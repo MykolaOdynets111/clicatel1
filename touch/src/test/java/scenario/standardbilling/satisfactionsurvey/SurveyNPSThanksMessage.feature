@@ -1,4 +1,6 @@
 @no_widget
+@off_rating_whatsapp
+@no_chatdesk
 @start_orca_server
 @orca_api
 Feature: Satisfaction Survey
@@ -17,10 +19,9 @@ Feature: Satisfaction Survey
     When Send connect to agent message by ORCA
     And Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
-    And Wait for 5 second
+    Then Conversation area becomes active with connect to agent user's message
     And Agent closes chat
     And Send 7 message by ORCA
-    And Wait for 5 second
     And Verify Orca returns Thanks, please leave a message on how we can improve our service. response during 40 seconds
     Examples:
       | channelType         |

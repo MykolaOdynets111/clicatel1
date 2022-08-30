@@ -248,9 +248,15 @@ public class AgentHomePage extends AgentAbstractPage {
              return getTextFromElem(this.getCurrentDriver(), connectionErrorImage, 15, "Connection error");
     }
 
-    public void endChat(){
-        if(getChatHeader().isEndChatShown()){
-            getChatHeader().clickEndChatButton();
+    public void endChat() {
+        getChatHeader().clickEndChatButton();
+        if (getAgentFeedbackWindow().isAgentFeedbackWindowShown()) {
+            getAgentFeedbackWindow().waitForLoadingData().clickCloseButtonInCloseChatPopup();
+        }
+        try {
+            waitForElementToBeInVisibleByCss(this.getCurrentDriver(), chatMessageContainer, 10);
+        } catch (TimeoutException e) {
+            Assert.fail("Chat container does not disappear after 10 second wait");
         }
     }
 

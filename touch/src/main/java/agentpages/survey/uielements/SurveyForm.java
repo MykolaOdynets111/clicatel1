@@ -42,6 +42,9 @@ public class SurveyForm extends AbstractWidget {
     @FindBy(xpath = ".//button[text()='Save configuration']")
     private WebElement saveButtonElement;
 
+    @FindBy(xpath = "//div[@data-testid='spinner']")
+    private WebElement saveSurveySpinner;
+
     @FindBy(xpath = ".//label[contains(@for, 'thanksMessageEnabled')]//div")
     private WebElement toggleButtonThankMessage;
 
@@ -57,10 +60,10 @@ public class SurveyForm extends AbstractWidget {
     @FindBy(name = "surveyQuestionTitle")
     private WebElement questionInput;
 
-    @FindBy(xpath = ".//label[contains(@for, 'thanksMessageEnabled')]")
+    @FindBy(xpath = ".//textarea[contains(@id, 'thanksMessageEnabled')]")
     private WebElement thankMessageForm;
 
-    @FindBy(xpath = ".//label[contains(@for, 'commentEnabled')]")
+    @FindBy(xpath = ".//textarea[contains(@id, 'customerNoteTitle')]")
     private WebElement notesForm;
 
     @FindBy(css = ".number-block")
@@ -77,6 +80,9 @@ public class SurveyForm extends AbstractWidget {
 
     @FindBy(xpath = ".//span[text()='Prompt customer to leave a note:']/following-sibling::label")
     private WebElement commentSwitcher;
+
+    @FindBy(xpath = ".//span[text()='Follow-up thank you message:']/following-sibling::label")
+    private WebElement thankMessageSwitcher;
 
     @FindBy(xpath = ".//div[@class='surveys-inner']/div[contains(@class, 'form-content')]")
     private WebElement noteFormEnabled;
@@ -139,6 +145,7 @@ public class SurveyForm extends AbstractWidget {
     }
 
     public void changeQuestion(String question) {
+        questionInput.clear();
         inputText(this.getCurrentDriver(), questionInput, 1, "Question Input", question);
     }
 
@@ -149,7 +156,7 @@ public class SurveyForm extends AbstractWidget {
 
     public void setNotesMessage(String message) {
         notesForm.clear();
-        inputText(this.getCurrentDriver(), notesForm, 1, "Notes form Input", message);
+        inputText(this.getCurrentDriver(), notesForm, 4, "Notes form Input", message);
     }
 
     public SurveyForm clickCSATRadioButton() {
@@ -171,14 +178,9 @@ public class SurveyForm extends AbstractWidget {
     }
 
     public void clickSaveButton() {
-        if (isElementEnabled(this.getCurrentDriver(), saveButtonElement, 2)) {
+        if (isElementEnabled(this.getCurrentDriver(), saveButtonElement, 5)) {
             clickElem(this.getCurrentDriver(), saveButtonElement, 2, "Save Survey Button");
-            if (isElementEnabled(this.getCurrentDriver(), saveButtonElement, 2)) {
-                waitFor(5000);
-            }
-            else{
-                System.out.println("Button is successfully clicked and value is correctly saved");
-            }
+            waitForAppearAndDisappear(this.getCurrentDriver(), saveSurveySpinner, 3, 4);
         } else {
             System.out.println("Value is already saved");
         }
@@ -223,7 +225,7 @@ public class SurveyForm extends AbstractWidget {
 
     public void clickThankMessageSwitcher() {
         if (thankFormEnabled.getAttribute("class").contains("disabled")) {
-            clickElem(this.getCurrentDriver(), thankMessageForm, 2, "Thank message form switcher");
+            clickElem(this.getCurrentDriver(), thankMessageSwitcher, 2, "Thank message form switcher");
         } else {
             System.out.println("Thank Message toggle is already clicked");
         }
@@ -235,21 +237,11 @@ public class SurveyForm extends AbstractWidget {
     }
 
     public boolean checkThankFormStatus() {
-        boolean flag;
-        if (thankFormEnabled.getAttribute("class").contains("disabled")) {
-            return true;
-        } else {
-            return false;
-        }
+        return thankFormEnabled.getAttribute("class").contains("disabled");
     }
 
     public boolean checkNotesFormStatus() {
-        boolean flag;
-        if (noteFormEnabled.getAttribute("class").contains("disabled")) {
-            return true;
-        } else {
-            return false;
-        }
+        return noteFormEnabled.getAttribute("class").contains("disabled");
     }
 
     public void selectRateIcon(String icon) {

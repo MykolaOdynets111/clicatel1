@@ -77,12 +77,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         String id = ORCASteps.getChannelId();
         getSurveyManagementPage().getSurveyForm(id).clickThankMessageToggle();
         boolean flag = getSurveyManagementPage().getSurveyForm(id).checkThankFormStatus();
-        if(flag){
-            System.out.println("Thank form is disabled for channel with id: " + id);
-        }
-        else{
-            Assert.fail("Thank form is still enabled for channel with id: " + id);
-        }
+        Assert.assertTrue(flag, "Thank form is still enabled for channel with id: " + id);
     }
 
     @When("^Agent switch \"Allow customer to give thank message\" in survey management$")
@@ -96,22 +91,15 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         String id = ORCASteps.getChannelId();
         getSurveyManagementPage().getSurveyForm(id).clickNotesToggle();
         boolean flag = getSurveyManagementPage().getSurveyForm(id).checkNotesFormStatus();
-        if(flag){
-            System.out.println("Notes form is disabled for channel with id: " + id);
-        }
-        else{
-            Assert.fail("Notes form is still enabled for channel with id: " + id);
-        }
+        Assert.assertTrue(flag, "Notes form is still enabled for channel with id: " + id);
     }
 
     @Then("^Then on the right side the preview card heading shows as (.*)$")
     public void verifyPreviewHeader(String expectedPreviewHeader){
         String id = ORCASteps.getChannelId();
         String actualPreviewHeader = getSurveyManagementPage().getSurveyForm(id).getSurveyPreviewTitle();
-        SoftAssert soft = new SoftAssert();
-        soft.assertTrue(actualPreviewHeader.contains(expectedPreviewHeader),
+        Assert.assertTrue(actualPreviewHeader.contains(expectedPreviewHeader),
                 "Survey Preview header is not correct: "+ actualPreviewHeader);
-        soft.assertAll();
     }
 
     @When("^Switch to whatsapp survey configuration$")
@@ -223,8 +211,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         String channelID = ORCASteps.getChannelId();
         List<String> surveyPreviewMessages;
         surveyPreviewMessages = getSurveyManagementPage().getSurveyForm(channelID).getAllMessagesInSurveyPreview();
-        SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(surveyPreviewMessages.contains(notesMessageUpdate.get()));
+        Assert.assertTrue(surveyPreviewMessages.contains(notesMessageUpdate.get()));
     }
 
     @Then("^Survey backend was updated for (.*) and (.*) chanel with following attribute$")

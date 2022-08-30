@@ -1,4 +1,7 @@
 @no_widget
+@off_rating_whatsapp
+@off_rating_abc
+@no_chatdesk
 @start_orca_server
 @orca_api
 Feature: Satisfaction Survey
@@ -25,10 +28,8 @@ Feature: Satisfaction Survey
     And Agent click save survey configuration button for <channelType> survey form
     Then Survey notes was updated on backend for Standard Billing and <channelType> chanel
     Then I select Touch in left menu and Agent Desk in submenu
-    And Wait for 5 second
     And I select Touch in left menu and Dashboard in submenu
     And Navigate to Surveys page
-    And Wait for 5 second
     When Admin clicks notes toggle for survey form
     And Agent click save survey configuration button for <channelType> survey form
     Examples:

@@ -29,6 +29,9 @@ public class DashboardSteps extends AbstractPortalSteps {
 
     private final ThreadLocal<Integer> npsPassivesPercentage = new ThreadLocal<>();
 
+    private final ThreadLocal<Double> actualCustomerSatisfactionScoreOld = new ThreadLocal<>();
+
+    private final ThreadLocal<Double> actualCustomerSatisfactionScoreNew = new ThreadLocal<>();
     @And("^Admin click on Customers Overview dashboard tab$")
     public void agentClickOnCustomersOverviewDashboardTab() {
         getDashboardPage().clickOnCustomersOverviewTab();
@@ -287,40 +290,40 @@ public class DashboardSteps extends AbstractPortalSteps {
 
     @Then("^Admin is able to see the average CSAT survey response converted to (\\d+)-(\\d+)$")
     public void adminIsAbleToSeeTheAverageCSATSurveyResponseConvertedTo(int from, int to) {
-        double actualCustomerSatisfactionScore = getDashboardPage().getCustomerSatisfactionSection()
-                .getCustomerSatisfactionScoreOld();
-        Assert.assertTrue(actualCustomerSatisfactionScore >= from, "Customer Satisfaction Score is less then " + from);
-        Assert.assertTrue(actualCustomerSatisfactionScore <= to, "Customer Satisfaction Score is more then " + to);
+        if (getDashboardPage().getCustomersHistory().isNoDataDisplayedForGraph("Customer Satisfaction")) {
+            actualCustomerSatisfactionScoreOld.set(0.0);
+        } else {
+            actualCustomerSatisfactionScoreOld.set(getDashboardPage().getCustomerSatisfactionSection()
+                    .getCustomerSatisfactionScoreOld());
+        }
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(actualCustomerSatisfactionScoreOld.get() >= from, "Customer Satisfaction Score is less then " + from);
+        softAssert.assertTrue(actualCustomerSatisfactionScoreOld.get() <= to, "Customer Satisfaction Score is more then " + to);
     }
 
     //Use this step to fetch after CSAT ratings to compare before and after CSAT rating
     @Then("^Admin is able to see the new average CSAT survey response converted to (\\d+)-(\\d+)$")
     public void adminIsAbleToSeeTheNewAverageCSATSurveyResponseConvertedTo(int from, int to) {
-        double actualCustomerSatisfactionScore = getDashboardPage().getCustomerSatisfactionSection()
-                .getCustomerSatisfactionScoreNew();
-        Assert.assertTrue(actualCustomerSatisfactionScore >= from, "Customer Satisfaction Score is less then " + from);
-        Assert.assertTrue(actualCustomerSatisfactionScore <= to, "Customer Satisfaction Score is more then " + to);
+        if (getDashboardPage().getCustomersHistory().isNoDataDisplayedForGraph("Customer Satisfaction")) {
+            actualCustomerSatisfactionScoreNew.set(0.0);
+        } else {
+            actualCustomerSatisfactionScoreNew.set(getDashboardPage().getCustomerSatisfactionSection()
+                    .getCustomerSatisfactionScoreOld());
+        }
+        Assert.assertTrue(actualCustomerSatisfactionScoreNew.get() >= from, "Customer Satisfaction Score is less then " + from);
+        Assert.assertTrue(actualCustomerSatisfactionScoreNew.get() <= to, "Customer Satisfaction Score is more then " + to);
     }
 
     //Use this step to compare before and after CSAT rating
     @Then("^Admin is able to see the same average CSAT rating for NPS response$")
     public void adminIsAbleToSameCSATRating() {
-        double actualCustomerSatisfactionScoreOld = CustomerSatisfactionSection.satisfactionScoreOld;
-        double actualCustomerSatisfactionScoreNew = CustomerSatisfactionSection.satisfactionScoreNew;
-
-        Assert.assertTrue(actualCustomerSatisfactionScoreOld == actualCustomerSatisfactionScoreNew, "Customer Satisfaction Score are different: actual: " + actualCustomerSatisfactionScoreOld + " expected: " + actualCustomerSatisfactionScoreNew);
-        System.out.println("The condition is correct and it is showing the correct ratings: Old rating: " + actualCustomerSatisfactionScoreOld + " New Rating: " + actualCustomerSatisfactionScoreNew);
-
+        Assert.assertTrue(actualCustomerSatisfactionScoreOld.get().equals(actualCustomerSatisfactionScoreNew.get()), "Customer Satisfaction Score are different: actual: " + actualCustomerSatisfactionScoreOld + " expected: " + actualCustomerSatisfactionScoreNew);
     }
 
     //Use this step to compare before and after CSAT rating
     @Then("^Admin is able to see the different average CSAT rating for CSAT response$")
     public void adminIsAbleToDifferentCSATRating() {
-        double actualCustomerSatisfactionScoreOld = CustomerSatisfactionSection.satisfactionScoreOld;
-        double actualCustomerSatisfactionScoreNew = CustomerSatisfactionSection.satisfactionScoreNew;
-
-        Assert.assertTrue(actualCustomerSatisfactionScoreOld <= actualCustomerSatisfactionScoreNew, "Customer Satisfaction Score are different: actual: " + actualCustomerSatisfactionScoreOld + " expected: " + actualCustomerSatisfactionScoreNew);
-        System.out.println("The condition is correct and it is showing the correct ratings: Old rating: " + actualCustomerSatisfactionScoreOld + " New Rating: " + actualCustomerSatisfactionScoreNew);
+        Assert.assertTrue(actualCustomerSatisfactionScoreOld.get() <= actualCustomerSatisfactionScoreNew.get(), "Customer Satisfaction Score are different: actual: " + actualCustomerSatisfactionScoreOld + " expected: " + actualCustomerSatisfactionScoreNew);
     }
 
     @Then("^Admin see the Net Promoter Score as negative$")

@@ -1,6 +1,7 @@
 @no_widget
-@start_orca_server
-@orca_api
+@off_survey_management
+@off_rating_whatsapp
+@off_rating_abc
 Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-19270")
@@ -24,10 +25,8 @@ Feature: Satisfaction Survey
     And Admin clicks on channel expand button for survey form
     And Admin selects NPS survey type for <channelType> survey form
     And Agent click save survey configuration button for <channelType> survey form
-    And Wait for 5 second
     Then I select Touch in left menu and Agent Desk in submenu
     And Agent click on last opened conversation request from orca
-    And Wait for 5 second
     And Agent closes chat
     And Send skip message by ORCA
     And Verify Orca returns Thank you. Please don't hesitate to reach out if you ever need help! response during 40 seconds
@@ -57,10 +56,9 @@ Feature: Satisfaction Survey
     And Admin clicks on channel expand button for survey form
     And Admin selects NPS survey type for <channelType> survey form
     And Agent click save survey configuration button for <channelType> survey form
-    And Wait for 5 second
     Then I select Touch in left menu and Agent Desk in submenu
-    And Agent click on last opened conversation request from orca
-    And Wait for 5 second
+    And Agent click on new conversation request from orca
+    And Conversation area becomes active with connect to agent user's message
     And Agent closes chat
     And Send skip message by ORCA
     When Agent select "Closed" left menu option
@@ -79,19 +77,18 @@ Feature: Satisfaction Survey
     When Send connect to agent message by ORCA
     And Update survey management chanel <channelType> settings by ip for Standard Billing
       | ratingEnabled | true        |
-      | surveyType    | NPS        |
+      | surveyType    | NPS         |
       | ratingScale   | ZERO_TO_TEN |
       | ratingIcon    | NUMBER      |
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by Whatsapp channel
-    Then Admin is able to see the average CSAT survey response converted to 0-10
+    Then Admin is able to see the average CSAT survey response converted to 0-100
     And I select Touch in left menu and Agent Desk in submenu
     And Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
     And Conversation area becomes active with connect to agent user's message
-    And Wait for 5 second
     And Agent closes chat
     And Send 10 message by ORCA
     And Agent switches to opened Portal page
@@ -99,7 +96,7 @@ Feature: Satisfaction Survey
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by Whatsapp channel
-    Then Admin is able to see the new average CSAT survey response converted to 0-10
+    Then Admin is able to see the new average CSAT survey response converted to 0-100
     And Admin is able to see the same average CSAT rating for NPS response
     Examples:
       | channelType |
@@ -112,7 +109,6 @@ Feature: Satisfaction Survey
     And Setup ORCA <channelType> integration for Standard Billing tenant
     And I select Touch in left menu and Dashboard in submenu
     And Navigate to Surveys page
-    And Wait for 5 second
     When Agent switch "Allow customer to give thank message" in survey management
     And Agent switch "Allow customer to leave a note" in survey management
     And Agent click save survey configuration button for <channelType> survey form
@@ -125,6 +121,7 @@ Feature: Satisfaction Survey
     Then I select Touch in left menu and Agent Desk in submenu
     And Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
+    And Conversation area becomes active with connect to agent user's message
     And Agent closes chat
     And Send 5 message by ORCA
     And Agent switches to opened Portal page
@@ -132,8 +129,8 @@ Feature: Satisfaction Survey
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by channel and period
-      | Apple Business Chat   | Past day  |
-    Then Admin is able to see Customer Satisfaction,Chats by Channel,Past Sentiment graphs
+      | Apple Business Chat | Past day |
+    And Admin is able to see Customer Satisfaction,Chats by Channel,Past Sentiment graphs
     Examples:
       | channelType |
       | abc         |
@@ -146,10 +143,9 @@ Feature: Satisfaction Survey
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by channel and period
-      | Apple Business Chat   | Past day  |
+      | Apple Business Chat | Past day |
     Then Admin is able to see the average CSAT survey response converted to 0-100
     And Navigate to Surveys page
-    And Wait for 5 second
     When Agent switch "Allow customer to give thank message" in survey management
     And Agent switch "Allow customer to leave a note" in survey management
     And Agent click save survey configuration button for <channelType> survey form
@@ -162,6 +158,7 @@ Feature: Satisfaction Survey
     Then I select Touch in left menu and Agent Desk in submenu
     And Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
+    And Conversation area becomes active with connect to agent user's message
     And Agent closes chat
     And Send 5 message by ORCA
     And Agent switches to opened Portal page
@@ -169,8 +166,8 @@ Feature: Satisfaction Survey
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by channel and period
-      | Apple Business Chat   | Past day  |
-    Then Admin is able to see the new average CSAT survey response converted to 0-100
+      | Apple Business Chat | Past day |
+    And Admin is able to see the new average CSAT survey response converted to 0-100
     And Admin is able to see the different average CSAT rating for CSAT response
     Examples:
       | channelType |

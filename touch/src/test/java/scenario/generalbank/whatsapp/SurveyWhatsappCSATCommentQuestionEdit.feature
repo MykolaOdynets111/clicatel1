@@ -1,5 +1,6 @@
 @no_widget
 @no_chatdesk
+@off_survey_management
 Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-19243")
