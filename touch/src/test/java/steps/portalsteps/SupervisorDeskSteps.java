@@ -240,6 +240,18 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertEquals(getSupervisorDeskPage().getTicketTypes(), ticketTypes, "Ticket types are different");
     }
 
+    @Then("^Verify Chat has pending icon in the Chat (.*)$")
+    public void verifyChatHasPendingIcon(String value) {
+        switch (value){
+            case "Like":
+                 getSupervisorDeskPage().getSupervisorLeftPanel().verifyChatPendingIcon();
+                 break;
+            case "View":
+                getSupervisorDeskPage().getSupervisorLeftPanel().verifyChatPendingOn();
+        }
+
+    }
+
     @When("^User select (.*) ticket type$")
     public void selectTicketType(String type) {
         getSupervisorDeskPage().selectTicketType(type);

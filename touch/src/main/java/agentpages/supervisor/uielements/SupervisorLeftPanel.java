@@ -30,6 +30,12 @@ public class SupervisorLeftPanel extends AbstractUIElement {
     @FindBy(xpath="//div[@class='chats-list live-chats-list']")
     private  WebElement livechatsinfo;
 
+    @FindBy(xpath = "//span[@data-testid='chat-item-icons-holder']")
+    private WebElement leftChatPendingIcon;
+
+    @FindBy(xpath = "//button[@data-testid='header-toggle-pending']")
+    private WebElement leftChatPendingOn;
+
     public String getFilterByDefaultName(){
         return getTextFromElem(this.getCurrentDriver(), defaultFilter,5,"Default filter").trim();
     }
@@ -67,5 +73,13 @@ public class SupervisorLeftPanel extends AbstractUIElement {
 
     public void verifyLiveChatInfo() {
         Assert.assertTrue(livechatsinfo.isDisplayed(),"Live chat not displayed ");
+    }
+
+    public void verifyChatPendingIcon() {
+        Assert.assertTrue(leftChatPendingIcon.isDisplayed(),"Pending icon not displayed ");
+    }
+
+    public void verifyChatPendingOn() {
+        Assert.assertTrue(leftChatPendingOn.isDisplayed(),"Pending icon not displayed ");
     }
 }
