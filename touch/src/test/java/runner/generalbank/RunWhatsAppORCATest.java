@@ -8,17 +8,15 @@ import org.testng.annotations.Test;
 
 @Test(groups = {"whatsapporca"})
 @CucumberOptions(
-         plugin={"pretty", "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
-        },
+        plugin={"pretty", "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"},
         monochrome = true,
-        features ="touch/src/test/java/scenario/generalbank/whatsapporca/ChatdeskOrcaWA.feature",
+        features = "touch/src/test/java/scenario/generalbank/whatsapporca",
         glue ="steps")
 public class RunWhatsAppORCATest extends AbstractTestNGCucumberTests {
 
     @Override
-    @DataProvider(parallel = true)
+    @DataProvider()
     public Object[][] scenarios() {
-//        ApiHelper.ratingEnabling("General Bank Demo", false,"abc");
         return super.scenarios();
     }
 
