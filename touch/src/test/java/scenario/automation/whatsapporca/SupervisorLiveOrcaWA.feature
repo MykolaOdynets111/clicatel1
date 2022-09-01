@@ -4,6 +4,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
   @orca_api
   @start_orca_server
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-114900")
+  @Regression
   Scenario: CD :: Supervisor Desk :: Chats :: Verify if customer starts a chat there is no agent available, the chat is visible in Supervisor Desk as unassigned
     Given Setup ORCA whatsapp integration for Automation tenant
     When Send to agent message by ORCA

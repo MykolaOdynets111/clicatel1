@@ -27,6 +27,7 @@ Feature: WhatsApp ORCA :: Surveys
     Then Survey Preview should be displayed with correct data for whatsapp channel
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-120988")
+  @Regression
   Scenario: WA: Survey: Verify if CSAT ratings in the survey configuration to be standardized to cater for only 1-5 ratings
     And I open portal
     Given Login into portal as an admin of General Bank Demo account

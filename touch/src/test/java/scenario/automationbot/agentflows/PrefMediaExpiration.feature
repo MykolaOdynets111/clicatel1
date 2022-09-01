@@ -17,6 +17,7 @@ Feature: Preferences
     Then Error message is not shown in Media Files Expiration section
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-110427")
+  @Regression
   Scenario: CD :: Dashboard :: Settings :: Preferences :: Verify that the minimum value for media deletion setting is 7 days
     Given I open portal
     And Login into portal as an admin of Automation Bot account
