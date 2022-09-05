@@ -158,13 +158,13 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             results.put("sessionCapacityUpdate", 50);
         }
 
-        supportHours = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName()).getAgentMapping();
+        supportHours = ApiHelper.getAgentSupportDaysAndHoursForMainAgent(Tenants.getTenantUnderTestOrgName()).getAgentMapping();
         results.put("supportHours", supportHours);
 
         if (!type.equalsIgnoreCase("ticket")) {
             if (supportHours.size() < 7) {
                 ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
-                supportHoursUpdated = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName()).getAgentMapping();
+                supportHoursUpdated = ApiHelper.getAgentSupportDaysAndHoursForMainAgent(Tenants.getTenantUnderTestOrgName()).getAgentMapping();
                 results.put("supportHoursUpdated", supportHoursUpdated);
             }else {results.put("supportHoursUpdated", "were not updated because \"All week\" was set");}
         }else {results.put("supportHoursUpdated", "were not updated because it is ticket");}

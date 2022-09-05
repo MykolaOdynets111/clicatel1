@@ -1,63 +1,30 @@
 package datamanager.jacksonschemas;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.Data;
 
 import java.util.List;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "departmentMapping",
-        "agentMapping",
-        "department"
+        "agentSupportHours",
+        "supportHoursByDepartment"
 })
+@Data
 public class SupportHoursItem {
 
-    @JsonProperty("departmentMapping")
-    private List<DepartmentMapping> departmentMapping = null;
-    @JsonProperty("agentMapping")
-    private List<AgentMapping> agentMapping = null;
-    @JsonProperty("department")
-    private Boolean department;
-
-    @JsonProperty("departmentMapping")
-    public List<DepartmentMapping> getDepartmentMapping() {
-        return departmentMapping;
-    }
-
-    @JsonProperty("departmentMapping")
-    public void setDepartmentMapping(List<DepartmentMapping> departmentMapping) {
-        this.departmentMapping = departmentMapping;
-    }
-
-    @JsonProperty("agentMapping")
-    public List<AgentMapping> getAgentMapping() {
-        return agentMapping;
-    }
-
-    @JsonProperty("agentMapping")
-    public void setAgentMapping(List<AgentMapping> agentMapping) {
-        this.agentMapping = agentMapping;
-    }
-
-    @JsonProperty("department")
-    public Boolean getDepartment() {
-        return department;
-    }
-
-    @JsonProperty("department")
-    public void setDepartment(Boolean department) {
-        this.department = department;
-    }
+    @JsonProperty("agentSupportHours")
+    private List <AgentMapping> agentMapping;
+    @JsonProperty("supportHoursByDepartment")
+    private List <DepartmentMapping> departmentMapping;
 
     @Override
     public String toString() {
-        return "SupportHoursItem{" +
-                "departmentMapping=" + departmentMapping +
-                ", agentMapping=" + agentMapping +
-                ", department=" + department +
-                '}';
+        return "SupportHoursItem {"
+                + "agentSupportHours = " + agentMapping
+                + ", supportHoursByDepartment = " + departmentMapping + '}';
     }
 }
