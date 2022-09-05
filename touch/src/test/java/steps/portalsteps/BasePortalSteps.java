@@ -857,13 +857,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
         agentClickSaveChangesButton();
     }
 
-
     @When("^Agent click 'Save changes' button$")
     public void agentClickSaveChangesButton() {
         getPortalTouchPreferencesPage().clickSaveButton();
         getPortalTouchPreferencesPage().waitForSaveMessage();
     }
-
 
     @When("^Agent click expand arrow for (.*) auto responder$")
     public void clickExpandArrowForAutoResponder(String autoresponder){
@@ -1486,13 +1484,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(3,6);
     }
 
-
-    @When("^Upload: photo for tenant$")
-    public void uploadPhotoForTenant() {
-        getPortalTouchPreferencesPage().getBusinessProfileWindow().uploadPhoto("touch/src/test/resources/agentphoto/tenant.png");
-        getPortalTouchPreferencesPage().getEditCompanyLogoWindow().clickSaveImageButton();
-    }
-
     @Then("^I check secondary color for tenant in widget$")
     public void iCheckSecondaryColorForTenantInWidget() {
         Assert.assertEquals(getMainPage().getTenantNameColor(), tenantInfo.get("newColor"), "Color for tenant name in widget window is not correct");
@@ -1683,11 +1674,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     }
 
-    @When("^Select 'Specific Agent Support hours' radio button in Agent Supported Hours section$")
-    public void selectSpecificAgentSupportHoursRadioButtonInAgentSupportedHoursSection() {
-        getPortalTouchPreferencesPage().getBusinessProfileWindow().openSpecificSupportHours();
-    }
-
     @When("^click off/on 'Automatic Scheduler'$")
     public void clickOnOffAutoScheduler(){
         autoSchedulerPreActionStatus =  ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled");
@@ -1722,7 +1708,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @And("^'support hours' are updated in (.*) configs$")
     public void supportHoursAreUpdatedInTenantConfigs(String tenantOrgName) {
-        Assert.assertFalse(ApiHelper.getAgentSupportDaysAndHours(tenantOrgName).toString().contains(nameOfUnchekedDay.toUpperCase()),"Error. 'support hours' contain today day.");
+        Assert.assertFalse(ApiHelper.getAgentSupportDaysAndHoursForMainAgent(tenantOrgName).toString().contains(nameOfUnchekedDay.toUpperCase()),"Error. 'support hours' contain today day.");
     }
 
     @Then("^Check that today day is unselected in 'Scheduled hours' pop up$")
