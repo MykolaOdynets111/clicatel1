@@ -184,7 +184,7 @@ public class DotControlSteps implements WebWait {
         if(expMessage.isEmpty()) expMessage = "OK";
         if(expMessage.trim().equals("OUT_OF_BUSINESS_HOURS")){
             expectedBusinessHours =
-                    ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
+                    ApiHelper.getAgentSupportDaysAndHoursForMainAgent(Tenants.getTenantUnderTestOrgName());
         }
         SoftAssert soft = new SoftAssert();
 

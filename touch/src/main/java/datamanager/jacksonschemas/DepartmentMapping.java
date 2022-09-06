@@ -1,47 +1,36 @@
 package datamanager.jacksonschemas;
 
-import com.fasterxml.jackson.annotation.*;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.Data;
 
 import java.util.List;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "departmentId",
-        "supportHours"
+        "departmentName",
+        "supportHours",
+        "days"
 })
+@Data
 public class DepartmentMapping {
 
     @JsonProperty("departmentId")
     private String departmentId;
+    @JsonProperty("departmentName")
+    private String departmentName;
     @JsonProperty("supportHours")
-    private List<DepartmentSupportHour> supportHours = null;
-
-    @JsonProperty("departmentId")
-    public String getDepartmentId() {
-        return departmentId;
-    }
-
-    @JsonProperty("departmentId")
-    public void setDepartmentId(String departmentId) {
-        this.departmentId = departmentId;
-    }
-
-    @JsonProperty("supportHours")
-    public List<DepartmentSupportHour> getSupportHours() {
-        return supportHours;
-    }
-
-    @JsonProperty("supportHours")
-    public void setSupportHours(List<DepartmentSupportHour> supportHours) {
-        this.supportHours = supportHours;
-    }
+    private List<String> supportHours;
+    @JsonProperty("days")
+    private List<String> days;
 
     @Override
     public String toString() {
-        return "DepartmentMapping{" +
-                "departmentId='" + departmentId + '\'' +
-                ", supportHours=" + supportHours +
-                '}';
+        return "SupportHoursByDepartment {"
+                + "departmentId=' " + departmentId + '\''
+                + "departmentName=' " + departmentName + '\''
+                + ", supportHours= " + supportHours + '}';
     }
 }

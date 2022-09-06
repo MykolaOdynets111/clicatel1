@@ -26,7 +26,8 @@ public class AgentInfoSteps extends AbstractAgentSteps{
     }
 
     @When("^I click icon with (.*) initials$")
-    public void clickIconWithInitials(String agent){ getPageHeader(agent).clickIcon();
+    public void clickIconWithInitials(String agent){
+        getAgentHomePage(agent).getPageHeader().clickIcon();
     }
 
 
@@ -45,7 +46,18 @@ public class AgentInfoSteps extends AbstractAgentSteps{
 
     @When("^(.*) clicks \"Profile Settings\" button$")
     public void clickProfileSettingsButton(String agent){
-        getPageHeader(agent).clickProfileSettingsButton();
+        getAgentHomePage(agent).getPageHeader().clickProfileSettingsButton();
+    }
+
+    @When("^(.*) clicks \"Reset Password\" button$")
+    public void clickResetPasswordButton(String agent){
+        getAgentHomePage(agent).getProfileWindow().clickResetPasswordButton();
+    }
+
+    @Then("^(.*) views (.*) message in Profile Settings$")
+    public void verifyResetPasswordSuccessMessage(String agent, String message){
+        Assert.assertEquals(getAgentHomePage(agent).getProfileWindow().getResetPasswordSuccessMessage(),
+                message, "Password reset success message does not match");
     }
 
     @Then("^(.*) of (.*) info details is shown in profile window$")
