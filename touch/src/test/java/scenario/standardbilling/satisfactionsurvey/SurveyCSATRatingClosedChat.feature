@@ -2,6 +2,8 @@
 @off_survey_management
 @off_rating_whatsapp
 @off_rating_abc
+@orca_api
+@start_orca_server
 Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-19270")
@@ -129,21 +131,21 @@ Feature: Satisfaction Survey
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by channel and period
-      | Apple Business Chat | Past day |
+      | Apple Business Chat | Past week |
     And Admin is able to see Customer Satisfaction,Chats by Channel,Past Sentiment graphs
     Examples:
       | channelType |
       | abc         |
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-121002")
-  Scenario Outline: CD:: Survey:: CSAT:: Dashboard:: Verify if customer satisfaction odometer for CSAT score is presented as 0% to 100% scale
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-120998")
+  Scenario Outline: CD:: Survey:: CSAT:: Verify if survey rating updates the % value for CSAT scores in the Agent performance reports
     Given I login as agent of Standard Billing
     And Setup ORCA <channelType> integration for Standard Billing tenant
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by channel and period
-      | Apple Business Chat | Past day |
+      | Apple Business Chat | Past week |
     Then Admin is able to see the average CSAT survey response converted to 0-100
     And Navigate to Surveys page
     When Agent switch "Allow customer to give thank message" in survey management
@@ -166,9 +168,24 @@ Feature: Satisfaction Survey
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by channel and period
-      | Apple Business Chat | Past day |
+      | Apple Business Chat | Past week |
     And Admin is able to see the new average CSAT survey response converted to 0-100
     And Admin is able to see the different average CSAT rating for CSAT response
     Examples:
       | channelType |
       | abc         |
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-121002")
+  Scenario Outline: CD:: Survey:: CSAT:: Dashboard:: Verify if customer satisfaction odometer for CSAT score is presented as 0% to 100% scale
+    Given I login as agent of Standard Billing
+    And Setup ORCA <channelType> integration for Standard Billing tenant
+    And I select Touch in left menu and Dashboard in submenu
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Customers History on dashboard
+    And Admin filter Customers History by channel and period
+      | Apple Business Chat | Past week |
+    Then Admin is able to see the CSAT scale having down scale as 0% and upscale as 100%
+    Examples:
+      | channelType |
+      | abc         |
+      | whatsapp    |

@@ -24,6 +24,9 @@ public class CustomersHistory extends AbstractUIElement {
     @FindBy(css = ".chart-container")
     private List<WebElement> graphs;
 
+    @FindBy(css = ".gauge-labels")
+    private WebElement gaugeLabels;
+
     public List<List<String>> getGraphsTimelines() {
         waitFor(2000);
         return graphs.stream()
@@ -41,6 +44,12 @@ public class CustomersHistory extends AbstractUIElement {
          scrollToElem(this.getCurrentDriver(), graphXpath, graphName);
         }
         return isElementShownByXpath(this.getCurrentDriver(), graphXpath, 1);
+    }
+
+    public boolean isGraphContainsScale(String downScale, String upScale) {
+        String text= getTextFromElem(this.getCurrentDriver(), gaugeLabels, 5, "Customer satisfaction scale");
+
+        return text.contains(downScale) && text.contains(upScale);
     }
 
     public boolean isNoDataRemovedForGraph(String graphName) {

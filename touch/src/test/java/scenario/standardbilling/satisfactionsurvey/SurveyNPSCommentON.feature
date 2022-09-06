@@ -2,8 +2,6 @@
 @off_rating_whatsapp
 @off_rating_abc
 @no_chatdesk
-@start_orca_server
-@orca_api
 Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-19237")

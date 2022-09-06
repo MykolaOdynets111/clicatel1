@@ -288,6 +288,11 @@ public class DashboardSteps extends AbstractPortalSteps {
         softAssert.assertAll();
     }
 
+    @Then("^Admin is able to see the CSAT scale having down scale as (.*) and upscale as (.*)$")
+    public void adminIsAbleToSeeTheAverageCSATSurveyScaleHavingUpAndDownScale(String downScale, String upScale) {
+        Assert.assertTrue(getDashboardPage().getCustomersHistory().isGraphContainsScale(downScale, upScale), "Down and up scale parameters are not present");
+    }
+
     @Then("^Admin is able to see the average CSAT survey response converted to (\\d+)-(\\d+)$")
     public void adminIsAbleToSeeTheAverageCSATSurveyResponseConvertedTo(int from, int to) {
         if (getDashboardPage().getCustomersHistory().isNoDataDisplayedForGraph("Customer Satisfaction")) {
