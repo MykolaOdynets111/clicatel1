@@ -26,3 +26,19 @@ Feature: Apple Business Chat :: Supervisor Desk
     And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Supervisor Desk in submenu
     Then Verify that Chat is displayed first
+
+  @orca_api
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-106827")
+  Scenario: Supervisor Desk :: Closed Chat :: Verify if roster is updated after a chat is closed on supervisor desk
+    Given I login as Second Agent of General Bank Demo
+    And Setup ORCA abc integration for General Bank Demo tenant
+    And Send chat to be closed message by ORCA
+    Then Second Agent has new conversation request from orca user
+    And Second Agent click on new conversation request from orca
+    Given I open portal
+    And Login into portal as an admin of General Bank Demo account
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Agent click On Live Supervisor Desk chat from Orca channel
+    And Second Agent click "End chat" button
+    Then Admin clicks 'Go to chat' button
+    And Orca request is shown on Supervisor Desk Live page
