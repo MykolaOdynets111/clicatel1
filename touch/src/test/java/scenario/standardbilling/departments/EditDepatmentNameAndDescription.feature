@@ -3,6 +3,7 @@
 Feature: Departments
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-14859")
+  @Regression
   Scenario: Edit department name and description
     Given I open portal
     And Login into portal as an admin of Standard Billing account

@@ -11,6 +11,7 @@ Feature: Departments
     When Send connect to support message by ORCA
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-14876")
+  @Regression
   Scenario: Departments: Verify if possible to transfer overnight ticket to department
     Then Agent has new ticket request from orca user
     Given I login as second agent of Standard Billing
