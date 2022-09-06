@@ -3,6 +3,7 @@ Feature: Whatsapp ORCA :: ChatDesk
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-90123")
+  @Regression
   Scenario: CD :: Agent Desk :: Live Chat :: Location :: Verify the end-user can share the current location on WhatsApp via Flow
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant

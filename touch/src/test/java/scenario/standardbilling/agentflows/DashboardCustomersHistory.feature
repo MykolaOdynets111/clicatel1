@@ -26,7 +26,9 @@ Feature: Dashboard: Customer History
       | NPS        | Net Promoter Score    | ZERO_TO_TEN |
       | CSAT       | Customer Satisfaction | ONE_TO_FIVE |
 
-  @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/TPORT-50385")
+  @no_chatdesk
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-50385")
+  @Regression
   Scenario: Dashboard: Verify if admin can filter Customers History report by channel and period
     When I open portal
     And Login into portal as an admin of Standard Billing account
@@ -164,6 +166,7 @@ Feature: Dashboard: Customer History
     Then All reports in graphs should be breakdown hourly
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-118185")
+  @Regression
   Scenario: CD:: SMS:: Customers Overview :: Verify if Supervisor can see SMS channel in the Customer History tab in Dashboard
     When I open portal
     And Login into portal as an admin of Standard Billing account

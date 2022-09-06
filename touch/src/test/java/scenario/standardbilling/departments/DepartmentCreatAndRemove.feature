@@ -3,6 +3,7 @@
 Feature: Departments
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-10791")
+  @Regression
   Scenario: Create and Remove department
     Given I open portal
     And Login into portal as an admin of Standard Billing account

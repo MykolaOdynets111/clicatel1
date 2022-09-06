@@ -3,6 +3,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-118510")
+  @Regression
   Scenario: Supervisor desk:: verify that supervisor is able to check WhatsApp chats
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     When Send chat to agent message by ORCA
@@ -12,6 +13,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     Then Supervisor can see orca live chat with chat to agent message to agent
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-118511")
+  @Regression
   Scenario: Supervisor desk:: Verify if supervisor can filter closed chat by WhatsApp chat channel
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
@@ -23,6 +25,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
   @agent_support_hours
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-118512")
+  @Regression
   Scenario: Supervisor desk:: Verify if supervisor can filter tickets by ticket status and WhatsApp filter option
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     And Set agent support hours with day shift

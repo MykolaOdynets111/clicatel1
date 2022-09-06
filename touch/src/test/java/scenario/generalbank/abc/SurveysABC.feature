@@ -17,6 +17,7 @@ Feature: Apple Business Chat :: Surveys
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-117475")
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-105166")
+  @Regression
   Scenario: ABC: : Surveys: Verify if the survey preview header for Apple shows as Apple Business Chat Preview
     And I open portal
     Given Login into portal as an admin of General Bank Demo account
@@ -29,6 +30,7 @@ Feature: Apple Business Chat :: Surveys
     Then Survey Preview should be displayed with correct data for abc channel
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-120988")
+  @Regression
   Scenario: ABC: Survey: Verify if CSAT ratings in the survey configuration to be standardized to cater for only 1-5 ratings
     And I open portal
     Given Login into portal as an admin of General Bank Demo account
