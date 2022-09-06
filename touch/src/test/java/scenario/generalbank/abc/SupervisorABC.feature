@@ -18,7 +18,7 @@ Feature: Apple Business Chat :: Supervisor Desk
     When I select Touch in left menu and Supervisor Desk in submenu
     When Agent select "Closed" left menu option
     And Agent select "Apple Business Chat" in Chanel container and click "Apply filters" button
-    Then Verify that only "apple_business_chat" closed chats are shown
+    Then Verify that only "apple-business-chat" closed chats are shown
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-106817")
   Scenario: Supervisor Desk :: Verify if the first view on supervisor desk is ‘Chats’ tab

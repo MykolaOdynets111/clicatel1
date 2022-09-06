@@ -9,6 +9,7 @@ import org.openqa.selenium.Rectangle;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
@@ -89,8 +90,10 @@ public class ChatBody extends AbstractUIElement {
 
     @FindBy(css = "div[title='AGENT_REJECT_CHAT']")
     private WebElement rejectTransferIndicator;
-
-    @FindBy(css = "[selenium-id='map-chat-message-content-LocationMessage']")
+    @FindAll({
+            @FindBy(css = "[selenium-id='map-chat-message-content-LocationMessage']"),
+            @FindBy(css = "[data-testid='map-chat-message-content-LocationMessage']")
+    })
     private WebElement locationHREFFromAgent;
 
     @FindBy(css = ".from [selenium-id='map-chat-message-content-LocationMessage']")
