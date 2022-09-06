@@ -7,6 +7,7 @@ Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-19243")
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-121097")
+  @Regression
   Scenario Outline: Verify if tenant can customize his own survey questions for CSAT survey type
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing

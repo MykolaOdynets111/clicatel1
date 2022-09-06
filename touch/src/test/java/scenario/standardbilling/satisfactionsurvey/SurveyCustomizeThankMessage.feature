@@ -8,7 +8,9 @@ Feature: Satisfaction Survey
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-18591")
     @TestCaseId("https://jira.clickatell.com/browse/TPORT-121098")
     @TestCaseId("https://jira.clickatell.com/browse/TPORT-105177")
-  Scenario Outline: Verify if tenant can Customize customer thank you message text
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-121098")
+  @Regression
+  Scenario Outline: CD:: Whatsapp:: Settings :: Survey :: Verify if tenant can  Customize customer thank you message text
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing
       | ratingEnabled        | true        |
@@ -33,7 +35,7 @@ Feature: Satisfaction Survey
     When Admin clicks thank message toggle for survey form
     And Agent click save survey configuration button for <channelType> survey form
     Examples:
-      | channelType |
-      | whatsapp    |
-      | abc         |
-    #  | webchat     |
+      | channelType         |
+      | whatsapp            |
+      | abc                 |
+#      | webchat             |

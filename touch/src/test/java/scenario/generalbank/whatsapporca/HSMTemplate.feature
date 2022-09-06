@@ -4,6 +4,7 @@
 Feature: HSMTemplate
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-105014")
+  @Regression
   Scenario: CD :: Agent Desk :: HSM :: Verify if an agent can initiate a chat by sending an HSM template to a WhatsApp via ORCA user
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -28,6 +29,7 @@ Feature: HSMTemplate
 
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-105012")
+  @Regression
   Scenario: CD:: Agent Desk :: Closed Chat :: HSM :: Verify if agent can initiate a chat with WhatsApp via orca user by sending HSM template from Closed tab
     Given I login as agent of General Bank Demo
     When Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -50,6 +52,7 @@ Feature: HSMTemplate
 
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-105017")
+  @Regression
   Scenario: CD :: Agent Desk :: HSM :: Verify if Agent send HSM template to  WhatsApp via orca user then HSM label is displayed in the conversation area
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant

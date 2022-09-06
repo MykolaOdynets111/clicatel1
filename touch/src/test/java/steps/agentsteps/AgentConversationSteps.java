@@ -463,6 +463,11 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
     }
 
+    @When("^(.*) clicks 'Go to chat' button$")
+    public void clickGoToChatButton(String agent) {
+        getAgentHomePage(agent).getAgentFeedbackWindow().clickGoToChatButtonInCloseChatPopup();
+    }
+
     @When("^(.*) click happy sentiment button$")
     public void clickUnsatisfiedSentiment(String agent) {
         getAgentHomePage(agent).getAgentFeedbackWindow().setSentimentHappy();

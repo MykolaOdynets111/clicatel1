@@ -47,6 +47,7 @@ public class DashboardSettingsPage extends PortalAbstractPage {
         switch (settingsName) {
             case "Business Profile":
                 clickElem(this.getCurrentDriver(), businessProfile, 5, "Business Profile");
+                waitForElementToBeVisible(this.getCurrentDriver(), businessProfile, 5);
                 break;
             case "Chat Tags":
                 clickElem(this.getCurrentDriver(), chatTags, 5, "Chat Tags");
@@ -83,5 +84,4 @@ public class DashboardSettingsPage extends PortalAbstractPage {
     public boolean isSurveysTabShown() {
         return isElementShown(this.getCurrentDriver(), surveysNavigation, 5);
     }
-
 }

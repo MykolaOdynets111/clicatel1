@@ -26,7 +26,8 @@ Feature: Supervisor desk
     Then Verify first closed ticket date are fitted by filter
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-118540")
-  Scenario: Closed Chat :: Verify that the closed chats of only last 90 days are visible to supervisor
+  @Regression
+  Scenario: CD :: Agent Desk :: Closed Chat :: Verify that the closed chats of only last 90 days are visible
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Supervisor Desk in submenu

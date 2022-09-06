@@ -1,13 +1,19 @@
 package datamanager.jacksonschemas;
 
-import com.fasterxml.jackson.annotation.*;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import datamanager.enums.Days;
+import lombok.Data;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+import java.util.List;
+
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "startWorkTime",
         "endWorkTime",
-        "dayOfWeek"
+        "days"
 })
 public class AgentMapping {
 
@@ -15,45 +21,14 @@ public class AgentMapping {
     private String startWorkTime;
     @JsonProperty("endWorkTime")
     private String endWorkTime;
-    @JsonProperty("dayOfWeek")
-    private String dayOfWeek;
-
-    @JsonProperty("startWorkTime")
-    public String getStartWorkTime() {
-        return startWorkTime;
-    }
-
-    @JsonProperty("startWorkTime")
-    public void setStartWorkTime(String startWorkTime) {
-        this.startWorkTime = startWorkTime;
-    }
-
-    @JsonProperty("endWorkTime")
-    public String getEndWorkTime() {
-        return endWorkTime;
-    }
-
-    @JsonProperty("endWorkTime")
-    public void setEndWorkTime(String endWorkTime) {
-        this.endWorkTime = endWorkTime;
-    }
-
-    @JsonProperty("dayOfWeek")
-    public String getDayOfWeek() {
-        return dayOfWeek;
-    }
-
-    @JsonProperty("dayOfWeek")
-    public void setDayOfWeek(String dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
-    }
+    @JsonProperty("days")
+    private List<Days> days;
 
     @Override
     public String toString() {
-        return "AgentMapping{" +
+        return "AgentSupportHours {" +
                 "startWorkTime='" + startWorkTime + '\'' +
                 ", endWorkTime='" + endWorkTime + '\'' +
-                ", dayOfWeek='" + dayOfWeek + '\'' +
-                '}';
+                ", days ='" + days + '\'' + '}';
     }
 }

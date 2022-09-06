@@ -31,6 +31,7 @@ Feature: WhatsApp ORCA :: Surveys
       | abc         |
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-120988")
+    @Regression
   Scenario Outline: WA: Survey: Verify if CSAT ratings in the survey configuration to be standardized to cater for only 1-5 ratings
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Update survey management chanel <channelType> settings by ip for General Bank Demo

@@ -7,14 +7,14 @@ import agentpages.dashboard.uielements.LiveAgentsCustomerRow;
 import apihelper.ApiCustomerHistoryHelper;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
-import io.cucumber.datatable.DataTable;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import datamanager.Agents;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.AvailableAgent;
 import driverfactory.DriverFactory;
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
@@ -78,9 +78,9 @@ public class DashboardSteps extends AbstractPortalSteps {
     }
 
     @And("^Admin filter Customers History by channel and period$")
-    public void adminFilterCustomersHistoryByWebchatAndPastDay(DataTable datatable ) {
-        List<List<String>> data=datatable.cells();
-        for (List<String> a: data ){
+    public void adminFilterCustomersHistoryByWebchatAndPastDay(DataTable datatable) {
+        List<List<String>> data = datatable.cells();
+        for (List<String> a : data) {
 //            System.out.println(a);
             this.channel.set(a.get(0));
             this.period.set(a.get(1));
@@ -91,7 +91,7 @@ public class DashboardSteps extends AbstractPortalSteps {
                     String.format("Graph is not filtered by %s channel and %s period", channel, period));
             softAssert.assertAll();
         }
-  }
+    }
 
 
     @And("^Admin filter Customers History by (?!.*period and)(.*) channel$")

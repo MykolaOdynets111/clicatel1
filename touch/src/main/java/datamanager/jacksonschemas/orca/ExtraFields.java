@@ -50,20 +50,18 @@ public class ExtraFields {
     private String oauth2Token;
     @JsonProperty("channelProfileName")
     private String channelProfileName;
-
     @JsonProperty("displayTypes")
     private String displayTypes;
     @JsonProperty("messageId")
     private String messageId;
-
     @JsonProperty("channel-api-key")
     private String channelApiKey;
+
     public ExtraFields(String name){
         this.setLocale("en_uk");
         this.setAgent("iOs");
         this.setChannelProfileName(name);
     }
-
 
     @Override
     public String toString() {

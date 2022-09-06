@@ -7,7 +7,8 @@ Feature: Last agent switch
     And Turn off the Last Agent routing
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-110469")
-  Scenario: verify if supervisor can switch the toggle on or off for the "Last agent"setting
+  @Regression
+  Scenario: CD :: Dashboard :: Settings :: Preferences :: Verify if supervisor can switch the toggle on or off for the "last agent routing”
     And I select Touch in left menu and Dashboard in submenu
     When Navigate to Preferences page
     And Switch Last Agent routing

@@ -3,7 +3,8 @@
 Feature: Managing business details
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-4563")
-  Scenario: Settings :: Check changing business details
+  @Regression
+  Scenario: CD :: Dashboard :: Settings :: Business Profile :: Verify if admin is able to change/edit on business details
     Given I open portal
     And Login into portal as an admin of Automation Bot account
     When I select Touch in left menu and Dashboard in submenu
@@ -19,7 +20,7 @@ Feature: Managing business details
     And Login into portal as an admin of Automation Bot account
     When I select Touch in left menu and Dashboard in submenu
     And Navigate to Business Profile page
-    When Select 'Specific Agent Support hours' radio button in Agent Supported Hours section
+    When Select Business support hours for all agents option in Agent Supported Hours section
     And Uncheck today day and apply changes
     Then Check that today day is unselected in 'Scheduled hours' pop up
     And 'support hours' are updated in Automation Bot configs

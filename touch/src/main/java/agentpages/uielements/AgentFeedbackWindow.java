@@ -27,6 +27,9 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     })
     private WebElement closeChatButton;
 
+    @FindBy(xpath = "//*[contains(text(),'Go to chat')]")
+    private WebElement goToChatButton ;
+
     @FindBy(css = "[data-testid=sentiment-icon-negative]")
     private WebElement sentimentUnsatisfied ;
 
@@ -95,6 +98,10 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     public void clickCloseButtonInCloseChatPopup(){
         scrollAndClickElem(this.getCurrentDriver(), closeChatButton, 5, "Close button");
+    }
+
+    public void clickGoToChatButtonInCloseChatPopup(){
+        scrollAndClickElem(this.getCurrentDriver(), goToChatButton, 5, "Go to chat button");
     }
 
     public boolean isEndChatPopupShown (){
