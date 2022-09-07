@@ -130,6 +130,7 @@ public class PreferencesWindow extends BasePortalWindow {
     public void setAttachmentLifeTimeDays(int days){
         waitForElementToBeVisible(this.getCurrentDriver(), attachmentLifeTimeDays, 5);
         scrollToElem(this.getCurrentDriver(), attachmentLifeTimeDays,"Attachment Life Time Days");
+        attachmentLifeTimeDays.clear();
         inputText(this.getCurrentDriver(), attachmentLifeTimeDays,1, "Attachment Life Time Days", String.valueOf(days));
     }
 
