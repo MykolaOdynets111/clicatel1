@@ -1,27 +1,36 @@
 @no_widget
+@off_rating_whatsapp
+@off_rating_abc
 @no_chatdesk
-@off_survey_management
 Feature: Satisfaction Survey
 
-  Background:
-    Given Update survey management chanel webchat settings by ip for Standard Billing
-      | ratingEnabled   | true             |
-      | ratingType      | NPS              |
-      | ratingScale     | ZERO_TO_TEN      |
-      | ratingIcon      | NUMBER           |
-      | commentEnabled  | false            |
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-19237")
+    @TestCaseId("https://jira.clickatell.com/browse/TPORT-105173")
+  Scenario Outline: CD :: Supervisor Desk :: Chat :: Notes :: Verify that Admin/Supervisor should be able to turn ON/OFF a request for user to Leave a note
+    Given Setup ORCA <channelType> integration for Standard Billing tenant
+    And Update survey management chanel <channelType> settings by ip for Standard Billing
+      | ratingEnabled        | true        |
+      | surveyType           | CSAT        |
+      | ratingScale          | ONE_TO_FIVE |
+      | ratingIcon           | NUMBER      |
+      | commentEnabled       | true        |
+      | thanksMessageEnabled | true        |
     And I open portal
     Given Login into portal as an admin of Standard Billing account
-
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-18587")
-  Scenario: verify if supervisor has an option to allow customer to leave a note for webchat NPS survey type
     When I select Touch in left menu and Dashboard in submenu
     And Navigate to Surveys page
     Then Survey Management page should be shown
-    When Selects NPS survey type
+    When Admin selects NPS survey type for <channelType> survey form
     And Agent switch "Allow customer to leave a note" in survey management
-    When Agent click save survey configuration button
-    Then Agent sees comment field in Survey management form
-    Then Survey backend was updated for Standard Billing and webchat chanel with following attribute
-       | commentEnabled     | true       |
-
+    And Customize your survey notes message to Thank you for taking the time to leave a note.
+    And Agent click save survey configuration button for <channelType> survey form
+    Then Survey notes was updated on backend for Standard Billing and <channelType> chanel
+    Then I select Touch in left menu and Agent Desk in submenu
+    And I select Touch in left menu and Dashboard in submenu
+    And Navigate to Surveys page
+    When Admin clicks notes toggle for survey form
+    And Agent click save survey configuration button for <channelType> survey form
+    Examples:
+      | channelType |
+      | whatsapp    |
+      | abc         |

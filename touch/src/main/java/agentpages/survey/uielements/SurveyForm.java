@@ -42,6 +42,15 @@ public class SurveyForm extends AbstractWidget {
     @FindBy(xpath = ".//button[text()='Save configuration']")
     private WebElement saveButtonElement;
 
+    @FindBy(xpath = "//div[@data-testid='spinner']")
+    private WebElement saveSurveySpinner;
+
+    @FindBy(xpath = ".//label[contains(@for, 'thanksMessageEnabled')]//div")
+    private WebElement toggleButtonThankMessage;
+
+    @FindBy(xpath = ".//label[contains(@for, 'commentEnabled')]//div")
+    private WebElement toggleButtonNotes;
+
     @FindBy(xpath = ".//div[@class='setting-group__collapse-wrapper']//div")
     private WebElement collapseChannelForm;
 
@@ -51,8 +60,11 @@ public class SurveyForm extends AbstractWidget {
     @FindBy(name = "surveyQuestionTitle")
     private WebElement questionInput;
 
-    @FindBy(name = "ratingThanksMessage")
+    @FindBy(xpath = ".//textarea[contains(@id, 'thanksMessageEnabled')]")
     private WebElement thankMessageForm;
+
+    @FindBy(xpath = ".//textarea[contains(@id, 'customerNoteTitle')]")
+    private WebElement notesForm;
 
     @FindBy(css = ".number-block")
     private WebElement numberButton;
@@ -69,8 +81,14 @@ public class SurveyForm extends AbstractWidget {
     @FindBy(xpath = ".//span[text()='Prompt customer to leave a note:']/following-sibling::label")
     private WebElement commentSwitcher;
 
+    @FindBy(xpath = ".//span[text()='Follow-up thank you message:']/following-sibling::label")
+    private WebElement thankMessageSwitcher;
+
     @FindBy(xpath = ".//div[@class='surveys-inner']/div[contains(@class, 'form-content')]")
     private WebElement noteFormEnabled;
+
+    @FindBy(xpath = ".//div[@class='surveys-inner']/div[contains(@class, 'form-content')][2]")
+    private WebElement thankFormEnabled;
 
     @FindBy(xpath = ".//textarea[@name='customerNoteTitle']")
     private WebElement commentFieldHeader;
@@ -116,12 +134,29 @@ public class SurveyForm extends AbstractWidget {
         return this;
     }
 
+    public SurveyForm clickThankMessageToggle() {
+        moveToElemAndClick(this.getCurrentDriver(), toggleButtonThankMessage);
+        return this;
+    }
+
+    public SurveyForm clickNotesToggle() {
+        moveToElemAndClick(this.getCurrentDriver(), toggleButtonNotes);
+        return this;
+    }
+
     public void changeQuestion(String question) {
+        questionInput.clear();
         inputText(this.getCurrentDriver(), questionInput, 1, "Question Input", question);
     }
 
     public void setThankMessage(String message) {
+        thankMessageForm.clear();
         inputText(this.getCurrentDriver(), thankMessageForm, 1, "Question Input", message);
+    }
+
+    public void setNotesMessage(String message) {
+        notesForm.clear();
+        inputText(this.getCurrentDriver(), notesForm, 4, "Notes form Input", message);
     }
 
     public SurveyForm clickCSATRadioButton() {
@@ -143,8 +178,9 @@ public class SurveyForm extends AbstractWidget {
     }
 
     public void clickSaveButton() {
-        if (isElementEnabled(this.getCurrentDriver(), saveButtonElement, 2) == true) {
+        if (isElementEnabled(this.getCurrentDriver(), saveButtonElement, 5)) {
             clickElem(this.getCurrentDriver(), saveButtonElement, 2, "Save Survey Button");
+            waitForAppearAndDisappear(this.getCurrentDriver(), saveSurveySpinner, 3, 4);
         } else {
             System.out.println("Value is already saved");
         }
@@ -185,6 +221,27 @@ public class SurveyForm extends AbstractWidget {
         } else {
             System.out.println("Comment switcher toggle is already clicked");
         }
+    }
+
+    public void clickThankMessageSwitcher() {
+        if (thankFormEnabled.getAttribute("class").contains("disabled")) {
+            clickElem(this.getCurrentDriver(), thankMessageSwitcher, 2, "Thank message form switcher");
+        } else {
+            System.out.println("Thank Message toggle is already clicked");
+        }
+    }
+
+    public String getSurveyPreviewTitle(){
+        return getTextFromElem(this.getCurrentDriver(), surveyPreviewTitle, 4,
+                "Survey preview header");
+    }
+
+    public boolean checkThankFormStatus() {
+        return thankFormEnabled.getAttribute("class").contains("disabled");
+    }
+
+    public boolean checkNotesFormStatus() {
+        return noteFormEnabled.getAttribute("class").contains("disabled");
     }
 
     public void selectRateIcon(String icon) {

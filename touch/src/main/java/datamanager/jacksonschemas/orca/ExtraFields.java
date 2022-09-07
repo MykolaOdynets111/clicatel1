@@ -62,4 +62,5 @@ public class ExtraFields {
         this.setAgent("iOs");
         this.setChannelProfileName(name);
     }
+
 }

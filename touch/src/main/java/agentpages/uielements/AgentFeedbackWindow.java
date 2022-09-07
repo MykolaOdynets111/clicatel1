@@ -82,6 +82,10 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css =".cl-loading-overlay")
     private WebElement loadingState;
 
+    public boolean isAgentFeedbackWindowShown(){
+        return isElementShown(this.getCurrentDriver(), this.getWrappedElement(),2);
+    }
+    
     public AgentFeedbackWindow waitForLoadingData(){
         waitForAppearAndDisappearByCss(this.getCurrentDriver(), ".cl-animated-ellipsis",  3, 5);
         return this;

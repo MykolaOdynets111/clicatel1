@@ -32,11 +32,16 @@ public class ORCASteps implements WebWait {
     public static final ThreadLocal<OrcaEvent> orcaMessageCallBody = new ThreadLocal<>();
     private static final ThreadLocal<String> apiToken = new ThreadLocal<>();
     private static final ThreadLocal<String> clientId = new ThreadLocal<>();
+    private static final ThreadLocal<String> smsSourceId = new ThreadLocal<>();
     public static ThreadLocal<String> mediaFileName = new ThreadLocal<>();
     private static final ThreadLocal<String> orcaChannelId = new ThreadLocal<>();
 
     public static String getClientId() {
         return clientId.get();
+    }
+
+    public static String getSmsSourceId() {
+        return smsSourceId.get();
     }
 
     public static String getChannelId() {
@@ -232,7 +237,7 @@ public class ORCASteps implements WebWait {
         if(Objects.isNull(OrcaServer.orcaMessages)) {
             return false;
         }
-        return OrcaServer.orcaMessages.contains(message);
+        return OrcaServer.orcaMessages.toString().contains(message);
 
 
 
@@ -241,6 +246,7 @@ public class ORCASteps implements WebWait {
     private void createRequestMessage(String apiKey, String message) {
         orcaMessageCallBody.set(new OrcaEvent(apiKey, message));
         clientId.set(orcaMessageCallBody.get().getUserInfo().getUserName());
+        smsSourceId.set(orcaMessageCallBody.get().getSourceId());
     }
 
 }

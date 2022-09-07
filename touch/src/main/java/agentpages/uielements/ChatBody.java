@@ -96,7 +96,7 @@ public class ChatBody extends AbstractUIElement {
     })
     private WebElement locationHREFFromAgent;
 
-    @FindBy(css = ".from [selenium-id='map-chat-message-content-LocationMessage']")
+    @FindBy(css = "[data-testid='map-chat-message-content-LocationMessage']")
     private WebElement locationHREFFormUser;
 
     @FindBy(xpath = ".//div[@class='channel-separator-title mb-2 mt-2']")

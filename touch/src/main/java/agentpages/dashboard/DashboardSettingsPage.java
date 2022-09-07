@@ -40,6 +40,9 @@ public class DashboardSettingsPage extends PortalAbstractPage {
     })
     private WebElement surveysNavigation;
 
+    @FindBy(xpath = "//div[@data-testid='spinner']")
+    private WebElement surveySpinner;
+
     public void openSettingsPage(String settingsName) {
         switch (settingsName) {
             case "Business Profile":
@@ -59,6 +62,7 @@ public class DashboardSettingsPage extends PortalAbstractPage {
                 clickElem(this.getCurrentDriver(), surveysNavigation, 6, "Surveys");
         }
         this.getCurrentDriver().navigate().refresh();
+        waitForAppearAndDisappear(this.getCurrentDriver(), surveySpinner, 3, 4);
     }
 
     public boolean isBusinessProfileTabShown() {
