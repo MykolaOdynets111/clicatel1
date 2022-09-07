@@ -20,6 +20,9 @@ import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import javaserver.Server;
 import mc2api.auth.PortalAuthToken;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.springframework.util.StringUtils;
 import org.testng.Assert;
 
 import java.net.ConnectException;
@@ -42,9 +45,9 @@ public class ApiHelper implements VerificationHelper {
     }
 
     public static Response getTenantConfig(String tenantOrgName) {
-        String tenantId = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        String tenantId = getTenant(tenantOrgName).get("id");
         return RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .log().all()
                 .get(String.format(Endpoints.INTERNAL_TENANT_CONFIG, tenantId));
     }
@@ -80,7 +83,7 @@ public class ApiHelper implements VerificationHelper {
 
     public static Response getTenantInfo(String tenantOrgName) {
         Response resp = RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .get(Endpoints.TENANT_INFO);
         Assert.assertEquals(resp.statusCode(), 200, "Failed to get tenant info\n" +
                 "URL: " + Endpoints.TENANT_INFO + "\n" +
@@ -91,7 +94,7 @@ public class ApiHelper implements VerificationHelper {
 
     public static Response createUserProfile(String clientID) {
         Response resp;
-        String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
+        String tenantId = getTenant(Tenants.getTenantUnderTestOrgName()).get("id");
 
         resp = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
@@ -115,7 +118,7 @@ public class ApiHelper implements VerificationHelper {
 
     public static void createUserProfileWithPhone(String clientID, String phoneNumber) {
         Response resp;
-        String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
+        String tenantId = getTenant(Tenants.getTenantUnderTestOrgName()).get("id");
 
         resp = RestAssured.given()
                 .contentType(ContentType.JSON)
@@ -169,7 +172,7 @@ public class ApiHelper implements VerificationHelper {
 
     public static List<AutoResponderMessage> getAutoRespondersList(String title) {
         Response resp = RestAssured.given().log().all()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .contentType(ContentType.JSON)
                 .get(Endpoints.INTERNAL_AUTORESPONDER_CONTROLLER);
         Assert.assertEquals(resp.statusCode(), 200,
@@ -196,7 +199,7 @@ public class ApiHelper implements VerificationHelper {
     public static void updateAutoresponderMessage(AutoResponderMessage tafMessage, String autoResponderId) {
         String url = String.format(Endpoints.AUTORESPONDER_CONTROLLER, autoResponderId);
         Response resp = RestAssured.given().log().all()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .contentType(ContentType.JSON)
                 .param("autoresponderId", tafMessage.getId())
                 .param("enabled", tafMessage.getEnabled())
@@ -209,33 +212,27 @@ public class ApiHelper implements VerificationHelper {
         }
     }
 
-
-    //** commented everywhere because widget visibility hours doe not present anymore
-//    public static void setWidgetVisibilityDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
-//        String body = createPutBodyForHours(day, startTime, endTime);
-//        Response resp = RestAssured.given().log().all()
-//                .contentType(ContentType.JSON)
-//                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
-//                .body(body)
-//                .put(String.format(Endpoints.WIDGET_VISIBILITY_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
-//        if (! (resp.getStatusCode() == 200)){
-//            Assert.fail("Update Widget Visibility failed \n"
-//                    +"Status code: " +resp.statusCode() + "\n"
-//                    + "Error message: " + resp.getBody().asString());
-//        }
-//    }
-
-    public static Response setAgentSupportDaysAndHours(String tenantOrgName, String day, String startTime, String endTime) {
+    public static Response setAgentSupportDaysAndHours(String tenantOrgName, String day,
+                                                       String startTime, String endTime) {
         String body = createPutBodyForHours(day, startTime, endTime);
-        return RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
-                .body(body)
-                .post(String.format(Endpoints.AGENT_SUPPORT_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
+        String id = getTenant(tenantOrgName).get("id");
+        return postQuery(tenantOrgName, body, Endpoints.AGENT_SUPPORT_HOURS, id);
+    }
+
+    public static SupportHoursItem setAgentSupportDaysAndHours(String tenantOrgName, List<String> days,
+                                                               String startTime, String endTime) {
+        String body = getAgentSupportHoursBody(days, startTime, endTime);
+
+        return Objects.requireNonNull(getPostQueryFor(tenantOrgName, Endpoints.AGENT_SUPPORT_HOURS, body))
+                .as(SupportHoursItem.class);
+    }
+
+    public static SupportHoursItem setAgentSupportDaysAndHours(String tenantOrgName, List<String> days) {
+        return setAgentSupportDaysAndHours(tenantOrgName, days, "00:00", "23:59");
     }
 
     private static SupportHoursItem getAgentSupportDaysAndHours(String tenantOrgName, String agent) {
-        String accessToken = TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, agent);
+        String accessToken = getAccessToken(tenantOrgName, agent);
         Response response = getSupportHoursForTenant(tenantOrgName, accessToken);
 
         if (response.getStatusCode() != 200) {
@@ -276,26 +273,33 @@ public class ApiHelper implements VerificationHelper {
                     "  \"supportHoursByDepartment\": []\n" +
                     "}";
         } else {
-            body = "{\n" +
-                    "  \"agentSupportHours\": [\n" +
-                    "    {\n" +
-                    "      \"startWorkTime\": \"" + startTime + "\",\n" +
-                    "      \"endWorkTime\": \"" + endTime + "\",\n" +
-                    "      \"days\": [\n" +
-                    "        \"" + day.toUpperCase() + "\"\n" +
-                    "      ]\n" +
-                    "    }\n" +
-                    "  ],\n" +
-                    "  \"supportHoursByDepartment\": []\n" +
-                    "}";
+            body = getAgentSupportHoursBody(Collections.singletonList(day), startTime, endTime);
         }
+        return body;
+    }
+
+    @NotNull
+    private static String getAgentSupportHoursBody(List<String> days, String startTime, String endTime) {
+        String body;
+        String sequenceOfDays = StringUtils.collectionToDelimitedString(days, ",", "\"", "\"");
+        body = "{\n" +
+                "  \"agentSupportHours\": [\n" +
+                "    {\n" +
+                "      \"startWorkTime\": \"" + startTime + "\",\n" +
+                "      \"endWorkTime\": \"" + endTime + "\",\n" +
+                "      \"days\": [\n" + sequenceOfDays +
+                "      ]\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"supportHoursByDepartment\": []\n" +
+                "}";
         return body;
     }
 
     public static void setAvailableForAllTerritories(String tenantOrgName) {
         RestAssured.given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"availability\": \"AVAILABLE\"\n" +
                         "\n" +
@@ -313,7 +317,7 @@ public class ApiHelper implements VerificationHelper {
         String countryID = targetCountry.getCountryId();
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"availability\": \"LIMITED\",\n" +
                         "  \"territory\": [\n" +
@@ -337,7 +341,7 @@ public class ApiHelper implements VerificationHelper {
         String territoryID = targetTerr.getTerritoryId();
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"availability\": \"LIMITED\",\n" +
                         "  \"territory\": [\n" +
@@ -369,14 +373,14 @@ public class ApiHelper implements VerificationHelper {
 
 
     public static void updateFeatureStatus(String tenantOrgName, String feature, String status) {
-        String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        String tenantID = getTenant(tenantOrgName).get("id");
         String url = String.format(Endpoints.INTERNAL_FEATURE_STATE, tenantID, feature, status);
         RestAssured.put(url);
     }
 
     public static boolean getFeatureStatus(String tenantOrgName, String FEATURE) {
         Response resp = RestAssured.given().log().all()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .get(Endpoints.FEATURE);
         boolean featureStatus = false;
         try {
@@ -431,7 +435,7 @@ public class ApiHelper implements VerificationHelper {
     }
 
     public static void logoutTheAgent(String tenantOrgName) {
-        String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        String tenantID = getTenant(tenantOrgName).get("id");
         RestAssured.given().accept(ContentType.JSON)
                 .get(String.format(Endpoints.INTERNAL_LOGOUT_AGENT, tenantID));
     }
@@ -449,7 +453,7 @@ public class ApiHelper implements VerificationHelper {
 
     public static SurveyManagement getSurveyManagementAttributes(String channelId) {
         Response resp = RestAssured.given().log().all()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(String.format(Endpoints.SURVEY_MANAGEMENT, channelId));
         if (!(resp.statusCode() == 200)) {
             Assert.fail("Failed to get survey configuration ifo, status code = " + resp.statusCode() +
@@ -470,7 +474,7 @@ public class ApiHelper implements VerificationHelper {
     }
 
     public static void updateSurveyManagement(String tenantOrgName, SurveyManagement configuration, String channelID, String channelName) {
-        Response resp = RestAssured.given().log().all().header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
+        Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON).body(configuration)
                 .put(String.format(Endpoints.UPDATE_SURVEY_MANAGEMENT, channelName, channelID));
@@ -482,7 +486,7 @@ public class ApiHelper implements VerificationHelper {
 
     public static String getChannelID(String tenantOrgName, String integrationChanel) {
         List<IntegrationChannel> existedChannels = RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .get(Endpoints.INTEGRATION_EXISTING_CHANNELS)
                 .getBody().jsonPath().getList("", IntegrationChannel.class);
         return existedChannels.stream().filter(e -> e.getChannelType().equalsIgnoreCase(integrationChanel))
@@ -494,16 +498,16 @@ public class ApiHelper implements VerificationHelper {
     public static UserInfo getUserProfile(String integrationChanel, String clientId) {
         String tenantOrgName = Tenants.getTenantUnderTestOrgName();
         String chanelId = getChannelID(tenantOrgName, integrationChanel);
-        String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        String tenantID = getTenant(tenantOrgName).get("id");
         String.format(Endpoints.INTERNAL_CHAT_USER_BY_ID, tenantID, clientId, chanelId);
         return RestAssured.given().log().all()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .get(String.format(Endpoints.INTERNAL_CHAT_USER_BY_ID, tenantID, clientId, chanelId))
                 .getBody().as(UserInfo.class);
     }
 
     public static void updateUserProfile(UserInfo userInfo) {
-        Response resp = RestAssured.given().log().all().header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
+        Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON).body(userInfo)
                 .put(Endpoints.INTERNAL_CHAT_USERS);
@@ -516,7 +520,7 @@ public class ApiHelper implements VerificationHelper {
     public static void setIntegrationStatus(String tenantOrgName, String integration, boolean integrationStatus) {
         RestAssured.given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"channelId\": \"" + getChannelID(tenantOrgName, integration) + "\",\n" +
                         "  \"enable\": " + integrationStatus + "\n" +
@@ -526,35 +530,35 @@ public class ApiHelper implements VerificationHelper {
 
     public static ResponseBody getInfoAboutFBIntegration(String tenantOrgName) {
         return RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .get(Endpoints.FACEBOOK_INTEGRATION)
                 .getBody();
     }
 
     public static ResponseBody getInfoAboutTwitterIntegration(String tenantOrgName) {
         return RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .get(Endpoints.TWITTER_INTEGRATION)
                 .getBody();
     }
 
     public static String getInfoAboutTwitterIntegration(String tenantOrgName, String parametr) {
         return RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .get(Endpoints.TWITTER_INTEGRATION)
                 .getBody().jsonPath().getString(parametr);
     }
 
     public static ResponseBody delinkTwitterIntegration(String tenantOrgName) {
         return RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .delete(Endpoints.TWITTER_INTEGRATION)
                 .getBody();
     }
 
     public static void delinkFBIntegration(String tenantOrgName) {
         RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .delete(Endpoints.FACEBOOK_INTEGRATION)
                 .getBody();
     }
@@ -577,7 +581,7 @@ public class ApiHelper implements VerificationHelper {
 
     public static Integration getIntegration(String tenantOrgName, String integrationType) {
         return RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .get(Endpoints.INTEGRATIONS)
                 .getBody().jsonPath().getList("", Integration.class)
                 .stream()
@@ -587,7 +591,7 @@ public class ApiHelper implements VerificationHelper {
 
     public static List<ChatHistoryItem> getChatHistory(String tenantOrgName, String sessionId) {
         return RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .get(String.format(Endpoints.CHAT_HISTORY, sessionId))
                 .getBody().jsonPath().getList("records", ChatHistoryItem.class);
     }
@@ -596,7 +600,7 @@ public class ApiHelper implements VerificationHelper {
         PortalAuthToken.clearAccessTokenForPortalUser();
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .put(Endpoints.SESSION_CAPACITY + availableChats);
     }
 
@@ -633,7 +637,7 @@ public class ApiHelper implements VerificationHelper {
     public static List<OvernightTicket> getAssignedOvernightTickets(String tenantOrgName, String ordinalAgentNumber) {
         List<OvernightTicket> tickets = new ArrayList<>();
         Response resp = RestAssured.given().log().all()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, ordinalAgentNumber))
+                .header("Authorization", getAccessToken(tenantOrgName, ordinalAgentNumber))
                 .get(Endpoints.AGENT_ASSIGNED_TICKETS);
         try {
             tickets = resp.getBody().jsonPath().getList("", OvernightTicket.class);
@@ -647,7 +651,7 @@ public class ApiHelper implements VerificationHelper {
 
 
     public static List<OvernightTicket> getUnassignedOvernightTickets(String tenantOrgName) {
-        String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        String tenantID = getTenant(tenantOrgName).get("id");
         List<OvernightTicket> tickets = new ArrayList<>();
         Response resp = RestAssured.given().log().all()
                 .get(String.format(Endpoints.INTERNAL_GET_TICKETS, tenantID, 0));
@@ -675,7 +679,7 @@ public class ApiHelper implements VerificationHelper {
     }
 
     public static List<Department> getDepartments(String tenantOrgName) {
-        Response resp = RestAssured.given().header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main")).get(Endpoints.DEPARTMENTS);
+        Response resp = RestAssured.given().header("Authorization", getAccessToken(tenantOrgName, "main")).get(Endpoints.DEPARTMENTS);
         List<Department> departments = resp.jsonPath().getList("", Department.class);
         return departments;
     }
@@ -685,7 +689,7 @@ public class ApiHelper implements VerificationHelper {
         for (Department department : departments) {
             if (department.getName().contains("Auto")) {
                 RestAssured.given()
-                        .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, ""))
+                        .header("Authorization", getAccessToken(tenantOrgName, ""))
                         .delete(Endpoints.DEPARTMENTS + "/" + department.getId());
             }
         }
@@ -696,7 +700,7 @@ public class ApiHelper implements VerificationHelper {
         String agentId = getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent).get("id");
         Response resp;
         resp = RestAssured.given().log().all()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
                 .body("{ " +
@@ -712,7 +716,7 @@ public class ApiHelper implements VerificationHelper {
     }
 
     public static Map getActiveSessionByClientId(String clientId) {
-        String tenantID = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
+        String tenantID = getTenant(Tenants.getTenantUnderTestOrgName()).get("id");
         String url = String.format(Endpoints.INTERNAL_CHAT_BY_CLIENT, tenantID, clientId);
         Response resp = RestAssured.get(url);
         Map activeSession = null;
@@ -786,7 +790,7 @@ public class ApiHelper implements VerificationHelper {
 
     public static void updateClientProfileAttribute(String attributeName, String attribute, String clientId) {
         Response resp = RestAssured.given().log().all()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
                 .body("{" +
@@ -806,7 +810,7 @@ public class ApiHelper implements VerificationHelper {
     public static JsonPath getCustomerView(String tenantOrgName, String clineId) {
         String sessionId = (String) getActiveSessionByClientId(clineId).get("sessionId");
         return RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .get(Endpoints.CUSTOMER_VIEW + sessionId)
                 .getBody().jsonPath();
 
@@ -824,7 +828,7 @@ public class ApiHelper implements VerificationHelper {
     public static void deleteAgentPhotoForMainAQAAgent(String tenantOrgName) {
         String agentId = getAgentInfo(tenantOrgName, "main").get("id");
         Response resp = RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .delete(String.format(Endpoints.DELETE_AGENT_IMAGE, agentId));
         if (!(resp.getStatusCode() == 200)) {
             Assert.fail("Agent image was not successful" + " status code = " + resp.statusCode() +
@@ -833,27 +837,27 @@ public class ApiHelper implements VerificationHelper {
     }
 
     public static void deleteTenantBrandImage(String tenantOrgName) {
-        String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        String tenantID = getTenant(tenantOrgName).get("id");
         RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .delete(String.format(Endpoints.TENANT_BRAND_LOGO, tenantID));
 
         RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .delete(String.format(Endpoints.TENANT_BRAND_LOGO_TRANS, tenantID));
     }
 
     public static Response getTenantBrandImage(String tenantOrgName) {
-        String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        String tenantID = getTenant(tenantOrgName).get("id");
         return RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .get(String.format(Endpoints.TENANT_BRAND_LOGO, tenantID));
     }
 
     public static Response getTenantBrandImageTrans(String tenantOrgName) {
-        String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        String tenantID = getTenant(tenantOrgName).get("id");
         return RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .get(String.format(Endpoints.TENANT_BRAND_LOGO_TRANS, tenantID));
     }
 
@@ -870,7 +874,7 @@ public class ApiHelper implements VerificationHelper {
     public static Response getActiveChatsByAgent(String agent) {
         return RestAssured.given().contentType(ContentType.JSON).log().all()
                 .header("Authorization",
-                        TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), agent))
+                        getAccessToken(Tenants.getTenantUnderTestOrgName(), agent))
                 .body("{\n" +
                         "  \"chatStates\": [\n" +
                         "    \"LIVE_IN_SCHEDULER_QUEUE\",\n" +
@@ -890,7 +894,7 @@ public class ApiHelper implements VerificationHelper {
             Response r = RestAssured.given()
                     .accept(ContentType.JSON).log().all()
                     .header("Authorization",
-                            TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), agent))
+                            getAccessToken(Tenants.getTenantUnderTestOrgName(), agent))
                     .get(String.format(Endpoints.CLOSE_ACTIVE_CHAT, conversationId));
             System.out.println(r.getBody().asString());
         }
@@ -898,9 +902,9 @@ public class ApiHelper implements VerificationHelper {
 
     public static Map getElasticSearchModel(String chatId) {
         String tenantOrgName = Tenants.getTenantUnderTestOrgName();
-        String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        String tenantID = getTenant(tenantOrgName).get("id");
         Response resp = RestAssured.given().log().all()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .contentType(ContentType.JSON)
                 .body("{\n" +
                         "  \"page\": 0,\n" +
@@ -915,7 +919,7 @@ public class ApiHelper implements VerificationHelper {
     }
 
     public static void updateElasticSearchModel(Map elasticSearchModel) {
-        Response resp = RestAssured.given().log().all().header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
+        Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON).body(elasticSearchModel)
                 .put(Endpoints.INTERNAL_ELASTIC_CHAT_INDEX);
@@ -932,26 +936,26 @@ public class ApiHelper implements VerificationHelper {
 
     public static List<CRMTicket> getCRMTickets() {
         return RestAssured.given().log().all()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(String.format(Endpoints.CRM_TICKET, clientProfileId.get()))
                 .getBody().jsonPath().getList("", CRMTicket.class);
     }
 
     public static List<String> getTagsForCRMTicket(String chatId) {
-        return RestAssured.given().header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
+        return RestAssured.given().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(String.format(Endpoints.CHATS_INFO, chatId)).getBody().jsonPath().getList("tags.value");
     }
 
     public static List<String> getAllTags() {
         return RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(Endpoints.TAGS_FOR_CRM_TICKET).getBody().jsonPath().getList("value");
     }
 
 
     public static Response createCRMTicket(String clientID, Map<String, String> ticketInfo) {
         return RestAssured.given().log().all()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
                 .body("{" +
@@ -966,16 +970,16 @@ public class ApiHelper implements VerificationHelper {
 
     public static void deleteCRMTicket(String crmTicketId) {
         RestAssured.given().log().all()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.JSON)
                 .delete(Endpoints.DELETE_CRM_TICKET + crmTicketId);
     }
 
 
     public static Response updateTenantConfig(String tenantOrgName, TenantChatPreferences body) {
-        String tenantId = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        String tenantId = getTenant(tenantOrgName).get("id");
         return RestAssured.given().log().all()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON)
                 .body(TenantChatPreferences.class)
@@ -984,7 +988,7 @@ public class ApiHelper implements VerificationHelper {
 
     public static TenantChatPreferences getTenantChatPreferences() {
         return RestAssured.given().log().all()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON).get(Endpoints.TENANT_CHAT_PREFERENCES).getBody().as(TenantChatPreferences.class);
     }
@@ -1034,14 +1038,14 @@ public class ApiHelper implements VerificationHelper {
 
     public static List<AvailableAgent> getAvailableAgents() {
         return RestAssured.given().log().all()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(Endpoints.TENANT_AVAILABLE_AGENTS)
                 .getBody().jsonPath().getList("agents", AvailableAgent.class);
     }
 
     public static ClientProfile getClientAttributes(String clientProfileID) {
         return RestAssured.given().log().all()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(String.format(Endpoints.INTERNAL_CLIENT_PROFILE_ATTRIBUTES_ENDPOINT, clientProfileID))
                 .getBody().as(ClientProfile.class);
     }
@@ -1093,6 +1097,40 @@ public class ApiHelper implements VerificationHelper {
 
     private static Response callServer() throws ConnectException {
         return RestAssured.get(Server.getServerURL());
+    }
+
+    @Nullable
+    private static ResponseBody getPostQueryFor(String tenantOrgName,
+                                                String endpoint,
+                                                String body) {
+        String id = getTenant(tenantOrgName).get("id");
+        Response response = postQuery(tenantOrgName, body, endpoint, id);
+
+        if (response.getStatusCode() != 200) {
+            fail("Couldn't get 'Agent Support Hours' \n"
+                    + "Status code: " + response.statusCode() + "\n"
+                    + "TenantOrgName: " + tenantOrgName + "\n"
+                    + "Error message: " + response.getBody().asString());
+            return null;
+        } else {
+            return response.getBody();
+        }
+    }
+
+    private static Response postQuery(String tenantOrgName, String body, String endpoint, String id) {
+        return RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
+                .body(body)
+                .post(String.format(endpoint, id));
+    }
+
+    private static Map<String, String> getTenant(String tenantOrgName) {
+        return ApiHelper.getTenantInfoMap(tenantOrgName);
+    }
+
+    private static String getAccessToken(String tenantOrgName, String main) {
+        return TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, main);
     }
 
     private static Response getSupportHoursForTenant(String tenantOrgName, String accessToken) {

@@ -63,19 +63,4 @@ public class ExtraFields {
         this.setChannelProfileName(name);
     }
 
-    @Override
-    public String toString() {
-        return "ExtraFields{" +
-                "locale='" + locale + '\'' +
-                ", agent='" + agent + '\'' +
-                ", intent='" + intent + '\'' +
-                ", group='" + group + '\'' +
-                ", abc=" + abc +
-                ", merchantSession='" + merchantSession + '\'' +
-                ", endpoints='" + endpoints + '\'' +
-                ", addressInfo='" + addressInfo + '\'' +
-                ", token='" + token + '\'' +
-                ", oauth2Token='" + oauth2Token + '\'' +
-                '}';
-    }
 }

@@ -3,7 +3,6 @@ package datamanager.jacksonschemas;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import datamanager.enums.Days;
 import lombok.Data;
 
 import java.util.List;
@@ -22,7 +21,7 @@ public class AgentMapping {
     @JsonProperty("endWorkTime")
     private String endWorkTime;
     @JsonProperty("days")
-    private List<Days> days;
+    private List<String> days;
 
     @Override
     public String toString() {

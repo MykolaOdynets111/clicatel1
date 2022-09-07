@@ -33,7 +33,6 @@ public class ChatInLeftMenu extends AbstractWidget {
 
     @FindAll({
             @FindBy(css = "[data-testid='chat-item-icons-holder'] svg"),
-            @FindBy(css = "[selenium-id='chat-item-icons-holder'] svg") //toDo old locator
     })
     private WebElement adapterWrappedIcon;
 

@@ -58,7 +58,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
     private Widget widget;
     int activeChatsFromChatdesk;
     private Map<String, Double> topUpBalance = new HashMap<>();
-    private String nameOfUnchekedDay = "";
     private String accountCurrency;
     private String autoSchedulerPreActionStatus;
     private String confirmationURL;
@@ -1359,13 +1358,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().selectPaymentMethod(option);
     }
 
-
     @Then("^Payment review tab is opened$")
     public void verifyPaymentReviewTabIsOpened(){
         getAdminPortalMainPage().waitForNotificationAlertToDisappear();
         Assert.assertTrue(getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentReviewTabOpened(),
                 "Admin is not redirected to PaymentReview tab after adding new card.");
-
     }
 
     @When("^Admin closes Confirm details window$")
@@ -1671,7 +1668,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         soft.assertEquals(preferencesWindow.getPendingChatAutoClosureHours(), pref.get("pendingChatsAuto_closureTime"),
                 "Default Pending Chats Auto-closure Time hours are not correct");
         soft.assertAll();
-
     }
 
     @When("^click off/on 'Automatic Scheduler'$")
@@ -1698,22 +1694,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         Assert.assertNotEquals(ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled"),
                 autoSchedulerPreActionStatus,
                 "Auto scheduling status on backend is not as expected \n");
-    }
-
-    @And("^Uncheck today day and apply changes$")
-    public void uncheckTodayDayAndApplyChanges() {
-        nameOfUnchekedDay = getPortalTouchPreferencesPage().getBusinessProfileWindow().uncheckTodayDay();
-        agentClickSaveChangesButton();
-    }
-
-    @And("^'support hours' are updated in (.*) configs$")
-    public void supportHoursAreUpdatedInTenantConfigs(String tenantOrgName) {
-        Assert.assertFalse(ApiHelper.getAgentSupportDaysAndHoursForMainAgent(tenantOrgName).toString().contains(nameOfUnchekedDay.toUpperCase()),"Error. 'support hours' contain today day.");
-    }
-
-    @Then("^Check that today day is unselected in 'Scheduled hours' pop up$")
-    public void checkThatTodayDayIsUnselectedInScheduledHoursPopUp() {
-        Assert.assertTrue(getPortalTouchPreferencesPage().getBusinessProfileWindow().isUncheckTodayDay(nameOfUnchekedDay.toUpperCase()),"Today  day was not been unchecked");
     }
 
     @When("^Turn (.*) the Last Agent routing$")
@@ -1774,12 +1754,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
     }
 
     private MainPage getMainPage() {
-        if (mainPage==null) {
+        if (mainPage == null) {
             mainPage = new MainPage();
-            return mainPage;
-        } else{
-            return mainPage;
         }
+        return mainPage;
     }
-
 }
