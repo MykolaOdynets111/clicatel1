@@ -294,29 +294,28 @@ public class DashboardSteps extends AbstractPortalSteps {
     }
 
     @Then("^Admin is able to see the average CSAT survey response converted to (\\d+)-(\\d+)$")
-    public void adminIsAbleToSeeTheAverageCSATSurveyResponseConvertedTo(int from, int to) {
+    public void adminIsAbleToSeeTheAverageCSATSurveyResponseConvertedTo(double from, double to) {
         if (getDashboardPage().getCustomersHistory().isNoDataDisplayedForGraph("Customer Satisfaction")) {
             actualCustomerSatisfactionScoreOld.set(0.0);
         } else {
             actualCustomerSatisfactionScoreOld.set(getDashboardPage().getCustomerSatisfactionSection()
-                    .getCustomerSatisfactionScoreOld());
+                    .getCustomerSatisfactionScore());
         }
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(actualCustomerSatisfactionScoreOld.get() >= from, "Customer Satisfaction Score is less then " + from);
         softAssert.assertTrue(actualCustomerSatisfactionScoreOld.get() <= to, "Customer Satisfaction Score is more then " + to);
+        softAssert.assertAll();
     }
 
     //Use this step to fetch after CSAT ratings to compare before and after CSAT rating
     @Then("^Admin is able to see the new average CSAT survey response converted to (\\d+)-(\\d+)$")
-    public void adminIsAbleToSeeTheNewAverageCSATSurveyResponseConvertedTo(int from, int to) {
-        if (getDashboardPage().getCustomersHistory().isNoDataDisplayedForGraph("Customer Satisfaction")) {
-            actualCustomerSatisfactionScoreNew.set(0.0);
-        } else {
-            actualCustomerSatisfactionScoreNew.set(getDashboardPage().getCustomerSatisfactionSection()
-                    .getCustomerSatisfactionScoreOld());
-        }
-        Assert.assertTrue(actualCustomerSatisfactionScoreNew.get() >= from, "Customer Satisfaction Score is less then " + from);
-        Assert.assertTrue(actualCustomerSatisfactionScoreNew.get() <= to, "Customer Satisfaction Score is more then " + to);
+    public void adminIsAbleToSeeTheNewAverageCSATSurveyResponseConvertedTo(double from, double to) {
+        actualCustomerSatisfactionScoreNew.set(getDashboardPage().getCustomerSatisfactionSection()
+                .getCustomerSatisfactionScore());
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(actualCustomerSatisfactionScoreNew.get() >= from, "Customer Satisfaction Score is less then " + from);
+        softAssert.assertTrue(actualCustomerSatisfactionScoreNew.get() <= to, "Customer Satisfaction Score is more then " + to);
+        softAssert.assertAll();
     }
 
     //Use this step to compare before and after CSAT rating

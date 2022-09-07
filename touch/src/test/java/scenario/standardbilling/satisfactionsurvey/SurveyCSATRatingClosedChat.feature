@@ -148,7 +148,9 @@ Feature: Satisfaction Survey
       | Apple Business Chat | Past week |
     Then Admin is able to see the average CSAT survey response converted to 0-100
     And Navigate to Surveys page
-    When Agent switch "Allow customer to give thank message" in survey management
+    When Admin clicks on channel toggle button for survey form
+    And Admin clicks on channel expand button for survey form
+    And Agent switch "Allow customer to give thank message" in survey management
     And Agent switch "Allow customer to leave a note" in survey management
     And Agent click save survey configuration button for <channelType> survey form
     When Send connect to agent message by ORCA
