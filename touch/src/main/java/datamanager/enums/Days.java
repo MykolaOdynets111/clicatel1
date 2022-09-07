@@ -6,6 +6,7 @@ import lombok.ToString;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @ToString
@@ -22,7 +23,7 @@ public enum Days {
 
     private final String value;
 
-    public static List<Days> getAllDays(){
-        return Arrays.asList(Days.values());
+    public static List<String> getAllDays(){
+        return Arrays.stream(Days.values()).map(d -> d.getValue().toUpperCase()).collect(Collectors.toList());
     }
 }

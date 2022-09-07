@@ -7,10 +7,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -35,15 +32,6 @@ public class BusinessProfileWindow extends BasePortalWindow {
     @FindBy(xpath = ".//label[text()='Country:']/parent::div//div[@class='cl-select-container cl-select-container--primary css-b62m3t-container']")
     private WebElement selectCompanyCountry;
 
-    @FindBy(css = ".support-hours-select-wrapper .cl-r-select__indicators")
-    private WebElement arrowSupportHours;
-
-    @FindBy(xpath = ".//span[contains(@class, 'ui-select-choices-row-inner')]")
-    private WebElement choicesSupportHours;
-
-    @FindBy(xpath = ".//button[contains(text(), 'Add')]")
-    private WebElement addSupportHoursButton;
-
     @FindBy(css = "[for='file-input-avatar']")
     private WebElement uploadButton;
 
@@ -62,10 +50,6 @@ public class BusinessProfileWindow extends BasePortalWindow {
     private WebElement getAgentSupportHoursOption(String option) {
         return findElementByXpath(this.getCurrentDriver(), String.format("//*[contains(text(), '%s')]", option), 10);
     }
-
-    private final String choiseSupportDay = "//span[@class='cl-r-checkbox__label'][text()='%s']/..";
-    private final String uncheckedTDay = ".//input[@value='%s' and not(@checked)]";
-
 
     public void clickUploadButton() {
         clickElem(this.getCurrentDriver(), uploadButton, 1, "Upload button");
@@ -130,21 +114,6 @@ public class BusinessProfileWindow extends BasePortalWindow {
         int randomIndustryNumber = ThreadLocalRandom.current().nextInt(0, companyCountry.size() - 1);
         companyCountry.get(randomIndustryNumber).click();
         return selectCompanyCountry.getText();
-    }
-
-    public String uncheckTodayDay() {
-        clickElem(this.getCurrentDriver(), arrowSupportHours, 2, "Arrow to open support hours");
-        SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE", Locale.US);
-        String nameOfDay = simpleDateformat.format(new Date());
-        WebElement dayToUncheck = findElemByXPATH(this.getCurrentDriver(), String.format(choiseSupportDay, nameOfDay));
-        clickElem(this.getCurrentDriver(), dayToUncheck, 2, "Today day");
-        clickElem(this.getCurrentDriver(), arrowSupportHours, 2, "Arrow to open support hours");
-        return nameOfDay;
-    }
-
-    public boolean isUncheckTodayDay(String nameOfDay) {
-        clickElem(this.getCurrentDriver(), arrowSupportHours, 3, "Arrow to open support hours");
-        return isElementExistsInDOMXpath(this.getCurrentDriver(), String.format(uncheckedTDay, nameOfDay), 5);
     }
 
     public void selectAgentSupportHoursOption(String option) {

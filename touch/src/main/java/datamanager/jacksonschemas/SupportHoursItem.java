@@ -8,12 +8,12 @@ import lombok.Data;
 
 import java.util.List;
 
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "agentSupportHours",
         "supportHoursByDepartment"
 })
-@Data
 public class SupportHoursItem {
 
     @JsonProperty("agentSupportHours")
