@@ -299,6 +299,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @When("^(.*) sees Lviv Location from User$")
     public void verifyLocationFromUser(String agent){
+        waitFor(2000);// URL needs time for full creation
         locationURL.set(getAgentHomePage(agent).getChatBody().getLocationURLFromUser());
         Assert.assertTrue(locationURL.get().contains("Lviv"),  agent+ " didn't get Lviv location");
     }

@@ -35,5 +35,6 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Agent click on new conversation request from orca
     Then Agent view the visual indicator "This chat has been marked as Pending by " agent name and timestamp in the conversation area
     When Agent click 'Pending On' chat button
+    When Agent select "Live Chats" left menu option
     And Agent click on new conversation request from orca
     Then Agent view the visual indicator "This chat has been marked as live chat by " agent name and timestamp in the conversation area
