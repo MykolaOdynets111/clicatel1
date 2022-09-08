@@ -2,7 +2,7 @@
 Feature: Whatsapp ORCA :: ChatDesk
 
   @orca_api
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-90123")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1174")
   @Regression
   Scenario: CD :: Agent Desk :: Live Chat :: Location :: Verify the end-user can share the current location on WhatsApp via Flow
     Given I login as agent of Standard Billing

@@ -33,7 +33,7 @@ Feature: Managing Chat desk Window
     And Agent refreshes the page
     Then Chats per agent became:"6"
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-110447")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1166")
   @Regression
   Scenario: CD :: Dashboard :: Settings :: Preferences :: Verify if supervisor can't input decimal number for maximum number of chat
     Given I open portal

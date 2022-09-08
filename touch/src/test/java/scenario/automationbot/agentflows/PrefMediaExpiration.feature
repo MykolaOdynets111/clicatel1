@@ -16,7 +16,7 @@ Feature: Preferences
     When Agent set 90 days in Media Files Expiration section
     Then Error message is not shown in Media Files Expiration section
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-110427")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1164")
   @Regression
   Scenario: CD :: Dashboard :: Settings :: Preferences :: Verify that the minimum value for media deletion setting is 7 days
     Given I open portal

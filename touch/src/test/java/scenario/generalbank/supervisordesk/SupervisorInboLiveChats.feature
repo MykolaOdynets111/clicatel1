@@ -2,7 +2,7 @@
 Feature: Supervisor desk
 
   @orca_api
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-15691")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2787")
   @Regression
   Scenario: CD::Supervisor desk :: Verify if supervisor is able to check live chats
     Given I open portal
@@ -15,7 +15,7 @@ Feature: Supervisor desk
     When Verify "All Chats" display default
     Then  Verify that live chats available are shown
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-106817")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1168")
   @Regression
   Scenario: CD :: Supervisor Desk :: Chats :: Verify if the first view on supervisor desk is ‘Chats’ tab
     Given I open portal

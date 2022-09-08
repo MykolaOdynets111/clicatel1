@@ -2,7 +2,7 @@
 Feature: Whatsapp ORCA :: Chatdesk
 
   @orca_api
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118502")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1739")
   @Regression
   Scenario: ChatDesk:: The header should have whatsapp icon when user is chatting using orca whatsapp
     Given I login as agent of General Bank Demo
@@ -15,7 +15,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent should see whatsappHeader icon in active chat header
 
  @orca_api
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118503")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1821")
   @Regression
   Scenario: ChatDesk: ORCA WhatsApp: Verify if //END message works for whatsapp chat
     Given I login as agent of General Bank Demo
@@ -29,7 +29,7 @@ Feature: Whatsapp ORCA :: Chatdesk
 
   @orca_api
   @start_orca_server
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118504")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1826")
   @Regression
   Scenario: ChatDesk:: Verify if agent is able to transfer Orca WhatsApp chat via "Transfer chat" button
     Given I login as agent of General Bank Demo
@@ -50,7 +50,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Second agent responds with hello to User
     Then Verify Orca returns hello response during 40 seconds
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118505")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1752")
   @Regression
   Scenario: ChatDesk:: Verify if agent can filter closed chat using WhatsApp chat channel
     Given I login as agent of General Bank Demo
@@ -58,7 +58,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Agent filter closed chats with WhatsApp channel, no sentiment and flagged is false
     Then Agent see only whatsapp chats in left menu
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-90120")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1162")
   @Regression
   Scenario: CD :: Agent Desk :: Live Chat :: Location :: Verify if agent click on the small cross on search bar, the text entered in the search bar is deleted
     Given I login as agent of General Bank Demo
@@ -72,7 +72,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent click on reset button
     Then Location field becomes empty
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-104472")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1171")
   @Regression
   Scenario: CD :: Agent Desk :: Live Chat :: Verify if agent can send plain text message to a user over WhatsApp Channel
     Given I login as agent of General Bank Demo
@@ -83,7 +83,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Conversation area becomes active with connect to Support user's message
     When Agent send Hello message
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-101060")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1176")
   @Regression
   Scenario: CD :: Agent Desk :: Live Chat :: Profile :: Verify the text in the "not verified" label is in grey color in customer profile phone number field
     Given I login as agent of General Bank Demo
@@ -96,7 +96,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent click Save button in User profile
     Then Not verified label is displayed
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-114765")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1835")
   @Regression
   Scenario: CD :: Agent Desk :: Live Chat :: Verify that location should auto-populate after agent try to search for second location without selecting the first one.
     Given I login as agent of General Bank Demo
@@ -113,7 +113,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent search for Canada Location
     And Agent click on Canada Location
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-90109")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1165")
   @Regression
   Scenario: CD :: Agent Desk :: Live Chat :: Location :: Verify that An agent should be able to search for any location.
     Given I login as agent of General Bank Demo

@@ -6,7 +6,8 @@
 @start_orca_server
 Feature: Satisfaction Survey
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-19270")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2443")
+  @Regression
   Scenario Outline: verify if user has an option to skip the survey for Whatsapp NPS survey type - Customer Feedback turned OFF in Flow
     Given I login as agent of Standard Billing
     And Setup ORCA <channelType> integration for Standard Billing tenant
@@ -72,7 +73,8 @@ Feature: Satisfaction Survey
       | whatsapp    |
       | abc         |
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-121014")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1861")
+  @Regression
   Scenario Outline: CD:: Survey:: Dashboard:: Verify If the client enables NPS Survey, there will be no update in the agent scores in the CSAT in agent performance tab
     Given I login as agent of Standard Billing
     And Setup ORCA <channelType> integration for Standard Billing tenant
@@ -105,7 +107,8 @@ Feature: Satisfaction Survey
       | whatsapp    |
       | abc         |
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-85704")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1170")
+  @Regression
   Scenario Outline: Dashboard: Verify if admin can open Customers History with CSAT customer survey
     Given I login as agent of Standard Billing
     And Setup ORCA <channelType> integration for Standard Billing tenant
@@ -137,7 +140,8 @@ Feature: Satisfaction Survey
       | channelType |
       | abc         |
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-120998")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1685")
+  @Regression
   Scenario Outline: CD:: Survey:: CSAT:: Verify if survey rating updates the % value for CSAT scores in the Agent performance reports
     Given I login as agent of Standard Billing
     And Setup ORCA <channelType> integration for Standard Billing tenant
@@ -177,7 +181,8 @@ Feature: Satisfaction Survey
       | channelType |
       | abc         |
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-121002")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1796")
+  @Regression
   Scenario Outline: CD:: Survey:: CSAT:: Dashboard:: Verify if customer satisfaction odometer for CSAT score is presented as 0% to 100% scale
     Given I login as agent of Standard Billing
     And Setup ORCA <channelType> integration for Standard Billing tenant
