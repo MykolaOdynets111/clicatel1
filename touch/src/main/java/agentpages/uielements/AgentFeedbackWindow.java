@@ -60,15 +60,15 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(xpath = ".//div[text() = 'No options']")
     private WebElement noOptionsMessage;
 
-    private String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
+    private final String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
 
-    private String inputTagField =  ".cl-r-select__input input";
+    private final String inputTagField =  ".cl-r-select__input input";
 
-    private String tagsOptionsCss = "div[id^='react-select']";
+    private final String tagsOptionsCss = "div[id^='react-select']";
 
-    private String selectedButtonTagsCss = ".cl-r-select__multi-value";
+    private final String selectedButtonTagsCss = ".cl-r-select__multi-value";
 
-    private String cleareAll = ".Select-clear";
+    private final String cleareAll = ".Select-clear";
 
     @FindBy(css = "[data-testid='crm-note']")
     private WebElement crmNoteTextField;
@@ -82,6 +82,10 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css =".cl-loading-overlay")
     private WebElement loadingState;
 
+    public boolean isAgentFeedbackWindowShown(){
+        return isElementShown(this.getCurrentDriver(), this.getWrappedElement(),2);
+    }
+    
     public AgentFeedbackWindow waitForLoadingData(){
         waitForAppearAndDisappearByCss(this.getCurrentDriver(), ".cl-animated-ellipsis",  3, 5);
         return this;

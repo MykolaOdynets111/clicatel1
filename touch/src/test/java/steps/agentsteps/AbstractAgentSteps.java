@@ -17,25 +17,25 @@ import java.util.Map;
 
 public class AbstractAgentSteps extends AbstractPortalSteps {
 
-    private static ThreadLocal<AgentLoginPage> currentAgentLoginPage = new ThreadLocal<>();
+    private static final ThreadLocal<AgentLoginPage> currentAgentLoginPage = new ThreadLocal<>();
 
-    private static ThreadLocal<AgentLoginPage> secondAgentLoginPage = new ThreadLocal<>();
+    private static final ThreadLocal<AgentLoginPage> secondAgentLoginPage = new ThreadLocal<>();
 
-    private static ThreadLocal<AgentLoginPage> mainAgentLoginPage = new ThreadLocal<>();
+    private static final ThreadLocal<AgentLoginPage> mainAgentLoginPage = new ThreadLocal<>();
 
-    private static ThreadLocal<AgentHomePage> mainAgentHomePage = new ThreadLocal<>();
+    private static final ThreadLocal<AgentHomePage> mainAgentHomePage = new ThreadLocal<>();
 
-    private static ThreadLocal<AgentHomePage> currentAgentHomePage = new ThreadLocal<>();
+    private static final ThreadLocal<AgentHomePage> currentAgentHomePage = new ThreadLocal<>();
 
-    private static ThreadLocal<AgentHomePage> secondAgentHomePage = new ThreadLocal<>();
+    private static final ThreadLocal<AgentHomePage> secondAgentHomePage = new ThreadLocal<>();
 
     public static Faker faker = new Faker();
 
-    private static ThreadLocal<String> clientIDGlobal = new ThreadLocal<>();
+    private static final ThreadLocal<String> clientIDGlobal = new ThreadLocal<>();
 
     public List<DotControlInitRequest> createdChatsViaDotControl = new ArrayList<>();
 
-    private static ThreadLocal<List<Map<String, String>>> createdAgentsMails = new ThreadLocal<>();
+    private static final ThreadLocal<List<Map<String, String>>> createdAgentsMails = new ThreadLocal<>();
 
     public static void setAgentLoginPage(String ordinalAgentNumber, AgentLoginPage loginPage) {
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
@@ -179,7 +179,9 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         if(userFrom.equalsIgnoreCase("orca")) {
             return super.getUserName("orca");
         }
-
+        if(userFrom.equalsIgnoreCase("sms")) {
+            return super.getUserName("sms");
+        }
         return getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
     }
 

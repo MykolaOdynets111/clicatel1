@@ -40,7 +40,7 @@ import java.util.stream.Stream;
 public class AgentConversationSteps extends AbstractAgentSteps {
 
     private static String selectedEmoji;
-    private static ThreadLocal<List<String>> messagesFromChatBody = new ThreadLocal<List<String>>();
+    private static final ThreadLocal<List<String>> messagesFromChatBody = new ThreadLocal<List<String>>();
     public static ThreadLocal<String> locationURL = new ThreadLocal<String>();
     private LocationWindow locationWindow ;
     private C2pSendForm c2pSendForm;
@@ -297,10 +297,10 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         locationURL.set(getAgentHomePage(agent).getChatBody().getLocationURLFromAgent());
     }
 
-    @When("^(.*) sees Lviv Location from User$")
-    public void verifyLocationFromUser(String agent){
+    @When("^(.*) sees (.*) Location from User$")
+    public void verifyLocationFromUser(String agent, String location){
         locationURL.set(getAgentHomePage(agent).getChatBody().getLocationURLFromUser());
-        Assert.assertTrue(locationURL.get().contains("Lviv"),  agent+ " didn't get Lviv location");
+        Assert.assertTrue(locationURL.get().contains(location),  agent+ " didn't get Lviv location");
     }
 
     @Then("^(.*) can see message with HSM label in Conversation area$")

@@ -22,11 +22,11 @@ import java.util.stream.Collectors;
 @FindBy(css = "section.chat-body")
 public class ChatBody extends AbstractUIElement {
 
-    private String scrollElement = ".chat-body.chat-box__messages";
+    private final String scrollElement = ".chat-body.chat-box__messages";
 
-    private String fromUserMessagesXPATH = ".//div[contains(@class,'from')]//*[text()='%s']";
+    private final String fromUserMessagesXPATH = ".//div[contains(@class,'from')]//*[text()='%s']";
 
-    private String messagesInChatBodyXPATH = ".//ul[contains(@class, 'chat-container')]/div";
+    private final String messagesInChatBodyXPATH = ".//ul[contains(@class, 'chat-container')]/div";
 
     @FindBy(css = ".spinner")
     private WebElement spinner;
@@ -96,7 +96,7 @@ public class ChatBody extends AbstractUIElement {
     })
     private WebElement locationHREFFromAgent;
 
-    @FindBy(css = ".from [selenium-id='map-chat-message-content-LocationMessage']")
+    @FindBy(css = "[data-testid='map-chat-message-content-LocationMessage']")
     private WebElement locationHREFFormUser;
 
     @FindBy(xpath = ".//div[@class='channel-separator-title mb-2 mt-2']")

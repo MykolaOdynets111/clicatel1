@@ -24,7 +24,7 @@ import java.util.TimeZone;
 
 public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelper {
 
-    private Faker faker = new Faker();
+    private final Faker faker = new Faker();
     private ChatHistory chatHistory;
     private String userId;
 
@@ -67,6 +67,12 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
     public void compareLocationInHistoryDetailsWindows(String agent){
         String locationInHistoryDetailes = getAgentHomePage(agent).getHistoryDetailsWindow().getLocationURL();
         Assert.assertEquals(locationInHistoryDetailes, AgentConversationSteps.locationURL.get(), "Location URLs aro different");
+    }
+
+    @Then("^(.*) sees the particular message (.*) in History Details window$")
+    public void compareParticularMessageInHistoryDetailsWindows(String agent, String message){
+        String locationInHistoryDetails = getAgentHomePage(agent).getHistoryDetailsWindow().getText();
+        Assert.assertTrue(locationInHistoryDetails.contains(message), "Particular message is not there in history window");
     }
 
     @Then("^(.*) sees correct messages in history details window$")
