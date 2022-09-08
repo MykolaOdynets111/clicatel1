@@ -1,9 +1,12 @@
 @no_widget
 @no_chatdesk
 @off_survey_management
+@off_rating_whatsapp
 Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-19250")
+    @TestCaseId("https://jira.clickatell.com/browse/TPORT-19251")
+    @TestCaseId("https://jira.clickatell.com/browse/TPORT-121096")
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-121096")
   @Regression
   Scenario Outline: Verify if supervisor can enable option to allow customer to leave a note for CSAT survey type
