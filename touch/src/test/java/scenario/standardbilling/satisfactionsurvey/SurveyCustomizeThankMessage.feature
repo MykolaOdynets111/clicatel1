@@ -5,10 +5,10 @@
 @no_chatdesk
 Feature: Satisfaction Survey
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-18591")
-    @TestCaseId("https://jira.clickatell.com/browse/TPORT-121098")
-    @TestCaseId("https://jira.clickatell.com/browse/TPORT-105177")
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-121098")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2273")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1921")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1169")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1921")
   @Regression
   Scenario Outline: CD:: Whatsapp:: Settings :: Survey :: Verify if tenant can  Customize customer thank you message text
     Given Setup ORCA <channelType> integration for Standard Billing tenant

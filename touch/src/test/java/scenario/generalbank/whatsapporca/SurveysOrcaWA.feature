@@ -2,9 +2,9 @@
 @off_rating_whatsapp
 Feature: WhatsApp ORCA :: Surveys
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-117475")
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-105166")
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-18586")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1877")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1173")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2394")
   Scenario Outline: WA: : Surveys: Verify if the survey preview header for Whatsapp shows as Whatsapp Chat Preview
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Update survey management chanel <channelType> settings by ip for General Bank Demo
@@ -30,7 +30,7 @@ Feature: WhatsApp ORCA :: Surveys
       | whatsapp    |
       | abc         |
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-120988")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1719")
     @Regression
   Scenario Outline: WA: Survey: Verify if CSAT ratings in the survey configuration to be standardized to cater for only 1-5 ratings
     Given Setup ORCA <channelType> integration for General Bank Demo tenant

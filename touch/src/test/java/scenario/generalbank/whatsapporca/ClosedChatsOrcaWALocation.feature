@@ -3,7 +3,7 @@ Feature: Whatsapp ORCA :: ChatDesk
 
   @orca_api
   @start_orca_server
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-106528")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1175")
   @Regression
   Scenario: CD :: WA :: Agent Desk :: Closed Chat :: History :: Location :: Verify if location shared by agent is displayed on history tab
     Given I login as agent of General Bank Demo
@@ -24,7 +24,7 @@ Feature: Whatsapp ORCA :: ChatDesk
 
 
   @orca_api
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-106523")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1157")
   @Regression
   Scenario: CD :: Agent Desk :: Closed Chat :: History :: Location :: Verify if location shared by user is  displayed on history tab
     Given I login as agent of General Bank Demo

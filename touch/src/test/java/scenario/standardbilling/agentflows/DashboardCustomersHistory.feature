@@ -27,7 +27,7 @@ Feature: Dashboard: Customer History
       | CSAT       | Customer Satisfaction | ONE_TO_FIVE |
 
   @no_chatdesk
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-50385")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2427")
   @Regression
   Scenario: Dashboard: Verify if admin can filter Customers History report by channel and period
     When I open portal
@@ -100,7 +100,8 @@ Feature: Dashboard: Customer History
     And Admin filter Customers History by Apple Business Chat channel and Past day period
     Then Admin see the message no data for Customer Satisfaction graph if there is no available data
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-50411")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2289")
+  @Regression
   Scenario: Customer History:: NPS Score:: Verify if Net Promoter Score can display a negative rating
     Given Update survey management chanel webchat settings by ip for Standard Billing
       | ratingEnabled | true        |
@@ -165,7 +166,7 @@ Feature: Dashboard: Customer History
     And Admin filter Customers History by Past day period
     Then All reports in graphs should be breakdown hourly
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118185")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1816")
   @Regression
   Scenario: CD:: SMS:: Customers Overview :: Verify if Supervisor can see SMS channel in the Customer History tab in Dashboard
     When I open portal

@@ -2,7 +2,7 @@
 Feature: Apple Business Chat :: Chatdesk
 
   @orca_api
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-45496")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-3001")
   @Regression
   Scenario: Chatdesk:: The header should have apple icon when user is chatting using apple chat
     Given I login as agent of General Bank Demo
@@ -16,7 +16,7 @@ Feature: Apple Business Chat :: Chatdesk
 
 
   @orca_api
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-45561")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2328")
   @Regression
   Scenario: CD:: ABC:: Agent Desk:: //END message works for apple business chat
     Given I login as agent of General Bank Demo
@@ -29,7 +29,7 @@ Feature: Apple Business Chat :: Chatdesk
 
   @orca_api
   @start_orca_server
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-45512")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1618")
   @Regression
   Scenario: CD :: Agent Desk :: Live Chat :: Transfer Chat :: Verify if agent is able to transfer Apple business chat via "Transfer chat" button (ABC)
     Given I login as agent of General Bank Demo
@@ -50,7 +50,7 @@ Feature: Apple Business Chat :: Chatdesk
     When Second agent responds with hello to User
     Then Verify Orca returns hello response during 40 seconds
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-45510")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2856")
   @Regression
   Scenario: Chatdesk:: Verify if agent can filter closed chat using Apple business chat channel
     Given I login as agent of General Bank Demo
