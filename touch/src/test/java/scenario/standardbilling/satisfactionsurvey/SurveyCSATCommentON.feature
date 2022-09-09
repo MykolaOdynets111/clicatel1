@@ -34,4 +34,4 @@ Feature: Satisfaction Survey
       | channelType |
       | whatsapp    |
       | abc         |
-      | webchat     |
+    #  | webchat     |
