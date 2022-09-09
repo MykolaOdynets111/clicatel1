@@ -3,8 +3,9 @@
 @newagent
 Feature: Departments
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-85767")
-  Scenario: Verify correct agents numbers in created department
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1177")
+  @Regression
+  Scenario: CD :: Dashboard :: Department Management :: Verify that the correct number of agents online/offline are displayed
     Given I open portal
     And Login into portal as an admin of Standard Billing account
     Given Admin select TOUCH in left menu and Dashboard in submenu

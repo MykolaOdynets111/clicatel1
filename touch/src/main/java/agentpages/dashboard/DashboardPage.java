@@ -3,6 +3,7 @@ package agentpages.dashboard;
 
 import agentpages.dashboard.uielements.*;
 import agentpages.uielements.C2pSendForm;
+import io.qameta.allure.Step;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -69,14 +70,6 @@ public class DashboardPage extends PortalAbstractPage {
     private GeneralSentimentPerChannel generalSentimentPerChannel;
     private AttendedVsUnattendedChats attendedVsUnattendedChats;
     // == Constructors == //
-
-    public DashboardPage() {
-        super();
-    }
-
-    public DashboardPage(String agent) {
-        super(agent);
-    }
 
     public DashboardPage(WebDriver driver) {
         super(driver);

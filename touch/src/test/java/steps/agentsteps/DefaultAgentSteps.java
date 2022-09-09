@@ -34,8 +34,8 @@ import java.util.*;
 
 public class DefaultAgentSteps extends AbstractAgentSteps {
 
-    private static ThreadLocal<Map<String, Boolean>> PRE_TEST_FEATURE_STATUS = new ThreadLocal<>();
-    private static ThreadLocal<Map<String, Boolean>> TEST_FEATURE_STATUS_CHANGES = new ThreadLocal<>();
+    private static final ThreadLocal<Map<String, Boolean>> PRE_TEST_FEATURE_STATUS = new ThreadLocal<>();
+    private static final ThreadLocal<Map<String, Boolean>> TEST_FEATURE_STATUS_CHANGES = new ThreadLocal<>();
     private static UserPersonalInfo userPersonalInfoForUpdating;
     public Profile profile;
 
@@ -124,7 +124,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
         String userName=getUserName(integration);
 
-        boolean isConversationShown = getLeftMenu(agent).isNewConversationIsShown(userName,20);
+        boolean isConversationShown = getLeftMenu(agent).isNewConversationIsShown(userName,30);
 
         Map settingResults = new HashMap<String, Object>();
 
@@ -158,13 +158,13 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             results.put("sessionCapacityUpdate", 50);
         }
 
-        supportHours = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName()).getAgentMapping();
+        supportHours = ApiHelper.getAgentSupportDaysAndHoursForMainAgent(Tenants.getTenantUnderTestOrgName()).getAgentMapping();
         results.put("supportHours", supportHours);
 
         if (!type.equalsIgnoreCase("ticket")) {
             if (supportHours.size() < 7) {
                 ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
-                supportHoursUpdated = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName()).getAgentMapping();
+                supportHoursUpdated = ApiHelper.getAgentSupportDaysAndHoursForMainAgent(Tenants.getTenantUnderTestOrgName()).getAgentMapping();
                 results.put("supportHoursUpdated", supportHoursUpdated);
             }else {results.put("supportHoursUpdated", "were not updated because \"All week\" was set");}
         }else {results.put("supportHoursUpdated", "were not updated because it is ticket");}

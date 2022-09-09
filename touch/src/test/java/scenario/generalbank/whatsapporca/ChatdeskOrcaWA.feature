@@ -2,7 +2,8 @@
 Feature: Whatsapp ORCA :: Chatdesk
 
   @orca_api
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118502")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1739")
+  @Regression
   Scenario: ChatDesk:: The header should have whatsapp icon when user is chatting using orca whatsapp
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -14,7 +15,8 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent should see whatsappHeader icon in active chat header
 
  @orca_api
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118503")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1821")
+  @Regression
   Scenario: ChatDesk: ORCA WhatsApp: Verify if //END message works for whatsapp chat
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -27,7 +29,8 @@ Feature: Whatsapp ORCA :: Chatdesk
 
   @orca_api
   @start_orca_server
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118504")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1826")
+  @Regression
   Scenario: ChatDesk:: Verify if agent is able to transfer Orca WhatsApp chat via "Transfer chat" button
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -47,14 +50,16 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Second agent responds with hello to User
     Then Verify Orca returns hello response during 40 seconds
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118505")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1752")
+  @Regression
   Scenario: ChatDesk:: Verify if agent can filter closed chat using WhatsApp chat channel
     Given I login as agent of General Bank Demo
     When Agent select "Closed" left menu option
     When Agent filter closed chats with WhatsApp channel, no sentiment and flagged is false
     Then Agent see only whatsapp chats in left menu
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-90120")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1162")
+  @Regression
   Scenario: CD :: Agent Desk :: Live Chat :: Location :: Verify if agent click on the small cross on search bar, the text entered in the search bar is deleted
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -67,8 +72,9 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent click on reset button
     Then Location field becomes empty
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-104472")
-  Scenario: Agent Desk :: Live Chat :: Verify if agent can send plain text message to a user over WhatsApp Channel
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1171")
+  @Regression
+  Scenario: CD :: Agent Desk :: Live Chat :: Verify if agent can send plain text message to a user over WhatsApp Channel
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     When Send connect to Support message by ORCA
@@ -77,8 +83,9 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Conversation area becomes active with connect to Support user's message
     When Agent send Hello message
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-101060")
-  Scenario: Agent Desk :: Live Chat :: Profile :: Verify the text in the "not verified" label is in grey color in customer profile phone number field
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1176")
+  @Regression
+  Scenario: CD :: Agent Desk :: Live Chat :: Profile :: Verify the text in the "not verified" label is in grey color in customer profile phone number field
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     When Send connect to Support message by ORCA
@@ -89,7 +96,8 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent click Save button in User profile
     Then Not verified label is displayed
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-114765")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1835")
+  @Regression
   Scenario: CD :: Agent Desk :: Live Chat :: Verify that location should auto-populate after agent try to search for second location without selecting the first one.
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -105,14 +113,49 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent search for Canada Location
     And Agent click on Canada Location
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-90109")
-  Scenario: CD :: Agent Desk :: Live Chat :: Location :: Verify if agent click on the small cross on search bar, the text entered in the search bar is deleted
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1165")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1848")
+    @Regression
+    @orca_api
+  Scenario Outline: CD :: Agent Desk :: Live Chat :: Location :: Verify that An agent should be able to search for any location.
     Given I login as agent of General Bank Demo
-    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    Given Setup ORCA <channelType> integration for General Bank Demo tenant
     When Send connect to agent message by ORCA
-    Then Agent has new conversation request from orca user
-    When Agent click on new conversation request from orca
+    Then Agent has new conversation request from <userType> user
+    When Agent click on new conversation request from <userType>
     Then Conversation area becomes active with connect to agent user's message
     When Agent open chat location form
     And Agent search for Paris Location
     And Agent click on Paris Location
+    Examples:
+      | channelType | userType|
+      | sms         | sms     |
+      | whatsapp    | orca    |
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-15691")
+  Scenario: Supervisor desk :: verify that supervisor able to check live chats
+    Given I open portal
+    And Login into portal as an admin of General Bank Demo account
+    When I select Touch in left menu and Supervisor Desk in submenu
+    When I login as agent of General Bank Demo
+    And Setup ORCA whatsapp integration for General Bank Demo tenant
+    And Send to agent message by ORCA
+    When I select Touch in left menu and Supervisor Desk in submenu
+    When Verify "All Chats" display default
+    Then  Verify that live chats available are shown
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-7391")
+  Scenario: Supervisor desk:: Route ticket to scheduler
+    Given I login as second agent of General Bank Demo
+    And Setup ORCA whatsapp integration for General Bank Demo tenant
+    And Send to agent message by ORCA
+    When I open portal
+    And Login into portal as an admin of General Bank Demo account
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Agent select "Tickets" left menu option
+    And Agent search chat ORCA on Supervisor desk
+    Then Ticket from orca is present on All tickets filter page
+    And Select orca ticket checkbox
+    When Click 'Route to scheduler' button
+    And Second agent select "Tickets" left menu option
+    Then Second agent has new ticket request from ORCA user

@@ -19,8 +19,9 @@ import lombok.*;
         "token",
         "oauth2Token",
         "channelProfileName",
-        "displayType",
-        "messageId"
+        "displayTypes",
+        "messageId",
+        "channel-api-key"
 })
 @Data @AllArgsConstructor @NoArgsConstructor
 public class ExtraFields {
@@ -49,14 +50,17 @@ public class ExtraFields {
     private String oauth2Token;
     @JsonProperty("channelProfileName")
     private String channelProfileName;
-    @JsonProperty("displayType")
-    private String displayType;
+    @JsonProperty("displayTypes")
+    private String displayTypes;
     @JsonProperty("messageId")
     private String messageId;
+    @JsonProperty("channel-api-key")
+    private String channelApiKey;
 
     public ExtraFields(String name){
         this.setLocale("en_uk");
         this.setAgent("iOs");
         this.setChannelProfileName(name);
     }
+
 }

@@ -40,7 +40,7 @@ import java.util.stream.Stream;
 public class AgentConversationSteps extends AbstractAgentSteps {
 
     private static String selectedEmoji;
-    private static ThreadLocal<List<String>> messagesFromChatBody = new ThreadLocal<List<String>>();
+    private static final ThreadLocal<List<String>> messagesFromChatBody = new ThreadLocal<List<String>>();
     public static ThreadLocal<String> locationURL = new ThreadLocal<String>();
     private LocationWindow locationWindow ;
     private C2pSendForm c2pSendForm;
@@ -197,7 +197,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
             }
             if (i== 9){
                 Assert.fail("File " + downloadedFile.getPath() + " was not downloaded to the shared folder\n"+
-                            "the following files are found only: " + allFiles);
+                        "the following files are found only: " + allFiles);
             }
             waitFor(2000);
         }
@@ -297,10 +297,11 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         locationURL.set(getAgentHomePage(agent).getChatBody().getLocationURLFromAgent());
     }
 
-    @When("^(.*) sees Lviv Location from User$")
-    public void verifyLocationFromUser(String agent){
+    @When("^(.*) sees (.*) Location from User$")
+    public void verifyLocationFromUser(String agent, String location){
+        waitFor(2000);// URL needs time for full creation
         locationURL.set(getAgentHomePage(agent).getChatBody().getLocationURLFromUser());
-        Assert.assertTrue(locationURL.get().contains("Lviv"),  agent+ " didn't get Lviv location");
+        Assert.assertTrue(locationURL.get().contains(location),  agent+ " didn't get Lviv location");
     }
 
     @Then("^(.*) can see message with HSM label in Conversation area$")
@@ -321,7 +322,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @When("^(.*) send (.*) message$")
     public void sendMessageOnCurrentChat(String agent, String agentMessage) {
         getAgentHomePage(agent).getChatForm().clearAndSendResponseToUser(agentMessage);
-        }
+    }
 
     @When("^(.*) clear input and send a new message (.*)$")
     public void clearAndSendAnswerToUser(String agent, String responseToUser) {
@@ -463,6 +464,11 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
     }
 
+    @When("^(.*) clicks 'Go to chat' button$")
+    public void clickGoToChatButton(String agent) {
+        getAgentHomePage(agent).getAgentFeedbackWindow().clickGoToChatButtonInCloseChatPopup();
+    }
+
     @When("^(.*) click happy sentiment button$")
     public void clickUnsatisfiedSentiment(String agent) {
         getAgentHomePage(agent).getAgentFeedbackWindow().setSentimentHappy();
@@ -494,7 +500,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
         soft.assertTrue(result,
                 "Ended date is not set for session " + sessionDetails.get("sessionId") + " after ending chat\n" +
-                "Session " + sessionDetails.get("sessionId") + " is not terminated after ending chat. \n\n");
+                        "Session " + sessionDetails.get("sessionId") + " is not terminated after ending chat. \n\n");
         soft.assertTrue(chatAgentDetails.get("endedDate") != null,
                 "Ended date is not set for chat agent history record after ending chat.\n" +
                         "\nSession " + sessionDetails.get("sessionId") + "\n\n");
@@ -656,6 +662,16 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     public void agentClickOnLocation(String locationName) {
         locationWindow.selectLocation(locationName);
         Assert.assertEquals(locationWindow.getTextFromSearch(),locationName, "Location did not match");
+    }
+
+    @And("^Agent checks Location list size as (.*)$")
+    public void agentChecksLocationListSize(int expectedSize) {
+        Assert.assertTrue(locationWindow.fetchLocationDropdownSize(expectedSize), "Location list size is not as expected");
+    }
+
+    @And("^Agent checks (.*) for sharing location is not visible$")
+    public void sendLocationButtonInvisibility(String buttonElementText) {
+        Assert.assertTrue(locationWindow.isSendLocationsButtonInvisible(buttonElementText) == 0, "Send location button is visible");
     }
 
     @When("^(.*) open c2p form$")

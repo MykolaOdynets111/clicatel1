@@ -1,19 +1,20 @@
 package steps.portalsteps;
 
 import agentpages.AgentHomePage;
+import agentpages.dashboard.uielements.CustomerSatisfactionSection;
 import agentpages.dashboard.uielements.LiveAgentRowDashboard;
 import agentpages.dashboard.uielements.LiveAgentsCustomerRow;
 import apihelper.ApiCustomerHistoryHelper;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
-import io.cucumber.datatable.DataTable;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import datamanager.Agents;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.AvailableAgent;
 import driverfactory.DriverFactory;
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
@@ -25,9 +26,11 @@ public class DashboardSteps extends AbstractPortalSteps {
 
     private final ThreadLocal<String> channel = new ThreadLocal<>();
     private final ThreadLocal<String> period = new ThreadLocal<>();
-
     private final ThreadLocal<Integer> npsPassivesPercentage = new ThreadLocal<>();
 
+    private final ThreadLocal<Double> actualCustomerSatisfactionScoreOld = new ThreadLocal<>();
+
+    private final ThreadLocal<Double> actualCustomerSatisfactionScoreNew = new ThreadLocal<>();
     @And("^Admin click on Customers Overview dashboard tab$")
     public void agentClickOnCustomersOverviewDashboardTab() {
         getDashboardPage().clickOnCustomersOverviewTab();
@@ -49,16 +52,18 @@ public class DashboardSteps extends AbstractPortalSteps {
     }
 
     @Then("^Admin is able to see (.*) graphs$")
-    public void adminIsAbleToSeeNPSLiveChatsByChannelPastSentimentGraphs(List<String> graphs) {
+    public void adminIsAbleToSeeNPSLiveChatsByChannelPastSentimentGraphs(String graphs) {
         SoftAssert softAssert = new SoftAssert();
-        for (String graph : graphs) {
-            if (graph.equalsIgnoreCase("Net Promoter Score")) {
+        String[] myArray = graphs.split(",");
+
+        for (String graph : myArray) {
+            if (graph.trim().equalsIgnoreCase("Net Promoter Score")) {
                 softAssert.assertTrue(getDashboardPage().getNetPromoterScoreSection().isPromoterScoreBarsDisplayed(),
                         String.format("Promoter Score Bars is not displayed for section %s", graph));
                 softAssert.assertTrue(getDashboardPage().getNetPromoterScoreSection().isPromoterScorePieDisplayed(),
                         String.format("Promoter Score Pie is not displayed for section %s", graph));
             }
-            if (graph.equalsIgnoreCase("Customer Satisfaction")) {
+            if (graph.trim().equalsIgnoreCase("Customer Satisfaction")) {
                 softAssert.assertTrue(getDashboardPage().getCustomerSatisfactionSection()
                                 .isCustomerSatisfactionScoreDisplayed(),
                         String.format("Customer Satisfaction Score is not displayed for section %s", graph));
@@ -72,9 +77,9 @@ public class DashboardSteps extends AbstractPortalSteps {
     }
 
     @And("^Admin filter Customers History by channel and period$")
-    public void adminFilterCustomersHistoryByWebchatAndPastDay(DataTable datatable ) {
-        List<List<String>> data=datatable.cells();
-        for (List<String> a: data ){
+    public void adminFilterCustomersHistoryByWebchatAndPastDay(DataTable datatable) {
+        List<List<String>> data = datatable.cells();
+        for (List<String> a : data) {
 //            System.out.println(a);
             this.channel.set(a.get(0));
             this.period.set(a.get(1));
@@ -85,8 +90,7 @@ public class DashboardSteps extends AbstractPortalSteps {
                     String.format("Graph is not filtered by %s channel and %s period", channel, period));
             softAssert.assertAll();
         }
-  }
-
+    }
 
     @And("^Admin filter Customers History by (?!.*period and)(.*) channel$")
     public void adminFilterCustomersHistoryByChannel(String channel) {
@@ -282,12 +286,46 @@ public class DashboardSteps extends AbstractPortalSteps {
         softAssert.assertAll();
     }
 
+    @Then("^Admin is able to see the CSAT scale having down scale as (.*) and upscale as (.*)$")
+    public void adminIsAbleToSeeTheAverageCSATSurveyScaleHavingUpAndDownScale(String downScale, String upScale) {
+        Assert.assertTrue(getDashboardPage().getCustomersHistory().isGraphContainsScale(downScale, upScale), "Down and up scale parameters are not present");
+    }
+
     @Then("^Admin is able to see the average CSAT survey response converted to (\\d+)-(\\d+)$")
-    public void adminIsAbleToSeeTheAverageCSATSurveyResponseConvertedTo(int from, int to) {
-        double actualCustomerSatisfactionScore = getDashboardPage().getCustomerSatisfactionSection()
-                .getCustomerSatisfactionScore();
-        Assert.assertTrue(actualCustomerSatisfactionScore >= from, "Customer Satisfaction Score is less then " + from);
-        Assert.assertTrue(actualCustomerSatisfactionScore <= to, "Customer Satisfaction Score is more then " + to);
+    public void adminIsAbleToSeeTheAverageCSATSurveyResponseConvertedTo(double from, double to) {
+        if (getDashboardPage().getCustomersHistory().isNoDataDisplayedForGraph("Customer Satisfaction")) {
+            actualCustomerSatisfactionScoreOld.set(0.0);
+        } else {
+            actualCustomerSatisfactionScoreOld.set(getDashboardPage().getCustomerSatisfactionSection()
+                    .getCustomerSatisfactionScore());
+        }
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(actualCustomerSatisfactionScoreOld.get() >= from, "Customer Satisfaction Score is less then " + from);
+        softAssert.assertTrue(actualCustomerSatisfactionScoreOld.get() <= to, "Customer Satisfaction Score is more then " + to);
+        softAssert.assertAll();
+    }
+
+    //Use this step to fetch after CSAT ratings to compare before and after CSAT rating
+    @Then("^Admin is able to see the new average CSAT survey response converted to (\\d+)-(\\d+)$")
+    public void adminIsAbleToSeeTheNewAverageCSATSurveyResponseConvertedTo(double from, double to) {
+        actualCustomerSatisfactionScoreNew.set(getDashboardPage().getCustomerSatisfactionSection()
+                .getCustomerSatisfactionScore());
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(actualCustomerSatisfactionScoreNew.get() >= from, "Customer Satisfaction Score is less then " + from);
+        softAssert.assertTrue(actualCustomerSatisfactionScoreNew.get() <= to, "Customer Satisfaction Score is more then " + to);
+        softAssert.assertAll();
+    }
+
+    //Use this step to compare before and after CSAT rating
+    @Then("^Admin is able to see the same average CSAT rating for NPS response$")
+    public void adminIsAbleToSameCSATRating() {
+        Assert.assertTrue(actualCustomerSatisfactionScoreOld.get().equals(actualCustomerSatisfactionScoreNew.get()), "Customer Satisfaction Score are different: actual: " + actualCustomerSatisfactionScoreOld + " expected: " + actualCustomerSatisfactionScoreNew);
+    }
+
+    //Use this step to compare before and after CSAT rating
+    @Then("^Admin is able to see the different average CSAT rating for CSAT response$")
+    public void adminIsAbleToDifferentCSATRating() {
+        Assert.assertTrue(actualCustomerSatisfactionScoreOld.get() <= actualCustomerSatisfactionScoreNew.get(), "Customer Satisfaction Score are different: actual: " + actualCustomerSatisfactionScoreOld + " expected: " + actualCustomerSatisfactionScoreNew);
     }
 
     @Then("^Admin see the Net Promoter Score as negative$")

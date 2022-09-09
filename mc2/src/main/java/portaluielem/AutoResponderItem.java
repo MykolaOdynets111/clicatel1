@@ -11,7 +11,7 @@ public class AutoResponderItem extends AbstractWidget {
     @FindBy(css = ".auto-responder-title__text")
     private WebElement messageTitle;
 
-    @FindBy(name = "arrow-down")
+    @FindBy(xpath = ".//button[contains(@class, 'expand')]")
     private WebElement collapceIcon;
 
     @FindBy(name = "text")

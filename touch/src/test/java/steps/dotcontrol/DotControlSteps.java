@@ -6,7 +6,6 @@ import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
 import com.github.javafaker.Faker;
 import com.google.common.io.Files;
-
 import datamanager.Tenants;
 import datamanager.dotcontrol.DotControlCreateIntegrationInfo;
 import datamanager.jacksonschemas.ChatHistoryItem;
@@ -21,9 +20,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import javaserver.DotControlServer;
-import javaserver.Server;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import sqsreader.SQSConfiguration;
 import steps.DefaultTouchUserSteps;
 
 import java.io.File;
@@ -64,7 +63,7 @@ public class DotControlSteps implements WebWait {
         if (adaptor.isEmpty()) adaptor = "fbmsg";
 
         Response resp = APIHelperDotControl.createIntegrationForAdapters(adaptor, tenantOrgName,
-                preparePayloadForCreateIntegrationEndpoint(Server.getServerURL()).get());
+                preparePayloadForCreateIntegrationEndpoint(SQSConfiguration.getCallbackUrl()).get());
 
         if(!(resp.statusCode()==200)) {
             Assert.fail("Integration creating was not successful\n" + "Status code " + resp.statusCode()+
@@ -115,7 +114,7 @@ public class DotControlSteps implements WebWait {
     @Then("^(.*) status code for multiple integration creation$")
     public void verifyMultipleIntegrationsCreating(int statusCode){
         Response resp = APIHelperDotControl.createIntegrationForAdapters("fbmsg", Tenants.getTenantUnderTestOrgName(),
-                preparePayloadForCreateIntegrationEndpoint(Server.getServerURL()).get());
+                preparePayloadForCreateIntegrationEndpoint(SQSConfiguration.getCallbackUrl()).get());
         Assert.assertEquals(resp.getStatusCode(), statusCode,
                 "Wrong status code after trying to create second integration");
     }
@@ -125,7 +124,7 @@ public class DotControlSteps implements WebWait {
         Tenants.setTenantUnderTestNames(tenantOrgName);
 
         Response resp = APIHelperDotControl.updateIntegration(tenantOrgName,
-                preparePayloadForCreateIntegrationEndpoint(Server.getServerURL()).get(),apiToken.get());
+                preparePayloadForCreateIntegrationEndpoint(SQSConfiguration.getCallbackUrl()).get(),apiToken.get());
 
         if(!(resp.statusCode()==200)) {
             Assert.fail("Integration creating was not successful\n" + "Status code " + resp.statusCode()+
@@ -184,7 +183,7 @@ public class DotControlSteps implements WebWait {
         if(expMessage.isEmpty()) expMessage = "OK";
         if(expMessage.trim().equals("OUT_OF_BUSINESS_HOURS")){
             expectedBusinessHours =
-                    ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
+                    ApiHelper.getAgentSupportDaysAndHoursForMainAgent(Tenants.getTenantUnderTestOrgName());
         }
         SoftAssert soft = new SoftAssert();
 

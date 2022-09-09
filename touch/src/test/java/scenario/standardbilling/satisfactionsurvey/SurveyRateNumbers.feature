@@ -1,12 +1,15 @@
 @no_widget
 @no_chatdesk
 @off_survey_management
+@off_rating_whatsapp
+@skip
 Feature: Satisfaction Survey
 
   Background:
-    Given Update survey management chanel webchat settings by ip for Standard Billing
+    Given Setup ORCA whatsapp integration for Standard Billing tenant
+    And Update survey management chanel whatsapp settings by ip for Standard Billing
       | ratingEnabled   | true             |
-      | ratingType      | NPS              |
+      | surveyType      | NPS              |
       | ratingScale     | ZERO_TO_TEN      |
       | ratingIcon      | NUMBER           |
     And I open portal
@@ -17,8 +20,10 @@ Feature: Satisfaction Survey
     When I select Touch in left menu and Dashboard in submenu
     And Navigate to Surveys page
     Then Survey Management page should be shown
-    And Selects CSAT survey type
-    Then CSAT scale has correct limit variants 1 to 5, 1 to 7, 1 to 10 in dropdown and number set as type
+    And Admin clicks on channel toggle button for survey form
+    And Admin clicks on channel expand button for survey form
+    And Admin selects CSAT survey type for whatsapp survey form
+    #Then CSAT scale has correct limit variants 1 to 5, 1 to 7, 1 to 10 in dropdown and number set as type
     When Agent select 1 to 5 as number limit from dropdown
     And Agent click save survey configuration button
     Then Agent see survey range 5 in rating scale

@@ -9,6 +9,7 @@ import org.openqa.selenium.Rectangle;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
@@ -21,11 +22,11 @@ import java.util.stream.Collectors;
 @FindBy(css = "section.chat-body")
 public class ChatBody extends AbstractUIElement {
 
-    private String scrollElement = ".chat-body.chat-box__messages";
+    private final String scrollElement = ".chat-body.chat-box__messages";
 
-    private String fromUserMessagesXPATH = ".//div[contains(@class,'from')]//*[text()='%s']";
+    private final String fromUserMessagesXPATH = ".//div[contains(@class,'from')]//*[text()='%s']";
 
-    private String messagesInChatBodyXPATH = ".//ul[contains(@class, 'chat-container')]/div";
+    private final String messagesInChatBodyXPATH = ".//ul[contains(@class, 'chat-container')]/div";
 
     @FindBy(css = ".spinner")
     private WebElement spinner;
@@ -89,11 +90,13 @@ public class ChatBody extends AbstractUIElement {
 
     @FindBy(css = "div[title='AGENT_REJECT_CHAT']")
     private WebElement rejectTransferIndicator;
-
-    @FindBy(css = "[selenium-id='map-chat-message-content-LocationMessage']")
+    @FindAll({
+            @FindBy(css = "[selenium-id='map-chat-message-content-LocationMessage']"),
+            @FindBy(css = "[data-testid='map-chat-message-content-LocationMessage']")
+    })
     private WebElement locationHREFFromAgent;
 
-    @FindBy(css = ".from [selenium-id='map-chat-message-content-LocationMessage']")
+    @FindBy(css = "[data-testid='map-chat-message-content-LocationMessage']")
     private WebElement locationHREFFormUser;
 
     @FindBy(xpath = ".//div[@class='channel-separator-title mb-2 mt-2']")
@@ -111,7 +114,7 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public String getLocationURLFromAgent() {
-        return getAttributeFromElem(this.getCurrentDriver(), locationHREFFromAgent,5, "Location href", "href");
+        return getAttributeFromElem(this.getCurrentDriver(), locationHREFFromAgent,10, "Location href", "href");
     }
 
     public String getLocationURLFromUser() {

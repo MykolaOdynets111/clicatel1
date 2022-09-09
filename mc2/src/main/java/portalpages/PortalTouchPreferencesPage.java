@@ -3,7 +3,6 @@ package portalpages;
 import org.openqa.selenium.WebDriver;
 import portaluielem.*;
 
-
 public class PortalTouchPreferencesPage extends PortalAbstractPage {
 
     private AutoRespondersWindow autoRespondersWindow;
@@ -18,12 +17,6 @@ public class PortalTouchPreferencesPage extends PortalAbstractPage {
 
     // == Constructors == //
 
-    public PortalTouchPreferencesPage() {
-        super();
-    }
-    public PortalTouchPreferencesPage(String agent) {
-        super(agent);
-    }
     public PortalTouchPreferencesPage(WebDriver driver) {
         super(driver);
     }
@@ -48,10 +41,8 @@ public class PortalTouchPreferencesPage extends PortalAbstractPage {
         return editCompanyLogoWindow;
     }
 
-    public ChatTagsWindow getChatTagsWindow(){
+    public ChatTagsWindow getChatTagsWindow() {
         chatTagsWindow.setCurrentDriver(this.getCurrentDriver());
         return chatTagsWindow;
     }
-
-
 }
