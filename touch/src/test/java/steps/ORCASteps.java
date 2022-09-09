@@ -22,10 +22,7 @@ import org.testng.Assert;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class ORCASteps implements WebWait {
 
@@ -139,7 +136,6 @@ public class ORCASteps implements WebWait {
 
     @Then("^Verify Orca returns (.*) autoresponder during (.*) seconds$")
     public void verifyOrcaReturnedCorrectAutoresponder(String expectedResponse, int wait) {
-
         expectedResponse = DefaultTouchUserSteps.formExpectedAutoresponder(expectedResponse);
 
         verifyAutoresponder(expectedResponse, wait);
@@ -232,15 +228,11 @@ public class ORCASteps implements WebWait {
         );
     }
 
-
     private boolean isExpectedResponseArrives(String message) {
         if(Objects.isNull(OrcaServer.orcaMessages)) {
             return false;
         }
         return OrcaServer.orcaMessages.toString().contains(message);
-
-
-
     }
 
     private void createRequestMessage(String apiKey, String message) {
@@ -248,5 +240,4 @@ public class ORCASteps implements WebWait {
         clientId.set(orcaMessageCallBody.get().getUserInfo().getUserName());
         smsSourceId.set(orcaMessageCallBody.get().getSourceId());
     }
-
 }
