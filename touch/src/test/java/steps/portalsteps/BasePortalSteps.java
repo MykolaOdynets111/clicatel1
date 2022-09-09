@@ -58,7 +58,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
     private Widget widget;
     int activeChatsFromChatdesk;
     private Map<String, Double> topUpBalance = new HashMap<>();
-    private String nameOfUnchekedDay = "";
     private String accountCurrency;
     private String autoSchedulerPreActionStatus;
     private String confirmationURL;
@@ -846,10 +845,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
             Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getChatsAvailable(), result,"Chats per agent is not as expected");
     }
 
-    @When("^Error message is shown$")
-    public void errorIsShownInWindow(){
-        Assert.assertTrue(getPortalTouchPreferencesPage().getPreferencesWindow().isErrorMessageShown(),
-                "Error message is not shown");
+    @When("^(.*) Error message is shown$")
+    public void decimalErrorIsShownInWindow(String errorMessage){
+        getPortalTouchPreferencesPage().getPreferencesWindow().isErrorMessageShown(errorMessage);
     }
 
     @When("^Click off/on Chat Conclusion$")
@@ -858,13 +856,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
         agentClickSaveChangesButton();
     }
 
-
     @When("^Agent click 'Save changes' button$")
     public void agentClickSaveChangesButton() {
         getPortalTouchPreferencesPage().clickSaveButton();
         getPortalTouchPreferencesPage().waitForSaveMessage();
     }
-
 
     @When("^Agent click expand arrow for (.*) auto responder$")
     public void clickExpandArrowForAutoResponder(String autoresponder){
@@ -1362,13 +1358,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().selectPaymentMethod(option);
     }
 
-
     @Then("^Payment review tab is opened$")
     public void verifyPaymentReviewTabIsOpened(){
         getAdminPortalMainPage().waitForNotificationAlertToDisappear();
         Assert.assertTrue(getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentReviewTabOpened(),
                 "Admin is not redirected to PaymentReview tab after adding new card.");
-
     }
 
     @When("^Admin closes Confirm details window$")
@@ -1485,13 +1479,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(2, 5);
         getPortalUserProfileEditingPage().clickPageActionButton("Save changes");
         getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(3,6);
-    }
-
-
-    @When("^Upload: photo for tenant$")
-    public void uploadPhotoForTenant() {
-        getPortalTouchPreferencesPage().getBusinessProfileWindow().uploadPhoto("touch/src/test/resources/agentphoto/tenant.png");
-        getPortalTouchPreferencesPage().getEditCompanyLogoWindow().clickSaveImageButton();
     }
 
     @Then("^I check secondary color for tenant in widget$")
@@ -1681,12 +1668,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         soft.assertEquals(preferencesWindow.getPendingChatAutoClosureHours(), pref.get("pendingChatsAuto_closureTime"),
                 "Default Pending Chats Auto-closure Time hours are not correct");
         soft.assertAll();
-
-    }
-
-    @When("^Select 'Specific Agent Support hours' radio button in Agent Supported Hours section$")
-    public void selectSpecificAgentSupportHoursRadioButtonInAgentSupportedHoursSection() {
-        getPortalTouchPreferencesPage().getBusinessProfileWindow().openSpecificSupportHours();
     }
 
     @When("^click off/on 'Automatic Scheduler'$")
@@ -1713,22 +1694,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         Assert.assertNotEquals(ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled"),
                 autoSchedulerPreActionStatus,
                 "Auto scheduling status on backend is not as expected \n");
-    }
-
-    @And("^Uncheck today day and apply changes$")
-    public void uncheckTodayDayAndApplyChanges() {
-        nameOfUnchekedDay = getPortalTouchPreferencesPage().getBusinessProfileWindow().uncheckTodayDay();
-        agentClickSaveChangesButton();
-    }
-
-    @And("^'support hours' are updated in (.*) configs$")
-    public void supportHoursAreUpdatedInTenantConfigs(String tenantOrgName) {
-        Assert.assertFalse(ApiHelper.getAgentSupportDaysAndHours(tenantOrgName).toString().contains(nameOfUnchekedDay.toUpperCase()),"Error. 'support hours' contain today day.");
-    }
-
-    @Then("^Check that today day is unselected in 'Scheduled hours' pop up$")
-    public void checkThatTodayDayIsUnselectedInScheduledHoursPopUp() {
-        Assert.assertTrue(getPortalTouchPreferencesPage().getBusinessProfileWindow().isUncheckTodayDay(nameOfUnchekedDay.toUpperCase()),"Today  day was not been unchecked");
     }
 
     @When("^Turn (.*) the Last Agent routing$")
@@ -1789,12 +1754,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
     }
 
     private MainPage getMainPage() {
-        if (mainPage==null) {
+        if (mainPage == null) {
             mainPage = new MainPage();
-            return mainPage;
-        } else{
-            return mainPage;
         }
+        return mainPage;
     }
-
 }

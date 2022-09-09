@@ -297,10 +297,11 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         locationURL.set(getAgentHomePage(agent).getChatBody().getLocationURLFromAgent());
     }
 
-    @When("^(.*) sees Lviv Location from User$")
-    public void verifyLocationFromUser(String agent){
+    @When("^(.*) sees (.*) Location from User$")
+    public void verifyLocationFromUser(String agent, String location){
+        waitFor(2000);// URL needs time for full creation
         locationURL.set(getAgentHomePage(agent).getChatBody().getLocationURLFromUser());
-        Assert.assertTrue(locationURL.get().contains("Lviv"),  agent+ " didn't get Lviv location");
+        Assert.assertTrue(locationURL.get().contains(location),  agent+ " didn't get Lviv location");
     }
 
     @Then("^(.*) can see message with HSM label in Conversation area$")
@@ -461,6 +462,11 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @When("^(.*) click 'Close chat' button$")
     public void clickCloseChatButton(String agent) {
         getAgentHomePage(agent).getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
+    }
+
+    @When("^(.*) clicks 'Go to chat' button$")
+    public void clickGoToChatButton(String agent) {
+        getAgentHomePage(agent).getAgentFeedbackWindow().clickGoToChatButtonInCloseChatPopup();
     }
 
     @When("^(.*) click happy sentiment button$")

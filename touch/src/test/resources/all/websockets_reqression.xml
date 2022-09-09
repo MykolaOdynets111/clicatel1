@@ -4,7 +4,7 @@
     <test name="User to Agent conversation (General Bank Demo tenant)">
         <classes>
             <class name="runner.generalbank.RunWhatsAppORCATest" />
-<!--            <class name="runner.generalbank.RunAbcTest" />-->
+            <class name="runner.generalbank.RunAbcTest" />
         </classes>
     </test>
 </suite>

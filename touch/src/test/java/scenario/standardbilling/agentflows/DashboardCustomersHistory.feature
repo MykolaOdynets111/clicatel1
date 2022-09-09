@@ -26,23 +26,31 @@ Feature: Dashboard: Customer History
       | NPS        | Net Promoter Score    | ZERO_TO_TEN |
       | CSAT       | Customer Satisfaction | ONE_TO_FIVE |
 
-  @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/TPORT-50385")
+  @no_chatdesk
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2427")
+  @Regression
   Scenario: Dashboard: Verify if admin can filter Customers History report by channel and period
     When I open portal
     And Login into portal as an admin of Standard Billing account
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
-    And Admin filter Customers History by Webchat channel and Past day period
-    Then Admin see all graphs filtered by Web Chat channel and Past day period
-    And Admin filter Customers History by Facebook channel and Past week period
-    Then Admin see all graphs filtered by Facebook channel and Past week period
-    And Admin filter Customers History by Twitter channel and Past 2 weeks period
-    Then Admin see all graphs filtered by Twitter channel and Past 2 weeks period
-    And Admin filter Customers History by WhatsApp channel and Past 3 weeks period
-    Then Admin see all graphs filtered by WhatsApp channel and Past 3 weeks period
-    And Admin filter Customers History by Apple Business Chat channel and Past 4 weeks period
-    Then Admin see all graphs filtered by Apple Business Chat channel and Past 4 weeks period
+    And Admin filter Customers History by channel and period
+      | WhatsApp   | Past day  |
+      | WhatsApp   | Past week  |
+      | WhatsApp   | Past 2 weeks   |
+      | WhatsApp   | Past 3 weeks    |
+      | WhatsApp   | Past 4 weeks   |
+      | Apple Business Chat   | Past day  |
+      | Apple Business Chat   | Past week   |
+      | Apple Business Chat   | Past 2 weeks   |
+      | Apple Business Chat   | Past 3 weeks   |
+      | Apple Business Chat   | Past 4 weeks   |
+      | SMS   | Past day   |
+      | SMS   | Past week   |
+      | SMS   | Past 2 weeks   |
+      | SMS   | Past 3 weeks   |
+      | SMS   | Past 4 weeks   |
 
   @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/TPORT-3760")
   Scenario: Customer History:: Past sentiment graph:: Verify if past sentiment graph is empty if no data is available
@@ -92,7 +100,8 @@ Feature: Dashboard: Customer History
     And Admin filter Customers History by Apple Business Chat channel and Past day period
     Then Admin see the message no data for Customer Satisfaction graph if there is no available data
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-50411")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2289")
+  @Regression
   Scenario: Customer History:: NPS Score:: Verify if Net Promoter Score can display a negative rating
     Given Update survey management chanel webchat settings by ip for Standard Billing
       | ratingEnabled | true        |
@@ -157,7 +166,8 @@ Feature: Dashboard: Customer History
     And Admin filter Customers History by Past day period
     Then All reports in graphs should be breakdown hourly
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118185")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1816")
+  @Regression
   Scenario: CD:: SMS:: Customers Overview :: Verify if Supervisor can see SMS channel in the Customer History tab in Dashboard
     When I open portal
     And Login into portal as an admin of Standard Billing account

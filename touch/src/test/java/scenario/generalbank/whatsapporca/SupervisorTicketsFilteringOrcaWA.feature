@@ -8,7 +8,8 @@ Feature: WhatsApp ORCA :: Supervisor Desk
 
   @no_widget
   @orca_api
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118513")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1896")
+  @Regression
   Scenario: Supervisor desk: Verify if supervisor can use different filter options for filtering WhatsApp ORCA tickets
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     When Send to agent message by ORCA

@@ -15,13 +15,17 @@ public class CustomersHistory extends AbstractUIElement {
 
     private final String graphByNameXpath = "//h3[text()='%s']/../following-sibling::div[contains(@class,'chart-container')]";
     private final String noDataByGraphNameXpath = graphByNameXpath + "//div[contains(@class,'no-data-overlay')]";
-    private final String filteredByInfoXpath = "//h3[text()='%s']/../span[contains(@class, 'cl-default-text-muted')]";
+    private final String filteredByInfoXpath = "//span[text()='%s']/../span[contains(@class, 'cl-default-text-muted')]";
+
 
     @FindBy(css = "h3")
     private List<WebElement> graphHeaders;
 
     @FindBy(css = ".chart-container")
     private List<WebElement> graphs;
+
+    @FindBy(css = ".gauge-labels")
+    private WebElement gaugeLabels;
 
     public List<List<String>> getGraphsTimelines() {
         waitFor(2000);
@@ -40,6 +44,12 @@ public class CustomersHistory extends AbstractUIElement {
          scrollToElem(this.getCurrentDriver(), graphXpath, graphName);
         }
         return isElementShownByXpath(this.getCurrentDriver(), graphXpath, 1);
+    }
+
+    public boolean isGraphContainsScale(String downScale, String upScale) {
+        String text= getTextFromElem(this.getCurrentDriver(), gaugeLabels, 5, "Customer satisfaction scale");
+
+        return text.contains(downScale) && text.contains(upScale);
     }
 
     public boolean isNoDataRemovedForGraph(String graphName) {
@@ -61,6 +71,7 @@ public class CustomersHistory extends AbstractUIElement {
                     String.format(filteredByInfoXpath, graphName));
             waitForFirstElementToBeVisible(getCurrentDriver(), filteredByInfInH3, 3);
             List<String> foundFilters = filteredByInfInH3.stream().map(WebElement::getText).collect(Collectors.toList());
+            System.out.println("Graph is working fine for: " + graphName + " , " + Arrays.stream(filters).findFirst());
             return foundFilters.containsAll(Arrays.asList(filters));
         } catch (TimeoutException | NoSuchElementException e2) {
             return false;

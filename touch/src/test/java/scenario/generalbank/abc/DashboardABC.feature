@@ -2,7 +2,8 @@
 @orca_api
 Feature: Apple Business Chat :: Dashboard
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-45501")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2301")
+  @Regression
   Scenario: Dashboard:: Verify if Apple channel is displayed on live customer charts
     Given Setup ORCA abc integration for General Bank Demo tenant
     When Send chat to agent message by ORCA
@@ -16,7 +17,8 @@ Feature: Apple Business Chat :: Dashboard
     And Admin should see Apple Business Chat charts in Attended vs. Unattended Chats
     Then Send //end message by ORCA
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-45509")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2399")
+  @Regression
   Scenario: Dashboard: ABC support: Verify customer overview displays current number of Live Chats being engaged by agents for ABC.
     Given Setup ORCA abc integration for General Bank Demo tenant
     When Send chat to agent message by ORCA
@@ -29,7 +31,8 @@ Feature: Apple Business Chat :: Dashboard
     And Verify admin can see number of live chats per channel when hover over abc
     Then Send //end message by ORCA
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-45506")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2298")
+  @Regression
   Scenario: Dashboard: ABC support: Verify Customer overview displays correct report of Attended / Unattended chats
     Given I login as agent of General Bank Demo
     Given Setup ORCA abc integration for General Bank Demo tenant
@@ -45,7 +48,8 @@ Feature: Apple Business Chat :: Dashboard
     Then Verify admin can see number of attended chats when hover over Apple Business Chat channel
     Then Send //end message by ORCA
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-45503")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2281")
+  @Regression
   Scenario: Dashboard: ABC support: Verify Customer overview displays correct general sentiment for Apple business Chat
     Given I login as agent of General Bank Demo
     Given Setup ORCA abc integration for General Bank Demo tenant

@@ -21,8 +21,9 @@ Feature: Filtering : Chat Desk
     When Agent filter by 0 year 0 month and 1 days ago start date and today's end date
     Then Verify filtered tickets dates are fitted by filter for agent
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118542")
-  Scenario: Chatdesk:: Verify calendar picker should be limited to max 90 days back in closed chats
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1154")
+  @Regression
+  Scenario: CD :: Agent Desk :: Closed Chat :: Verify calendar picker should be limited to max 90 days back in closed chats
     Given I login as agent of General Bank Demo
     When Agent select "Closed" left menu option
     And  Agent filter by 0 year 3 month and 0 days ago start date and today's end date

@@ -2,10 +2,11 @@
 Feature: Whatsapp ORCA :: ChatDesk
 
   @orca_api
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-90123")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1174")
+  @Regression
   Scenario: CD :: Agent Desk :: Live Chat :: Location :: Verify the end-user can share the current location on WhatsApp via Flow
-    Given I login as agent of General Bank Demo
-    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    Given I login as agent of Standard Billing
+    Given Setup ORCA whatsapp integration for Standard Billing tenant
     When Send connect to agent message by ORCA
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca

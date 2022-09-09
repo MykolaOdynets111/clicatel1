@@ -1,9 +1,11 @@
 @no_widget
 @no_chatdesk
+@off_survey_management
 Feature: Satisfaction Survey
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-19243")
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-121097")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2286")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1790")
+  @Regression
   Scenario Outline:verify if supervisor can customize survey question for whatsapp CSAT survey type
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Update survey management chanel <channelType> settings by ip for General Bank Demo

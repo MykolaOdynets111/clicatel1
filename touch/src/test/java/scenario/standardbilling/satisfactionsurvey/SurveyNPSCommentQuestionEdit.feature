@@ -1,10 +1,12 @@
 @no_widget
+@off_rating_whatsapp
+@off_rating_abc
 @no_chatdesk
-@off_survey_management
 Feature: Satisfaction Survey
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-19236")
-  Scenario Outline: Verify if tenant can customize his own survey question for NPS survey type
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2382")
+  @Regression
+  Scenario Outline: verify if supervisor can customize survey question for whatsapp NPS survey type
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing
       | ratingEnabled | true       |
@@ -26,4 +28,4 @@ Feature: Satisfaction Survey
       | channelType |
       | whatsapp    |
       | abc         |
-      | webchat     |
+    #  | webchat     |
