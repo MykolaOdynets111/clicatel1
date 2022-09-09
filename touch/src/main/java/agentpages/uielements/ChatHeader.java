@@ -77,13 +77,13 @@ public class ChatHeader extends AbstractUIElement {
 
     @FindAll({
             @FindBy(css = "[selenium-id='header-toggle-pending']"),
-            @FindBy(css = "button[data-testid=\'header-toggle-pending\']")
+            @FindBy(css = "button[data-testid='header-toggle-pending']")
     })
     private WebElement pendingButton;
 
-    private String transferChatButtonXpath =  ".//button[@selenium-id='header-transfer-chat']";
-    private String sendSMSXpath = ".//button[@selenium-id='header-send-sms']";
-    private String sendWhatsAppXpath = ".//button[text()='Send WhatsApp']";
+    private final String transferChatButtonXpath =  ".//button[@selenium-id='header-transfer-chat']";
+    private final String sendSMSXpath = ".//button[@selenium-id='header-send-sms']";
+    private final String sendWhatsAppXpath = ".//button[text()='Send WhatsApp']";
 
     public ChatHeader (WebDriver current){
         this.currentDriver = current;
@@ -214,7 +214,7 @@ public class ChatHeader extends AbstractUIElement {
         String expectedInitials;
         List<String> userNames = Arrays.asList(userName.split(" "));
         if(userNames.size() == 2){
-            expectedInitials = userNames.get(0).substring(0,1) + userNames.get(1).substring(0,1);
+            expectedInitials = userNames.get(0).substring(0) + userNames.get(1).substring(0);
         } else {
             expectedInitials = userNames.get(0).substring(0,1);
         }

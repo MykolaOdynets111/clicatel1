@@ -18,7 +18,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
-import javaserver.OrcaServer;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -54,8 +53,8 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
     private WidgetHeader widgetHeader;
     private TouchActionsMenu touchActionsMenu;
     private WelcomeMessages welcomeMessages;
-    private static Map<Long, VMQuoteRequestUserData> userDataForQuoteRequest = new ConcurrentHashMap<>();
-    private static ThreadLocal<String> enteredUserMessageInTouchWidget = new ThreadLocal<>();
+    private static final Map<Long, VMQuoteRequestUserData> userDataForQuoteRequest = new ConcurrentHashMap<>();
+    private static final ThreadLocal<String> enteredUserMessageInTouchWidget = new ThreadLocal<>();
     private static Map selectedClient;
     public static ThreadLocal<String> mediaFileName = new ThreadLocal<>();
 
@@ -463,14 +462,6 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
      */
     @Then("^User should see '(.*)' (?:text response|url) for his '(.*)' input$")
     public void verifyTextResponseRegardlessPosition(String textResponse, String userInput) {
-
-        List l = OrcaServer.orcaMessages;
-        OrcaServer.orcaMessagesMap.clear();
-//        orcaMessageCallBody.remove();
-//        apiToken.remove();
-//        clientId.remove();
-//        orcaChannelId.remove();
-
         if (userInput.contains("personal info")) {
             userInput = "Submitted data:\n" +
                     "" + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + "\n" +

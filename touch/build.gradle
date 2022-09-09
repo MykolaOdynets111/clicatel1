@@ -39,8 +39,8 @@ dependencies {
     api  group: 'ch.qos.logback', name: 'logback-core', version: '1.2.10'
     api  group: 'org.slf4j', name: 'slf4j-api', version: '1.7.34'
     api  group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.10'
-    api group: 'com.amazonaws', name: 'amazon-sqs-java-messaging-lib', version: '1.0.4'
-
+    api group: 'com.amazonaws', name: 'amazon-sqs-java-messaging-lib', version: '2.0.0'
+    api group: 'software.amazon.awssdk', name: 'auth', version: '2.17.267'
 }
 
 tasks.withType(Copy) { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }

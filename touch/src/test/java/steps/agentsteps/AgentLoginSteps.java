@@ -18,12 +18,6 @@ import java.util.List;
 
 public class AgentLoginSteps extends AbstractAgentSteps {
 
-    @Then("^(.*) is the current agent of (.*) ticket$")
-    public void verifyCurrentAgentOfTicket(String agentName, String userName) {
-        Assert.assertEquals(getSupervisorDeskPage().getCurrentAgentOfTheChat(userName),agentName,
-                "The current agent of the ticket is not as expected");
-    }
-
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);

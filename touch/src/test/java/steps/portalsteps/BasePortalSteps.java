@@ -52,12 +52,12 @@ public class BasePortalSteps extends AbstractPortalSteps {
     private Map<String, String> updatedAgentInfo;
     public static Map billingInfo = new HashMap();
     private String activationAccountID;
-    private static Map<String, String> tenantInfo = new HashMap<>();
-    private Map<String, Integer> chatConsolePretestValue = new HashMap<>();
+    private static final Map<String, String> tenantInfo = new HashMap<>();
+    private final Map<String, Integer> chatConsolePretestValue = new HashMap<>();
     private MainPage mainPage;
     private Widget widget;
     int activeChatsFromChatdesk;
-    private Map<String, Double> topUpBalance = new HashMap<>();
+    private final Map<String, Double> topUpBalance = new HashMap<>();
     private String accountCurrency;
     private String autoSchedulerPreActionStatus;
     private String confirmationURL;
@@ -251,8 +251,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
         List<String> permissions = ApiHelperPlatform.getAllRolePermission(tenantOrgName, "Touch agent role");
         Assert.assertTrue(permissions.containsAll(expectedPermissions),
                 "Not all CRM permissions are present for Agent role\n" +
-                        "Expected permitions: " + expectedPermissions.toString() + "\n" +
-                        "Full permitions list: " + permissions.toString());
+                        "Expected permitions: " + expectedPermissions + "\n" +
+                        "Full permitions list: " + permissions);
     }
 
     @Then("^New agent is added into touch database$")
@@ -1136,7 +1136,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
                         + info.get("billingContact");
                 else message = message + resp.getBody().asString();
             }
-            if(billingInfo!=null) message = message + "\n\n" + "expected billing info: \n" + billingInfo.toString();
+            if(billingInfo!=null) message = message + "\n\n" + "expected billing info: \n" + billingInfo;
             Assert.fail(message);
         }
     }

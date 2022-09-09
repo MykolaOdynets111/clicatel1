@@ -18,14 +18,12 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
-import javaserver.Server;
 import mc2api.auth.PortalAuthToken;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.util.StringUtils;
 import org.testng.Assert;
 
-import java.net.ConnectException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -378,7 +376,7 @@ public class ApiHelper implements VerificationHelper {
 
     public static int getNumberOfLoggedInAgents() {
         String url = format(Endpoints.INTERNAL_COUNT_OF_LOGGED_IN_AGENTS, Tenants.getTenantUnderTestName());
-        return (int) RestAssured.get(url).getBody().jsonPath().get("loggedInAgentsCount");
+        return RestAssured.get(url).getBody().jsonPath().get("loggedInAgentsCount");
     }
 
     public static Map<String, String> getAgentInfo(String tenantOrgName, String agent) {
@@ -1039,47 +1037,6 @@ public class ApiHelper implements VerificationHelper {
                 .contentType(ContentType.JSON)
                 .body(history)
                 .post(Endpoints.INTERNAL_CREATE_HISTORY);
-    }
-
-    public static void waitForServerToBeReady() {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        for (int i = 0; i < 10; i++) {
-            if (RestAssured.get(Server.getServerURL()).statusCode() == 200) {
-                break;
-            } else {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    public static void waitForServerToBeClosed() {
-        try {
-            for (int i = 0; i < 10; i++) {
-                if (callServer().statusCode() == 502) {
-                    break;
-                } else {
-                    try {
-                        Thread.sleep(200);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        } catch (ConnectException e) {
-            // Server is not available
-        }
-    }
-
-    private static Response callServer() throws ConnectException {
-        return RestAssured.get(Server.getServerURL());
     }
 
     @Nullable

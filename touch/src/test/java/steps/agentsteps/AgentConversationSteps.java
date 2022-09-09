@@ -40,7 +40,7 @@ import java.util.stream.Stream;
 public class AgentConversationSteps extends AbstractAgentSteps {
 
     private static String selectedEmoji;
-    private static ThreadLocal<List<String>> messagesFromChatBody = new ThreadLocal<List<String>>();
+    private static final ThreadLocal<List<String>> messagesFromChatBody = new ThreadLocal<List<String>>();
     public static ThreadLocal<String> locationURL = new ThreadLocal<String>();
     private LocationWindow locationWindow ;
     private C2pSendForm c2pSendForm;

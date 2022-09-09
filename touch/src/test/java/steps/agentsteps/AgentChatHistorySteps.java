@@ -24,7 +24,7 @@ import java.util.TimeZone;
 
 public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelper {
 
-    private Faker faker = new Faker();
+    private final Faker faker = new Faker();
     private ChatHistory chatHistory;
     private String userId;
 
