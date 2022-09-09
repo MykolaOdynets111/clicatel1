@@ -14,15 +14,3 @@ Feature: Supervisor desk
     When I select Touch in left menu and Supervisor Desk in submenu
     When Verify "All Chats" display default
     Then  Verify that live chats available are shown
-
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1168")
-  @Regression
-  Scenario: CD :: Supervisor Desk :: Chats :: Verify if the first view on supervisor desk is ‘Chats’ tab
-    Given I open portal
-    And Login into portal as an admin of General Bank Demo account
-    When I select Touch in left menu and Supervisor Desk in submenu
-    Then Verify that Chats tab is displayed first
-
-
-
-
