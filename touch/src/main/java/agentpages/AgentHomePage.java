@@ -15,9 +15,9 @@ import java.util.List;
 
 public class AgentHomePage extends AgentAbstractPage {
 
-    private String chatMessageContainer = ".cl-chat-messages";
-    private String cancelCloseChatButtonXPATH = "//span[text()='Cancel']";
-    private String modalWindow = "div.modal-content";
+    private final String chatMessageContainer = ".cl-chat-messages";
+    private final String cancelCloseChatButtonXPATH = "//span[text()='Cancel']";
+    private final String modalWindow = "div.modal-content";
 
     @FindBy(css = "div.agent-view--main")
     private WebElement conversationAreaContainer;
@@ -40,7 +40,7 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//p[@class='cl-pending-chat-mark-toast-content']")
     private WebElement pendingAlertMessage;
 
-    private String pinErrorMessageXpath = "//div[text()='You do not have the ability to close the chat when it has been flagged']";
+    private final String pinErrorMessageXpath = "//div[text()='You do not have the ability to close the chat when it has been flagged']";
 
     @FindBy(xpath = "//div[text()='You do not have the ability to close the chat when it has been flagged']")
     private WebElement pinErrorMessage;
@@ -81,7 +81,7 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath ="//button[text()='Move to Pending']")
     private WebElement moveToPendingButton;
 
-    private String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
+    private final String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
 
     private DeleteCRMConfirmationPopup deleteCRMConfirmationPopup;
     private EditCRMTicketWindow editCRMTicketWindow;

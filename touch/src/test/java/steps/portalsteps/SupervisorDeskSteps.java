@@ -138,7 +138,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @Then("^Supervisor Desk Live chat container header display \"(.*)\" instead of agent name$")
     public void verifyNoAgentHeaderInfo(String agentName) {
-        ;
         Assert.assertEquals(getSupervisorDeskPage().getChatHeader().getAgentName(), agentName,
                 "Agent should not be assigned");
     }

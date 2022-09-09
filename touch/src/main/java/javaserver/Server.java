@@ -2,7 +2,6 @@ package javaserver;
 
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import drivermanager.ConfigManager;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -20,15 +19,15 @@ public abstract class Server {
         running = false;
     }
 
-    public static synchronized String getServerURL() {
-        if (ConfigManager.isRemote()) {
-            return "http://" + Server.INTERNAL_CI_IP + ":" + Server.SERVER_PORT;
-        } else {
-            // to provide local ngrok url
-            return "https://j7q5gdrxs0.execute-api.eu-west-1.amazonaws.com/Internal/interact/chat-desk/1";
-
-        }
-    }
+//    public static synchronized String getServerURL() {
+//        if (ConfigManager.isRemote()) {
+//            return "http://" + Server.INTERNAL_CI_IP + ":" + Server.SERVER_PORT;
+//        } else {
+//            // to provide local ngrok url
+//            return "https://j7q5gdrxs0.execute-api.eu-west-1.amazonaws.com/Internal/interact/chat-desk/1";
+//
+//        }
+//    }
 
     public static synchronized void createServerURL() {
         SERVER_PORT += 1;

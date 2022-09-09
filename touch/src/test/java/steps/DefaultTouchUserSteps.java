@@ -54,8 +54,8 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
     private WidgetHeader widgetHeader;
     private TouchActionsMenu touchActionsMenu;
     private WelcomeMessages welcomeMessages;
-    private static Map<Long, VMQuoteRequestUserData> userDataForQuoteRequest = new ConcurrentHashMap<>();
-    private static ThreadLocal<String> enteredUserMessageInTouchWidget = new ThreadLocal<>();
+    private static final Map<Long, VMQuoteRequestUserData> userDataForQuoteRequest = new ConcurrentHashMap<>();
+    private static final ThreadLocal<String> enteredUserMessageInTouchWidget = new ThreadLocal<>();
     private static Map selectedClient;
     public static ThreadLocal<String> mediaFileName = new ThreadLocal<>();
 

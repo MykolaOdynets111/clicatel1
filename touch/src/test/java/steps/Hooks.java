@@ -1,7 +1,10 @@
 package steps;
 
 import agentpages.AgentHomePage;
-import apihelper.*;
+import apihelper.APIHelperDotControl;
+import apihelper.ApiHelper;
+import apihelper.Endpoints;
+import apihelper.TouchAuthToken;
 import com.google.gson.JsonObject;
 import datamanager.Agents;
 import datamanager.MC2Account;
@@ -21,7 +24,6 @@ import io.cucumber.java.Scenario;
 import io.qameta.allure.Attachment;
 import io.restassured.response.Response;
 import javaserver.DotControlServer;
-import javaserver.OrcaServer;
 import mc2api.ApiHelperPlatform;
 import mc2api.auth.PortalAuthToken;
 import org.openqa.selenium.OutputType;
@@ -31,6 +33,8 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
+import sqsreader.SQSConfiguration;
+import sqsreader.SyncMessageReceiver;
 import steps.agentsteps.AbstractAgentSteps;
 import steps.agentsteps.AgentCRMTicketsSteps;
 import steps.agentsteps.DefaultAgentSteps;
@@ -45,7 +49,9 @@ import twitter.TwitterTenantPage;
 import twitter.uielements.DMWindow;
 
 import java.io.ByteArrayOutputStream;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.NoSuchElementException;
 
 import static io.restassured.RestAssured.given;
 
@@ -72,13 +78,12 @@ public class Hooks implements JSHelper {
         }
 
         if (scenario.getSourceTagNames().contains("@start_server")) {
-            new DotControlServer().startServer();
-            ApiHelper.waitForServerToBeReady();
+                throw new PendingException();
         }
 
         if (scenario.getSourceTagNames().contains("@start_orca_server")) {
-            new OrcaServer().startServer();
-            ApiHelper.waitForServerToBeReady();
+            new SyncMessageReceiver().startSQSReader();
+//            new OrcaServer().startServer();
         }
     }
 
@@ -182,12 +187,11 @@ public class Hooks implements JSHelper {
 
         if(scenario.getSourceTagNames().contains("@start_server")){
             DotControlServer.stopServer();
-            ApiHelper.waitForServerToBeClosed();
         }
 
         if (scenario.getSourceTagNames().contains("@start_orca_server")) {
-            OrcaServer.stopServer();
-            ApiHelper.waitForServerToBeClosed();
+//            OrcaServer.stopServer();
+            SQSConfiguration.stopSQSReader();
         }
 
         if(scenario.getSourceTagNames().contains("@camunda")){

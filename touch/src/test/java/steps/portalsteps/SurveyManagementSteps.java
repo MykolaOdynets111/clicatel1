@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Map;
 
 public class SurveyManagementSteps extends AbstractPortalSteps {
-    private static ThreadLocal<String> questionUpdate = new ThreadLocal<>();
-    private static ThreadLocal<String> thankMessageUpdate = new ThreadLocal<>();
+    private static final ThreadLocal<String> questionUpdate = new ThreadLocal<>();
+    private static final ThreadLocal<String> thankMessageUpdate = new ThreadLocal<>();
 
-    private static ThreadLocal<String> notesMessageUpdate = new ThreadLocal<>();
+    private static final ThreadLocal<String> notesMessageUpdate = new ThreadLocal<>();
 
     Faker faker = new Faker();
     public static ThreadLocal<SurveyManagement> surveyConfiguration = new ThreadLocal<>();
