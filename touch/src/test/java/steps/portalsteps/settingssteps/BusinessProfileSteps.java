@@ -1,4 +1,4 @@
-package steps.portalsteps;
+package steps.portalsteps.settingssteps;
 
 import agentpages.AgentHomePage;
 import datamanager.enums.Days;
@@ -8,6 +8,7 @@ import io.cucumber.java.en.When;
 import org.joda.time.LocalDate;
 import org.openqa.selenium.NoSuchSessionException;
 import portaluielem.BusinessProfileWindow;
+import steps.portalsteps.AbstractPortalSteps;
 
 import java.util.List;
 import java.util.stream.Collectors;
