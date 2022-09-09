@@ -114,7 +114,7 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public String getLocationURLFromAgent() {
-        return getAttributeFromElem(this.getCurrentDriver(), locationHREFFromAgent,5, "Location href", "href");
+        return getAttributeFromElem(this.getCurrentDriver(), locationHREFFromAgent,10, "Location href", "href");
     }
 
     public String getLocationURLFromUser() {
