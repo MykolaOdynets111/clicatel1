@@ -18,7 +18,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
-import javaserver.OrcaServer;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -463,14 +462,6 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
      */
     @Then("^User should see '(.*)' (?:text response|url) for his '(.*)' input$")
     public void verifyTextResponseRegardlessPosition(String textResponse, String userInput) {
-
-        List l = OrcaServer.orcaMessages;
-        OrcaServer.orcaMessagesMap.clear();
-//        orcaMessageCallBody.remove();
-//        apiToken.remove();
-//        clientId.remove();
-//        orcaChannelId.remove();
-
         if (userInput.contains("personal info")) {
             userInput = "Submitted data:\n" +
                     "" + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + "\n" +

@@ -214,7 +214,7 @@ public class ChatHeader extends AbstractUIElement {
         String expectedInitials;
         List<String> userNames = Arrays.asList(userName.split(" "));
         if(userNames.size() == 2){
-            expectedInitials = userNames.get(0).charAt(0) + userNames.get(1).charAt(0);
+            expectedInitials = userNames.get(0) + userNames.get(1);
         } else {
             expectedInitials = userNames.get(0).substring(0,1);
         }
