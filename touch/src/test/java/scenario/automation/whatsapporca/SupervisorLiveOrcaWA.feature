@@ -33,8 +33,6 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     Then Supervisor Desk Live chat header display "Auto Main" Agent name
     And Supervisor Desk Live chat header display date
 
-  @orca_api
-  @start_orca_server
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2899")
   Scenario: Supervisor desk:: Verify if supervisor can unflag chat
     Given I login as agent of Automation
