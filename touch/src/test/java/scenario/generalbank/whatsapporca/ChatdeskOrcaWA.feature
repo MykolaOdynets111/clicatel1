@@ -114,17 +114,23 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent click on Canada Location
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1165")
-  @Regression
-  Scenario: CD :: Agent Desk :: Live Chat :: Location :: Verify that An agent should be able to search for any location.
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1848")
+    @Regression
+    @orca_api
+  Scenario Outline: CD :: Agent Desk :: Live Chat :: Location :: Verify that An agent should be able to search for any location.
     Given I login as agent of General Bank Demo
-    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    Given Setup ORCA <channelType> integration for General Bank Demo tenant
     When Send connect to agent message by ORCA
-    Then Agent has new conversation request from orca user
-    When Agent click on new conversation request from orca
+    Then Agent has new conversation request from <userType> user
+    When Agent click on new conversation request from <userType>
     Then Conversation area becomes active with connect to agent user's message
     When Agent open chat location form
     And Agent search for Paris Location
     And Agent click on Paris Location
+    Examples:
+      | channelType | userType|
+      | sms         | sms     |
+      | whatsapp    | orca    |
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-15691")
   Scenario: Supervisor desk :: verify that supervisor able to check live chats
