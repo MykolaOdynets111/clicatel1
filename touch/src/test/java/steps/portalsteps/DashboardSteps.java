@@ -26,7 +26,6 @@ public class DashboardSteps extends AbstractPortalSteps {
 
     private final ThreadLocal<String> channel = new ThreadLocal<>();
     private final ThreadLocal<String> period = new ThreadLocal<>();
-
     private final ThreadLocal<Integer> npsPassivesPercentage = new ThreadLocal<>();
 
     private final ThreadLocal<Double> actualCustomerSatisfactionScoreOld = new ThreadLocal<>();
@@ -92,7 +91,6 @@ public class DashboardSteps extends AbstractPortalSteps {
             softAssert.assertAll();
         }
     }
-
 
     @And("^Admin filter Customers History by (?!.*period and)(.*) channel$")
     public void adminFilterCustomersHistoryByChannel(String channel) {

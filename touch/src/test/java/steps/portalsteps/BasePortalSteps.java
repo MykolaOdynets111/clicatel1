@@ -862,23 +862,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalTouchPreferencesPage().waitForSaveMessage();
     }
 
-    @When("^Agent click expand arrow for (.*) auto responder$")
-    public void clickExpandArrowForAutoResponder(String autoresponder){
-        getPortalTouchPreferencesPage().getAutoRespondersWindow()
-                                                            .clickExpandArrowForMessage(autoresponder);
-    }
-
     @When("^Agent click On/Off button for (.*) auto responder$")
     public void clickOnOffForAutoResponder(String autoresponder){
         getPortalTouchPreferencesPage().getAutoRespondersWindow().waitToBeLoaded();
         getPortalTouchPreferencesPage().getAutoRespondersWindow()
                 .clickOnOffForMessage(autoresponder);
-    }
-
-    @When("^Click \"Reset to default\" button for (.*) auto responder$")
-    public void clickResetToDefaultButton(String autoresponder){
-        getPortalTouchPreferencesPage().getAutoRespondersWindow().clickResetToDefaultForMessage(autoresponder);
-        getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
     }
 
     @When("^Type new message: (.*) to: (.*) message field$")

@@ -124,7 +124,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
         String userName=getUserName(integration);
 
-        boolean isConversationShown = getLeftMenu(agent).isNewConversationIsShown(userName,20);
+        boolean isConversationShown = getLeftMenu(agent).isNewConversationIsShown(userName,30);
 
         Map settingResults = new HashMap<String, Object>();
 
