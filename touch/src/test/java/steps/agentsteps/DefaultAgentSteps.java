@@ -34,8 +34,8 @@ import java.util.*;
 
 public class DefaultAgentSteps extends AbstractAgentSteps {
 
-    private static ThreadLocal<Map<String, Boolean>> PRE_TEST_FEATURE_STATUS = new ThreadLocal<>();
-    private static ThreadLocal<Map<String, Boolean>> TEST_FEATURE_STATUS_CHANGES = new ThreadLocal<>();
+    private static final ThreadLocal<Map<String, Boolean>> PRE_TEST_FEATURE_STATUS = new ThreadLocal<>();
+    private static final ThreadLocal<Map<String, Boolean>> TEST_FEATURE_STATUS_CHANGES = new ThreadLocal<>();
     private static UserPersonalInfo userPersonalInfoForUpdating;
     public Profile profile;
 
@@ -124,7 +124,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
         String userName=getUserName(integration);
 
-        boolean isConversationShown = getLeftMenu(agent).isNewConversationIsShown(userName,20);
+        boolean isConversationShown = getLeftMenu(agent).isNewConversationIsShown(userName,30);
 
         Map settingResults = new HashMap<String, Object>();
 

@@ -74,6 +74,9 @@ public class AbstractPortalSteps implements JSHelper, VerificationHelper, WebWai
             case "orca":
                 userName = ORCASteps.getClientId();
                 break;
+            case "sms":
+                userName = ORCASteps.getSmsSourceId();
+                break;
             default:
                 throw new AssertionError("Incorrect channel name was provided: " + userName);
         }

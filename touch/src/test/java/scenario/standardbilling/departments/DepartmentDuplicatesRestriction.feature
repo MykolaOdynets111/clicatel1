@@ -2,7 +2,7 @@
 @remove_dep
 Feature: Departments
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-33046")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2836")
   @Regression
   Scenario: Verify if supervisor is able to launch department management page from dashboard view
     Given I open portal
@@ -12,7 +12,7 @@ Feature: Departments
     Then Admin click on Departments Management button
     And Departments Management page should be shown
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-14884")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2446")
   @Regression
   Scenario: Departments: Verify if not possible to create two departments with the same name
     Given I open portal

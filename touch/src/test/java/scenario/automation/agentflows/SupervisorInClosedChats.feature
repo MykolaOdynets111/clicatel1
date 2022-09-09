@@ -9,7 +9,7 @@ Feature: Supervisor desk
     And Agent select "Closed" left menu option
     And Verify that closed chats have Send email button
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-42387")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2776")
   @Regression
   Scenario: Supervisor desk:: Verify if "Start chat" is available in closed chats
     Given I open portal

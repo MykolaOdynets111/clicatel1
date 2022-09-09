@@ -71,14 +71,6 @@ public class DashboardPage extends PortalAbstractPage {
     private AttendedVsUnattendedChats attendedVsUnattendedChats;
     // == Constructors == //
 
-    public DashboardPage() {
-        super();
-    }
-
-    public DashboardPage(String agent) {
-        super(agent);
-    }
-
     public DashboardPage(WebDriver driver) {
         super(driver);
         if (isElementShown(this.getCurrentDriver(), mainFrame, 10)) {

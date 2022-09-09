@@ -51,15 +51,19 @@ public class DashboardSettingsPage extends PortalAbstractPage {
                 break;
             case "Chat Tags":
                 clickElem(this.getCurrentDriver(), chatTags, 5, "Chat Tags");
+                waitForElementToBeVisible(this.getCurrentDriver(), chatTags, 5);
                 break;
             case "Auto Responders":
                 clickElem(this.getCurrentDriver(), autoResponders, 5, "Auto Responders");
+                waitForElementToBeVisible(this.getCurrentDriver(), autoResponders, 5);
                 break;
             case "Preferences":
                 clickElem(this.getCurrentDriver(), preferences, 5, "Preferences");
+                waitForElementToBeVisible(this.getCurrentDriver(), preferences, 5);
                 break;
             case "Surveys":
                 clickElem(this.getCurrentDriver(), surveysNavigation, 6, "Surveys");
+                waitForElementToBeVisible(this.getCurrentDriver(), surveysNavigation, 5);
         }
         this.getCurrentDriver().navigate().refresh();
         waitForAppearAndDisappear(this.getCurrentDriver(), surveySpinner, 3, 4);
