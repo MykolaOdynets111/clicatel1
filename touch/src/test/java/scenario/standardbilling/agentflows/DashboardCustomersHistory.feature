@@ -56,14 +56,16 @@ Feature: Dashboard: Customer History
       | SMS   | Past 3 weeks   |
       | SMS   | Past 4 weeks   |
 
-  @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/TPORT-3760")
+  @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/CCD-2437")
   Scenario: Customer History:: Past sentiment graph:: Verify if past sentiment graph is empty if no data is available
+    Given Setup ORCA whatsapp integration for Standard Billing tenant
     When I open portal
-    And Login into portal as an admin of Standard Billing account
+    And I login as admin of Standard Billing
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
-    And Admin filter Customers History by Apple Business Chat channel and Past day period
+    And Admin filter Customers History by channel and period
+      | WhatsApp   | Past day  |
     Then Admin see the message no data for Past Sentiment graph if there is no available data
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45620")
@@ -154,3 +156,22 @@ Feature: Dashboard: Customer History
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by SMS channel
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1796")
+    @TestCaseId("https://jira.clickatell.com/browse/CCD-1819")
+    @Regression
+  Scenario Outline: CD:: Survey:: CSAT:: Dashboard:: Verify if customer satisfaction odometer for CSAT score is presented as 0% to 100% scale
+    Given I login as agent of Standard Billing
+    When I select Touch in left menu and Dashboard in submenu
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Customers History on dashboard
+    And Admin filter Customers History by channel and period
+      | <channelTypeFilter> | Past week |
+    Then Admin is able to see the CSAT scale having down scale as 0% and upscale as 100%
+    And Admin is able to see the y axis CSAT scale having down scale as 0 and upscale as 5
+    Examples:
+      | channelTypeFilter   |
+      | Apple Business Chat |
+      | WhatsApp            |
+      | SMS                 |
+

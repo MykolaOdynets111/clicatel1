@@ -17,7 +17,6 @@ public class CustomersHistory extends AbstractUIElement {
     private final String noDataByGraphNameXpath = graphByNameXpath + "//div[contains(@class,'no-data-overlay')]";
     private final String filteredByInfoXpath = "//span[text()='%s']/../span[contains(@class, 'cl-default-text-muted')]";
 
-
     @FindBy(css = "h3")
     private List<WebElement> graphHeaders;
 
@@ -26,6 +25,9 @@ public class CustomersHistory extends AbstractUIElement {
 
     @FindBy(css = ".gauge-labels")
     private WebElement gaugeLabels;
+
+    @FindBy(css = ".live-chats-section:nth-child(2) [dominant-baseline='central']")
+    private List<WebElement> yAxisScaleCustomerSatisfaction;
 
     public List<List<String>> getGraphsTimelines() {
         waitFor(2000);
@@ -44,6 +46,13 @@ public class CustomersHistory extends AbstractUIElement {
          scrollToElem(this.getCurrentDriver(), graphXpath, graphName);
         }
         return isElementShownByXpath(this.getCurrentDriver(), graphXpath, 1);
+    }
+
+    public boolean isYAxisContainsScale(String downScale, String upScale) {
+        List<WebElement> finalList = yAxisScaleCustomerSatisfaction.stream().filter(e -> e.getText().contains(downScale) ||
+                e.getText().contains(upScale)).collect(Collectors.toList());
+
+        return finalList.size() == 2;
     }
 
     public boolean isGraphContainsScale(String downScale, String upScale) {

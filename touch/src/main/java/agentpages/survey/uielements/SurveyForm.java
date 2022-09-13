@@ -1,11 +1,15 @@
 package agentpages.survey.uielements;
 
 import abstractclasses.AbstractWidget;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,6 +45,9 @@ public class SurveyForm extends AbstractWidget {
 
     @FindBy(xpath = ".//button[text()='Save configuration']")
     private WebElement saveButtonElement;
+
+    @FindBy(css = ".cl-charters-count")
+    private WebElement questionTitleCharacterLimit;
 
     @FindBy(xpath = "//div[@data-testid='spinner']")
     private WebElement saveSurveySpinner;
@@ -149,6 +156,14 @@ public class SurveyForm extends AbstractWidget {
         inputText(this.getCurrentDriver(), questionInput, 1, "Question Input", question);
     }
 
+    public void changeQuestionEmoji(String question) {
+        questionInput.clear();
+        StringSelection stringSelection = new StringSelection(question);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+        questionInput.sendKeys(Keys.chord(Keys.CONTROL, "V"));
+    }
+
     public void setThankMessage(String message) {
         thankMessageForm.clear();
         inputText(this.getCurrentDriver(), thankMessageForm, 1, "Question Input", message);
@@ -184,6 +199,17 @@ public class SurveyForm extends AbstractWidget {
         } else {
             System.out.println("Value is already saved");
         }
+    }
+
+    public boolean checkInputQuestionCharacterCount(String expectedText) {
+        String actualText = getTextFromElem(this.getCurrentDriver(), questionTitleCharacterLimit, 5, "Question Input character limit title");
+        return actualText.contains(expectedText);
+    }
+
+    public boolean checkCharacterCountCompWithEnteredText() {
+        String actualText = getTextFromElem(this.getCurrentDriver(), questionTitleCharacterLimit, 5, "Question Input character limit title");
+        String expectedTextSize = String.valueOf(getTextFromElem(this.getCurrentDriver(), questionInput, 5, "Question Input").length());
+        return actualText.contains(expectedTextSize);
     }
 
     public List<String> getVariationOfRatingCSATScale() {

@@ -63,7 +63,7 @@ Feature: Satisfaction Survey
     And Agent click on new conversation request from orca
     And Conversation area becomes active with connect to agent user's message
     And Agent closes chat
-    And Send skip message by ORCA
+    And Send 10 message by ORCA
     When Agent select "Closed" left menu option
     And Agent searches and selects chat from orca in chat history list
     And Agent open first 'History view'
@@ -180,19 +180,3 @@ Feature: Satisfaction Survey
     Examples:
       | channelType |
       | abc         |
-
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1796")
-  @Regression
-  Scenario Outline: CD:: Survey:: CSAT:: Dashboard:: Verify if customer satisfaction odometer for CSAT score is presented as 0% to 100% scale
-    Given I login as agent of Standard Billing
-    And Setup ORCA <channelType> integration for Standard Billing tenant
-    And I select Touch in left menu and Dashboard in submenu
-    And Admin click on Customers Overview dashboard tab
-    And Admin click on Customers History on dashboard
-    And Admin filter Customers History by channel and period
-      | Apple Business Chat | Past week |
-    Then Admin is able to see the CSAT scale having down scale as 0% and upscale as 100%
-    Examples:
-      | channelType |
-      | abc         |
-      | whatsapp    |

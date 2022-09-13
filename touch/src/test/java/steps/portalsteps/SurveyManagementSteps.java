@@ -135,6 +135,18 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         }
     }
 
+    @When("^Agent checks question title character limit as (.*) in survey form$")
+    public void checkSurveyQuesCharacterLimitCheck(String expectedText) {
+        String id = ORCASteps.getChannelId();
+        Assert.assertTrue(getSurveyManagementPage().getSurveyForm(id).checkInputQuestionCharacterCount(expectedText));
+    }
+
+    @Then("^Supervisor is able to see the number of characters typed for text in survey form$")
+    public void checkSurveyQuesFieldContainsCharacters() {
+        String id = ORCASteps.getChannelId();
+        Assert.assertTrue(getSurveyManagementPage().getSurveyForm(id).checkCharacterCountCompWithEnteredText());
+    }
+
     @When("^Agent checks rating dropdown visibility for (.*) survey form$")
     public void checkDropdownDisability(String surveyForm) {
         String id = ORCASteps.getChannelId();
@@ -181,6 +193,13 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         String channelID = ORCASteps.getChannelId();
         questionUpdate.set(question + " " + faker.rockBand().name());
         getSurveyManagementPage().getSurveyForm(channelID).changeQuestion(questionUpdate.get());
+    }
+
+    @When("^Customize your survey \"(.*)\" question with emoji$")
+    public void setSurveyQuestionWithEmoji(String question) {
+        String channelID = ORCASteps.getChannelId();
+        questionUpdate.set(question);
+        getSurveyManagementPage().getSurveyForm(channelID).changeQuestionEmoji(questionUpdate.get());
     }
 
     @When("^Customize your survey thank message to (.*)$")
