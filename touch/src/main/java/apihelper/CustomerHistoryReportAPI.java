@@ -22,8 +22,8 @@ public class CustomerHistoryReportAPI {
     }
 
     public static Response createAverageCustomerSatisfactionReport(String tenantOrgName, String period, String channelType) {
-        return RestAssured.given()
-                .cookie("clickatell-auth", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+        return RestAssured.given().log().all().header("Authorization", getAccessToken(tenantOrgName, "main"))
+                .accept(ContentType.ANY)
                 .contentType(ContentType.JSON)
                 .body(getFilterModel(period, channelType))
                 .post(Endpoints.AVERAGE_CUSTOMER_SATISFACTION_REPORT);
