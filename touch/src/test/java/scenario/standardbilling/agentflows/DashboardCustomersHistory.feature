@@ -58,9 +58,8 @@ Feature: Dashboard: Customer History
 
   @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/CCD-2437")
   Scenario: Customer History:: Past sentiment graph:: Verify if past sentiment graph is empty if no data is available
-    Given Setup ORCA whatsapp integration for Standard Billing tenant
     When I open portal
-    And I login as admin of Standard Billing
+    And I login as agent of Standard Billing
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
