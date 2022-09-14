@@ -1,7 +1,10 @@
 package sqsreader;
 
+import drivermanager.ConfigManager;
 import lombok.Data;
+import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.sqs.SqsClient;
 
 @Data
 public class SQSConfiguration {
@@ -26,11 +29,20 @@ public class SQSConfiguration {
     }
 
     private String queueName = DEFAULT_QUEUE_NAME;
-    private Region region = DEFAULT_REGION;
     private static String callbackUrl = DEFAULT_CALLBACK_URL;
 
     public static String getCallbackUrl() {
         return callbackUrl;
+    }
+
+    public static SqsClient getSqsClient(){
+        if(ConfigManager.isRemote()){
+            return SqsClient.builder().region(SQSConfiguration.DEFAULT_REGION).build();
+        }
+
+        return SqsClient.builder().region(SQSConfiguration.DEFAULT_REGION)
+                .credentialsProvider(ProfileCredentialsProvider.create("215418463085_vulcan-mc2-dev"))
+                .build();
     }
 
 }

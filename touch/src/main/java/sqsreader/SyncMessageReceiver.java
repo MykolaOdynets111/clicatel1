@@ -4,7 +4,6 @@ import com.amazon.sqs.javamessaging.ProviderConfiguration;
 import com.amazon.sqs.javamessaging.SQSConnection;
 import com.amazon.sqs.javamessaging.SQSConnectionFactory;
 import com.amazon.sqs.javamessaging.SQSSession;
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.services.sqs.SqsClient;
 
 import javax.jms.JMSException;
@@ -42,10 +41,7 @@ public class SyncMessageReceiver {
     private void startSyncMessageReceiver() throws JMSException {
         SQSConfiguration config = SQSConfiguration.parseConfig();
 
-        SqsClient sqsClient = SqsClient.builder()
-                .region(config.getRegion())
-                .credentialsProvider(ProfileCredentialsProvider.create("215418463085_vulcan-mc2-dev"))
-                .build();
+        SqsClient sqsClient = SQSConfiguration.getSqsClient();
 
         SQSConnectionFactory connectionFactory = new SQSConnectionFactory(
                 new ProviderConfiguration(),

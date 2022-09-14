@@ -4,7 +4,6 @@
     <test name="ABC tests">
         <classes>
             <class name="runner.generalbank.RunWhatsAppORCATest" />
-
         </classes>
     </test>
 </suite>
