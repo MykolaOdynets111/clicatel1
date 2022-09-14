@@ -112,6 +112,9 @@ public class SurveyForm extends AbstractWidget {
     @FindBy(css = ".rate-input-label.number")
     private List<WebElement> numberRateRepresentation;
 
+    @FindBy(css = ".cl-form-group__error-text")
+    private WebElement errorMessage;
+
     public SurveyForm(WebElement element) {
         super(element);
     }
@@ -152,12 +155,34 @@ public class SurveyForm extends AbstractWidget {
     }
 
     public void changeQuestion(String question) {
-        questionInput.clear();
+        for (int i = 0; i < 5; i++) {
+            try {
+                if (errorMessage.isDisplayed() &&
+                        getTextFromElem(this.getCurrentDriver(), errorMessage, 5, "Error message").contains("Survey question text is required")) {
+                    break;
+                }
+            }
+            catch (Exception e) {
+                questionInput.sendKeys(Keys.chord(Keys.CONTROL, "A", Keys.BACK_SPACE));
+                waitFor(1000);
+            }
+        }
         inputText(this.getCurrentDriver(), questionInput, 1, "Question Input", question);
     }
 
     public void changeQuestionEmoji(String question) {
-        questionInput.clear();
+        for (int i = 0; i < 5; i++) {
+            try {
+                if (errorMessage.isDisplayed() &&
+                        getTextFromElem(this.getCurrentDriver(), errorMessage, 5, "Error message").contains("Survey question text is required")) {
+                    break;
+                }
+            }
+            catch (Exception e) {
+                questionInput.sendKeys(Keys.chord(Keys.CONTROL, "A", Keys.BACK_SPACE));
+                waitFor(1000);
+            }
+        }
         StringSelection stringSelection = new StringSelection(question);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, null);
@@ -204,6 +229,13 @@ public class SurveyForm extends AbstractWidget {
     public boolean checkInputQuestionCharacterCount(String expectedText) {
         String actualText = getTextFromElem(this.getCurrentDriver(), questionTitleCharacterLimit, 5, "Question Input character limit title");
         return actualText.contains(expectedText);
+    }
+
+    public boolean checkUpperQuestionCharactersLimit(int expectedValue) {
+        String actualText = getTextFromElem(this.getCurrentDriver(), questionTitleCharacterLimit, 5, "Question Input character limit title");
+        String[] splitArray = actualText.split(" ");
+        int upperLimit = Integer.parseInt(splitArray[0]);
+        return upperLimit > expectedValue;
     }
 
     public boolean checkCharacterCountCompWithEnteredText() {
@@ -296,6 +328,15 @@ public class SurveyForm extends AbstractWidget {
 
     public boolean isCommentFieldShown() {
         return isElementShown(this.getCurrentDriver(), commentFieldHeader, 2);
+    }
+
+    public boolean isErrorMessageShown() {
+        return isElementShown(this.getCurrentDriver(), errorMessage, 2);
+    }
+
+    public boolean isErrorMessageHavingText(String expectedText) {
+        String actualText = getTextFromElem(this.getCurrentDriver(), errorMessage, 5, "Error message");
+        return actualText.equalsIgnoreCase(expectedText);
     }
 
     public String getSizeOfRateInputNumbers() {

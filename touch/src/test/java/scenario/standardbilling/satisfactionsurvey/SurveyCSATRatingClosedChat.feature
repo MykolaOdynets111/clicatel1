@@ -149,7 +149,8 @@ Feature: Satisfaction Survey
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by channel and period
-      | Apple Business Chat | Past week |
+      | <channelFilter> | Past week    |
+      | <channelFilter> | Past 2 weeks |
     Then Admin is able to see the average CSAT survey response converted to 0-100
     And Navigate to Surveys page
     When Admin clicks on channel toggle button for survey form
@@ -174,9 +175,11 @@ Feature: Satisfaction Survey
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by channel and period
-      | Apple Business Chat | Past week |
+      | <channelFilter> | Past week    |
+      | <channelFilter> | Past 2 weeks |
     And Admin is able to see the new average CSAT survey response converted to 0-100
     And Admin is able to see the different average CSAT rating for CSAT response
     Examples:
-      | channelType |
-      | abc         |
+      | channelType | channelFilter       |
+      | abc         | Apple Business Chat |
+      | sms         | SMS                 |

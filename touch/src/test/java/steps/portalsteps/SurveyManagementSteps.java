@@ -141,10 +141,26 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         Assert.assertTrue(getSurveyManagementPage().getSurveyForm(id).checkInputQuestionCharacterCount(expectedText));
     }
 
+    @When("^Agent is able to see the number of characters typed more than (.*) in survey form$")
+    public void checkSurveyQuesNumberOfCharacters(int expectedValue) {
+        String id = ORCASteps.getChannelId();
+        Assert.assertTrue(getSurveyManagementPage().getSurveyForm(id).checkUpperQuestionCharactersLimit(expectedValue));
+    }
+
     @Then("^Supervisor is able to see the number of characters typed for text in survey form$")
     public void checkSurveyQuesFieldContainsCharacters() {
         String id = ORCASteps.getChannelId();
         Assert.assertTrue(getSurveyManagementPage().getSurveyForm(id).checkCharacterCountCompWithEnteredText());
+    }
+
+    @Then("^Supervisor is able to see character limit error with text (.*)$")
+    public void checkErrorMessage(String expectedText) {
+        String id = ORCASteps.getChannelId();
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(getSurveyManagementPage().getSurveyForm(id).isErrorMessageShown(), "Error message is not there");
+        softAssert.assertTrue(getSurveyManagementPage().getSurveyForm(id).isErrorMessageHavingText(expectedText), "Error message is not having expected text");
+
+        softAssert.assertAll();
     }
 
     @When("^Agent checks rating dropdown visibility for (.*) survey form$")
