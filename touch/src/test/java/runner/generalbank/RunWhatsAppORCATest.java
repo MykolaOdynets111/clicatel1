@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 @CucumberOptions(
         plugin={"pretty", "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"},
         monochrome = true,
-        features = "touch/src/test/java/scenario/generalbank/whatsapporca",
+        features = "touch/src/test/java/scenario/generalbank/whatsapporca/DebugSQS.feature",
         glue ="steps")
 public class RunWhatsAppORCATest extends AbstractTestNGCucumberTests {
 
