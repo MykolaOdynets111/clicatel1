@@ -261,13 +261,15 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then("^Verify Chat has pending icon in the Chat (.*)$")
     public void verifyChatHasPendingIcon(String value) {
         switch (value){
-            case "Like":
-                 getSupervisorDeskPage().getSupervisorLeftPanel().verifyChatPendingIcon();
+            case "List":
+                 getSupervisorDeskPage().verifyChatPendingIcon();
                  break;
             case "View":
-                getSupervisorDeskPage().getSupervisorLeftPanel().verifyChatPendingOn();
+                getSupervisorDeskPage().verifyChatPendingOn();
+                break;
+            default:
+                System.out.println("Invalid Input for pending "+ value);
         }
-
     }
 
     @When("^User select (.*) ticket type$")

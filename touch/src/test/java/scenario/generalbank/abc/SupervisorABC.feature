@@ -27,7 +27,7 @@ Feature: Apple Business Chat :: Supervisor Desk
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Supervisor Desk in submenu
-    Then Verify that Chat is displayed first
+    Then Verify that Chats tab is displayed first
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-106827")
@@ -44,3 +44,20 @@ Feature: Apple Business Chat :: Supervisor Desk
     And Second Agent click "End chat" button
     Then Admin clicks 'Go to chat' button
     And Orca request is shown on Supervisor Desk Live page
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1981")
+  Scenario: CD :: Supervisor Desk :: Chats :: Verify the Chats that are currently in the 'Pending' tab will have a yellow 'Pending' icon on them in the Supervisor view
+    Given I login as agent of General Bank Demo
+    When Setup ORCA abc integration for General Bank Demo tenant
+    And Set agent support hours for all week
+    And Send to agent message by ORCA
+    And Agent has new conversation request from ORCA user
+    And Agent click on new conversation request from ORCA
+    And Agent click 'Pending' chat button
+    And I open portal
+    And Login into portal as an admin of General Bank Demo account
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Agent search chat orca on Supervisor desk
+    And Agent click On Live Supervisor Desk chat from ORCA channel
+    Then Verify Chat has pending icon in the Chat List
+    Then Verify Chat has pending icon in the Chat View

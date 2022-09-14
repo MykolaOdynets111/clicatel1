@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import portalpages.PortalAbstractPage;
 import portaluielem.*;
 
@@ -65,6 +66,13 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     @FindBy(xpath = "//input[contains(@class, 'cl-form-control cl-form-control--input cl-end-date')]")
     private WebElement endDateInput;
+
+    @FindBy(xpath = "//*[local-name()='svg' and @name='clock']/*[local-name()='g']")
+    private WebElement leftChatPendingIcon;
+
+    @FindBy(xpath= "//div[contains(text(),'Pending On')]")
+    private WebElement leftChatPendingOn;
+
     private String backButtonString = "//button[@aria-label='Previous Month']";
 
     private String chatName = "//h2[@class='cl-chat-item-user-name' and text() ='%s']";
@@ -278,5 +286,13 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     public void loadAllClosedChats() {
         getSupervisorClosedChatsTable().loadAllFoundChats();
+    }
+
+    public void verifyChatPendingIcon() {
+        Assert.assertTrue(leftChatPendingIcon.isDisplayed(),"Pending icon not displayed ");
+    }
+
+    public void verifyChatPendingOn() {
+        Assert.assertTrue(leftChatPendingOn.isDisplayed(),"Pending icon not displayed ");
     }
 }
