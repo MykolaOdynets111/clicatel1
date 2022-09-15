@@ -533,4 +533,21 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void verifyThatLiveChatAvailableAreShown(){
         getSupervisorDeskPage().getSupervisorLeftPanel().verifyLiveChatInfo();
     }
+    @And("Supervisor adds a note {string}, Jira link {string} and Ticket Number {string}")
+    public void addNewNote(String note, String jiraLink, String ticketNumber){
+        getSupervisorDeskPage().getSupervisorRightPanel().clickOnNotesTab();
+        getSupervisorDeskPage().getSupervisorRightPanel().clickOnNewNoteButton();
+        getSupervisorDeskPage().getSupervisorRightPanel().addTextToNote(note);
+        getSupervisorDeskPage().getSupervisorRightPanel().addJiraLinkToNote(jiraLink);
+        getSupervisorDeskPage().getSupervisorRightPanel().addTicketNumberToNote(ticketNumber);
+        getSupervisorDeskPage().getSupervisorRightPanel().clickOnCreateNoteButton();
+    }
+
+    @Then("Supervisor sees note {string}, Jira link {string} and Ticket Number {string}")
+    public void verifyNoteDetails(String note, String jiraLink, String ticketNumber) {
+        getSupervisorDeskPage().getSupervisorRightPanel().clickOnNotesTab();
+        getSupervisorDeskPage().getSupervisorRightPanel().verifyNoteCardText(note);
+        getSupervisorDeskPage().getSupervisorRightPanel().verifyNoteCardJiraLink(jiraLink);
+        getSupervisorDeskPage().getSupervisorRightPanel().verifyNoteCardTicketNumber(ticketNumber);
+    }
 }
