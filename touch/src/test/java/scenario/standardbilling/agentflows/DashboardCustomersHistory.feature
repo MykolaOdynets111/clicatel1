@@ -57,17 +57,6 @@ Feature: Dashboard: Customer History
       | SMS   | Past 3 weeks   |
       | SMS   | Past 4 weeks   |
 
-  @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/CCD-2437")
-  Scenario: Customer History:: Past sentiment graph:: Verify if past sentiment graph is empty if no data is available
-    When I open portal
-    And I login as agent of Standard Billing
-    And I select Touch in left menu and Dashboard in submenu
-    And Admin click on Customers Overview dashboard tab
-    And Admin click on Customers History on dashboard
-    And Admin filter Customers History by channel and period
-      | WhatsApp   | Past day  |
-    Then Admin see the message no data for Past Sentiment graph if there is no available data
-
   @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/CCD-1486")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1816")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2437")
@@ -85,6 +74,7 @@ Feature: Dashboard: Customer History
       | channelTypeFilter   |
       | SMS                 |
       | Apple Business Chat |
+      | WhatsApp            |
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45620")
   Scenario: Dashboard:: Verify that supervisor can check average CSAT surveys per selected duration of time and specific channel
