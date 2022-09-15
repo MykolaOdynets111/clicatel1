@@ -1667,7 +1667,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Select (.*) department By Default$")
     public void selectDefaultDepartment(String name){
-        getPortalTouchPreferencesPage().getPreferencesWindow().activateDefaultDepartmentCheckbox().selectDefaultDepartment(name);
+        getPortalTouchPreferencesPage()
+                .getPreferencesWindow()
+                .selectDefaultDepartment(name);
         agentClickSaveChangesButton();
     }
 
