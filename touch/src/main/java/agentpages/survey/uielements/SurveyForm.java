@@ -226,9 +226,8 @@ public class SurveyForm extends AbstractWidget {
         }
     }
 
-    public boolean checkInputQuestionCharacterCount(String expectedText) {
-        String actualText = getTextFromElem(this.getCurrentDriver(), questionTitleCharacterLimit, 5, "Question Input character limit title");
-        return actualText.contains(expectedText);
+    public String checkInputQuestionCharacterCount() {
+        return getTextFromElem(this.getCurrentDriver(), questionTitleCharacterLimit, 5, "Question Input character limit title");
     }
 
     public boolean checkUpperQuestionCharactersLimit(int expectedValue) {

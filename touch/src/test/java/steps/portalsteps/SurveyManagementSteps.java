@@ -138,7 +138,8 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     @When("^Agent checks question title character limit as (.*) in survey form$")
     public void checkSurveyQuesCharacterLimitCheck(String expectedText) {
         String id = ORCASteps.getChannelId();
-        Assert.assertTrue(getSurveyManagementPage().getSurveyForm(id).checkInputQuestionCharacterCount(expectedText));
+        Assert.assertTrue(getSurveyManagementPage().getSurveyForm(id).checkInputQuestionCharacterCount().contains(expectedText),
+                "Title character limit is not correct");
     }
 
     @When("^Agent is able to see the number of characters typed more than (.*) in survey form$")
