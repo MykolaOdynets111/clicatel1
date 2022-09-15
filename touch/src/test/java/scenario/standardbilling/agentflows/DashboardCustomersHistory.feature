@@ -32,6 +32,7 @@ Feature: Dashboard: Customer History
 
   @no_chatdesk
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2427")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1929")
   @Regression
   Scenario: Dashboard: Verify if admin can filter Customers History report by channel and period
     When I open portal
@@ -68,16 +69,22 @@ Feature: Dashboard: Customer History
     Then Admin see the message no data for Past Sentiment graph if there is no available data
 
   @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/CCD-1486")
-  Scenario: CD:: Survey:: Verify " no data to show now" should be shown in the CSAT column against the agent.
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1816")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2437")
+  Scenario Outline: CD:: Survey:: Verify " no data to show now" should be shown in the CSAT column against the agent.
     When I open portal
     And I login as agent of Standard Billing
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by channel and period
-      | SMS   | Past day  |
+      | <channelTypeFilter>  | Past day  |
     Then Admin is able to see No data to report at the moment in the Customer Satisfaction against the agent
     And Admin see the message no data for Customer Satisfaction gauge if there is no available data
+    Examples:
+      | channelTypeFilter   |
+      | SMS                 |
+      | Apple Business Chat |
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45620")
   Scenario: Dashboard:: Verify that supervisor can check average CSAT surveys per selected duration of time and specific channel
@@ -106,16 +113,6 @@ Feature: Dashboard: Customer History
     And Admin filter Customers History by Past 4 weeks period
     Then Admin is able to see Customer Satisfaction graphs
     Then Admin is able to see the average CSAT survey response converted to 0-10
-
-  @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/TPORT-50386")
-  Scenario: Dashboard: Verify if admin can see the message "No data to report at the moment" if there is no available CSAT Score data per period
-    When I open portal
-    And Login into portal as an admin of Standard Billing account
-    And I select Touch in left menu and Dashboard in submenu
-    And Admin click on Customers Overview dashboard tab
-    And Admin click on Customers History on dashboard
-    And Admin filter Customers History by Apple Business Chat channel and Past day period
-    Then Admin see the message no data for Customer Satisfaction graph if there is no available data
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2955")
   Scenario: Dashboard:: Verify that if NPS surveys are categorize as Passives if webchat user chooses between 7 – 8
@@ -157,16 +154,6 @@ Feature: Dashboard: Customer History
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by Past day period
     Then All reports in graphs should be breakdown hourly
-
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1816")
-  @Regression
-  Scenario: CD:: SMS:: Customers Overview :: Verify if Supervisor can see SMS channel in the Customer History tab in Dashboard
-    When I open portal
-    And Login into portal as an admin of Standard Billing account
-    And I select Touch in left menu and Dashboard in submenu
-    And Admin click on Customers Overview dashboard tab
-    And Admin click on Customers History on dashboard
-    And Admin filter Customers History by SMS channel
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1796")
     @TestCaseId("https://jira.clickatell.com/browse/CCD-1819")
