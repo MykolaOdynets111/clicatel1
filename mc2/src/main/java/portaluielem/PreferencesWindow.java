@@ -1,5 +1,6 @@
 package portaluielem;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -21,9 +22,6 @@ public class PreferencesWindow extends BasePortalWindow {
 
     @FindBy(css = "[for='auto-scheduler'] .cl-r-toggle-btn__label")
     private WebElement toggleAutoScheduler;
-
-    @FindBy(xpath = ".//h3[text()='Route to Specific Departments']/ancestor::div[@class='setting-group-control__header']//div[@class='cl-toggle__label']")
-    private WebElement defaultDepartmentCheckbox;
 
     @FindBy(xpath = ".//div[text()='Select department']/ancestor::div[contains(@class,'cl-select__control')]")
     private WebElement defaultDepartmentsDropdown;
@@ -61,6 +59,16 @@ public class PreferencesWindow extends BasePortalWindow {
     @FindBy(css = "[name='pendingChatAutoClosureHours']")
     private WebElement pendingChatAutoClosureHours;
 
+    private WebElement getToggleElementByName(String name) {
+        return findElementByXpath(this.getCurrentDriver(), String.format(".//h3[text() = '" + name
+                +"']/..//div[@class = 'cl-toggle__label']", name), 10);
+    }
+
+    private boolean verifyToggleIsChecked(String name) {
+        return getToggleElementByName(name).findElement(By.xpath("./../input"))
+                .getAttribute("value").equalsIgnoreCase("true");
+    }
+
     public void setChatsAvailable(String chats){
         waitForElementToBeVisible(this.getCurrentDriver(), chatsAvailable, 5);
         scrollToElem(this.getCurrentDriver(), chatsAvailable,"Chat available");
@@ -87,13 +95,15 @@ public class PreferencesWindow extends BasePortalWindow {
     return this;
     }
 
-    public PreferencesWindow activateDefaultDepartmentCheckbox(){
-        scrollAndClickElem(this.getCurrentDriver(), defaultDepartmentCheckbox, 5,"Default Department Checkbox");
-        return this;
+    public void activateToggle(String toggleName){
+        if(!verifyToggleIsChecked(toggleName)){
+            scrollAndClickElem(currentDriver, getToggleElementByName(toggleName), 10, toggleName);
+        }
     }
 
     public void selectDefaultDepartment(String name){
-        clickElem(this.getCurrentDriver(), defaultDepartmentsDropdown, 5,"Default Department Dropdown");
+        activateToggle("Route to Specific Departments");
+        scrollAndClickElem(this.getCurrentDriver(), defaultDepartmentsDropdown, 5,"Default Department Dropdown");
         waitForElementsToBeVisible(this.getCurrentDriver(), departments, 3);
         departments.stream().filter(a -> a.getText().contains(name))
                 .findFirst().orElseThrow(() -> new AssertionError("Cannot find department: " + name)).click();
