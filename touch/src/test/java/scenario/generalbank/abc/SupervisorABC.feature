@@ -22,7 +22,7 @@ Feature: Apple Business Chat :: Supervisor Desk
     And Agent select "Apple Business Chat" in Chanel container and click "Apply filters" button
     Then Verify that only "apple-business-chat" closed chats are shown
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-106817")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1168")
   Scenario: Supervisor Desk :: Verify if the first view on supervisor desk is ‘Chats’ tab
     Given I open portal
     And Login into portal as an admin of General Bank Demo account

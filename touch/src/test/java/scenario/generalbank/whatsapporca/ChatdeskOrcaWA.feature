@@ -144,7 +144,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Verify "All Chats" display default
     Then  Verify that live chats available are shown
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-7391")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2369")
   Scenario: Supervisor desk:: Route ticket to scheduler
     Given I login as second agent of General Bank Demo
     And Setup ORCA whatsapp integration for General Bank Demo tenant

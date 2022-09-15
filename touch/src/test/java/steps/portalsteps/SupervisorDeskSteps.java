@@ -268,7 +268,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 getSupervisorDeskPage().verifyChatPendingOn();
                 break;
             default:
-                System.out.println("Invalid Input for pending "+ value);
+                Assert.fail("Incorrect string value");
         }
     }
 
