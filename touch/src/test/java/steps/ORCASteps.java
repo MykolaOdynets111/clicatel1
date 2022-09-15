@@ -149,7 +149,6 @@ public class ORCASteps implements WebWait {
                         " Messages which came from server for clientId %s are: %s \n" +
                         "Expected: %s", clientId.get(), OrcaSQSHandler.orcaMessages, expectedResponse));
     }
-
     @Then("^Verify Orca returns (.*) Location sent by Agent during (.*) seconds$")
     public void verifyOrcaReturnedCorrectLocation(String locationName, int wait) {
         Assert.assertTrue(isLocationCameToUser(locationName, wait),
@@ -162,7 +161,6 @@ public class ORCASteps implements WebWait {
                 String.format("HSM '%s' didn't come to user",templateId ) +"\n" +
                 "Following ORCA events sent to user " +  OrcaSQSHandler.orcaEvents);
     }
-
 
     @When("^User send (.*) attachment with orca$")
     public void sendAttachment(String fileName){
@@ -236,9 +234,6 @@ public class ORCASteps implements WebWait {
             return false;
         }
         return OrcaSQSHandler.orcaMessages.contains(message);
-
-
-
     }
 
     private void createRequestMessage(String apiKey, String message) {
@@ -246,5 +241,4 @@ public class ORCASteps implements WebWait {
         clientId.set(orcaMessageCallBody.get().getUserInfo().getUserName());
         smsSourceId.set(orcaMessageCallBody.get().getSourceId());
     }
-
 }
