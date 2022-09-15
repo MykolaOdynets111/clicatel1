@@ -14,7 +14,13 @@ import java.util.stream.Collectors;
 public class CustomersHistory extends AbstractUIElement {
 
     private final String graphByNameXpath = "//h3[text()='%s']/../following-sibling::div[contains(@class,'chart-container')]";
+
+    private final String csatScoreGaugeByNameXpath = "//h3[text()='%s']/../following-sibling::div[contains(@class,'cl-gauge-section')]";
+
     private final String noDataByGraphNameXpath = graphByNameXpath + "//div[contains(@class,'no-data-overlay')]";
+
+    private final String gaugeNameXpath = csatScoreGaugeByNameXpath + "//div[contains(@class,'cl-no-data-alert')]";
+
     private final String filteredByInfoXpath = "//span[text()='%s']/../span[contains(@class, 'cl-default-text-muted')]";
 
     @FindBy(css = "h3")
@@ -67,6 +73,14 @@ public class CustomersHistory extends AbstractUIElement {
 
     public boolean isNoDataDisplayedForGraph(String graphName) {
         return isElementShownByXpath(this.getCurrentDriver(), String.format(noDataByGraphNameXpath, graphName), 5);
+    }
+
+    public String isNoDataAlertMessageText(String graphName) {
+        return getTextFromElem(this.getCurrentDriver(), findElementByXpath(this.getCurrentDriver(), String.format(noDataByGraphNameXpath, graphName), 5), 5, "No data alert");
+    }
+
+    public boolean isNoGaugeDisplayedForGraph(String graphName) {
+        return isElementShownByXpath(this.getCurrentDriver(), String.format(gaugeNameXpath, graphName), 5);
     }
 
     public List<String> getAllGraphs() {

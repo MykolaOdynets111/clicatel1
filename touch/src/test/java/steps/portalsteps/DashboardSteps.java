@@ -270,6 +270,14 @@ public class DashboardSteps extends AbstractPortalSteps {
         }
     }
 
+    @Then("^Admin see the message no data for Customer Satisfaction gauge if there is no available data$")
+    public void adminSeeTheMessageNoDataForCustomerSatisfactionGaugeIfThereIsNoAvailableData() {
+        if (ApiCustomerHistoryHelper.getCustomerSatisfactionReport(Tenants.getTenantUnderTestOrgName(), period.get(), channel.get()).isEmpty()) {
+            Assert.assertTrue(getDashboardPage().getCustomersHistory().isNoGaugeDisplayedForGraph("Customer Satisfaction"),
+                    "No data is displayed for Past Sentiment Graph");
+        }
+    }
+
     @Then("^Admin can see Settings page with options Business Profile, Chat tags, Auto Responders, Preferences, Surveys$")
     public void adminCanSeeSettingsPageWithOptionsBusinessProfileChatTagsAutoRespondersPreferencesSurveys() {
         SoftAssert softAssert = new SoftAssert();
@@ -308,6 +316,12 @@ public class DashboardSteps extends AbstractPortalSteps {
         softAssert.assertTrue(actualCustomerSatisfactionScoreOld.get() >= from, "Customer Satisfaction Score is less then " + from);
         softAssert.assertTrue(actualCustomerSatisfactionScoreOld.get() <= to, "Customer Satisfaction Score is more then " + to);
         softAssert.assertAll();
+    }
+
+    @Then("^Admin is able to see (.*) in the (.*) against the agent$")
+    public void adminIsAbleToSeeTheNoDataShowAlertText(String expectedText, String graphName) {
+        Assert.assertTrue(getDashboardPage().getCustomersHistory()
+                .isNoDataAlertMessageText(graphName).contains(expectedText), "Alert message doesn't get required text");
     }
 
     //Use this step to fetch after CSAT ratings to compare before and after CSAT rating

@@ -34,6 +34,7 @@ Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1735")
     @TestCaseId("https://jira.clickatell.com/browse/CCD-1824")
+    @TestCaseId("https://jira.clickatell.com/browse/CCD-1698")
     @Regression
   Scenario Outline: CD:: SMS:: Settings :: Survey :: Verify if Supervisor should be allowed to type plain text message more then the total count of 160 in the survey question
     Given Setup ORCA <channelType> integration for General Bank Demo tenant

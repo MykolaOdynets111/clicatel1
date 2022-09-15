@@ -67,6 +67,18 @@ Feature: Dashboard: Customer History
       | WhatsApp   | Past day  |
     Then Admin see the message no data for Past Sentiment graph if there is no available data
 
+  @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/CCD-1486")
+  Scenario: CD:: Survey:: Verify " no data to show now" should be shown in the CSAT column against the agent.
+    When I open portal
+    And I login as agent of Standard Billing
+    And I select Touch in left menu and Dashboard in submenu
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Customers History on dashboard
+    And Admin filter Customers History by channel and period
+      | SMS   | Past day  |
+    Then Admin is able to see No data to report at the moment in the Customer Satisfaction against the agent
+    And Admin see the message no data for Customer Satisfaction gauge if there is no available data
+
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45620")
   Scenario: Dashboard:: Verify that supervisor can check average CSAT surveys per selected duration of time and specific channel
     Given Update survey management chanel webchat settings by ip for Standard Billing
