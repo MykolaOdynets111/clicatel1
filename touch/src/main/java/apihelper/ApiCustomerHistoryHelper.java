@@ -13,11 +13,11 @@ import java.util.Map;
 
 public class ApiCustomerHistoryHelper {
     private static final Map<String, String> periods = new HashMap<String, String>() {{
-        put("Past day", "day");
-        put("Past week", "one_week");
-        put("Past 2 week", "two_weeks");
-        put("Past 3 week", "three_weeks");
-        put("Past 4 week", "four_weeks");
+        put("Past day", "DAY");
+        put("Past week", "ONE_WEEK");
+        put("Past 2 week", "TWO_WEEKS");
+        put("Past 3 week", "THREE_WEEKS");
+        put("Past 4 week", "FOUR_WEEKS");
     }};
 
     private static final Map<String, String> channelTypes = new HashMap<String, String>() {{
@@ -26,6 +26,7 @@ public class ApiCustomerHistoryHelper {
         put("Twitter", "twitter");
         put("WhatsApp", "whatsapp");
         put("Apple Business Chat", "abc");
+        put("SMS", "sms");
     }};
 
     public static List<PastSentimentReport> getPastSentimentReport(String tenantOrgName, String period, String channelType) {
