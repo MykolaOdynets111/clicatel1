@@ -174,3 +174,8 @@ Feature: Dashboard: Customer History
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by SMS channel
+
+
+
+
+

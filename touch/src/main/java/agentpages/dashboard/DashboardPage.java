@@ -44,6 +44,17 @@ public class DashboardPage extends PortalAbstractPage {
     @FindBy(xpath = "//a[text()='Departments Management']")
     private WebElement departmentsManagementButton;
 
+    @FindBy(xpath="//a[text()='Settings']")
+    private WebElement SettingsButton;
+
+    @FindBy(xpath = "//a[text()='Chat Tags']")
+    private WebElement ChatTagsButton;
+
+    @FindBy(xpath = "//a[text()='+ Add Chat Tag']")
+    private WebElement CreateChatTagsButton;
+
+
+
     @FindAll({
             @FindBy(css = "[data-testid='tab-navigation-panel-customers']"),
             @FindBy(css = "[selenium-id='tab-dashboard-tabs-2']")
@@ -225,4 +236,14 @@ public class DashboardPage extends PortalAbstractPage {
     public void clickDepartmentsManagement() {
         clickElem(this.getCurrentDriver(), departmentsManagementButton, 5, "Departments Management");
     }
+    public void clickSettingsManagement(){
+        clickElem(this.getCurrentDriver(), SettingsButton, 5, "Settings");
+    }
+    public void clickCHatTagsPage(){
+        clickElem(this.getCurrentDriver(), ChatTagsButton, 5, "Chat Tags");
+    }
+    public void clickCreateCHatTags(){
+        clickElem(this.getCurrentDriver(), CreateChatTagsButton, 10, "Create Chat Tags");
+    }
+
 }
