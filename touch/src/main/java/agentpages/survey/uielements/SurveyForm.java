@@ -155,34 +155,23 @@ public class SurveyForm extends AbstractWidget {
     }
 
     public void changeQuestion(String question) {
-        for (int i = 0; i < 5; i++) {
-            try {
-                if (errorMessage.isDisplayed() &&
-                        getTextFromElem(this.getCurrentDriver(), errorMessage, 5, "Error message").contains("Survey question text is required")) {
-                    break;
-                }
-            }
-            catch (Exception e) {
-                questionInput.sendKeys(Keys.chord(Keys.CONTROL, "A", Keys.BACK_SPACE));
-                waitFor(1000);
-            }
-        }
+        handleQuestionFormClearing();
         inputText(this.getCurrentDriver(), questionInput, 1, "Question Input", question);
     }
 
-    public void changeQuestionEmoji(String question) {
+    public void handleQuestionFormClearing() {
         for (int i = 0; i < 5; i++) {
-            try {
-                if (errorMessage.isDisplayed() &&
-                        getTextFromElem(this.getCurrentDriver(), errorMessage, 5, "Error message").contains("Survey question text is required")) {
-                    break;
-                }
+            if (isElementShown(this.getCurrentDriver(), errorMessage, 5) &&
+                    getTextFromElem(this.getCurrentDriver(), errorMessage, 5, "Error message").contains("Survey question text is required")) {
+                break;
             }
-            catch (Exception e) {
-                questionInput.sendKeys(Keys.chord(Keys.CONTROL, "A", Keys.BACK_SPACE));
-                waitFor(1000);
-            }
+            questionInput.sendKeys(Keys.chord(Keys.CONTROL, "A", Keys.BACK_SPACE));
+            waitFor(1000);
         }
+    }
+
+    public void changeQuestionEmoji(String question) {
+        handleQuestionFormClearing();
         StringSelection stringSelection = new StringSelection(question);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, null);
