@@ -4,7 +4,7 @@
 @no_chatdesk
 Feature: Satisfaction Survey
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-19236")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2382")
   @Regression
   Scenario Outline: verify if supervisor can customize survey question for whatsapp NPS survey type
     Given Setup ORCA <channelType> integration for Standard Billing tenant

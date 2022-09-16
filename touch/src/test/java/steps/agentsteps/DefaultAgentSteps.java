@@ -34,8 +34,8 @@ import java.util.*;
 
 public class DefaultAgentSteps extends AbstractAgentSteps {
 
-    private static ThreadLocal<Map<String, Boolean>> PRE_TEST_FEATURE_STATUS = new ThreadLocal<>();
-    private static ThreadLocal<Map<String, Boolean>> TEST_FEATURE_STATUS_CHANGES = new ThreadLocal<>();
+    private static final ThreadLocal<Map<String, Boolean>> PRE_TEST_FEATURE_STATUS = new ThreadLocal<>();
+    private static final ThreadLocal<Map<String, Boolean>> TEST_FEATURE_STATUS_CHANGES = new ThreadLocal<>();
     private static UserPersonalInfo userPersonalInfoForUpdating;
     public Profile profile;
 
@@ -124,7 +124,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
         String userName=getUserName(integration);
 
-        boolean isConversationShown = getLeftMenu(agent).isNewConversationIsShown(userName,20);
+        boolean isConversationShown = getLeftMenu(agent).isNewConversationIsShown(userName,30);
 
         Map settingResults = new HashMap<String, Object>();
 
@@ -170,12 +170,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         }else {results.put("supportHoursUpdated", "were not updated because it is ticket");}
 
         return results;
-    }
-
-    public static void main(String[] args) {
-        Tenants.setTenantUnderTestNames("Automation");
-        int r = ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50).jsonPath().get("sessionsCapacity");
-        System.out.println(r);
     }
 
     @Then("^(.*) button is (.+) on Chat header$")

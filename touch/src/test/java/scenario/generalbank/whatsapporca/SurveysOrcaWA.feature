@@ -2,9 +2,11 @@
 @off_rating_whatsapp
 Feature: WhatsApp ORCA :: Surveys
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-117475")
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-105166")
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-18586")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1877")
+    @TestCaseId("https://jira.clickatell.com/browse/CCD-1173")
+    @TestCaseId("https://jira.clickatell.com/browse/CCD-2394")
+    @TestCaseId("https://jira.clickatell.com/browse/CCD-1933")
+    @TestCaseId("https://jira.clickatell.com/browse/CCD-1828")
   Scenario Outline: WA: : Surveys: Verify if the survey preview header for Whatsapp shows as Whatsapp Chat Preview
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Update survey management chanel <channelType> settings by ip for General Bank Demo
@@ -29,14 +31,16 @@ Feature: WhatsApp ORCA :: Surveys
       | channelType |
       | whatsapp    |
       | abc         |
+      | sms         |
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-120988")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1719")
+    @TestCaseId("https://jira.clickatell.com/browse/CCD-1728")
     @Regression
   Scenario Outline: WA: Survey: Verify if CSAT ratings in the survey configuration to be standardized to cater for only 1-5 ratings
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Update survey management chanel <channelType> settings by ip for General Bank Demo
       | ratingEnabled | true        |
-      | surveyType    | CSAT         |
+      | surveyType    | CSAT        |
       | ratingScale   | ONE_TO_FIVE |
       | ratingIcon    | NUMBER      |
     And I open portal
@@ -49,8 +53,9 @@ Feature: WhatsApp ORCA :: Surveys
     And Admin selects CSAT survey type for <channelType> survey form
     Then Agent checks rating dropdown visibility for <channelType> survey form
     And Survey backend was updated for General Bank Demo and <channelType> chanel with following attribute
-      | ratingScale     |     ONE_TO_FIVE   |
+      | ratingScale | ONE_TO_FIVE |
     Examples:
       | channelType |
       | whatsapp    |
       | abc         |
+      | sms         |

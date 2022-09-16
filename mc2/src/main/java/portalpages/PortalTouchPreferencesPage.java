@@ -1,10 +1,8 @@
 package portalpages;
 
-import lombok.Data;
 import org.openqa.selenium.WebDriver;
 import portaluielem.*;
 
-@Data
 public class PortalTouchPreferencesPage extends PortalAbstractPage {
 
     private AutoRespondersWindow autoRespondersWindow;

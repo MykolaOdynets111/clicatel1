@@ -26,7 +26,6 @@ public class DashboardSteps extends AbstractPortalSteps {
 
     private final ThreadLocal<String> channel = new ThreadLocal<>();
     private final ThreadLocal<String> period = new ThreadLocal<>();
-
     private final ThreadLocal<Integer> npsPassivesPercentage = new ThreadLocal<>();
 
     private final ThreadLocal<Double> actualCustomerSatisfactionScoreOld = new ThreadLocal<>();
@@ -92,7 +91,6 @@ public class DashboardSteps extends AbstractPortalSteps {
             softAssert.assertAll();
         }
     }
-
 
     @And("^Admin filter Customers History by (?!.*period and)(.*) channel$")
     public void adminFilterCustomersHistoryByChannel(String channel) {
@@ -272,6 +270,14 @@ public class DashboardSteps extends AbstractPortalSteps {
         }
     }
 
+    @Then("^Admin see the message no data for Customer Satisfaction gauge if there is no available data$")
+    public void adminSeeTheMessageNoDataForCustomerSatisfactionGaugeIfThereIsNoAvailableData() {
+        if (ApiCustomerHistoryHelper.getCustomerSatisfactionReport(Tenants.getTenantUnderTestOrgName(), period.get(), channel.get()).isEmpty()) {
+            Assert.assertTrue(getDashboardPage().getCustomersHistory().isNoGaugeDisplayedForGraph("Customer Satisfaction"),
+                    "No data is displayed for Past Sentiment Graph");
+        }
+    }
+
     @Then("^Admin can see Settings page with options Business Profile, Chat tags, Auto Responders, Preferences, Surveys$")
     public void adminCanSeeSettingsPageWithOptionsBusinessProfileChatTagsAutoRespondersPreferencesSurveys() {
         SoftAssert softAssert = new SoftAssert();
@@ -293,6 +299,11 @@ public class DashboardSteps extends AbstractPortalSteps {
         Assert.assertTrue(getDashboardPage().getCustomersHistory().isGraphContainsScale(downScale, upScale), "Down and up scale parameters are not present");
     }
 
+    @Then("^Admin is able to see the y axis CSAT scale having down scale as (.*) and upscale as (.*)$")
+    public void adminIsAbleToSeeYAxisCSATSurveyScaleHavingUpAndDownScale(String downScale, String upScale) {
+        Assert.assertTrue(getDashboardPage().getCustomersHistory().isYAxisContainsScale(downScale, upScale), "Down and up scale parameters are not present");
+    }
+
     @Then("^Admin is able to see the average CSAT survey response converted to (\\d+)-(\\d+)$")
     public void adminIsAbleToSeeTheAverageCSATSurveyResponseConvertedTo(double from, double to) {
         if (getDashboardPage().getCustomersHistory().isNoDataDisplayedForGraph("Customer Satisfaction")) {
@@ -305,6 +316,12 @@ public class DashboardSteps extends AbstractPortalSteps {
         softAssert.assertTrue(actualCustomerSatisfactionScoreOld.get() >= from, "Customer Satisfaction Score is less then " + from);
         softAssert.assertTrue(actualCustomerSatisfactionScoreOld.get() <= to, "Customer Satisfaction Score is more then " + to);
         softAssert.assertAll();
+    }
+
+    @Then("^Admin is able to see (.*) in the (.*) against the agent$")
+    public void adminIsAbleToSeeTheNoDataShowAlertText(String expectedText, String graphName) {
+        Assert.assertTrue(getDashboardPage().getCustomersHistory()
+                .isNoDataAlertMessageText(graphName).contains(expectedText), "Alert message doesn't get required text");
     }
 
     //Use this step to fetch after CSAT ratings to compare before and after CSAT rating

@@ -41,6 +41,9 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import static apihelper.ApiHelper.getAutoResponderMessageText;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebWait {
 
     private MainPage mainPage;
@@ -50,8 +53,8 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
     private WidgetHeader widgetHeader;
     private TouchActionsMenu touchActionsMenu;
     private WelcomeMessages welcomeMessages;
-    private static Map<Long, VMQuoteRequestUserData> userDataForQuoteRequest = new ConcurrentHashMap<>();
-    private static ThreadLocal<String> enteredUserMessageInTouchWidget = new ThreadLocal<>();
+    private static final Map<Long, VMQuoteRequestUserData> userDataForQuoteRequest = new ConcurrentHashMap<>();
+    private static final ThreadLocal<String> enteredUserMessageInTouchWidget = new ThreadLocal<>();
     private static Map selectedClient;
     public static ThreadLocal<String> mediaFileName = new ThreadLocal<>();
 
@@ -477,8 +480,11 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
 
     @Then("^Text response that contains \"(.*)\" is shown$")
     public void quickVerifyIsResponseShown(String text) {
-        Assert.assertTrue(widget.getWidgetConversationArea().isTextShown(formExpectedAutoresponder(text), 10),
-                "Response to user is not shown");
+        String message = formExpectedAutoresponder(text);
+
+        assertThat(widget.getWidgetConversationArea().isTextShown(message, 10))
+                .as("Message should be visible: " + message)
+                .isTrue();
     }
 
     @Then("^User see correct Thanks message from Survey management$")
@@ -517,7 +523,7 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
         String expectedCardText;
         switch (cardText) {
             case "welcome":
-                expectedCardText = ApiHelper.getAutoResponderMessageText("first_navigation_card_title");
+                expectedCardText = getAutoResponderMessageText("first_navigation_card_title");
                 break;
             default:
                 expectedCardText = cardText;
@@ -700,7 +706,7 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
 
     @Then("^Welcome message with correct text is shown$")
     public void verifyWelcomeTextMessage() {
-        String welcomeMessage = ApiHelper.getAutoResponderMessageText("welcome_message");
+        String welcomeMessage = getAutoResponderMessageText("welcome_message");
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(getWelcomeMessages().isWelcomeTextMessageShown(),
                 "Welcome text message is not shown");
@@ -718,7 +724,7 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
 
     @Then("^Welcome back message with correct text is shown after user's input '(.*)'$")
     public void verifyWelcomeBackTextMessage(String userMessage) {
-        String welcomeBackMessage = ApiHelper.getAutoResponderMessageText("welcome_back_message");
+        String welcomeBackMessage = getAutoResponderMessageText("welcome_back_message");
         Assert.assertTrue(widget.getWidgetConversationArea().isTextResponseShownAmongOtherForUserMessage(userMessage, welcomeBackMessage),
                 "'" + welcomeBackMessage + "' welcome back message is not shown");
     }
@@ -734,7 +740,7 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
 
     @Given("^Welcome card with correct text and button \"(.*)\" is shown$")
     public void verifyWelcomeCardWithCorrectTextAndButtonIsShown(String buttonName) {
-        String welcomeCardText = ApiHelper.getAutoResponderMessageText("first_navigation_card_title");
+        String welcomeCardText = getAutoResponderMessageText("first_navigation_card_title");
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(getWelcomeMessages().isWelcomeCardContainerShown(), "Welcome card is not shown. Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + "");
         soft.assertEquals(getWelcomeMessages().getWelcomeCardText(), welcomeCardText,
@@ -786,7 +792,7 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
     }
 
     public static String formExpectedAutoresponder(String fromFeatureText) {
-        return ApiHelper.getAutoResponderMessageText(fromFeatureText);
+        return getAutoResponderMessageText(fromFeatureText);
     }
 
     @Then("^Tenant photo is shown on widget$")

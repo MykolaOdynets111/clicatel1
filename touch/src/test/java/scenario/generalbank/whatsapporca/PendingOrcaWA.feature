@@ -2,7 +2,7 @@
 Feature: Whatsapp ORCA :: Chatdesk
 
   @orca_api
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-105432")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1939")
   @Regression
   Scenario: CD :: Agent Desk :: Pending Chat :: Verify that visual indicator appears in the conversation area if Agent marks chat as Pending
     Given I login as agent of General Bank Demo
@@ -19,7 +19,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Agent view the visual indicator "This chat has been marked as Pending by " agent name and timestamp in the conversation area
 
   @orca_api
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-105434")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2002")
   @Regression
   Scenario: CD :: Agent Desk :: Pending Chat :: Verify that visual indicator appears in the conversation area if Agent marks chat as unpending
     Given I login as agent of General Bank Demo
@@ -35,5 +35,6 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Agent click on new conversation request from orca
     Then Agent view the visual indicator "This chat has been marked as Pending by " agent name and timestamp in the conversation area
     When Agent click 'Pending On' chat button
+    When Agent select "Live Chats" left menu option
     And Agent click on new conversation request from orca
     Then Agent view the visual indicator "This chat has been marked as live chat by " agent name and timestamp in the conversation area

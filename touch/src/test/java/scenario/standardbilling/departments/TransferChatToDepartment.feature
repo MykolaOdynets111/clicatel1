@@ -7,7 +7,7 @@ Feature: Departments
     Given Setup ORCA whatsapp integration for Standard Billing tenant
     When Send connect to support message by ORCA
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-20910")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2276")
   @Regression
   Scenario: Departments: Verify if possible to transfer chat to department
     Then Agent has new conversation request from orca user

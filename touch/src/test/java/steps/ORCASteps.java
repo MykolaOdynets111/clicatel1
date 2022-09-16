@@ -8,16 +8,14 @@ import datamanager.Tenants;
 import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.orca.OrcaEvent;
 import datamanager.jacksonschemas.orca.event.Event;
-import drivermanager.ConfigManager;
 import interfaces.WebWait;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
-import javaserver.OrcaServer;
-import javaserver.Server;
 import org.testng.Assert;
+import sqsreader.OrcaSQSHandler;
+import sqsreader.SQSConfiguration;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,8 +47,8 @@ public class ORCASteps implements WebWait {
     }
 
     public static void cleanUPORCAData() {
-        OrcaServer.orcaMessages.clear();
-        OrcaServer.orcaMessagesMap.clear();
+        OrcaSQSHandler.orcaMessages.clear();
+        OrcaSQSHandler.orcaMessagesMap.clear();
         orcaMessageCallBody.remove();
         apiToken.remove();
         clientId.remove();
@@ -104,10 +102,10 @@ public class ORCASteps implements WebWait {
 
         orcaChannelId.set(getIntegrationId(channel, "ORCA"));
         if (orcaChannelId.get() == null) {
-            apiToken.set(ApiORCA.createIntegration(channel, Server.getServerURL()));
+            apiToken.set(ApiORCA.createIntegration(channel, SQSConfiguration.getCallbackUrl()));
             orcaChannelId.set(getIntegrationId(channel, "ORCA"));
         } else {
-            apiToken.set(ApiORCA.updateIntegration(channel, Server.getServerURL(),orcaChannelId.get()));
+            apiToken.set(ApiORCA.updateIntegration(channel, SQSConfiguration.getCallbackUrl() ,orcaChannelId.get()));
             System.out.println("apiToken was set with: " + apiToken.get());
         }
     }
@@ -149,22 +147,20 @@ public class ORCASteps implements WebWait {
         Assert.assertTrue(isResponseComeToServerForClient(expectedResponse, wait),
                 String.format("Autoresponder is not as expected\n" +
                         " Messages which came from server for clientId %s are: %s \n" +
-                        "Expected: %s", clientId.get(), OrcaServer.orcaMessages, expectedResponse));
+                        "Expected: %s", clientId.get(), OrcaSQSHandler.orcaMessages, expectedResponse));
     }
-
     @Then("^Verify Orca returns (.*) Location sent by Agent during (.*) seconds$")
     public void verifyOrcaReturnedCorrectLocation(String locationName, int wait) {
         Assert.assertTrue(isLocationCameToUser(locationName, wait),
-                String.format("Location '%s' didn't come to user",locationName ));;
+                String.format("Location '%s' didn't come to user",locationName ));
     }
 
     @Then("^Verify Orca returns (.*) HSM sent by Agent during (.*) seconds with parameters$")
     public void verifyOrcaReturnedCorrectLocation(String templateId, int wait, Map<String, String> parameters) {
         Assert.assertTrue(isHSMCameToUser(templateId, parameters, wait),
                 String.format("HSM '%s' didn't come to user",templateId ) +"\n" +
-                "Following ORCA events sent to user " +  OrcaServer.orcaEvents);
+                "Following ORCA events sent to user " +  OrcaSQSHandler.orcaEvents);
     }
-
 
     @When("^User send (.*) attachment with orca$")
     public void sendAttachment(String fileName){
@@ -210,7 +206,7 @@ public class ORCASteps implements WebWait {
     }
 
     private boolean isCorrectLocationCameToUser(String location){
-        return OrcaServer.orcaEvents.stream().anyMatch(e->
+        return OrcaSQSHandler.orcaEvents.stream().anyMatch(e->
                 Optional.ofNullable(e.getContent().getEvent().getName()).equals(Optional.of(location)));
     }
 
@@ -223,7 +219,7 @@ public class ORCASteps implements WebWait {
     }
 
     private boolean isCorrectHSMCameToUser(String templateId, Map<String, String> parameters){
-        return OrcaServer.orcaEvents.stream().anyMatch(e->
+        return OrcaSQSHandler.orcaEvents.stream().anyMatch(e->
                 Optional.ofNullable(e.getContent()).isPresent()
                 && Optional.ofNullable(e.getContent().getEvent()).isPresent()
                 && Optional.ofNullable(e.getContent().getEvent().getNestedEvent()).isPresent()
@@ -234,13 +230,10 @@ public class ORCASteps implements WebWait {
 
 
     private boolean isExpectedResponseArrives(String message) {
-        if(Objects.isNull(OrcaServer.orcaMessages)) {
+        if(Objects.isNull(OrcaSQSHandler.orcaMessages)) {
             return false;
         }
-        return OrcaServer.orcaMessages.toString().contains(message);
-
-
-
+        return OrcaSQSHandler.orcaMessages.contains(message);
     }
 
     private void createRequestMessage(String apiKey, String message) {
@@ -248,5 +241,4 @@ public class ORCASteps implements WebWait {
         clientId.set(orcaMessageCallBody.get().getUserInfo().getUserName());
         smsSourceId.set(orcaMessageCallBody.get().getSourceId());
     }
-
 }
