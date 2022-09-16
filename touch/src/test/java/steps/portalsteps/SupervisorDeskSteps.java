@@ -112,6 +112,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 channelName + " channel name should be shown.");
     }
 
+    @When("^Supervisor opens closed chat$")
+    public void openFirstClosedChat() {
+        getSupervisorDeskPage().getSupervisorClosedChatsTable().openFirstClosedChat();
+    }
+
     @Then("^Verify that only \"(.*)\" tickets chats are shown$")
     public void verifyTicketsChatsChannelsFilter(String channelName) {
         Assert.assertTrue(getSupervisorDeskPage().getSupervisorTicketsTable().verifyChanelOfTheTicketsIsPresent(channelName),
