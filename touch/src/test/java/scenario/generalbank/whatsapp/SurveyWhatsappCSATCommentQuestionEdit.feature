@@ -29,6 +29,8 @@ Feature: Satisfaction Survey
     Examples:
       | channelType |
       | whatsapp    |
+      | abc         |
+      | sms         |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1735")
     @TestCaseId("https://jira.clickatell.com/browse/CCD-1824")
