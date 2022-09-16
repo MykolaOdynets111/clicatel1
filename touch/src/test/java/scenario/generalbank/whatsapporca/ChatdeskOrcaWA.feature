@@ -159,3 +159,15 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Click 'Route to scheduler' button
     And Second agent select "Tickets" left menu option
     Then Second agent has new ticket request from ORCA user
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1129")
+  Scenario: Supervisor Desk :: Live Chat :: Profile :: Verify that WhatsApp profile name is displayed as username on customer profile section
+    Given I login as agent of General Bank Demo
+    And Setup ORCA whatsapp integration for General Bank Demo tenant
+    And Send to agent message by ORCA
+    When I open portal
+    And Login into portal as an admin of General Bank Demo account
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Agent search chat orca on Supervisor desk
+    When Agent click On Live Supervisor Desk chat from ORCA channel
+    Then Agent can see whatsapp profile name
