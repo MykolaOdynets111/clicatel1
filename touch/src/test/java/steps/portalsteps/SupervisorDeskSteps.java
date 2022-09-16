@@ -117,6 +117,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().getSupervisorClosedChatsTable().openFirstClosedChat();
     }
 
+    @When("^Supervisor clicks on first ticket$")
+    public void openFirstTicket() {
+        getSupervisorDeskPage().getSupervisorTicketsTable().openFirstTicket();
+    }
+
     @Then("^Verify that only \"(.*)\" tickets chats are shown$")
     public void verifyTicketsChatsChannelsFilter(String channelName) {
         Assert.assertTrue(getSupervisorDeskPage().getSupervisorTicketsTable().verifyChanelOfTheTicketsIsPresent(channelName),

@@ -27,3 +27,17 @@ Feature: Supervisor desk
     And Supervisor opens closed chat
     When Supervisor adds a note "Closed Chat Test Note Message", Jira link "https://closedchatdummy.com" and Ticket Number "662220"
     Then Supervisor sees note "Closed Chat Test Note Message", Jira link "https://closedchatdummy.com/" and Ticket Number "662220"
+
+  @orca_api
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-3883")
+  Scenario: Supervisor Desk :: Chat :: Notes :: Verify if supervisor is able to add notes to a ticket
+    Given Setup ORCA abc integration for General Bank Demo tenant
+    And Set agent support hours with day shift
+    And Send Notes for Ticket message by ORCA
+    And I open portal
+    And Login into portal as an admin of General Bank Demo account
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Agent select "Tickets" left menu option
+    And Supervisor clicks on first ticket
+    When Supervisor adds a note "Ticket Test Note Message", Jira link "https://ticketdummy.com" and Ticket Number "662230"
+    Then Supervisor sees note "Ticket Test Note Message", Jira link "https://ticketdummy.com/" and Ticket Number "662230"
