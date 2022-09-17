@@ -178,6 +178,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 "The current agent of the ticket is not as expected");
     }
 
+    @Then("^(.*) is the current agent of the chat$")
+    public void verifyCurrentAgentOfChat(String agentName) {
+        Assert.assertEquals(getSupervisorDeskPage().getChatHeader().getAgentName(),agentName,
+                "The current agent of the ticket is not as expected");
+    }
+
     @Then("^Ticket from (.*) is present on (.*) filter page$")
     public void verifyUnassignedType(String channel, String status) {
         String userName = getUserName(channel);
@@ -483,6 +489,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @And("^Agent load all filtered closed chats$")
     public void agentLoadAllFilteredChats() {
         getSupervisorDeskPage().loadAllClosedChats();
+    }
+
+    @And("^Supervisor clicks on chats filter for (.*) Agent$")
+    public void clickOnChatsFilterFromAgent(String Agent){
+        getSupervisorDeskPage().getSupervisorLeftPanel().selectTicketType(Agent);
     }
 
     @Then("^Verify first closed chat date are fitted by filter$")
