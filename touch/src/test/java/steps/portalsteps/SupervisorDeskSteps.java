@@ -533,4 +533,19 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void verifyThatLiveChatAvailableAreShown(){
         getSupervisorDeskPage().getSupervisorLeftPanel().verifyLiveChatInfo();
     }
+
+    @And("Agent click on three dot vertical menu and click on assign button")
+    public void agentClickAssignButton() {
+        getSupervisorDeskPage().clickOnAssignButton();
+    }
+    
+    @When("Assign chat modal is opened")
+    public void assignChatModalOpened() {
+        Assert.assertTrue(getSupervisorDeskPage().assignChatModal());
+    }
+
+    @Then("Agent is able to close the assign chat window")
+    public void closeAssignWindow() {
+        getSupervisorDeskPage().closeAssignWindow();
+    }
 }

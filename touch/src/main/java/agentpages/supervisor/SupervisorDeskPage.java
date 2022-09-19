@@ -4,6 +4,7 @@ import agentpages.supervisor.uielements.*;
 import agentpages.uielements.ChatBody;
 import agentpages.uielements.ChatHeader;
 import agentpages.uielements.Profile;
+import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
@@ -65,6 +66,21 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     @FindBy(xpath = "//input[contains(@class, 'cl-form-control cl-form-control--input cl-end-date')]")
     private WebElement endDateInput;
+
+    @FindBy(css = "svg[name = '3-dot-menu-vert']")
+    private WebElement threeDotsVerticalMenu;
+
+    @FindBy(xpath = "//button[contains(text(), 'Assign' )]")
+    private WebElement assignButton;
+
+    @FindBy(xpath = "//div[contains(text(), 'Assign chat' )]")
+    private WebElement assignChatModal;
+
+    @FindBy(css = "svg[name = '3-dot-menu-vert']")
+    private WebElement close;
+
+    @FindBy(css = "svg[name = 'close']")
+    private WebElement closeAssignChatWindow;
     private String backButtonString = "//button[@aria-label='Previous Month']";
 
     private String chatName = "//h2[@class='cl-chat-item-user-name' and text() ='%s']";
@@ -278,5 +294,18 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     public void loadAllClosedChats() {
         getSupervisorClosedChatsTable().loadAllFoundChats();
+    }
+
+    public void clickOnAssignButton() {
+        clickElem(this.getCurrentDriver(), threeDotsVerticalMenu, 3, "Three Dots Vertical Menu");
+        clickElem(this.getCurrentDriver(), assignButton, 3, "Assign Chat Button");
+    }
+
+    public boolean assignChatModal() {
+        return isElementShown(this.getCurrentDriver(), assignChatModal, 3);
+    }
+
+    public void closeAssignWindow() {
+        clickElem(this.getCurrentDriver(), closeAssignChatWindow, 3, "Assign Chat Close Button");
     }
 }

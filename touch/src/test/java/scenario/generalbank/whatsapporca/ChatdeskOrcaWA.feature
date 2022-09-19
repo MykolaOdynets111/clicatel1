@@ -159,3 +159,17 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Click 'Route to scheduler' button
     And Second agent select "Tickets" left menu option
     Then Second agent has new ticket request from ORCA user
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2108")
+  Scenario: Supervisor:: Verify if refresh icon unavailable in the "Assign chat" modal window
+    Given I login as agent of General Bank Demo
+    And Setup ORCA whatsapp integration for General Bank Demo tenant
+    And Send to agent message by ORCA
+    When I open portal
+    And Login into portal as an admin of General Bank Demo account
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Agent search chat orca on Supervisor desk
+    When Agent click On Live Supervisor Desk chat from ORCA channel
+    And Agent click on three dot vertical menu and click on assign button
+    When Assign chat modal is opened
+    Then Agent is able to close the assign chat window
