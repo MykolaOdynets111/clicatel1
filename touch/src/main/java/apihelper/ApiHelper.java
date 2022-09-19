@@ -9,6 +9,7 @@ import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import datamanager.jacksonschemas.usersessioninfo.ClientProfile;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
+import driverfactory.URLs;
 import drivermanager.ConfigManager;
 import interfaces.VerificationHelper;
 import io.restassured.RestAssured;
@@ -30,6 +31,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static io.restassured.RestAssured.given;
 import static java.lang.String.format;
 import static org.junit.Assert.fail;
 
@@ -352,17 +354,35 @@ public class ApiHelper implements VerificationHelper {
 
     }
 
-
     public static void updateFeatureStatus(String tenantOrgName, String feature, String status) {
         String tenantID = getTenant(tenantOrgName).get("id");
-        String url = format(Endpoints.INTERNAL_FEATURE_STATE, tenantID, feature, status);
-        RestAssured.put(url);
+        String url = format(Endpoints.INTERNAL_TENANT_CONFIG, tenantID);
+        Response resp = given()
+                .log().all()
+                .header("Authorization", getAccessToken(tenantOrgName, "main"))
+                .body("{\n" +
+                        "            \"agentPackPurchased\": true,\n" +
+                        "                \"maxOnlineAgentLimit\": 1,\n" +
+                        "                \"orgName\": \"string\",\n" +
+                        "                \"category\": \"string\",\n" +
+                        "                \"touchGoType\": \"TOUCH_STANDARD\",\n" +
+                        "                \""+feature+"\": "+status+",\n" +
+                        "                \"hasBalance\": true,\n" +
+                        "                \"agentAssistant\": true,\n" +
+                        "                \"touchButtonEnabled\": true,\n" +
+                        "                \"canPurchaseAgents\": true,\n" +
+                        "                \"canUpgradePackage\": true,\n" +
+                        "                \"botMode\": \"AUTONOMOUS\"\n" +
+                        "        }")
+                .put(url);
+        Assert.assertEquals(resp.statusCode(), 200,
+                "Status code is not 200 for feature "+feature+"");
     }
 
     public static boolean getFeatureStatus(String tenantOrgName, String FEATURE) {
         Response resp = RestAssured.given().log().all()
                 .header("Authorization", getAccessToken(tenantOrgName, "main"))
-                .get(Endpoints.FEATURE);
+                .get(format(Endpoints.FEATURE, Tenants.getTenantId()));
         boolean featureStatus = false;
         try {
             featureStatus = resp.getBody().jsonPath().getBoolean(FEATURE);

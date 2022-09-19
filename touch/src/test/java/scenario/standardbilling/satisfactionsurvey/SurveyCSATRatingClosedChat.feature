@@ -143,8 +143,8 @@ Feature: Satisfaction Survey
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1685")
   @Regression
   Scenario Outline: CD:: Survey:: CSAT:: Verify if survey rating updates the % value for CSAT scores in the Agent performance reports
-    Given I login as agent of Standard Billing
-    And Setup ORCA <channelType> integration for Standard Billing tenant
+    Given I login as agent of Automation Bot
+    And Setup ORCA <channelType> integration for Automation Bot tenant
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard

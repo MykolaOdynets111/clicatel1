@@ -234,9 +234,12 @@ public class Hooks implements JSHelper {
             ApiHelper.ratingEnabling(Tenants.getTenantUnderTestOrgName(), false, "whatsapp");
         }
 
+        if (scenario.getSourceTagNames().contains("@off_rating_sms")) {
+            ApiHelper.ratingEnabling(Tenants.getTenantUnderTestOrgName(), false, "sms");
+        }
 
 
-            if (scenario.getSourceTagNames().contains("@orca_api")){
+        if (scenario.getSourceTagNames().contains("@orca_api")){
             ORCASteps.cleanUPORCAData();
         }
 

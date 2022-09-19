@@ -22,7 +22,7 @@ public class Endpoints {
 
     public static String AGENT_INFO_ME = URLs.getBaseWSInternalURL() + "agents/%s";
 
-    public static String FEATURE = URLs.getTouchApiBaseURL() + "features/tenant";
+    public static String FEATURE = URLs.getTouchApiBaseURL() + "internal/tenants/%s";
 
     public static String INTEGRATIONS_ENABLING_DISABLING = URLs.getTouchApiBaseURL() + "integrations/channel/enable";
 
@@ -80,10 +80,7 @@ public class Endpoints {
 
     public static String INTERNAL_LAST_CLIENT_SESSION = URLs.getBaseInternalApiUrl() + "sessions/tenant/%s/client/%s/last";
 
-    public static String INTERNAL_TENANT_CONFIG = URLs.getBaseWSInternalURL() + "tenants/%s";
-
-    public static String INTERNAL_FEATURE_STATE = URLs.getBaseInternalApiUrl() + "features/tenants/%s/%s/%s";
-
+    public static String INTERNAL_TENANT_CONFIG = URLs.getTouchApiBaseURL() + "internal/tenants/%s";
     public static String INTERNAL_COUNT_OF_LOGGED_IN_AGENTS = URLs.getBaseInternalApiUrl() + "loggedin-agents-count/%s";
 
     public static String INTERNAL_CREATE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles";

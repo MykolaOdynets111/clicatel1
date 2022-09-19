@@ -2,10 +2,13 @@
 Feature: Interaction with Tags in CRM tickets (agent mode)
 
   Background:
-    Given AGENT_FEEDBACK tenant feature is set to true for Automation
-    Given User select Automation tenant
-    Given I login as agent of Automation
-    And Click chat icon
+    Given Setup ORCA whatsapp integration for Standard Billing tenant
+    And agentFeedback tenant feature is set to true for Standard Billing
+    And User select Standard Billing tenant
+    And I open portal
+    And Login into portal as an admin of Standard Billing account
+    And I select Touch in left menu and Dashboard in submenu
+    When Navigate to Chat Tags page
 
   Scenario: All tags available for the test tenant in the drop down
     When User enter connect to Support into widget input field
@@ -58,17 +61,19 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
     Then Agent should not see from user chat in agent desk
     Then CRM ticket is created on backend with correct information
 
-
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2934")
+    @skip
   Scenario: Agent can select, then delete tags and the tags is not saved in created CRM ticket
-    When User enter connect to Support into widget input field
-    Then Agent has new conversation request
-    When Agent click on new conversation request from touch
-    Then Conversation area becomes active with connect to Support user's message
+    When Send connect to agent message by ORCA
+    And I select Touch in left menu and Agent Desk in submenu
+    Then Agent has new conversation request from orca user
+    And Agent click on new conversation request from orca
+    #And Conversation area becomes active with connect to Support user's message
     When Agent click "End chat" button
     Then End chat popup for agent should be opened
     Then Agent add 2 tag
     Then Agent delete all tags
-    Then Agent type Note:Note from automation test), Link:http://NoteTextLink.com, Number:12345 for CRM ticket
+    #Then Agent type Note:Note from automation test), Link:http://NoteTextLink.com, Number:12345 for CRM ticket for ORCA
     When Agent click 'Close chat' button
-    Then Agent should not see from user chat in agent desk
+    Then Agent should not see from user chat in agent desk from ORCA
     Then CRM ticket is created on backend with correct information
