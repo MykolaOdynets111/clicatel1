@@ -172,12 +172,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         return results;
     }
 
-    public static void main(String[] args) {
-        Tenants.setTenantUnderTestNames("Automation");
-        int r = ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50).jsonPath().get("sessionsCapacity");
-        System.out.println(r);
-    }
-
     @Then("^(.*) button is (.+) on Chat header$")
     public void isButtonEnabled(String button, String state){
         if (state.equalsIgnoreCase("disabled"))

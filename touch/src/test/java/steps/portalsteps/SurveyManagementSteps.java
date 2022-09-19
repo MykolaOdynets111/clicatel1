@@ -135,6 +135,35 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         }
     }
 
+    @When("^Agent checks question title character limit as (.*) in survey form$")
+    public void checkSurveyQuesCharacterLimitCheck(String expectedText) {
+        String id = ORCASteps.getChannelId();
+        Assert.assertTrue(getSurveyManagementPage().getSurveyForm(id).checkInputQuestionCharacterCount().contains(expectedText),
+                "Title character limit is not correct");
+    }
+
+    @When("^Agent is able to see the number of characters typed more than (.*) in survey form$")
+    public void checkSurveyQuesNumberOfCharacters(int expectedValue) {
+        String id = ORCASteps.getChannelId();
+        Assert.assertTrue(getSurveyManagementPage().getSurveyForm(id).checkUpperQuestionCharactersLimit(expectedValue));
+    }
+
+    @Then("^Supervisor is able to see the number of characters typed for text in survey form$")
+    public void checkSurveyQuesFieldContainsCharacters() {
+        String id = ORCASteps.getChannelId();
+        Assert.assertTrue(getSurveyManagementPage().getSurveyForm(id).checkCharacterCountCompWithEnteredText());
+    }
+
+    @Then("^Supervisor is able to see character limit error with text (.*)$")
+    public void checkErrorMessage(String expectedText) {
+        String id = ORCASteps.getChannelId();
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(getSurveyManagementPage().getSurveyForm(id).isErrorMessageShown(), "Error message is not there");
+        softAssert.assertTrue(getSurveyManagementPage().getSurveyForm(id).isErrorMessageHavingText(expectedText), "Error message is not having expected text");
+
+        softAssert.assertAll();
+    }
+
     @When("^Agent checks rating dropdown visibility for (.*) survey form$")
     public void checkDropdownDisability(String surveyForm) {
         String id = ORCASteps.getChannelId();
@@ -181,6 +210,13 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         String channelID = ORCASteps.getChannelId();
         questionUpdate.set(question + " " + faker.rockBand().name());
         getSurveyManagementPage().getSurveyForm(channelID).changeQuestion(questionUpdate.get());
+    }
+
+    @When("^Customize your survey \"(.*)\" question with emoji$")
+    public void setSurveyQuestionWithEmoji(String question) {
+        String channelID = ORCASteps.getChannelId();
+        questionUpdate.set(question);
+        getSurveyManagementPage().getSurveyForm(channelID).changeQuestionEmoji(questionUpdate.get());
     }
 
     @When("^Customize your survey thank message to (.*)$")
