@@ -25,7 +25,9 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = "[data-testid=profile-settings-button]")
     private WebElement profileSettingsButton;
 
-    @FindBy(css = "[selenium-id=agent-fullname]")
+    @FindAll({
+        @FindBy(css = "[selenium-id=agent-fullname]"),
+        @FindBy(css = "[data-testid=agent-fullname]")})
     private WebElement agentName;
 
     @FindBy(css = "[selenium-id=agent-role]")
@@ -34,10 +36,10 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = "[selenium-id=agent-email]")
     private WebElement agentEmail;
 
-    @FindBy(css = "[selenium-id=radio-chat]")
+    @FindBy(xpath = "//input[@value = 'AVAILABLE']/ancestor::label")
     private WebElement statusActive;
 
-    @FindBy(css = "[selenium-id=radio-away]")
+    @FindBy(xpath = "//input[@value = 'UNAVAILABLE']/ancestor::label")
     private WebElement statusUnavailable;
 
     @FindBy(css = "[selenium-id=company-info-logo]")
