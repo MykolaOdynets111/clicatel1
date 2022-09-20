@@ -58,7 +58,8 @@ public interface WebWait {
 
 
     default WebElement waitForElementToBeVisible(WebDriver driver, WebElement element, int wait){
-        return initWait(driver, wait).ignoring(NoSuchElementException.class)
+        return initWait(driver, wait)
+                .ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.visibilityOf(element));
     }
