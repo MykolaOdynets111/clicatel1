@@ -13,7 +13,7 @@ public class AgentFlagChatSteps extends AbstractAgentSteps {
 
     @When("^(.*) click 'Unflag chat' button$")
     public void unpinChat(String agent) {
-        getAgentHomePage(agent).getChatHeader().clickUnflagChatButton();
+        getAgentHomePage(agent).getChatHeader().clickflagOnButton();
     }
 
     @Then("^(.*) receives 'pin' error message$")

@@ -1,11 +1,15 @@
 package agentpages.survey.uielements;
 
 import abstractclasses.AbstractWidget;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,6 +45,9 @@ public class SurveyForm extends AbstractWidget {
 
     @FindBy(xpath = ".//button[text()='Save configuration']")
     private WebElement saveButtonElement;
+
+    @FindBy(css = ".cl-charters-count")
+    private WebElement questionTitleCharacterLimit;
 
     @FindBy(xpath = "//div[@data-testid='spinner']")
     private WebElement saveSurveySpinner;
@@ -105,6 +112,9 @@ public class SurveyForm extends AbstractWidget {
     @FindBy(css = ".rate-input-label.number")
     private List<WebElement> numberRateRepresentation;
 
+    @FindBy(css = ".cl-form-group__error-text")
+    private WebElement errorMessage;
+
     public SurveyForm(WebElement element) {
         super(element);
     }
@@ -145,8 +155,27 @@ public class SurveyForm extends AbstractWidget {
     }
 
     public void changeQuestion(String question) {
-        questionInput.clear();
+        handleQuestionFormClearing();
         inputText(this.getCurrentDriver(), questionInput, 1, "Question Input", question);
+    }
+
+    public void handleQuestionFormClearing() {
+        for (int i = 0; i < 5; i++) {
+            if (isElementShown(this.getCurrentDriver(), errorMessage, 5) &&
+                    getTextFromElem(this.getCurrentDriver(), errorMessage, 5, "Error message").contains("Survey question text is required")) {
+                break;
+            }
+            questionInput.sendKeys(Keys.chord(Keys.CONTROL, "A", Keys.BACK_SPACE));
+            waitFor(1000);
+        }
+    }
+
+    public void changeQuestionEmoji(String question) {
+        handleQuestionFormClearing();
+        StringSelection stringSelection = new StringSelection(question);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+        questionInput.sendKeys(Keys.chord(Keys.CONTROL, "V"));
     }
 
     public void setThankMessage(String message) {
@@ -184,6 +213,23 @@ public class SurveyForm extends AbstractWidget {
         } else {
             System.out.println("Value is already saved");
         }
+    }
+
+    public String checkInputQuestionCharacterCount() {
+        return getTextFromElem(this.getCurrentDriver(), questionTitleCharacterLimit, 5, "Question Input character limit title");
+    }
+
+    public boolean checkUpperQuestionCharactersLimit(int expectedValue) {
+        String actualText = getTextFromElem(this.getCurrentDriver(), questionTitleCharacterLimit, 5, "Question Input character limit title");
+        String[] splitArray = actualText.split(" ");
+        int upperLimit = Integer.parseInt(splitArray[0]);
+        return upperLimit > expectedValue;
+    }
+
+    public boolean checkCharacterCountCompWithEnteredText() {
+        String actualText = getTextFromElem(this.getCurrentDriver(), questionTitleCharacterLimit, 5, "Question Input character limit title");
+        String expectedTextSize = String.valueOf(getTextFromElem(this.getCurrentDriver(), questionInput, 5, "Question Input").length());
+        return actualText.contains(expectedTextSize);
     }
 
     public List<String> getVariationOfRatingCSATScale() {
@@ -270,6 +316,15 @@ public class SurveyForm extends AbstractWidget {
 
     public boolean isCommentFieldShown() {
         return isElementShown(this.getCurrentDriver(), commentFieldHeader, 2);
+    }
+
+    public boolean isErrorMessageShown() {
+        return isElementShown(this.getCurrentDriver(), errorMessage, 2);
+    }
+
+    public boolean isErrorMessageHavingText(String expectedText) {
+        String actualText = getTextFromElem(this.getCurrentDriver(), errorMessage, 5, "Error message");
+        return actualText.equalsIgnoreCase(expectedText);
     }
 
     public String getSizeOfRateInputNumbers() {
