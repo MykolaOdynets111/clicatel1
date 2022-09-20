@@ -14,8 +14,8 @@ Feature: Dashboard: Settings: Business Profile : Agent Support Hours
 
   @Regression
   @agent_support_hours
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-5317")
-  Scenario: Verify if agent can change support hours
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2312")
+  Scenario: CD :: Dashboard :: Settings :: Business Profile :: Verify if supervisor can change  support hours
 
     Given I login as agent of Standard Billing
     And I select Touch in left menu and Dashboard in submenu

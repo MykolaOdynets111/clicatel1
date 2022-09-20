@@ -19,8 +19,9 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     Then Supervisor Desk Live chat container header display "No current Agent" instead of agent name
     Then Verify Orca returns Agent Busy message autoresponder during 40 seconds
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-114789")
-  Scenario: Agent Desk :: Verify the agent name and date are displayed in the visual indicator in agent chat window
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1437")
+  @Regression
+  Scenario: CD :: Supervisor :: Live Chat :: Verify the agent name and date are displayed in the visual indicator in agent chat window
     Given I login as agent of Automation
     When Setup ORCA whatsapp integration for Automation tenant
     And Send to agent message by ORCA
