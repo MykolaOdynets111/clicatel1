@@ -32,3 +32,13 @@ Feature: WhatsApp ORCA :: Supervisor Desk
 #    Then Ticket from orca is present on "All tickets" filter page
 #    When Agent filter by "Apple Business Chat" channel and "Positive" sentiment
 #    Then Ticket from orca is not present on Supervisor Desk commented till chat name would be available
+
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2801")
+  @Regression
+  Scenario: Supervisor desk:: Verify if tickets are sorted from newest to oldest by default
+    Given I open portal
+    And Login into portal as an admin of General Bank Demo account
+    When I select Touch in left menu and Supervisor Desk in submenu
+    And Agent select "Tickets" left menu option
+    Then Tickets are sorted in descending order

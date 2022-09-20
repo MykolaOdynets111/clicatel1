@@ -171,3 +171,18 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent search chat orca on Supervisor desk
     When Agent click On Live Supervisor Desk chat from ORCA channel
     Then Agent can see whatsapp profile name
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1302")
+  @regression
+  Scenario: CD :: Supervisor Desk :: Chat :: Chat2Pay :: Verify that supervisor does not have the capability to initiate a payment transaction
+    Given I login as agent of General Bank Demo
+    When Setup ORCA whatsapp integration for General Bank Demo tenant
+    And Send to agent message by ORCA
+    And Agent has new conversation request from ORCA user
+    And Agent click on new conversation request from ORCA
+    And I open portal
+    And Login into portal as an admin of General Bank Demo account
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Agent search chat orca on Supervisor desk
+    And Agent click On Live Supervisor Desk chat from ORCA channel
+    Then Agent cannot initiate a payment

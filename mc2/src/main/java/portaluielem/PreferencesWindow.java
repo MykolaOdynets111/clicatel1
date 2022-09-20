@@ -56,7 +56,7 @@ public class PreferencesWindow extends BasePortalWindow {
     @FindBy(css = "[name='globalInactivityTimeoutHours']")
     private WebElement globalInactivityTimeoutHours;
 
-    @FindBy(css = "[name='pendingChatAutoClosureHours']")
+    @FindBy(css = "[name='pendingChatAutoClosureTimeHours']")
     private WebElement pendingChatAutoClosureHours;
 
     private WebElement getToggleElementByName(String name) {
@@ -67,6 +67,12 @@ public class PreferencesWindow extends BasePortalWindow {
     private boolean verifyToggleIsChecked(String name) {
         return getToggleElementByName(name).findElement(By.xpath("./../input"))
                 .getAttribute("value").equalsIgnoreCase("true");
+    }
+
+    private void activateToggle(String toggleName){
+        if(!verifyToggleIsChecked(toggleName)){
+            scrollAndClickElem(currentDriver, getToggleElementByName(toggleName), 10, toggleName);
+        }
     }
 
     public void setChatsAvailable(String chats){
@@ -93,12 +99,6 @@ public class PreferencesWindow extends BasePortalWindow {
     public PreferencesWindow clickOnOffAutoScheduler(){
         scrollAndClickElem(this.getCurrentDriver(), toggleAutoScheduler, 5,"Auto scheduler toggle");
     return this;
-    }
-
-    public void activateToggle(String toggleName){
-        if(!verifyToggleIsChecked(toggleName)){
-            scrollAndClickElem(currentDriver, getToggleElementByName(toggleName), 10, toggleName);
-        }
     }
 
     public void selectDefaultDepartment(String name){
@@ -187,7 +187,7 @@ public class PreferencesWindow extends BasePortalWindow {
     }
 
     public String getPendingChatAutoClosureHours() {
-        waitForElementToBeVisible(this.getCurrentDriver(), pendingChatAutoClosureHours, 1);
+        waitForElementToBeVisible(this.getCurrentDriver(), pendingChatAutoClosureHours, 10);
         scrollToElem(this.getCurrentDriver(), pendingChatAutoClosureHours, "Pending Chat Auto-Closure Hours");
         return pendingChatAutoClosureHours.getAttribute("value");
     }
