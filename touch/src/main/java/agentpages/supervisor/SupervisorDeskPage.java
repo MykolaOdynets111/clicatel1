@@ -67,16 +67,15 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(xpath = "//input[contains(@class, 'cl-form-control cl-form-control--input cl-end-date')]")
     private WebElement endDateInput;
 
-<<<<<<< HEAD
+
     @FindBy(xpath = "//*[local-name()='svg' and @name='clock']/*[local-name()='g']")
     private WebElement leftChatPendingIcon;
 
     @FindBy(xpath= "//div[contains(text(),'Pending On')]")
     private WebElement leftChatPendingOn;
-=======
+
     @FindBy(css="svg[name='puzzle']")
     private WebElement c2pButton;
->>>>>>> master
 
     private String backButtonString = "//button[@aria-label='Previous Month']";
 
