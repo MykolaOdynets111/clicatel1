@@ -37,8 +37,7 @@ public class SQSConfiguration {
 
     public static SqsClient getSqsClient(){
         if(ConfigManager.isRemote()){
-            return SqsClient.builder().region(SQSConfiguration.DEFAULT_REGION)
-                    .credentialsProvider(ProfileCredentialsProvider.create("TouchtestsDevAccess")).build();
+            return SqsClient.builder().region(SQSConfiguration.DEFAULT_REGION).build();
         }
 
         return SqsClient.builder().region(SQSConfiguration.DEFAULT_REGION)
