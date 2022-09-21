@@ -31,8 +31,9 @@ Feature: Apple Business Chat :: Supervisor Desk
     Then Verify that Chats tab is displayed first
 
   @orca_api
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-106827")
-  Scenario: Supervisor Desk :: Closed Chat :: Verify if roster is updated after a chat is closed on supervisor desk
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1350")
+  @regression
+  Scenario: CD :: Supervisor Desk :: Closed Chat :: Verify if roster is updated after a chat is closed on supervisor desk
     Given I login as Second Agent of General Bank Demo
     And Setup ORCA abc integration for General Bank Demo tenant
     And Send chat to be closed message by ORCA
@@ -50,7 +51,7 @@ Feature: Apple Business Chat :: Supervisor Desk
   @regression
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1325")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1315")
-  Scenario: Supervisor Desk :: Chats :: Transfer Chat :: Verify if agent name is updated after chat is being transferred from agent1 to agent2 on header
+  Scenario: CD :: Supervisor Desk :: Chats :: Transfer Chat :: Verify if agent name is updated after chat is being transferred from agent1 to agent2 on header
     Given Setup ORCA abc integration for General Bank Demo tenant
     And I login as Agent of General Bank Demo
     And Send chat for transfer message by ORCA
