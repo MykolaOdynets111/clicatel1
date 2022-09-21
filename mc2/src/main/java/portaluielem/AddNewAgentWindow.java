@@ -23,5 +23,4 @@ public class AddNewAgentWindow extends BasePortalWindow {
 
         clickPrimaryBindingButton("Add Agent users");
     }
-
 }
