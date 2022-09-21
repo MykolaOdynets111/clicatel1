@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import portalpages.PortalAbstractPage;
 import portaluielem.*;
 
@@ -65,6 +66,10 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     @FindBy(xpath = "//input[contains(@class, 'cl-form-control cl-form-control--input cl-end-date')]")
     private WebElement endDateInput;
+
+    @FindBy(css="svg[name='puzzle']")
+    private WebElement c2pButton;
+
     private String backButtonString = "//button[@aria-label='Previous Month']";
 
     private String chatName = "//h2[@class='cl-chat-item-user-name' and text() ='%s']";
@@ -284,5 +289,9 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     public void loadAllClosedChats() {
         getSupervisorClosedChatsTable().loadAllFoundChats();
+    }
+
+    public void verifyInitiatePayment() {
+        Assert.assertFalse(isElementShown(this.getCurrentDriver(), c2pButton, 5));
     }
 }

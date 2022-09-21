@@ -16,9 +16,6 @@ import org.testng.asserts.SoftAssert;
 import steps.agentsteps.AgentConversationSteps;
 import steps.dotcontrol.DotControlSteps;
 
-import java.sql.SQLOutput;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -559,5 +556,10 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().getSupervisorRightPanel().verifyNoteCardText(note);
         getSupervisorDeskPage().getSupervisorRightPanel().verifyNoteCardJiraLink(jiraLink);
         getSupervisorDeskPage().getSupervisorRightPanel().verifyNoteCardTicketNumber(ticketNumber);
+    };
+
+    @Then("Agent cannot initiate a payment")
+    public void agentCannotInitiateAPayment() {
+        getSupervisorDeskPage().verifyInitiatePayment();
     }
 }

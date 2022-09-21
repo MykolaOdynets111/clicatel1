@@ -2,11 +2,12 @@
 Feature: Dashboard: Customer History
 
   @off_survey_management
-    @off_rating_whatsapp
-    @orca_api
-    @start_orca_server
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-1456")
-  Scenario Outline: Dashboard: Verify if admin can open Customers History with <surveyType> customer survey
+  @off_rating_whatsapp
+  @orca_api
+  @start_orca_server
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1456")
+  @Regression
+  Scenario Outline: CD:: Dashboard: Dashboard-Customers_Overview:: Verify if admin can open Customers History with <surveyType> customer survey
     Given I login as agent of Standard Billing
     And Setup ORCA whatsapp integration for Standard Billing tenant
     And Update survey management chanel whatsapp settings by ip for Standard Billing
@@ -57,10 +58,12 @@ Feature: Dashboard: Customer History
       | SMS   | Past 3 weeks   |
       | SMS   | Past 4 weeks   |
 
-  @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/CCD-1486")
+  @no_chatdesk
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1486")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1816")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2437")
-  Scenario Outline: CD:: Survey:: Verify " no data to show now" should be shown in the CSAT column against the agent.
+  @Regression
+  Scenario Outline:  CD:: Survey:: Verify " no data to show now" should be shown in the CSAT column against the agent.
     When I open portal
     And I login as agent of Standard Billing
     And I select Touch in left menu and Dashboard in submenu
@@ -135,7 +138,9 @@ Feature: Dashboard: Customer History
     Then Admin is able to see Net Promoter Score graphs
     And Admin see the percentage for passives from NPS is increased
 
-  @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/TPORT-45595")
+  @no_chatdesk
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2338")
+  @Regression
   Scenario: Dashboard:: Verify that if supervisor selects 'past day' date filter, reports should be displayed hourly
     When I open portal
     And Login into portal as an admin of Standard Billing account
@@ -146,9 +151,9 @@ Feature: Dashboard: Customer History
     Then All reports in graphs should be breakdown hourly
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1796")
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-1819")
-    @Regression
-  Scenario Outline: CD:: Survey:: CSAT:: Dashboard:: Verify if customer satisfaction odometer for CSAT score is presented as 0% to 100% scale
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1819")
+  @Regression
+  Scenario Outline: CD:: Survey:: CSAT:: Dashboard:: Verify if customer satisfaction graph for CSAT score is presented as "0-5" on Y Axis scale
     Given I login as agent of Standard Billing
     When I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab

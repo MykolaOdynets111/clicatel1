@@ -1,11 +1,10 @@
-@remove_dep
 @start_orca_server
 Feature: Dashboard: Settings: Preferences: Route to Specific Departments
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1304")
+  @remove_dep
   @Regression
-  Scenario: CD :: Dashboard :: Department Management ::
-  Verify if Whatsapp chat "Route to Specific Departments" when department agent is online
+  Scenario: CD :: Dashboard :: Department Management :: Verify if Whatsapp chat "Route to Specific Departments" when department agent is online
 
     Given I login as agent of Standard Billing
     And New departments with Auto_Department name Auto_Description description and agent is created
