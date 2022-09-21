@@ -147,10 +147,10 @@ Feature: Whatsapp ORCA :: Chatdesk
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2369")
   @Regression
   Scenario: CD:: Supervisor desk :: Verify if Supervisor is able to Route ticket to scheduler
-    Given I login as second agent of General Bank Demo
-    And Setup ORCA whatsapp integration for General Bank Demo tenant
-    And Send to agent message by ORCA
-    When I open portal
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    And Set agent support hours with day shift
+    When Send to agent message by ORCA
+    And I open portal
     And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
