@@ -12,7 +12,7 @@ Feature: Tags
     When Create chat tag
     And Click the pencil icon to edit the tag
     Then Cancel editing a tag
-
+    And Existing TagName is not changed
 
 
   Scenario: verify when a supervisor edits a tag that the chats/tickets associated with the tag also be edited and has the new name.

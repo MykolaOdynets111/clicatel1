@@ -19,10 +19,17 @@ public class ChatTagsWindow extends BasePortalWindow{
     private WebElement saveButton;
 
     @FindBy(css= "g[id='Delete / Outline']")
-    private WebElement DeleteButton;
+    private WebElement deleteButton;
 
     @FindBy(css = ".cl-collapsible-table__row")
     private List<WebElement> tagRows;
+
+    @FindBy(css = ".cl-tag-form__pencil-icon")
+    private WebElement clickPencilIcon;
+
+    @FindBy(xpath = "//div[@class='cl-tag-form'][1]")
+    private WebElement getTagName;
+
 
     public ChatTagsWindow clickAddChatTagButton() {
         clickElem(this.getCurrentDriver(), addChatTagButton, 5, "Add Chat Tag Button");
@@ -39,8 +46,11 @@ public class ChatTagsWindow extends BasePortalWindow{
         return this;
     }
     public ChatTagsWindow clickDeleteButton(){
-        clickElem(this.getCurrentDriver(), DeleteButton, 2, "Delete Button");
+        clickElem(this.getCurrentDriver(), deleteButton, 2, "Delete Button");
         return this;
+    }
+    public String getTagName(){
+        return getTextFromElem(this.getCurrentDriver(), getTagName, 2, "Tag Name");
     }
 
 
@@ -54,7 +64,7 @@ public class ChatTagsWindow extends BasePortalWindow{
     public ChatTagsWindow clickEditTagButton(String tagName){
         WebElement row = getRowByName(tagName);
         moveToElement(this.getCurrentDriver(), row);
-        moveToElemAndClick(this.getCurrentDriver(), this.getCurrentDriver().findElement(By.cssSelector(".cl-tag-form__pencil-icon")));
+        moveToElemAndClick(this.getCurrentDriver(), clickPencilIcon);
         return this;
     }
 
@@ -64,6 +74,5 @@ public class ChatTagsWindow extends BasePortalWindow{
         row.findElement(By.cssSelector(".cl-r-toggle-btn")).click();
         return this;
     }
-
 
 }

@@ -44,14 +44,11 @@ public class DashboardPage extends PortalAbstractPage {
     @FindBy(xpath = "//a[text()='Departments Management']")
     private WebElement departmentsManagementButton;
 
-    @FindBy(xpath="//a[text()='Settings']")
-    private WebElement SettingsButton;
-
     @FindBy(xpath = "//a[text()='Chat Tags']")
-    private WebElement ChatTagsButton;
+    private WebElement chatTagsButton;
 
     @FindBy(xpath = "//a[text()='+ Add Chat Tag']")
-    private WebElement CreateChatTagsButton;
+    private WebElement createChatTagsButton;
 
 
 
@@ -229,13 +226,12 @@ public class DashboardPage extends PortalAbstractPage {
         clickElem(this.getCurrentDriver(), departmentsManagementButton, 5, "Departments Management");
     }
     public void clickSettingsManagement(){
-        clickElem(this.getCurrentDriver(), SettingsButton, 5, "Settings");
+        clickElem(this.getCurrentDriver(), settingsButton, 5, "Settings");
     }
     public void clickCHatTagsPage(){
-        clickElem(this.getCurrentDriver(), ChatTagsButton, 5, "Chat Tags");
+        clickElem(this.getCurrentDriver(), chatTagsButton, 5, "Chat Tags");
     }
     public void clickCreateCHatTags(){
-        clickElem(this.getCurrentDriver(), CreateChatTagsButton, 10, "Create Chat Tags");
+        clickElem(this.getCurrentDriver(), createChatTagsButton, 10, "Create Chat Tags");
     }
-
 }

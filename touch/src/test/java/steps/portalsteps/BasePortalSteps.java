@@ -42,6 +42,8 @@ import touchpages.pages.Widget;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.testng.Assert.assertEquals;
+
 public class BasePortalSteps extends AbstractPortalSteps {
 
     public static final String FIRST_AND_LAST_NAME = "Clickatell Test";
@@ -332,7 +334,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
             expectedMessage = expectedMessage.replace("<email>", Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
         }
         getPortalLoginPage(agent).waitForNotificationAlertToBeProcessed(2,4);
-        Assert.assertEquals(notificationText, expectedMessage.trim(),
+        assertEquals(notificationText, expectedMessage.trim(),
                 "Expected notification is not shown");
     }
 
@@ -456,7 +458,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void verifyDeletedAgentIsNotLoggedIn(){
         getCurrentPortalLoginPage().getAccountForm().enterAdminCreds(AGENT_EMAIL, AGENT_PASS);
         getCurrentPortalLoginPage().getAccountForm().clickLogin();
-        Assert.assertEquals(getCurrentPortalLoginPage().getNotificationAlertText(),
+        assertEquals(getCurrentPortalLoginPage().getNotificationAlertText(),
                 "Username or password is invalid",
                 "Error about invalid credentials is not shown");
     }
@@ -548,14 +550,14 @@ public class BasePortalSteps extends AbstractPortalSteps {
         MC2Account mc2Account = MC2Account.getAccountByOrgName(ConfigManager.getEnv(), tenantOrgName);
         getCurrentPortalLoginPage().getAccountForm().enterAdminCreds(mc2Account.getEmail(), mc2Account.getPass());
         getCurrentPortalLoginPage().getAccountForm().clickLogin();
-        Assert.assertEquals(getCurrentPortalLoginPage().getNotificationAlertText(),
+        assertEquals(getCurrentPortalLoginPage().getNotificationAlertText(),
                 "Username or password is invalid",
                 "Error about invalid credentials is not shown");
     }
 
     @Then("^Error about invalid credentials is shown$")
     public void verifyInvalidCredsError(){
-        Assert.assertEquals(getPortalAccountDetailsPage().getNotificationAlertText(),
+        assertEquals(getPortalAccountDetailsPage().getNotificationAlertText(),
                 "Invalid username or password.",
                 "Error about invalid credentials is not shown");
     }
@@ -638,7 +640,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^Main portal page with welcome message is shown$")
     public void verifyMainPageWithWelcomeMessageShown(){
-        Assert.assertEquals(getAdminPortalMainPage().getGreetingMessage(), "Welcome, "+ FIRST_AND_LAST_NAME.split(" ")[0] +
+        assertEquals(getAdminPortalMainPage().getGreetingMessage(), "Welcome, "+ FIRST_AND_LAST_NAME.split(" ")[0] +
                 ". Get started with your Clickatell account.", "Welcome message is not shown.");
     }
 
@@ -715,7 +717,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         int actualActiveAgentsCount = Integer.parseInt(getDashboardPage().getWidgetValue(widgetName));
         chatConsolePretestValue.put(widgetName, actualActiveAgentsCount);
         int loggedInAgentsCountFromBackend = ApiHelper.getNumberOfLoggedInAgents();
-        Assert.assertEquals(actualActiveAgentsCount, loggedInAgentsCountFromBackend,
+        assertEquals(actualActiveAgentsCount, loggedInAgentsCountFromBackend,
                 widgetName + " counter differs from agent online count on backend");
     }
 
@@ -741,7 +743,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void verifyAverageChatsPerAgent(){
        int actualAverageChats = Integer.valueOf(getDashboardPage().getAverageChatsPerAgent());
        int expectedAverageChats = activeChatsFromChatdesk /  ApiHelper.getNumberOfLoggedInAgents();
-       Assert.assertEquals(actualAverageChats, expectedAverageChats,
+       assertEquals(actualAverageChats, expectedAverageChats,
                "Number of Average chats per Agent is not as expected");
     }
 
@@ -795,7 +797,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^\"(.*)\" error message is shown in Agent Chat Timeout section$")
     public void verifyInactivityTimeoutError(String expectedError){
-        Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getAgentInactivityTimeoutLimitError(), expectedError,
+        assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getAgentInactivityTimeoutLimitError(), expectedError,
                 "Incorrect limits message was shown in Agent Chat Timeout section");
     }
 
@@ -813,7 +815,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^\"(.*)\" error message is shown in Media Files Expiration section$")
     public void verifyAttachmentLifeTimeDaysLimitError(String expectedError){
-        Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getAttachmentLifeTimeDaysLimitError(), expectedError, "Incorrect limits message was shown in Media Files Expiration section");
+        assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getAttachmentLifeTimeDaysLimitError(), expectedError, "Incorrect limits message was shown in Media Files Expiration section");
     }
 
     @Then("^Error message is not shown in Media Files Expiration section$")
@@ -830,7 +832,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^\"(.*)\" error message is shown in Ticket Expiration section$")
     public void verifyTicketsExpirationLimitError(String expectedError){
-        Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getTicketExpirationLimitError(),
+        assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getTicketExpirationLimitError(),
                 expectedError, "Incorrect limits message was shown in Tickets Expiration section");
     }
 
@@ -842,7 +844,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Chats per agent became:\"(.*)\"$")
     public void changeChatPerAgentPlusMinus(String result){
-            Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getChatsAvailable(), result,"Chats per agent is not as expected");
+            assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getChatsAvailable(), result,"Chats per agent is not as expected");
     }
 
     @When("^(.*) Error message is shown$")
@@ -884,7 +886,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void messageWasUpdatedOnBackend(String tafMessageId, String messageName) {
         String messageOnfrontend = getPortalTouchPreferencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(messageName).getMessage();
         String actualMessage = ApiHelper.getAutoResponderMessageText(tafMessageId);
-        Assert.assertEquals(actualMessage, messageOnfrontend,
+        assertEquals(actualMessage, messageOnfrontend,
                 messageName + " message is not updated on backend");
 
     }
@@ -893,7 +895,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void verifyTafMessageIsReset(String autoresponderId){
         String actualMessage = ApiHelper.getAutoResponderMessageText(autoresponderId);
         String defaultMessage = DBConnector.getDefaultAutoResponder(ConfigManager.getEnv(), autoresponderId);
-        Assert.assertEquals(actualMessage, defaultMessage,
+        assertEquals(actualMessage, defaultMessage,
                 autoresponderId + " message is not reset to default");
     }
 
@@ -940,13 +942,13 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^I see \"Payment Successful\" message$")
     public void verifyPaymentSuccessfulMessage(){
-        Assert.assertEquals(getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().getSuccessMessageMessage(),
+        assertEquals(getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().getSuccessMessageMessage(),
                 "Payment Successful", "Payment successful message was not shown");
     }
 
     @Then("^Admin should see \"(.*)\" in the page header$")
     public void verifyTouchGoPlanNamePresence(String expectedTouchGo){
-        Assert.assertEquals(getAdminPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTouchGo,
+        assertEquals(getAdminPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTouchGo,
                 "Shown Touch go plan is not as expected.");
     }
 
@@ -957,7 +959,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^See \"(.*)\" button$")
     public void verifyNShowingUpgradeButtonText(String textToBeShown){
-        Assert.assertEquals(getAdminPortalMainPage().getPageHeader().getTextFromBuyingAgentsButton(), textToBeShown, "'Add Agent seats' button is shown for Starter Touch Go tenant");
+        assertEquals(getAdminPortalMainPage().getPageHeader().getTextFromBuyingAgentsButton(), textToBeShown, "'Add Agent seats' button is shown for Starter Touch Go tenant");
     }
 
     @When("^(.*) the (.*) integration$")
@@ -982,7 +984,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         if(!actualStatus.equalsIgnoreCase(expectedStatus)) {
             actualStatus = getPortalIntegrationsPage().getIntegrationCardStatus(integration).toLowerCase();
         }
-        Assert.assertEquals(actualStatus, expectedStatus.toLowerCase(),
+        assertEquals(actualStatus, expectedStatus.toLowerCase(),
                 "'"+integration+"' has unexpected status.");
     }
 
@@ -995,14 +997,14 @@ public class BasePortalSteps extends AbstractPortalSteps {
         } catch (JsonPathException e){
             Assert.fail("FB integration not created");
         }
-        Assert.assertEquals(userName, FacebookUsers.USER_FOR_INTEGRATION.getFBUserName(),
+        assertEquals(userName, FacebookUsers.USER_FOR_INTEGRATION.getFBUserName(),
                 "Incorrect user name in fb integration");
     }
 
     @Then("^Twitter integration is saved on the backend$")
     public void verifyTwitterIntegrationSaved(){
         String twitterFirstName = ApiHelper.getInfoAboutTwitterIntegration(Tenants.getTenantUnderTestOrgName(),"fullName");
-        Assert.assertEquals(twitterFirstName, TwitterUsers.TOUCHGO_USER.getTwitterUserName(),
+        assertEquals(twitterFirstName, TwitterUsers.TOUCHGO_USER.getTwitterUserName(),
                 "Incorrect user name in Twitter integration");
     }
 
@@ -1010,7 +1012,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @And("^Delete Twitter integration on the backend$")
     public void deleteTwitterIntegrationOnTheBackend() {
         Response deleteTwitterIntegration = (Response) ApiHelper.delinkTwitterIntegration(Tenants.getTenantUnderTestOrgName());
-        Assert.assertEquals(deleteTwitterIntegration.statusCode(),200, "Twitter integration is not deleted");
+        assertEquals(deleteTwitterIntegration.statusCode(),200, "Twitter integration is not deleted");
     }
 
     @Then("^Facebook integration is deleted$")
@@ -1069,7 +1071,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^Touch Go plan is updated to \"(.*)\" in portal page$")
     public void verifyPlanUpdatingOnPortalPage(String expectedTouchGo){
         DriverFactory.getAgentDriverInstance().navigate().refresh();
-        Assert.assertEquals(getAdminPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTouchGo,
+        assertEquals(getAdminPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTouchGo,
                 "Shown Touch go plan is not as expected.");
     }
 
@@ -1186,7 +1188,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
             int minValue = TopUpBalanceLimits.getMinValueByCurrency(accountCurrency);
             expectedMessage = baseMessage.replace("min_value", minValue + " " + accountCurrency);
         }
-        Assert.assertEquals(getPortalBillingDetailsPage().getTopUpBalanceWindow().getErrorWhileAddingPopup(),
+        assertEquals(getPortalBillingDetailsPage().getTopUpBalanceWindow().getErrorWhileAddingPopup(),
                 expectedMessage, "Error massage about invalid top up sum is not as expected \n" );
     }
 
@@ -1471,7 +1473,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^I check secondary color for tenant in widget$")
     public void iCheckSecondaryColorForTenantInWidget() {
-        Assert.assertEquals(getMainPage().getTenantNameColor(), tenantInfo.get("newColor"), "Color for tenant name in widget window is not correct");
+        assertEquals(getMainPage().getTenantNameColor(), tenantInfo.get("newColor"), "Color for tenant name in widget window is not correct");
     }
 
 
@@ -1739,15 +1741,19 @@ public class BasePortalSteps extends AbstractPortalSteps {
         AgentCRMTicketsSteps.crmTicketInfoForUpdating.get().put("agentTags",  tagname);
     }
     @When("^Click the pencil icon to edit the tag")
-    public void EditTag() {
+    public void editTag() {
         getPortalTouchPreferencesPage().getChatTagsWindow().clickEditTagButton(tagname);
     }
 
     @When("^Cancel editing a tag")
-    public void CancelEditingTag() {
+    public void cancelEditingTag() {
         getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickDeleteButton();
     }
-
+    @When("^Existing TagName is not changed")
+    public void verifyTagName() {
+        String newTagName = getPortalTouchPreferencesPage().getChatTagsWindow().getTagName();
+        Assert.assertTrue(tagname.equalsIgnoreCase(newTagName), "Tag name has not changed");
+    }
 
     @When("^(?:Enable|Disable) tag$")
     public void disableTag(){
