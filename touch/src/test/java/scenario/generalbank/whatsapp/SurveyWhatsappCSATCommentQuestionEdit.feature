@@ -1,6 +1,5 @@
 @no_widget
 @no_chatdesk
-@off_survey_management
 Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2286")
@@ -8,6 +7,9 @@ Feature: Satisfaction Survey
     @TestCaseId("https://jira.clickatell.com/browse/CCD-1980")
     @TestCaseId("https://jira.clickatell.com/browse/CCD-2423")
     @Regression
+    @off_survey_abc
+    @off_survey_sms
+    @off_survey_whatsapp
   Scenario Outline:verify if supervisor can customize survey question for whatsapp CSAT survey type
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Update survey management chanel <channelType> settings by ip for General Bank Demo
@@ -36,6 +38,7 @@ Feature: Satisfaction Survey
     @TestCaseId("https://jira.clickatell.com/browse/CCD-1824")
     @TestCaseId("https://jira.clickatell.com/browse/CCD-1698")
     @Regression
+    @off_survey_sms
   Scenario Outline: CD:: SMS:: Settings :: Survey :: Verify if Supervisor should be allowed to type plain text message more then the total count of 160 in the survey question
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Update survey management chanel <channelType> settings by ip for General Bank Demo
@@ -69,6 +72,7 @@ Feature: Satisfaction Survey
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1868")
     @TestCaseId("https://jira.clickatell.com/browse/CCD-1777")
     @Regression
+    @off_survey_sms
   Scenario Outline: CD:: SMS:: Settings :: Survey :: Verify if Supervisor message contains only Unicode characters then the total count should be out of 70 in the survey question
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Update survey management chanel <channelType> settings by ip for General Bank Demo

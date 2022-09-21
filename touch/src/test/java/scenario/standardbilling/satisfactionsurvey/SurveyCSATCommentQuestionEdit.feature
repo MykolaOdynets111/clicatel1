@@ -1,5 +1,4 @@
 @no_widget
-@off_survey_management
 @off_rating_whatsapp
 @off_rating_abc
 @no_chatdesk
@@ -30,4 +29,4 @@ Feature: Satisfaction Survey
       | channelType         |
       | whatsapp            |
       | abc                 |
-      | webchat             |
+    #  | webchat             |

@@ -1,5 +1,5 @@
 @no_widget
-@off_survey_management
+@off_survey_sms
 @off_rating_whatsapp
 @off_rating_abc
 Feature: Satisfaction Survey

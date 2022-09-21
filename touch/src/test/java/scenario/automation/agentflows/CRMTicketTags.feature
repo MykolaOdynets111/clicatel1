@@ -4,6 +4,16 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
   Background:
     Given Setup ORCA whatsapp integration for Standard Billing tenant
     And agentFeedback tenant feature is set to true for Standard Billing
+      | agentPackPurchased  | true           |
+      | maxOnlineAgentLimit | 1              |
+      | touchGoType         | TOUCH_STANDARD |
+      | agentFeedback       | true           |
+      | hasBalance          | true           |
+      | agentAssistant      | true           |
+      | touchButtonEnabled  | true           |
+      | canPurchaseAgents   | true           |
+      | canUpgradePackage   | true           |
+      | botMode             | AUTONOMOUS     |
     And User select Standard Billing tenant
     And I open portal
     And Login into portal as an admin of Standard Billing account
@@ -62,7 +72,6 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
     Then CRM ticket is created on backend with correct information
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2934")
-    @skip
   Scenario: Agent can select, then delete tags and the tags is not saved in created CRM ticket
     When Send connect to agent message by ORCA
     And I select Touch in left menu and Agent Desk in submenu

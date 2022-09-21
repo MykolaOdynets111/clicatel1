@@ -7,8 +7,8 @@ Feature: Whatsapp ORCA :: ChatDesk
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1175")
   @Regression
   Scenario Outline: CD :: WA :: Agent Desk :: Closed Chat :: History :: Location :: Verify if location shared by agent is displayed on history tab
-    Given I login as agent of General Bank Demo
-    Given Setup ORCA <channelType> integration for General Bank Demo tenant
+    Given I login as agent of Standard Billing
+    Given Setup ORCA <channelType> integration for Standard Billing tenant
     When Send connect to agent message by ORCA
     Then Agent has new conversation request from <userType> user
     When Agent click on new conversation request from <userType>

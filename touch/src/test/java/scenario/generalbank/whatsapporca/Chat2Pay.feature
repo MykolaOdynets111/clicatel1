@@ -27,6 +27,7 @@ Feature: Chat2Pay ::Chat2PayCustomerClosedChat
     Then Conversation area becomes active with connect to Support user's message
     When Agent open c2p form
     And Agent fill c2p form with orderNumber 45545, price 10 and send
+    When Send Thank you for payment link message by ORCA
     When Wait for 360 second
     Then Agent get 'payment link expired' update is sent to agent desk by C2P
 

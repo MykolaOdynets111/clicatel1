@@ -74,13 +74,13 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Given("^(.*) tenant feature is set to (.*) for (.*)$")
-    public void setFeatureStatus(String feature, String status, String tenantOrgName){
+    public void setFeatureStatus(String feature, String status, String tenantOrgName, Map<String, String> map){
         PortalAuthToken.clearAccessTokenForPortalUser();
         boolean featureStatus = ApiHelper.getFeatureStatus(tenantOrgName, feature);
         savePreTestFeatureStatus(feature, featureStatus);
         saveTestFeatureStatusChanging(feature, Boolean.parseBoolean(status.toLowerCase()));
         if(featureStatus != Boolean.parseBoolean(status.toLowerCase())) {
-            ApiHelper.updateFeatureStatus(tenantOrgName, feature, status);
+            ApiHelper.updateFeatureStatus(tenantOrgName, map);
         }
     }
 

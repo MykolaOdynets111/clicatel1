@@ -29,7 +29,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
             configuration.updateSomeValueByMethodName(key, map.get(key));
         }
         surveyConfiguration.set(configuration);
-        ApiHelper.updateSurveyManagement(tenantOrgName, configuration, channelID, chanel);
+        ApiHelper.updateSurveyManagement(tenantOrgName, configuration, channelID, chanel.toLowerCase());
 
     }
 
@@ -270,7 +270,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
 
     @Then("^Preview question is updated successfully for (.*) and (.*) chanel")
     public void verifyQuestionPreviewAPI(String tenantOrgName, String chanel) {
-        String channelID = ApiHelper.getChannelID(tenantOrgName, chanel);
+        String channelID = ApiHelper.getChannelID(tenantOrgName, chanel.toLowerCase());
         SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
         Assert.assertEquals(configuration.getSurveyQuestionTitle(), questionUpdate.get(), "Preview question is not the same as was set");
     }

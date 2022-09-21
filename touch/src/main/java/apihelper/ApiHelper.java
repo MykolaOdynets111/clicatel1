@@ -354,29 +354,33 @@ public class ApiHelper implements VerificationHelper {
 
     }
 
-    public static void updateFeatureStatus(String tenantOrgName, String feature, String status) {
+    public static void updateFeatureStatus(String tenantOrgName, Map<String, String> map) {
         String tenantID = getTenant(tenantOrgName).get("id");
         String url = format(Endpoints.INTERNAL_TENANT_CONFIG, tenantID);
-        Response resp = given()
-                .log().all()
-                .header("Authorization", getAccessToken(tenantOrgName, "main"))
-                .body("{\n" +
-                        "            \"agentPackPurchased\": true,\n" +
-                        "                \"maxOnlineAgentLimit\": 1,\n" +
-                        "                \"orgName\": \"string\",\n" +
-                        "                \"category\": \"string\",\n" +
-                        "                \"touchGoType\": \"TOUCH_STANDARD\",\n" +
-                        "                \""+feature+"\": "+status+",\n" +
-                        "                \"hasBalance\": true,\n" +
-                        "                \"agentAssistant\": true,\n" +
-                        "                \"touchButtonEnabled\": true,\n" +
-                        "                \"canPurchaseAgents\": true,\n" +
-                        "                \"canUpgradePackage\": true,\n" +
-                        "                \"botMode\": \"AUTONOMOUS\"\n" +
-                        "        }")
+        FeatureStatusUpdate fs = JsonPath.given("{\n" +
+                "            \"agentPackPurchased\": true,\n" +
+                "                \"maxOnlineAgentLimit\": 2,\n" +
+                "                \"orgName\": \"string\",\n" +
+                "                \"category\": \"string\",\n" +
+                "                \"touchGoType\": \"TOUCH_STANDARD\",\n" +
+                "                \"agentFeedback\": false,\n" +
+                "                \"hasBalance\": true,\n" +
+                "                \"agentAssistant\": true,\n" +
+                "                \"touchButtonEnabled\": true,\n" +
+                "                \"canPurchaseAgents\": true,\n" +
+                "                \"canUpgradePackage\": true,\n" +
+                "                \"botMode\": \"AUTO\"\n" +
+                "        }").getObject("", FeatureStatusUpdate.class);
+        for (String key : map.keySet()) {
+            fs.updateSomeValueByMethodName(key, map.get(key));
+        }
+        Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
+                .accept(ContentType.ANY)
+                .contentType(ContentType.JSON)
+                .body(fs.toString())
                 .put(url);
         Assert.assertEquals(resp.statusCode(), 200,
-                "Status code is not 200 for feature "+feature+"");
+                "Status code is not 200 for feature ");
     }
 
     public static boolean getFeatureStatus(String tenantOrgName, String FEATURE) {

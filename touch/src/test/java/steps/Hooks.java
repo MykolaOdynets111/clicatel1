@@ -325,7 +325,7 @@ public class Hooks implements JSHelper {
 
             if(scenario.getSourceTagNames().contains("@sign_up")) newAccountInfo();
 
-            if (scenario.getSourceTagNames().contains("@suggestions")){
+            /*if (scenario.getSourceTagNames().contains("@suggestions")){
                 boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus("AGENT_ASSISTANT");
                 if(pretestFeatureStatus != DefaultAgentSteps.getTestFeatureStatusChanging("AGENT_ASSISTANT")) {
                     ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_ASSISTANT", Boolean.toString(pretestFeatureStatus));
@@ -350,7 +350,7 @@ public class Hooks implements JSHelper {
                     }
                 }
             }
-
+*/
             if (scenario.getSourceTagNames().contains("@widget_disabling")){
                 ApiHelper.setIntegrationStatus(Tenants.getTenantUnderTestOrgName(), "webchat", true);
 

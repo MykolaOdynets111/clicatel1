@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ORCASteps implements WebWait {
 
@@ -97,7 +98,7 @@ public class ORCASteps implements WebWait {
     public void createOrUpdateOrcaIntegration(String channel, String tenantName) {
         Tenants.setTenantUnderTestOrgName(tenantName);
 
-        orcaChannelId.set(getIntegrationId(channel, "ORCA"));
+        orcaChannelId.set(getIntegrationId(channel.toLowerCase(), "ORCA"));
         if (orcaChannelId.get() == null) {
             apiToken.set(ApiORCA.createIntegration(channel, SQSConfiguration.getCallbackUrl()));
             orcaChannelId.set(getIntegrationId(channel, "ORCA"));
@@ -215,8 +216,14 @@ public class ORCASteps implements WebWait {
     }
 
     private boolean isCorrectLocationCameToUser(String location){
-        return OrcaSQSHandler.orcaEvents.stream().anyMatch(e->
-                Optional.ofNullable(e.getContent().getEvent().getName()).equals(Optional.of(location)));
+        AtomicBoolean flag = new AtomicBoolean(false);
+        OrcaSQSHandler.orcaEvents.stream().forEach( e -> {
+        if(e.getContent() != null) {
+            if(Optional.ofNullable(e.getContent().getEvent().getName()).equals(Optional.of(location))){
+                flag.set(true);
+            }
+        }});
+        return flag.get();
     }
 
     private boolean isHSMCameToUser(String templateId, Map<String, String> parameters, int wait){
