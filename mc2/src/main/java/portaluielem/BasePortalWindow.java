@@ -18,12 +18,6 @@ public class BasePortalWindow extends AbstractUIElement {
     @FindBy(css = "li.ui-select-choices-group div.ui-select-choices-row")
     protected List<WebElement> selectOptionsInDropdown;
 
-    @FindBy(xpath = "//span[@class='create-title ng-binding']")
-    protected WebElement windowHeader;
-
-    @FindBy(name = "form.cartPaymentDetails")
-    protected WebElement cartPaymentDetailsForm;
-
     @FindBy(xpath = ".//button[@ng-click='wizardSubmit()'][not(@id='integration-save')]")
     protected WebElement addToCardButton;
 

@@ -37,8 +37,8 @@ public class ChatInLeftMenu extends AbstractWidget {
     private WebElement adapterWrappedIcon;
 
     @FindAll({
-            @FindBy(css = "[data-testid='icon-flag-filled'] g"),
-            @FindBy(css = "[selenium-id='icon-flag-filled'] g") //toDo old locator
+            @FindBy(css = "[data-testid='header-toggle-flag']"),
+            @FindBy(xpath = "//div[text()='Unflag chat']")
     })
     private WebElement flagIcon;
 
