@@ -144,13 +144,6 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Verify "All Chats" display default
     Then  Verify that live chats available are shown
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-7391")
-  Scenario: Supervisor desk:: Route ticket to scheduler
-    Given Setup ORCA whatsapp integration for General Bank Demo tenant
-    And Set agent support hours with day shift
-    When Send to agent message by ORCA
-    And I open portal
-
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2369")
   @Regression
   Scenario: CD:: Supervisor desk :: Verify if Supervisor is able to Route ticket to scheduler
@@ -183,8 +176,6 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent click on three dot vertical menu and click on assign button
     When Assign chat modal is opened
     Then Agent is able to close the assign chat window
-    And Second agent select "Tickets" left menu option
-    Then Second agent has new ticket request from ORCA user
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1302")
   @Regression
