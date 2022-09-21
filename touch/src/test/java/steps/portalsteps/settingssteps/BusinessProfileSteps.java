@@ -64,7 +64,7 @@ public class BusinessProfileSteps extends AbstractPortalSteps {
         businessProfileWindow().selectAgentSupportHoursOption(option);
     }
 
-    @Then("^Verify 'Support hours' is default for (.*)$")
+    @Then("^Verify 'Support hours' are default for (.*)$")
     public void verifySupportHoursAreDefault(String tenantOrgName) {
         verifyThatSupportHoursAreDefaultFor(tenantOrgName);
     }

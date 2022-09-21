@@ -1,8 +1,8 @@
-@remove_dep
 @start_orca_server
 Feature: Dashboard: Settings: Preferences: Route to Specific Departments
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1304")
+  @remove_dep
   @Regression
   Scenario: CD :: Dashboard :: Department Management :: Verify if Whatsapp chat "Route to Specific Departments" when department agent is online
 
