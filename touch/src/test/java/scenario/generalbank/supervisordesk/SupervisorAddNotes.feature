@@ -2,7 +2,8 @@ Feature: Supervisor desk
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1427")
-  Scenario: Supervisor Desk :: Chat :: Notes :: Verify if supervisor is able to add notes to a live chat
+  @regression
+  Scenario: CD :: Supervisor Desk :: Chat :: Notes :: Verify if supervisor is able to add notes to a live chat
     Given Setup ORCA abc integration for General Bank Demo tenant
     And Send Notes for Live Chat message by ORCA
     And I open portal
@@ -14,7 +15,8 @@ Feature: Supervisor desk
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-3882")
-  Scenario: Supervisor Desk :: Chat :: Notes :: Verify if supervisor is able to add notes to a closed chat
+  @regression
+  Scenario: CD :: Supervisor Desk :: Chat :: Notes :: Verify if supervisor is able to add notes to a closed chat
     Given Setup ORCA abc integration for General Bank Demo tenant
     And I login as agent of General Bank Demo
     And Send Notes for Closed Chat message by ORCA
@@ -30,7 +32,8 @@ Feature: Supervisor desk
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-3883")
-  Scenario: Supervisor Desk :: Chat :: Notes :: Verify if supervisor is able to add notes to a ticket
+  @regression
+  Scenario: CD :: Supervisor Desk :: Chat :: Notes :: Verify if supervisor is able to add notes to a ticket
     Given Setup ORCA abc integration for General Bank Demo tenant
     And Set agent support hours with day shift
     And Send Notes for Ticket message by ORCA
