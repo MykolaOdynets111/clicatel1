@@ -225,13 +225,4 @@ public class DashboardPage extends PortalAbstractPage {
     public void clickDepartmentsManagement() {
         clickElem(this.getCurrentDriver(), departmentsManagementButton, 5, "Departments Management");
     }
-    public void clickSettingsManagement(){
-        clickElem(this.getCurrentDriver(), settingsButton, 5, "Settings");
-    }
-    public void clickCHatTagsPage(){
-        clickElem(this.getCurrentDriver(), chatTagsButton, 5, "Chat Tags");
-    }
-    public void clickCreateCHatTags(){
-        clickElem(this.getCurrentDriver(), createChatTagsButton, 10, "Create Chat Tags");
-    }
 }
