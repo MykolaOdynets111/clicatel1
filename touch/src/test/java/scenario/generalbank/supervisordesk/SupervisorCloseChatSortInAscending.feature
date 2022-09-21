@@ -1,8 +1,9 @@
 @no_widget
 Feature: Supervisor desk
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-15684")
-  Scenario: Supervisor desk :: Verify if Supervisor can sort with Chat Ended Ascending order
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2849")
+  @Regression
+  Scenario: CD::Supervisor desk :: Verify if Supervisor can sort with Chat Ended Ascending order
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Supervisor Desk in submenu

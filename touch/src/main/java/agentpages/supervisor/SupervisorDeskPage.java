@@ -10,7 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
-import portaluielem.*;
+import portaluielem.AssignChatWindow;
 
 import java.util.List;
 import java.util.Set;
@@ -81,6 +81,10 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     @FindBy(css = "svg[name = 'close']")
     private WebElement closeAssignChatWindow;
+
+    @FindBy(css="svg[name='puzzle']")
+    private WebElement c2pButton;
+
     private String backButtonString = "//button[@aria-label='Previous Month']";
 
     private String chatName = "//h2[@class='cl-chat-item-user-name' and text() ='%s']";
@@ -305,7 +309,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return isElementShown(this.getCurrentDriver(), assignChatModal, 3);
     }
 
-    public void closeAssignWindow() {
-        clickElem(this.getCurrentDriver(), closeAssignChatWindow, 3, "Assign Chat Close Button");
-    }
+    public void closeAssignWindow() { clickElem(this.getCurrentDriver(), closeAssignChatWindow, 3, "Assign Chat Close Button"); }
+
+    public void verifyInitiatePayment() { Assert.assertFalse(isElementShown(this.getCurrentDriver(), c2pButton, 5)); }
 }

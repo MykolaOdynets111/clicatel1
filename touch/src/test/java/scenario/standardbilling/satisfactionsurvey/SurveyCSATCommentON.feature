@@ -5,12 +5,12 @@
 Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2283")
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-2353")
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-1106")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2353")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1106")
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-1844")
-    @Regression
-  Scenario Outline: Verify if supervisor can enable option to allow customer to leave a note for CSAT survey type
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1106")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1844")
+  @Regression
+  Scenario Outline: CD:: Whatsapp:: Settings :: Survey :: Verify if supervisor can enable option to allow customer to leave a note for CSAT survey type
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing
       | ratingEnabled  | true        |
