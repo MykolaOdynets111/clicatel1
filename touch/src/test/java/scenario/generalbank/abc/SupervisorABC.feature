@@ -64,3 +64,20 @@ Feature: Apple Business Chat :: Supervisor Desk
     Then Supervisor clicks on chats filter for GBD Second Agent
     And Agent click On Live Supervisor Desk chat from Orca channel
     Then GBD Second is the current agent of the chat
+
+  @orca_api
+  @regression
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1415")
+  Scenario: CD :: Supervisor Desk :: Chats :: Transfer Chat :: Verify if there is no alert appearing on supervisor desk when the transfer still not complete
+    Given Setup ORCA abc integration for General Bank Demo tenant
+    And I login as Agent of General Bank Demo
+    And Send chat for transfer message by ORCA
+    Then Agent has new conversation request from orca user
+    And I login as Second Agent of General Bank Demo
+    And Agent click on new conversation request from orca
+    When Agent clicks on Transfer button and selects Second Agent from dropdown
+    Given I open portal
+    And Login into portal as an admin of General Bank Demo account
+    And I select Touch in left menu and Supervisor Desk in submenu
+    When Agent click On Live Supervisor Desk chat from Orca channel
+    Then Supervisor does not see any Chat Transfer alert

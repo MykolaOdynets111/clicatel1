@@ -544,4 +544,9 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void verifyThatLiveChatAvailableAreShown(){
         getSupervisorDeskPage().getSupervisorLeftPanel().verifyLiveChatInfo();
     }
+
+    @Then("Supervisor does not see any Chat Transfer alert")
+    public void verifyChatTransferAlertNotPresent(){
+        Assert.assertFalse(getSupervisorDeskPage().verifyChatAlertIsPresent(5),"Chat alert is present");
+    }
 }

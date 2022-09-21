@@ -75,6 +75,22 @@ public class TransferChatWindow extends AbstractUIElement {
         return agentName;
     }
 
+    public String makeChatTransferReady(String agent) {
+        openDropDownAgent();
+        String agentSurname= getUserSurname(agent);
+        String agentName = selectDropDownAgent(agentSurname);
+        sentNote();
+        if(isElementShown(this.getCurrentDriver(), selectAgentPlaceholder, 1)){
+            clickElem(this.getCurrentDriver(), cancelTransferButton, 1,"Cancel transfer button");
+            new ChatHeader(this.getCurrentDriver()).clickTransferButton();
+            waitForUpdatingAvailableAgents();
+            agentName = selectDropDownAgent(agentSurname);
+            sentNote();
+        }
+        //clickTransferChatButton();
+        return agentName;
+    }
+
     public String transferOvernightTicket(String agent) {
         openDropDownAgent();
         String agentSurname= getUserSurname(agent);
