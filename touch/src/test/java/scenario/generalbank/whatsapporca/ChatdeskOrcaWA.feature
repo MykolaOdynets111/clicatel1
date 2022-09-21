@@ -146,19 +146,20 @@ Feature: Whatsapp ORCA :: Chatdesk
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-7391")
   Scenario: Supervisor desk:: Route ticket to scheduler
-    Given I login as second agent of General Bank Demo
-    And Setup ORCA whatsapp integration for General Bank Demo tenant
-    And Send to agent message by ORCA
-    When I open portal
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    And Set agent support hours with day shift
+    When Send to agent message by ORCA
+    And I open portal
     And Login into portal as an admin of General Bank Demo account
-    And I select Touch in left menu and Supervisor Desk in submenu
+    When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     And Agent search chat ORCA on Supervisor desk
     Then Ticket from orca is present on All tickets filter page
     And Select orca ticket checkbox
     When Click 'Route to scheduler' button
-    And Second agent select "Tickets" left menu option
-    Then Second agent has new ticket request from ORCA user
+    Given I login as agent of General Bank Demo
+    And Agent select "Tickets" left menu option
+    Then Agent has new conversation request from ORCA user
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2108")
   Scenario: Supervisor:: Verify if refresh icon unavailable in the "Assign chat" modal window
