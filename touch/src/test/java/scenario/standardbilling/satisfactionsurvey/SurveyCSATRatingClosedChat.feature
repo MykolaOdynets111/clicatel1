@@ -7,7 +7,7 @@ Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2443")
   @Regression
-  Scenario Outline: verify if user has an option to skip the survey for Whatsapp NPS survey type - Customer Feedback turned OFF in Flow
+  Scenario Outline: CD:: Survey:: verify if user has an option to skip the survey for Whatsapp NPS survey type - Customer Feedback turned OFF in Flow
     Given I login as agent of Standard Billing
     And Setup ORCA <channelType> integration for Standard Billing tenant
     When Send connect to agent message by ORCA
