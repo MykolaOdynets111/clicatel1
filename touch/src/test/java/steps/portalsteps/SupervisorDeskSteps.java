@@ -530,9 +530,14 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void verifyThatLiveChatAvailableAreShown(){
         getSupervisorDeskPage().getSupervisorLeftPanel().verifyLiveChatInfo();
     }
+    @And("Agent can see whatsapp profile name")
+    public void agentCanSeeWhatsappProfileName() {
+        getSupervisorDeskPage().verifyProfileNameUpdated();
+    }
 
     @Then("Agent cannot initiate a payment")
     public void agentCannotInitiateAPayment() {
         getSupervisorDeskPage().verifyInitiatePayment();
+
     }
 }
