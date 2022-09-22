@@ -330,13 +330,13 @@ public class Hooks implements JSHelper {
                 if(pretestFeatureStatus != DefaultAgentSteps.getTestFeatureStatusChanging("AGENT_ASSISTANT")) {
                     ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_ASSISTANT", Boolean.toString(pretestFeatureStatus));
                 }
-            }
+            }*/
 
             if (scenario.getSourceTagNames().contains("@agent_feedback")){
                 try{
-                    boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus("AGENT_FEEDBACK");
-                    if (pretestFeatureStatus != DefaultAgentSteps.getTestFeatureStatusChanging("AGENT_FEEDBACK")) {
-                        ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_FEEDBACK", Boolean.toString(pretestFeatureStatus));
+                    boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus("agentFeedback");
+                    if (pretestFeatureStatus != DefaultAgentSteps.getTestFeatureStatusChanging("agentFeedback")) {
+                        ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "agentFeedback", Boolean.toString(pretestFeatureStatus));
                     }
                 }catch(NullPointerException e){
                     //no feature status interaction
@@ -350,7 +350,26 @@ public class Hooks implements JSHelper {
                     }
                 }
             }
-*/
+
+            if (scenario.getSourceTagNames().contains("@autoTicketScheduling")){
+                try{
+                    boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus("autoTicketScheduling");
+                    if (pretestFeatureStatus != DefaultAgentSteps.getTestFeatureStatusChanging("autoTicketScheduling")) {
+                        ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "autoTicketScheduling", Boolean.toString(pretestFeatureStatus));
+                    }
+                }catch(NullPointerException e){
+                    //no feature status interaction
+                }
+                if(AgentCRMTicketsSteps.getCreatedCRMTicket()!=null){
+                    ApiHelper.deleteCRMTicket(AgentCRMTicketsSteps.getCreatedCRMTicket().getId());
+                }
+                if(AgentCRMTicketsSteps.getCreatedCRMTicketsList()!=null){
+                    for(CRMTicket ticket: AgentCRMTicketsSteps.getCreatedCRMTicketsList()){
+                        ApiHelper.deleteCRMTicket(ticket.getId());
+                    }
+                }
+            }
+
             if (scenario.getSourceTagNames().contains("@widget_disabling")){
                 ApiHelper.setIntegrationStatus(Tenants.getTenantUnderTestOrgName(), "webchat", true);
 

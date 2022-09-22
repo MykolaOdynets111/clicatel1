@@ -1,5 +1,7 @@
 @no_widget
 @off_rating_whatsapp
+@off_rating_abc
+@off_rating_sms
 Feature: WhatsApp ORCA :: Surveys
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1877")
@@ -30,9 +32,9 @@ Feature: WhatsApp ORCA :: Surveys
     Then Survey Preview should be displayed with correct data for <channelType> channel
     Examples:
       | channelType |
-      | whatsapp    |
-      | abc         |
-      | sms         |
+      | Whatsapp    |
+      | ABC         |
+      | SMS         |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1719")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1728")
@@ -57,6 +59,6 @@ Feature: WhatsApp ORCA :: Surveys
       | ratingScale | ONE_TO_FIVE |
     Examples:
       | channelType |
-      | whatsapp    |
-      | abc         |
-      | sms         |
+      | Whatsapp    |
+      | ABC         |
+      | SMS         |

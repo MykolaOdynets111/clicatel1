@@ -2,6 +2,8 @@ package apihelper;
 
 import com.github.javafaker.Faker;
 import datamanager.*;
+import datamanager.enums.Days;
+import datamanager.enums.TenantInfoValues;
 import datamanager.jacksonschemas.*;
 import datamanager.jacksonschemas.chathistory.ChatHistory;
 import datamanager.jacksonschemas.chatusers.UserInfo;
@@ -9,7 +11,6 @@ import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import datamanager.jacksonschemas.usersessioninfo.ClientProfile;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
-import driverfactory.URLs;
 import drivermanager.ConfigManager;
 import interfaces.VerificationHelper;
 import io.restassured.RestAssured;
@@ -30,6 +31,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 import static java.lang.String.format;
@@ -354,30 +356,15 @@ public class ApiHelper implements VerificationHelper {
 
     }
 
-    public static void updateFeatureStatus(String tenantOrgName, Map<String, String> map) {
+    public static void updateFeatureStatus(String tenantOrgName, String feature, String status) {
         String tenantID = getTenant(tenantOrgName).get("id");
         String url = format(Endpoints.INTERNAL_TENANT_CONFIG, tenantID);
-        FeatureStatusUpdate fs = JsonPath.given("{\n" +
-                "            \"agentPackPurchased\": false,\n" +
-                "                \"maxOnlineAgentLimit\": 2,\n" +
-                "                \"orgName\": \"string\",\n" +
-                "                \"category\": \"string\",\n" +
-                "                \"touchGoType\": \"TOUCH_STANDARD\",\n" +
-                "                \"agentFeedback\": false,\n" +
-                "                \"hasBalance\": true,\n" +
-                "                \"agentAssistant\": true,\n" +
-                "                \"touchButtonEnabled\": true,\n" +
-                "                \"canPurchaseAgents\": true,\n" +
-                "                \"canUpgradePackage\": true,\n" +
-                "                \"botMode\": \"AUTO\"\n" +
-                "        }").getObject("", FeatureStatusUpdate.class);
-        for (String key : map.keySet()) {
-            fs.updateSomeValueByMethodName(key, map.get(key));
-        }
+
+        String body = String.format("{\"%s\": %s}", TenantInfoValues.getAllBooleanValues(feature), status);
         Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON)
-                .body(fs)
+                .body(body)
                 .put(url);
         Assert.assertEquals(resp.statusCode(), 200,
                 "Status code is not 200 for feature ");

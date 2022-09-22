@@ -5,6 +5,7 @@ import agentpages.uielements.Profile;
 import apihelper.ApiHelper;
 import datamanager.Tenants;
 import datamanager.UserPersonalInfo;
+import datamanager.enums.TenantInfoValues;
 import datamanager.jacksonschemas.AgentMapping;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
@@ -74,13 +75,13 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Given("^(.*) tenant feature is set to (.*) for (.*)$")
-    public void setFeatureStatus(String feature, String status, String tenantOrgName, Map<String, String> map){
+    public void setFeatureStatus(String feature, String status, String tenantOrgName){
         PortalAuthToken.clearAccessTokenForPortalUser();
-        boolean featureStatus = ApiHelper.getFeatureStatus(tenantOrgName, feature);
+        boolean featureStatus = ApiHelper.getFeatureStatus(tenantOrgName, TenantInfoValues.getAllBooleanValues(feature));
         savePreTestFeatureStatus(feature, featureStatus);
         saveTestFeatureStatusChanging(feature, Boolean.parseBoolean(status.toLowerCase()));
         if(featureStatus != Boolean.parseBoolean(status.toLowerCase())) {
-            ApiHelper.updateFeatureStatus(tenantOrgName, map);
+            ApiHelper.updateFeatureStatus(tenantOrgName, feature, status);
         }
     }
 

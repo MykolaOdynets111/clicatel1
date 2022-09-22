@@ -2,21 +2,11 @@
 Feature: Interaction with Tags in CRM tickets (agent mode)
 
   Background:
-    Given Setup ORCA whatsapp integration for Standard Billing tenant
-    And agentFeedback tenant feature is set to true for Standard Billing
-      | agentPackPurchased  | true           |
-      | maxOnlineAgentLimit | 1              |
-      | touchGoType         | TOUCH_STANDARD |
-      | agentFeedback       | true           |
-      | hasBalance          | true           |
-      | agentAssistant      | true           |
-      | touchButtonEnabled  | true           |
-      | canPurchaseAgents   | true           |
-      | canUpgradePackage   | true           |
-      | botMode             | AUTONOMOUS     |
-    And User select Standard Billing tenant
+    Given Setup ORCA whatsapp integration for Automation Bot tenant
+    And agentFeedback tenant feature is set to false for Automation Bot
+    And User select Automation Bot tenant
     And I open portal
-    And Login into portal as an admin of Standard Billing account
+    And Login into portal as an admin of Automation Bot account
     And I select Touch in left menu and Dashboard in submenu
     When Navigate to Chat Tags page
 
@@ -85,4 +75,4 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
     #Then Agent type Note:Note from automation test), Link:http://NoteTextLink.com, Number:12345 for CRM ticket for ORCA
     When Agent click 'Close chat' button
     Then Agent should not see from user chat in agent desk from ORCA
-    Then CRM ticket is created on backend with correct information
+    #Then CRM ticket is created on backend with correct information

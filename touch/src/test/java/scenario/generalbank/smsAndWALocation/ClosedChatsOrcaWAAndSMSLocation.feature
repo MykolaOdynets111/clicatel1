@@ -6,7 +6,7 @@ Feature: Whatsapp ORCA :: ChatDesk
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1829")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1175")
   @Regression
-  Scenario Outline: CD :: WA :: Agent Desk :: Closed Chat :: History :: Location :: Verify if location shared by agent is displayed on history tab
+  Scenario Outline: CD :: <channelType> :: Location:: Verify if location shared by agent is displayed on history tab
     Given I login as agent of Standard Billing
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     When Send connect to agent message by ORCA
@@ -24,8 +24,8 @@ Feature: Whatsapp ORCA :: ChatDesk
     Then Agent sees correct location URL in History Details window
     Examples:
       | channelType | userType |
-      | whatsapp    | orca     |
-      | sms         | sms      |
+      | Whatsapp    | orca     |
+      | SMS         | sms      |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1157")
   @Regression
