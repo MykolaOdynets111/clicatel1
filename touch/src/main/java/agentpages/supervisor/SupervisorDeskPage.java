@@ -8,7 +8,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Assert;
 import portalpages.PortalAbstractPage;
 import portaluielem.AssignChatWindow;
 
@@ -299,9 +298,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     public void loadAllClosedChats() {
         getSupervisorClosedChatsTable().loadAllFoundChats();
-    }
-    public void verifyInitiatePayment() {
-        Assert.assertFalse(isElementShown(this.getCurrentDriver(), c2pButton, 5));
     }
 
     public boolean verifyChatAlertIsPresent(int wait) {
