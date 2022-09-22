@@ -259,10 +259,10 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void verifyChatHasPendingIcon(String value) {
         switch (value){
             case "List":
-                 getSupervisorDeskPage().verifyChatPendingIcon();
+                 Assert.assertTrue(getSupervisorDeskPage().verifyChatPendingIcon());
                  break;
             case "View":
-                getSupervisorDeskPage().verifyChatPendingOn();
+                Assert.assertTrue(getSupervisorDeskPage().verifyChatPendingOn());
                 break;
             default:
                 Assert.fail("Incorrect string value");
