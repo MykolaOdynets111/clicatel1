@@ -2,13 +2,15 @@
 @orca_api
 Feature: Chat console: Waiting customers
 
-  @agent_session_capacity
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2674")
-  Scenario: Dashboard:: Chats waiting in a queue increases in case no session capacity
+  Background:
     Given I open portal
     And Login into portal as an admin of Automation Bot account
     When I select Touch in left menu and Dashboard in submenu
     And Save Customers waiting for response pre-test widget value
+
+  @agent_session_capacity
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2674")
+  Scenario: Dashboard:: Chats waiting in a queue increases in case no session capacity
     Given I login as second agent of Automation Bot
 #    And User enter connect to agent into widget input field
     Given Setup ORCA whatsapp integration for Automation Bot tenant
@@ -19,23 +21,14 @@ Feature: Chat console: Waiting customers
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2586")
   @Regression
   Scenario: Dashboards:: Chats waiting in a queue increase in case no agents online
-    Given I open portal
-    And Login into portal as an admin of Automation Bot account
-    When I select Touch in left menu and Dashboard in submenu
-    And Save Customers waiting for response pre-test widget value
     And Setup ORCA whatsapp integration for Automation Bot tenant
     And Send connect to agent message by ORCA
     Then Customers waiting for response widget value increased on 1
-
 
   @second_agent_availability
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2508")
   @Regression
   Scenario: Dashboard:: Chats waiting in a queue increase in case agent not available
-    Given I open portal
-    And Login into portal as an admin of Automation Bot account
-    And I select Touch in left menu and Dashboard in submenu
-    And Save Customers waiting for response pre-test widget value
     And admin changes status to: Unavailable
     And I login as second agent of Automation Bot
     When Customers waiting for response widget value set to 0
