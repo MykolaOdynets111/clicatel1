@@ -44,6 +44,14 @@ public class DashboardPage extends PortalAbstractPage {
     @FindBy(xpath = "//a[text()='Departments Management']")
     private WebElement departmentsManagementButton;
 
+    @FindBy(xpath = "//a[text()='Chat Tags']")
+    private WebElement chatTagsButton;
+
+    @FindBy(xpath = "//a[text()='+ Add Chat Tag']")
+    private WebElement createChatTagsButton;
+
+
+
     @FindAll({
             @FindBy(css = "[data-testid='tab-navigation-panel-customers']"),
             @FindBy(css = "[selenium-id='tab-dashboard-tabs-2']")
