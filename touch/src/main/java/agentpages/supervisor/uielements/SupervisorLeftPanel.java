@@ -74,12 +74,4 @@ public class SupervisorLeftPanel extends AbstractUIElement {
     public void verifyLiveChatInfo() {
         Assert.assertTrue(livechatsinfo.isDisplayed(),"Live chat not displayed ");
     }
-
-    public void verifyChatPendingIcon() {
-        Assert.assertTrue(leftChatPendingIcon.isDisplayed(),"Pending icon not displayed ");
-    }
-
-    public void verifyChatPendingOn() {
-        Assert.assertTrue(leftChatPendingOn.isDisplayed(),"Pending icon not displayed ");
-    }
 }

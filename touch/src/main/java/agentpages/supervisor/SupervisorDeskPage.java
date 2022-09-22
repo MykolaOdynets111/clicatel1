@@ -295,12 +295,12 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         getSupervisorClosedChatsTable().loadAllFoundChats();
     }
 
-    public boolean verifyChatPendingIcon() {
-        return leftChatPendingIcon.isDisplayed();
+    public boolean isChatPendingIconShown() {
+        return isElementShown(this.getCurrentDriver(), leftChatPendingIcon, 3);
     }
 
-    public boolean verifyChatPendingOn() {
-        return leftChatPendingOn.isDisplayed();
+    public boolean isChatPendingOnShown() {
+        return isElementShown(this.getCurrentDriver(), leftChatPendingOn, 3);
     }
 
     public void verifyProfileNameUpdated() {
