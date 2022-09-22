@@ -255,6 +255,20 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertEquals(getSupervisorDeskPage().getTicketTypes(), ticketTypes, "Ticket types are different");
     }
 
+    @Then("^Verify Chat has pending icon in the Chat (.*)$")
+    public void verifyChatHasPendingIcon(String value) {
+        switch (value){
+            case "List":
+                 Assert.assertTrue(getSupervisorDeskPage().isChatPendingIconShown(), "Yellow Pending Icon is not shown in chat list");
+                 break;
+            case "View":
+                Assert.assertTrue(getSupervisorDeskPage().isChatPendingOnShown(), "Yellow Pending On is not shown in chat view");
+                break;
+            default:
+                Assert.fail("Incorrect string value");
+        }
+    }
+
     @When("^User select (.*) ticket type$")
     public void selectTicketType(String type) {
         getSupervisorDeskPage().selectTicketType(type);
@@ -532,12 +546,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     }
     @And("Agent can see whatsapp profile name")
     public void agentCanSeeWhatsappProfileName() {
-        getSupervisorDeskPage().verifyProfileNameUpdated();
+        Assert.assertTrue(getSupervisorDeskPage().isUpdatedProfileNameShown(),"Whatsapp Profile Name is not shown");
     }
 
     @Then("Agent cannot initiate a payment")
     public void agentCannotInitiateAPayment() {
-        getSupervisorDeskPage().verifyInitiatePayment();
-
+        Assert.assertFalse(getSupervisorDeskPage().isC2pButtonPresent(),"Supervisor Can Initiate Payment");
     }
 }

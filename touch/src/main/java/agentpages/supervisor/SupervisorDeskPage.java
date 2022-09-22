@@ -8,9 +8,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Assert;
 import portalpages.PortalAbstractPage;
-import portaluielem.*;
+import portaluielem.AssignChatWindow;
 
 import java.util.List;
 import java.util.Set;
@@ -66,6 +65,13 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     @FindBy(xpath = "//input[contains(@class, 'cl-form-control cl-form-control--input cl-end-date')]")
     private WebElement endDateInput;
+
+
+    @FindBy(xpath = "//*[local-name()='svg' and @name='clock']/*[local-name()='g']")
+    private WebElement leftChatPendingIcon;
+
+    @FindBy(xpath= "//div[contains(text(),'Pending On')]")
+    private WebElement leftChatPendingOn;
 
     @FindBy(css="svg[name='puzzle']")
     private WebElement c2pButton;
@@ -288,11 +294,19 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         getSupervisorClosedChatsTable().loadAllFoundChats();
     }
 
-    public void verifyProfileNameUpdated() {
-        isElementShown(this.getCurrentDriver(), profileName, 3);
+    public boolean isChatPendingIconShown() {
+        return isElementShown(this.getCurrentDriver(), leftChatPendingIcon, 3);
     }
 
-    public void verifyInitiatePayment() {
-        Assert.assertFalse(isElementShown(this.getCurrentDriver(), c2pButton, 5));
+    public boolean isChatPendingOnShown() {
+        return isElementShown(this.getCurrentDriver(), leftChatPendingOn, 3);
+    }
+
+    public boolean isUpdatedProfileNameShown() {
+       return isElementShown(this.getCurrentDriver(), profileName, 3);
+    }
+
+    public boolean isC2pButtonPresent() {
+        return isElementShown(this.getCurrentDriver(), c2pButton, 5);
     }
 }
