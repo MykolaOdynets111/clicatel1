@@ -551,6 +551,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @Then("Agent cannot initiate a payment")
     public void agentCannotInitiateAPayment() {
-        Assert.assertFalse(getSupervisorDeskPage().canSupervisorInitiatePayment(),"Supervisor Can Initiate Payment");
+        Assert.assertFalse(getSupervisorDeskPage().isC2pButtonPresent(),"Supervisor Can Initiate Payment");
     }
 }

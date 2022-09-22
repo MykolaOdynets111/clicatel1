@@ -306,7 +306,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
        return isElementShown(this.getCurrentDriver(), profileName, 3);
     }
 
-    public boolean canSupervisorInitiatePayment() {
+    public boolean isC2pButtonPresent() {
         return isElementShown(this.getCurrentDriver(), c2pButton, 5);
     }
 }
