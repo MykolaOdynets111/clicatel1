@@ -358,7 +358,7 @@ public class ApiHelper implements VerificationHelper {
         String tenantID = getTenant(tenantOrgName).get("id");
         String url = format(Endpoints.INTERNAL_TENANT_CONFIG, tenantID);
         FeatureStatusUpdate fs = JsonPath.given("{\n" +
-                "            \"agentPackPurchased\": true,\n" +
+                "            \"agentPackPurchased\": false,\n" +
                 "                \"maxOnlineAgentLimit\": 2,\n" +
                 "                \"orgName\": \"string\",\n" +
                 "                \"category\": \"string\",\n" +
@@ -377,7 +377,7 @@ public class ApiHelper implements VerificationHelper {
         Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON)
-                .body(fs.toString())
+                .body(fs)
                 .put(url);
         Assert.assertEquals(resp.statusCode(), 200,
                 "Status code is not 200 for feature ");
