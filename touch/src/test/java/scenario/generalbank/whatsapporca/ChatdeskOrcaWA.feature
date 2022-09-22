@@ -162,6 +162,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Second agent has new ticket request from ORCA user
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1302")
+  @regression
   Scenario: CD :: Supervisor Desk :: Chat :: Chat2Pay :: Verify that supervisor does not have the capability to initiate a payment transaction
     Given I login as agent of General Bank Demo
     When Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -174,3 +175,16 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent search chat orca on Supervisor desk
     And Agent click On Live Supervisor Desk chat from ORCA channel
     Then Agent cannot initiate a payment
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2751")
+  @regression
+  Scenario: CD :: Chat :: Verify that neutral sentiment is set by default when agent closes a chat
+    Given I open portal
+    And I login as agent of General Bank Demo
+    And Turn on the Agent Feedback
+    And Setup ORCA whatsapp integration for General Bank Demo tenant
+    When Send connect to agent message by ORCA
+    And Agent has new conversation request from ORCA user
+    And Agent click on new conversation request from ORCA
+    When Agent click "End chat" button
+    Then Correct neutral sentiment selected

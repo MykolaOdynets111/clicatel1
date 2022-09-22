@@ -1596,6 +1596,19 @@ public class BasePortalSteps extends AbstractPortalSteps {
         ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(),tenantChatPreferences);
     }
 
+    @Given("^Turn (.*) the Agent Feedback$")
+    public void additionalNotesToClosedChat(String status) {
+        TenantChatPreferences tenantChatPreferences = ApiHelper.getTenantChatPreferences();
+        if (status.equalsIgnoreCase("on")){
+            tenantChatPreferences.setAgentFeedback(true);
+        } else if(status.equalsIgnoreCase("off")){
+            tenantChatPreferences.setAgentFeedback(false);
+        }else{
+            throw new AssertionError("Incorrect status was provided");
+        }
+        ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(),tenantChatPreferences);
+    }
+
     @When("^Create chat tag$")
     public void createChatTag(){
         tagname = faker.artist().name() + faker.numerify("#####");
