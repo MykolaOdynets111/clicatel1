@@ -81,6 +81,9 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     private String chatName = "//h2[@class='cl-chat-item-user-name' and text() ='%s']";
 
+    @FindBy(css = ".cl-details-value")
+    private WebElement profileName;
+
     //private String filterByDefaultXpath = "//span[text()='Conversation status:']//following-sibling::div//div[@class='cl-r-select__single-value css-1uccc91-singleValue']";
 
     private String iframeId = "ticketing-iframe";
@@ -298,6 +301,10 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     public void verifyChatPendingOn() {
         Assert.assertTrue(leftChatPendingOn.isDisplayed(), "Pending icon not displayed ");
+    }
+
+    public void verifyProfileNameUpdated() {
+        isElementShown(this.getCurrentDriver(), profileName, 3);
     }
 
     public void verifyInitiatePayment() {

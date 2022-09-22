@@ -4,11 +4,11 @@
 Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2286")
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-1790")
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-1980")
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-2423")
-    @Regression
-  Scenario Outline:verify if supervisor can customize survey question for whatsapp CSAT survey type
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1790")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1980")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2423")
+  @Regression
+  Scenario Outline: CD:: Whatsapp:: Settings :: Survey :: Verify if tenant can customize his own survey questions for CSAT survey type
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Update survey management chanel <channelType> settings by ip for General Bank Demo
       | ratingEnabled | true       |
@@ -33,10 +33,10 @@ Feature: Satisfaction Survey
       | sms         |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1735")
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-1824")
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-1698")
-    @Regression
-  Scenario Outline: CD:: SMS:: Settings :: Survey :: Verify if Supervisor should be allowed to type plain text message more then the total count of 160 in the survey question
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1824")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1698")
+  @Regression
+  Scenario Outline: CD:: SMS:: Settings :: Survey :: Verify if Supervisor should be able see the count of the number of text typed in the survey question out of 160 in the survey question
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Update survey management chanel <channelType> settings by ip for General Bank Demo
       | ratingEnabled | true        |
@@ -67,9 +67,9 @@ Feature: Satisfaction Survey
       | sms         |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1868")
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-1777")
-    @Regression
-  Scenario Outline: CD:: SMS:: Settings :: Survey :: Verify if Supervisor message contains only Unicode characters then the total count should be out of 70 in the survey question
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1777")
+  @Regression
+  Scenario Outline:  CD:: SMS:: Settings :: Survey :: Verify if Supervisor  message contains only Unicode characters then the total count should be out of 70 in the survey question
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Update survey management chanel <channelType> settings by ip for General Bank Demo
       | ratingEnabled | true        |

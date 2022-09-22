@@ -12,9 +12,9 @@ Feature: Dashboard: Settings: Business Profile : Agent Support Hours
     When Select Business support hours for all agents option in Agent Supported Hours section
     Then Verify 'Support hours' are default for Standard Billing
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-5317")
   @Regression
   @agent_support_hours
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2312")
   Scenario: CD :: Dashboard :: Settings :: Business Profile :: Verify if supervisor can change support hours
 
     Given I login as agent of Standard Billing
