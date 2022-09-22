@@ -566,12 +566,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @And("Supervisor adds a note {string}, Jira link {string} and Ticket Number {string}")
     public void addNewNote(String note, String jiraLink, String ticketNumber){
-        getSupervisorDeskPage().getSupervisorRightPanel().clickOnNotesTab();
-        getSupervisorDeskPage().getSupervisorRightPanel().clickOnNewNoteButton();
-        getSupervisorDeskPage().getSupervisorRightPanel().addTextToNote(note);
-        getSupervisorDeskPage().getSupervisorRightPanel().addJiraLinkToNote(jiraLink);
-        getSupervisorDeskPage().getSupervisorRightPanel().addTicketNumberToNote(ticketNumber);
-        getSupervisorDeskPage().getSupervisorRightPanel().clickOnCreateNoteButton();
+        getSupervisorDeskPage().getSupervisorRightPanel().clickOnNotesTab()
+                .clickOnNewNoteButton()
+                .addTextToNote(note)
+                .addJiraLinkToNote(jiraLink)
+                .addTicketNumberToNote(ticketNumber)
+                .clickOnCreateNoteButton();
     }
 
     @Then("Supervisor sees note {string}, Jira link {string} and Ticket Number {string}")

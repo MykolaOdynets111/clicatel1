@@ -44,29 +44,34 @@ public class SupervisorRightPanel extends AbstractUIElement{
 
 
     // <<================= ACTION METHODS ==========================>>
-    public void clickOnNotesTab() {
+    public SupervisorRightPanel clickOnNotesTab() {
         waitForElementToBeVisible(this.getCurrentDriver(), notesTab, 3);
         notesTab.click();
+        return this;
     }
 
-    public void clickOnNewNoteButton() {
+    public SupervisorRightPanel clickOnNewNoteButton() {
         waitForElementToBeVisible(this.getCurrentDriver(), newNoteButton, 3);
         newNoteButton.click();
+        return this;
     }
 
-    public void addTextToNote(String note) {
+    public SupervisorRightPanel addTextToNote(String note) {
         waitForElementToBeVisible(this.getCurrentDriver(), notesTextBox, 3);
         notesTextBox.sendKeys(note);
+        return this;
     }
 
-    public void addJiraLinkToNote(String jiraLink) {
+    public SupervisorRightPanel addJiraLinkToNote(String jiraLink) {
         waitForElementToBeVisible(this.getCurrentDriver(), jiraLinkBox, 3);
         jiraLinkBox.sendKeys(jiraLink);
+        return this;
     }
 
-    public void addTicketNumberToNote(String ticketNumber) {
+    public SupervisorRightPanel addTicketNumberToNote(String ticketNumber) {
         waitForElementToBeVisible(this.getCurrentDriver(), ticketNumberBox, 3);
         ticketNumberBox.sendKeys(ticketNumber);
+        return this;
     }
 
     public void clickOnCreateNoteButton() {
