@@ -8,9 +8,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Assert;
 import portalpages.PortalAbstractPage;
-import portaluielem.*;
+import portaluielem.AssignChatWindow;
 
 import java.util.List;
 import java.util.Set;
@@ -303,11 +302,11 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return isElementShown(this.getCurrentDriver(), leftChatPendingOn, 3);
     }
 
-    public void verifyProfileNameUpdated() {
-        isElementShown(this.getCurrentDriver(), profileName, 3);
+    public boolean isUpdatedProfileNameShown() {
+       return isElementShown(this.getCurrentDriver(), profileName, 3);
     }
 
-    public void verifyInitiatePayment() {
-        Assert.assertFalse(isElementShown(this.getCurrentDriver(), c2pButton, 5));
+    public boolean canSupervisorInitiatePayment() {
+        return isElementShown(this.getCurrentDriver(), c2pButton, 5);
     }
 }

@@ -546,12 +546,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     }
     @And("Agent can see whatsapp profile name")
     public void agentCanSeeWhatsappProfileName() {
-        getSupervisorDeskPage().verifyProfileNameUpdated();
+        Assert.assertTrue(getSupervisorDeskPage().isUpdatedProfileNameShown(),"Whatsapp Profile Name is not shown");
     }
 
     @Then("Agent cannot initiate a payment")
     public void agentCannotInitiateAPayment() {
-        getSupervisorDeskPage().verifyInitiatePayment();
-
+        Assert.assertFalse(getSupervisorDeskPage().canSupervisorInitiatePayment(),"Supervisor Can Initiate Payment");
     }
 }
