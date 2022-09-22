@@ -265,6 +265,20 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertEquals(getSupervisorDeskPage().getTicketTypes(), ticketTypes, "Ticket types are different");
     }
 
+    @Then("^Verify Chat has pending icon in the Chat (.*)$")
+    public void verifyChatHasPendingIcon(String value) {
+        switch (value){
+            case "List":
+                 Assert.assertTrue(getSupervisorDeskPage().isChatPendingIconShown(), "Yellow Pending Icon is not shown in chat list");
+                 break;
+            case "View":
+                Assert.assertTrue(getSupervisorDeskPage().isChatPendingOnShown(), "Yellow Pending On is not shown in chat view");
+                break;
+            default:
+                Assert.fail("Incorrect string value");
+        }
+    }
+
     @When("^User select (.*) ticket type$")
     public void selectTicketType(String type) {
         getSupervisorDeskPage().selectTicketType(type);
@@ -540,6 +554,16 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void verifyThatLiveChatAvailableAreShown(){
         getSupervisorDeskPage().getSupervisorLeftPanel().verifyLiveChatInfo();
     }
+    @And("Agent can see whatsapp profile name")
+    public void agentCanSeeWhatsappProfileName() {
+        Assert.assertTrue(getSupervisorDeskPage().isUpdatedProfileNameShown(),"Whatsapp Profile Name is not shown");
+    }
+
+    @Then("Agent cannot initiate a payment")
+    public void agentCannotInitiateAPayment() {
+        Assert.assertFalse(getSupervisorDeskPage().isC2pButtonPresent(),"Supervisor Can Initiate Payment");
+    }
+
     @And("Supervisor adds a note {string}, Jira link {string} and Ticket Number {string}")
     public void addNewNote(String note, String jiraLink, String ticketNumber){
         getSupervisorDeskPage().getSupervisorRightPanel().clickOnNotesTab();
@@ -557,9 +581,4 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().getSupervisorRightPanel().verifyNoteCardJiraLink(jiraLink);
         getSupervisorDeskPage().getSupervisorRightPanel().verifyNoteCardTicketNumber(ticketNumber);
     };
-
-    @Then("Agent cannot initiate a payment")
-    public void agentCannotInitiateAPayment() {
-        getSupervisorDeskPage().verifyInitiatePayment();
-    }
 }

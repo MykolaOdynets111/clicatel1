@@ -1,7 +1,6 @@
 package steps.portalsteps;
 
 import apihelper.ApiHelper;
-import com.github.javafaker.Faker;
 import datamanager.SurveyManagement;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -15,13 +14,10 @@ import java.util.Map;
 public class SurveyManagementSteps extends AbstractPortalSteps {
     private static final ThreadLocal<String> questionUpdate = new ThreadLocal<>();
     private static final ThreadLocal<String> thankMessageUpdate = new ThreadLocal<>();
-
     private static final ThreadLocal<String> notesMessageUpdate = new ThreadLocal<>();
-
-    Faker faker = new Faker();
     public static ThreadLocal<SurveyManagement> surveyConfiguration = new ThreadLocal<>();
 
-    @Then("^Update survey management chanel (.*) settings by ip for (.*)")
+    @Then("^Update survey management chanel (.*) settings by ip for (.*)$")
     public void updateSurveyManagementSettings(String chanel, String tenantOrgName, Map<String, String> map) {
         String channelID = ORCASteps.getChannelId();
         SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);

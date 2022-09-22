@@ -1609,6 +1609,20 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickSaveButton();
         AgentCRMTicketsSteps.crmTicketInfoForUpdating.get().put("agentTags",  tagname);
     }
+    @When("^Click the pencil icon to edit the tag")
+    public void editTag() {
+        getPortalTouchPreferencesPage().getChatTagsWindow().clickEditTagButton(tagname);
+    }
+
+    @When("^Cancel editing a tag")
+    public void cancelEditingTag() {
+        getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickDeleteButton();
+    }
+    @When("^Existing TagName is not changed")
+    public void verifyTagName() {
+        String newTagName = getPortalTouchPreferencesPage().getChatTagsWindow().getTagName();
+        Assert.assertTrue(tagname.equalsIgnoreCase(newTagName), "Tag name has not changed");
+    }
 
     @When("^(?:Enable|Disable) tag$")
     public void disableTag(){

@@ -830,7 +830,6 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
             surveyForm.selectRatingNumber(rate).setComment(comment).clickSubmitReviewButton();
         }
     }
-
     @When("^Reject survey form submit$")
     public void rejectSurveyForm() {
         surveyForm.clickNoThanksButton();
