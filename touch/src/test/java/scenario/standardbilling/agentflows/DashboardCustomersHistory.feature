@@ -158,6 +158,7 @@ Feature: Dashboard: Customer History
     When I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
+    And Admin filter Customers History by SMS channel
     And Admin filter Customers History by channel and period
       | <channelTypeFilter> | Past week |
     Then Admin is able to see the CSAT scale having down scale as 0% and upscale as 100%
@@ -167,4 +168,3 @@ Feature: Dashboard: Customer History
       | Apple Business Chat |
       | WhatsApp            |
       | SMS                 |
-
