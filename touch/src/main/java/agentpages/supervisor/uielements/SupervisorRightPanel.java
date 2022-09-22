@@ -94,17 +94,4 @@ public class SupervisorRightPanel extends AbstractUIElement{
         waitForElementToBeVisible(this.getCurrentDriver(), noteCardTicketNumberJiraLink, 3);
         return noteCardTicketNumberJiraLink.getAttribute("title");
     }
-
-    // <<================= ASSERTION METHODS ==========================>>
-    public void verifyNoteCardText(String noteCardText){
-        Assert.assertEquals(getNoteCardText(), noteCardText, "Text inside note does not match");
-    }
-
-    public void verifyNoteCardJiraLink(String noteCardJiraLink){
-        Assert.assertEquals(getNoteCardJiraLink(), noteCardJiraLink, "JIRA Link does not match");
-    }
-
-    public void verifyNoteCardTicketNumber(String noteCardTicketNumber){
-        Assert.assertEquals(getNoteCardTicketNumber(), noteCardTicketNumber, "Ticket Number does not match");
-    }
 }

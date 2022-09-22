@@ -577,8 +577,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then("Supervisor sees note {string}, Jira link {string} and Ticket Number {string}")
     public void verifyNoteDetails(String note, String jiraLink, String ticketNumber) {
         getSupervisorDeskPage().getSupervisorRightPanel().clickOnNotesTab();
-        getSupervisorDeskPage().getSupervisorRightPanel().verifyNoteCardText(note);
-        getSupervisorDeskPage().getSupervisorRightPanel().verifyNoteCardJiraLink(jiraLink);
-        getSupervisorDeskPage().getSupervisorRightPanel().verifyNoteCardTicketNumber(ticketNumber);
+
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getSupervisorDeskPage().getSupervisorRightPanel().getNoteCardText(),note,"Text inside note does not match");
+        soft.assertEquals(getSupervisorDeskPage().getSupervisorRightPanel().getNoteCardJiraLink(),jiraLink,"JIRA Link does not match");
+        soft.assertEquals(getSupervisorDeskPage().getSupervisorRightPanel().getNoteCardTicketNumber(),ticketNumber,"Ticket Number does not match");
+        soft.assertAll();
     };
 }
