@@ -2,16 +2,22 @@
 Feature: Tags
 
   Background:
-    Given AGENT_FEEDBACK tenant feature is set to true for Automation bot
-    Given User select Automation bot tenant
     Given I open portal
-    And Login into portal as an admin of Automation bot account
+    And Login into portal as an admin of Standard Billing account
     And I select Touch in left menu and Dashboard in submenu
     When Navigate to Chat Tags page
 
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2781")
+  Scenario: CD :: Dashboard :: Settings :: Chat Tags :: Verify if Admin is able to cancel editing an existing tag
+    When Create chat tag
+    And Click the pencil icon to edit the tag
+    Then Cancel editing a tag
+    And Existing TagName is not changed
+
+
   Scenario: verify when a supervisor edits a tag that the chats/tickets associated with the tag also be edited and has the new name.
     And Create chat tag
-    And I login as second agent of Automation bot
+    And I login as second agent of Standard Billing
     When Click chat icon
     And User enter connect to Support into widget input field
     Then Second agent has new conversation request
