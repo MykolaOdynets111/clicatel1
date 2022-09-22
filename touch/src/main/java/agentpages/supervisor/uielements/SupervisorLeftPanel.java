@@ -30,6 +30,12 @@ public class SupervisorLeftPanel extends AbstractUIElement {
     @FindBy(xpath="//div[@class='chats-list live-chats-list']")
     private  WebElement livechatsinfo;
 
+    @FindBy(xpath = "//span[@data-testid='chat-item-icons-holder']")
+    private WebElement leftChatPendingIcon;
+
+    @FindBy(xpath = "//button[@data-testid='header-toggle-pending']")
+    private WebElement leftChatPendingOn;
+
     public String getFilterByDefaultName(){
         return getTextFromElem(this.getCurrentDriver(), defaultFilter,5,"Default filter").trim();
     }

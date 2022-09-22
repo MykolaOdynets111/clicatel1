@@ -115,8 +115,8 @@ Feature: Whatsapp ORCA :: Chatdesk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1165")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1848")
-    @Regression
-    @orca_api
+  @Regression
+  @orca_api
   Scenario Outline: CD :: Agent Desk :: Live Chat :: Location :: Verify that An agent should be able to search for any location.
     Given I login as agent of General Bank Demo
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
@@ -144,8 +144,9 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Verify "All Chats" display default
     Then  Verify that live chats available are shown
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-7391")
-  Scenario: Supervisor desk:: Route ticket to scheduler
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2369")
+  @Regression
+  Scenario: CD:: Supervisor desk :: Verify if Supervisor is able to Route ticket to scheduler
     Given I login as second agent of General Bank Demo
     And Setup ORCA whatsapp integration for General Bank Demo tenant
     And Send to agent message by ORCA
@@ -159,3 +160,30 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Click 'Route to scheduler' button
     And Second agent select "Tickets" left menu option
     Then Second agent has new ticket request from ORCA user
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1129")
+  Scenario: Supervisor Desk :: Live Chat :: Profile :: Verify that WhatsApp profile name is displayed as username on customer profile section
+    Given I login as agent of General Bank Demo
+    And Setup ORCA whatsapp integration for General Bank Demo tenant
+    And Send to agent message by ORCA
+    When I open portal
+    And Login into portal as an admin of General Bank Demo account
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Agent search chat orca on Supervisor desk
+    When Agent click On Live Supervisor Desk chat from ORCA channel
+    Then Agent can see whatsapp profile name
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1302")
+  @regression
+  Scenario: CD :: Supervisor Desk :: Chat :: Chat2Pay :: Verify that supervisor does not have the capability to initiate a payment transaction
+    Given I login as agent of General Bank Demo
+    When Setup ORCA whatsapp integration for General Bank Demo tenant
+    And Send to agent message by ORCA
+    And Agent has new conversation request from ORCA user
+    And Agent click on new conversation request from ORCA
+    And I open portal
+    And Login into portal as an admin of General Bank Demo account
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Agent search chat orca on Supervisor desk
+    And Agent click On Live Supervisor Desk chat from ORCA channel
+    Then Agent cannot initiate a payment

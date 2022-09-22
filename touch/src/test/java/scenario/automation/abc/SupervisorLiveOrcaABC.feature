@@ -22,3 +22,20 @@ And User select Assigned ticket type
 Then Ticket from orca is present on Assigned filter page
 When Agent select "Apple Business Chat" in Chanel container and click "Apply filters" button
 Then Verify that only "apple-business-chat" tickets chats are shown
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1981")
+  @regression
+  Scenario: CD :: Supervisor Desk :: Chats :: Verify the Chats that are currently in the 'Pending' tab will have a yellow 'Pending' icon on them in the Supervisor view
+    Given Setup ORCA abc integration for Automation tenant
+    When I login as agent of Automation
+    And Send to agent message by ORCA
+    And Agent has new conversation request from ORCA user
+    And Agent click on new conversation request from ORCA
+    And Agent click 'Pending' chat button
+    And I open portal
+    And Login into portal as an admin of Automation account
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Agent search chat orca on Supervisor desk
+    And Agent click On Live Supervisor Desk chat from ORCA channel
+    Then Verify Chat has pending icon in the Chat List
+    Then Verify Chat has pending icon in the Chat View
