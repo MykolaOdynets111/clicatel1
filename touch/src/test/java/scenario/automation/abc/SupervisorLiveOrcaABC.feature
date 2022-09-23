@@ -39,3 +39,30 @@ Then Verify that only "apple-business-chat" tickets chats are shown
     And Agent click On Live Supervisor Desk chat from ORCA channel
     Then Verify Chat has pending icon in the Chat List
     Then Verify Chat has pending icon in the Chat View
+
+  @orca_api
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2082")
+  @regression
+  Scenario: CD :: Supervisor Desk :: Chats :: Verify that the "All live chats" card has both "pending and live chats" in Supervisor view
+    Given Setup ORCA abc integration for Automation tenant
+    When I login as agent of Automation
+    And Send live chat message by ORCA
+    And I open portal
+    And Login into portal as an admin of Automation account
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Agent search chat orca on Supervisor desk
+    And All Chats filter is selected
+    Then Agent click On Live Supervisor Desk chat from ORCA channel
+    Given Setup ORCA abc integration for Automation tenant
+    When I login as agent of Automation
+    And Send pending chat message by ORCA
+    And Agent has new conversation request from ORCA user
+    And Agent click on new conversation request from ORCA
+    And Agent click 'Pending' chat button
+    And I open portal
+    And Login into portal as an admin of Automation account
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Agent search chat orca on Supervisor desk
+    And All Chats filter is selected
+    And Agent click On Live Supervisor Desk chat from ORCA channel
+    Then Verify Chat has pending icon in the Chat List

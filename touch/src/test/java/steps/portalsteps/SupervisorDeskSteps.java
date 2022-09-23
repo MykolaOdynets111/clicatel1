@@ -45,6 +45,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 "Filter name by default does not match expected");
     }
 
+    @When("^(.*) filter is selected$")
+    public void filterIsSelected(String filterName) {
+        getSupervisorDeskPage().getSupervisorLeftPanel().clickFilterType(filterName);
+    }
+
     @Then("^Select (.*) ticket checkbox$")
     public void clickThreeDotsButton(String channel) {
         getSupervisorDeskPage().getSupervisorTicketsTable().selectTicketCheckbox(getUserName(channel));
