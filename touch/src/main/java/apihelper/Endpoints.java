@@ -68,7 +68,7 @@ public class Endpoints {
 
     public static String CHATS_INFO = URLs.getTouchApiBaseIntegrationURL() + "chats/%s";
 
-    public static String AUTORESPONDER_CONTROLLER = URLs.getTouchApiBaseIntegrationURL() + "api/autoresponders/%s";
+    public static String AUTORESPONDER_CONTROLLER = URLs.getTouchApiBaseURL() + "api/autoresponders/%s";
 
     public static String PAST_SENTIMENT_REPORT = URLs.getBaseWSApiURL() + "dashboard/customer-history-report/past-sentiment-report";
 
@@ -109,7 +109,7 @@ public class Endpoints {
 
     public static String INTERNAL_CREATE_HISTORY = URLs.getBaseInternalApiUrl() + "chats/chat/history";
 
-    public static String INTERNAL_AUTORESPONDER_CONTROLLER = URLs.getAgentDeskURL() +  "api/platform/autoresponders";
+    public static String INTERNAL_AUTORESPONDER_CONTROLLER = URLs.getTouchApiBaseURL() +  "api/autoresponders";
 
     public static String INTERNAL_CHAT_USER_BY_ID = URLs.getBaseInternalApiUrl() + "api/chat-users/by-external-user-id/%s/%s/%s";
 

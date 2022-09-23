@@ -171,7 +171,7 @@ public class ApiHelper implements VerificationHelper {
 
     public static AutoResponderMessage getAutoResponderMessage(String title) {
         return getAutoRespondersList().stream()
-                .filter(e -> e.getTitle().equalsIgnoreCase(title))
+                .filter(e -> e.getCategory().equalsIgnoreCase(title))
                 .findFirst().orElseThrow(() ->
                         new NoSuchElementException(format("There is no message with title: %s",  title)));
     }
@@ -185,7 +185,7 @@ public class ApiHelper implements VerificationHelper {
     }
 
     public static void updateAutoresponderMessage(AutoResponderMessage tafMessage, String autoResponderId) {
-        String url = format(Endpoints.AUTORESPONDER_CONTROLLER, autoResponderId);
+        String url = format(Endpoints.AUTORESPONDER_CONTROLLER, tafMessage.getId());
         Response resp = RestAssured.given().log().all()
                 .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .contentType(ContentType.JSON)

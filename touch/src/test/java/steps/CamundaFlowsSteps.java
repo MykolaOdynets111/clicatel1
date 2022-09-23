@@ -25,6 +25,8 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
 
     private Faker faker = new Faker();
 
+    private static ThreadLocal<String> updatedMessage = new ThreadLocal<>();
+
     @Given("^Taf (.*) is set to (.*) for (.*) tenant$")
     public void updateTafMessageStatus(String autoResponderTitle, boolean status, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
@@ -38,8 +40,8 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
     public void updateTafMessageText(String autoResponderMessageId, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         AutoResponderMessage autoResponderMessageUpdates = ApiHelper.getAutoResponderMessage(autoResponderMessageId);;
-        String updatedMessage = generateNewMessageText(autoResponderMessageId);
-        autoResponderMessageUpdates.setText(updatedMessage);
+        updatedMessage.set(generateNewMessageText(autoResponderMessageId));
+        autoResponderMessageUpdates.setText(updatedMessage.get());
         ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates, autoResponderMessageId);
         AutoResponderMessage tafMessageBackend = ApiHelper.getAutoResponderMessage(autoResponderMessageId);;
         Assert.assertEquals(tafMessageBackend.getText(), autoResponderMessageUpdates.getText(),
