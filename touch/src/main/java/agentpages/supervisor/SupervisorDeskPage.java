@@ -4,7 +4,6 @@ import agentpages.supervisor.uielements.*;
 import agentpages.uielements.ChatBody;
 import agentpages.uielements.ChatHeader;
 import agentpages.uielements.Profile;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
@@ -82,12 +81,21 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(css = "svg[name = 'close']")
     private WebElement closeAssignChatWindow;
 
+    @FindBy(xpath = "//*[local-name()='svg' and @name='clock']/*[local-name()='g']")
+    private WebElement leftChatPendingIcon;
+
+    @FindBy(xpath= "//div[contains(text(),'Pending On')]")
+    private WebElement leftChatPendingOn;
+
     @FindBy(css="svg[name='puzzle']")
     private WebElement c2pButton;
 
     private String backButtonString = "//button[@aria-label='Previous Month']";
 
     private String chatName = "//h2[@class='cl-chat-item-user-name' and text() ='%s']";
+
+    @FindBy(css = ".cl-details-value")
+    private WebElement profileName;
 
     //private String filterByDefaultXpath = "//span[text()='Conversation status:']//following-sibling::div//div[@class='cl-r-select__single-value css-1uccc91-singleValue']";
 
@@ -309,7 +317,23 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return isElementShown(this.getCurrentDriver(), assignChatModal, 3);
     }
 
-    public void closeAssignWindow() { clickElem(this.getCurrentDriver(), closeAssignChatWindow, 3, "Assign Chat Close Button"); }
+    public void closeAssignWindow() {
+         clickElem(this.getCurrentDriver(), closeAssignChatWindow, 3, "Assign chat model close icon" );
+    }
 
-    public void verifyInitiatePayment() { Assert.assertFalse(isElementShown(this.getCurrentDriver(), c2pButton, 5)); }
+    public boolean isChatPendingIconShown() {
+        return isElementShown(this.getCurrentDriver(), leftChatPendingIcon, 3);
+    }
+
+    public boolean isChatPendingOnShown() {
+        return isElementShown(this.getCurrentDriver(), leftChatPendingOn, 3);
+    }
+
+    public boolean isUpdatedProfileNameShown() {
+       return isElementShown(this.getCurrentDriver(), profileName, 3);
+    }
+
+    public boolean isC2pButtonPresent() {
+        return isElementShown(this.getCurrentDriver(), c2pButton, 5);
+    }
 }

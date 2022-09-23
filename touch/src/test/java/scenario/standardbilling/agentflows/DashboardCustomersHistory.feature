@@ -79,34 +79,6 @@ Feature: Dashboard: Customer History
       | Apple Business Chat |
       | WhatsApp            |
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-45620")
-  Scenario: Dashboard:: Verify that supervisor can check average CSAT surveys per selected duration of time and specific channel
-    Given Update survey management chanel webchat settings by ip for Standard Billing
-      | ratingEnabled | true       |
-      | ratingType    | CSAT       |
-      | ratingScale   | ONE_TO_TEN |
-      | ratingIcon    | NUMBER     |
-    And User select Standard Billing tenant
-    And I login as admin of Standard Billing
-    When Click chat icon
-    And User enter connect to Support into widget input field
-    Then Agent has new conversation request
-    When Agent click on new conversation request from touch
-    Then Agent see conversation area with connect to Support user's message
-    When Agent closes chat
-    Then User see CSAT survey form
-    When Submit survey form with no comment and 8 rate
-    And Agent switches to opened Portal page
-    And I select Touch in left menu and Dashboard in submenu
-    And Admin click on Customers Overview dashboard tab
-    And Admin click on Customers History on dashboard
-    And Admin filter Customers History by Webchat channel
-    Then Admin is able to see Customer Satisfaction graphs
-    Then Admin is able to see the average CSAT survey response converted to 0-10
-    And Admin filter Customers History by Past 4 weeks period
-    Then Admin is able to see Customer Satisfaction graphs
-    Then Admin is able to see the average CSAT survey response converted to 0-10
-
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2955")
   Scenario: Dashboard:: Verify that if NPS surveys are categorize as Passives if webchat user chooses between 7 – 8
     Given Update survey management chanel webchat settings by ip for Standard Billing
@@ -158,6 +130,7 @@ Feature: Dashboard: Customer History
     When I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
+    And Admin filter Customers History by SMS channel
     And Admin filter Customers History by channel and period
       | <channelTypeFilter> | Past week |
     Then Admin is able to see the CSAT scale having down scale as 0% and upscale as 100%
@@ -167,4 +140,3 @@ Feature: Dashboard: Customer History
       | Apple Business Chat |
       | WhatsApp            |
       | SMS                 |
-

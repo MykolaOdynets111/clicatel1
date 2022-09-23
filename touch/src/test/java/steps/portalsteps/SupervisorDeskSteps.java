@@ -255,6 +255,20 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertEquals(getSupervisorDeskPage().getTicketTypes(), ticketTypes, "Ticket types are different");
     }
 
+    @Then("^Verify Chat has pending icon in the Chat (.*)$")
+    public void verifyChatHasPendingIcon(String value) {
+        switch (value){
+            case "List":
+                 Assert.assertTrue(getSupervisorDeskPage().isChatPendingIconShown(), "Yellow Pending Icon is not shown in chat list");
+                 break;
+            case "View":
+                Assert.assertTrue(getSupervisorDeskPage().isChatPendingOnShown(), "Yellow Pending On is not shown in chat view");
+                break;
+            default:
+                Assert.fail("Incorrect string value");
+        }
+    }
+
     @When("^User select (.*) ticket type$")
     public void selectTicketType(String type) {
         getSupervisorDeskPage().selectTicketType(type);
@@ -530,6 +544,10 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void verifyThatLiveChatAvailableAreShown(){
         getSupervisorDeskPage().getSupervisorLeftPanel().verifyLiveChatInfo();
     }
+    @And("Agent can see whatsapp profile name")
+    public void agentCanSeeWhatsappProfileName() {
+        getSupervisorDeskPage().isUpdatedProfileNameShown();
+    }
 
     @And("Agent click on three dot vertical menu and click on assign button")
     public void agentClickAssignButton() {
@@ -541,9 +559,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertTrue(getSupervisorDeskPage().assignChatModal());
     }
 
-    @Then("Agent is able to close the assign chat window")
-    public void closeAssignWindow() { getSupervisorDeskPage().closeAssignWindow();}
-
     @Then("Agent cannot initiate a payment")
-    public void agentCannotInitiateAPayment() { getSupervisorDeskPage().verifyInitiatePayment(); }
+    public void agentCannotInitiateAPayment() {
+        Assert.assertFalse(getSupervisorDeskPage().isC2pButtonPresent(),"Supervisor Can Initiate Payment");
+    }
+
+    @Then("Agent is able to close the assign chat window")
+    public void agentCloseAssignWindow() { getSupervisorDeskPage().closeAssignWindow();}
 }

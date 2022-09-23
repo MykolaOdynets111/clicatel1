@@ -164,10 +164,11 @@ Feature: Whatsapp ORCA :: Chatdesk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2108")
   @Regression
-  Scenario: Supervisor:: Verify if refresh icon unavailable in the "Assign chat" modal window
-    Given I login as agent of General Bank Demo
-    And Setup ORCA whatsapp integration for General Bank Demo tenant
+  Scenario: CD:: Supervisor:: Verify if supervisor is able to close "Assign Chat" modal
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
     And Send to agent message by ORCA
+    And I login as agent of General Bank Demo
+    And Agent has new conversation request from ORCA user
     When I open portal
     And Login into portal as an admin of General Bank Demo account
     And I select Touch in left menu and Supervisor Desk in submenu
@@ -176,6 +177,18 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent click on three dot vertical menu and click on assign button
     When Assign chat modal is opened
     Then Agent is able to close the assign chat window
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1129")
+  Scenario: Supervisor Desk :: Live Chat :: Profile :: Verify that WhatsApp profile name is displayed as username on customer profile section
+    Given I login as agent of General Bank Demo
+    And Setup ORCA whatsapp integration for General Bank Demo tenant
+    And Send to agent message by ORCA
+    When I open portal
+    And Login into portal as an admin of General Bank Demo account
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Agent search chat orca on Supervisor desk
+    When Agent click On Live Supervisor Desk chat from ORCA channel
+    Then Agent can see whatsapp profile name
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1302")
   @Regression
