@@ -132,7 +132,8 @@ Feature: Whatsapp ORCA :: Chatdesk
       | sms         | sms     |
       | whatsapp    | orca    |
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-15691")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2787")
+  @regression
   Scenario: Supervisor desk :: verify that supervisor able to check live chats
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
@@ -162,6 +163,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Second agent has new ticket request from ORCA user
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1129")
+  @regression
   Scenario: Supervisor Desk :: Live Chat :: Profile :: Verify that WhatsApp profile name is displayed as username on customer profile section
     Given I login as agent of General Bank Demo
     And Setup ORCA whatsapp integration for General Bank Demo tenant
