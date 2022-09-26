@@ -66,21 +66,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(xpath = "//input[contains(@class, 'cl-form-control cl-form-control--input cl-end-date')]")
     private WebElement endDateInput;
 
-    @FindBy(css = "svg[name = '3-dot-menu-vert']")
-    private WebElement threeDotsVerticalMenu;
-
-    @FindBy(xpath = "//button[contains(text(), 'Assign' )]")
-    private WebElement assignButton;
-
-    @FindBy(xpath = "//div[contains(text(), 'Assign chat' )]")
-    private WebElement assignChatModal;
-
-    @FindBy(css = "svg[name = '3-dot-menu-vert']")
-    private WebElement close;
-
-    @FindBy(css = "svg[name = 'close']")
-    private WebElement closeAssignChatWindow;
-
     @FindBy(xpath = "//*[local-name()='svg' and @name='clock']/*[local-name()='g']")
     private WebElement leftChatPendingIcon;
 
@@ -306,19 +291,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     public void loadAllClosedChats() {
         getSupervisorClosedChatsTable().loadAllFoundChats();
-    }
-
-    public void clickOnAssignButton() {
-        clickElem(this.getCurrentDriver(), threeDotsVerticalMenu, 3, "Three Dots Vertical Menu");
-        clickElem(this.getCurrentDriver(), assignButton, 3, "Assign Chat Button");
-    }
-
-    public boolean assignChatModalShown() {
-        return isElementShown(this.getCurrentDriver(), assignChatModal, 3);
-    }
-
-    public void clickOnCloseAssignWindow() {
-         clickElem(this.getCurrentDriver(), closeAssignChatWindow, 3, "Assign chat model close icon" );
     }
 
     public boolean isChatPendingIconShown() {

@@ -167,15 +167,16 @@ Feature: Whatsapp ORCA :: Chatdesk
   @Regression
   Scenario: CD:: Supervisor:: Verify if supervisor is able to close "Assign Chat" modal
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    When Set agent support hours for all week
     And Send to agent message by ORCA
-    When I open portal
+    And I open portal
     And Login into portal as an admin of General Bank Demo account
     And I select Touch in left menu and Supervisor Desk in submenu
     And Agent search chat orca on Supervisor desk
     When Agent click On Live Supervisor Desk chat from ORCA channel
     And Agent click on three dot vertical menu and click on assign button
     When Assign chat modal is opened
-    Then Agent is able to close the assign chat window
+    And Agent is able to close the assign chat window
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1129")
   @Regression

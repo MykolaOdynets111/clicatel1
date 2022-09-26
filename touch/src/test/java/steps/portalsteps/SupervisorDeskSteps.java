@@ -551,12 +551,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @And("Agent click on three dot vertical menu and click on assign button")
     public void agentClickAssignButton() {
-        getSupervisorDeskPage().clickOnAssignButton();
+        getSupervisorDeskPage().getChatHeader().clickOnAssignButton();
     }
     
     @When("Assign chat modal is opened")
     public void assignChatModalOpened() {
-        Assert.assertTrue(getSupervisorDeskPage().assignChatModalShown());
+        Assert.assertTrue(getSupervisorDeskPage().getAssignChatWindow().isAssignWindowShown());
     }
 
     @Then("Agent cannot initiate a payment")
@@ -565,5 +565,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     }
 
     @Then("Agent is able to close the assign chat window")
-    public void agentClickCloseAssignWindow() { getSupervisorDeskPage().clickOnCloseAssignWindow();}
+    public void agentClickCloseAssignWindow() {
+        getSupervisorDeskPage().getAssignChatWindow().clickOnCloseAssignWindow();
+        Assert.assertFalse(getSupervisorDeskPage().getAssignChatWindow().isAssignWindowShown(),"Assign Chat Window is closed"); }
 }
