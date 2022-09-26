@@ -1,8 +1,9 @@
+@no_widget
+@orca_api
+@regression
 Feature: Supervisor desk
 
-  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1427")
-  @regression
   Scenario: CD :: Supervisor Desk :: Chat :: Notes :: Verify if supervisor is able to add notes to a live chat
     Given Setup ORCA abc integration for General Bank Demo tenant
     And Send Notes for Live Chat message by ORCA
@@ -13,9 +14,7 @@ Feature: Supervisor desk
     When Supervisor adds a note "Live Chat Test Note Message", Jira link "https://livechatdummy.com" and Ticket Number "662210"
     Then Supervisor sees note "Live Chat Test Note Message", Jira link "https://livechatdummy.com/" and Ticket Number "662210"
 
-  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-3882")
-  @regression
   Scenario: CD :: Supervisor Desk :: Chat :: Notes :: Verify if supervisor is able to add notes to a closed chat
     Given Setup ORCA abc integration for General Bank Demo tenant
     And I login as agent of General Bank Demo
@@ -30,9 +29,7 @@ Feature: Supervisor desk
     When Supervisor adds a note "Closed Chat Test Note Message", Jira link "https://closedchatdummy.com" and Ticket Number "662220"
     Then Supervisor sees note "Closed Chat Test Note Message", Jira link "https://closedchatdummy.com/" and Ticket Number "662220"
 
-  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-3883")
-  @regression
   Scenario: CD :: Supervisor Desk :: Chat :: Notes :: Verify if supervisor is able to add notes to a ticket
     Given Setup ORCA abc integration for General Bank Demo tenant
     And Set agent support hours with day shift

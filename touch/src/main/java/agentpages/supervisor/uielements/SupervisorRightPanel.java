@@ -65,7 +65,7 @@ public class SupervisorRightPanel extends AbstractUIElement{
     }
 
     public SupervisorRightPanel addTicketNumberToNote(String ticketNumber) {
-        clickElem(this.getCurrentDriver(),ticketNumberBox,3,"New Note");
+        inputText(this.getCurrentDriver(),ticketNumberBox,3,"Ticket Number",ticketNumber);
         return this;
     }
 
