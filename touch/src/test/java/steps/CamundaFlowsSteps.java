@@ -30,7 +30,7 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
     @Given("^Taf (.*) is set to (.*) for (.*) tenant$")
     public void updateTafMessageStatus(String autoResponderTitle, boolean status, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        AutoResponderMessage autoResponderMessageUpdates = ApiHelper.getAutoResponderMessage(autoResponderTitle);;
+        AutoResponderMessage autoResponderMessageUpdates = ApiHelper.getAutoResponderMessage(autoResponderTitle);
         autoResponderMessageUpdates.setEnabled(status);
         ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates, autoResponderTitle);
 

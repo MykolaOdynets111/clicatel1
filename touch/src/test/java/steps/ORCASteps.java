@@ -254,11 +254,12 @@ public class ORCASteps implements WebWait {
 
     private boolean isExpectedResponseListCheck(String message, int expectedSize, int wait) {
         for (int i = 0; i < wait; i++) {
-            if ((Collections.frequency(OrcaSQSHandler.orcaMessages, message)) >= expectedSize) {
-                break;
+            if ((Collections.frequency(OrcaSQSHandler.orcaMessages, message)) == expectedSize) {
+                return true;
             }
+            waitFor(1000);
         }
-        return (Collections.frequency(OrcaSQSHandler.orcaMessages, message)) >= expectedSize;
+        return false;
     }
 
     private void createRequestMessage(String apiKey, String message) {

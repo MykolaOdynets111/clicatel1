@@ -14,19 +14,22 @@ Feature: Welcome flow: agent mode
     And Click chat icon
     Then Welcome message with correct text is shown
 
-
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2477")
   @no_chatdesk
   Scenario: Reset to default Welcome message auto responder (Agent mode)
-    Given Taf welcome_message is set to true for Automation tenant
-    Given Taf welcome_message message text is updated for Automation tenant
-    Given I open portal
-    And Login into portal as an admin of Automation account
+    Given Setup ORCA Whatsapp integration for Automation Bot tenant
+    And Taf Connecting Agent message (Social Channels) is set to true for Automation Bot tenant
+    And Taf Connecting Agent message (Social Channels) message text is updated for Automation Bot tenant
+    And I login as agent of Automation Bot
     And I select Touch in left menu and Dashboard in submenu
-    When Navigate to Auto Responders page
-    When Wait for auto responders page to load
-    And Agent click expand arrow for Greeting message auto responder
-    And Click "Reset to default" button for Greeting message auto responder
-    Then welcome_message is reset on backend
-    Given User select Automation tenant
-    And Click chat icon
-    Then Welcome message with correct text is shown
+    And Navigate to Auto Responders page
+    And Wait for auto responders page to load
+    And Agent click expand arrow for Connecting Agent message (Social Channels) auto responder
+    And Click "Reset to default" button for Connecting Agent message (Social Channels) auto responder
+    #When Connecting Agent message (Social Channels) is reset on backend
+    And Send connect to agent message by ORCA
+    And I select Touch in left menu and Agent Desk in submenu
+    And Agent has new conversation request from orca user
+    And Agent click on new conversation request from orca
+    And Conversation area becomes active with connect to agent user's message
+    Then Agent Welcome message with correct text Thanks for your patience. You have now been connected with Autobot Main. is shown

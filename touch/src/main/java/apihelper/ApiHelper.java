@@ -2,13 +2,12 @@ package apihelper;
 
 import com.github.javafaker.Faker;
 import datamanager.*;
-import datamanager.enums.Days;
-import datamanager.enums.TenantInfoValues;
 import datamanager.jacksonschemas.*;
 import datamanager.jacksonschemas.chathistory.ChatHistory;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
+import datamanager.jacksonschemas.usersessioninfo.ChatPreferenceSettings;
 import datamanager.jacksonschemas.usersessioninfo.ClientProfile;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
 import drivermanager.ConfigManager;
@@ -31,7 +30,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 import static java.lang.String.format;
@@ -41,6 +39,8 @@ public class ApiHelper implements VerificationHelper {
 
     private static List<HashMap> tenantsInfo = null;
     public static ThreadLocal<String> clientProfileId = new ThreadLocal<>();
+
+    public static ThreadLocal<String> featureName = new ThreadLocal<>();
 
     public static String getInternalTenantConfig(String tenantName, String config) {
         String url = format(Endpoints.INTERNAL_TENANT_CONFIG, tenantName);
@@ -171,7 +171,7 @@ public class ApiHelper implements VerificationHelper {
 
     public static AutoResponderMessage getAutoResponderMessage(String title) {
         return getAutoRespondersList().stream()
-                .filter(e -> e.getCategory().equalsIgnoreCase(title))
+                .filter(e -> e.getTitle().equalsIgnoreCase(title))
                 .findFirst().orElseThrow(() ->
                         new NoSuchElementException(format("There is no message with title: %s",  title)));
     }
@@ -357,14 +357,16 @@ public class ApiHelper implements VerificationHelper {
     }
 
     public static void updateFeatureStatus(String tenantOrgName, String feature, String status) {
+        ChatPreferenceSettings chatPreferenceSettings = new ChatPreferenceSettings();
+        featureName.set(feature);
+        chatPreferenceSettings.setFeatureStatus(feature, status);
         String tenantID = getTenant(tenantOrgName).get("id");
         String url = format(Endpoints.INTERNAL_TENANT_CONFIG, tenantID);
 
-        String body = String.format("{\"%s\": %s}", TenantInfoValues.getAllBooleanValues(feature), status);
         Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON)
-                .body(body)
+                .body(chatPreferenceSettings.toString())
                 .put(url);
         Assert.assertEquals(resp.statusCode(), 200,
                 "Status code is not 200 for feature ");

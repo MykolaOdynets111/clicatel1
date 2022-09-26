@@ -1,5 +1,5 @@
 @camunda
-  @agent_feedback
+  @chat_preferences
 Feature: End chat flow: bot mode
 
   Background:
@@ -24,8 +24,8 @@ Feature: End chat flow: bot mode
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2990")
   @Regression
   Scenario: Close chat message enabling and editing for Bot mode tenant
-    Given Taf start_new_conversation is set to true for Automation Bot tenant
-    And Taf start_new_conversation message text is updated for Automation Bot tenant
+    Given Taf End Chat message is set to true for Automation Bot tenant
+    And Taf End Chat message message text is updated for Automation Bot tenant
     And I login as agent of Automation Bot
     When Send connect to agent message by ORCA
     Then Agent has new conversation request from orca user

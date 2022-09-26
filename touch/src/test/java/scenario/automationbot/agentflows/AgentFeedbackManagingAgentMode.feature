@@ -1,4 +1,4 @@
-@agent_feedback
+@chat_preferences
 Feature: Turning on / off AGENT_FEEDBACK feature for Agent mode tenant
 
   Background:

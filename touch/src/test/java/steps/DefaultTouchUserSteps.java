@@ -690,34 +690,34 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
 
     // ======================== Welcome Card Steps ======================= //
 
-    @Given("^Welcome card with a button \"(.*)\" is shown$")
-    public void verifyWelcomeCardWithCorrectButtonIsShown(String buttonName) {
+    @Given("^(.*) Welcome card with a button \"(.*)\" is shown$")
+    public void verifyWelcomeCardWithCorrectButtonIsShown(String agent, String buttonName) {
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(getWelcomeMessages().isWelcomeCardContainerShown(), "Welcome card is not shown. Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + "");
-        soft.assertTrue(getWelcomeMessages().getWelcomeCardButtonText().contains(buttonName),
+        soft.assertTrue(getWelcomeMessages(agent).isWelcomeCardContainerShown(), "Welcome card is not shown. Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + "");
+        soft.assertTrue(getWelcomeMessages(agent).getWelcomeCardButtonText().contains(buttonName),
                 "Button is not shown in Welcome card (Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + ")");
         soft.assertAll();
     }
 
-    @When("^User select (.*) option from Welcome card$")
-    public void selectOptionInWelcomeCard(String butonName) {
-        getWelcomeMessages().clickActionButton(butonName);
+    @When("^(.*) select (.*) option from Welcome card$")
+    public void selectOptionInWelcomeCard(String agent, String butonName) {
+        getWelcomeMessages(agent).clickActionButton(butonName);
     }
 
-    @Then("^Welcome message with correct text is shown$")
-    public void verifyWelcomeTextMessage() {
-        String welcomeMessage = getAutoResponderMessageText("welcome_message");
+    @Then("^(.*) Welcome message with correct text (.*) is shown$")
+    public void verifyWelcomeTextMessage(String agent, String welcomeMessage) {
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(getWelcomeMessages().isWelcomeTextMessageShown(),
+
+        soft.assertTrue(getWelcomeMessages(agent).isWelcomeTextMessageShown(),
                 "Welcome text message is not shown");
-        soft.assertEquals(getWelcomeMessages().getWelcomeMessageText(), welcomeMessage,
+        soft.assertEquals(getWelcomeMessages(agent).getWelcomeMessageText(), welcomeMessage,
                 "Welcome message is not as expected");
         soft.assertAll();
     }
 
-    @Then("^Welcome message is not shown$")
-    public void verifyWelcomeMessageNotShown() {
-        Assert.assertFalse(getWelcomeMessages().isWelcomeTextMessageShown(),
+    @Then("^(.*) Welcome message is not shown$")
+    public void verifyWelcomeMessageNotShown(String agent) {
+        Assert.assertFalse(getWelcomeMessages(agent).isWelcomeTextMessageShown(),
                 "Welcome text message is still shown after disabling");
     }
 
@@ -729,23 +729,23 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
                 "'" + welcomeBackMessage + "' welcome back message is not shown");
     }
 
-    @Given("^Welcome card with correct (.*) text is shown$")
-    public void verifyWelcomeCardWithCorrectText(String welcomeCardText) {
+    @Given("^(.*) Welcome card with correct (.*) text is shown$")
+    public void verifyWelcomeCardWithCorrectText(String agent, String welcomeCardText) {
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(getWelcomeMessages().isWelcomeCardContainerShown(), "Welcome card is not shown. Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + "");
-        soft.assertEquals(getWelcomeMessages().getWelcomeCardText(), welcomeCardText,
+        soft.assertTrue(getWelcomeMessages(agent).isWelcomeCardContainerShown(), "Welcome card is not shown. Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + "");
+        soft.assertEquals(getWelcomeMessages(agent).getWelcomeCardText(), welcomeCardText,
                 "Text in Welcome card is not as expected");
         soft.assertAll();
     }
 
-    @Given("^Welcome card with correct text and button \"(.*)\" is shown$")
-    public void verifyWelcomeCardWithCorrectTextAndButtonIsShown(String buttonName) {
+    @Given("^(.*) Welcome card with correct text and button \"(.*)\" is shown$")
+    public void verifyWelcomeCardWithCorrectTextAndButtonIsShown(String agent, String buttonName) {
         String welcomeCardText = getAutoResponderMessageText("first_navigation_card_title");
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(getWelcomeMessages().isWelcomeCardContainerShown(), "Welcome card is not shown. Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + "");
-        soft.assertEquals(getWelcomeMessages().getWelcomeCardText(), welcomeCardText,
+        soft.assertTrue(getWelcomeMessages(agent).isWelcomeCardContainerShown(), "Welcome card is not shown. Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + "");
+        soft.assertEquals(getWelcomeMessages(agent).getWelcomeCardText(), welcomeCardText,
                 "Text in Welcome card is not as expected");
-        soft.assertTrue(getWelcomeMessages().getWelcomeCardButtonText().contains(buttonName),
+        soft.assertTrue(getWelcomeMessages(agent).getWelcomeCardButtonText().contains(buttonName),
                 "Button is not shown in Welcome card (Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + ")");
         soft.assertAll();
     }
@@ -865,9 +865,9 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
 
     // ======================= Private Getters ========================== //
 
-    private WelcomeMessages getWelcomeMessages() {
+    private WelcomeMessages getWelcomeMessages(String agent) {
         if (welcomeMessages == null) {
-            welcomeMessages = new WelcomeMessages();
+            welcomeMessages = new WelcomeMessages(agent);
             return welcomeMessages;
         } else {
             return welcomeMessages;

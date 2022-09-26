@@ -33,6 +33,7 @@ Feature: Dashboard: Customer History
   @no_chatdesk
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2427")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1929")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1816")
   @Regression
   Scenario: Dashboard: Verify if admin can filter Customers History report by channel and period
     When I open portal
@@ -56,27 +57,6 @@ Feature: Dashboard: Customer History
       | SMS   | Past 2 weeks   |
       | SMS   | Past 3 weeks   |
       | SMS   | Past 4 weeks   |
-
-  @no_chatdesk
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1486")
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1816")
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2437")
-  @Regression
-  Scenario Outline:  CD:: Survey:: Verify " no data to show now" should be shown in the CSAT column against the agent.
-    When I open portal
-    And I login as agent of Standard Billing
-    And I select Touch in left menu and Dashboard in submenu
-    And Admin click on Customers Overview dashboard tab
-    And Admin click on Customers History on dashboard
-    And Admin filter Customers History by channel and period
-      | <channelTypeFilter>  | Past day  |
-    Then Admin is able to see No data to report at the moment in the Customer Satisfaction against the agent
-    And Admin see the message no data for Customer Satisfaction gauge if there is no available data
-    Examples:
-      | channelTypeFilter   |
-      | SMS                 |
-      | Apple Business Chat |
-      | WhatsApp            |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2955")
   Scenario: Dashboard:: Verify that if NPS surveys are categorize as Passives if webchat user chooses between 7 – 8

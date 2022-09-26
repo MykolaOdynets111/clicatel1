@@ -1,4 +1,4 @@
-@agent_feedback
+@chat_preferences
 Feature: Interaction with Tags in CRM tickets (agent mode)
 
   Background:

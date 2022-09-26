@@ -332,11 +332,11 @@ public class Hooks implements JSHelper {
                 }
             }*/
 
-            if (scenario.getSourceTagNames().contains("@agent_feedback")){
+            if (scenario.getSourceTagNames().contains("@chat_preferences")){
                 try{
-                    boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus("agentFeedback");
-                    if (pretestFeatureStatus != DefaultAgentSteps.getTestFeatureStatusChanging("agentFeedback")) {
-                        ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "agentFeedback", Boolean.toString(pretestFeatureStatus));
+                    boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus(ApiHelper.featureName.get());
+                    if (pretestFeatureStatus != DefaultAgentSteps.getTestFeatureStatusChanging(ApiHelper.featureName.get())) {
+                        ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), ApiHelper.featureName.get(), Boolean.toString(pretestFeatureStatus));
                     }
                 }catch(NullPointerException e){
                     //no feature status interaction

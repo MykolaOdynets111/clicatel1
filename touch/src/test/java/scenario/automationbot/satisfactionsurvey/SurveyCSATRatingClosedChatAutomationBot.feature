@@ -29,8 +29,8 @@ Feature: Satisfaction Survey
     And Agent click on new conversation request from orca
     And Conversation area becomes active with connect to agent user's message
     And Agent closes chat
-    And Send -1 message by ORCA
     And Verify Orca returns Great, thanks - could you please rate our service from 0 - 10. 0 being "Very unsatisfied" and 10 being "Very satisfied". Simply type "skip" keyword to skip the survey. response during 40 seconds
+    And Send -1 message by ORCA
     And Verify Orca returns survey Great, thanks - could you please rate our service from 0 - 10. 0 being "Very unsatisfied" and 10 being "Very satisfied". Simply type "skip" keyword to skip the survey. response 2 number of times during 40 seconds
     Examples:
       | channelType |
