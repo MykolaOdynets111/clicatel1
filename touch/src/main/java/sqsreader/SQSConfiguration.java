@@ -44,7 +44,7 @@ public class SQSConfiguration {
 
     public static SqsClient getSqsClient(){
         if(ConfigManager.isRemote()){
-            return SqsClient.builder().region(SQSConfiguration.DEFAULT_REGION).build();
+            return SqsClient.builder().build();
         }
         return SqsClient.builder().region(SQSConfiguration.DEFAULT_REGION)
                 .credentialsProvider(ProfileCredentialsProvider.create("215418463085_vulcan-mc2-dev"))
