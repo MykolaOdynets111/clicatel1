@@ -313,11 +313,11 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         clickElem(this.getCurrentDriver(), assignButton, 3, "Assign Chat Button");
     }
 
-    public boolean assignChatModal() {
+    public boolean assignChatModalShown() {
         return isElementShown(this.getCurrentDriver(), assignChatModal, 3);
     }
 
-    public void closeAssignWindow() {
+    public void clickOnCloseAssignWindow() {
          clickElem(this.getCurrentDriver(), closeAssignChatWindow, 3, "Assign chat model close icon" );
     }
 
