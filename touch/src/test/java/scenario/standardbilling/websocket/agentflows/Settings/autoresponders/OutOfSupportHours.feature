@@ -1,9 +1,9 @@
 @no_widget
 @start_orca_server
+@Regression
 Feature: Dashboard: Settings: Auto Responder
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1915")
-  @Regression
   @agent_support_hours
   Scenario: CD :: Dashboard :: Settings :: Auto Responder :: Verify that customers receives the 'out of support hours' message when tries to reach agent out of business hours
 
