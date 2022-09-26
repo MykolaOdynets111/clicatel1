@@ -45,53 +45,44 @@ public class SupervisorRightPanel extends AbstractUIElement{
 
     // <<================= ACTION METHODS ==========================>>
     public SupervisorRightPanel clickOnNotesTab() {
-        waitForElementToBeVisible(this.getCurrentDriver(), notesTab, 3);
-        notesTab.click();
+        clickElem(this.getCurrentDriver(),notesTab,3,"Notes");
         return this;
     }
 
     public SupervisorRightPanel clickOnNewNoteButton() {
-        waitForElementToBeVisible(this.getCurrentDriver(), newNoteButton, 3);
-        newNoteButton.click();
+        clickElem(this.getCurrentDriver(),newNoteButton,3,"New Note");
         return this;
     }
 
     public SupervisorRightPanel addTextToNote(String note) {
-        waitForElementToBeVisible(this.getCurrentDriver(), notesTextBox, 3);
-        notesTextBox.sendKeys(note);
+        inputText(this.getCurrentDriver(),notesTextBox,3,"Notes Text Box",note);
         return this;
     }
 
     public SupervisorRightPanel addJiraLinkToNote(String jiraLink) {
-        waitForElementToBeVisible(this.getCurrentDriver(), jiraLinkBox, 3);
-        jiraLinkBox.sendKeys(jiraLink);
+        inputText(this.getCurrentDriver(),jiraLinkBox,3,"JIRA link",jiraLink);
         return this;
     }
 
     public SupervisorRightPanel addTicketNumberToNote(String ticketNumber) {
-        waitForElementToBeVisible(this.getCurrentDriver(), ticketNumberBox, 3);
-        ticketNumberBox.sendKeys(ticketNumber);
+        clickElem(this.getCurrentDriver(),ticketNumberBox,3,"New Note");
         return this;
     }
 
     public void clickOnCreateNoteButton() {
-        waitForElementToBeVisible(this.getCurrentDriver(), createNoteButton, 3);
-        createNoteButton.click();
+        clickElem(this.getCurrentDriver(),createNoteButton,3,"Create Note");
     }
 
     // <<================= GETTER METHODS ==========================>>
     public String getNoteCardText() {
-        waitForElementToBeVisible(this.getCurrentDriver(), noteCardText, 3);
-        return noteCardText.getText();
+        return getTextFromElem(this.getCurrentDriver(), noteCardText, 3, "Note Card Text");
     }
 
     public String getNoteCardJiraLink() {
-        waitForElementToBeVisible(this.getCurrentDriver(), noteCardTicketNumberJiraLink, 3);
-        return noteCardTicketNumberJiraLink.getAttribute("href");
+        return getAttributeFromElem(this.getCurrentDriver(), noteCardTicketNumberJiraLink, 3,"JIRA Ticket Number Link", "href");
     }
 
     public String getNoteCardTicketNumber() {
-        waitForElementToBeVisible(this.getCurrentDriver(), noteCardTicketNumberJiraLink, 3);
-        return noteCardTicketNumberJiraLink.getAttribute("title");
+        return getAttributeFromElem(this.getCurrentDriver(), noteCardTicketNumberJiraLink, 3,"JIRA Ticket Number", "title");
     }
 }
