@@ -35,11 +35,17 @@ public class SQSConfiguration {
         return callbackUrl;
     }
 
+    public String getQueueName(){
+        if(ConfigManager.isRemote()){
+            return "arn:aws:sqs:eu-west-1:215418463085:dev-callback-handler-interact-chatdesk-1";
+        }
+        return queueName;
+    }
+
     public static SqsClient getSqsClient(){
         if(ConfigManager.isRemote()){
             return SqsClient.builder().region(SQSConfiguration.DEFAULT_REGION).build();
         }
-
         return SqsClient.builder().region(SQSConfiguration.DEFAULT_REGION)
                 .credentialsProvider(ProfileCredentialsProvider.create("215418463085_vulcan-mc2-dev"))
                 .build();
