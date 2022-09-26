@@ -1,6 +1,7 @@
 package agentpages.dashboard.uielements;
 
 import abstractclasses.AbstractUIElement;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -9,6 +10,8 @@ import org.openqa.selenium.support.FindBy;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.lang.String.format;
 
 @FindBy(css = ".customers-history-tab")
 public class CustomersHistory extends AbstractUIElement {
@@ -34,6 +37,17 @@ public class CustomersHistory extends AbstractUIElement {
 
     @FindBy(css = ".live-chats-section:nth-child(2) [dominant-baseline='central']")
     private List<WebElement> yAxisScaleCustomerSatisfaction;
+
+    private WebElement getGraphSectionByName(String name) {
+        return findElementByXpath(currentDriver,
+                format("//h3[text() = '%s']/ancestor::section[@class = 'live-chats-section']", name), 10);
+    }
+
+    public List<String> getVerticalLineValuesForGraph(String name) {
+        return getGraphSectionByName(name)
+                .findElements(By.xpath(".//*[name() = 'svg']//*[@text-anchor='end']"))
+                .stream().map(WebElement::getText).collect(Collectors.toList());
+    }
 
     public List<List<String>> getGraphsTimelines() {
         waitFor(2000);
