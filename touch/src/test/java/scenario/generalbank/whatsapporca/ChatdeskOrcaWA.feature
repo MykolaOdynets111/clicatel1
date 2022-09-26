@@ -167,8 +167,6 @@ Feature: Whatsapp ORCA :: Chatdesk
   Scenario: CD:: Supervisor:: Verify if supervisor is able to close "Assign Chat" modal
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     And Send to agent message by ORCA
-    And I login as agent of General Bank Demo
-    And Agent has new conversation request from ORCA user
     When I open portal
     And Login into portal as an admin of General Bank Demo account
     And I select Touch in left menu and Supervisor Desk in submenu
