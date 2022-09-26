@@ -2,10 +2,10 @@
 @no_widget
 @start_orca_server
 @off_rating_whatsapp
+@Regression
 Feature: Dashboard: Customers History: Customer Satisfaction chart
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2323")
-    @Regression
   Scenario Outline: Dashboard:: Verify that supervisor can check average CSAT surveys per selected duration of time and specific channel
 
     Given I login as agent of Standard Billing

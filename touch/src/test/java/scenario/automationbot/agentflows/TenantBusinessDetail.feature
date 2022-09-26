@@ -1,9 +1,9 @@
 @no_widget
 @no_chatdesk
+@Regression
 Feature: Managing business details
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2537")
-  @Regression
   Scenario: CD :: Dashboard :: Settings :: Business Profile :: Verify if admin is able to change/edit on business details
     Given I open portal
     And Login into portal as an admin of Automation Bot account

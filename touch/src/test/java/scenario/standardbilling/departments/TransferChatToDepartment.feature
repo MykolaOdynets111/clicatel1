@@ -1,4 +1,5 @@
 @remove_dep
+@Regression
 Feature: Departments
 
   Background:
@@ -8,7 +9,6 @@ Feature: Departments
     When Send connect to support message by ORCA
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2276")
-  @Regression
   Scenario: CD:: Dashboard:: Departments:: Transfer_Chat:: Verify if possible to transfer chat to department
     Then Agent has new conversation request from orca user
     Given I login as second agent of Standard Billing

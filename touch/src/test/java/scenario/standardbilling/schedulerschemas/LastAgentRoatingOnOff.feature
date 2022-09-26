@@ -1,4 +1,5 @@
 @no_widget
+@Regression
 Feature: Last agent switch
 
   Background:
@@ -7,7 +8,6 @@ Feature: Last agent switch
     And Turn off the Last Agent routing
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1159")
-  @Regression
   Scenario: CD :: Dashboard :: Settings :: Preferences :: Verify if supervisor can switch the toggle on or off for the "last agent routing”
     And I select Touch in left menu and Dashboard in submenu
     When Navigate to Preferences page

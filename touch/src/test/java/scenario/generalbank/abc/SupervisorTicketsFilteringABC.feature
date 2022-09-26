@@ -1,4 +1,5 @@
 @agent_support_hours
+@Regression
 Feature: Apple Business Chat :: Supervisor Desk
 
   Background:
@@ -10,7 +11,6 @@ Feature: Apple Business Chat :: Supervisor Desk
   @orca_api
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1158")
-  @Regression
   Scenario: Supervisor desk: Verify if supervisor can use different filter options for filtering ORCA tickets
     Given Setup ORCA abc integration for General Bank Demo tenant
     When Send to agent message by ORCA
