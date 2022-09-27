@@ -21,6 +21,9 @@ public class AssignChatWindow extends BasePortalWindow {
     @FindBy(css = "button[type='submit']")
     private WebElement assignChatButton;
 
+    @FindBy(css = "svg[name = 'close']")
+    private WebElement closeAssignChatWindow;
+
 
     private void openDropDownAgent() {
         clickElem(this.getCurrentDriver(), openAgentDropdownButton, 5, "Agent drop down");
@@ -44,5 +47,13 @@ public class AssignChatWindow extends BasePortalWindow {
 
     public void clickAssignChatButton() {
         clickElem(this.getCurrentDriver(), assignChatButton, 3, "'Assign chat' button");
+    }
+
+    public boolean isAssignWindowShown(){
+        return isElementShown(this.getCurrentDriver(), this.getWrappedElement(), 2);
+    }
+
+    public void clickOnCloseAssignWindow() {
+        clickElem(this.getCurrentDriver(), closeAssignChatWindow, 3, "Assign chat model close icon" );
     }
 }

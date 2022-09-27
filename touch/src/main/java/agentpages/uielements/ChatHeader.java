@@ -81,6 +81,12 @@ public class ChatHeader extends AbstractUIElement {
     })
     private WebElement pendingButton;
 
+    @FindBy(css = "svg[name = '3-dot-menu-vert']")
+    private WebElement threeDotsVerticalMenu;
+
+    @FindBy(xpath = "//button[contains(text(), 'Assign' )]")
+    private WebElement assignButton;
+
     private final String transferChatButtonXpath =  ".//button[@selenium-id='header-transfer-chat']";
     private final String sendSMSXpath = ".//button[@selenium-id='header-send-sms']";
     private final String sendWhatsAppXpath = ".//button[text()='Send WhatsApp']";
@@ -228,5 +234,10 @@ public class ChatHeader extends AbstractUIElement {
 
     public String getAgentName(){
         return getTextFromElem(getCurrentDriver(),agentName,2,"Agent Name");
+    }
+
+    public void clickOnAssignButton() {
+        clickElem(this.getCurrentDriver(), threeDotsVerticalMenu, 3, "Three Dots Vertical Menu");
+        clickElem(this.getCurrentDriver(), assignButton, 3, "Assign Chat Button");
     }
 }

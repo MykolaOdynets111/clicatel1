@@ -1,5 +1,6 @@
 @no_widget
 @off_rating_whatsapp
+@Regression
 Feature: WhatsApp ORCA :: Surveys
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1877")
@@ -7,7 +8,6 @@ Feature: WhatsApp ORCA :: Surveys
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2394")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1933")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1828")
-  @Regression
   Scenario Outline: verify if supervisor can choose between NPS(Net Promotor Score) or CSAT(Customer Satisfaction Score) survey type
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Update survey management chanel <channelType> settings by ip for General Bank Demo
@@ -36,7 +36,6 @@ Feature: WhatsApp ORCA :: Surveys
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1719")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1728")
-  @Regression
   Scenario Outline: CD:: Survey:: CSAT:: Verify if CSAT ratings in the survey configuration to be standardized to cater for only 1-5 ratings
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Update survey management chanel <channelType> settings by ip for General Bank Demo

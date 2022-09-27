@@ -1,10 +1,10 @@
 @no_widget
 @orca_api
+@Regression
 Feature: Whatsapp And SMS ORCA :: ChatDesk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1898")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1174")
-  @Regression
   Scenario Outline: CD :: Agent Desk :: Live Chat :: Location :: Verify the end-user can share the current location on WhatsApp via Flow
     Given I login as agent of General Bank Demo
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
@@ -21,7 +21,6 @@ Feature: Whatsapp And SMS ORCA :: ChatDesk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1831")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1278")
-  @Regression
   Scenario Outline: CD :: SMS :: Location:: Verify If agent can't send the location if searched location entered doesn't yield any known result
     Given I login as agent of General Bank Demo
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
@@ -41,7 +40,6 @@ Feature: Whatsapp And SMS ORCA :: ChatDesk
   @start_orca_server
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1718")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1964")
-  @Regression
   Scenario Outline: CD :: SMS :: Location:: Verify if agent is able to send location to SMS user
     Given I login as agent of General Bank Demo
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
