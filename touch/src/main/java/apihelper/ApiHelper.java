@@ -7,7 +7,7 @@ import datamanager.jacksonschemas.chathistory.ChatHistory;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
-import datamanager.jacksonschemas.usersessioninfo.ChatPreferenceSettings;
+import datamanager.jacksonschemas.ChatPreferenceSettings;
 import datamanager.jacksonschemas.usersessioninfo.ClientProfile;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
 import drivermanager.ConfigManager;

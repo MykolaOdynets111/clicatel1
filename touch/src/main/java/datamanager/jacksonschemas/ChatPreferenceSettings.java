@@ -1,9 +1,10 @@
-package datamanager.jacksonschemas.usersessioninfo;
+package datamanager.jacksonschemas;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.openqa.selenium.NoSuchElementException;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -94,6 +95,8 @@ public class ChatPreferenceSettings {
             case "pendingChatAutoClosureTimeSec":
                 setPendingChatAutoClosureTimeSec(value);
                 break;
+            default:
+                throw new NoSuchElementException("Json element: '" + feature + "' wasn't found");
         }
     }
 
