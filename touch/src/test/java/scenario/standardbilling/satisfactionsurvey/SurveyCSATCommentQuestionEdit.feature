@@ -3,11 +3,11 @@
 @off_rating_whatsapp
 @off_rating_abc
 @no_chatdesk
+@Regression
 Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2286")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1790")
-  @Regression
   Scenario Outline: CD:: ABC:: Settings :: Survey :: Verify if tenant can customize his own survey questions for CSAT survey type
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing

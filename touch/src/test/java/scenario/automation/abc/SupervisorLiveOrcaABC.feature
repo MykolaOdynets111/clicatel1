@@ -1,9 +1,9 @@
+@Regression
 Feature: ABC ORCA :: Supervisor Desk
 
 @agent_support_hours
 @orca_api
 @TestCaseId("https://jira.clickatell.com/browse/CCD-2848")
-@Regression
 Scenario: Supervisor desk:: Verify if supervisor can filter tickets by ticket status and apple channel filter option
 Given Setup ORCA abc integration for Automation tenant
 And Set agent support hours with day shift
@@ -24,7 +24,6 @@ When Agent select "Apple Business Chat" in Chanel container and click "Apply fil
 Then Verify that only "apple-business-chat" tickets chats are shown
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1981")
-  @regression
   Scenario: CD :: Supervisor Desk :: Chats :: Verify the Chats that are currently in the 'Pending' tab will have a yellow 'Pending' icon on them in the Supervisor view
     Given Setup ORCA abc integration for Automation tenant
     When I login as agent of Automation

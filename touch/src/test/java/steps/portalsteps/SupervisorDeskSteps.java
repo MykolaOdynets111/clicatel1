@@ -551,11 +551,26 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     }
     @And("Agent can see whatsapp profile name")
     public void agentCanSeeWhatsappProfileName() {
-        Assert.assertTrue(getSupervisorDeskPage().isUpdatedProfileNameShown(),"Whatsapp Profile Name is not shown");
+        getSupervisorDeskPage().isUpdatedProfileNameShown();
+    }
+
+    @And("Agent click on three dot vertical menu and click on assign button")
+    public void agentClickAssignButton() {
+        getSupervisorDeskPage().getChatHeader().clickOnAssignButton();
+    }
+    
+    @When("Assign chat modal is opened")
+    public void assignChatModalOpened() {
+        Assert.assertTrue(getSupervisorDeskPage().getAssignChatWindow().isAssignWindowShown());
     }
 
     @Then("Agent cannot initiate a payment")
     public void agentCannotInitiateAPayment() {
         Assert.assertFalse(getSupervisorDeskPage().isC2pButtonPresent(),"Supervisor Can Initiate Payment");
     }
+
+    @Then("Agent is able to close the assign chat window")
+    public void agentClickCloseAssignWindow() {
+        getSupervisorDeskPage().getAssignChatWindow().clickOnCloseAssignWindow();
+        Assert.assertFalse(getSupervisorDeskPage().getAssignChatWindow().isAssignWindowShown(),"Assign Chat Window is closed"); }
 }

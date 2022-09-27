@@ -1,9 +1,9 @@
 @no_widget
+@Regression
 Feature: Whatsapp ORCA :: Chatdesk
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1939")
-  @Regression
   Scenario: CD :: Agent Desk :: Pending Chat :: Verify that visual indicator appears in the conversation area if Agent marks chat as Pending
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -20,7 +20,6 @@ Feature: Whatsapp ORCA :: Chatdesk
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2002")
-  @Regression
   Scenario: CD :: Agent Desk :: Pending Chat :: Verify that visual indicator appears in the conversation area if Agent marks chat as unpending
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
