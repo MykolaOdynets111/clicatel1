@@ -1,9 +1,9 @@
 @no_widget
+@Regression
 Feature: Supervisor desk
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2787")
-  @Regression
   Scenario: CD::Supervisor desk :: Verify if supervisor is able to check live chats
     Given I open portal
     And Login into portal as an admin of General Bank Demo account

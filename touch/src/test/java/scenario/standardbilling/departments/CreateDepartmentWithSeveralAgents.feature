@@ -1,10 +1,10 @@
 @no_widget
 @remove_dep
 @newagent
+@Regression
 Feature: Departments
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1177")
-  @Regression
   Scenario: CD :: Dashboard :: Department Management :: Verify that the correct number of agents online/offline are displayed
     Given I open portal
     And Login into portal as an admin of Standard Billing account

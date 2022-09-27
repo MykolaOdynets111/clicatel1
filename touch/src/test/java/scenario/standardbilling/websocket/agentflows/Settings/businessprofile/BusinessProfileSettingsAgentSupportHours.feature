@@ -1,8 +1,8 @@
 @no_widget
+@Regression
 Feature: Dashboard: Settings: Business Profile : Agent Support Hours
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-76362")
-  @Regression
   @agent_support_hours
   Scenario: CD :: Dashboard :: Settings :: Business Profile :: Verify that the default time configuration for all departments is Mon-Sun 00:00 - 23:59
 
@@ -12,7 +12,6 @@ Feature: Dashboard: Settings: Business Profile : Agent Support Hours
     When Select Business support hours for all agents option in Agent Supported Hours section
     Then Verify 'Support hours' are default for Standard Billing
 
-  @Regression
   @agent_support_hours
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2312")
   Scenario: CD :: Dashboard :: Settings :: Business Profile :: Verify if supervisor can change support hours
