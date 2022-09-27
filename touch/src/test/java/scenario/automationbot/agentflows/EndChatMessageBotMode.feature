@@ -40,14 +40,17 @@ Feature: End chat flow: bot mode
     And Conversation area becomes active with start_new_conversation user's message
     #Then Text response that contains "start_new_conversation" is shown
 
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2750")
   @no_chatdesk
-  Scenario: End chat message resetting for Bot mode tenant
-    Given Taf start_new_conversation message text is updated for Automation Bot tenant
-    Given I open portal
-    And Login into portal as an admin of Automation Bot account
+  @Regression
+  @start_orca_server
+  Scenario: CD :: Dashboard :: Settings :: End chat message resetting for Bot mode tenant
+    Given Taf End Chat message is set to true for Automation Bot tenant
+    And Taf End Chat message message text is updated for Automation Bot tenant
+    And I login as agent of Automation Bot
     And I select Touch in left menu and Dashboard in submenu
     When Navigate to Auto Responders page
     When Wait for auto responders page to load
     And Agent click expand arrow for End chat message auto responder
     And Click "Reset to default" button for End chat message auto responder
-    Then start_new_conversation is reset on backend
+    Then End Chat message is reset on backend

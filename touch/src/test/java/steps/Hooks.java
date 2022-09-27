@@ -485,6 +485,8 @@ public class Hooks implements JSHelper {
         DefaultTouchUserSteps.mediaFileName.remove();
         DotControlSteps.mediaFileName.remove();
         ApiHelper.clientProfileId.remove();
+        CamundaFlowsSteps.updatedMessage.remove();
+        CamundaFlowsSteps.defaultMessage.remove();
     }
 
     @Attachment(value = "request")
