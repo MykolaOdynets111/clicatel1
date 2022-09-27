@@ -48,4 +48,19 @@ Feature: Chat2Pay ::Chat2PayCustomerClosedChat
     When Agent select "Pending" left menu option
     Then Agent has new conversation request from orca user
 
-    
+  @orca_api
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1683")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1660")
+    @Regression
+  Scenario Outline: CD:: C2P:: Verify if Agent can use Chat2Pay in WhatsApp
+    Given I login as agent of General Bank Demo
+    Given Setup ORCA <channelType> integration for General Bank Demo tenant
+    When Send connect to agent message by ORCA
+    Then Agent has new conversation request from <userType> user
+    When Agent click on new conversation request from <userType>
+    Then Conversation area becomes active with connect to agent user's message
+    Then Agent can see c2p extension icon
+    Examples:
+      | channelType | userType |
+      | whatsapp    | orca     |
+      | sms         | sms      |
