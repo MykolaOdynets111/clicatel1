@@ -40,7 +40,7 @@ public class ChatPreferenceSettings {
     @JsonProperty("routingType")
     private String routingType = "RANDOM";
     @JsonProperty("departmentPrimaryStatus")
-    private String departmentPrimaryStatus = "true";
+    private String departmentPrimaryStatus = "false";
     @JsonProperty("chatTranscriptMode")
     private String chatTranscriptMode = "ALL";
     @JsonProperty("ticketTimeoutHours")
@@ -98,25 +98,5 @@ public class ChatPreferenceSettings {
             default:
                 throw new NoSuchElementException("Json element: '" + feature + "' wasn't found");
         }
-    }
-
-    @Override
-    public String toString() {
-        return "{\n" +
-                "            \"maxChatsPerAgent\": "+maxChatsPerAgent+",\n" +
-                "                \"autoTicketScheduling\": "+autoTicketScheduling+",\n" +
-                "                \"agentFeedback\": "+agentFeedback+",\n" +
-                "                \"tenantMode\": \""+tenantMode+"\",\n" +
-                "                \"lastAgentMode\": "+lastAgentMode+",\n" +
-                "                \"routingType\": \""+routingType+"\",\n" +
-                "                \"departmentPrimaryStatus\": "+departmentPrimaryStatus+",\n" +
-                "                \"chatTranscriptMode\": \""+chatTranscriptMode+"\",\n" +
-                "                \"ticketTimeoutHours\": "+ticketTimeoutHours+",\n" +
-                "                \"agentInactivityTimeoutSec\": "+agentInactivityTimeoutSec+",\n" +
-                "                \"attachmentLifeTimeDays\": "+attachmentLifeTimeDays+",\n" +
-                "                \"globalInactivityTimeoutSec\": "+globalInactivityTimeoutSec+",\n" +
-                "                \"pendingChatAutoClosureTimeSec\": "+pendingChatAutoClosureTimeSec+"\n" +
-                "        }"
-                ;
     }
 }

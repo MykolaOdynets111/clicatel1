@@ -24,16 +24,14 @@ public class WelcomeMessages extends AbstractSocialPage {
     @FindBy(css = "li.message-to.with-content button")
     private List<WebElement> welcomeCardButtons;
 
-    @FindBy(css = "div.to .msg")
-    private WebElement toUserMessages;
     String cssWelcomeTextMessage = "li.ctl-chat-message-container.message-to span.text-break-mod";
 
     public WelcomeMessages(WebDriver driver) {
         super(driver);
     }
 
-    public WelcomeMessages(String agent) {
-        super(DriverFactory.getDriverForAgent(agent));
+    public WelcomeMessages() {
+        super(DriverFactory.getTouchDriverInstance());
     }
 
     public boolean isWelcomeCardContainerShown() {
@@ -54,16 +52,16 @@ public class WelcomeMessages extends AbstractSocialPage {
     }
 
     public boolean isWelcomeTextMessageShown() {
-        if (isElementShown(this.getCurrentDriver(), toUserMessages, 5)){
-            return isElementShown(this.getCurrentDriver(), toUserMessages, 1);
+        if (areElementsExistsInDOMCss(this.getCurrentDriver(), cssWelcomeTextMessage, 5)){
+            return isElementShown(this.getCurrentDriver(), welcomeTextMessage.get(welcomeTextMessage.size()-1), 1);
         } else {
             return false;
         }
     }
 
     public String getWelcomeMessageText() {
-        waitForElementToBeVisible(this.getCurrentDriver(), toUserMessages, 3);
-        return getTextFromElem(this.getCurrentDriver(), toUserMessages, 1, "Welcome message");
+        waitForElementsToBePresentByCss(this.getCurrentDriver(), cssWelcomeTextMessage, 3);
+        return getTextFromElem(this.getCurrentDriver(), welcomeTextMessage.get(welcomeTextMessage.size()-1), 1, "Welcome message");
     }
 
     public String getWelcomeCardText() {

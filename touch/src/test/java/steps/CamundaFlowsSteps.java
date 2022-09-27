@@ -25,7 +25,9 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
 
     private Faker faker = new Faker();
 
-    private static ThreadLocal<String> updatedMessage = new ThreadLocal<>();
+    public static ThreadLocal<String> updatedMessage = new ThreadLocal<>();
+
+    public static ThreadLocal<String> defaultMessage = new ThreadLocal<>();
 
     @Given("^Taf (.*) is set to (.*) for (.*) tenant$")
     public void updateTafMessageStatus(String autoResponderTitle, boolean status, String tenantOrgName){
@@ -33,7 +35,7 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
         AutoResponderMessage autoResponderMessageUpdates = ApiHelper.getAutoResponderMessage(autoResponderTitle);
         autoResponderMessageUpdates.setEnabled(status);
         ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates, autoResponderTitle);
-
+        defaultMessage.set(autoResponderMessageUpdates.getText());
     }
 
     @Given("^Taf (.*) message text is updated for (.*) tenant$")

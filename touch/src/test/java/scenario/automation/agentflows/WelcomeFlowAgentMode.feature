@@ -16,7 +16,9 @@ Feature: Welcome flow: agent mode
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2477")
   @no_chatdesk
-  Scenario: Reset to default Welcome message auto responder (Agent mode)
+  @Regression
+  @start_orca_server
+  Scenario: CD :: Dashboard :: Settings :: Reset to default Welcome message auto responder (Agent mode)
     Given Setup ORCA Whatsapp integration for Automation Bot tenant
     And Taf Connecting Agent message (Social Channels) is set to true for Automation Bot tenant
     And Taf Connecting Agent message (Social Channels) message text is updated for Automation Bot tenant
@@ -26,10 +28,6 @@ Feature: Welcome flow: agent mode
     And Wait for auto responders page to load
     And Agent click expand arrow for Connecting Agent message (Social Channels) auto responder
     And Click "Reset to default" button for Connecting Agent message (Social Channels) auto responder
-    #When Connecting Agent message (Social Channels) is reset on backend
+    When Connecting Agent message (Social Channels) is reset on backend
     And Send connect to agent message by ORCA
-    And I select Touch in left menu and Agent Desk in submenu
-    And Agent has new conversation request from orca user
-    And Agent click on new conversation request from orca
-    And Conversation area becomes active with connect to agent user's message
-    Then Agent Welcome message with correct text Thanks for your patience. You have now been connected with Autobot Main. is shown
+    Then Verify Orca returns Connecting Agent message (Social Channels) autoresponder during 40 seconds

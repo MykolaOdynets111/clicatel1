@@ -6,6 +6,7 @@ import apihelper.ApiHelper;
 import datamanager.Tenants;
 import datamanager.UserPersonalInfo;
 import datamanager.jacksonschemas.AgentMapping;
+import datamanager.jacksonschemas.ChatPreferenceSettings;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
 import dbmanager.DBConnector;
@@ -75,13 +76,9 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Given("^(.*) tenant feature is set to (.*) for (.*)$")
     public void setFeatureStatus(String feature, String status, String tenantOrgName){
-        PortalAuthToken.clearAccessTokenForPortalUser();
-        boolean featureStatus = ApiHelper.getFeatureStatus(tenantOrgName, feature);
-        savePreTestFeatureStatus(feature, featureStatus);
-        saveTestFeatureStatusChanging(feature, Boolean.parseBoolean(status.toLowerCase()));
-        if(featureStatus != Boolean.parseBoolean(status.toLowerCase())) {
-            ApiHelper.updateFeatureStatus(tenantOrgName, feature, status);
-        }
+        ChatPreferenceSettings chatPreferenceSettings = new ChatPreferenceSettings();
+        chatPreferenceSettings.setFeatureStatus(feature, status);
+        ApiHelper.updateFeatureStatus(tenantOrgName, chatPreferenceSettings);
     }
 
     @Then("^On backand (.*) tenant feature status is set to (.*) for (.*)$")

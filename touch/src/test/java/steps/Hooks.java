@@ -10,6 +10,7 @@ import datamanager.Agents;
 import datamanager.MC2Account;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.CRMTicket;
+import datamanager.jacksonschemas.ChatPreferenceSettings;
 import datamanager.jacksonschemas.TenantChatPreferences;
 import driverfactory.DriverFactory;
 import driverfactory.URLs;
@@ -333,41 +334,11 @@ public class Hooks implements JSHelper {
             }*/
 
             if (scenario.getSourceTagNames().contains("@chat_preferences")){
-                try{
-                    boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus(ApiHelper.featureName.get());
-                    if (pretestFeatureStatus != DefaultAgentSteps.getTestFeatureStatusChanging(ApiHelper.featureName.get())) {
-                        ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), ApiHelper.featureName.get(), Boolean.toString(pretestFeatureStatus));
-                    }
-                }catch(NullPointerException e){
-                    //no feature status interaction
-                }
-                if(AgentCRMTicketsSteps.getCreatedCRMTicket()!=null){
-                    ApiHelper.deleteCRMTicket(AgentCRMTicketsSteps.getCreatedCRMTicket().getId());
-                }
-                if(AgentCRMTicketsSteps.getCreatedCRMTicketsList()!=null){
-                    for(CRMTicket ticket: AgentCRMTicketsSteps.getCreatedCRMTicketsList()){
-                        ApiHelper.deleteCRMTicket(ticket.getId());
-                    }
-                }
+                ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), new ChatPreferenceSettings());
             }
 
             if (scenario.getSourceTagNames().contains("@autoTicketScheduling")){
-                try{
-                    boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus("autoTicketScheduling");
-                    if (pretestFeatureStatus != DefaultAgentSteps.getTestFeatureStatusChanging("autoTicketScheduling")) {
-                        ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "autoTicketScheduling", Boolean.toString(pretestFeatureStatus));
-                    }
-                }catch(NullPointerException e){
-                    //no feature status interaction
-                }
-                if(AgentCRMTicketsSteps.getCreatedCRMTicket()!=null){
-                    ApiHelper.deleteCRMTicket(AgentCRMTicketsSteps.getCreatedCRMTicket().getId());
-                }
-                if(AgentCRMTicketsSteps.getCreatedCRMTicketsList()!=null){
-                    for(CRMTicket ticket: AgentCRMTicketsSteps.getCreatedCRMTicketsList()){
-                        ApiHelper.deleteCRMTicket(ticket.getId());
-                    }
-                }
+                ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), new ChatPreferenceSettings());
             }
 
             if (scenario.getSourceTagNames().contains("@widget_disabling")){

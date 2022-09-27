@@ -33,6 +33,7 @@ import portalpages.PortalSignUpPage;
 import portalpages.PortalUserEditingPage;
 import socialaccounts.FacebookUsers;
 import socialaccounts.TwitterUsers;
+import steps.CamundaFlowsSteps;
 import steps.agentsteps.AbstractAgentSteps;
 import steps.agentsteps.AgentCRMTicketsSteps;
 import touchpages.pages.MainPage;
@@ -812,7 +813,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^(.*) is reset on backend$")
     public void verifyTafMessageIsReset(String autoresponderId){
         String actualMessage = ApiHelper.getAutoResponderMessageText(autoresponderId);
-        String defaultMessage = DBConnector.getDefaultAutoResponder(ConfigManager.getEnv(), autoresponderId);
+        String defaultMessage = CamundaFlowsSteps.defaultMessage.get();
         Assert.assertEquals(actualMessage, defaultMessage,
                 autoresponderId + " message is not reset to default");
     }

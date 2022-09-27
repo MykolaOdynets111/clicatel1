@@ -43,7 +43,7 @@ public class ApiHelper implements VerificationHelper {
     public static ThreadLocal<String> featureName = new ThreadLocal<>();
 
     public static String getInternalTenantConfig(String tenantName, String config) {
-        String url = format(Endpoints.INTERNAL_TENANT_CONFIG, tenantName);
+        String url = format(Endpoints.CHAT_PREFERENCES, tenantName);
         return RestAssured.get(url).jsonPath().get(config).toString();
     }
 
@@ -52,7 +52,7 @@ public class ApiHelper implements VerificationHelper {
         return RestAssured.given()
                 .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .log().all()
-                .get(format(Endpoints.INTERNAL_TENANT_CONFIG, tenantId));
+                .get(format(Endpoints.CHAT_PREFERENCES, tenantId));
     }
 
     public static Map<String, String> getAllTenantsInfoMap(String theValue) {
@@ -356,20 +356,16 @@ public class ApiHelper implements VerificationHelper {
 
     }
 
-    public static void updateFeatureStatus(String tenantOrgName, String feature, String status) {
-        ChatPreferenceSettings chatPreferenceSettings = new ChatPreferenceSettings();
-        featureName.set(feature);
-        chatPreferenceSettings.setFeatureStatus(feature, status);
-        String tenantID = getTenant(tenantOrgName).get("id");
-        String url = format(Endpoints.INTERNAL_TENANT_CONFIG, tenantID);
+    public static void updateFeatureStatus(String tenantOrgName, ChatPreferenceSettings chatPreferenceSettings) {
+        String url = Endpoints.CHAT_PREFERENCES;
 
         Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON)
-                .body(chatPreferenceSettings.toString())
+                .body(chatPreferenceSettings)
                 .put(url);
         Assert.assertEquals(resp.statusCode(), 200,
-                "Status code is not 200 for feature ");
+                "Status code is not 200 and body value is \n: " + chatPreferenceSettings.toString() + "\n error message is: " + resp.getBody().asString());
     }
 
     public static boolean getFeatureStatus(String tenantOrgName, String FEATURE) {
