@@ -3,10 +3,10 @@
 @off_rating_abc
 @orca_api
 @start_orca_server
+@Regression
 Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2443")
-  @Regression
   Scenario Outline: CD:: Survey:: verify if user has an option to skip the survey for Whatsapp NPS survey type - Customer Feedback turned OFF in Flow
     Given I login as agent of Standard Billing
     And Setup ORCA <channelType> integration for Standard Billing tenant
@@ -73,7 +73,6 @@ Feature: Satisfaction Survey
       | abc         |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1861")
-  @Regression
   Scenario Outline: CD:: Survey:: Dashboard:: Verify If the client enables NPS Survey, there will be no update in the agent scores in the CSAT in agent performance tab
     Given I login as agent of Automation Bot
     And Setup ORCA <channelType> integration for Automation Bot tenant
@@ -107,7 +106,6 @@ Feature: Satisfaction Survey
       | abc         | Apple Business Chat |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1170")
-  @Regression
   Scenario Outline: Dashboard: Verify if admin can open Customers History with CSAT customer survey
     Given I login as agent of Standard Billing
     And Setup ORCA <channelType> integration for Standard Billing tenant
@@ -140,10 +138,9 @@ Feature: Satisfaction Survey
       | abc         |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1685")
-  @Regression
   Scenario Outline: CD:: <channelType>:: Survey:: CSAT:: Verify if survey rating updates the % value for CSAT scores in the Agent performance reports
-    Given I login as agent of Automation Bot
-    And Setup ORCA <channelType> integration for Automation Bot tenant
+    Given I login as agent of Standard Billing
+    And Setup ORCA <channelType> integration for Standard Billing tenant
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard

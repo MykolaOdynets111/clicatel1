@@ -1,9 +1,9 @@
 @no_widget
 @orca_api
+@Regression
 Feature: Apple Business Chat :: Dashboard
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2301")
-  @Regression
   Scenario: Dashboard:: Verify if Apple channel is displayed on live customer charts
     Given Setup ORCA abc integration for General Bank Demo tenant
     When Send chat to agent message by ORCA
@@ -18,7 +18,6 @@ Feature: Apple Business Chat :: Dashboard
     Then Send //end message by ORCA
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2399")
-  @Regression
   Scenario: Dashboard: ABC support: Verify customer overview displays current number of Live Chats being engaged by agents for ABC.
     Given Setup ORCA abc integration for General Bank Demo tenant
     When Send chat to agent message by ORCA
@@ -32,7 +31,6 @@ Feature: Apple Business Chat :: Dashboard
     Then Send //end message by ORCA
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2298")
-  @Regression
   Scenario: Dashboard: ABC support: Verify Customer overview displays correct report of Attended / Unattended chats
     Given I login as agent of General Bank Demo
     Given Setup ORCA abc integration for General Bank Demo tenant
@@ -49,7 +47,6 @@ Feature: Apple Business Chat :: Dashboard
     Then Send //end message by ORCA
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2281")
-  @Regression
   Scenario: Dashboard: ABC support: Verify Customer overview displays correct general sentiment for Apple business Chat
     Given I login as agent of General Bank Demo
     Given Setup ORCA abc integration for General Bank Demo tenant

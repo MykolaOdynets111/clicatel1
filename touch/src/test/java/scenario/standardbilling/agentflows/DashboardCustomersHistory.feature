@@ -1,12 +1,12 @@
 @no_widget
+@Regression
 Feature: Dashboard: Customer History
 
-    @off_rating_whatsapp
-    @orca_api
-    @start_orca_server
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-1456")
-      @Regression
-  Scenario Outline: Dashboard: Verify if admin can open Customers History with <surveyType> customer survey
+  @off_rating_whatsapp
+  @orca_api
+  @start_orca_server
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1456")
+  Scenario Outline: CD:: Dashboard: Dashboard-Customers_Overview:: Verify if admin can open Customers History with <surveyType> customer survey
     Given I login as agent of Standard Billing
     And Setup ORCA whatsapp integration for Standard Billing tenant
     And Update survey management chanel whatsapp settings by ip for Standard Billing
@@ -34,7 +34,6 @@ Feature: Dashboard: Customer History
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2427")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1929")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1816")
-  @Regression
   Scenario: Dashboard: Verify if admin can filter Customers History report by channel and period
     When I open portal
     And Login into portal as an admin of Standard Billing account
@@ -59,6 +58,7 @@ Feature: Dashboard: Customer History
       | SMS   | Past 4 weeks   |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2955")
+  @skip
   Scenario: Dashboard:: Verify that if NPS surveys are categorize as Passives if webchat user chooses between 7 – 8
     Given Update survey management chanel webchat settings by ip for Standard Billing
       | ratingEnabled | true        |
@@ -91,7 +91,6 @@ Feature: Dashboard: Customer History
 
   @no_chatdesk
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2338")
-  @Regression
   Scenario: Dashboard:: Verify that if supervisor selects 'past day' date filter, reports should be displayed hourly
     When I open portal
     And Login into portal as an admin of Standard Billing account
@@ -103,7 +102,6 @@ Feature: Dashboard: Customer History
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1796")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1819")
-  @Regression
   Scenario Outline: CD:: Survey:: CSAT:: Dashboard:: Verify if customer satisfaction graph for CSAT score is presented as "0-5" on Y Axis scale
     Given I login as agent of Standard Billing
     When I select Touch in left menu and Dashboard in submenu

@@ -1,9 +1,9 @@
 @no_widget
+@Regression
 Feature: Whatsapp ORCA :: Chatdesk
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1739")
-  @Regression
   Scenario: ChatDesk:: The header should have whatsapp icon when user is chatting using orca whatsapp
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -16,7 +16,6 @@ Feature: Whatsapp ORCA :: Chatdesk
 
  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1821")
-  @Regression
   Scenario: ChatDesk: ORCA WhatsApp: Verify if //END message works for whatsapp chat
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -30,7 +29,6 @@ Feature: Whatsapp ORCA :: Chatdesk
   @orca_api
   @start_orca_server
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1826")
-  @Regression
   Scenario: ChatDesk:: Verify if agent is able to transfer Orca WhatsApp chat via "Transfer chat" button
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -51,7 +49,6 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Verify Orca returns hello response during 40 seconds
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1752")
-  @Regression
   Scenario: ChatDesk:: Verify if agent can filter closed chat using WhatsApp chat channel
     Given I login as agent of General Bank Demo
     When Agent select "Closed" left menu option
@@ -59,7 +56,6 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Agent see only whatsapp chats in left menu
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1162")
-  @Regression
   Scenario: CD :: Agent Desk :: Live Chat :: Location :: Verify if agent click on the small cross on search bar, the text entered in the search bar is deleted
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -73,7 +69,6 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Location field becomes empty
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1171")
-  @Regression
   Scenario: CD :: Agent Desk :: Live Chat :: Verify if agent can send plain text message to a user over WhatsApp Channel
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -84,7 +79,6 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Agent send Hello message
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1176")
-  @Regression
   Scenario: CD :: Agent Desk :: Live Chat :: Profile :: Verify the text in the "not verified" label is in grey color in customer profile phone number field
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -97,7 +91,6 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Not verified label is displayed
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1835")
-  @Regression
   Scenario: CD :: Agent Desk :: Live Chat :: Verify that location should auto-populate after agent try to search for second location without selecting the first one.
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -115,7 +108,6 @@ Feature: Whatsapp ORCA :: Chatdesk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1165")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1848")
-  @Regression
   @orca_api
   Scenario Outline: CD :: Location :: <channelType>:: Verify that An agent should be able to search for any location
     Given I login as agent of General Bank Demo
@@ -145,7 +137,6 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then  Verify that live chats available are shown
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2369")
-  @Regression
   Scenario: CD:: Supervisor desk :: Verify if Supervisor is able to Route ticket to scheduler
     Given I login as second agent of General Bank Demo
     And Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -174,7 +165,6 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Agent can see whatsapp profile name
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1302")
-  @regression
   Scenario: CD :: Supervisor Desk :: Chat :: Chat2Pay :: Verify that supervisor does not have the capability to initiate a payment transaction
     Given I login as agent of General Bank Demo
     When Setup ORCA whatsapp integration for General Bank Demo tenant
