@@ -66,7 +66,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(xpath = "//input[contains(@class, 'cl-form-control cl-form-control--input cl-end-date')]")
     private WebElement endDateInput;
 
-
     @FindBy(xpath = "//*[local-name()='svg' and @name='clock']/*[local-name()='g']")
     private WebElement leftChatPendingIcon;
 

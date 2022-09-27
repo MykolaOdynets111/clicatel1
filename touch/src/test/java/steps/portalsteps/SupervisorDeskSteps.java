@@ -556,14 +556,23 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     }
     @And("Agent can see whatsapp profile name")
     public void agentCanSeeWhatsappProfileName() {
-        Assert.assertTrue(getSupervisorDeskPage().isUpdatedProfileNameShown(),"Whatsapp Profile Name is not shown");
+        getSupervisorDeskPage().isUpdatedProfileNameShown();
+    }
+
+    @And("Agent click on three dot vertical menu and click on assign button")
+    public void agentClickAssignButton() {
+        getSupervisorDeskPage().getChatHeader().clickOnAssignButton();
+    }
+    
+    @When("Assign chat modal is opened")
+    public void assignChatModalOpened() {
+        Assert.assertTrue(getSupervisorDeskPage().getAssignChatWindow().isAssignWindowShown());
     }
 
     @Then("Agent cannot initiate a payment")
     public void agentCannotInitiateAPayment() {
         Assert.assertFalse(getSupervisorDeskPage().isC2pButtonPresent(),"Supervisor Can Initiate Payment");
     }
-
     @And("Supervisor adds a note {string}, Jira link {string} and Ticket Number {string}")
     public void addNewNote(String note, String jiraLink, String ticketNumber){
         getSupervisorDeskPage().getSupervisorRightPanel().clickOnNotesTab()
@@ -583,5 +592,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         soft.assertEquals(getSupervisorDeskPage().getSupervisorRightPanel().getNoteCardJiraLink(),jiraLink,"JIRA Link does not match");
         soft.assertEquals(getSupervisorDeskPage().getSupervisorRightPanel().getNoteCardTicketNumber(),ticketNumber,"Ticket Number does not match");
         soft.assertAll();
-    };
+    }
+
+    @Then("Agent is able to close the assign chat window")
+    public void agentClickCloseAssignWindow() {
+        getSupervisorDeskPage().getAssignChatWindow().clickOnCloseAssignWindow();
+        Assert.assertFalse(getSupervisorDeskPage().getAssignChatWindow().isAssignWindowShown(),"Assign Chat Window is closed");
+    }
 }
