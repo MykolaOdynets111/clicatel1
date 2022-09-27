@@ -32,8 +32,6 @@ Feature: Dashboard: Customer History
 
   @no_chatdesk
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2427")
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1929")
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1816")
   Scenario: Dashboard: Verify if admin can filter Customers History report by channel and period
     When I open portal
     And Login into portal as an admin of Standard Billing account

@@ -1,5 +1,6 @@
 @camunda
-  @chat_preferences
+@chat_preferences
+@no_widget
 Feature: End chat flow: bot mode
 
   Background:
@@ -23,7 +24,7 @@ Feature: End chat flow: bot mode
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2990")
   @Regression
-  Scenario: Close chat message enabling and editing for Bot mode tenant
+  Scenario: CD:: Close chat message enabling and editing for Bot mode tenant
     Given Taf End Chat message is set to true for Automation Bot tenant
     And Taf End Chat message message text is updated for Automation Bot tenant
     And I login as agent of Automation Bot
@@ -35,15 +36,9 @@ Feature: End chat flow: bot mode
     Then End chat popup for agent should be opened
     When Agent click 'Close chat' button
     Then Agent should not see from user chat in agent desk from orca
-    And Agent select "Closed" left menu option
-    And Agent searches and selects chat from orca in chat history list
-    And Conversation area becomes active with start_new_conversation user's message
-    #Then Text response that contains "start_new_conversation" is shown
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2750")
-  @no_chatdesk
   @Regression
-  @start_orca_server
   Scenario: CD :: Dashboard :: Settings :: End chat message resetting for Bot mode tenant
     Given Taf End Chat message is set to true for Automation Bot tenant
     And Taf End Chat message message text is updated for Automation Bot tenant

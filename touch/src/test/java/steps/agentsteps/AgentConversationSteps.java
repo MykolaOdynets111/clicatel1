@@ -217,7 +217,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     }
 
     @When("^Agent click on emoji icon$")
-    public void selectRamdomFrequetlyUsedEmogy() {
+    public void selectRandomFrequentlyUsedEmoji() {
         getAgentHomePage("main").getChatForm().clickEmoticonButton();
         selectedEmoji = getAgentHomePage("main").getChatForm().selectRandomFrequentlyUsedEmoji();
     }
@@ -269,14 +269,10 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         messagesFromChatBody.set(getChatBody(agent).getAllMessages());
     }
 
-    @Then("^Sent emoji is displayed on chatdesk$")
+    @Then("Sent emoji is displayed on chatdesk$")
     public void verifyEmojiDisplayedOnChatdesk() {
-        String userMessage = "Submitted data:\n" +
-                "" + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + "\n" +
-                "health@test.com";
-        Assert.assertTrue(getAgentHomePage("main agent").getChatBody()
-                        .getAgentEmojiResponseOnUserMessage(userMessage).contains(selectedEmoji),
-                "Expected to user emoji '" + selectedEmoji + "' is not shown in chatdesk");
+        Assert.assertTrue(getChatBody("main agent").getAgentEmojiResponseOnUserMessage(selectedEmoji),
+                "'" + selectedEmoji + "' User message is not shown in conversation area");
     }
 
     @Then("^There is no from (.*) response added by default for (.*) message from fb user$")

@@ -6,11 +6,8 @@
 Feature: WhatsApp ORCA :: Surveys
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1877")
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1173")
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2394")
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1933")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1828")
-  Scenario Outline: verify if supervisor can choose between NPS(Net Promotor Score) or CSAT(Customer Satisfaction Score) survey type
+  Scenario Outline: CD:: <channelType>:: Settings :: Survey :: Verify if Supervisor is able to see the survey preview header for <channelType> channel and select between NPS(Net Promotor Score) or CSAT(Customer Satisfaction Score) survey type in the survey tab
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Update survey management chanel <channelType> settings by ip for General Bank Demo
       | ratingEnabled | true        |
