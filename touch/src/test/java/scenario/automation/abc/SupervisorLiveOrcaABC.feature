@@ -41,7 +41,6 @@ Then Verify that only "apple-business-chat" tickets chats are shown
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2082")
-  @regression
   Scenario: CD :: Supervisor Desk :: Chats :: Verify that the "All live chats" card has both "pending and live chats" in Supervisor view
     Given Setup ORCA abc integration for Automation tenant
     When I login as agent of Automation
