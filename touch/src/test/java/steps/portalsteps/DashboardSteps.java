@@ -318,12 +318,8 @@ public class DashboardSteps extends AbstractPortalSteps {
 
     @Then("^Admin is able to see (.*) in the (.*) against the agent$")
     public void adminIsAbleToSeeTheNoDataShowAlertText(String expectedText, String graphName) {
-        try {
-            Assert.assertTrue(getDashboardPage().getCustomersHistory()
-                    .isNoDataAlertMessageText(graphName).contains(expectedText), "Alert message doesn't get required text");
-        } catch (NoSuchElementException | TimeoutException e) {
-            adminIsAbleToSeeNPSLiveChatsByChannelPastSentimentGraphs(graphName);
-        }
+        Assert.assertTrue(getDashboardPage().getCustomersHistory()
+                .isNoDataAlertMessageText(graphName).contains(expectedText), "Alert message doesn't get required text");
     }
 
     //Use this step to fetch after CSAT ratings to compare before and after CSAT rating
