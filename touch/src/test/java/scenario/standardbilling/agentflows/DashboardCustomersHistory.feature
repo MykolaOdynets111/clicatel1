@@ -2,7 +2,6 @@
 @Regression
 Feature: Dashboard: Customer History
 
-  @off_survey_management
   @off_rating_whatsapp
   @orca_api
   @start_orca_server
@@ -33,7 +32,6 @@ Feature: Dashboard: Customer History
 
   @no_chatdesk
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2427")
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1929")
   Scenario: Dashboard: Verify if admin can filter Customers History report by channel and period
     When I open portal
     And Login into portal as an admin of Standard Billing account
@@ -56,26 +54,6 @@ Feature: Dashboard: Customer History
       | SMS   | Past 2 weeks   |
       | SMS   | Past 3 weeks   |
       | SMS   | Past 4 weeks   |
-
-  @no_chatdesk
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1486")
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1816")
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2437")
-  Scenario Outline:  CD:: Survey:: Verify " no data to show now" should be shown in the CSAT column against the agent.
-    When I open portal
-    And I login as agent of Standard Billing
-    And I select Touch in left menu and Dashboard in submenu
-    And Admin click on Customers Overview dashboard tab
-    And Admin click on Customers History on dashboard
-    And Admin filter Customers History by channel and period
-      | <channelTypeFilter>  | Past day  |
-    Then Admin is able to see No data to report at the moment in the Customer Satisfaction against the agent
-    And Admin see the message no data for Customer Satisfaction gauge if there is no available data
-    Examples:
-      | channelTypeFilter   |
-      | SMS                 |
-      | Apple Business Chat |
-      | WhatsApp            |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2955")
   @skip

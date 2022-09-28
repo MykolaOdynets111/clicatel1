@@ -7,6 +7,7 @@ import datamanager.jacksonschemas.chathistory.ChatHistory;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
+import datamanager.jacksonschemas.ChatPreferenceSettings;
 import datamanager.jacksonschemas.usersessioninfo.ClientProfile;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
 import drivermanager.ConfigManager;
@@ -30,6 +31,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static io.restassured.RestAssured.given;
 import static java.lang.String.format;
 import static org.junit.Assert.fail;
 
@@ -38,8 +40,10 @@ public class ApiHelper implements VerificationHelper {
     private static List<HashMap> tenantsInfo = null;
     public static ThreadLocal<String> clientProfileId = new ThreadLocal<>();
 
+    public static ThreadLocal<String> featureName = new ThreadLocal<>();
+
     public static String getInternalTenantConfig(String tenantName, String config) {
-        String url = format(Endpoints.INTERNAL_TENANT_CONFIG, tenantName);
+        String url = format(Endpoints.CHAT_PREFERENCES, tenantName);
         return RestAssured.get(url).jsonPath().get(config).toString();
     }
 
@@ -48,7 +52,7 @@ public class ApiHelper implements VerificationHelper {
         return RestAssured.given()
                 .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .log().all()
-                .get(format(Endpoints.INTERNAL_TENANT_CONFIG, tenantId));
+                .get(format(Endpoints.CHAT_PREFERENCES, tenantId));
     }
 
     public static Map<String, String> getAllTenantsInfoMap(String theValue) {
@@ -181,7 +185,7 @@ public class ApiHelper implements VerificationHelper {
     }
 
     public static void updateAutoresponderMessage(AutoResponderMessage tafMessage, String autoResponderId) {
-        String url = format(Endpoints.AUTORESPONDER_CONTROLLER, autoResponderId);
+        String url = format(Endpoints.AUTORESPONDER_CONTROLLER, tafMessage.getId());
         Response resp = RestAssured.given().log().all()
                 .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .contentType(ContentType.JSON)
@@ -352,17 +356,22 @@ public class ApiHelper implements VerificationHelper {
 
     }
 
+    public static void updateFeatureStatus(String tenantOrgName, ChatPreferenceSettings chatPreferenceSettings) {
+        String url = Endpoints.CHAT_PREFERENCES;
 
-    public static void updateFeatureStatus(String tenantOrgName, String feature, String status) {
-        String tenantID = getTenant(tenantOrgName).get("id");
-        String url = format(Endpoints.INTERNAL_FEATURE_STATE, tenantID, feature, status);
-        RestAssured.put(url);
+        Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
+                .accept(ContentType.ANY)
+                .contentType(ContentType.JSON)
+                .body(chatPreferenceSettings)
+                .put(url);
+        Assert.assertEquals(resp.statusCode(), 200,
+                "Status code is not 200 and body value is \n: " + chatPreferenceSettings.toString() + "\n error message is: " + resp.getBody().asString());
     }
 
     public static boolean getFeatureStatus(String tenantOrgName, String FEATURE) {
         Response resp = RestAssured.given().log().all()
                 .header("Authorization", getAccessToken(tenantOrgName, "main"))
-                .get(Endpoints.FEATURE);
+                .get(format(Endpoints.FEATURE, Tenants.getTenantId()));
         boolean featureStatus = false;
         try {
             featureStatus = resp.getBody().jsonPath().getBoolean(FEATURE);

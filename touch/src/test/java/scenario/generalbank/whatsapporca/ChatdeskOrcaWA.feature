@@ -109,7 +109,7 @@ Feature: Whatsapp ORCA :: Chatdesk
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1165")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1848")
   @orca_api
-  Scenario Outline: CD :: Agent Desk :: Live Chat :: Location :: Verify that An agent should be able to search for any location.
+  Scenario Outline: CD :: Location :: <channelType>:: Verify that An agent should be able to search for any location
     Given I login as agent of General Bank Demo
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     When Send connect to agent message by ORCA
@@ -121,8 +121,8 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent click on Paris Location
     Examples:
       | channelType | userType|
-      | sms         | sms     |
-      | whatsapp    | orca    |
+      | SMS         | sms     |
+      | Whatsapp    | orca    |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2787")
   @regression

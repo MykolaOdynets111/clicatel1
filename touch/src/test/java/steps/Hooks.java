@@ -10,6 +10,7 @@ import datamanager.Agents;
 import datamanager.MC2Account;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.CRMTicket;
+import datamanager.jacksonschemas.ChatPreferenceSettings;
 import datamanager.jacksonschemas.TenantChatPreferences;
 import driverfactory.DriverFactory;
 import driverfactory.URLs;
@@ -234,9 +235,12 @@ public class Hooks implements JSHelper {
             ApiHelper.ratingEnabling(Tenants.getTenantUnderTestOrgName(), false, "whatsapp");
         }
 
+        if (scenario.getSourceTagNames().contains("@off_rating_sms")) {
+            ApiHelper.ratingEnabling(Tenants.getTenantUnderTestOrgName(), false, "sms");
+        }
 
 
-            if (scenario.getSourceTagNames().contains("@orca_api")){
+        if (scenario.getSourceTagNames().contains("@orca_api")){
             ORCASteps.cleanUPORCAData();
         }
 
@@ -322,30 +326,19 @@ public class Hooks implements JSHelper {
 
             if(scenario.getSourceTagNames().contains("@sign_up")) newAccountInfo();
 
-            if (scenario.getSourceTagNames().contains("@suggestions")){
+            /*if (scenario.getSourceTagNames().contains("@suggestions")){
                 boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus("AGENT_ASSISTANT");
                 if(pretestFeatureStatus != DefaultAgentSteps.getTestFeatureStatusChanging("AGENT_ASSISTANT")) {
                     ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_ASSISTANT", Boolean.toString(pretestFeatureStatus));
                 }
+            }*/
+
+            if (scenario.getSourceTagNames().contains("@chat_preferences")){
+                ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), new ChatPreferenceSettings());
             }
 
-            if (scenario.getSourceTagNames().contains("@agent_feedback")){
-                try{
-                    boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus("AGENT_FEEDBACK");
-                    if (pretestFeatureStatus != DefaultAgentSteps.getTestFeatureStatusChanging("AGENT_FEEDBACK")) {
-                        ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_FEEDBACK", Boolean.toString(pretestFeatureStatus));
-                    }
-                }catch(NullPointerException e){
-                    //no feature status interaction
-                }
-                if(AgentCRMTicketsSteps.getCreatedCRMTicket()!=null){
-                    ApiHelper.deleteCRMTicket(AgentCRMTicketsSteps.getCreatedCRMTicket().getId());
-                }
-                if(AgentCRMTicketsSteps.getCreatedCRMTicketsList()!=null){
-                    for(CRMTicket ticket: AgentCRMTicketsSteps.getCreatedCRMTicketsList()){
-                        ApiHelper.deleteCRMTicket(ticket.getId());
-                    }
-                }
+            if (scenario.getSourceTagNames().contains("@autoTicketScheduling")){
+                ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), new ChatPreferenceSettings());
             }
 
             if (scenario.getSourceTagNames().contains("@widget_disabling")){
@@ -492,6 +485,8 @@ public class Hooks implements JSHelper {
         DefaultTouchUserSteps.mediaFileName.remove();
         DotControlSteps.mediaFileName.remove();
         ApiHelper.clientProfileId.remove();
+        CamundaFlowsSteps.updatedMessage.remove();
+        CamundaFlowsSteps.defaultMessage.remove();
     }
 
     @Attachment(value = "request")
