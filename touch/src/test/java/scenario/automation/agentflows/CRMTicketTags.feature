@@ -2,11 +2,11 @@
 Feature: Interaction with Tags in CRM tickets (agent mode)
 
   Background:
-    Given Setup ORCA whatsapp integration for Automation Bot tenant
-    And agentFeedback tenant feature is set to true for Automation Bot
-    And User select Automation Bot tenant
+    Given Setup ORCA whatsapp integration for Automation tenant
+    And agentFeedback tenant feature is set to true for Automation
+    And User select Automation tenant
     And I open portal
-    And Login into portal as an admin of Automation Bot account
+    And Login into portal as an admin of Automation account
     And I select Touch in left menu and Dashboard in submenu
     When Navigate to Chat Tags page
 
