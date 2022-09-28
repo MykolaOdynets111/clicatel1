@@ -14,7 +14,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Valid image for whatsapp integration are shown in left menu with chat
     And Agent should see whatsappHeader icon in active chat header
 
- @orca_api
+  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1821")
   Scenario: ChatDesk: ORCA WhatsApp: Verify if //END message works for whatsapp chat
     Given I login as agent of General Bank Demo
@@ -124,7 +124,7 @@ Feature: Whatsapp ORCA :: Chatdesk
       | SMS         | sms     |
       | Whatsapp    | orca    |
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-15691")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2787")
   Scenario: Supervisor desk :: verify that supervisor able to check live chats
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
@@ -138,21 +138,38 @@ Feature: Whatsapp ORCA :: Chatdesk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2369")
   Scenario: CD:: Supervisor desk :: Verify if Supervisor is able to Route ticket to scheduler
-    Given I login as second agent of General Bank Demo
-    And Setup ORCA whatsapp integration for General Bank Demo tenant
-    And Send to agent message by ORCA
-    When I open portal
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    And Set agent support hours with day shift
+    When Send to agent message by ORCA
+    And I open portal
     And Login into portal as an admin of General Bank Demo account
-    And I select Touch in left menu and Supervisor Desk in submenu
+    When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     And Agent search chat ORCA on Supervisor desk
     Then Ticket from orca is present on All tickets filter page
     And Select orca ticket checkbox
     When Click 'Route to scheduler' button
-    And Second agent select "Tickets" left menu option
-    Then Second agent has new ticket request from ORCA user
+    Given I login as agent of General Bank Demo
+    And Agent select "Tickets" left menu option
+    Then Agent has new conversation request from ORCA user
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2108")
+  @Regression
+  Scenario: CD:: Supervisor:: Verify if supervisor is able to close "Assign Chat" modal
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    When Set agent support hours for all week
+    And Send to agent message by ORCA
+    And I open portal
+    And Login into portal as an admin of General Bank Demo account
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Agent search chat orca on Supervisor desk
+    When Agent click On Live Supervisor Desk chat from ORCA channel
+    And Agent click on three dot vertical menu and click on assign button
+    When Assign chat modal is opened
+    And Agent is able to close the assign chat window
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1129")
+  @Regression
   Scenario: Supervisor Desk :: Live Chat :: Profile :: Verify that WhatsApp profile name is displayed as username on customer profile section
     Given I login as agent of General Bank Demo
     And Setup ORCA whatsapp integration for General Bank Demo tenant
