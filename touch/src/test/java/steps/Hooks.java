@@ -334,11 +334,11 @@ public class Hooks implements JSHelper {
             }*/
 
             if (scenario.getSourceTagNames().contains("@chat_preferences")){
-                ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), new ChatPreferenceSettings());
+                ApiHelper.updateFeatureStatus(new ChatPreferenceSettings());
             }
 
             if (scenario.getSourceTagNames().contains("@autoTicketScheduling")){
-                ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), new ChatPreferenceSettings());
+                ApiHelper.updateFeatureStatus(new ChatPreferenceSettings());
             }
 
             if (scenario.getSourceTagNames().contains("@widget_disabling")){

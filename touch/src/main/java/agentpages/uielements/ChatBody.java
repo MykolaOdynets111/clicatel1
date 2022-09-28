@@ -46,6 +46,8 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = "div.to .msg > span")
     private List<WebElement> toUserMessagesEmoji;
 
+    @FindBy(css = "div.from .msg > span")
+    private List<WebElement> fromUserMessagesEmoji;
     @FindBy(css = "[selenium-id=empty-avatar]")
     private WebElement agentIconWIthInitials;
 
@@ -111,6 +113,8 @@ public class ChatBody extends AbstractUIElement {
     @FindBy (css = "[data-testid='card']")
     private WebElement c2pCard;
 
+    @FindBy (css = ".cl-extension-item")
+    private WebElement extensionItem;
 
     public List<String> getChanelSeparatorsText() {
         return channelSeparators.stream().map(e->e.getText()).collect(Collectors.toList());
@@ -130,6 +134,10 @@ public class ChatBody extends AbstractUIElement {
 
     public String getC2pCardsText(){
         return getTextFromElem(this.getCurrentDriver(), c2pCard, 5,"c2p text");
+    }
+
+    public String getExtensionCardText(){
+        return getTextFromElem(this.getCurrentDriver(), extensionItem, 5,"Extension Card text");
     }
 
     public boolean isHSMShownForAgent(){
@@ -202,6 +210,22 @@ public class ChatBody extends AbstractUIElement {
                 }
             }
             return false;
+    }
+
+    public boolean getAgentEmojiUserMessage(String userMessage) {
+        for (int i = fromUserMessagesEmoji.size() - 1; i >= 0; i--) {
+            wheelScrollUpToElement(this.getCurrentDriver(),
+                    this.getCurrentDriver().findElement(By.cssSelector(scrollElement)),
+                    fromUserMessagesEmoji.get(i), 1);
+
+            if (fromUserMessagesEmoji.get(i).getAttribute("aria-label").trim().contains(userMessage)) {
+                wheelScroll(this.getCurrentDriver(),
+                        this.getCurrentDriver().findElement(By.cssSelector(scrollElement)),
+                        2000, 0, 0);
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isToUserMessageShown(String userMessage) {

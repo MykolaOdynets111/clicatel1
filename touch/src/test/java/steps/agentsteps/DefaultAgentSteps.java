@@ -78,7 +78,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void setFeatureStatus(String feature, String status, String tenantOrgName){
         ChatPreferenceSettings chatPreferenceSettings = new ChatPreferenceSettings();
         chatPreferenceSettings.setFeatureStatus(feature, status);
-        ApiHelper.updateFeatureStatus(tenantOrgName, chatPreferenceSettings);
+        ApiHelper.updateFeatureStatus(chatPreferenceSettings);
+    }
+
+    @Given("(.*) creates tenant extension with label (.*) and name (.*)$")
+    public void createExtensionForTenant(String agent, String label, String name){
+        ApiHelper.updateExtensions(label, name);
     }
 
     @Then("^On backand (.*) tenant feature status is set to (.*) for (.*)$")

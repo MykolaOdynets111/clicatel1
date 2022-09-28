@@ -66,6 +66,12 @@ public class ChatForm extends AbstractUIElement {
     @FindBy(xpath = "//button[text()='Start Chat']")
     private WebElement startChatButton;
 
+    @FindBy(xpath = "//div[contains(@class, 'cl-time-picker-modal__body')]//div[contains(@class, 'cl-select__indicators')]")
+    private WebElement datePickerDropdown;
+
+    @FindBy(xpath = "//div[contains(@id, 'react-select')]")
+    private List<WebElement> datePickerItems;
+
     private String emojiMartCss = "section.emoji-mart";
 
     private AttachmentWindow attachmentWindow;
@@ -190,6 +196,14 @@ public class ChatForm extends AbstractUIElement {
 
     public void openExtensionsForm(){
         clickElem(this.getCurrentDriver(), c2pButton, 2, "c2p button");
+    }
+
+    public void setDevicePickerName(String name) {
+        clickElem(this.getCurrentDriver(), datePickerDropdown, 20, "Rating number dropdown");
+
+        waitFor(5000);
+        datePickerItems.stream().filter(e -> e.getText().trim().equals(name)).findFirst()
+                .orElseThrow(() -> new AssertionError(name + " name was not found in dropdown.")).click();
     }
 
     public void openHSMForm(){

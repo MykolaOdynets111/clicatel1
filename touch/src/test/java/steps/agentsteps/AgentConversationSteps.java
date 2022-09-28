@@ -1,9 +1,6 @@
 package steps.agentsteps;
 
-import agentpages.uielements.C2pSendForm;
-import agentpages.uielements.ChatAttachment;
-import agentpages.uielements.LocationWindow;
-import agentpages.uielements.Suggestion;
+import agentpages.uielements.*;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
 import com.github.javafaker.Faker;
@@ -44,6 +41,8 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     public static ThreadLocal<String> locationURL = new ThreadLocal<String>();
     private LocationWindow locationWindow ;
     private C2pSendForm c2pSendForm;
+
+    private Extensions extensions;
 
     public static String getSelectedEmoji() {
         return selectedEmoji;
@@ -272,6 +271,12 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @Then("Sent emoji is displayed on chatdesk$")
     public void verifyEmojiDisplayedOnChatdesk() {
         Assert.assertTrue(getChatBody("main agent").getAgentEmojiResponseOnUserMessage(selectedEmoji),
+                "'" + selectedEmoji + "' User message is not shown in conversation area");
+    }
+
+    @Then("Sent emoji from user (.*) is displayed on chatdesk$")
+    public void verifySentUserEmojiDisplayedOnChatdesk(String emoji) {
+        Assert.assertTrue(getChatBody("main agent").getAgentEmojiUserMessage(emoji),
                 "'" + selectedEmoji + "' User message is not shown in conversation area");
     }
 
@@ -685,6 +690,12 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         c2pSendForm.setOrderNumberField(order).setPriceForOrder(price).clickSendButton();
     }
 
+    @And("^Agent send date picker form with name (.*) and send$")
+    public void sendDatePicker(String name) {
+        getAgentHomePage("main").getChatForm().setDevicePickerName(name);
+        c2pSendForm.clickSendButton();
+    }
+
     @Then("^(.*) get 'payment link expired' update is sent to agent desk by C2P$")
     public void verifyExpirationC2p(String agent){
         Assert.assertTrue(getAgentHomePage(agent).getChatBody().getC2pExpiresCardsText().contains("Payment link expired"), "Expire card didn't come from c2p");
@@ -693,6 +704,11 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @Then("^(.*) sees C2P link with (.*) number in chat body$")
     public void verifyExpirationC2p(String agent, String number){
         Assert.assertTrue(getAgentHomePage(agent).getChatBody().getC2pCardsText().contains(number), "C2P link with number: "+ number +"is not shown in chat body");
+    }
+
+    @Then("^(.*) sees date picker link with (.*) name in chat body$")
+    public void verifyDatePickerChatBody(String agent, String name){
+        Assert.assertTrue(getAgentHomePage(agent).getChatBody().getExtensionCardText().contains(name), "Date Picker with name: "+ name +"is not shown in chat body");
     }
 
 }
