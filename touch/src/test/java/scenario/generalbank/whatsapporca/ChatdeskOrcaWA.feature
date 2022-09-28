@@ -196,15 +196,16 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent click On Live Supervisor Desk chat from ORCA channel
     Then Agent cannot initiate a payment
 
+  @chat_preferences
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2751")
-  @regression
+  @Regression
   Scenario: CD :: Chat :: Verify that neutral sentiment is set by default when agent closes a chat
-    Given I open portal
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    And agentFeedback tenant feature is set to true for General Bank Demo
     And I login as agent of General Bank Demo
-    And Turn on the Agent Feedback
-    And Setup ORCA whatsapp integration for General Bank Demo tenant
     When Send connect to agent message by ORCA
     And Agent has new conversation request from ORCA user
     And Agent click on new conversation request from ORCA
     When Agent click "End chat" button
+    And Agent Feedback popup for agent should be opened
     Then Correct neutral sentiment selected
