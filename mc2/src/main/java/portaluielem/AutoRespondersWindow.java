@@ -30,6 +30,20 @@ public class AutoRespondersWindow extends BasePortalWindow {
         getTargetAutoResponderItem(autoresponder).clickCollapseIcon();
     }
 
+    public void editTextMessage(String autoresponder) {
+        waitForElementsToBeVisible(this.getCurrentDriver(), autoResponderItems, 5);
+        getTargetAutoResponderItem(autoresponder).editText();
+    }
+
+    public void clickSaveButton(String autoresponder) {
+        waitForElementsToBeVisible(this.getCurrentDriver(), autoResponderItems, 5);
+        getTargetAutoResponderItem(autoresponder).clickSaveButton();
+    }
+
+    public void verifyText(String autoresponder) {
+        waitForElementsToBeVisible(this.getCurrentDriver(), autoResponderItems, 5);
+        getTargetAutoResponderItem(autoresponder).getMessage();
+    }
     public void waitForAutoRespondersToLoad() {
         try {
             waitForElementsToBeVisible(this.getCurrentDriver(), autoResponderItems, 16);
