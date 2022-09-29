@@ -2,7 +2,6 @@
 @Regression
 Feature: Dashboard: Customer History
 
-  @off_survey_management
   @off_rating_whatsapp
   @orca_api
   @start_orca_server
@@ -74,7 +73,6 @@ Feature: Dashboard: Customer History
       | SMS                 |
       | Apple Business Chat |
       | WhatsApp            |
-
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2955")
   @skip
   Scenario: Dashboard:: Verify that if NPS surveys are categorize as Passives if webchat user chooses between 7 – 8

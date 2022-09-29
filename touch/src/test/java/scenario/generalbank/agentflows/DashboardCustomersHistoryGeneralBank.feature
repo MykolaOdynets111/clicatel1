@@ -2,7 +2,6 @@
 Feature: Dashboard: Customer History
 
   @no_widget
-    @off_survey_management
     @off_rating_whatsapp
     @off_rating_abc
     @orca_api

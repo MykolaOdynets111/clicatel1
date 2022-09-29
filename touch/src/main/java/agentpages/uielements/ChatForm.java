@@ -48,7 +48,7 @@ public class ChatForm extends AbstractUIElement {
     @FindBy(css = "div.overnight-chat-controls p")
     public WebElement overnightTicketLable;
 
-    @FindBy(css = "[id='Sentiment / Happy']")
+    @FindBy(css = "[name='sentiment-happy']")
     public WebElement emoticonButton;
 
     @FindBy(xpath = "//div[@data-name='Recent']/following-sibling::ul[@class='emoji-mart-category-list']//button")
@@ -168,7 +168,7 @@ public class ChatForm extends AbstractUIElement {
     }
 
     public void clickEmoticonButton(){
-        clickElem(this.getCurrentDriver(), emoticonButton, 2,"Emoticon button in chatdesk");
+        clickElem(this.getCurrentDriver(), emoticonButton, 2, "Emoticon button");
         waitForElementToBeVisibleByCss(this.getCurrentDriver(), emojiMartCss,  5);
     }
 
