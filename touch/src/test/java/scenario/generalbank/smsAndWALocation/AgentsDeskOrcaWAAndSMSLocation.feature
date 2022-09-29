@@ -5,7 +5,8 @@ Feature: Whatsapp And SMS ORCA :: ChatDesk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1898")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1174")
-  Scenario Outline: CD :: Agent Desk :: Live Chat :: Location :: Verify the end-user can share the current location on WhatsApp via Flow
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2122")
+  Scenario Outline: CD :: <channelType> :: Location:: Verify If user is able to send location through <channelType>
     Given I login as agent of General Bank Demo
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     When Send connect to agent message by ORCA
@@ -16,12 +17,12 @@ Feature: Whatsapp And SMS ORCA :: ChatDesk
     When Agent sees Lviv Location from User
     Examples:
       | channelType | userType |
-      | whatsapp    | orca     |
-      | sms         | sms      |
+      | Whatsapp    | orca     |
+      | SMS         | sms      |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1831")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1278")
-  Scenario Outline: CD :: SMS :: Location:: Verify If agent can't send the location if searched location entered doesn't yield any known result
+  Scenario Outline: CD :: <channelType> :: Location:: Verify If agent can't send the location if searched location entered doesn't yield any known result
     Given I login as agent of General Bank Demo
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     When Send connect to agent message by ORCA
@@ -34,13 +35,13 @@ Feature: Whatsapp And SMS ORCA :: ChatDesk
     And Agent checks Send location for sharing location is not visible
     Examples:
       | channelType | userType |
-      | whatsapp    | orca     |
-      | sms         | sms      |
+      | Whatsapp    | orca     |
+      | SMS         | sms      |
 
   @start_orca_server
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1718")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1964")
-  Scenario Outline: CD :: SMS :: Location:: Verify if agent is able to send location to SMS user
+  Scenario Outline: CD :: <channelType> :: Location:: Verify if agent is able to send location to <channelType> user
     Given I login as agent of General Bank Demo
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     When Send connect to agent message by ORCA
@@ -51,5 +52,5 @@ Feature: Whatsapp And SMS ORCA :: ChatDesk
     And Verify Orca returns Lviv Location sent by Agent during 40 seconds
     Examples:
       | channelType | userType |
-      | whatsapp    | orca     |
-      | sms         | sms      |
+      | Whatsapp    | orca     |
+      | SMS         | sms      |

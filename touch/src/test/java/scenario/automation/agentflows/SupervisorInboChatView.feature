@@ -9,6 +9,7 @@ Feature: Supervisor desk
     And Send message call
 
   Scenario: Supervisor desk: : verify if correct chat type along with time stamp is shown in chat view
+    @skip
     Given I login as agent of Automation
     Then Agent has new conversation request from dotcontrol user
     When Agent click on new conversation request from dotcontrol
