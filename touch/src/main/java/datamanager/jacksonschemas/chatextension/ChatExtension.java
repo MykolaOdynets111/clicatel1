@@ -3,17 +3,13 @@ package datamanager.jacksonschemas.chatextension;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.github.javafaker.Faker;
-import datamanager.jacksonschemas.orca.Content;
-import datamanager.jacksonschemas.orca.UserInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.openqa.selenium.NoSuchElementException;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -26,7 +22,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DatePicker {
+public class ChatExtension {
 
     @JsonProperty("type")
     private String type;
@@ -39,11 +35,11 @@ public class DatePicker {
     @JsonProperty("popularityScore")
     private int popularityScore;
 
-    public DatePicker(String label, String name){
-        this.setType("TIME_PICKER");
+    public ChatExtension(String label, Optional name, String extensionType){
+        this.setType(extensionType);
         this.setLabel(label);
         this.setSupportedChannels(Arrays.asList("ABC"));
-        this.setConfig(new Config(name));
+        this.setConfig(new Config(name, extensionType));
         this.setPopularityScore(6);
     }
 }

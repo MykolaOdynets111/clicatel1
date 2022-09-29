@@ -69,7 +69,7 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = ".rate-card-feedback-text")
     private WebElement rateCardComment;
 
-    @FindBy(css = ".from.file-msg")
+    @FindBy(css = ".msg-MediaMessage")
     private WebElement attachmentMessage;
 
     @FindBy(css = "[selenium-id='chat-message-content-opted-out']")

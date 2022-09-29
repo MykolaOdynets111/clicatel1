@@ -54,7 +54,7 @@ public class ChatForm extends AbstractUIElement {
     @FindBy(xpath = "//div[@data-name='Recent']/following-sibling::ul[@class='emoji-mart-category-list']//button")
     public List<WebElement> frequetlyUsedEmojis;
 
-    @FindBy(id ="Attachment")
+    @FindBy(css ="svg[name='attachment']")
     private WebElement attachmentButton;
 
     @FindBy(css ="svg[name='map-pin']")

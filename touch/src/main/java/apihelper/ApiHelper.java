@@ -5,7 +5,7 @@ import com.github.javafaker.Faker;
 import datamanager.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import datamanager.jacksonschemas.*;
-import datamanager.jacksonschemas.chatextension.DatePicker;
+import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.jacksonschemas.chathistory.ChatHistory;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.departments.Department;
@@ -422,13 +422,12 @@ public class ApiHelper implements VerificationHelper {
                 "Status code is not 200 and body value is \n: " + chatPreferenceSettings.toString() + "\n error message is: " + resp.getBody().asString());
     }
 
-    public static void updateExtensions(String label, String name) {
-        String url = Endpoints.EXTENSIONS;
+    public static void createExtensions(String label, Optional name, String extensionType) {
         //String extensionBody = createPutBodyForTimePickerExtension(label, name);
         String extensionBody;
         ObjectMapper mapper = new ObjectMapper();
         try {
-            extensionBody = "[" + mapper.writerFor(DatePicker.class).writeValueAsString(new DatePicker(label, name)) + "]";
+            extensionBody = mapper.writeValueAsString(Arrays.asList(new ChatExtension(label, name, extensionType)));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -436,7 +435,7 @@ public class ApiHelper implements VerificationHelper {
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON)
                 .body(extensionBody)
-                .put(url);
+                .put(Endpoints.EXTENSIONS);
         Assert.assertEquals(resp.statusCode(), 200,
                 "Status code is not 200 and body value is \n: " + extensionBody + "\n error message is: " + resp.getBody().asString());
     }

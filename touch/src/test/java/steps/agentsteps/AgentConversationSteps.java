@@ -150,7 +150,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         DefaultTouchUserSteps.mediaFileName.set(newName);
 
         getAgentHomePage("agent").openAttachmentWindow().setPathToFile(renamed.getPath());
-        Assert.assertTrue(getChatAttachmentForm("agent").isFileUploaded(), "File was not uploaded to widget");
+        Assert.assertTrue(getChatAttachmentForm("agent").isFileUploaded(), "File was not uploaded to form");
     }
 
     @When("^Agent send attached file$")
@@ -181,7 +181,8 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         File fileForUpload = new File(System.getProperty("user.dir")+"/src/test/resources/mediasupport/renamed/" + DefaultTouchUserSteps.mediaFileName.get());
 //        String sharedFolder = File.separator + File.separator+ "172.31.76.251"+File.separator + "Share" + File.separator
 //                + "chrome" + File.separator;
-        String sharedFolder = "\\\\172.31.76.251\\Share\\chrome\\";
+        //String sharedFolder = "\\\\172.31.76.251\\Share\\chrome\\";
+        String sharedFolder = System.getProperty("user.home")+ "/Downloads/";
         File downloadedFile = new File( sharedFolder +  DefaultTouchUserSteps.mediaFileName.get());
         List<String> allFiles = new ArrayList<>();
         for (int i=0; i < 10; i++){
@@ -207,6 +208,23 @@ public class AgentConversationSteps extends AbstractAgentSteps {
             e.printStackTrace();
         }
         Assert.assertTrue(fileEquality, "Files are not equal after uploading and downloading");
+    }
+
+    @Then("(.*) is able to see the File is downloaded after downloading$")
+    public boolean isFileDownloaded(String userType) {
+        String downloadPath = System.getProperty("user.home")+ "/Downloads/";
+        String fileName = DefaultTouchUserSteps.mediaFileName.get();
+        File dir = new File(downloadPath);
+        File[] dirContents = dir.listFiles();
+
+        for (int i = 0; i < dirContents.length; i++) {
+            if (dirContents[i].getName().equals(fileName)) {
+                // File has been found, it can now be deleted:
+                dirContents[i].delete();
+                return true;
+            }
+        }
+        return false;
     }
 
     @Then("^Agent can play (.*) file$")
@@ -706,7 +724,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         Assert.assertTrue(getAgentHomePage(agent).getChatBody().getC2pCardsText().contains(number), "C2P link with number: "+ number +"is not shown in chat body");
     }
 
-    @Then("^(.*) sees date picker link with (.*) name in chat body$")
+    @Then("^(.*) sees extension link with (.*) name in chat body$")
     public void verifyDatePickerChatBody(String agent, String name){
         Assert.assertTrue(getAgentHomePage(agent).getChatBody().getExtensionCardText().contains(name), "Date Picker with name: "+ name +"is not shown in chat body");
     }

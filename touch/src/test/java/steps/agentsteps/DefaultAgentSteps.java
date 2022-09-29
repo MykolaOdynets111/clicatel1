@@ -1,5 +1,6 @@
 package steps.agentsteps;
 
+import agentpages.AgentHomePage;
 import agentpages.uielements.FilterMenu;
 import agentpages.uielements.Profile;
 import apihelper.ApiHelper;
@@ -19,6 +20,7 @@ import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import mc2api.auth.PortalAuthToken;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -81,9 +83,9 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         ApiHelper.updateFeatureStatus(chatPreferenceSettings);
     }
 
-    @Given("(.*) creates tenant extension with label (.*) and name (.*)$")
-    public void createExtensionForTenant(String agent, String label, String name){
-        ApiHelper.updateExtensions(label, name);
+    @Given("(.*) creates (.*) tenant extension with label (.*) and name (.*)$")
+    public void createExtensionForTenant(String agent, String extensionType, String label, Optional name){
+        ApiHelper.createExtensions(label, name, extensionType);
     }
 
     @Then("^On backand (.*) tenant feature status is set to (.*) for (.*)$")
@@ -778,6 +780,16 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("Not verified label is displayed")
     public void notVerifiedLabelIsDisplayed() {
         Assert.assertTrue(getAgentHomeForMainAgent().getProfile().isNotVerifiedLabelDisplayed(), "NotVerified label is not displayed");
+    }
+
+    @Given("^(.*) is logged out from the Agent Desk$")
+    public void logOutAgentDesk(String agent){
+        try {
+            AgentHomePage agentHomePage = new AgentHomePage(agent);
+            ApiHelper.closeActiveChats(agent);
+            agentHomePage.getPageHeader().logOut();
+        } catch(WebDriverException | AssertionError | NoSuchElementException e){
+        }
     }
 
 }

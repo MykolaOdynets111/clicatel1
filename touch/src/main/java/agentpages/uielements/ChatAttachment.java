@@ -16,13 +16,13 @@ public class ChatAttachment extends AbstractWidget {
         return this;
     }
 
-    @FindBy(css =".file-name")
+    @FindBy(css =".media-message__file-name")
     private WebElement fileName;
 
     @FindBy(css = ".file-size")
     private WebElement fileSize;
 
-    @FindBy(css = ".download-file-link")
+    @FindBy(css = "svg[name='download']")
     private WebElement downloadLink;
 
     @FindBy(css = "div[data-vjs-player = true]")
@@ -43,7 +43,7 @@ public class ChatAttachment extends AbstractWidget {
     }
 
     public void clickDownloadLink(){
-        clickElem(this.getCurrentDriver(), downloadLink, 6, "Download Link");
+        clickElem(this.getCurrentDriver(), downloadLink, 10, "Download Link");
     }
 
     public ChatAttachment clickPlayPauseButton(String fileType){
