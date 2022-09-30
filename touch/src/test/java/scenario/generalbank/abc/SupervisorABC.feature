@@ -4,7 +4,7 @@ Feature: Apple Business Chat :: Supervisor Desk
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2844")
-  Scenario: Supervisor desk:: verify that supervisor is able to check apple live chats
+  Scenario: CD :: Supervisor Desk :: Chats :: ABC :: Verify that supervisor is able to check apple live chats
     Given Setup ORCA abc integration for General Bank Demo tenant
     When Send chat to agent message by ORCA
     Given I open portal
