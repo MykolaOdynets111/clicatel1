@@ -389,7 +389,6 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
     @Then("^(.*) select precreated tag$")
     public void agentAddSelectedTag(String agent) {
         getAgentHomePage(agent).getAgentFeedbackWindow().typeTags(BasePortalSteps.tagname);
-        getAgentHomePage(agent).getAgentFeedbackWindow().selectTagInSearch().closeDropdown();
     }
 
     @Then("^(.*) does not see the disabled tag$")
