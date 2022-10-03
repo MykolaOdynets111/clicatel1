@@ -7,13 +7,13 @@ Feature: Departments
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1177")
   Scenario: CD :: Dashboard :: Department Management :: Verify that the correct number of agents online/offline are displayed
     Given I open portal
-    And Login into portal as an admin of Standard Billing account
+    And Login into portal as an admin of General Bank Demo account
     Given Admin select TOUCH in left menu and Dashboard in submenu
     Then Admin click on Departments Management button
     And Departments Management page should be shown
     And Create Department with AutoDepartmentName name Auto Description description and with 3 agents
     Then Verify that card with AutoDepartmentName name and Auto Description description has 3 total 3 offline and 0 active agents
-    Given I login as second agent of Standard Billing
+    Given I login as second agent of General Bank Demo
     And Agent refresh current page
     And Departments Management page should be shown
     And Wait for 5 second
