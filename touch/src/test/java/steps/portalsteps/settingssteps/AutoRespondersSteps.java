@@ -24,7 +24,7 @@ public class AutoRespondersSteps extends AbstractPortalSteps {
     }
     @When("^Admin edit the text for (.*) auto responder$")
     public void clearTextForAutoResponder(String autoresponder) {
-        autoRespondersWindow().editTextMessage(autoresponder);
+        autoRespondersWindow().InputTextMessage(autoresponder);
     }
     @When("^Admin click save button for (.*) auto responder$")
     public void clickSaveButtonForAutoResponder(String autoresponder) {
@@ -35,7 +35,6 @@ public class AutoRespondersSteps extends AbstractPortalSteps {
     public void verifyAutoResponderMessageWasReset(String messageTitle) {
         String actualMessage = ApiHelper.getAutoResponderMessageText(messageTitle);
         String defaultMessage = AutoRespondersMessage.getMessageByTitle(messageTitle);
-
         assertThat(actualMessage)
                 .as("Message should be default")
                 .isEqualTo(defaultMessage);

@@ -30,7 +30,7 @@ public class AutoRespondersWindow extends BasePortalWindow {
         getTargetAutoResponderItem(autoresponder).clickCollapseIcon();
     }
 
-    public void editTextMessage(String autoresponder) {
+    public void InputTextMessage(String autoresponder) {
         waitForElementsToBeVisible(this.getCurrentDriver(), autoResponderItems, 5);
         getTargetAutoResponderItem(autoresponder).InputText("This is for testing");
     }
