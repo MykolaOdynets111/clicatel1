@@ -109,6 +109,16 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 channelName + " channel name should be shown.");
     }
 
+    @When("^Supervisor opens closed chat$")
+    public void openFirstClosedChat() {
+        getSupervisorDeskPage().getSupervisorClosedChatsTable().openFirstClosedChat();
+    }
+
+    @When("^Supervisor clicks on first ticket$")
+    public void openFirstTicket() {
+        getSupervisorDeskPage().getSupervisorTicketsTable().openFirstTicket();
+    }
+
     @Then("^Verify that only \"(.*)\" tickets chats are shown$")
     public void verifyTicketsChatsChannelsFilter(String channelName) {
         Assert.assertTrue(getSupervisorDeskPage().getSupervisorTicketsTable().verifyChanelOfTheTicketsIsPresent(channelName),
@@ -563,9 +573,30 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void agentCannotInitiateAPayment() {
         Assert.assertFalse(getSupervisorDeskPage().isC2pButtonPresent(),"Supervisor Can Initiate Payment");
     }
+    @And("Supervisor adds a note {string}, Jira link {string} and Ticket Number {string}")
+    public void addNewNote(String note, String jiraLink, String ticketNumber){
+        getSupervisorDeskPage().getSupervisorRightPanel().clickOnNotesTab()
+                .clickOnNewNoteButton()
+                .addTextToNote(note)
+                .addJiraLinkToNote(jiraLink)
+                .addTicketNumberToNote(ticketNumber)
+                .clickOnCreateNoteButton();
+    }
+
+    @Then("Supervisor sees note {string}, Jira link {string} and Ticket Number {string}")
+    public void verifyNoteDetails(String note, String jiraLink, String ticketNumber) {
+        getSupervisorDeskPage().getSupervisorRightPanel().clickOnNotesTab();
+
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getSupervisorDeskPage().getSupervisorRightPanel().getNoteCardText(),note,"Text inside note does not match");
+        soft.assertEquals(getSupervisorDeskPage().getSupervisorRightPanel().getNoteCardJiraLink(),jiraLink,"JIRA Link does not match");
+        soft.assertEquals(getSupervisorDeskPage().getSupervisorRightPanel().getNoteCardTicketNumber(),ticketNumber,"Ticket Number does not match");
+        soft.assertAll();
+    }
 
     @Then("Agent is able to close the assign chat window")
     public void agentClickCloseAssignWindow() {
         getSupervisorDeskPage().getAssignChatWindow().clickOnCloseAssignWindow();
-        Assert.assertFalse(getSupervisorDeskPage().getAssignChatWindow().isAssignWindowShown(),"Assign Chat Window is closed"); }
+        Assert.assertFalse(getSupervisorDeskPage().getAssignChatWindow().isAssignWindowShown(),"Assign Chat Window is closed");
+    }
 }
