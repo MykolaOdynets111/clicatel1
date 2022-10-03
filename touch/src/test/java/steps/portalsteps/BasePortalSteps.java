@@ -1598,7 +1598,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         }
         ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(),tenantChatPreferences);
     }
-
     @When("^Create chat tag$")
     public void createChatTag(){
         tagname = faker.artist().name() + faker.numerify("#####");
