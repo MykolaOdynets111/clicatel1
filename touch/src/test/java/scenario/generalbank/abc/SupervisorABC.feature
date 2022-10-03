@@ -1,10 +1,10 @@
 @no_widget
+@Regression
 Feature: Apple Business Chat :: Supervisor Desk
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2844")
-  @Regression
-  Scenario: Supervisor desk:: verify that supervisor is able to check apple live chats
+  Scenario: CD :: Supervisor Desk :: Chats :: ABC :: Verify that supervisor is able to check apple live chats
     Given Setup ORCA abc integration for General Bank Demo tenant
     When Send chat to agent message by ORCA
     Given I open portal
@@ -13,7 +13,6 @@ Feature: Apple Business Chat :: Supervisor Desk
     Then Supervisor can see orca live chat with chat to agent message to agent
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1882")
-  @Regression
   Scenario: supervisor desk:: Verify if supervisor can filter closed chat by apple business chat channel
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
@@ -23,7 +22,6 @@ Feature: Apple Business Chat :: Supervisor Desk
     Then Verify that only "apple-business-chat" closed chats are shown
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1168")
-  @Regression
   Scenario: CD :: Supervisor Desk :: Chats :: Verify if the first view on supervisor desk is ‘Chats’ tab
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
@@ -32,7 +30,6 @@ Feature: Apple Business Chat :: Supervisor Desk
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1350")
-  @regression
   Scenario: CD :: Supervisor Desk :: Closed Chat :: Verify if roster is updated after a chat is closed on supervisor desk
     Given I login as Second Agent of General Bank Demo
     And Setup ORCA abc integration for General Bank Demo tenant
@@ -50,7 +47,6 @@ Feature: Apple Business Chat :: Supervisor Desk
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1325")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1315")
-  @regression
   Scenario: CD :: Supervisor Desk :: Chats :: Transfer Chat :: Verify if agent name is updated after chat is being transferred from agent1 to agent2 on header
     Given Setup ORCA abc integration for General Bank Demo tenant
     And I login as Agent of General Bank Demo
@@ -69,7 +65,6 @@ Feature: Apple Business Chat :: Supervisor Desk
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1415")
-  @regression
   Scenario: CD :: Supervisor Desk :: Chats :: Transfer Chat :: Verify if there is no alert appearing on supervisor desk when the transfer still not complete
     Given Setup ORCA abc integration for General Bank Demo tenant
     And I login as Agent of General Bank Demo

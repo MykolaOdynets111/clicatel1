@@ -20,10 +20,10 @@ import sqsreader.SQSConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static apihelper.ApiHelper.getAgentInfo;
 
 public class ORCASteps implements WebWait {
 
@@ -100,7 +100,7 @@ public class ORCASteps implements WebWait {
     public void createOrUpdateOrcaIntegration(String channel, String tenantName) {
         Tenants.setTenantUnderTestOrgName(tenantName);
 
-        orcaChannelId.set(getIntegrationId(channel, "ORCA"));
+        orcaChannelId.set(getIntegrationId(channel.toLowerCase(), "ORCA"));
         if (orcaChannelId.get() == null) {
             apiToken.set(ApiORCA.createIntegration(channel, SQSConfiguration.getCallbackUrl()));
             orcaChannelId.set(getIntegrationId(channel, "ORCA"));
@@ -135,16 +135,38 @@ public class ORCASteps implements WebWait {
         verifyAutoresponder(expectedResponse, wait);
     }
 
+    @Then("^Verify Orca returns survey (.*) response (.*) number of times during (.*) seconds")
+    public void verifyOrcaReturnedResponseNumberOfTimes(String expectedResponse, int expectedSize, int wait) {
+        verifyAutoResponderMessageListSize(expectedResponse, expectedSize, wait);
+    }
+
     @Then("^Verify Orca returns (.*) autoresponder during (.*) seconds$")
     public void verifyOrcaReturnedCorrectAutoresponder(String expectedResponse, int wait) {
-
         expectedResponse = DefaultTouchUserSteps.formExpectedAutoresponder(expectedResponse);
 
         verifyAutoresponder(expectedResponse, wait);
     }
 
+    @Then("^Verify message (.*) is present for (.*) during (.*) seconds$")
+    public void verifyAutoresponderMessageForTenant(String expectedResponse, String agent, int wait) {
+        String response = DefaultTouchUserSteps.formExpectedAutoresponder(expectedResponse);
+        String responseUpdated = "";
+        Map<String, String> agentInfo = getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent);
+        if(response.contains("${agentName}")){
+            responseUpdated = response.replace( "${agentName}", agentInfo.get("fullName"));
+        }
+        verifyAutoresponder(responseUpdated, wait);
+    }
+
     private void verifyAutoresponder(String expectedResponse, int wait){
         Assert.assertTrue(isResponseComeToServerForClient(expectedResponse, wait),
+                String.format("Autoresponder is not as expected\n" +
+                        " Messages which came from server for clientId %s are: %s \n" +
+                        "Expected: %s", clientId.get(), OrcaSQSHandler.orcaMessages, expectedResponse));
+    }
+
+    private void verifyAutoResponderMessageListSize(String expectedResponse, int size, int wait){
+        Assert.assertTrue(isExpectedResponseListCheck(expectedResponse, size, wait),
                 String.format("Autoresponder is not as expected\n" +
                         " Messages which came from server for clientId %s are: %s \n" +
                         "Expected: %s", clientId.get(), OrcaSQSHandler.orcaMessages, expectedResponse));
@@ -206,8 +228,14 @@ public class ORCASteps implements WebWait {
     }
 
     private boolean isCorrectLocationCameToUser(String location){
-        return OrcaSQSHandler.orcaEvents.stream().anyMatch(e->
-                Optional.ofNullable(e.getContent().getEvent().getName()).equals(Optional.of(location)));
+        AtomicBoolean flag = new AtomicBoolean(false);
+        OrcaSQSHandler.orcaEvents.stream().forEach( e -> {
+        if(e.getContent() != null) {
+            if(Optional.ofNullable(e.getContent().getEvent().getName()).equals(Optional.of(location))){
+                flag.set(true);
+            }
+        }});
+        return flag.get();
     }
 
     private boolean isHSMCameToUser(String templateId, Map<String, String> parameters, int wait){
@@ -228,12 +256,21 @@ public class ORCASteps implements WebWait {
         );
     }
 
-
     private boolean isExpectedResponseArrives(String message) {
         if(Objects.isNull(OrcaSQSHandler.orcaMessages)) {
             return false;
         }
         return OrcaSQSHandler.orcaMessages.contains(message);
+    }
+
+    private boolean isExpectedResponseListCheck(String message, int expectedSize, int wait) {
+        for (int i = 0; i < wait; i++) {
+            if ((Collections.frequency(OrcaSQSHandler.orcaMessages, message)) == expectedSize) {
+                return true;
+            }
+            waitFor(1000);
+        }
+        return false;
     }
 
     private void createRequestMessage(String apiKey, String message) {

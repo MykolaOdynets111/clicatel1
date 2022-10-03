@@ -8,6 +8,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -22,6 +25,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "type",
         "visible"
 })
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AutoResponderMessage {
 
     @JsonProperty("category")
@@ -46,106 +52,6 @@ public class AutoResponderMessage {
     private Boolean visible;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-    @JsonProperty("category")
-    public String getCategory() {
-        return category;
-    }
-
-    @JsonProperty("category")
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    @JsonProperty("description")
-    public String getDescription() {
-        return description;
-    }
-
-    @JsonProperty("description")
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @JsonProperty("enabled")
-    public Boolean getEnabled() {
-        return enabled;
-    }
-
-    @JsonProperty("enabled")
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    @JsonProperty("hint")
-    public String getHint() {
-        return hint;
-    }
-
-    @JsonProperty("hint")
-    public void setHint(String hint) {
-        this.hint = hint;
-    }
-
-    @JsonProperty("id")
-    public String getId() {
-        return id;
-    }
-
-    @JsonProperty("id")
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @JsonProperty("order")
-    public Integer getOrder() {
-        return order;
-    }
-
-    @JsonProperty("order")
-    public void setOrder(Integer order) {
-        this.order = order;
-    }
-
-    @JsonProperty("text")
-    public String getText() {
-        return text;
-    }
-
-    @JsonProperty("text")
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    @JsonProperty("title")
-    public String getTitle() {
-        return title;
-    }
-
-    @JsonProperty("title")
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @JsonProperty("type")
-    public String getType() {
-        return type;
-    }
-
-    @JsonProperty("type")
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    @JsonProperty("visible")
-    public Boolean getVisible() {
-        return visible;
-    }
-
-    @JsonProperty("visible")
-    public void setVisible(Boolean visible) {
-        this.visible = visible;
-    }
 
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {

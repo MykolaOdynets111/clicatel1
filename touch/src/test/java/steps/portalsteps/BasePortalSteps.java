@@ -33,6 +33,7 @@ import portalpages.PortalSignUpPage;
 import portalpages.PortalUserEditingPage;
 import socialaccounts.FacebookUsers;
 import socialaccounts.TwitterUsers;
+import steps.CamundaFlowsSteps;
 import steps.agentsteps.AbstractAgentSteps;
 import steps.agentsteps.AgentCRMTicketsSteps;
 import touchpages.pages.MainPage;
@@ -708,8 +709,10 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getDashboardPage().waitForConnectingDisappear(1, 5);
         int actualActiveAgentsCount = Integer.parseInt(getDashboardPage().getWidgetValue(widgetName));
         chatConsolePretestValue.put(widgetName, actualActiveAgentsCount);
-        int loggedInAgentsCountFromBackend = ApiHelper.getNumberOfLoggedInAgents();
-        Assert.assertEquals(actualActiveAgentsCount, loggedInAgentsCountFromBackend,
+        getDashboardPage().clickLaunchSupervisor();
+        List<String> agentsList = AbstractAgentSteps.getPageHeader("agent").getAvailableAgents();
+        int loggedInAgentsCountFromSuperVisorDesk = agentsList.size();
+        Assert.assertEquals(actualActiveAgentsCount, loggedInAgentsCountFromSuperVisorDesk,
                 widgetName + " counter differs from agent online count on backend");
     }
 
@@ -812,7 +815,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^(.*) is reset on backend$")
     public void verifyTafMessageIsReset(String autoresponderId){
         String actualMessage = ApiHelper.getAutoResponderMessageText(autoresponderId);
-        String defaultMessage = DBConnector.getDefaultAutoResponder(ConfigManager.getEnv(), autoresponderId);
+        String defaultMessage = CamundaFlowsSteps.defaultMessage.get();
         Assert.assertEquals(actualMessage, defaultMessage,
                 autoresponderId + " message is not reset to default");
     }
@@ -1595,7 +1598,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         }
         ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(),tenantChatPreferences);
     }
-
     @When("^Create chat tag$")
     public void createChatTag(){
         tagname = faker.artist().name() + faker.numerify("#####");

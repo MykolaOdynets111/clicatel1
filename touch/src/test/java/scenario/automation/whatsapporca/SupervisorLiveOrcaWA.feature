@@ -1,10 +1,10 @@
 @no_widget
+@Regression
 Feature: WhatsApp ORCA :: Supervisor Desk
 
   @orca_api
   @start_orca_server
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1178")
-  @Regression
   Scenario: CD :: Supervisor Desk :: Chats :: Verify if customer starts a chat there is no agent available, the chat is visible in Supervisor Desk as unassigned
     Given Setup ORCA whatsapp integration for Automation tenant
     When Send to agent message by ORCA
@@ -20,7 +20,6 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     Then Verify Orca returns Agent Busy message autoresponder during 40 seconds
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1437")
-  @Regression
   Scenario: CD :: Supervisor :: Live Chat :: Verify the agent name and date are displayed in the visual indicator in agent chat window
     Given I login as agent of Automation
     When Setup ORCA whatsapp integration for Automation tenant
@@ -35,7 +34,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Supervisor Desk Live chat header display date
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2899")
-  Scenario: Supervisor desk:: Verify if supervisor can unflag chat
+  Scenario: CD:: Supervisor desk :: Supervisor_Desk-Chat:: Verify if supervisor can unflag chat
     Given I login as agent of Automation
     When Setup ORCA whatsapp integration for Automation tenant
     And Send to agent message by ORCA

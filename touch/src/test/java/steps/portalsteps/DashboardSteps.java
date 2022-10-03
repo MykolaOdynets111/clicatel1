@@ -15,11 +15,13 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.TimeoutException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -324,8 +326,13 @@ public class DashboardSteps extends AbstractPortalSteps {
 
     @Then("^Admin is able to see the new average CSAT survey response converted to (\\d+)-(\\d+)$")
     public void adminIsAbleToSeeTheNewAverageCSATSurveyResponseConvertedTo(double from, double to) {
-        actualCustomerSatisfactionScoreNew.set(getDashboardPage().getCustomerSatisfactionSection()
-                .getCustomerSatisfactionScore());
+        if (getDashboardPage().getCustomersHistory().isNoDataDisplayedForGraph("Customer Satisfaction")) {
+            System.out.println("Since no scores are given yet, CSAT score is not there");
+            actualCustomerSatisfactionScoreNew.set(0.0);
+        } else {
+            actualCustomerSatisfactionScoreNew.set(getDashboardPage().getCustomerSatisfactionSection()
+                    .getCustomerSatisfactionScore());
+        }
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(actualCustomerSatisfactionScoreNew.get() >= from, "Customer Satisfaction Score is less then " + from);
         softAssert.assertTrue(actualCustomerSatisfactionScoreNew.get() <= to, "Customer Satisfaction Score is more then " + to);

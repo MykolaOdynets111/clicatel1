@@ -1,14 +1,13 @@
 @no_widget
 @off_rating_whatsapp
+@off_rating_abc
+@off_rating_sms
+@Regression
 Feature: WhatsApp ORCA :: Surveys
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1877")
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1173")
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2394")
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1933")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1828")
-  @Regression
-  Scenario Outline: verify if supervisor can choose between NPS(Net Promotor Score) or CSAT(Customer Satisfaction Score) survey type
+  Scenario Outline: CD:: <channelType>:: Settings :: Survey :: Verify if Supervisor is able to see the survey preview header for <channelType> channel and select between NPS(Net Promotor Score) or CSAT(Customer Satisfaction Score) survey type in the survey tab
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Update survey management chanel <channelType> settings by ip for General Bank Demo
       | ratingEnabled | true        |
@@ -30,13 +29,12 @@ Feature: WhatsApp ORCA :: Surveys
     Then Survey Preview should be displayed with correct data for <channelType> channel
     Examples:
       | channelType |
-      | whatsapp    |
-      | abc         |
-      | sms         |
+      | Whatsapp    |
+      | ABC         |
+      | SMS         |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1719")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1728")
-  @Regression
   Scenario Outline: CD:: Survey:: CSAT:: Verify if CSAT ratings in the survey configuration to be standardized to cater for only 1-5 ratings
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Update survey management chanel <channelType> settings by ip for General Bank Demo
@@ -57,6 +55,6 @@ Feature: WhatsApp ORCA :: Surveys
       | ratingScale | ONE_TO_FIVE |
     Examples:
       | channelType |
-      | whatsapp    |
-      | abc         |
-      | sms         |
+      | Whatsapp    |
+      | ABC         |
+      | SMS         |

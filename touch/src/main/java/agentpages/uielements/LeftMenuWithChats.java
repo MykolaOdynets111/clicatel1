@@ -253,8 +253,20 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     public void searchUserChat(String userId) {
         clickOnSearchButton();
-        inputUserNameIntoSearch(userId);
-        getTargetChat(userId).click();
+        int wait = 10;
+
+        for (int i = 0; i < wait; i++) {
+            try {
+                inputUserNameIntoSearch(userId);
+                getTargetChat(userId).click();
+                if (newConversationRequests.size() > 0) {
+                    break;
+                }
+            } catch (AssertionError | Exception e) {
+                System.out.println("No chats are there after search, chat has not reached yet, so retrying searching");
+                waitFor(1000);
+            }
+        }
     }
 
     public void clickCloseButton() {
@@ -273,6 +285,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     public void inputUserNameIntoSearch(String userId) {
         waitForElementToBeClickable(this.getCurrentDriver(), searchChatInput, 2);
+        searchChatInput.sendKeys(Keys.chord(Keys.CONTROL, "A", Keys.BACK_SPACE));
         searchChatInput.sendKeys(userId);
         searchChatInput.sendKeys(Keys.CONTROL, Keys.ENTER);
     }
