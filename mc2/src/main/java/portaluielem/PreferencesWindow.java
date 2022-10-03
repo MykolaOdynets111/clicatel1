@@ -78,6 +78,7 @@ public class PreferencesWindow extends BasePortalWindow {
     public void setChatsAvailable(String chats){
         waitForElementToBeVisible(this.getCurrentDriver(), chatsAvailable, 5);
         scrollToElem(this.getCurrentDriver(), chatsAvailable,"Chat available");
+        chatsAvailable.clear();
         inputText(this.getCurrentDriver(), chatsAvailable,1, "Chat available", chats);
     }
 

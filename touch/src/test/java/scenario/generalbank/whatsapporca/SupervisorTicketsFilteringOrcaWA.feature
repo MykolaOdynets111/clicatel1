@@ -1,4 +1,4 @@
-@agent_support_hours
+@support_hours
 @Regression
 Feature: WhatsApp ORCA :: Supervisor Desk
 

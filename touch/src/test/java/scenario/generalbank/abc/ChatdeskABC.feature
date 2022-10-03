@@ -4,7 +4,7 @@ Feature: Apple Business Chat :: Chatdesk
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-3001")
-  Scenario: Chatdesk:: The header should have apple icon when user is chatting using apple chat
+  Scenario: CD :: Agent Desk :: Live Chat :: ABC :: Verify that chat header should have apple icon when user is chatting using apple chat
     Given I login as agent of General Bank Demo
     Given Setup ORCA abc integration for General Bank Demo tenant
     When Send connect to Support message by ORCA

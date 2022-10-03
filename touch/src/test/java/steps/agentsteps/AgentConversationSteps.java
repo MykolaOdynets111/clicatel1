@@ -693,6 +693,11 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         Assert.assertTrue(locationWindow.isSendLocationsButtonInvisible(buttonElementText) == 0, "Send location button is visible");
     }
 
+    @Then("^(.*) can see c2p extension icon$")
+    public void c2PExtensionIsVisible(String agent){
+        Assert.assertTrue(getAgentHomePage(agent).getChatForm().c2pExtensionIconIsVisible(), "C2P Extension Icon is not visible");
+        }
+
     @When("^(.*) open c2p form$")
     public void agentOpenC2PForm(String agent){
         c2pSendForm = getAgentHomePage(agent).openc2pSendForm();

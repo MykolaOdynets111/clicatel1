@@ -25,6 +25,8 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static apihelper.ApiHelper.getAgentInfo;
+
 public class ORCASteps implements WebWait {
 
     public static final ThreadLocal<OrcaEvent> orcaMessageCallBody = new ThreadLocal<>();
@@ -145,13 +147,23 @@ public class ORCASteps implements WebWait {
 
     @Then("^Verify Orca returns (.*) autoresponder during (.*) seconds$")
     public void verifyOrcaReturnedCorrectAutoresponder(String expectedResponse, int wait) {
-
         expectedResponse = DefaultTouchUserSteps.formExpectedAutoresponder(expectedResponse);
 
         if(expectedResponse.contains("${agentName}")) {
             expectedResponse = expectedResponse.replace("${agentName}", AgentLoginPage.agentName.get());
         }
         verifyAutoresponder(expectedResponse, wait);
+    }
+
+    @Then("^Verify message (.*) is present for (.*) during (.*) seconds$")
+    public void verifyAutoresponderMessageForTenant(String expectedResponse, String agent, int wait) {
+        String response = DefaultTouchUserSteps.formExpectedAutoresponder(expectedResponse);
+        String responseUpdated = "";
+        Map<String, String> agentInfo = getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent);
+        if(response.contains("${agentName}")){
+            responseUpdated = response.replace( "${agentName}", agentInfo.get("fullName"));
+        }
+        verifyAutoresponder(responseUpdated, wait);
     }
 
     private void verifyAutoresponder(String expectedResponse, int wait){
@@ -251,7 +263,6 @@ public class ORCASteps implements WebWait {
                 && Optional.ofNullable(e.getContent().getEvent().getNestedEvent().getParameters()).equals(Optional.of(parameters))
         );
     }
-
 
     private boolean isExpectedResponseArrives(String message) {
         if(Objects.isNull(OrcaSQSHandler.orcaMessages)) {

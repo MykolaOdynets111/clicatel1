@@ -51,10 +51,14 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = "[selenium-id=company-info-text]")
     private WebElement tenantName;
 
-    @FindBy(css = "[selenium-id=agents-list-wrapper]")
+    @FindAll({
+            @FindBy(css = "[selenium-id=agents-list-wrapper]"),
+            @FindBy(css = "[data-testid=agents-list-wrapper]")
+    })
     private WebElement headPhones;
-
-    @FindBy(css = "[selenium-id=agents-list]")
+    @FindAll({
+            @FindBy(css = "[selenium-id=agents-list]"),
+            @FindBy(css = "[data-testid=agents-list]")    })
     private List<WebElement> headPhonesList;
 
     @FindBy(css= "[name='message-forward']")
@@ -63,7 +67,6 @@ public class PageHeader extends AbstractUIElement {
     @FindAll({
             @FindBy(css = "[selenium-id=header-whats-app-button]"),
             @FindBy(css = "[data-testid=header-whats-app-button]")
-
     })
     private WebElement sendWhatsAppButton;
 

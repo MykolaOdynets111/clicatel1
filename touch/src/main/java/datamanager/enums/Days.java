@@ -23,7 +23,7 @@ public enum Days {
 
     private final String value;
 
-    public static List<String> getAllDays(){
+    public static List<String> getDaysValue() {
         return Arrays.stream(Days.values()).map(d -> d.getValue().toUpperCase()).collect(Collectors.toList());
     }
 }

@@ -11,7 +11,7 @@ Feature: Filtering : Chat Desk
     And Agent types a customer name "bla bla" on the search field
     Then Agent receives an error message "Sorry, no results found. Please refine your search and try again"
 
-  @agent_support_hours
+  @support_hours
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-28061) @no_widget
   Scenario: Verify if agent can filter tickets using date range
     Given I login as agent of Automation Bot
