@@ -45,6 +45,16 @@ public class HSMForm extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), sendButton, 10, "Send button");
     }
 
+    public boolean checkContactNum(){
+        System.out.println("Wa field exist or not :: "+waPhoneField.isDisplayed());
+       String a =  getAttributeFromElem(this.getCurrentDriver(),waPhoneField,3, "wa phone number", "value");
+       System.out.println("value of Phone number field is "+waPhoneField.getAttribute("placeholder"));
+       System.out.println("Value of a is " +waitForElementToBeVisible(this.getCurrentDriver(), waPhoneField, 3).getText().isEmpty());
+     //  System.out.println(isElementHasAnyText(this.getCurrentDriver(),waPhoneField,3));
+       return !getAttributeFromElem(this.getCurrentDriver(),waPhoneField,3, "wa phone number", "value").isEmpty();
+
+    }
+
 }
 
 

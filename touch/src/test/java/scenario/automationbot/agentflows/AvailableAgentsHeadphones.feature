@@ -1,4 +1,5 @@
 @no_widget
+
 Feature: Available agents on headphones
 
 
@@ -10,3 +11,11 @@ Feature: Available agents on headphones
     When First Agent changes status to: Unavailable
     Then First Agent click on 'headphones' icon and see 1 available agents
 
+  @Regression
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2973)
+  Scenario: CD :: Agent Desk :: Verify that agent is able to type phone number in "send to" input field(Whatsapp)
+    Given I login as agent of Automation Bot
+    And click on send external message icon on the right side header
+    And agent click Whatsapp message icon button on the top bar
+    When agent fill the customer contact number +1 9055197655
+    Then agent verify customer contact number is filled

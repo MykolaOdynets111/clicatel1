@@ -110,9 +110,15 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getHSMForm().clickSendButton();
     }
 
-    @And("^(.*) fill the customer contact number$")
-    public void sendWhatsApp(String agent) {
-        getAgentHomePage(agent).getHSMForm().setWAPhoneNumber(ORCASteps.orcaMessageCallBody.get().getSourceId());
+    @And("^(.*) fill the customer contact number (.*)$")
+    public void sendWhatsApp(String agent, String contactNumber) {
+        getAgentHomePage(agent).getHSMForm().setWAPhoneNumber(contactNumber);
+     //  Assert.assertTrue(getAgentHomePage(agent).getHSMForm().checkContactNum(), "False : waPhone Field is empty");
+    }
+
+    @Then("^(.*) verify customer contact number is filled$")
+    public void checkContactNumber(String agent){
+        Assert.assertTrue(getAgentHomePage(agent).getHSMForm().checkContactNum(), "False : waPhone Field is empty");
     }
 
     @Then("^(.*) has (?:new|old) (.*) (?:request|shown)(?: from (.*) user|)$")
@@ -784,4 +790,16 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertTrue(getAgentHomeForMainAgent().getProfile().isNotVerifiedLabelDisplayed(), "NotVerified label is not displayed");
     }
 
+    @And("click on send external message icon on the right side header")
+    public void agentClickExternalMessageIcon() {
+        getAgentHomeForMainAgent().getProfile().clickSendExternalMessageIcon();
+
+    }
+
+    @And("^agent should able to type (.*) number in 'Send to' input field$")
+    public void typePhoneNumber() {
+      //  getAgentHomeForMainAgent().getProfile().clickSendExternalMessageIcon();
+       // getAgentHomeForMainAgent().getProfile().clickWhatsApp();
+    //    getAgentHomeForMainAgent().getHSMForm().waPhone();
+    }
 }

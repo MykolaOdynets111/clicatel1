@@ -1,6 +1,7 @@
 package steps.portalsteps;
 
 
+import agentpages.dashboard.DashboardSettingsPage;
 import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
 import datamanager.Agents;
@@ -62,6 +63,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     private String autoSchedulerPreActionStatus;
     private String confirmationURL;
     public static String tagname;
+
 
     public static Map<String, String> getTenantInfoMap() {
         return tenantInfo;
@@ -1734,19 +1736,59 @@ public class BasePortalSteps extends AbstractPortalSteps {
         ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(),tenantChatPreferences);
     }
 
-    @When("^Create chat tag$")
+/*    @When("^Create chat tag$")
     public void createChatTag(){
         tagname = faker.artist().name() + faker.numerify("#####");
+        System.out.println("Value for tagname as :: "+tagname);
         getPortalTouchPreferencesPage().getChatTagsWindow().clickAddChatTagButton().setTagName(tagname).clickSaveButton();
+    }*/
+
+    @When("^Create chat tag$")
+    public String createChatTag(){
+        tagname = faker.artist().name() + faker.numerify("#####");
+        System.out.println("Value for tagname as :: "+tagname);
+        getPortalTouchPreferencesPage().getChatTagsWindow().clickAddChatTagButton().setTagName(tagname).clickSaveButton();
+        return tagname;
     }
 
-    @When("^Update chat tag")
-    public void updateTag(){
+/*    @When("^Update chat tag")
+    public void updateTag(String tagname){
+      //  String tagNameOld = getPortalTouchPreferencesPage().getChatTagsWindow().getTagName();
+      //  System.out.println("The value of the tagNameOld is :: "+ tagNameOld);
+        getPortalTouchPreferencesPage().getChatTagsWindow().clickEditTagButton(tagname);
+        tagname = faker.artist().name() + faker.numerify("#####");
+        getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickSaveButton();
+        AgentCRMTicketsSteps.crmTicketInfoForUpdating.get().put("agentTags",  tagname);
+    }*/
+
+
+    @When("^Update (.*)")
+    public void updateTag(String tagname){
         getPortalTouchPreferencesPage().getChatTagsWindow().clickEditTagButton(tagname);
         tagname = faker.artist().name() + faker.numerify("#####");
         getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickSaveButton();
         AgentCRMTicketsSteps.crmTicketInfoForUpdating.get().put("agentTags",  tagname);
     }
+
+    @When("^Edit chat tag and click on X button")
+    public void editNotSavedTag(){
+        String originalTagname = getPortalTouchPreferencesPage().getChatTagsWindow().copyFirstChatTag();
+        String demoTagName = faker.artist().name() + faker.numerify("#####");
+        String tagname = getPortalTouchPreferencesPage().getChatTagsWindow().verifyChatTagsExistance(demoTagName);
+        getPortalTouchPreferencesPage().getChatTagsWindow().clickEditTagButton(tagname);
+        String newTagName = faker.artist().name() + faker.numerify("#####");
+        getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(newTagName).clickDeleteButton();
+        //AgentCRMTicketsSteps.crmTicketInfoForUpdating.get().put("chatTags",  tagname);
+
+        String currentTagname = getPortalTouchPreferencesPage().getChatTagsWindow().copyFirstChatTag();
+        System.out.println(originalTagname.equalsIgnoreCase(currentTagname));
+       //  System.out.println("Chat Tag name is not changed");
+if(originalTagname.equalsIgnoreCase(currentTagname));
+
+
+
+    }
+
 
     @When("^(?:Enable|Disable) tag$")
     public void disableTag(){
@@ -1758,5 +1800,43 @@ public class BasePortalSteps extends AbstractPortalSteps {
             mainPage = new MainPage();
         }
         return mainPage;
+    }
+
+/*    @When("^Chat tag exist")
+    public void chatTagExist(){
+        getPortalTouchPreferencesPage().getChatTagsWindow().verifyChatTagsExistance();
+
+        Assert.assertTrue(getPortalTouchPreferencesPage().getChatTagsWindow().verifyChatTagsExistance(),
+                  " There are chat tags already present");
+
+    }*/
+
+    @Then("^admin can see Settings page with - options Business Profile, Chat tags,Auto Responders, Preferences and Surveys$")
+    public void verifySettingPageTabOptions(){
+
+        //Verifying 'Business Profile' tab in Settings page
+      //  getPortalTouchPreferencesPage().getChatTagsWindow().isBusinessProfileTabShown();
+        Assert.assertFalse(getPortalTouchPreferencesPage().getChatTagsWindow().isBusinessProfileTabShown(),
+                " Business Profile tab is present");
+
+        //Verifying 'Chat Tags' tab in Settings page
+     //   getPortalTouchPreferencesPage().getChatTagsWindow().isChatTagsTabShown();
+        Assert.assertFalse(getPortalTouchPreferencesPage().getChatTagsWindow().isChatTagsTabShown(),
+                " Chat Tags");
+
+        //Verifying 'Auto Responders' tab in Settings page
+     //   getPortalTouchPreferencesPage().getChatTagsWindow().isAutoRespondersTabShown();
+        Assert.assertFalse(getPortalTouchPreferencesPage().getChatTagsWindow().isAutoRespondersTabShown(),
+                " Auto Responders");
+
+        //Verifying 'Preferences' tab in Settings page
+     //   getPortalTouchPreferencesPage().getChatTagsWindow().isPreferencesTabShown();
+        Assert.assertFalse(getPortalTouchPreferencesPage().getChatTagsWindow().isPreferencesTabShown(),
+                " Preferences tab present");
+
+        //Verifying 'Surveys' tab in Settings page
+     //   getPortalTouchPreferencesPage().getChatTagsWindow().isSurveysTabShown();
+        Assert.assertFalse(getPortalTouchPreferencesPage().getChatTagsWindow().isSurveysTabShown(),
+                " Surveys tab present");
     }
 }
