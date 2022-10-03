@@ -24,7 +24,7 @@ public class AutoRespondersSteps extends AbstractPortalSteps {
     }
     @When("^Admin edit the text for (.*) auto responder$")
     public void clearTextForAutoResponder(String autoresponder) {
-        autoRespondersWindow().InputTextMessage(autoresponder);
+        autoRespondersWindow().inputTextMessage(autoresponder);
     }
     @When("^Admin click save button for (.*) auto responder$")
     public void clickSaveButtonForAutoResponder(String autoresponder) {
