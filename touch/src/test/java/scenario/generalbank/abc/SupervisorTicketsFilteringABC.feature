@@ -1,4 +1,4 @@
-@agent_support_hours
+@support_hours
 @Regression
 Feature: Apple Business Chat :: Supervisor Desk
 

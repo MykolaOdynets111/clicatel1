@@ -256,7 +256,6 @@ public class ORCASteps implements WebWait {
         );
     }
 
-
     private boolean isExpectedResponseArrives(String message) {
         if(Objects.isNull(OrcaSQSHandler.orcaMessages)) {
             return false;
