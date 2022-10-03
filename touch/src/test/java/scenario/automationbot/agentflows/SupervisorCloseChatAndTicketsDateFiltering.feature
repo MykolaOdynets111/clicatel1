@@ -1,7 +1,7 @@
-@no_widget
+@Regression
 Feature: Supervisor desk
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-57105")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2401")
   Scenario: Supervisor inbox :: Verify if Supervisor can filter closed chat and tickets by date range filtering
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
@@ -26,7 +26,6 @@ Feature: Supervisor desk
     Then Verify first closed ticket date are fitted by filter
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1138")
-  @Regression
   Scenario: CD :: Agent Desk :: Closed Chat :: Verify that the closed chats of only last 90 days are visible
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
