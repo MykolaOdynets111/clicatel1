@@ -1,7 +1,7 @@
+@skip
 Feature: Agent Date Time Picker Extension
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-860")
-    @Regression
     @no_widget
   Scenario Outline: CD :: <channelType> :: Agent Desk :: Live Chat :: Verify the "Date/Time picker" extension cards for the tenant
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
@@ -14,12 +14,13 @@ Feature: Agent Date Time Picker Extension
     And Agent open c2p form
     And Agent send date picker form with name WaveBank Sranch and send
     And Agent sees extension link with Schedule Appointment with picker name in chat body
+    #Can't be finished with Automation as user side validation is pending, after sending extension, UI comes on user side to
+    #select option from the extension
     Examples:
       | channelType | userType |
       | ABC         | orca     |
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-4283")
-    @Regression
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1617")
     @no_widget
   Scenario Outline: CD :: <channelType> :: Verify that selected emoticons with text (title) display the title of each selected option in same format to agent as they display to user
     Given Setup ORCA <channelType> integration for General Bank Demo tenant

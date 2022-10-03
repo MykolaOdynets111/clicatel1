@@ -201,7 +201,7 @@ public class ChatForm extends AbstractUIElement {
     public void setDevicePickerName(String name) {
         clickElem(this.getCurrentDriver(), datePickerDropdown, 20, "Rating number dropdown");
 
-        waitFor(5000);
+        waitForElementsToBeVisible(this.getCurrentDriver(), datePickerItems, 5);
         datePickerItems.stream().filter(e -> e.getText().trim().equals(name)).findFirst()
                 .orElseThrow(() -> new AssertionError(name + " name was not found in dropdown.")).click();
     }

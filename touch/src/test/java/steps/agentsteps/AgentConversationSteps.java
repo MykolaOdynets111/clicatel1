@@ -294,7 +294,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @Then("Sent emoji from user (.*) is displayed on chatdesk$")
     public void verifySentUserEmojiDisplayedOnChatdesk(String emoji) {
-        Assert.assertTrue(getChatBody("main agent").getAgentEmojiUserMessage(emoji),
+        Assert.assertTrue(getChatBody("main agent").isAgentEmojiUserMessageShown(emoji),
                 "'" + selectedEmoji + "' User message is not shown in conversation area");
     }
 

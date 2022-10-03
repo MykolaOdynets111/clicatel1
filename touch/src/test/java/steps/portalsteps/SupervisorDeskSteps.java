@@ -450,9 +450,9 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 
-    @And("^Admin checks back button is (.*) in calendar for (.*) filter 3 months ago in supervisor$")
-    public void backButtonDisability(String visibility, String filterType) {
-        getSupervisorDeskPage().checkBackButtonVisibilityThreeMonthsBack(filterType);
+    @And("^Admin checks back button is (.*) in calendar for (.*) filter (.*) days ago in supervisor$")
+    public void backButtonDisability(String visibility, String filterType, Long day) {
+        getSupervisorDeskPage().checkBackButtonVisibilityThreeMonthsBack(filterType, day);
     }
 
     @Then("^Verify closed chats dates are fitted by filter$")

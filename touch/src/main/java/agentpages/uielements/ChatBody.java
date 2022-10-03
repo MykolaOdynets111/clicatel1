@@ -212,7 +212,7 @@ public class ChatBody extends AbstractUIElement {
             return false;
     }
 
-    public boolean getAgentEmojiUserMessage(String userMessage) {
+    public boolean isAgentEmojiUserMessageShown(String userMessage) {
         for (int i = fromUserMessagesEmoji.size() - 1; i >= 0; i--) {
             wheelScrollUpToElement(this.getCurrentDriver(),
                     this.getCurrentDriver().findElement(By.cssSelector(scrollElement)),

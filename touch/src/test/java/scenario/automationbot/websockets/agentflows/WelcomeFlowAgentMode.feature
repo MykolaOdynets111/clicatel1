@@ -30,4 +30,4 @@ Feature: Welcome flow: agent mode
     And Click "Reset to default" button for Connecting Agent message (Social Channels) auto responder
     When Connecting Agent message (Social Channels) is reset on backend
     And Send connect to agent message by ORCA
-    Then Verify Orca returns Thanks for your patience. You have now been connected with Autobot Main. response during 40 seconds
+    Then Verify Orca returns Connecting Agent message (Social Channels) autoresponder during 40 seconds

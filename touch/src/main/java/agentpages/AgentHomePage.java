@@ -165,6 +165,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public HistoryDetailsWindow getHistoryDetailsWindow() {
+        waitForElementToBeVisible(this.getCurrentDriver(), historyDetailsWindow, 5);
         historyDetailsWindow.setCurrentDriver(this.getCurrentDriver());
         return historyDetailsWindow;
     }

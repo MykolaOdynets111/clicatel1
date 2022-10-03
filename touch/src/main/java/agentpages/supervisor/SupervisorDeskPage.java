@@ -4,6 +4,7 @@ import agentpages.supervisor.uielements.*;
 import agentpages.uielements.ChatBody;
 import agentpages.uielements.ChatHeader;
 import agentpages.uielements.Profile;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
@@ -11,7 +12,11 @@ import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
 import portaluielem.AssignChatWindow;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,6 +25,9 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     @FindBy(css = ".cl-chat-item")
     private List<WebElement> chatsLive;
+
+    @FindBy(xpath = "//div[contains(@class,'react-datepicker__day react-datepicker__day')]")
+    private List<WebElement> calendarDatePicker;
 
     @FindBy(xpath = "//h2[text() ='Loading...']")
     private WebElement loading;
@@ -112,28 +120,46 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         super(driver);
     }
 
-    public boolean checkBackButtonVisibilityThreeMonthsBack(String filterType) {
-        if (filterType.equalsIgnoreCase("start date")) {
-            clickElem(this.getCurrentDriver(), startDateInput, 5, "Start date element");
-        } else if (filterType.equalsIgnoreCase("end date")) {
-            clickElem(this.getCurrentDriver(), endDateInput, 5, "End date element");
+    public boolean checkBackButtonVisibilityThreeMonthsBack(String filterType, Long day) {
+        switch (filterType) {
+            case "start date":
+                clickElem(this.getCurrentDriver(), startDateInput, 5, "Start date element");
+                break;
+            case "end date":
+                clickElem(this.getCurrentDriver(), endDateInput, 5, "End date element");
+                break;
+            default:
+                throw new AssertionError("Incorrect filter type was provided: " + filterType);
         }
 
-        //Clicking back button 3 times for back button invisibility check
-        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
+        LocalDate startDate = LocalDate.now().minusDays(day);
+        int month = startDate.getDayOfMonth();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(getPattern(month));
+        String expectedDate = startDate.format(formatter);
+
         clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
         clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
 
-        try {
-            if (filterType.equalsIgnoreCase("start date")) {
-                waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), backButtonString, 5);
-            } else if (filterType.equalsIgnoreCase("end date")) {
-                waitForElementToBeVisibleByXpath(this.getCurrentDriver(), backButtonString, 5);
-            }
+        List<WebElement> date = calendarDatePicker.stream().filter(e -> e.getAttribute("aria-label").contains(expectedDate)).collect(Collectors.toList());
+
+        if(date.size() ==0) {
+            clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
+            date = calendarDatePicker.stream().filter(e -> e.getAttribute("aria-label").contains(expectedDate)).collect(Collectors.toList());
+        }
+
+        if(date.get(0).getAttribute("aria-disabled").equalsIgnoreCase("false")) {
             return true;
-        } catch (Exception e) {
-            throw new AssertionError("There is issue with Back button visibility for selected filter");
         }
+
+        return false;
+    }
+
+    public static String getPattern(int month) {
+        String first = "MMMM d";
+        String last = ", yyyy";
+        String pos = (month == 1 || month == 21 || month == 31) ? "'st'" : (month == 2 || month == 22) ? "'nd'" : (month == 3 || month == 23) ? "'rd'" : "'th'";
+
+        return first + pos + last;
     }
 
     public AssignChatWindow getAssignChatWindow(){

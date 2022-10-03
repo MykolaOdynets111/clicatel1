@@ -4,10 +4,13 @@ import agentpages.AgentHomePage;
 import agentpages.uielements.FilterMenu;
 import agentpages.uielements.Profile;
 import apihelper.ApiHelper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import datamanager.Tenants;
 import datamanager.UserPersonalInfo;
 import datamanager.jacksonschemas.AgentMapping;
 import datamanager.jacksonschemas.ChatPreferenceSettings;
+import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
 import dbmanager.DBConnector;
@@ -85,7 +88,14 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Given("(.*) creates (.*) tenant extension with label (.*) and name (.*)$")
     public void createExtensionForTenant(String agent, String extensionType, String label, Optional name){
-        ApiHelper.createExtensions(label, name, extensionType);
+        String extensionBody;
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            extensionBody = mapper.writeValueAsString(Arrays.asList(new ChatExtension(label, name, extensionType)));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        ApiHelper.createExtensions(extensionBody);
     }
 
     @Then("^On backand (.*) tenant feature status is set to (.*) for (.*)$")
@@ -783,13 +793,8 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Given("^(.*) is logged out from the Agent Desk$")
-    public void logOutAgentDesk(String agent){
-        try {
-            AgentHomePage agentHomePage = new AgentHomePage(agent);
-            ApiHelper.closeActiveChats(agent);
-            agentHomePage.getPageHeader().logOut();
-        } catch(WebDriverException | AssertionError | NoSuchElementException e){
-        }
+    public void logOutAgentDesk(String agent) {
+        getAgentHomePage(agent).getPageHeader().logOut().isLoginDialogShown();
     }
 
 }

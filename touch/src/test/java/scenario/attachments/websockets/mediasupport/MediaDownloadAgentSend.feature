@@ -1,5 +1,5 @@
 @no_chatdesk
-@Regression
+@skip
 Feature: Media Support: Agent sends files and user downloads
 
   Background:
@@ -21,7 +21,7 @@ Feature: Media Support: Agent sends files and user downloads
     And Agent attach <fileType> file type
     And Agent send attached file
     When Agent download the file
-    Then User is able to see the File is downloaded after downloading
+    Then File is not changed after uploading and downloading
     Examples:
       | fileType            |
       | jpeg                |

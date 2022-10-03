@@ -99,8 +99,7 @@ Feature: Dashboard: Customer History
     Then All reports in graphs should be breakdown hourly
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1796")
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1819")
-  Scenario Outline: CD:: Survey:: CSAT:: Dashboard:: Verify if customer satisfaction graph for CSAT score is presented as "0-5" on Y Axis scale
+  Scenario Outline: CD :: Dashboard :: Customer Overview :: Customer History :: Verify if customer satisfaction odometer for CSAT score and graph are presented correct values
     Given I login as agent of Standard Billing
     When I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab

@@ -266,57 +266,6 @@ public class ApiHelper implements VerificationHelper {
         return body;
     }
 
-    /*private static String createPutBodyForTimePickerExtension(String label, String name) {
-        String body = "[\n" +
-                    "  {\n" +
-                    "    \"type\": \"TIME_PICKER\",\n" +
-                    "    \"label\": " + String.format("\"%s\",\n", label) +
-                    "    \"supportedChannels\": [\n" +
-                    "      \"ABC\"\n" +
-                    "    ],\n" +
-                    "    \"config\": {\n" +
-                    "      \"title\": \"Schedule Appointment\",\n" +
-                    "      \"imageRef\": null,\n" +
-                    "      \"location\": {\n" +
-                    "        \"name\": " + String.format("\"%s\",\n", name) +
-                    "        \"radius\": 10.2,\n" +
-                    "        \"address\": \"WaveBank\",\n" +
-                    "        \"latitude\": 49.8511,\n" +
-                    "        \"longitude\": 21.842,\n" +
-                    "        \"identifier\": \"WaveBankBranch\",\n" +
-                    "        \"description\": \"Location description\"\n" +
-                    "      },\n" +
-                    "      \"subTitle\": \"Select one of the available time slots for your appointment\",\n" +
-                    "      \"timeSlots\": [\n" +
-                    "        {\n" +
-                    "          \"duration\": 3600,\n" +
-                    "          \"startTime\": 1672074000,\n" +
-                    "          \"identifier\": \"SUNDAYYYYYYYYYYYYYYYYYY HEEELLLLL, 26 December 2022, 5:00 PM UTC\",\n" +
-                    "          \"description\": \"Some description\"\n" +
-                    "        },\n" +
-                    "        {\n" +
-                    "          \"duration\": 3600,\n" +
-                    "          \"startTime\": 1672167600,\n" +
-                    "          \"identifier\": \"Tuesday, 27 December 2022, 7:00 PM UTC\",\n" +
-                    "          \"description\": \"Some description\"\n" +
-                    "        },\n" +
-                    "        {\n" +
-                    "          \"duration\": 3600,\n" +
-                    "          \"startTime\": 1672252200,\n" +
-                    "          \"identifier\": \"Wednesday, 28 December 2022, 6:30 PM UTC\",\n" +
-                    "          \"description\": \"Some description\"\n" +
-                    "        }\n" +
-                    "      ],\n" +
-                    "      \"description\": \"description\",\n" +
-                    "      \"postbackData\": \"timeslot-postback\"\n" +
-                    "    },\n" +
-                    "    \"popularityScore\": 6\n" +
-                    "  }\n" +
-                    "]";
-
-        return body;
-    }*/
-
     @NotNull
     private static String getAgentSupportHoursBody(List<String> days, String startTime, String endTime) {
         String body;
@@ -411,26 +360,16 @@ public class ApiHelper implements VerificationHelper {
     }
 
     public static void updateFeatureStatus(ChatPreferenceSettings chatPreferenceSettings) {
-        String url = Endpoints.CHAT_PREFERENCES;
-
         Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON)
                 .body(chatPreferenceSettings)
-                .put(url);
+                .put(Endpoints.CHAT_PREFERENCES);
         Assert.assertEquals(resp.statusCode(), 200,
                 "Status code is not 200 and body value is \n: " + chatPreferenceSettings.toString() + "\n error message is: " + resp.getBody().asString());
     }
 
-    public static void createExtensions(String label, Optional name, String extensionType) {
-        //String extensionBody = createPutBodyForTimePickerExtension(label, name);
-        String extensionBody;
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            extensionBody = mapper.writeValueAsString(Arrays.asList(new ChatExtension(label, name, extensionType)));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+    public static void createExtensions(String extensionBody) {
         Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON)

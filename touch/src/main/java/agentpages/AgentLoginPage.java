@@ -24,6 +24,8 @@ public class AgentLoginPage extends AgentAbstractPage {
         super(ordinalAgentNumber);
     }
 
+    public static final ThreadLocal<String> agentName = new ThreadLocal<>();
+
     public AgentLoginPage openPortalLoginPage() {
         getCurrentDriver().get(URLs.getTouchLoginForm());
         return this;
@@ -60,8 +62,8 @@ public class AgentLoginPage extends AgentAbstractPage {
         dropdownSelect = new Select(agentsDropdown);
         List<WebElement> options = waitForOptionsIsDownloaded(dropdownSelect);
         String finalAgent = agent;
-        String agentName = options.stream().filter(a -> a.getText().toLowerCase().contains(finalAgent)).findFirst().get().getText();
-        dropdownSelect.selectByVisibleText(agentName);
+        agentName.set(options.stream().filter(a -> a.getText().toLowerCase().contains(finalAgent)).findFirst().get().getText());
+        dropdownSelect.selectByVisibleText(agentName.get());
         return this;
     }
 

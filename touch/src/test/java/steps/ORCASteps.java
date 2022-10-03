@@ -1,5 +1,6 @@
 package steps;
 
+import agentpages.AgentLoginPage;
 import apihelper.ApiHelper;
 import apihelper.ApiORCA;
 import com.github.javafaker.Faker;
@@ -16,6 +17,7 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import sqsreader.OrcaSQSHandler;
 import sqsreader.SQSConfiguration;
+import steps.agentsteps.AgentConversationSteps;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,10 +49,13 @@ public class ORCASteps implements WebWait {
     public static void cleanUPORCAData() {
         OrcaSQSHandler.orcaMessages.clear();
         OrcaSQSHandler.orcaMessagesMap.clear();
+        OrcaSQSHandler.orcaEvents.clear();
+        AgentConversationSteps.locationURL.remove();
         orcaMessageCallBody.remove();
         apiToken.remove();
         clientId.remove();
         orcaChannelId.remove();
+        AgentLoginPage.agentName.remove();
         System.out.println("Orca artifacts were removed");
     }
 
@@ -143,6 +148,9 @@ public class ORCASteps implements WebWait {
 
         expectedResponse = DefaultTouchUserSteps.formExpectedAutoresponder(expectedResponse);
 
+        if(expectedResponse.contains("${agentName}")) {
+            expectedResponse = expectedResponse.replace("${agentName}", AgentLoginPage.agentName.get());
+        }
         verifyAutoresponder(expectedResponse, wait);
     }
 
