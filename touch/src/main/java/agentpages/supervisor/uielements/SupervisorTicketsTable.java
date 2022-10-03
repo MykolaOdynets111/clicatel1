@@ -112,4 +112,10 @@ public class SupervisorTicketsTable extends AbstractUIElement {
                 .map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver()))
                 .allMatch(closedChat -> closedChat.getIconName().equalsIgnoreCase(channelName));
     }
+
+    public void openFirstTicket() {
+        new SupervisorDeskTicketRow(tickets.get(0))
+                .setCurrentDriver(this.getCurrentDriver())
+                .clickOnUserName();
+    }
 }

@@ -3,12 +3,13 @@ package steps.agentsteps;
 import agentpages.uielements.FilterMenu;
 import agentpages.uielements.Profile;
 import apihelper.ApiHelper;
+import apihelper.ApiHelperSupportHours;
 import datamanager.Tenants;
 import datamanager.UserPersonalInfo;
-import datamanager.jacksonschemas.AgentMapping;
 import datamanager.jacksonschemas.ChatPreferenceSettings;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
+import datamanager.jacksonschemas.supportHours.SupportHoursMapping;
 import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
@@ -17,10 +18,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
-import mc2api.auth.PortalAuthToken;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import socialaccounts.FacebookUsers;
@@ -39,29 +37,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     private static final ThreadLocal<Map<String, Boolean>> TEST_FEATURE_STATUS_CHANGES = new ThreadLocal<>();
     private static UserPersonalInfo userPersonalInfoForUpdating;
     public Profile profile;
-
-    @FindBy(css = "Selenium-id= user-profile-edit")
-    private WebElement editButton;
-
-    private static void savePreTestFeatureStatus(String featureName, boolean status){
-        Map<String, Boolean> map = new HashMap<>();
-        map.put(featureName, status);
-        PRE_TEST_FEATURE_STATUS.set(map);
-    }
-
-    public static boolean getPreTestFeatureStatus(String featureName){
-        return PRE_TEST_FEATURE_STATUS.get().get(featureName);
-    }
-
-    private static void saveTestFeatureStatusChanging(String featureName, boolean status){
-        Map<String, Boolean> map = new HashMap<>();
-        map.put(featureName, status);
-        TEST_FEATURE_STATUS_CHANGES.set(map);
-    }
-
-    public static boolean getTestFeatureStatusChanging(String featureName){
-        return TEST_FEATURE_STATUS_CHANGES.get().get(featureName);
-    }
 
     @When("Save clientID value for (.*) user")
     public void saveClientIDValues(String userFrom){
@@ -144,8 +119,8 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Map<String, Object> results = new HashMap<String, Object>();
 
         int sessionCapacity = 0;
-        List<AgentMapping> supportHours = null;
-        List<AgentMapping> supportHoursUpdated = null;
+        List<SupportHoursMapping> supportHours = null;
+        List<SupportHoursMapping> supportHoursUpdated = null;
         sessionCapacity = ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity");
         results.put("sessionCapacity", sessionCapacity);
 
@@ -155,13 +130,13 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             results.put("sessionCapacityUpdate", 50);
         }
 
-        supportHours = ApiHelper.getAgentSupportDaysAndHoursForMainAgent(Tenants.getTenantUnderTestOrgName()).getAgentMapping();
+        supportHours = ApiHelperSupportHours.getSupportDaysAndHoursForMainAgent(Tenants.getTenantUnderTestOrgName()).getAgentMapping();
         results.put("supportHours", supportHours);
 
         if (!type.equalsIgnoreCase("ticket")) {
             if (supportHours.size() < 7) {
-                ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
-                supportHoursUpdated = ApiHelper.getAgentSupportDaysAndHoursForMainAgent(Tenants.getTenantUnderTestOrgName()).getAgentMapping();
+                ApiHelperSupportHours.setSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+                supportHoursUpdated = ApiHelperSupportHours.getSupportDaysAndHoursForMainAgent(Tenants.getTenantUnderTestOrgName()).getAgentMapping();
                 results.put("supportHoursUpdated", supportHoursUpdated);
             }else {results.put("supportHoursUpdated", "were not updated because \"All week\" was set");}
         }else {results.put("supportHoursUpdated", "were not updated because it is ticket");}
@@ -189,13 +164,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")\n" +
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
     }
-
     @Then("(.*) sees 'overnight' icon in this chat")
     public void verifyOvernightIconShown(String agent){
         Assert.assertTrue(getLeftMenu(agent).isOvernightTicketIconShown(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())),
                 "Overnight icon is not shown for overnight ticket. \n clientId: "+ getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
     }
-
     @Then("^Overnight ticket is removed from (.*) chatdesk$")
     public void checkThatOvernightTicketIsRemoved(String agent){
         Assert.assertTrue(getLeftMenu(agent).isOvernightTicketIconRemoved(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())),
@@ -340,11 +313,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             case "with day shift":
                 LocalDateTime currentTimeWithADayShift = LocalDateTime.now().minusDays(1);
 
-                resp = ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(),
+                resp = ApiHelperSupportHours.setSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(),
                         currentTimeWithADayShift.getDayOfWeek().toString(),"00:00", "23:59");
                 break;
             case "for all week":
-                resp = ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
+                resp = ApiHelperSupportHours.setSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
                         "00:00", "23:59");
                 getAgentHomePage("main").waitFor(1500);
                 break;

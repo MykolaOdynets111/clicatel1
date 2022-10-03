@@ -54,6 +54,13 @@ public class SupervisorLeftPanel extends AbstractUIElement {
                 .orElseThrow(() -> new AssertionError("Can't find Live Chats filter for " + agentName ));
     }
 
+    public void clickFilterType(String filterName) {
+        WebElement filter = liveChatsFilters.stream().filter(a -> a.getText().trim().contains(filterName)).findFirst()
+                .orElseThrow(() -> new AssertionError("Can't find Live Chats filter for " + filterName ));
+
+        filter.click();
+    }
+
     public int getLiveChatsNumberForAgent(String agentName){
         return Integer.valueOf(getLiveFilterType(agentName).findElement(By.cssSelector(".cl-chats-group-item__count--round")).getText().trim());
     }

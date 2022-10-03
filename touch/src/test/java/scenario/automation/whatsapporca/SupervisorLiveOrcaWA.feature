@@ -34,7 +34,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Supervisor Desk Live chat header display date
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2899")
-  Scenario: Supervisor desk:: Verify if supervisor can unflag chat
+  Scenario: CD:: Supervisor desk :: Supervisor_Desk-Chat:: Verify if supervisor can unflag chat
     Given I login as agent of Automation
     When Setup ORCA whatsapp integration for Automation tenant
     And Send to agent message by ORCA

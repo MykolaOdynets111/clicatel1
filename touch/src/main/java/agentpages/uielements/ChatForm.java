@@ -196,4 +196,7 @@ public class ChatForm extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), startChatButton, 2, "Start Chat button");
     }
 
+    public boolean c2pExtensionIconIsVisible(){
+        return isElementShown(this.getCurrentDriver(),c2pButton,3);
+    }
 }

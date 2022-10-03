@@ -44,7 +44,7 @@ public class SyncMessageReceiver {
 
         SqsClient sqsClient = SqsClient.builder()
                 .region(config.getRegion())
-                .credentialsProvider(ProfileCredentialsProvider.create("215418463085_vulcan-mc2-dev"))
+                .credentialsProvider(ProfileCredentialsProvider.create("215418463085_sg.interact.chatdesk.qa.nprod"))
                 .build();
 
         SQSConnectionFactory connectionFactory = new SQSConnectionFactory(

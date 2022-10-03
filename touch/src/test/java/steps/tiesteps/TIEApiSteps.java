@@ -3,17 +3,14 @@ package steps.tiesteps;
 import apihelper.ApiHelperTie;
 import apihelper.Endpoints;
 import com.github.javafaker.Faker;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.Intent;
 import datamanager.jacksonschemas.tie.*;
-
-import static io.restassured.RestAssured.*;
-
+import datetimeutils.DateTimeHelper;
 import driverfactory.URLs;
-import interfaces.DateTimeHelper;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.exception.JsonPathException;
@@ -29,6 +26,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 public class TIEApiSteps {

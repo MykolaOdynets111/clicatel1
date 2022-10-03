@@ -21,7 +21,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Agent select "WhatsApp" in Chanel container and click "Apply filters" button
     Then Verify that only "whatsapp" closed chats are shown
 
-  @agent_support_hours
+  @support_hours
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1776")
   Scenario: Supervisor desk:: Verify if supervisor can filter tickets by ticket status and WhatsApp filter option
