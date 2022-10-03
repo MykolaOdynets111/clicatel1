@@ -1,4 +1,4 @@
-@agent_support_hours
+@support_hours
 Feature: Transfer overnight ticket
 
   Background:

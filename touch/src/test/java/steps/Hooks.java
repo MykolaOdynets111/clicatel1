@@ -1,17 +1,14 @@
 package steps;
 
 import agentpages.AgentHomePage;
-import apihelper.APIHelperDotControl;
-import apihelper.ApiHelper;
-import apihelper.Endpoints;
-import apihelper.TouchAuthToken;
+import apihelper.*;
 import com.google.gson.JsonObject;
 import datamanager.Agents;
 import datamanager.MC2Account;
 import datamanager.Tenants;
-import datamanager.jacksonschemas.CRMTicket;
 import datamanager.jacksonschemas.ChatPreferenceSettings;
 import datamanager.jacksonschemas.TenantChatPreferences;
+import datamanager.jacksonschemas.supportHours.GeneralSupportHoursItem;
 import driverfactory.DriverFactory;
 import driverfactory.URLs;
 import drivermanager.ConfigManager;
@@ -23,7 +20,6 @@ import io.cucumber.java.Before;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.Scenario;
 import io.qameta.allure.Attachment;
-import io.restassured.response.Response;
 import javaserver.DotControlServer;
 import mc2api.ApiHelperPlatform;
 import mc2api.auth.PortalAuthToken;
@@ -37,8 +33,6 @@ import org.openqa.selenium.logging.LogType;
 import sqsreader.SQSConfiguration;
 import sqsreader.SyncMessageReceiver;
 import steps.agentsteps.AbstractAgentSteps;
-import steps.agentsteps.AgentCRMTicketsSteps;
-import steps.agentsteps.DefaultAgentSteps;
 import steps.dotcontrol.DotControlSteps;
 import steps.portalsteps.AbstractPortalSteps;
 import steps.portalsteps.BasePortalSteps;
@@ -116,16 +110,8 @@ public class Hooks implements JSHelper {
             }
         }
 
-        if(scenario.getSourceTagNames().contains("@agent_support_hours")){
-            Response resp = ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
-//ToDo Update API after it will be ready
-//            String agent;
-//            if(DriverFactory.isSecondAgentDriverExists()) agent = "second agent";
-//            else agent = "main";
-//            ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName(), agent);
-            if(resp.statusCode()!=200) {
-                supportHoursUpdates(resp);
-            }
+        if (scenario.getSourceTagNames().contains("@support_hours")){
+               ApiHelperSupportHours.setSupportDaysAndHours(new GeneralSupportHoursItem());
         }
 
         if(scenario.getSourceTagNames().contains("@auto_scheduler_disabled")){
@@ -294,7 +280,6 @@ public class Hooks implements JSHelper {
         }
     }
 
-
     private void finishAgentFlowIfExists(Scenario scenario) {
 
         if (scenario.getSourceTagNames().contains("@delete_agent_on_failure")&&scenario.isFailed()){
@@ -324,14 +309,9 @@ public class Hooks implements JSHelper {
             if(!scenario.getSourceTagNames().contains("@no_chatdesk") || scenario.getSourceTagNames().contains("@orca_api")){
                 closePopupsIfOpenedEndChatAndlogoutAgent("main agent");}
 
-            if(scenario.getSourceTagNames().contains("@sign_up")) newAccountInfo();
-
-            /*if (scenario.getSourceTagNames().contains("@suggestions")){
-                boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus("AGENT_ASSISTANT");
-                if(pretestFeatureStatus != DefaultAgentSteps.getTestFeatureStatusChanging("AGENT_ASSISTANT")) {
-                    ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_ASSISTANT", Boolean.toString(pretestFeatureStatus));
-                }
-            }*/
+            if(scenario.getSourceTagNames().contains("@sign_up")){
+                newAccountInfo();
+            }
 
             if (scenario.getSourceTagNames().contains("@chat_preferences")){
                 ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), new ChatPreferenceSettings());
@@ -345,7 +325,6 @@ public class Hooks implements JSHelper {
                 ApiHelper.setIntegrationStatus(Tenants.getTenantUnderTestOrgName(), "webchat", true);
 
             }
-
 
             DriverFactory.getAgentDriverInstance().manage().deleteAllCookies();
             DriverFactory.closeAgentBrowser();
@@ -470,9 +449,6 @@ public class Hooks implements JSHelper {
                     }
                 }
             }
-//        TIEApiSteps.clearTenantNames();
-//        logRequest(BaseTieSteps.request);
-//        logResponse(BaseTieSteps.response);
     }
 
     private void clearAllSessionData(){
@@ -487,16 +463,6 @@ public class Hooks implements JSHelper {
         ApiHelper.clientProfileId.remove();
         CamundaFlowsSteps.updatedMessage.remove();
         CamundaFlowsSteps.defaultMessage.remove();
-    }
-
-    @Attachment(value = "request")
-    public byte[] logRequest(ByteArrayOutputStream stream) {
-        return attach(stream);
-    }
-
-    @Attachment(value = "response")
-    public byte[] logResponse(ByteArrayOutputStream stream) {
-        return attach(stream);
     }
 
     private byte[] attach(ByteArrayOutputStream log) {
@@ -540,28 +506,6 @@ public class Hooks implements JSHelper {
         return  result.toString();
     }
 
-    @Attachment
-    private String chatdeskWebSocketLogs(){
-        return getWebSocketLogs(DriverFactory.getAgentDriverInstance());
-    }
-
-    @Attachment
-    private String secondAgentChatdeskWebSocketLogs(){
-        return getWebSocketLogs(DriverFactory.getSecondAgentDriverInstance());
-    }
-
-    @Attachment
-    private String widgetWebSocketLogs(){
-        return getWebSocketLogs(DriverFactory.getTouchDriverInstance());
-    }
-
-    @Attachment
-    private String supportHoursUpdates(Response resp){
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(resp.statusCode()).append("\n").append(resp.getBody().asString()).append("\n");
-        return  buffer.toString();
-    }
-
     private String getWebSocketLogs(WebDriver driver){
         StringBuilder result = new StringBuilder();
         try {
@@ -587,18 +531,8 @@ public class Hooks implements JSHelper {
         return  result.toString();
     }
 
-
     @Attachment
     private String newAccountInfo(){
         return MC2Account.TOUCH_GO_NEW_ACCOUNT.toString();
     }
-
-
-    @Attachment
-    private String newAgent(){
-        return BasePortalSteps.AGENT_FIRST_NAME + "\n"
-                + BasePortalSteps.AGENT_LAST_NAME + "\n"
-                + BasePortalSteps.AGENT_EMAIL;
-    }
-
 }

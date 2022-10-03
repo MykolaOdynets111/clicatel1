@@ -1,7 +1,7 @@
 @Regression
 Feature: ABC ORCA :: Supervisor Desk
 
-@agent_support_hours
+@support_hours
 @orca_api
 @TestCaseId("https://jira.clickatell.com/browse/CCD-2848")
 Scenario: Supervisor desk:: Verify if supervisor can filter tickets by ticket status and apple channel filter option

@@ -7,7 +7,6 @@ import datamanager.jacksonschemas.chathistory.ChatHistory;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
-import datamanager.jacksonschemas.ChatPreferenceSettings;
 import datamanager.jacksonschemas.usersessioninfo.ClientProfile;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
 import drivermanager.ConfigManager;
@@ -21,8 +20,6 @@ import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import mc2api.auth.PortalAuthToken;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.springframework.util.StringUtils;
 import org.testng.Assert;
 
 import java.time.LocalDateTime;
@@ -31,7 +28,6 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static io.restassured.RestAssured.given;
 import static java.lang.String.format;
 import static org.junit.Assert.fail;
 
@@ -173,7 +169,7 @@ public class ApiHelper implements VerificationHelper {
         return getAutoRespondersList().stream()
                 .filter(e -> e.getTitle().equalsIgnoreCase(title))
                 .findFirst().orElseThrow(() ->
-                        new NoSuchElementException(format("There is no message with title: %s",  title)));
+                        new NoSuchElementException(format("There is no message with title: %s", title)));
     }
 
     public static List<AutoResponderMessage> getAutoRespondersList() {
@@ -200,87 +196,6 @@ public class ApiHelper implements VerificationHelper {
         }
     }
 
-    public static Response setAgentSupportDaysAndHours(String tenantOrgName, String day,
-                                                       String startTime, String endTime) {
-        String body = createPutBodyForHours(day, startTime, endTime);
-        return postQuery(tenantOrgName, body, Endpoints.AGENT_SUPPORT_HOURS);
-    }
-
-    public static SupportHoursItem setAgentSupportDaysAndHours(String tenantOrgName, List<String> days,
-                                                               String startTime, String endTime) {
-        String body = getAgentSupportHoursBody(days, startTime, endTime);
-
-        return Objects.requireNonNull(getPostQueryFor(tenantOrgName, Endpoints.AGENT_SUPPORT_HOURS, body))
-                .as(SupportHoursItem.class);
-    }
-
-    public static SupportHoursItem setAgentSupportDaysAndHours(String tenantOrgName, List<String> days) {
-        return setAgentSupportDaysAndHours(tenantOrgName, days, "00:00", "23:59");
-    }
-
-    private static SupportHoursItem getAgentSupportDaysAndHours(String tenantOrgName, String agent) {
-        Response response = getQuery(tenantOrgName, Endpoints.AGENT_SUPPORT_HOURS, agent);
-
-        if (response.getStatusCode() != 200) {
-            fail("Couldn't get 'Agent Support Hours' \n"
-                    + "Status code: " + response.statusCode() + "\n"
-                    + "TenantOrgName: " + tenantOrgName + "\n"
-                    + "Error message: " + response.getBody().asString());
-            return null;
-        } else {
-            return response.getBody().as(SupportHoursItem.class);
-        }
-    }
-
-    public static SupportHoursItem getAgentSupportDaysAndHoursForMainAgent(String tenantOrgName) {
-        return getAgentSupportDaysAndHours(tenantOrgName, "main");
-    }
-
-    private static String createPutBodyForHours(String day, String startTime, String endTime) {
-        String body;
-        if (day.equalsIgnoreCase("all week")) {
-            body = "{\n" +
-                    "  \"agentSupportHours\": [\n" +
-                    "    {\n" +
-                    "      \"startWorkTime\": \"00:00\",\n" +
-                    "      \"endWorkTime\": \"23:59\",\n" +
-                    "      \"days\": [\n" +
-                    "        \"FRIDAY\",\n" +
-                    "        \"MONDAY\",\n" +
-                    "        \"SATURDAY\",\n" +
-                    "        \"SUNDAY\",\n" +
-                    "        \"THURSDAY\",\n" +
-                    "        \"TUESDAY\",\n" +
-                    "        \"WEDNESDAY\"\n" +
-                    "      ]\n" +
-                    "    }\n" +
-                    "  ],\n" +
-                    "  \"supportHoursByDepartment\": []\n" +
-                    "}";
-        } else {
-            body = getAgentSupportHoursBody(Collections.singletonList(day), startTime, endTime);
-        }
-        return body;
-    }
-
-    @NotNull
-    private static String getAgentSupportHoursBody(List<String> days, String startTime, String endTime) {
-        String body;
-        String sequenceOfDays = StringUtils.collectionToDelimitedString(days, ",", "\"", "\"");
-        body = "{\n" +
-                "  \"agentSupportHours\": [\n" +
-                "    {\n" +
-                "      \"startWorkTime\": \"" + startTime + "\",\n" +
-                "      \"endWorkTime\": \"" + endTime + "\",\n" +
-                "      \"days\": [\n" + sequenceOfDays +
-                "      ]\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"supportHoursByDepartment\": []\n" +
-                "}";
-        return body;
-    }
-
     public static void setAvailableForAllTerritories(String tenantOrgName) {
         RestAssured.given()
                 .contentType(ContentType.JSON)
@@ -291,7 +206,6 @@ public class ApiHelper implements VerificationHelper {
                         "}")
                 .post(Endpoints.WIDGET_VISIBILITY_TERRITORIES);
     }
-
 
     public static void setAvailabilityForTerritoryAndCountry(String tenantOrgName, String terrName, boolean terrAvailability,
                                                              String countryName, boolean countryAvailability) {
@@ -669,9 +583,8 @@ public class ApiHelper implements VerificationHelper {
     }
 
     public static List<Department> getDepartments(String tenantOrgName) {
-        Response resp = RestAssured.given().header("Authorization", getAccessToken(tenantOrgName, "main")).get(Endpoints.DEPARTMENTS);
-        List<Department> departments = resp.jsonPath().getList("", Department.class);
-        return departments;
+        return getQueryFor(tenantOrgName, Endpoints.DEPARTMENTS)
+                .jsonPath().getList("", Department.class);
     }
 
     public static void deleteDepartmentsById(String tenantOrgName) {
@@ -1048,37 +961,37 @@ public class ApiHelper implements VerificationHelper {
                 .post(Endpoints.INTERNAL_CREATE_HISTORY);
     }
 
-    @Nullable
-    private static ResponseBody getPostQueryFor(String tenantOrgName, String endpoint, String body) {
-        Response response = postQuery(tenantOrgName, body, endpoint);
+    @NotNull
+    protected static ResponseBody getPostQueryFor(String tenantOrgName, String endpoint, Object body) {
+        Response response = postQuery(tenantOrgName, endpoint, body);
 
         if (response.getStatusCode() != 200) {
-            fail("Couldn't get 'Agent Support Hours' \n"
+            fail("Couldn't post the value \n"
                     + "Status code: " + response.statusCode() + "\n"
                     + "TenantOrgName: " + tenantOrgName + "\n"
                     + "Error message: " + response.getBody().asString());
             return null;
         } else {
-            return response.getBody();
+            return Objects.requireNonNull(response.getBody());
         }
     }
 
-    @Nullable
-    private static ResponseBody getQueryFor(String tenantOrgName, String endpoint) {
+    @NotNull
+    protected static ResponseBody getQueryFor(String tenantOrgName, String endpoint) {
         Response response = getQuery(tenantOrgName, endpoint, "main");
 
         if (response.getStatusCode() != 200) {
-            fail("Couldn't get 'Agent Support Hours' \n"
+            fail("Couldn't get the value \n"
                     + "Status code: " + response.statusCode() + "\n"
                     + "TenantOrgName: " + tenantOrgName + "\n"
                     + "Error message: " + response.getBody().asString());
             return null;
         } else {
-            return response.getBody();
+            return Objects.requireNonNull(response.getBody());
         }
     }
 
-    private static Response postQuery(String tenantOrgName, String body, String endpoint) {
+    protected static Response postQuery(String tenantOrgName, String endpoint, Object body) {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .header("Authorization", getAccessToken(tenantOrgName, "main"))
@@ -1086,18 +999,18 @@ public class ApiHelper implements VerificationHelper {
                 .post(format(endpoint, getTenant(tenantOrgName).get("id")));
     }
 
-    private static Response getQuery(String tenantOrgName, String endpoint, String agent) {
+    protected static Response getQuery(String tenantOrgName, String endpoint, String agent) {
         return RestAssured.given().log().all()
                 .accept(ContentType.JSON)
                 .header("Authorization", getAccessToken(tenantOrgName, agent))
                 .get(format(endpoint, tenantOrgName));
     }
 
-    private static Map<String, String> getTenant(String tenantOrgName) {
+    protected static Map<String, String> getTenant(String tenantOrgName) {
         return ApiHelper.getTenantInfoMap(tenantOrgName);
     }
 
-    private static String getAccessToken(String tenantOrgName, String main) {
+    protected static String getAccessToken(String tenantOrgName, String main) {
         return TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, main);
     }
 }

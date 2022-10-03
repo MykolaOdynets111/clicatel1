@@ -3,6 +3,7 @@ package steps.dotcontrol;
 import agentpages.uielements.ChatForm;
 import apihelper.APIHelperDotControl;
 import apihelper.ApiHelper;
+import apihelper.ApiHelperSupportHours;
 import apihelper.ApiHelperTie;
 import com.github.javafaker.Faker;
 import com.google.common.io.Files;
@@ -10,8 +11,8 @@ import datamanager.Tenants;
 import datamanager.dotcontrol.DotControlCreateIntegrationInfo;
 import datamanager.jacksonschemas.ChatHistoryItem;
 import datamanager.jacksonschemas.Integration;
-import datamanager.jacksonschemas.SupportHoursItem;
 import datamanager.jacksonschemas.dotcontrol.*;
+import datamanager.jacksonschemas.supportHours.GeneralSupportHoursItem;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import interfaces.WebWait;
@@ -179,11 +180,11 @@ public class DotControlSteps implements WebWait {
 
     @When("^Send init call with (.*) messageId correct (.*)response is returned$")
     public void sendInitCall(String messageIdStrategy, String expMessage){
-        SupportHoursItem expectedBusinessHours = null;
+        GeneralSupportHoursItem expectedBusinessHours = null;
         if(expMessage.isEmpty()) expMessage = "OK";
         if(expMessage.trim().equals("OUT_OF_BUSINESS_HOURS")){
             expectedBusinessHours =
-                    ApiHelper.getAgentSupportDaysAndHoursForMainAgent(Tenants.getTenantUnderTestOrgName());
+                    ApiHelperSupportHours.getSupportDaysAndHoursForMainAgent(Tenants.getTenantUnderTestOrgName());
         }
         SoftAssert soft = new SoftAssert();
 
@@ -199,7 +200,7 @@ public class DotControlSteps implements WebWait {
                 "\nResponse on INIT call contains incorrect conversationId\n");
         soft.assertEquals(resp.getBody().jsonPath().get("agentStatus"), expMessage.trim(),
                 "\nResponse on INIT call contains incorrect agentStatus\n");
-        soft.assertEquals(resp.getBody().as(SupportHoursItem.class), expectedBusinessHours,
+        soft.assertEquals(resp.getBody().as(GeneralSupportHoursItem.class), expectedBusinessHours,
                 "\nResponse on INIT call contains incorrect businessHours\n");
         soft.assertAll();
     }
