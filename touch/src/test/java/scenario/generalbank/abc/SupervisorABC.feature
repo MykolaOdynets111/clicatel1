@@ -72,7 +72,7 @@ Feature: Apple Business Chat :: Supervisor Desk
     Then Agent has new conversation request from orca user
     And I login as Second Agent of General Bank Demo
     And Agent click on new conversation request from orca
-    When Agent clicks on Transfer button and selects Second Agent from dropdown
+    When Agent transfers chat
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
     And I select Touch in left menu and Supervisor Desk in submenu
