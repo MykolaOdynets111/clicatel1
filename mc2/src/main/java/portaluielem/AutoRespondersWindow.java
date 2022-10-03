@@ -32,7 +32,7 @@ public class AutoRespondersWindow extends BasePortalWindow {
 
     public void editTextMessage(String autoresponder) {
         waitForElementsToBeVisible(this.getCurrentDriver(), autoResponderItems, 5);
-        getTargetAutoResponderItem(autoresponder).editText();
+        getTargetAutoResponderItem(autoresponder).InputText("This is for testing");
     }
 
     public void clickSaveButton(String autoresponder) {
