@@ -1,5 +1,5 @@
 @remove_dep
-@agent_support_hours
+@support_hours
 @Regression
 Feature: Departments
 

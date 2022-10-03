@@ -20,8 +20,6 @@ Feature: Managing Chat desk Window
     When Click off/on Chat Conclusion
     Then  On backand AGENT_FEEDBACK tenant feature status is set to true for Automation Bot
 
-
-
   Scenario: Check changing available chats per agent
     Given Transfer timeout for Automation Bot tenant is set to 600 seconds
     Given I open portal
@@ -42,3 +40,13 @@ Feature: Managing Chat desk Window
     And Navigate to Preferences page
     When Change chats per agent:"0.5"
     Then Decimal numbers (e.g., 3.5) are not allowed. Please enter a whole number Error message is shown
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2657")
+  @Regression
+  Scenario: CD:: Dashboard:: Setting ::  Verify if error is displayed if user enters 0 in the Maximum Chats per Agent
+    Given I open portal
+    And Login into portal as an admin of Automation Bot account
+    When I select Touch in left menu and Dashboard in submenu
+    And Navigate to Preferences page
+    When Change chats per agent:"0"
+    Then Maximum Chats per Agent must be a positive number Error message is shown
