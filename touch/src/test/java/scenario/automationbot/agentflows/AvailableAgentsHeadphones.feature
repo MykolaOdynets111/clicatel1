@@ -1,9 +1,8 @@
+@Regression
 @no_widget
-
 Feature: Available agents on headphones
 
-
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-3626)
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2854)
   Scenario: Chat desk: if agent set unavailable he is disappearing from drop-down
     Given I login as agent of Automation Bot
     Given I login as second agent of Automation Bot
@@ -11,7 +10,6 @@ Feature: Available agents on headphones
     When First Agent changes status to: Unavailable
     Then First Agent click on 'headphones' icon and see 1 available agents
 
-  @Regression
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2973)
   Scenario: CD :: Agent Desk :: Verify that agent is able to type phone number in "send to" input field(Whatsapp)
     Given I login as agent of Automation Bot

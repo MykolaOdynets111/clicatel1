@@ -3,8 +3,8 @@ package apihelper;
 import com.github.javafaker.Faker;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.orca.OrcaEvent;
+import datetimeutils.DateTimeHelper;
 import driverfactory.URLs;
-import interfaces.DateTimeHelper;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -18,7 +18,7 @@ public class ApiORCA extends ApiHelper{
         Response resp = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(prepareIntegrationCAllData(callBackUrl))
-                .post(String.format(Endpoints.CREATE_ORCA_INTEGRATION, channel, Tenants.getTenantId()));
+                .post(String.format(Endpoints.CREATE_ORCA_INTEGRATION, channel.toLowerCase(), Tenants.getTenantId()));
         return validateIntegrationResponse(resp, "Create");
     }
 
@@ -26,7 +26,7 @@ public class ApiORCA extends ApiHelper{
         Response resp = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(prepareIntegrationCAllData(callBackUrl))
-                .put(String.format(Endpoints.UPDATE_ORCA_INTEGRATION, channel, Tenants.getTenantId(),orcaId));
+                .put(String.format(Endpoints.UPDATE_ORCA_INTEGRATION, channel.toLowerCase(), Tenants.getTenantId(),orcaId));
         return validateIntegrationResponse(resp, "Update");
     }
 

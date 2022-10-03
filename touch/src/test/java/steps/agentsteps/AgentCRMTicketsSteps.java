@@ -2,10 +2,10 @@ package steps.agentsteps;
 
 import apihelper.ApiHelper;
 import datamanager.jacksonschemas.CRMTicket;
+import datetimeutils.DateTimeHelper;
 import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
-import interfaces.DateTimeHelper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -298,13 +298,13 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
                 "CRM ticket was created on back end");
     }
 
-    @Then("(.*) type Note:(.*), Link:(.*), Number:(.*) for CRM ticket$")
-    public void agentCreateCRMTicket(String agent,String note, String link, String number) {
+    @Then("(.*) type Note:(.*), Link:(.*), Number:(.*) for CRM ticket for (.*)$")
+    public void agentCreateCRMTicket(String agent,String note, String link, String number, String channel) {
         // TODO: 9/4/2020 remove wait after spinner would be added
         //waitFor(2000);
         getAgentHomePage(agent).getAgentFeedbackWindow().fillForm(note, link, number);
         List <String> tags = getAgentHomePage(agent).getAgentFeedbackWindow().getChosenTags();
-        prepareDataForCrmTicketChatdesk(note, link, number, tags);
+        prepareDataForCrmTicketChatdesk(channel, note, link, number, tags);
     }
 
     private Map<String, String> prepareDataForCrmTicket( Map<String, String>  sessionDetails, String urlStatus){
@@ -334,9 +334,9 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
         crmTicketInfoForUpdating.set(info);
     }
 
-    private Map<String, String> prepareDataForCrmTicketChatdesk( String agentNote, String link, String ticketNumber, List<String> tags){
+    private Map<String, String> prepareDataForCrmTicketChatdesk(String channel, String agentNote, String link, String ticketNumber, List<String> tags){
         Map<String, String>  sessionDetails = DBConnector.getActiveSessionDetailsByClientProfileID
-                (ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+                (ConfigManager.getEnv(), getUserName(channel));
         Map<String, String> dataForNewCRMTicket = new HashMap<>();
         if (link.isEmpty())link=null;
         if (ticketNumber.isEmpty())ticketNumber=null;

@@ -1,6 +1,7 @@
 package agentpages.dashboard.uielements;
 
 import abstractclasses.AbstractUIElement;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -10,13 +11,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+
 @FindBy(css = ".customers-history-tab")
 public class CustomersHistory extends AbstractUIElement {
 
     private final String graphByNameXpath = "//h3[text()='%s']/../following-sibling::div[contains(@class,'chart-container')]";
-    private final String noDataByGraphNameXpath = graphByNameXpath + "//div[contains(@class,'no-data-overlay')]";
-    private final String filteredByInfoXpath = "//span[text()='%s']/../span[contains(@class, 'cl-default-text-muted')]";
 
+    private final String csatScoreGaugeByNameXpath = "//h3[text()='%s']/../following-sibling::div[contains(@class,'cl-gauge-section')]";
+
+    private final String noDataByGraphNameXpath = graphByNameXpath + "//div[contains(@class,'no-data-overlay')]";
+
+    private final String gaugeNameXpath = csatScoreGaugeByNameXpath + "//div[contains(@class,'cl-no-data-alert')]";
+
+    private final String filteredByInfoXpath = "//span[text()='%s']/../span[contains(@class, 'cl-default-text-muted')]";
 
     @FindBy(css = "h3")
     private List<WebElement> graphHeaders;
@@ -26,6 +34,20 @@ public class CustomersHistory extends AbstractUIElement {
 
     @FindBy(css = ".gauge-labels")
     private WebElement gaugeLabels;
+
+    @FindBy(css = ".live-chats-section:nth-child(2) [dominant-baseline='central']")
+    private List<WebElement> yAxisScaleCustomerSatisfaction;
+
+    private WebElement getGraphSectionByName(String name) {
+        return findElementByXpath(currentDriver,
+                format("//h3[text() = '%s']/ancestor::section[@class = 'live-chats-section']", name), 10);
+    }
+
+    public List<String> getVerticalLineValuesForGraph(String name) {
+        return getGraphSectionByName(name)
+                .findElements(By.xpath(".//*[name() = 'svg']//*[@text-anchor='end']"))
+                .stream().map(WebElement::getText).collect(Collectors.toList());
+    }
 
     public List<List<String>> getGraphsTimelines() {
         waitFor(2000);
@@ -46,6 +68,13 @@ public class CustomersHistory extends AbstractUIElement {
         return isElementShownByXpath(this.getCurrentDriver(), graphXpath, 1);
     }
 
+    public boolean isYAxisContainsScale(String downScale, String upScale) {
+        List<WebElement> finalList = yAxisScaleCustomerSatisfaction.stream().filter(e -> e.getText().contains(downScale) ||
+                e.getText().contains(upScale)).collect(Collectors.toList());
+
+        return finalList.size() == 2;
+    }
+
     public boolean isGraphContainsScale(String downScale, String upScale) {
         String text= getTextFromElem(this.getCurrentDriver(), gaugeLabels, 5, "Customer satisfaction scale");
 
@@ -58,6 +87,14 @@ public class CustomersHistory extends AbstractUIElement {
 
     public boolean isNoDataDisplayedForGraph(String graphName) {
         return isElementShownByXpath(this.getCurrentDriver(), String.format(noDataByGraphNameXpath, graphName), 5);
+    }
+
+    public String isNoDataAlertMessageText(String graphName) {
+        return getTextFromElem(this.getCurrentDriver(), findElementByXpath(this.getCurrentDriver(), String.format(noDataByGraphNameXpath, graphName), 5), 5, "No data alert");
+    }
+
+    public boolean isNoGaugeDisplayedForGraph(String graphName) {
+        return isElementShownByXpath(this.getCurrentDriver(), String.format(gaugeNameXpath, graphName), 5);
     }
 
     public List<String> getAllGraphs() {

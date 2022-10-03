@@ -8,24 +8,22 @@ import datamanager.Tenants;
 import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.orca.OrcaEvent;
 import datamanager.jacksonschemas.orca.event.Event;
-import drivermanager.ConfigManager;
 import interfaces.WebWait;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
-import javaserver.OrcaServer;
-import javaserver.Server;
 import org.testng.Assert;
+import sqsreader.OrcaSQSHandler;
+import sqsreader.SQSConfiguration;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static apihelper.ApiHelper.getAgentInfo;
 
 public class ORCASteps implements WebWait {
 
@@ -49,8 +47,8 @@ public class ORCASteps implements WebWait {
     }
 
     public static void cleanUPORCAData() {
-        OrcaServer.orcaMessages.clear();
-        OrcaServer.orcaMessagesMap.clear();
+        OrcaSQSHandler.orcaMessages.clear();
+        OrcaSQSHandler.orcaMessagesMap.clear();
         orcaMessageCallBody.remove();
         apiToken.remove();
         clientId.remove();
@@ -102,12 +100,12 @@ public class ORCASteps implements WebWait {
     public void createOrUpdateOrcaIntegration(String channel, String tenantName) {
         Tenants.setTenantUnderTestOrgName(tenantName);
 
-        orcaChannelId.set(getIntegrationId(channel, "ORCA"));
+        orcaChannelId.set(getIntegrationId(channel.toLowerCase(), "ORCA"));
         if (orcaChannelId.get() == null) {
-            apiToken.set(ApiORCA.createIntegration(channel, Server.getServerURL()));
+            apiToken.set(ApiORCA.createIntegration(channel, SQSConfiguration.getCallbackUrl()));
             orcaChannelId.set(getIntegrationId(channel, "ORCA"));
         } else {
-            apiToken.set(ApiORCA.updateIntegration(channel, Server.getServerURL(),orcaChannelId.get()));
+            apiToken.set(ApiORCA.updateIntegration(channel, SQSConfiguration.getCallbackUrl() ,orcaChannelId.get()));
             System.out.println("apiToken was set with: " + apiToken.get());
         }
     }
@@ -137,34 +135,54 @@ public class ORCASteps implements WebWait {
         verifyAutoresponder(expectedResponse, wait);
     }
 
+    @Then("^Verify Orca returns survey (.*) response (.*) number of times during (.*) seconds")
+    public void verifyOrcaReturnedResponseNumberOfTimes(String expectedResponse, int expectedSize, int wait) {
+        verifyAutoResponderMessageListSize(expectedResponse, expectedSize, wait);
+    }
+
     @Then("^Verify Orca returns (.*) autoresponder during (.*) seconds$")
     public void verifyOrcaReturnedCorrectAutoresponder(String expectedResponse, int wait) {
-
         expectedResponse = DefaultTouchUserSteps.formExpectedAutoresponder(expectedResponse);
 
         verifyAutoresponder(expectedResponse, wait);
+    }
+
+    @Then("^Verify message (.*) is present for (.*) during (.*) seconds$")
+    public void verifyAutoresponderMessageForTenant(String expectedResponse, String agent, int wait) {
+        String response = DefaultTouchUserSteps.formExpectedAutoresponder(expectedResponse);
+        String responseUpdated = "";
+        Map<String, String> agentInfo = getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent);
+        if(response.contains("${agentName}")){
+            responseUpdated = response.replace( "${agentName}", agentInfo.get("fullName"));
+        }
+        verifyAutoresponder(responseUpdated, wait);
     }
 
     private void verifyAutoresponder(String expectedResponse, int wait){
         Assert.assertTrue(isResponseComeToServerForClient(expectedResponse, wait),
                 String.format("Autoresponder is not as expected\n" +
                         " Messages which came from server for clientId %s are: %s \n" +
-                        "Expected: %s", clientId.get(), OrcaServer.orcaMessages, expectedResponse));
+                        "Expected: %s", clientId.get(), OrcaSQSHandler.orcaMessages, expectedResponse));
     }
 
+    private void verifyAutoResponderMessageListSize(String expectedResponse, int size, int wait){
+        Assert.assertTrue(isExpectedResponseListCheck(expectedResponse, size, wait),
+                String.format("Autoresponder is not as expected\n" +
+                        " Messages which came from server for clientId %s are: %s \n" +
+                        "Expected: %s", clientId.get(), OrcaSQSHandler.orcaMessages, expectedResponse));
+    }
     @Then("^Verify Orca returns (.*) Location sent by Agent during (.*) seconds$")
     public void verifyOrcaReturnedCorrectLocation(String locationName, int wait) {
         Assert.assertTrue(isLocationCameToUser(locationName, wait),
-                String.format("Location '%s' didn't come to user",locationName ));;
+                String.format("Location '%s' didn't come to user",locationName ));
     }
 
     @Then("^Verify Orca returns (.*) HSM sent by Agent during (.*) seconds with parameters$")
     public void verifyOrcaReturnedCorrectLocation(String templateId, int wait, Map<String, String> parameters) {
         Assert.assertTrue(isHSMCameToUser(templateId, parameters, wait),
                 String.format("HSM '%s' didn't come to user",templateId ) +"\n" +
-                "Following ORCA events sent to user " +  OrcaServer.orcaEvents);
+                "Following ORCA events sent to user " +  OrcaSQSHandler.orcaEvents);
     }
-
 
     @When("^User send (.*) attachment with orca$")
     public void sendAttachment(String fileName){
@@ -210,8 +228,14 @@ public class ORCASteps implements WebWait {
     }
 
     private boolean isCorrectLocationCameToUser(String location){
-        return OrcaServer.orcaEvents.stream().anyMatch(e->
-                Optional.ofNullable(e.getContent().getEvent().getName()).equals(Optional.of(location)));
+        AtomicBoolean flag = new AtomicBoolean(false);
+        OrcaSQSHandler.orcaEvents.stream().forEach( e -> {
+        if(e.getContent() != null) {
+            if(Optional.ofNullable(e.getContent().getEvent().getName()).equals(Optional.of(location))){
+                flag.set(true);
+            }
+        }});
+        return flag.get();
     }
 
     private boolean isHSMCameToUser(String templateId, Map<String, String> parameters, int wait){
@@ -223,7 +247,7 @@ public class ORCASteps implements WebWait {
     }
 
     private boolean isCorrectHSMCameToUser(String templateId, Map<String, String> parameters){
-        return OrcaServer.orcaEvents.stream().anyMatch(e->
+        return OrcaSQSHandler.orcaEvents.stream().anyMatch(e->
                 Optional.ofNullable(e.getContent()).isPresent()
                 && Optional.ofNullable(e.getContent().getEvent()).isPresent()
                 && Optional.ofNullable(e.getContent().getEvent().getNestedEvent()).isPresent()
@@ -232,15 +256,21 @@ public class ORCASteps implements WebWait {
         );
     }
 
-
     private boolean isExpectedResponseArrives(String message) {
-        if(Objects.isNull(OrcaServer.orcaMessages)) {
+        if(Objects.isNull(OrcaSQSHandler.orcaMessages)) {
             return false;
         }
-        return OrcaServer.orcaMessages.toString().contains(message);
+        return OrcaSQSHandler.orcaMessages.contains(message);
+    }
 
-
-
+    private boolean isExpectedResponseListCheck(String message, int expectedSize, int wait) {
+        for (int i = 0; i < wait; i++) {
+            if ((Collections.frequency(OrcaSQSHandler.orcaMessages, message)) == expectedSize) {
+                return true;
+            }
+            waitFor(1000);
+        }
+        return false;
     }
 
     private void createRequestMessage(String apiKey, String message) {
@@ -248,5 +278,4 @@ public class ORCASteps implements WebWait {
         clientId.set(orcaMessageCallBody.get().getUserInfo().getUserName());
         smsSourceId.set(orcaMessageCallBody.get().getSourceId());
     }
-
 }

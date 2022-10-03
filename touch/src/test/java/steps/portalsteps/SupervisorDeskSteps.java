@@ -18,6 +18,7 @@ import steps.dotcontrol.DotControlSteps;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -42,6 +43,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void filterIsSelectedByDefault(String filterName) {
         Assert.assertEquals(getSupervisorDeskPage().getSupervisorLeftPanel().getFilterByDefaultName(), filterName,
                 "Filter name by default does not match expected");
+    }
+
+    @When("^(.*) filter is selected$")
+    public void filterIsSelected(String filterName) {
+        getSupervisorDeskPage().getSupervisorLeftPanel().clickFilterType(filterName);
     }
 
     @Then("^Select (.*) ticket checkbox$")
@@ -108,6 +114,16 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 channelName + " channel name should be shown.");
     }
 
+    @When("^Supervisor opens closed chat$")
+    public void openFirstClosedChat() {
+        getSupervisorDeskPage().getSupervisorClosedChatsTable().openFirstClosedChat();
+    }
+
+    @When("^Supervisor clicks on first ticket$")
+    public void openFirstTicket() {
+        getSupervisorDeskPage().getSupervisorTicketsTable().openFirstTicket();
+    }
+
     @Then("^Verify that only \"(.*)\" tickets chats are shown$")
     public void verifyTicketsChatsChannelsFilter(String channelName) {
         Assert.assertTrue(getSupervisorDeskPage().getSupervisorTicketsTable().verifyChanelOfTheTicketsIsPresent(channelName),
@@ -134,9 +150,18 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @Then("^Supervisor Desk Live chat container header display \"(.*)\" instead of agent name$")
     public void verifyNoAgentHeaderInfo(String agentName) {
-        ;
         Assert.assertEquals(getSupervisorDeskPage().getChatHeader().getAgentName(), agentName,
                 "Agent should not be assigned");
+    }
+
+    @Then("Supervisor Desk Live chat header display {string} Agent name")
+    public void VerifyAgentNameDisplayed(String agentName){
+        Assert.assertEquals(getSupervisorDeskPage().getChatHeader().getAgentName(),agentName,"Agent name not displayed");
+    }
+
+    @And("Supervisor Desk Live chat header display date")
+    public void VerifyChatDateDisplayed(){
+        Assert.assertEquals(getSupervisorDeskPage().getChatHeader().getChatDateText(),LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMM yyyy")),"Date not displayed");
     }
 
     @Then("^Supervisor Desk Live chat Profile is displayed$")
@@ -158,6 +183,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
             } else waitFor(1000);
         }
         Assert.assertTrue(result, "Agent " + agentName + " is not set up as 'Current agent'");
+    }
+    @Then("^(.*) is the current agent of (.*) ticket$")
+    public void verifyCurrentAgentOfTicket(String agentName, String userName) {
+        Assert.assertEquals(getSupervisorDeskPage().getCurrentAgentOfTheChat(userName),agentName,
+                "The current agent of the ticket is not as expected");
     }
 
     @Then("^Ticket from (.*) is present on (.*) filter page$")
@@ -238,6 +268,20 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void verifyTicketTypes(List<String> ticketTypes) {
         //ToDo add numbers of tickets verification
         Assert.assertEquals(getSupervisorDeskPage().getTicketTypes(), ticketTypes, "Ticket types are different");
+    }
+
+    @Then("^Verify Chat has pending icon in the Chat (.*)$")
+    public void verifyChatHasPendingIcon(String value) {
+        switch (value){
+            case "List":
+                 Assert.assertTrue(getSupervisorDeskPage().isChatPendingIconShown(), "Yellow Pending Icon is not shown in chat list");
+                 break;
+            case "View":
+                Assert.assertTrue(getSupervisorDeskPage().isChatPendingOnShown(), "Yellow Pending On is not shown in chat view");
+                break;
+            default:
+                Assert.fail("Incorrect string value");
+        }
     }
 
     @When("^User select (.*) ticket type$")
@@ -501,11 +545,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().getSupervisorTicketsTable().clickAscendingArrowOfEndDateColumn();
     }
 
-    @Then("Verify that Chat is displayed first")
-    public void verifyThatChatIsDisplayedFirst() {
-        getSupervisorDeskPage().getSupervisorLeftPanel().getChatElement();
-    }
-
     @Then("Verify that Chats tab is displayed first")
     public void verifyThatChatsTabIsDisplayedFirst() {
         getSupervisorDeskPage().getSupervisorLeftPanel().getChatElement();
@@ -519,5 +558,50 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then("Verify that live chats available are shown")
     public void verifyThatLiveChatAvailableAreShown(){
         getSupervisorDeskPage().getSupervisorLeftPanel().verifyLiveChatInfo();
+    }
+    @And("Agent can see whatsapp profile name")
+    public void agentCanSeeWhatsappProfileName() {
+        getSupervisorDeskPage().isUpdatedProfileNameShown();
+    }
+
+    @And("Agent click on three dot vertical menu and click on assign button")
+    public void agentClickAssignButton() {
+        getSupervisorDeskPage().getChatHeader().clickOnAssignButton();
+    }
+    
+    @When("Assign chat modal is opened")
+    public void assignChatModalOpened() {
+        Assert.assertTrue(getSupervisorDeskPage().getAssignChatWindow().isAssignWindowShown());
+    }
+
+    @Then("Agent cannot initiate a payment")
+    public void agentCannotInitiateAPayment() {
+        Assert.assertFalse(getSupervisorDeskPage().isC2pButtonPresent(),"Supervisor Can Initiate Payment");
+    }
+    @And("Supervisor adds a note {string}, Jira link {string} and Ticket Number {string}")
+    public void addNewNote(String note, String jiraLink, String ticketNumber){
+        getSupervisorDeskPage().getSupervisorRightPanel().clickOnNotesTab()
+                .clickOnNewNoteButton()
+                .addTextToNote(note)
+                .addJiraLinkToNote(jiraLink)
+                .addTicketNumberToNote(ticketNumber)
+                .clickOnCreateNoteButton();
+    }
+
+    @Then("Supervisor sees note {string}, Jira link {string} and Ticket Number {string}")
+    public void verifyNoteDetails(String note, String jiraLink, String ticketNumber) {
+        getSupervisorDeskPage().getSupervisorRightPanel().clickOnNotesTab();
+
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getSupervisorDeskPage().getSupervisorRightPanel().getNoteCardText(),note,"Text inside note does not match");
+        soft.assertEquals(getSupervisorDeskPage().getSupervisorRightPanel().getNoteCardJiraLink(),jiraLink,"JIRA Link does not match");
+        soft.assertEquals(getSupervisorDeskPage().getSupervisorRightPanel().getNoteCardTicketNumber(),ticketNumber,"Ticket Number does not match");
+        soft.assertAll();
+    }
+
+    @Then("Agent is able to close the assign chat window")
+    public void agentClickCloseAssignWindow() {
+        getSupervisorDeskPage().getAssignChatWindow().clickOnCloseAssignWindow();
+        Assert.assertFalse(getSupervisorDeskPage().getAssignChatWindow().isAssignWindowShown(),"Assign Chat Window is closed");
     }
 }

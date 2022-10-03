@@ -2,10 +2,10 @@
 @off_rating_whatsapp
 @off_rating_abc
 @no_chatdesk
+@Regression
 Feature: Satisfaction Survey
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-19236")
-  @Regression
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2382")
   Scenario Outline: verify if supervisor can customize survey question for whatsapp NPS survey type
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing

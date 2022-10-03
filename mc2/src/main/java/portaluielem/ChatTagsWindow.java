@@ -6,23 +6,24 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+
+import static org.openqa.selenium.By.xpath;
 
 @FindBy(css = ".cl-chat-tags-page")
-public class ChatTagsWindow extends BasePortalWindow{
+public class ChatTagsWindow extends BasePortalWindow {
 
-    @FindBy(css = ".cl-add-button")
+    @FindBy(css = "[class='cl-button cl-button--secondary cl-add-button']")
     private WebElement addChatTagButton;
 
-  /*  @FindBy(css =".cl-r-form-control--input-primary")
-    private WebElement nameInput;
-    */
   @FindBy(css =".cl-form-control--input-primary")
   private WebElement nameInput;
 
-    @FindBy(css =".cl-tag-form__save-button")
+    @FindBy(css = "[class='cl-button cl-button--reset-only cl-tag-form__save-button']")
     private WebElement saveButton;
 
-    @FindBy(css ="#Delete\\ \\/\\ Outline")
+    @FindBy(css = "g[id='Delete / Outline']")
     private WebElement deleteButton;
 
     @FindBy(css = ".cl-collapsible-table__row")
@@ -37,27 +38,52 @@ public class ChatTagsWindow extends BasePortalWindow{
     @FindBy(css = "tr.cl-collapsible-table__row:first-of-type")
     private WebElement firstChatTagFromExisting;
 
+    @FindBy(css = ".cl-tag-form__pencil-icon")
+    private WebElement clickPencilIcon;
 
+    @FindBy(xpath = "//div[@class='cl-tag-form'][1]")
+    private WebElement getTagName;
 
-    @FindBy(css = "[data-testid='tab-navigation-panel-business-profile']")
-    private WebElement businessProfile;
+    @FindBy(xpath = "//table[contains(@class, 'collapsible-table')]")
+    private WebElement tagsTable;
 
-    @FindBy(css = "[data-testid='tab-navigation-panel-chat-tags']")
-    private WebElement chatTags;
+    private List<WebElement> getTableHeaders() {
+        return tagsTable.findElements(xpath("./thead//button//span"));
+    }
 
-    @FindBy(css = "[data-testid='tab-navigation-panel-auto-responders']")
-    private WebElement autoResponders;
+    private WebElement getHeaderByName(String column) {
+        return getTableHeaders().stream().filter(c -> c.getText().equals(column))
+                .findFirst().orElseThrow(() -> new NoSuchElementException("There no column with title " + column));
+    }
 
-    @FindBy(css = "[data-testid='tab-navigation-panel-preferences']")
-    private WebElement preferences;
+    private WebElement getSortButtonForColumn(String column, String sortingType) {
+        return getHeaderByName(column).findElement(xpath(String
+                .format("./..//div[contains(@class, 'cl-arrow') and contains(@data-testid, '%s')]", sortingType)));
+    }
 
-    @FindBy(css = "[selenium-id='tab-navigation-panel-surveys']")
-    private WebElement surveysNavigation;
+    private List<List<WebElement>> getAllElementsOfTheTable() {
+        return tagsTable.findElements(xpath("./tbody/tr"))
+                .stream().map(l -> l.findElements(xpath("./td[contains(@class, 'cell')]")))
+                .collect(Collectors.toList());
+    }
 
+    public List<String> getColumnValueList(String column) {
+        int headerNumber = getTableHeaders().stream().map(WebElement::getText)
+                .collect(Collectors.toList())
+                .indexOf(column);
+        return getAllElementsOfTheTable().stream()
+                .map(l -> l.get(headerNumber).getText())
+                .collect(Collectors.toList());
+    }
 
+    public void clickSortedColumn(String column, String sortingType) {
+        while (!getSortButtonForColumn(column, sortingType).getAttribute("class").contains("active")) {
+            getSortButtonForColumn(column, sortingType).click();
+        }
+    }
 
     public ChatTagsWindow clickAddChatTagButton() {
-        clickElem(this.getCurrentDriver(), addChatTagButton, 2, "Add Chat Tag Button");
+        clickElem(this.getCurrentDriver(), addChatTagButton, 5, "Add Chat Tag Button");
         return this;
     }
 
@@ -67,128 +93,41 @@ public class ChatTagsWindow extends BasePortalWindow{
         return this;
     }
 
-    public ChatTagsWindow clickSaveButton(){
+    public void clickSaveButton() {
         clickElem(this.getCurrentDriver(), saveButton, 2, "Save Button");
-        return this;
     }
+
+    public String getTagName() {
+        return getTextFromElem(this.getCurrentDriver(), getTagName, 2, "Tag Name");
+    }
+
 
     public ChatTagsWindow clickDeleteButton(){
         clickElem(this.getCurrentDriver(), deleteButton, 2, "Delete Button");
         return this;
     }
 
-    private WebElement getRowByName(String tagName){
+    private WebElement getRowByName(String tagName) {
+        waitForElementsToBeVisible(this.getCurrentDriver(), tagRows, 5);
         return tagRows.stream().filter(e -> e.getText().contains(tagName))
                 .findFirst()
-                .orElseThrow(() -> new AssertionError("Cannot find '" +tagName +"' tag."));
+                .orElseThrow(() -> new AssertionError("Cannot find '" + tagName + "' tag."));
     }
 
-    public ChatTagsWindow clickEditTagButton(String tagName){
+    public ChatTagsWindow clickEditTagButton(String tagName) {
         WebElement row = getRowByName(tagName);
         moveToElement(this.getCurrentDriver(), row);
-        System.out.println("The value for tagname before clicking Edit button is "+tagName);
+        moveToElemAndClick(this.getCurrentDriver(), clickPencilIcon);
         row.findElement(By.cssSelector(".cl-tag-form__pencil-icon")).click();
-        System.out.println("Enough Waiting");
-     //   row.findElement(By.xpath("//*[@id=\"Edit\"]/ancestor::button/parent::div[text()='tagName']")).click();
 
         return this;
     }
 
-    public ChatTagsWindow enableDisableTag(String tagName){
+    public ChatTagsWindow enableDisableTag(String tagName) {
         WebElement row = getRowByName(tagName);
         moveToElement(this.getCurrentDriver(), row);
         row.findElement(By.cssSelector(".cl-r-toggle-btn")).click();
         return this;
     }
-
-
-
-/*
-    public String verifyChatTagsExistance(String a){
-
-         a= "Add Chat Tags to your tenant";
-  //     inputText(this.getCurrentDriver(), nameInput, 2, "Name field", tagName);
-       //    getTextFromElem(this.getCurrentDriver(), emptyChatTags, 2, "Add Chat Tags to your tenant"));
-
-     */
-/*  String x= this.getCurrentDriver().findElement(By.cssSelector.cl-collapsible-table__empty-message).getText();
-       System.out.println("Value is  ::  "+x);*//*
-
-
-        this.getCurrentDriver().findElement(By.emptyChatTags).getText();
-
-        return x;
-    }
-*/
-
-
-/*
-
-    public void verifyChatTagsExistance() {
-       //  waitForElementToBeVisible(this.getCurrentDriver(), emptyChatTags, 7);
-
-
-      //  String x= this.getCurrentDriver().findElement(By.cssSelector.cl-collapsible-table__empty-message).getText();
-
-        Assert.assertEquals(emptyChatTags.getText(),"Add Chat Tags to your tenant","Warning message");
-
-    }
-*/
-
-
-    public boolean verifyNoChatTagsExistance(){
-        return isElementShown(this.getCurrentDriver(), emptyChatTags, 3);
-    }
-
-    public String verifyChatTagsExistance(String tagname){
-        if(verifyNoChatTagsExistance())
-        {
-            System.out.println("There are no chat tags , we need to create one first");
-            clickAddChatTagButton().setTagName(tagname).clickSaveButton();
-
-        }
-        else{
-            tagname = getTextFromElem(this.getCurrentDriver(),firstChatTagFromAll,1, "first Chat Tag From All the tags present");
-            System.out.println("Value for the first chat tag name is :: "+tagname);
-
-        }
-        System.out.println("The value of chat tag before the update is "+tagname);
-
-        return tagname;
-
-    }
-
-    public String copyFirstChatTag(){
-
-        return getTextFromElem(this.getCurrentDriver(),firstChatTagFromAll,1, "first Chat Tag From All the tags present");
-
-    }
-
-
-
-
-    public boolean isBusinessProfileTabShown() {
-        return isElementShown(this.getCurrentDriver(), businessProfile, 5);
-    }
-
-    public boolean isChatTagsTabShown() {
-        return isElementShown(this.getCurrentDriver(), chatTags, 5);
-    }
-
-    public boolean isAutoRespondersTabShown() {
-        return isElementShown(this.getCurrentDriver(), autoResponders, 5);
-    }
-
-    public boolean isPreferencesTabShown() {
-        return isElementShown(this.getCurrentDriver(), preferences, 5);
-    }
-
-    public boolean isSurveysTabShown() {
-        return isElementShown(this.getCurrentDriver(), surveysNavigation, 5);
-    }
-
-
-
-
 
 }

@@ -3,16 +3,16 @@ package steps.dotcontrol;
 import agentpages.uielements.ChatForm;
 import apihelper.APIHelperDotControl;
 import apihelper.ApiHelper;
+import apihelper.ApiHelperSupportHours;
 import apihelper.ApiHelperTie;
 import com.github.javafaker.Faker;
 import com.google.common.io.Files;
-
 import datamanager.Tenants;
 import datamanager.dotcontrol.DotControlCreateIntegrationInfo;
 import datamanager.jacksonschemas.ChatHistoryItem;
 import datamanager.jacksonschemas.Integration;
-import datamanager.jacksonschemas.SupportHoursItem;
 import datamanager.jacksonschemas.dotcontrol.*;
+import datamanager.jacksonschemas.supportHours.GeneralSupportHoursItem;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import interfaces.WebWait;
@@ -21,9 +21,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import javaserver.DotControlServer;
-import javaserver.Server;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import sqsreader.SQSConfiguration;
 import steps.DefaultTouchUserSteps;
 
 import java.io.File;
@@ -64,7 +64,7 @@ public class DotControlSteps implements WebWait {
         if (adaptor.isEmpty()) adaptor = "fbmsg";
 
         Response resp = APIHelperDotControl.createIntegrationForAdapters(adaptor, tenantOrgName,
-                preparePayloadForCreateIntegrationEndpoint(Server.getServerURL()).get());
+                preparePayloadForCreateIntegrationEndpoint(SQSConfiguration.getCallbackUrl()).get());
 
         if(!(resp.statusCode()==200)) {
             Assert.fail("Integration creating was not successful\n" + "Status code " + resp.statusCode()+
@@ -115,7 +115,7 @@ public class DotControlSteps implements WebWait {
     @Then("^(.*) status code for multiple integration creation$")
     public void verifyMultipleIntegrationsCreating(int statusCode){
         Response resp = APIHelperDotControl.createIntegrationForAdapters("fbmsg", Tenants.getTenantUnderTestOrgName(),
-                preparePayloadForCreateIntegrationEndpoint(Server.getServerURL()).get());
+                preparePayloadForCreateIntegrationEndpoint(SQSConfiguration.getCallbackUrl()).get());
         Assert.assertEquals(resp.getStatusCode(), statusCode,
                 "Wrong status code after trying to create second integration");
     }
@@ -125,7 +125,7 @@ public class DotControlSteps implements WebWait {
         Tenants.setTenantUnderTestNames(tenantOrgName);
 
         Response resp = APIHelperDotControl.updateIntegration(tenantOrgName,
-                preparePayloadForCreateIntegrationEndpoint(Server.getServerURL()).get(),apiToken.get());
+                preparePayloadForCreateIntegrationEndpoint(SQSConfiguration.getCallbackUrl()).get(),apiToken.get());
 
         if(!(resp.statusCode()==200)) {
             Assert.fail("Integration creating was not successful\n" + "Status code " + resp.statusCode()+
@@ -180,11 +180,11 @@ public class DotControlSteps implements WebWait {
 
     @When("^Send init call with (.*) messageId correct (.*)response is returned$")
     public void sendInitCall(String messageIdStrategy, String expMessage){
-        SupportHoursItem expectedBusinessHours = null;
+        GeneralSupportHoursItem expectedBusinessHours = null;
         if(expMessage.isEmpty()) expMessage = "OK";
         if(expMessage.trim().equals("OUT_OF_BUSINESS_HOURS")){
             expectedBusinessHours =
-                    ApiHelper.getAgentSupportDaysAndHoursForMainAgent(Tenants.getTenantUnderTestOrgName());
+                    ApiHelperSupportHours.getSupportDaysAndHoursForMainAgent(Tenants.getTenantUnderTestOrgName());
         }
         SoftAssert soft = new SoftAssert();
 
@@ -200,7 +200,7 @@ public class DotControlSteps implements WebWait {
                 "\nResponse on INIT call contains incorrect conversationId\n");
         soft.assertEquals(resp.getBody().jsonPath().get("agentStatus"), expMessage.trim(),
                 "\nResponse on INIT call contains incorrect agentStatus\n");
-        soft.assertEquals(resp.getBody().as(SupportHoursItem.class), expectedBusinessHours,
+        soft.assertEquals(resp.getBody().as(GeneralSupportHoursItem.class), expectedBusinessHours,
                 "\nResponse on INIT call contains incorrect businessHours\n");
         soft.assertAll();
     }

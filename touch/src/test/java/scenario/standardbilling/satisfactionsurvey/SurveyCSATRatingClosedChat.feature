@@ -1,13 +1,13 @@
 @no_widget
-@off_survey_management
 @off_rating_whatsapp
 @off_rating_abc
 @orca_api
 @start_orca_server
+@Regression
 Feature: Satisfaction Survey
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-19270")
-  Scenario Outline: verify if user has an option to skip the survey for Whatsapp NPS survey type - Customer Feedback turned OFF in Flow
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2443")
+  Scenario Outline: CD:: Survey:: verify if user has an option to skip the survey for Whatsapp NPS survey type - Customer Feedback turned OFF in Flow
     Given I login as agent of Standard Billing
     And Setup ORCA <channelType> integration for Standard Billing tenant
     When Send connect to agent message by ORCA
@@ -62,7 +62,7 @@ Feature: Satisfaction Survey
     And Agent click on new conversation request from orca
     And Conversation area becomes active with connect to agent user's message
     And Agent closes chat
-    And Send skip message by ORCA
+    And Send 10 message by ORCA
     When Agent select "Closed" left menu option
     And Agent searches and selects chat from orca in chat history list
     And Agent open first 'History view'
@@ -72,20 +72,20 @@ Feature: Satisfaction Survey
       | whatsapp    |
       | abc         |
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-121014")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1861")
   Scenario Outline: CD:: Survey:: Dashboard:: Verify If the client enables NPS Survey, there will be no update in the agent scores in the CSAT in agent performance tab
-    Given I login as agent of Standard Billing
+    Given I login as agent of Automation Bot
     And Setup ORCA <channelType> integration for Standard Billing tenant
-    When Send connect to agent message by ORCA
     And Update survey management chanel <channelType> settings by ip for Standard Billing
       | ratingEnabled | true        |
       | surveyType    | NPS         |
       | ratingScale   | ZERO_TO_TEN |
       | ratingIcon    | NUMBER      |
+    When Send connect to agent message by ORCA
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
-    And Admin filter Customers History by Whatsapp channel
+    And Admin filter Customers History by <channelFilterType> channel
     Then Admin is able to see the average CSAT survey response converted to 0-100
     And I select Touch in left menu and Agent Desk in submenu
     And Agent has new conversation request from orca user
@@ -97,15 +97,15 @@ Feature: Satisfaction Survey
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
-    And Admin filter Customers History by Whatsapp channel
+    And Admin filter Customers History by <channelFilterType> channel
     Then Admin is able to see the new average CSAT survey response converted to 0-100
     And Admin is able to see the same average CSAT rating for NPS response
     Examples:
-      | channelType |
-      | whatsapp    |
-      | abc         |
+      | channelType | channelFilterType |
+      | whatsapp    | Whatsapp          |
+      | abc         | Apple Business Chat |
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-85704")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1170")
   Scenario Outline: Dashboard: Verify if admin can open Customers History with CSAT customer survey
     Given I login as agent of Standard Billing
     And Setup ORCA <channelType> integration for Standard Billing tenant
@@ -137,15 +137,16 @@ Feature: Satisfaction Survey
       | channelType |
       | abc         |
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-120998")
-  Scenario Outline: CD:: Survey:: CSAT:: Verify if survey rating updates the % value for CSAT scores in the Agent performance reports
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1685")
+  Scenario Outline: CD:: <channelType>:: Survey:: CSAT:: Verify if survey rating updates the % value for CSAT scores in the Agent performance reports
     Given I login as agent of Standard Billing
     And Setup ORCA <channelType> integration for Standard Billing tenant
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by channel and period
-      | Apple Business Chat | Past week |
+      | <channelFilter> | Past week    |
+      | <channelFilter> | Past 2 weeks |
     Then Admin is able to see the average CSAT survey response converted to 0-100
     And Navigate to Surveys page
     When Admin clicks on channel toggle button for survey form
@@ -154,14 +155,14 @@ Feature: Satisfaction Survey
     And Agent switch "Allow customer to leave a note" in survey management
     And Agent click save survey configuration button for <channelType> survey form
     When Send connect to agent message by ORCA
-    And Update survey management chanel <channelType> settings by ip for Standard Billing
+    And Update survey management chanel <channelType> settings by ip for Automation Bot
       | ratingEnabled | true        |
       | surveyType    | CSAT        |
       | ratingScale   | ONE_TO_FIVE |
       | ratingIcon    | NUMBER      |
     Then I select Touch in left menu and Agent Desk in submenu
-    And Agent has new conversation request from orca user
-    And Agent click on new conversation request from orca
+    And Agent has new conversation request from <channelUserType> user
+    And Agent click on new conversation request from <channelUserType>
     And Conversation area becomes active with connect to agent user's message
     And Agent closes chat
     And Send 5 message by ORCA
@@ -170,24 +171,11 @@ Feature: Satisfaction Survey
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by channel and period
-      | Apple Business Chat | Past week |
+      | <channelFilter> | Past week    |
+      | <channelFilter> | Past 2 weeks |
     And Admin is able to see the new average CSAT survey response converted to 0-100
     And Admin is able to see the different average CSAT rating for CSAT response
     Examples:
-      | channelType |
-      | abc         |
-
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-121002")
-  Scenario Outline: CD:: Survey:: CSAT:: Dashboard:: Verify if customer satisfaction odometer for CSAT score is presented as 0% to 100% scale
-    Given I login as agent of Standard Billing
-    And Setup ORCA <channelType> integration for Standard Billing tenant
-    And I select Touch in left menu and Dashboard in submenu
-    And Admin click on Customers Overview dashboard tab
-    And Admin click on Customers History on dashboard
-    And Admin filter Customers History by channel and period
-      | Apple Business Chat | Past week |
-    Then Admin is able to see the CSAT scale having down scale as 0% and upscale as 100%
-    Examples:
-      | channelType |
-      | abc         |
-      | whatsapp    |
+      | channelType | channelUserType | channelFilter       |
+      | ABC         |  orca           | Apple Business Chat |
+      | SMS         |  sms            | SMS                 |

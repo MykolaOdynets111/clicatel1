@@ -1,5 +1,6 @@
 @remove_dep
-@agent_support_hours
+@support_hours
+@Regression
 Feature: Departments
 
   Background:
@@ -10,8 +11,7 @@ Feature: Departments
     Given Setup ORCA whatsapp integration for Standard Billing tenant
     When Send connect to support message by ORCA
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-14876")
-  @Regression
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2453")
   Scenario: Departments: Verify if possible to transfer overnight ticket to department
     Then Agent has new ticket request from orca user
     Given I login as second agent of Standard Billing

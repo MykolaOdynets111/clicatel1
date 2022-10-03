@@ -32,13 +32,12 @@ import portalpages.PaymentMethodPage;
 import portalpages.PortalLoginPage;
 import portalpages.PortalSignUpPage;
 import portalpages.PortalUserEditingPage;
-import portaluielem.PreferencesWindow;
 import socialaccounts.FacebookUsers;
 import socialaccounts.TwitterUsers;
+import steps.CamundaFlowsSteps;
 import steps.agentsteps.AbstractAgentSteps;
 import steps.agentsteps.AgentCRMTicketsSteps;
 import touchpages.pages.MainPage;
-import touchpages.pages.Widget;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -53,17 +52,14 @@ public class BasePortalSteps extends AbstractPortalSteps {
     private Map<String, String> updatedAgentInfo;
     public static Map billingInfo = new HashMap();
     private String activationAccountID;
-    private static Map<String, String> tenantInfo = new HashMap<>();
-    private Map<String, Integer> chatConsolePretestValue = new HashMap<>();
+    private static final Map<String, String> tenantInfo = new HashMap<>();
+    private final Map<String, Integer> chatConsolePretestValue = new HashMap<>();
     private MainPage mainPage;
-    private Widget widget;
     int activeChatsFromChatdesk;
-    private Map<String, Double> topUpBalance = new HashMap<>();
+    private final Map<String, Double> topUpBalance = new HashMap<>();
     private String accountCurrency;
-    private String autoSchedulerPreActionStatus;
     private String confirmationURL;
     public static String tagname;
-
 
     public static Map<String, String> getTenantInfoMap() {
         return tenantInfo;
@@ -221,7 +217,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     }
 
-
     @Then("^(.*) redirected to the \"(.*)\" page$")
     public void verifySetNewPasswordScreenShown(String agent, String pageName){
         SoftAssert soft = new SoftAssert();
@@ -253,8 +248,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
         List<String> permissions = ApiHelperPlatform.getAllRolePermission(tenantOrgName, "Touch agent role");
         Assert.assertTrue(permissions.containsAll(expectedPermissions),
                 "Not all CRM permissions are present for Agent role\n" +
-                        "Expected permitions: " + expectedPermissions.toString() + "\n" +
-                        "Full permitions list: " + permissions.toString());
+                        "Expected permitions: " + expectedPermissions + "\n" +
+                        "Full permitions list: " + permissions);
     }
 
     @Then("^New agent is added into touch database$")
@@ -281,7 +276,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
             //agent doesn't exists
         }
     }
-
 
     @When("^I provide all info about new (.*) account and click 'Sign Up' button$")
     public void fillInFormWithInfoAboutNewAccount(String accountOrgName){
@@ -716,8 +710,10 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getDashboardPage().waitForConnectingDisappear(1, 5);
         int actualActiveAgentsCount = Integer.parseInt(getDashboardPage().getWidgetValue(widgetName));
         chatConsolePretestValue.put(widgetName, actualActiveAgentsCount);
-        int loggedInAgentsCountFromBackend = ApiHelper.getNumberOfLoggedInAgents();
-        Assert.assertEquals(actualActiveAgentsCount, loggedInAgentsCountFromBackend,
+        getDashboardPage().clickLaunchSupervisor();
+        List<String> agentsList = AbstractAgentSteps.getPageHeader("agent").getAvailableAgents();
+        int loggedInAgentsCountFromSuperVisorDesk = agentsList.size();
+        Assert.assertEquals(actualActiveAgentsCount, loggedInAgentsCountFromSuperVisorDesk,
                 widgetName + " counter differs from agent online count on backend");
     }
 
@@ -785,89 +781,10 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalTouchPreferencesPage().getAutoRespondersWindow().waitForAutoRespondersToLoad();
     }
 
-    @When("^Change chats per agent:\"(.*)\"$")
-    public void changeChatPerAgent(String chats){
-        getPortalTouchPreferencesPage().getPreferencesWindow().setChatsAvailable(chats);
-    }
-
-    @When("^Agent set (\\d*) hours and (\\d*) minutes in Agent Chat Timeout section$")
-    public void setInactivityTimeout(int hours, int minutes){
-        getPortalTouchPreferencesPage().getPreferencesWindow().setAgentInactivityTimeout(hours, minutes);
-    }
-
-    @Then("^\"(.*)\" error message is shown in Agent Chat Timeout section$")
-    public void verifyInactivityTimeoutError(String expectedError){
-        Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getAgentInactivityTimeoutLimitError(), expectedError,
-                "Incorrect limits message was shown in Agent Chat Timeout section");
-    }
-
-    @Then("^Error message is not shown in Agent Chat Timeout section$")
-    public void verifyInactivityTimeoutErrorNotShowing(){
-        Assert.assertFalse(getPortalTouchPreferencesPage().getPreferencesWindow().isAgentInactivityTimeoutLimitErrorShown(),
-                "Error message for Agent Chat Timeout limit should not be shown");
-    }
-
-
-    @When("^Agent set (\\d*) days in Media Files Expiration section$")
-    public void setMediaFilesExpiration(int days){
-        getPortalTouchPreferencesPage().getPreferencesWindow().setAttachmentLifeTimeDays(days);
-    }
-
-    @Then("^\"(.*)\" error message is shown in Media Files Expiration section$")
-    public void verifyAttachmentLifeTimeDaysLimitError(String expectedError){
-        Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getAttachmentLifeTimeDaysLimitError(), expectedError, "Incorrect limits message was shown in Media Files Expiration section");
-    }
-
-    @Then("^Error message is not shown in Media Files Expiration section$")
-    public void verifyAttachmentLifeTimeDaysErrorNotShowing(){
-        Assert.assertFalse(getPortalTouchPreferencesPage().getPreferencesWindow().isAttachmentLifeTimeDaysLimitErrorShown(),
-                "Error message for Agent Chat Timeout limit should not be shown");
-    }
-
-
-    @When("^Agent set (\\d*) hours in Ticket Expiration section$")
-    public void setTicketsExpiration(int hours){
-        getPortalTouchPreferencesPage().getPreferencesWindow().setTicketExpirationHours(hours);
-    }
-
-    @Then("^\"(.*)\" error message is shown in Ticket Expiration section$")
-    public void verifyTicketsExpirationLimitError(String expectedError){
-        Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getTicketExpirationLimitError(),
-                expectedError, "Incorrect limits message was shown in Tickets Expiration section");
-    }
-
-    @Then("^Error message is not shown in Ticket Expiration section$")
-    public void verifyTicketsExpirationLimitErrorNotShowing(){
-        Assert.assertFalse(getPortalTouchPreferencesPage().getPreferencesWindow().isTicketExpirationLimitErrorShown(), "Error message for Tickets Expiration limit should not be shown");
-    }
-
-
-    @When("^Chats per agent became:\"(.*)\"$")
-    public void changeChatPerAgentPlusMinus(String result){
-            Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getChatsAvailable(), result,"Chats per agent is not as expected");
-    }
-
-    @When("^(.*) Error message is shown$")
-    public void decimalErrorIsShownInWindow(String errorMessage){
-        getPortalTouchPreferencesPage().getPreferencesWindow().isErrorMessageShown(errorMessage);
-    }
-
-    @When("^Click off/on Chat Conclusion$")
-    public void clickOffOnChatConclusion(){
-        getPortalTouchPreferencesPage().getPreferencesWindow().clickOnOffChatConclusion();
-        agentClickSaveChangesButton();
-    }
-
     @When("^Agent click 'Save changes' button$")
     public void agentClickSaveChangesButton() {
         getPortalTouchPreferencesPage().clickSaveButton();
         getPortalTouchPreferencesPage().waitForSaveMessage();
-    }
-
-    @When("^Agent click expand arrow for (.*) auto responder$")
-    public void clickExpandArrowForAutoResponder(String autoresponder){
-        getPortalTouchPreferencesPage().getAutoRespondersWindow()
-                                                            .clickExpandArrowForMessage(autoresponder);
     }
 
     @When("^Agent click On/Off button for (.*) auto responder$")
@@ -875,12 +792,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalTouchPreferencesPage().getAutoRespondersWindow().waitToBeLoaded();
         getPortalTouchPreferencesPage().getAutoRespondersWindow()
                 .clickOnOffForMessage(autoresponder);
-    }
-
-    @When("^Click \"Reset to default\" button for (.*) auto responder$")
-    public void clickResetToDefaultButton(String autoresponder){
-        getPortalTouchPreferencesPage().getAutoRespondersWindow().clickResetToDefaultForMessage(autoresponder);
-        getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
     }
 
     @When("^Type new message: (.*) to: (.*) message field$")
@@ -900,13 +811,12 @@ public class BasePortalSteps extends AbstractPortalSteps {
         String actualMessage = ApiHelper.getAutoResponderMessageText(tafMessageId);
         Assert.assertEquals(actualMessage, messageOnfrontend,
                 messageName + " message is not updated on backend");
-
     }
 
     @Then("^(.*) is reset on backend$")
     public void verifyTafMessageIsReset(String autoresponderId){
         String actualMessage = ApiHelper.getAutoResponderMessageText(autoresponderId);
-        String defaultMessage = DBConnector.getDefaultAutoResponder(ConfigManager.getEnv(), autoresponderId);
+        String defaultMessage = CamundaFlowsSteps.defaultMessage.get();
         Assert.assertEquals(actualMessage, defaultMessage,
                 autoresponderId + " message is not reset to default");
     }
@@ -1150,7 +1060,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
                         + info.get("billingContact");
                 else message = message + resp.getBody().asString();
             }
-            if(billingInfo!=null) message = message + "\n\n" + "expected billing info: \n" + billingInfo.toString();
+            if(billingInfo!=null) message = message + "\n\n" + "expected billing info: \n" + billingInfo;
             Assert.fail(message);
         }
     }
@@ -1488,7 +1398,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         Assert.assertEquals(getMainPage().getTenantNameColor(), tenantInfo.get("newColor"), "Color for tenant name in widget window is not correct");
     }
 
-
     @Then("^I check primary color for tenant in widget$")
     public void iCheckPrimaryColorForTenantInWidget() {
         SoftAssert soft = new SoftAssert();
@@ -1653,51 +1562,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         soft.assertAll();
     }
 
-    @Then("^All default values on Preferences page are correct$")
-    public void verifyAllDefaultPreferences(Map<String, String> pref){
-        SoftAssert soft = new SoftAssert();
-        PreferencesWindow preferencesWindow = getPortalTouchPreferencesPage().getPreferencesWindow();
-        soft.assertEquals(preferencesWindow.getChatsAvailable(), pref.get("maximumChatsPerAgent"),
-                "Default Max Chats per agent preferences are not correct");
-        soft.assertEquals(preferencesWindow.getTicketExpirationHours(), pref.get("ticketExpiration"),
-                "Default Ticket Expiration hours are not correct");
-        soft.assertEquals(preferencesWindow.getAgentChatTimeout(), pref.get("agentChatTimeout"),
-                "Default Agent Chat Timeout are not correct");
-        soft.assertEquals(preferencesWindow.getAttachmentLifeTimeDays(), pref.get("mediaFilesExpiration"),
-                "Default Media Files Expiration days are not correct");
-        soft.assertEquals(preferencesWindow.getInactivityTimeoutHours(), pref.get("InactivityTimeoutHours"),
-                "Default Inactivity Timeout Hours hours are not correct");
-        soft.assertEquals(preferencesWindow.getPendingChatAutoClosureHours(), pref.get("pendingChatsAuto_closureTime"),
-                "Default Pending Chats Auto-closure Time hours are not correct");
-        soft.assertAll();
-    }
-
-    @When("^click off/on 'Automatic Scheduler'$")
-    public void clickOnOffAutoScheduler(){
-        autoSchedulerPreActionStatus =  ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled");
-        getPortalTouchPreferencesPage().getPreferencesWindow().clickOnOffAutoScheduler();
-        agentClickSaveChangesButton();
-    }
-
-    @When("^Select (.*) department By Default$")
-    public void selectDefaultDepartment(String name){
-        getPortalTouchPreferencesPage().getPreferencesWindow().activateDefaultDepartmentCheckbox().selectDefaultDepartment(name);
-        agentClickSaveChangesButton();
-    }
-
-    @When("^Switch Last Agent routing$")
-    public void activateLastAgent(){
-        getPortalTouchPreferencesPage().getPreferencesWindow().clickOnLiveChatRoating();
-        agentClickSaveChangesButton();
-    }
-
-    @Then("^On backend AUTOMATIC_SCHEDULER status is updated for (.*)$")
-    public void verifyAutoSchedulingStatusOnBackend(String tenant){
-        Assert.assertNotEquals(ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled"),
-                autoSchedulerPreActionStatus,
-                "Auto scheduling status on backend is not as expected \n");
-    }
-
     @When("^Turn (.*) the Last Agent routing$")
     public void changeLastAgentRoting(String status){
         TenantChatPreferences tenantChatPreferences = ApiHelper.getTenantChatPreferences();
@@ -1735,60 +1599,34 @@ public class BasePortalSteps extends AbstractPortalSteps {
         }
         ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(),tenantChatPreferences);
     }
-
-/*    @When("^Create chat tag$")
+    @When("^Create chat tag$")
     public void createChatTag(){
         tagname = faker.artist().name() + faker.numerify("#####");
-        System.out.println("Value for tagname as :: "+tagname);
         getPortalTouchPreferencesPage().getChatTagsWindow().clickAddChatTagButton().setTagName(tagname).clickSaveButton();
-    }*/
-
-    @When("^Create chat tag$")
-    public String createChatTag(){
-        tagname = faker.artist().name() + faker.numerify("#####");
-        System.out.println("Value for tagname as :: "+tagname);
-        getPortalTouchPreferencesPage().getChatTagsWindow().clickAddChatTagButton().setTagName(tagname).clickSaveButton();
-        return tagname;
     }
 
-/*    @When("^Update chat tag")
-    public void updateTag(String tagname){
-      //  String tagNameOld = getPortalTouchPreferencesPage().getChatTagsWindow().getTagName();
-      //  System.out.println("The value of the tagNameOld is :: "+ tagNameOld);
-        getPortalTouchPreferencesPage().getChatTagsWindow().clickEditTagButton(tagname);
-        tagname = faker.artist().name() + faker.numerify("#####");
-        getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickSaveButton();
-        AgentCRMTicketsSteps.crmTicketInfoForUpdating.get().put("agentTags",  tagname);
-    }*/
-
-
-    @When("^Update (.*)")
-    public void updateTag(String tagname){
+    @When("^Update chat tag")
+    public void updateTag(){
         getPortalTouchPreferencesPage().getChatTagsWindow().clickEditTagButton(tagname);
         tagname = faker.artist().name() + faker.numerify("#####");
         getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickSaveButton();
         AgentCRMTicketsSteps.crmTicketInfoForUpdating.get().put("agentTags",  tagname);
     }
 
-    @When("^Edit chat tag and click on X button")
-    public void editNotSavedTag(){
-        String originalTagname = getPortalTouchPreferencesPage().getChatTagsWindow().copyFirstChatTag();
-        String demoTagName = faker.artist().name() + faker.numerify("#####");
-        String tagname = getPortalTouchPreferencesPage().getChatTagsWindow().verifyChatTagsExistance(demoTagName);
+    @When("^Click the pencil icon to edit the tag")
+    public void editTag() {
         getPortalTouchPreferencesPage().getChatTagsWindow().clickEditTagButton(tagname);
-        String newTagName = faker.artist().name() + faker.numerify("#####");
-        getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(newTagName).clickDeleteButton();
-        //AgentCRMTicketsSteps.crmTicketInfoForUpdating.get().put("chatTags",  tagname);
-
-        String currentTagname = getPortalTouchPreferencesPage().getChatTagsWindow().copyFirstChatTag();
-        System.out.println(originalTagname.equalsIgnoreCase(currentTagname));
-       //  System.out.println("Chat Tag name is not changed");
-if(originalTagname.equalsIgnoreCase(currentTagname));
-
-
-
     }
 
+    @When("^Cancel editing a tag")
+    public void cancelEditingTag() {
+        getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickDeleteButton();
+    }
+    @When("^Existing TagName is not changed")
+    public void verifyTagName() {
+        String newTagName = getPortalTouchPreferencesPage().getChatTagsWindow().getTagName();
+        Assert.assertTrue(tagname.equalsIgnoreCase(newTagName), "Tag name has not changed");
+    }
 
     @When("^(?:Enable|Disable) tag$")
     public void disableTag(){
@@ -1802,41 +1640,23 @@ if(originalTagname.equalsIgnoreCase(currentTagname));
         return mainPage;
     }
 
-/*    @When("^Chat tag exist")
-    public void chatTagExist(){
-        getPortalTouchPreferencesPage().getChatTagsWindow().verifyChatTagsExistance();
-
-        Assert.assertTrue(getPortalTouchPreferencesPage().getChatTagsWindow().verifyChatTagsExistance(),
-                  " There are chat tags already present");
-
-    }*/
-
-    @Then("^admin can see Settings page with - options Business Profile, Chat tags,Auto Responders, Preferences and Surveys$")
-    public void verifySettingPageTabOptions(){
-
-        //Verifying 'Business Profile' tab in Settings page
-      //  getPortalTouchPreferencesPage().getChatTagsWindow().isBusinessProfileTabShown();
-        Assert.assertFalse(getPortalTouchPreferencesPage().getChatTagsWindow().isBusinessProfileTabShown(),
+    @Then("^admin can see Settings page with - options (.*), (.*), (.*), (.*), (.*)$")
+    public void verifySettingPageTabOptions(String a,String b, String c, String d, String e){
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(getDashboardSettingsPage().isSettingTabsShown("Business Profile"),
                 " Business Profile tab is present");
 
-        //Verifying 'Chat Tags' tab in Settings page
-     //   getPortalTouchPreferencesPage().getChatTagsWindow().isChatTagsTabShown();
-        Assert.assertFalse(getPortalTouchPreferencesPage().getChatTagsWindow().isChatTagsTabShown(),
-                " Chat Tags");
+        softAssert.assertTrue(getDashboardSettingsPage().isSettingTabsShown("Chat Tags"),
+                " Chat Tags tab is present tab is present");
 
-        //Verifying 'Auto Responders' tab in Settings page
-     //   getPortalTouchPreferencesPage().getChatTagsWindow().isAutoRespondersTabShown();
-        Assert.assertFalse(getPortalTouchPreferencesPage().getChatTagsWindow().isAutoRespondersTabShown(),
-                " Auto Responders");
+        softAssert.assertTrue(getDashboardSettingsPage().isSettingTabsShown("Auto Responders"),
+                " Auto Responders tab is present");
 
-        //Verifying 'Preferences' tab in Settings page
-     //   getPortalTouchPreferencesPage().getChatTagsWindow().isPreferencesTabShown();
-        Assert.assertFalse(getPortalTouchPreferencesPage().getChatTagsWindow().isPreferencesTabShown(),
-                " Preferences tab present");
+        softAssert.assertTrue(getDashboardSettingsPage().isSettingTabsShown("Preferences"),
+                " Preferences tab is present");
 
-        //Verifying 'Surveys' tab in Settings page
-     //   getPortalTouchPreferencesPage().getChatTagsWindow().isSurveysTabShown();
-        Assert.assertFalse(getPortalTouchPreferencesPage().getChatTagsWindow().isSurveysTabShown(),
-                " Surveys tab present");
+        softAssert.assertTrue(getDashboardSettingsPage().isSettingTabsShown("Surveys"),
+                " Surveys tab is present");
+        softAssert.assertAll();
     }
 }

@@ -1,19 +1,9 @@
 @no_widget
 @remove_dep
+@Regression
 Feature: Departments
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-33046")
-  @Regression
-  Scenario: Verify if supervisor is able to launch department management page from dashboard view
-    Given I open portal
-    And Login into portal as an admin of Standard Billing account
-    Given Admin select TOUCH in left menu and Dashboard in submenu
-    Then Admin can see 'Welcome to the Chat Desk Dashboard'
-    Then Admin click on Departments Management button
-    And Departments Management page should be shown
-
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-14884")
-  @Regression
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2446")
   Scenario: Departments: Verify if not possible to create two departments with the same name
     Given I open portal
     And Login into portal as an admin of Standard Billing account

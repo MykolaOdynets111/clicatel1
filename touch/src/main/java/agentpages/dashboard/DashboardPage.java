@@ -44,6 +44,14 @@ public class DashboardPage extends PortalAbstractPage {
     @FindBy(xpath = "//a[text()='Departments Management']")
     private WebElement departmentsManagementButton;
 
+    @FindBy(xpath = "//a[text()='Chat Tags']")
+    private WebElement chatTagsButton;
+
+    @FindBy(xpath = "//a[text()='+ Add Chat Tag']")
+    private WebElement createChatTagsButton;
+
+
+
     @FindAll({
             @FindBy(css = "[data-testid='tab-navigation-panel-customers']"),
             @FindBy(css = "[selenium-id='tab-dashboard-tabs-2']")
@@ -70,14 +78,6 @@ public class DashboardPage extends PortalAbstractPage {
     private GeneralSentimentPerChannel generalSentimentPerChannel;
     private AttendedVsUnattendedChats attendedVsUnattendedChats;
     // == Constructors == //
-
-    public DashboardPage() {
-        super();
-    }
-
-    public DashboardPage(String agent) {
-        super(agent);
-    }
 
     public DashboardPage(WebDriver driver) {
         super(driver);

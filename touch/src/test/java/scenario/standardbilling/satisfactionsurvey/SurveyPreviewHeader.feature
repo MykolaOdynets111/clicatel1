@@ -1,11 +1,12 @@
 @no_widget
-@off_survey_management
+@off_survey_sms
 @off_rating_whatsapp
 @off_rating_abc
+@Regression
 Feature: Satisfaction Survey
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-45560")
-  Scenario Outline: ABC:: Surveys: Verify if the survey preview header for whatsapp shows as Apple Business Chat Preview
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2411")
+  Scenario Outline: CD:: Dashboard:: WA :: Surveys:: Verify if the "survey preview" section is displayed for whatsapp survey
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing
       | ratingEnabled        | true        |
@@ -24,3 +25,4 @@ Feature: Satisfaction Survey
       | channelType |
       | abc         |
       | whatsapp    |
+      | sms         |

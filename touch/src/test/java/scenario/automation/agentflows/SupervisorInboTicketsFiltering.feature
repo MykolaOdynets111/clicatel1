@@ -1,4 +1,4 @@
-@agent_support_hours
+@support_hours
 @auto_scheduler_disabled
 @dot_control
 @no_widget

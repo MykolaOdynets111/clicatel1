@@ -45,30 +45,30 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css = "[data-testid=chat-sentiment-icons]")
     private WebElement sentimentsAll;
 
-    @FindBy(css = ".cl-r-select__option.cl-r-multi-option")
+    @FindBy(css = "[class='css-1rhbuit-multiValue cl-select__multi-value']")
     private WebElement availableTagsContainer;
 
-    @FindBy(css = ".cl-r-select__control")
+    @FindBy(css = ".cl-select__control")
     private WebElement tagsInput;
 
     @FindBy(css = "div[id^='react-select']")
     private List<WebElement> availableTags;
 
-    @FindBy(css = ".cl-r-select__indicators svg[name^='arrow']")
+    @FindBy(css = ".cl-select__indicators svg")
     private WebElement openDropdownButton;
 
     @FindBy(xpath = ".//div[text() = 'No options']")
     private WebElement noOptionsMessage;
 
-    private String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
+    private final String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
 
-    private String inputTagField =  ".cl-r-select__input input";
+    private final String inputTagField =  ".cl-r-select__input input";
 
-    private String tagsOptionsCss = "div[id^='react-select']";
+    private final String tagsOptionsCss = "div[id^='react-select']";
 
-    private String selectedButtonTagsCss = ".cl-r-select__multi-value";
+    private final String selectedButtonTagsCss = ".cl-select__multi-value";
 
-    private String cleareAll = ".Select-clear";
+    private final String cleareAll = ".Select-clear";
 
     @FindBy(css = "[data-testid='crm-note']")
     private WebElement crmNoteTextField;
@@ -150,7 +150,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
 
     public void selectTags(int iter) {
-        for (int i = 0; i<iter; i++){
+        for (int i = 1; i<=iter; i++){
             selectTag(i);
         }
     }
@@ -164,7 +164,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         if(availableTags.size()==1 && availableTags.get(0).getText().equalsIgnoreCase("No results found")){
             Assert.fail("Have no Tags to be selected");
         }
-        availableTags.get(ordinalNumber).click();
+        moveToElemAndClick(this.getCurrentDriver(), availableTags.get(ordinalNumber));
         isElementShownByCSS(this.getCurrentDriver(), selectedButtonTagsCss, 2);
     }
 

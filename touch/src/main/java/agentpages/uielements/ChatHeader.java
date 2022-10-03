@@ -27,14 +27,14 @@ public class ChatHeader extends AbstractUIElement {
     private WebElement endChatButton;
 
     @FindAll({
-            @FindBy(css = "[data-testid=header-flag-chat]"),
-            @FindBy(css = ".cl-r-chat-unflagged")
+            @FindBy(css = "[data-testid=header-toggle-flag]"),
+            @FindBy(xpath = "//div[text()='Flag chat']")
     })
     private WebElement flagChatButton;
 
     @FindAll({
-            @FindBy(css = "[data-testid=header-unflag-chat]"),
-            @FindBy(css = ".cl-r-chat-flagged")
+            @FindBy(css = "[data-testid=header-toggle-flag]"),
+            @FindBy(css = "cl-chat-header-btn-label")
     })
     private WebElement unflagChatButton;
 
@@ -60,7 +60,7 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(xpath = ".//span[@class= 'cl-r-chat-header-time'][1]")
     private WebElement timeStamp;
 
-    @FindBy(css = ".cl-r-chat-header-time")
+    @FindBy(css = ".cl-chat-header-time")
     private WebElement dateTime;
 
     @FindBy(css = "[selenium-id=header-cancel-transfer]")
@@ -69,7 +69,7 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(css = ".cl-r-avatar")
     private WebElement userAvatar;
 
-    @FindBy(css = "button>svg[name=flag-fill]")
+    @FindBy(xpath = "//div[text()='Flag ON']")
     private WebElement flagOnIcon;
 
     @FindBy(css =".cl-transfer-history__agent-name")
@@ -77,13 +77,19 @@ public class ChatHeader extends AbstractUIElement {
 
     @FindAll({
             @FindBy(css = "[selenium-id='header-toggle-pending']"),
-            @FindBy(css = "button[data-testid=\'header-toggle-pending\']")
+            @FindBy(css = "button[data-testid='header-toggle-pending']")
     })
     private WebElement pendingButton;
 
-    private String transferChatButtonXpath =  ".//button[@selenium-id='header-transfer-chat']";
-    private String sendSMSXpath = ".//button[@selenium-id='header-send-sms']";
-    private String sendWhatsAppXpath = ".//button[text()='Send WhatsApp']";
+    @FindBy(css = "svg[name = '3-dot-menu-vert']")
+    private WebElement threeDotsVerticalMenu;
+
+    @FindBy(xpath = "//button[contains(text(), 'Assign' )]")
+    private WebElement assignButton;
+
+    private final String transferChatButtonXpath =  ".//button[@selenium-id='header-transfer-chat']";
+    private final String sendSMSXpath = ".//button[@selenium-id='header-send-sms']";
+    private final String sendWhatsAppXpath = ".//button[text()='Send WhatsApp']";
 
     public ChatHeader (WebDriver current){
         this.currentDriver = current;
@@ -162,6 +168,8 @@ public class ChatHeader extends AbstractUIElement {
         return chatHeaderTitle.getText();
     }
 
+    public  String getChatDateText(){return dateTime.getText();}
+
     public void clickFlagChatButton(){
         clickElem(this.getCurrentDriver(), flagChatButton, 2,"Flag chat");
     }
@@ -170,7 +178,7 @@ public class ChatHeader extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), pendingButton, 2,"Pending chat");
     }
 
-    public void clickUnflagChatButton(){
+    public void clickflagOnButton(){
         clickElem(this.getCurrentDriver(), unflagChatButton, 2, "Unflag chat");
     }
 
@@ -212,7 +220,7 @@ public class ChatHeader extends AbstractUIElement {
         String expectedInitials;
         List<String> userNames = Arrays.asList(userName.split(" "));
         if(userNames.size() == 2){
-            expectedInitials = userNames.get(0).substring(0,1) + userNames.get(1).substring(0,1);
+            expectedInitials = userNames.get(0).substring(0) + userNames.get(1).substring(0);
         } else {
             expectedInitials = userNames.get(0).substring(0,1);
         }
@@ -226,5 +234,10 @@ public class ChatHeader extends AbstractUIElement {
 
     public String getAgentName(){
         return getTextFromElem(getCurrentDriver(),agentName,2,"Agent Name");
+    }
+
+    public void clickOnAssignButton() {
+        clickElem(this.getCurrentDriver(), threeDotsVerticalMenu, 3, "Three Dots Vertical Menu");
+        clickElem(this.getCurrentDriver(), assignButton, 3, "Assign Chat Button");
     }
 }

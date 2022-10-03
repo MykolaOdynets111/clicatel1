@@ -33,7 +33,10 @@ public class HistoryDetailsWindow extends AbstractUIElement {
     })
     public WebElement closeHistoryDetailsButton;
 
-    @FindBy(css = "[selenium-id='map-chat-message-content-LocationMessage']")
+    @FindAll({
+            @FindBy(css = "[selenium-id='map-chat-message-content-LocationMessage']"),
+            @FindBy(css = "[data-testid='map-chat-message-content-LocationMessage']")
+    })
     private WebElement locationHREF;
 
     public String getUserName(){

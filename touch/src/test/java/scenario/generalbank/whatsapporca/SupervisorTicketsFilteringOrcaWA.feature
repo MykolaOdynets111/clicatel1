@@ -1,4 +1,5 @@
-@agent_support_hours
+@support_hours
+@Regression
 Feature: WhatsApp ORCA :: Supervisor Desk
 
   Background:
@@ -8,8 +9,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
 
   @no_widget
   @orca_api
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118513")
-  @Regression
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1896")
   Scenario: Supervisor desk: Verify if supervisor can use different filter options for filtering WhatsApp ORCA tickets
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     When Send to agent message by ORCA
@@ -32,3 +32,12 @@ Feature: WhatsApp ORCA :: Supervisor Desk
 #    Then Ticket from orca is present on "All tickets" filter page
 #    When Agent filter by "Apple Business Chat" channel and "Positive" sentiment
 #    Then Ticket from orca is not present on Supervisor Desk commented till chat name would be available
+
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2801")
+  Scenario: Supervisor desk:: Verify if tickets are sorted from newest to oldest by default
+    Given I open portal
+    And Login into portal as an admin of General Bank Demo account
+    When I select Touch in left menu and Supervisor Desk in submenu
+    And Agent select "Tickets" left menu option
+    Then Tickets are sorted in descending order

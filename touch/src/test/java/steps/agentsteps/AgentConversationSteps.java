@@ -40,7 +40,7 @@ import java.util.stream.Stream;
 public class AgentConversationSteps extends AbstractAgentSteps {
 
     private static String selectedEmoji;
-    private static ThreadLocal<List<String>> messagesFromChatBody = new ThreadLocal<List<String>>();
+    private static final ThreadLocal<List<String>> messagesFromChatBody = new ThreadLocal<List<String>>();
     public static ThreadLocal<String> locationURL = new ThreadLocal<String>();
     private LocationWindow locationWindow ;
     private C2pSendForm c2pSendForm;
@@ -197,7 +197,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
             }
             if (i== 9){
                 Assert.fail("File " + downloadedFile.getPath() + " was not downloaded to the shared folder\n"+
-                            "the following files are found only: " + allFiles);
+                        "the following files are found only: " + allFiles);
             }
             waitFor(2000);
         }
@@ -217,7 +217,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     }
 
     @When("^Agent click on emoji icon$")
-    public void selectRamdomFrequetlyUsedEmogy() {
+    public void selectRandomFrequentlyUsedEmoji() {
         getAgentHomePage("main").getChatForm().clickEmoticonButton();
         selectedEmoji = getAgentHomePage("main").getChatForm().selectRandomFrequentlyUsedEmoji();
     }
@@ -269,14 +269,10 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         messagesFromChatBody.set(getChatBody(agent).getAllMessages());
     }
 
-    @Then("^Sent emoji is displayed on chatdesk$")
+    @Then("Sent emoji is displayed on chatdesk$")
     public void verifyEmojiDisplayedOnChatdesk() {
-        String userMessage = "Submitted data:\n" +
-                "" + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + "\n" +
-                "health@test.com";
-        Assert.assertTrue(getAgentHomePage("main agent").getChatBody()
-                        .getAgentEmojiResponseOnUserMessage(userMessage).contains(selectedEmoji),
-                "Expected to user emoji '" + selectedEmoji + "' is not shown in chatdesk");
+        Assert.assertTrue(getChatBody("main agent").getAgentEmojiResponseOnUserMessage(selectedEmoji),
+                "'" + selectedEmoji + "' User message is not shown in conversation area");
     }
 
     @Then("^There is no from (.*) response added by default for (.*) message from fb user$")
@@ -299,6 +295,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @When("^(.*) sees (.*) Location from User$")
     public void verifyLocationFromUser(String agent, String location){
+        waitFor(2000);// URL needs time for full creation
         locationURL.set(getAgentHomePage(agent).getChatBody().getLocationURLFromUser());
         Assert.assertTrue(locationURL.get().contains(location),  agent+ " didn't get Lviv location");
     }
@@ -321,7 +318,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @When("^(.*) send (.*) message$")
     public void sendMessageOnCurrentChat(String agent, String agentMessage) {
         getAgentHomePage(agent).getChatForm().clearAndSendResponseToUser(agentMessage);
-        }
+    }
 
     @When("^(.*) clear input and send a new message (.*)$")
     public void clearAndSendAnswerToUser(String agent, String responseToUser) {
@@ -499,7 +496,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
         soft.assertTrue(result,
                 "Ended date is not set for session " + sessionDetails.get("sessionId") + " after ending chat\n" +
-                "Session " + sessionDetails.get("sessionId") + " is not terminated after ending chat. \n\n");
+                        "Session " + sessionDetails.get("sessionId") + " is not terminated after ending chat. \n\n");
         soft.assertTrue(chatAgentDetails.get("endedDate") != null,
                 "Ended date is not set for chat agent history record after ending chat.\n" +
                         "\nSession " + sessionDetails.get("sessionId") + "\n\n");
@@ -662,6 +659,21 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         locationWindow.selectLocation(locationName);
         Assert.assertEquals(locationWindow.getTextFromSearch(),locationName, "Location did not match");
     }
+
+    @And("^Agent checks Location list size as (.*)$")
+    public void agentChecksLocationListSize(int expectedSize) {
+        Assert.assertTrue(locationWindow.fetchLocationDropdownSize(expectedSize), "Location list size is not as expected");
+    }
+
+    @And("^Agent checks (.*) for sharing location is not visible$")
+    public void sendLocationButtonInvisibility(String buttonElementText) {
+        Assert.assertTrue(locationWindow.isSendLocationsButtonInvisible(buttonElementText) == 0, "Send location button is visible");
+    }
+
+    @Then("^(.*) can see c2p extension icon$")
+    public void c2PExtensionIsVisible(String agent){
+        Assert.assertTrue(getAgentHomePage(agent).getChatForm().c2pExtensionIconIsVisible(), "C2P Extension Icon is not visible");
+        }
 
     @When("^(.*) open c2p form$")
     public void agentOpenC2PForm(String agent){
