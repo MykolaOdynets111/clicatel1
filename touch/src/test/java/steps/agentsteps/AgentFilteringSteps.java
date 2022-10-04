@@ -50,9 +50,9 @@ public class AgentFilteringSteps extends AbstractAgentSteps {
                 "The date filter is not empty" + getAgentHomePage(agent).getLeftMenuWithChats().checkStartDateFilterEmpty());
     }
 
-    @And("^(.*) checks back button is (.*) in calendar for (.*) filter 3 months ago$")
-    public void backButtonDisability(String agent, String visibility, String filterType) {
-        getAgentHomePage(agent).getLeftMenuWithChats().checkBackButtonVisibilityThreeMonthsBack(filterType);
+    @And("^(.*) checks back button is (.*) in calendar for (.*) filter (.*) days ago$")
+    public void backButtonDisability(String agent, String visibility, String filterType, Long day) {
+        getAgentHomePage(agent).getLeftMenuWithChats().checkBackButtonVisibilityThreeMonthsBack(filterType, day);
     }
 
     @When("^(.*) filter closed chats with (.*) channel, (.*) sentiment and flagged is (.*)$")

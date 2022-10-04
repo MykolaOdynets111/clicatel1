@@ -223,6 +223,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void clickCloseFilterButton(String agent){
         getLeftMenu(agent).clickCloseButton();
     }
+
+    @Then("^(.*) opens filter menu$")
+    public void openFilterMenuAgentDesk(String agent){
+        getLeftMenu(agent).openFilterMenu();
+    }
+
     @When("^(.*) filter Live Chants with (.*) channel, (.*) sentiment and flagged is (.*)$")
     public void setLiveChatsFilter(String agent, String channel, String sentiment, boolean flagged){
         getLeftMenu(agent).applyTicketsFilters(channel.trim(), sentiment.trim(), flagged);
