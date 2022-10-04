@@ -29,5 +29,5 @@ Feature: Filtering : Chat Desk
     And  Agent filter by 0 year 3 month and 0 days ago start date and today's end date
     Then Agent checks value of date filter is empty for start date filter 0 year 3 month and 0 days ago
     When Agent opens filter menu
-    And Agent checks back button is not visible in calendar for start date filter 90 days ago
+    And Agent checks back button is not visible in calendar for start date filter 91 days ago
     Then Agent checks back button is visible in calendar for end date filter 90 days ago

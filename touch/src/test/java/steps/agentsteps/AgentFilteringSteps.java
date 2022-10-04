@@ -1,5 +1,7 @@
 package steps.agentsteps;
 
+import agentpages.uielements.ChatInLeftMenu;
+import agentpages.uielements.DatePicker;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -52,7 +54,7 @@ public class AgentFilteringSteps extends AbstractAgentSteps {
 
     @And("^(.*) checks back button is (.*) in calendar for (.*) filter (.*) days ago$")
     public void backButtonDisability(String agent, String visibility, String filterType, Long day) {
-        getAgentHomePage(agent).getLeftMenuWithChats().checkBackButtonVisibilityThreeMonthsBack(filterType, day);
+        Assert.assertTrue(new DatePicker(agent).checkBackButtonVisibilityThreeMonthsBack(filterType, day));
     }
 
     @When("^(.*) filter closed chats with (.*) channel, (.*) sentiment and flagged is (.*)$")

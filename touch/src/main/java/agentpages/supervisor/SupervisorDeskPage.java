@@ -26,9 +26,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(css = ".cl-chat-item")
     private List<WebElement> chatsLive;
 
-    @FindBy(xpath = "//div[contains(@class,'react-datepicker__day react-datepicker__day')]")
-    private List<WebElement> calendarDatePicker;
-
     @FindBy(xpath = "//h2[text() ='Loading...']")
     private WebElement loading;
 
@@ -65,15 +62,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(css = ".cl-agent-view-launch-btn")
     private WebElement launchAgentButton;
 
-    @FindBy(xpath = "//button[@aria-label='Previous Month']")
-    private WebElement backButton;
-
-    @FindBy(css = "[class='cl-form-control cl-form-control--input']")
-    private WebElement startDateInput;
-
-    @FindBy(xpath = "//input[contains(@class, 'cl-form-control cl-form-control--input cl-end-date')]")
-    private WebElement endDateInput;
-
     @FindBy(xpath = "//*[local-name()='svg' and @name='clock']/*[local-name()='g']")
     private WebElement leftChatPendingIcon;
 
@@ -108,7 +96,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private SupervisorDeskHeader supervisorDeskHeader;
     private SupervisorAvailableAsAgentDialog supervisorAvailableAsAgentDialog;
 
-
     // == Constructors == //
 
     public SupervisorDeskPage() {
@@ -119,48 +106,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     }
     public SupervisorDeskPage(WebDriver driver) {
         super(driver);
-    }
-
-    public boolean checkBackButtonVisibilityThreeMonthsBack(String filterType, Long day) {
-        switch (filterType) {
-            case "start date":
-                clickElem(this.getCurrentDriver(), startDateInput, 5, "Start date element");
-                break;
-            case "end date":
-                clickElem(this.getCurrentDriver(), endDateInput, 5, "End date element");
-                break;
-            default:
-                throw new AssertionError("Incorrect filter type was provided: " + filterType);
-        }
-
-        LocalDate startDate = LocalDate.now().minusDays(day);
-        int month = startDate.getDayOfMonth();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(getPattern(month));
-        String expectedDate = startDate.format(formatter);
-
-        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
-        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
-
-        List<WebElement> date = calendarDatePicker.stream().filter(e -> e.getAttribute("aria-label").contains(expectedDate)).collect(Collectors.toList());
-
-        if(date.size() ==0) {
-            clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
-            date = calendarDatePicker.stream().filter(e -> e.getAttribute("aria-label").contains(expectedDate)).collect(Collectors.toList());
-        }
-
-        if(date.get(0).getAttribute("aria-disabled").equalsIgnoreCase("false")) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public static String getPattern(int month) {
-        String first = "MMMM d";
-        String last = ", yyyy";
-        String pos = (month == 1 || month == 21 || month == 31) ? "'st'" : (month == 2 || month == 22) ? "'nd'" : (month == 3 || month == 23) ? "'rd'" : "'th'";
-
-        return first + pos + last;
     }
 
     public AssignChatWindow getAssignChatWindow(){

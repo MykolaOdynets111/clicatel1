@@ -1,6 +1,7 @@
 package steps.portalsteps;
 
 import agentpages.uielements.ChatBody;
+import agentpages.uielements.DatePicker;
 import apihelper.ApiHelper;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.TenantChatPreferences;
@@ -465,9 +466,9 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 
-    @And("^Admin checks back button is (.*) in calendar for (.*) filter (.*) days ago in supervisor$")
-    public void backButtonDisability(String visibility, String filterType, Long day) {
-        getSupervisorDeskPage().checkBackButtonVisibilityThreeMonthsBack(filterType, day);
+    @And("^(.*) checks back button is (.*) in calendar for (.*) filter (.*) days ago in supervisor$")
+    public void backButtonDisability(String agent, String visibility, String filterType, Long day) {
+        Assert.assertTrue(new DatePicker(agent).checkBackButtonVisibilityThreeMonthsBack(filterType, day));
     }
 
     @Then("^Verify closed chats dates are fitted by filter$")
