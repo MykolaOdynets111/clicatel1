@@ -45,9 +45,6 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = "[selenium-id=company-info-logo]")
     private WebElement agentIcon;
 
-    @FindBy(css = "[role=dialog]")
-    private WebElement loginDialog;
-
     @FindBy(css = "[selenium-id=company-info-text]")
     private WebElement tenantName;
 
@@ -147,10 +144,6 @@ public class PageHeader extends AbstractUIElement {
             else waitFor(500);
         }
         return false;
-    }
-
-    public boolean isLoginDialogShown(){
-        return isElementShown(this.getCurrentDriver(), loginDialog, 10);
     }
 
     public boolean isValidIconDisplayedOnHeader() {

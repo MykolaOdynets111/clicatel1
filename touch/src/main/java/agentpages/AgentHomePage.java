@@ -81,6 +81,9 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath ="//button[text()='Move to Pending']")
     private WebElement moveToPendingButton;
 
+    @FindBy(css = "[role=dialog]")
+    private WebElement loginDialog;
+
     private final String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
 
     private DeleteCRMConfirmationPopup deleteCRMConfirmationPopup;
@@ -346,5 +349,9 @@ public class AgentHomePage extends AgentAbstractPage {
             waitForElementToBeVisible(this.getCurrentDriver(), profile, 5);
         } catch (TimeoutException e) {
         }
+    }
+
+    public boolean isLoginDialogShown(){
+        return isElementShown(this.getCurrentDriver(), loginDialog, 10);
     }
 }
