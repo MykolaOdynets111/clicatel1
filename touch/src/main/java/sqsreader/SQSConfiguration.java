@@ -35,12 +35,12 @@ public class SQSConfiguration {
         return callbackUrl;
     }
 
-    public String getQueueName(){
-        if(ConfigManager.isRemote()){
-            return "arn:aws:sqs:eu-west-1:215418463085:dev-callback-handler-interact-chatdesk-1";
-        }
-        return queueName;
-    }
+//    public String getQueueName(){
+//        if(ConfigManager.isRemote()){
+//            return "arn:aws:sqs:eu-west-1:215418463085:dev-callback-handler-interact-chatdesk-1";
+//        }
+//        return queueName;
+//    }
 
     public static SqsClient getSqsClient(){
         if(ConfigManager.isRemote()){
