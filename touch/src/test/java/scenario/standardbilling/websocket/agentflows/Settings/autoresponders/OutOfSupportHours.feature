@@ -1,11 +1,10 @@
 @no_widget
-@Regression
 @start_orca_server
 @Regression
 Feature: Dashboard: Settings: Auto Responder
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1915")
-  @agent_support_hours
+  @support_hours
   Scenario: CD :: Dashboard :: Settings :: Auto Responder :: Verify that customers receives the 'out of support hours' message when tries to reach agent out of business hours
 
     Given Setup ORCA whatsapp integration for Standard Billing tenant
@@ -15,7 +14,7 @@ Feature: Dashboard: Settings: Auto Responder
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1822")
   @remove_dep
-  @department_support_hours
+  @support_hours
   Scenario: CD :: Dashboard :: Settings :: Auto Responder :: Verify that user should receive"out of support hours"
   autoresponder message when user try to reach out of specific support hours per department time
 

@@ -86,6 +86,12 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     private String iframeId = "ticketing-iframe";
 
+    @FindAll({
+            @FindBy(css = ".cl-modal-default-header-title']"),
+            @FindBy(css = "Chat transferred to another agent")
+    })
+    private WebElement chatTransferAlert;
+
     private AssignChatWindow assignChatWindow;
     private ChatBody chatBody;
     private SupervisorTicketsTable supervisorTicketsTable;
@@ -297,6 +303,10 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     public void loadAllClosedChats() {
         getSupervisorClosedChatsTable().loadAllFoundChats();
+    }
+
+    public boolean verifyChatAlertIsPresent(int wait) {
+        return isElementShown(this.getCurrentDriver(), chatTransferAlert, wait);
     }
 
     public boolean isChatPendingIconShown() {

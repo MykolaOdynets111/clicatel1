@@ -51,7 +51,6 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getTransferChatWindow().waitForUpdatingAvailableAgents();
         secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferChat(agent);
     }
-
     @And("^(.*) transfers chat to (.*) department$")
     public void transferChatTodDepartment(String agent, String departmentName){
         getAgentHomePage(agent).getChatHeader().clickTransferButton();

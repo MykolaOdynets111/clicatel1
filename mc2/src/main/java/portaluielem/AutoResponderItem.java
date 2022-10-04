@@ -26,6 +26,8 @@ public class AutoResponderItem extends AbstractWidget {
     @FindBy(xpath = ".//*[contains(text(), 'Save')]")
     private WebElement saveButton;
 
+    @FindBy(css = "div[class='cl-toggle__label']")
+    private WebElement toggleButton;
 
     protected AutoResponderItem(WebElement element) {
         super(element);
@@ -47,7 +49,10 @@ public class AutoResponderItem extends AbstractWidget {
     public void clickResetToDefaultButton(){
         clickElem(this.getCurrentDriver(), resetToDefaultButton, 1,"Reset to default button");
     }
-
+    public void  InputText(String message){
+        clickElem(this.getCurrentDriver(), textArea, 1,"Remove text");
+        inputText(this.getCurrentDriver(),textArea, 2, "For testing purpose",message);
+    }
     public AutoResponderItem typeMessage(@NonNull String msg) {
         if (!msg.equals("")) {
             textArea.clear();
@@ -71,5 +76,4 @@ public class AutoResponderItem extends AbstractWidget {
     public void clickOnOff(){
         clickElem(this.getCurrentDriver(), buttonOnOff, 10, "On Off button");
     }
-
 }

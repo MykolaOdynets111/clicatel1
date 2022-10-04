@@ -844,18 +844,6 @@ public class ApiHelper implements VerificationHelper {
                 .getBody().jsonPath().getList("", CRMTicket.class);
     }
 
-    public static List<String> getTagsForCRMTicket(String chatId) {
-        return RestAssured.given().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
-                .get(format(Endpoints.CHATS_INFO, chatId)).getBody().jsonPath().getList("tags.value");
-    }
-
-    public static List<String> getAllTags() {
-        return RestAssured.given()
-                .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
-                .get(Endpoints.TAGS_FOR_CRM_TICKET).getBody().jsonPath().getList("value");
-    }
-
-
     public static Response createCRMTicket(String clientID, Map<String, String> ticketInfo) {
         return RestAssured.given().log().all()
                 .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))

@@ -50,7 +50,7 @@ public class Endpoints {
 
     public static String DELETE_CRM_TICKET = URLs.getTouchApiBaseURL() + "client-profiles/crm-tickets/";
 
-    public static String TAGS_FOR_CRM_TICKET = URLs.getTouchApiBaseIntegrationURL() + "api/tags";
+    public static String TAGS_FOR_CRM_TICKET = URLs.getTouchApiBaseURL() + "api/tags";
 
     public static String TENANT_BRAND_LOGO = URLs.getTouchApiBaseURL() + "tenants/%s/resources/tenant_logo";
 
