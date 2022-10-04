@@ -754,16 +754,4 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertTrue(getAgentHomeForMainAgent().getProfile().isNotVerifiedLabelDisplayed(), "NotVerified label is not displayed");
     }
 
-    @And("click on send external message icon on the right side header")
-    public void agentClickExternalMessageIcon() {
-        getAgentHomeForMainAgent().getProfile().clickSendExternalMessageIcon();
-
-    }
-
-    @And("^agent should able to type (.*) number in 'Send to' input field$")
-    public void typePhoneNumber() {
-      //  getAgentHomeForMainAgent().getProfile().clickSendExternalMessageIcon();
-       // getAgentHomeForMainAgent().getProfile().clickWhatsApp();
-    //    getAgentHomeForMainAgent().getHSMForm().waPhone();
-    }
 }

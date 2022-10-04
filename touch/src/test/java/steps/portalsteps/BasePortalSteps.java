@@ -1639,7 +1639,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         return mainPage;
     }
 
-    @Then("^admin can see Settings page with - options (.*), (.*), (.*), (.*), (.*)$")
+    @Then("^Admin can see Settings page with - options (.*), (.*), (.*), (.*), (.*)$")
     public void verifySettingPageTabOptions(String a,String b, String c, String d, String e){
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(getDashboardSettingsPage().isSettingTabsShown("Business Profile"),
