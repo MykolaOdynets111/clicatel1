@@ -11,7 +11,6 @@ Feature: out_of_support_hours auto responder (Bot mode)
     When User enter chat to agent into widget input field
     Then There is no out_of_support_hours response
 
-
   @support_hours
   Scenario: out_of_support_hours Agent message enabling and editing for Bot mode tenant
     Given Taf out_of_support_hours is set to true for Automation Bot tenant

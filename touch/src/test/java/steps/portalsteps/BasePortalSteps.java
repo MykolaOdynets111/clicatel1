@@ -1615,7 +1615,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void editTag() {
         getPortalTouchPreferencesPage().getChatTagsWindow().clickEditTagButton(tagname);
     }
-
     @When("^Cancel editing a tag")
     public void cancelEditingTag() {
         getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickDeleteButton();
