@@ -54,7 +54,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css = "div[id^='react-select']")
     private List<WebElement> availableTags;
 
-    @FindBy(css = ".cl-select__indicators svg")
+    @FindBy(xpath = "//label[text() = 'Tags']/..//div/*[name() = 'svg']")
     private WebElement openDropdownButton;
 
     @FindBy(xpath = ".//div[text() = 'No options']")
@@ -68,8 +68,6 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     private final String selectedButtonTagsCss = ".cl-select__multi-value";
 
-    private final String cleareAll = ".Select-clear";
-
     @FindBy(css = "[data-testid='crm-note']")
     private WebElement crmNoteTextField;
 
@@ -78,9 +76,6 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     @FindBy(css = "[data-testid='crm-ticket-number']")
     private WebElement crmTicketNumber;
-
-    @FindBy(css =".cl-loading-overlay")
-    private WebElement loadingState;
 
     public boolean isAgentFeedbackWindowShown(){
         return isElementShown(this.getCurrentDriver(), this.getWrappedElement(),2);
@@ -140,10 +135,6 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), sentimentUnsatisfied, 5,"Sentiment Unsatisfied" );
     }
 
-    public void setSentimentNeutral() {
-        clickElem(this.getCurrentDriver(), sentimentNeutral, 5,"Sentiment Neutral" );
-    }
-
     public void setSentimentHappy() {
         clickElem(this.getCurrentDriver(), sentimentHappy, 5,"Sentiment Happy" );
     }
@@ -200,6 +191,12 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         waitForElementToBeClickable(this.getCurrentDriver(), openDropdownButton, 6);
         tagsInput.click();
         findElemByCSS(this.getCurrentDriver(), inputTagField).sendKeys(tag);
+    }
+
+    public List<String> getTagList() {
+        waitForElementToBeClickable(this.getCurrentDriver(), openDropdownButton, 6);
+        tagsInput.click();
+        return availableTags.stream().map(WebElement::getText).collect(Collectors.toList());
     }
 
     public AgentFeedbackWindow selectTagInSearch() {
