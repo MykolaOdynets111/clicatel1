@@ -190,6 +190,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 "The current agent of the ticket is not as expected");
     }
 
+    @Then("^(.*) is the current agent of the chat$")
+    public void verifyCurrentAgentOfChat(String agentName) {
+        Assert.assertEquals(getSupervisorDeskPage().getChatHeader().getAgentName(),agentName,
+                "The current agent of the ticket is not as expected");
+    }
+
     @Then("^Ticket from (.*) is present on (.*) filter page$")
     public void verifyUnassignedType(String channel, String status) {
         String userName = getUserName(channel);
@@ -511,6 +517,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().loadAllClosedChats();
     }
 
+    @And("^Supervisor clicks on chats filter for (.*) Agent$")
+    public void clickOnChatsFilterFromAgent(String Agent){
+        getSupervisorDeskPage().getSupervisorLeftPanel().selectTicketType(Agent);
+    }
+
     @Then("^Verify first closed chat date are fitted by filter$")
     public void verifyFirstClosedChatDateAreFittedByFilter() {
         LocalDate startDate = getSupervisorDeskPage().getSupervisorDeskHeader().getStartDateFilterValue();
@@ -578,6 +589,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void agentCannotInitiateAPayment() {
         Assert.assertFalse(getSupervisorDeskPage().isC2pButtonPresent(),"Supervisor Can Initiate Payment");
     }
+
+    @Then("Supervisor does not see any Chat Transfer alert")
+    public void verifyChatTransferAlertNotPresent() {
+        Assert.assertFalse(getSupervisorDeskPage().verifyChatAlertIsPresent(5), "Chat alert is present");
+    }
+
     @And("Supervisor adds a note {string}, Jira link {string} and Ticket Number {string}")
     public void addNewNote(String note, String jiraLink, String ticketNumber){
         getSupervisorDeskPage().getSupervisorRightPanel().clickOnNotesTab()
