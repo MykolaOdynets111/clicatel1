@@ -16,7 +16,7 @@ public class SupervisorDeskHeader extends AbstractUIElement {
     @FindBy(css = "[type='submit']")
     private WebElement applyFiltersButton;
 
-    @FindBy(css = ".cl-r-checkbox__label")
+    @FindBy(xpath = "//*[text()='Flagged Only']")
     private WebElement flaggedOnlyCheckbox;
 
     @FindBy(xpath = "//input[@name='waPhone']")
