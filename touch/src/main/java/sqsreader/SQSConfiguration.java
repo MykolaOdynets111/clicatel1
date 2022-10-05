@@ -2,14 +2,22 @@ package sqsreader;
 
 import drivermanager.ConfigManager;
 import lombok.Data;
+import software.amazon.awssdk.auth.credentials.AwsCredentials;
+import software.amazon.awssdk.auth.credentials.AwsSessionCredentials;
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sqs.SqsClient;
+import software.amazon.awssdk.services.sts.model.Credentials;
 
 @Data
 public class SQSConfiguration {
 
     public static final String DEFAULT_QUEUE_NAME = "dev-callback-handler-interact-chatdesk-1";
+
+    public static final String ROLE_ARN = "arn:aws:iam::215418463085:role/k8s-dev-callback-handler-interact-chatdesk-access-role";
+
+    public static final String ROLE_SESSION_NAME = "mySession";
 
     public static final Region DEFAULT_REGION = Region.EU_WEST_1;
 
@@ -35,20 +43,16 @@ public class SQSConfiguration {
         return callbackUrl;
     }
 
-//    public String getQueueName(){
-//        if(ConfigManager.isRemote()){
-//            return "arn:aws:sqs:eu-west-1:215418463085:dev-callback-handler-interact-chatdesk-1";
-//        }
-//        return queueName;
-//    }
 
     public static SqsClient getSqsClient(){
         if(ConfigManager.isRemote()){
-            return SqsClient.builder().build();
+            Credentials roleCreds = AssumeRole.assumeGivenRole(ROLE_ARN,ROLE_SESSION_NAME);
+            AwsCredentials creds  = AwsSessionCredentials.create(roleCreds.accessKeyId(),roleCreds.secretAccessKey(),roleCreds.sessionToken());
+            return SqsClient.builder().credentialsProvider(StaticCredentialsProvider.create(creds)).build();
         }
+
         return SqsClient.builder().region(SQSConfiguration.DEFAULT_REGION)
                 .credentialsProvider(ProfileCredentialsProvider.create("215418463085_vulcan-mc2-dev"))
                 .build();
     }
-
 }

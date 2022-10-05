@@ -38,7 +38,18 @@ public class SyncMessageReceiver {
 
     }
 
-    private void startSyncMessageReceiver() throws JMSException {
+    public static void main(String[] args) {
+        try {
+            new SyncMessageReceiver().startSyncMessageReceiver();
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void startSyncMessageReceiver() throws JMSException {
+        System.out.println("Start SQS consuming process");
+
         SQSConfiguration config = SQSConfiguration.parseConfig();
 
         SqsClient sqsClient = SQSConfiguration.getSqsClient();
