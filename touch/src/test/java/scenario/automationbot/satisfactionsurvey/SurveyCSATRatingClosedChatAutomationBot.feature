@@ -8,7 +8,7 @@ Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2125")
     @Regression
-  Scenario Outline: Verify the error message when end user send rating as "-1" or "+1" for NPS/CSAT -
+  Scenario Outline: CD:: Settings :: Survey :: Verify the error message when end user send rating as "-1" or "+1" for NPS/CSAT -
     Given I login as agent of Automation Bot
     And Setup ORCA <channelType> integration for Automation Bot tenant
     And I select Touch in left menu and Dashboard in submenu
@@ -34,11 +34,11 @@ Feature: Satisfaction Survey
     And Verify Orca returns survey Great, thanks - could you please rate our service from 0 - 10. 0 being "Very unsatisfied" and 10 being "Very satisfied". Simply type "skip" keyword to skip the survey. response 2 number of times during 40 seconds
     Examples:
       | channelType |
-      | abc         |
+      | ABC         |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1703")
     @Regression
-  Scenario Outline: CD:: SMS:: Settings :: Survey :: Verify that user can 'rate and leave comment' for SMS CSAT survey type if close chat with //end command
+  Scenario Outline: CD:: <channelType>:: Settings :: Survey :: Verify that user can 'rate and leave comment' for SMS CSAT survey type if close chat with //end command
     Given I login as agent of Automation Bot
     And Setup ORCA <channelType> integration for Automation Bot tenant
     And Update survey management chanel <channelType> settings by ip for Automation Bot
@@ -66,11 +66,11 @@ Feature: Satisfaction Survey
     And Verify Orca returns Thank you for taking the time to provide us with your feedback. response during 40 seconds
     Examples:
       | channelType |
-      | sms         |
+      | SMS         |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1778")
     @Regression
-  Scenario Outline: CD:: SMS:: Settings :: Survey :: Verify if User should be able to enter a Skip keyword to cancel the survey
+  Scenario Outline: CD:: <channelType>:: Settings :: Survey :: Verify if User should be able to enter a Skip keyword to cancel the survey
     Given I login as agent of Automation Bot
     And Setup ORCA <channelType> integration for Automation Bot tenant
     And Update survey management chanel <channelType> settings by ip for Automation Bot
@@ -97,4 +97,4 @@ Feature: Satisfaction Survey
     And Verify Orca returns Thank you. Please don't hesitate to reach out if you ever need help! response during 40 seconds
     Examples:
       | channelType |
-      | sms         |
+      | SMS         |

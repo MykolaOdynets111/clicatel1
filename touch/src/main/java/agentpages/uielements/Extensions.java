@@ -4,6 +4,8 @@ import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.List;
+
 @FindBy(css =".cl-extensions-manager-overlay")
 public class Extensions extends AbstractUIElement {
 
@@ -17,4 +19,5 @@ public class Extensions extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), allExtensionsTab, 2, "All Extensions Tab button");
         executeJSclick(this.getCurrentDriver(), paymentRequestItem);
     }
+
 }

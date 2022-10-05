@@ -4,6 +4,7 @@ import agentpages.supervisor.uielements.*;
 import agentpages.uielements.ChatBody;
 import agentpages.uielements.ChatHeader;
 import agentpages.uielements.Profile;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
@@ -11,7 +12,11 @@ import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
 import portaluielem.AssignChatWindow;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -57,15 +62,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(css = ".cl-agent-view-launch-btn")
     private WebElement launchAgentButton;
 
-    @FindBy(xpath = "//button[@aria-label='Previous Month']")
-    private WebElement backButton;
-
-    @FindBy(css = "[class='cl-form-control cl-form-control--input']")
-    private WebElement startDateInput;
-
-    @FindBy(xpath = "//input[contains(@class, 'cl-form-control cl-form-control--input cl-end-date')]")
-    private WebElement endDateInput;
-
     @FindBy(xpath = "//*[local-name()='svg' and @name='clock']/*[local-name()='g']")
     private WebElement leftChatPendingIcon;
 
@@ -106,7 +102,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private SupervisorDeskHeader supervisorDeskHeader;
     private SupervisorAvailableAsAgentDialog supervisorAvailableAsAgentDialog;
 
-
     // == Constructors == //
 
     public SupervisorDeskPage() {
@@ -117,30 +112,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     }
     public SupervisorDeskPage(WebDriver driver) {
         super(driver);
-    }
-
-    public boolean checkBackButtonVisibilityThreeMonthsBack(String filterType) {
-        if (filterType.equalsIgnoreCase("start date")) {
-            clickElem(this.getCurrentDriver(), startDateInput, 5, "Start date element");
-        } else if (filterType.equalsIgnoreCase("end date")) {
-            clickElem(this.getCurrentDriver(), endDateInput, 5, "End date element");
-        }
-
-        //Clicking back button 3 times for back button invisibility check
-        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
-        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
-        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
-
-        try {
-            if (filterType.equalsIgnoreCase("start date")) {
-                waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), backButtonString, 5);
-            } else if (filterType.equalsIgnoreCase("end date")) {
-                waitForElementToBeVisibleByXpath(this.getCurrentDriver(), backButtonString, 5);
-            }
-            return true;
-        } catch (Exception e) {
-            throw new AssertionError("There is issue with Back button visibility for selected filter");
-        }
     }
 
     public AssignChatWindow getAssignChatWindow(){
