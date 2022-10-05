@@ -1,11 +1,13 @@
-@skip
 Feature: Agent Date Time Picker Extension
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-860")
     @no_widget
+    @skip
   Scenario Outline: CD :: <channelType> :: Agent Desk :: Live Chat :: Verify the "Date/Time picker" extension cards for the tenant
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
-    And Agent creates TIME_PICKER tenant extension with label Schedule Appointment with picker and name WaveBank Sranch
+    And Agent creates tenant extension with label and name
+      | extensionType | label                            | name            |
+      | TIME_PICKER   | Schedule Appointment with picker | WaveBank Sranch |
     And I login as agent of General Bank Demo
     When Send chat to agent message by ORCA
     And Agent has new conversation request from <userType> user
@@ -22,9 +24,12 @@ Feature: Agent Date Time Picker Extension
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1617")
     @no_widget
+    @skip
   Scenario Outline: CD :: <channelType> :: Verify that selected emoticons with text (title) display the title of each selected option in same format to agent as they display to user
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
-    And Agent creates LIST_PICKER tenant extension with label MULTI SELECTION OPTION and name Travel Accident Protection
+    And Agent creates tenant extension with label and name
+      | extensionType | label                  | name                       |
+      | LIST_PICKER   | MULTI SELECTION OPTION | Travel Accident Protection |
     And I login as agent of General Bank Demo
     When Send chat to agent message by ORCA
     And Agent has new conversation request from <userType> user
@@ -35,3 +40,61 @@ Feature: Agent Date Time Picker Extension
     Examples:
       | channelType | userType |
       | ABC         | orca     |
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1625")
+    @no_widget
+    @Regression
+  Scenario Outline: CD :: ABC :: Verify that frequently used extensions will be a sub-set of all extensions list
+    Given Setup ORCA <channelType> integration for General Bank Demo tenant
+    And Agent creates tenant extension with label and name
+      | extensionType | label                            | name                       |
+      | TIME_PICKER   | Schedule Appointment with picker | WaveBank Sranch            |
+      | LIST_PICKER   | MULTI SELECTION OPTION           | Travel Accident Protection |
+    And I login as agent of General Bank Demo
+    When Send chat to agent message by ORCA
+    And Agent has new conversation request from <userType> user
+    And Agent click on new conversation request from <userType>
+    And Conversation area becomes active with chat to agent user's message
+    And Agent open c2p form
+    And Agent sees extension link with MULTI SELECTION OPTION name in chat body
+    Then Agent checks extensions in Frequently Used tab should be available in All Extension tab as well
+    Examples:
+      | channelType | userType |
+      | ABC         | orca     |
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1650")
+    @no_widget
+    @skip
+  Scenario: CD :: ABC :: Verify that "Frequently Used" extension tab options according to customer, if used less than 10 extensions, then those will only show up
+    Given Setup ORCA ABC integration for General Bank Demo tenant
+    And Agent creates tenant extension with label and name
+      | extensionType | label                            | name                         |
+      | LIST_PICKER   | MULTI SELECTION OPTION           | Travel Accident Protection   |
+      | LIST_PICKER   | MULTI SELECTION OPTION 1         | Travel Accident Protection1  |
+      | LIST_PICKER   | MULTI SELECTION OPTION 2         | Travel Accident Protection2  |
+      | LIST_PICKER   | MULTI SELECTION OPTION 3         | Travel Accident Protection3  |
+      | LIST_PICKER   | MULTI SELECTION OPTION 4         | Travel Accident Protection4  |
+      | LIST_PICKER   | MULTI SELECTION OPTION 5         | Travel Accident Protection5  |
+      | LIST_PICKER   | MULTI SELECTION OPTION 6         | Travel Accident Protection6  |
+      | LIST_PICKER   | MULTI SELECTION OPTION 7         | Travel Accident Protection7  |
+      | LIST_PICKER   | MULTI SELECTION OPTION 8         | Travel Accident Protection8  |
+      | LIST_PICKER   | MULTI SELECTION OPTION 9         | Travel Accident Protection9  |
+      | LIST_PICKER   | MULTI SELECTION OPTION 10        | Travel Accident Protection10 |
+    And I login as agent of General Bank Demo
+    When Send chat to agent message by ORCA
+    And Agent has new conversation request from orca user
+    And Agent click on new conversation request from orca
+    And Conversation area becomes active with chat to agent user's message
+    And Agent open and select extension with name
+      | MULTI SELECTION OPTION           |
+      | MULTI SELECTION OPTION 1         |
+      | MULTI SELECTION OPTION 2         |
+      | MULTI SELECTION OPTION 3         |
+      | MULTI SELECTION OPTION 4         |
+      | MULTI SELECTION OPTION 5         |
+      | MULTI SELECTION OPTION 6         |
+      | MULTI SELECTION OPTION 7         |
+      | MULTI SELECTION OPTION 8         |
+      | MULTI SELECTION OPTION 9         |
+      | MULTI SELECTION OPTION 10        |
+    And Agent checks extensions in Frequently Used tab should be less than 10

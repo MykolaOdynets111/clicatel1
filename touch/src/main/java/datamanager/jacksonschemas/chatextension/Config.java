@@ -47,12 +47,12 @@ public class Config {
     @JsonProperty("postbackData")
     private String postbackData;
 
-    public Config(Optional name, String extensionType){
+    public Config(String name, String extensionType){
         switch (extensionType) {
             case "TIME_PICKER":
                 this.setTitle("Schedule Appointment");
                 this.setImageRef("null");
-                this.setLocation(new Location(name.get().toString()));
+                this.setLocation(new Location(name));
                 this.setSubTitle("Select one of the available time slots for your appointment");
                 this.setTimeSlots(Arrays.asList(new TimeSlots()));
                 this.setDescription("description");
@@ -60,9 +60,11 @@ public class Config {
                 break;
             case "LIST_PICKER":
                 this.setGroups(Arrays.asList(new Groups()));
-                this.setHeader(name.get().toString());
+                this.setHeader(name);
                 this.setImageRef("null");
                 this.setDescription("Tap to Choose");
+                break;
+            case "CHAT_2_PAY":
                 break;
             default:
                 throw new NoSuchElementException("Extension type element: '" + extensionType + "' wasn't found");

@@ -148,6 +148,12 @@ public class AgentHomePage extends AgentAbstractPage {
         return c2pSendForm;
     }
 
+    public C2pSendForm openc2pSendForm(String text){
+        getChatForm().openExtensionsForm();
+        getExtensionsForm().openC2pFormWithText(text);
+        c2pSendForm.setCurrentDriver(this.getCurrentDriver());
+        return c2pSendForm;
+    }
 
     public DeleteCRMConfirmationPopup getDeleteCRMConfirmationPopup(){
         deleteCRMConfirmationPopup.setCurrentDriver(this.getCurrentDriver());
