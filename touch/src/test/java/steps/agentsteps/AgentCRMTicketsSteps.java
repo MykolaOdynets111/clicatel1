@@ -1,5 +1,7 @@
 package steps.agentsteps;
 
+import agentpages.uielements.AgentFeedbackWindow;
+import apihelper.APITagsHelper;
 import apihelper.ApiHelper;
 import datamanager.jacksonschemas.CRMTicket;
 import datetimeutils.DateTimeHelper;
@@ -18,6 +20,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static java.lang.String.format;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class AgentCRMTicketsSteps extends AbstractAgentSteps {
 
@@ -107,7 +112,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
                 .atZone(ZoneId.of("UTC"))
                 .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
         long actualMili = DateTimeHelper.convertLocalDateTimeToMillis(dateTimeFromBackend, zoneId);
-        List<String> tags = ApiHelper.getTagsForCRMTicket(actualTicketInfoFromBackend.getConversationId());
+        List<String> tags = APITagsHelper.getTagsForCRMTicket(actualTicketInfoFromBackend.getConversationId());
         Collections.sort(tags);
         String crmTicketTags = String.join(", ", tags);
         soft.assertTrue((actualMili-expectedMili)<=6000,
@@ -302,8 +307,8 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
     public void agentCreateCRMTicket(String agent,String note, String link, String number, String channel) {
         // TODO: 9/4/2020 remove wait after spinner would be added
         //waitFor(2000);
-        getAgentHomePage(agent).getAgentFeedbackWindow().fillForm(note, link, number);
-        List <String> tags = getAgentHomePage(agent).getAgentFeedbackWindow().getChosenTags();
+        getAgentFeedbackWindow(agent).fillForm(note, link, number);
+        List <String> tags = getAgentFeedbackWindow(agent).getChosenTags();
         prepareDataForCrmTicketChatdesk(channel, note, link, number, tags);
     }
 
@@ -322,7 +327,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
 
     @Then("^Correct (.*) sentiment selected$")
     public void verifyCorrectSentimentSelected(String sentiment){
-        Assert.assertTrue(getAgentHomePage("main").getAgentFeedbackWindow().getSelectedSentiment()
+        Assert.assertTrue(getAgentFeedbackWindow("main").getSelectedSentiment()
                 .contains(sentiment), "Sentiment '" + sentiment + "' is not selected in Conclusion window");
     }
 
@@ -389,13 +394,15 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
     @Then("^(.*) select precreated tag$")
     public void agentAddSelectedTag(String agent) {
         getAgentHomePage(agent).getAgentFeedbackWindow().typeTags(BasePortalSteps.tagname);
+        getAgentFeedbackWindow(agent).typeTags(BasePortalSteps.tagname);
+        getAgentFeedbackWindow(agent).selectTagInSearch().closeDropdown();
     }
 
-    @Then("^(.*) does not see the disabled tag$")
-    public void disabledTagIsNotAvailable(String agent) {
-        getAgentHomePage(agent).getAgentFeedbackWindow().typeTags(BasePortalSteps.tagname);
-        Assert.assertTrue(getAgentHomePage(agent).getAgentFeedbackWindow().noOptionMessageIsShown(),
-                "Tag should not be shown");
+    @Then("^(.*) does not see the disabled tag (.*)$")
+    public void verifyTagIsDisabledFor(String agent, String tag) {
+        assertThat(tag)
+                .as(format("Verify disabled tag %s is not in the list", tag))
+                .isNotIn(getAgentFeedbackWindow(agent).getTagList());
     }
 
     @Then("^Agent delete all tags$")
@@ -405,7 +412,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
 
     @Then("^All tags for tenant is available in the dropdown$")
     public void allTagsForTenantIsAvailableInTheDropdown() {
-        List<String> tags= ApiHelper.getAllTags();
+        List<String> tags= APITagsHelper.getAllTagsTitle();
         List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
         Assert.assertEquals(tagsInCRM, tags, " CRM ticket 'Tags' does not match created on the backend \n");
     }
@@ -413,7 +420,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
     @Then("^Agent can search tag and select tag, selected tag added in tags field$")
     public void agentCanSearchTagAndSelectTag() {
         SoftAssert soft = new SoftAssert();
-        List<String> tags= ApiHelper.getAllTags();
+        List<String> tags= APITagsHelper.getAllTagsTitle();
         String randomTag= tags.get((int)(Math.random() * tags.size()));
         getAgentHomeForMainAgent().getAgentFeedbackWindow().typeTags(randomTag);
         List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
@@ -435,5 +442,9 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
 
 
         return dateTimeFromBackend.format(formatter1).toLowerCase();
+    }
+
+    private static AgentFeedbackWindow getAgentFeedbackWindow(String agent) {
+        return getAgentHomePage(agent).getAgentFeedbackWindow();
     }
 }

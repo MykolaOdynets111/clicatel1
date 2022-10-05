@@ -54,7 +54,7 @@ public class ChatForm extends AbstractUIElement {
     @FindBy(xpath = "//div[@data-name='Recent']/following-sibling::ul[@class='emoji-mart-category-list']//button")
     public List<WebElement> frequetlyUsedEmojis;
 
-    @FindBy(id ="Attachment")
+    @FindBy(css ="svg[name='attachment']")
     private WebElement attachmentButton;
 
     @FindBy(css ="svg[name='map-pin']")
@@ -65,6 +65,12 @@ public class ChatForm extends AbstractUIElement {
 
     @FindBy(xpath = "//button[text()='Start Chat']")
     private WebElement startChatButton;
+
+    @FindBy(xpath = "//div[contains(@class, 'cl-time-picker-modal__body')]//div[contains(@class, 'cl-select__indicators')]")
+    private WebElement datePickerDropdown;
+
+    @FindBy(xpath = "//div[contains(@id, 'react-select')]")
+    private List<WebElement> datePickerItems;
 
     private String emojiMartCss = "section.emoji-mart";
 
@@ -190,6 +196,14 @@ public class ChatForm extends AbstractUIElement {
 
     public void openExtensionsForm(){
         clickElem(this.getCurrentDriver(), c2pButton, 2, "c2p button");
+    }
+
+    public void setDevicePickerName(String name) {
+        clickElem(this.getCurrentDriver(), datePickerDropdown, 20, "Rating number dropdown");
+
+        waitForElementsToBeVisible(this.getCurrentDriver(), datePickerItems, 5);
+        datePickerItems.stream().filter(e -> e.getText().trim().equals(name)).findFirst()
+                .orElseThrow(() -> new AssertionError(name + " name was not found in dropdown.")).click();
     }
 
     public void openHSMForm(){

@@ -1,8 +1,11 @@
 package apihelper;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javafaker.Faker;
 import datamanager.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import datamanager.jacksonschemas.*;
+import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.jacksonschemas.chathistory.ChatHistory;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.departments.Department;
@@ -180,7 +183,7 @@ public class ApiHelper implements VerificationHelper {
                 .jsonPath().getList("", AutoResponderMessage.class);
     }
 
-    public static void updateAutoresponderMessage(AutoResponderMessage tafMessage, String autoResponderId) {
+    public static void updateAutoresponderMessage(AutoResponderMessage tafMessage) {
         String url = format(Endpoints.AUTORESPONDER_CONTROLLER, tafMessage.getId());
         Response resp = RestAssured.given().log().all()
                 .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
@@ -270,16 +273,24 @@ public class ApiHelper implements VerificationHelper {
 
     }
 
-    public static void updateFeatureStatus(String tenantOrgName, ChatPreferenceSettings chatPreferenceSettings) {
-        String url = Endpoints.CHAT_PREFERENCES;
-
+    public static void updateFeatureStatus(ChatPreferenceSettings chatPreferenceSettings) {
         Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON)
                 .body(chatPreferenceSettings)
-                .put(url);
+                .put(Endpoints.CHAT_PREFERENCES);
         Assert.assertEquals(resp.statusCode(), 200,
                 "Status code is not 200 and body value is \n: " + chatPreferenceSettings.toString() + "\n error message is: " + resp.getBody().asString());
+    }
+
+    public static void createExtensions(String extensionBody) {
+        Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
+                .accept(ContentType.ANY)
+                .contentType(ContentType.JSON)
+                .body(extensionBody)
+                .put(Endpoints.EXTENSIONS);
+        Assert.assertEquals(resp.statusCode(), 200,
+                "Status code is not 200 and body value is \n: " + extensionBody + "\n error message is: " + resp.getBody().asString());
     }
 
     public static boolean getFeatureStatus(String tenantOrgName, String FEATURE) {
@@ -843,18 +854,6 @@ public class ApiHelper implements VerificationHelper {
                 .get(format(Endpoints.CRM_TICKET, clientProfileId.get()))
                 .getBody().jsonPath().getList("", CRMTicket.class);
     }
-
-    public static List<String> getTagsForCRMTicket(String chatId) {
-        return RestAssured.given().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
-                .get(format(Endpoints.CHATS_INFO, chatId)).getBody().jsonPath().getList("tags.value");
-    }
-
-    public static List<String> getAllTags() {
-        return RestAssured.given()
-                .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
-                .get(Endpoints.TAGS_FOR_CRM_TICKET).getBody().jsonPath().getList("value");
-    }
-
 
     public static Response createCRMTicket(String clientID, Map<String, String> ticketInfo) {
         return RestAssured.given().log().all()

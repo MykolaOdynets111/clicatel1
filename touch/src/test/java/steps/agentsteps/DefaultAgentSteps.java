@@ -3,10 +3,13 @@ package steps.agentsteps;
 import agentpages.uielements.FilterMenu;
 import agentpages.uielements.Profile;
 import apihelper.ApiHelper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import apihelper.ApiHelperSupportHours;
 import datamanager.Tenants;
 import datamanager.UserPersonalInfo;
 import datamanager.jacksonschemas.ChatPreferenceSettings;
+import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
 import datamanager.jacksonschemas.supportHours.SupportHoursMapping;
@@ -19,6 +22,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import socialaccounts.FacebookUsers;
@@ -53,7 +59,19 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void setFeatureStatus(String feature, String status, String tenantOrgName){
         ChatPreferenceSettings chatPreferenceSettings = new ChatPreferenceSettings();
         chatPreferenceSettings.setFeatureStatus(feature, status);
-        ApiHelper.updateFeatureStatus(tenantOrgName, chatPreferenceSettings);
+        ApiHelper.updateFeatureStatus(chatPreferenceSettings);
+    }
+
+    @Given("(.*) creates (.*) tenant extension with label (.*) and name (.*)$")
+    public void createExtensionForTenant(String agent, String extensionType, String label, Optional name){
+        String extensionBody;
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            extensionBody = mapper.writeValueAsString(Arrays.asList(new ChatExtension(label, name, extensionType)));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        ApiHelper.createExtensions(extensionBody);
     }
 
     @Then("^On backand (.*) tenant feature status is set to (.*) for (.*)$")
@@ -205,6 +223,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void clickCloseFilterButton(String agent){
         getLeftMenu(agent).clickCloseButton();
     }
+
+    @Then("^(.*) opens filter menu$")
+    public void openFilterMenuAgentDesk(String agent){
+        getLeftMenu(agent).openFilterMenu();
+    }
+
     @When("^(.*) filter Live Chants with (.*) channel, (.*) sentiment and flagged is (.*)$")
     public void setLiveChatsFilter(String agent, String channel, String sentiment, boolean flagged){
         getLeftMenu(agent).applyTicketsFilters(channel.trim(), sentiment.trim(), flagged);
@@ -746,6 +770,14 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("Not verified label is displayed")
     public void notVerifiedLabelIsDisplayed() {
         Assert.assertTrue(getAgentHomeForMainAgent().getProfile().isNotVerifiedLabelDisplayed(), "NotVerified label is not displayed");
+    }
+
+    @Given("^(.*) is logged out from the Agent Desk$")
+    public void logOutAgentDesk(String agent) {
+        getAgentHomePage(agent).getPageHeader().logOut();
+
+        Assert.assertTrue(getAgentHomePage(agent).isLoginDialogShown(),
+                "Log out from agent desk not successful");
     }
 
 }

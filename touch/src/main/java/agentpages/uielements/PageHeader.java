@@ -19,7 +19,7 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = ".cl-profile-info__agent-name")
     private WebElement iconAgentName;
 
-    @FindBy(css = "[selenium-id=logout-button]")
+    @FindBy(css = "[data-testid=logout-button]")
     private WebElement logOutButton;
 
     @FindBy(css = "[data-testid=profile-settings-button]")

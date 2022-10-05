@@ -34,7 +34,7 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
         Tenants.setTenantUnderTestNames(tenantOrgName);
         AutoResponderMessage autoResponderMessageUpdates = ApiHelper.getAutoResponderMessage(autoResponderTitle);
         autoResponderMessageUpdates.setEnabled(status);
-        ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates, autoResponderTitle);
+        ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates);
         defaultMessage.set(autoResponderMessageUpdates.getText());
     }
 
@@ -44,7 +44,7 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
         AutoResponderMessage autoResponderMessageUpdates = ApiHelper.getAutoResponderMessage(autoResponderMessageId);;
         updatedMessage.set(generateNewMessageText(autoResponderMessageId));
         autoResponderMessageUpdates.setText(updatedMessage.get());
-        ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates, autoResponderMessageId);
+        ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates);
         AutoResponderMessage tafMessageBackend = ApiHelper.getAutoResponderMessage(autoResponderMessageId);;
         Assert.assertEquals(tafMessageBackend.getText(), autoResponderMessageUpdates.getText(),
                 "Message text is not updated for tenant");

@@ -4,6 +4,8 @@ import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.List;
+
 @FindBy(css = ".ReactModal__Content.ReactModal__Content--after-open.cl-modal")
 public class C2pSendForm extends AbstractUIElement {
 
@@ -15,7 +17,6 @@ public class C2pSendForm extends AbstractUIElement {
 
     @FindBy(css=".cl-button.cl-button--primary")
     private WebElement sendButton;
-
 
     public C2pSendForm setOrderNumberField(String order) {
         inputText(this.getCurrentDriver(), orderNub, 5, "order", order);

@@ -1,6 +1,7 @@
 package steps.portalsteps;
 
 import agentpages.uielements.ChatBody;
+import agentpages.uielements.DatePicker;
 import apihelper.ApiHelper;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.TenantChatPreferences;
@@ -187,6 +188,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then("^(.*) is the current agent of (.*) ticket$")
     public void verifyCurrentAgentOfTicket(String agentName, String userName) {
         Assert.assertEquals(getSupervisorDeskPage().getCurrentAgentOfTheChat(userName),agentName,
+                "The current agent of the ticket is not as expected");
+    }
+
+    @Then("^(.*) is the current agent of the chat$")
+    public void verifyCurrentAgentOfChat(String agentName) {
+        Assert.assertEquals(getSupervisorDeskPage().getChatHeader().getAgentName(),agentName,
                 "The current agent of the ticket is not as expected");
     }
 
@@ -465,9 +472,9 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 
-    @And("^Admin checks back button is (.*) in calendar for (.*) filter 3 months ago in supervisor$")
-    public void backButtonDisability(String visibility, String filterType) {
-        getSupervisorDeskPage().checkBackButtonVisibilityThreeMonthsBack(filterType);
+    @And("^(.*) checks back button is (.*) in calendar for (.*) filter (.*) days ago in supervisor$")
+    public void backButtonDisability(String agent, String visibility, String filterType, Long day) {
+        Assert.assertTrue(new DatePicker(agent).checkBackButtonVisibilityThreeMonthsBack(filterType, day));
     }
 
     @Then("^Verify closed chats dates are fitted by filter$")
@@ -509,6 +516,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @And("^Agent load all filtered closed chats$")
     public void agentLoadAllFilteredChats() {
         getSupervisorDeskPage().loadAllClosedChats();
+    }
+
+    @And("^Supervisor clicks on chats filter for (.*) Agent$")
+    public void clickOnChatsFilterFromAgent(String Agent){
+        getSupervisorDeskPage().getSupervisorLeftPanel().selectTicketType(Agent);
     }
 
     @Then("^Verify first closed chat date are fitted by filter$")
@@ -578,6 +590,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void agentCannotInitiateAPayment() {
         Assert.assertFalse(getSupervisorDeskPage().isC2pButtonPresent(),"Supervisor Can Initiate Payment");
     }
+
+    @Then("Supervisor does not see any Chat Transfer alert")
+    public void verifyChatTransferAlertNotPresent() {
+        Assert.assertFalse(getSupervisorDeskPage().verifyChatAlertIsPresent(5), "Chat alert is present");
+    }
+
     @And("Supervisor adds a note {string}, Jira link {string} and Ticket Number {string}")
     public void addNewNote(String note, String jiraLink, String ticketNumber){
         getSupervisorDeskPage().getSupervisorRightPanel().clickOnNotesTab()
