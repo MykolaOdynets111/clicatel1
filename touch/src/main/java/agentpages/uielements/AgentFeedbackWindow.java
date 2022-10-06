@@ -62,7 +62,8 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     private final String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
 
-    private final String inputTagField =  ".cl-select__input";
+    @FindBy(css = ".cl-select__input")
+    private WebElement inputTagField;
 
     private final String tagsOptionsCss = "div[id^='react-select']";
 
@@ -190,10 +191,8 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     public void typeTags(String tag) {
         waitForElementToBeClickable(this.getCurrentDriver(), openDropdownButton, 6);
         tagsInput.click();
-        findElemByCSS(this.getCurrentDriver(), inputTagField).sendKeys(tag);
-        pressEnterForWebElem(this.getCurrentDriver(),
-                findElemByCSS(this.getCurrentDriver(), inputTagField), 5,
-                "Tags Input field");
+        inputText(this.getCurrentDriver(), inputTagField, 5,"Tags Input field",tag);
+        pressEnterForWebElem(this.getCurrentDriver(), inputTagField, 5,"Tags Input field");
     }
 
     public List<String> getTagList() {

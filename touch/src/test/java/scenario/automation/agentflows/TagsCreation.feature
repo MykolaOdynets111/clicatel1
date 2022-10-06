@@ -12,7 +12,7 @@ Feature: Create tag
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2839")
   @Regression
-  Scenario: verify when supervisor creates a tag, the newly created tag is available for the agent to use
+  Scenario: CD:: Supervisor Desk:: Chat_Tags:: Verify when supervisor creates a tag, the newly created tag is available for the agent to use
     Given Create chat tag
     When Agent switches to opened Portal page
     And I select Touch in left menu and Agent Desk in submenu
