@@ -36,7 +36,6 @@ public class OrcaSQSHandler {
                     OrcaSQSHandler.orcaMessagesMap.put(orcaEvent.getSourceId(), currentMessages);
                     OrcaSQSHandler.orcaMessages.add(orcaEvent.getContent().getEvent().getText());
                 }
-            System.out.println( "\t" +"TextMessag: "+ txtMessage.getText() );
         } else if( message instanceof BytesMessage){
             BytesMessage byteMessage = ( BytesMessage ) message;
             // Assume the length fits in an int - SQS only supports sizes up to 256k so that
