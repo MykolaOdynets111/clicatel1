@@ -1,4 +1,4 @@
-@agent_support_hours
+@support_hours
 @no_widget
 @dot_control
 @start_server

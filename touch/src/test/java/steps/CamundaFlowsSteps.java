@@ -25,22 +25,26 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
 
     private Faker faker = new Faker();
 
+    public static ThreadLocal<String> updatedMessage = new ThreadLocal<>();
+
+    public static ThreadLocal<String> defaultMessage = new ThreadLocal<>();
+
     @Given("^Taf (.*) is set to (.*) for (.*) tenant$")
     public void updateTafMessageStatus(String autoResponderTitle, boolean status, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        AutoResponderMessage autoResponderMessageUpdates = ApiHelper.getAutoResponderMessage(autoResponderTitle);;
+        AutoResponderMessage autoResponderMessageUpdates = ApiHelper.getAutoResponderMessage(autoResponderTitle);
         autoResponderMessageUpdates.setEnabled(status);
-        ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates, autoResponderTitle);
-
+        ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates);
+        defaultMessage.set(autoResponderMessageUpdates.getText());
     }
 
     @Given("^Taf (.*) message text is updated for (.*) tenant$")
     public void updateTafMessageText(String autoResponderMessageId, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         AutoResponderMessage autoResponderMessageUpdates = ApiHelper.getAutoResponderMessage(autoResponderMessageId);;
-        String updatedMessage = generateNewMessageText(autoResponderMessageId);
-        autoResponderMessageUpdates.setText(updatedMessage);
-        ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates, autoResponderMessageId);
+        updatedMessage.set(generateNewMessageText(autoResponderMessageId));
+        autoResponderMessageUpdates.setText(updatedMessage.get());
+        ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates);
         AutoResponderMessage tafMessageBackend = ApiHelper.getAutoResponderMessage(autoResponderMessageId);;
         Assert.assertEquals(tafMessageBackend.getText(), autoResponderMessageUpdates.getText(),
                 "Message text is not updated for tenant");

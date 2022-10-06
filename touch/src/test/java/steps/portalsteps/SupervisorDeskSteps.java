@@ -1,6 +1,7 @@
 package steps.portalsteps;
 
 import agentpages.uielements.ChatBody;
+import agentpages.uielements.DatePicker;
 import apihelper.ApiHelper;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.TenantChatPreferences;
@@ -16,9 +17,6 @@ import org.testng.asserts.SoftAssert;
 import steps.agentsteps.AgentConversationSteps;
 import steps.dotcontrol.DotControlSteps;
 
-import java.sql.SQLOutput;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -46,6 +44,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void filterIsSelectedByDefault(String filterName) {
         Assert.assertEquals(getSupervisorDeskPage().getSupervisorLeftPanel().getFilterByDefaultName(), filterName,
                 "Filter name by default does not match expected");
+    }
+
+    @When("^(.*) filter is selected$")
+    public void filterIsSelected(String filterName) {
+        getSupervisorDeskPage().getSupervisorLeftPanel().clickFilterType(filterName);
     }
 
     @Then("^Select (.*) ticket checkbox$")
@@ -112,6 +115,16 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 channelName + " channel name should be shown.");
     }
 
+    @When("^Supervisor opens closed chat$")
+    public void openFirstClosedChat() {
+        getSupervisorDeskPage().getSupervisorClosedChatsTable().openFirstClosedChat();
+    }
+
+    @When("^Supervisor clicks on first ticket$")
+    public void openFirstTicket() {
+        getSupervisorDeskPage().getSupervisorTicketsTable().openFirstTicket();
+    }
+
     @Then("^Verify that only \"(.*)\" tickets chats are shown$")
     public void verifyTicketsChatsChannelsFilter(String channelName) {
         Assert.assertTrue(getSupervisorDeskPage().getSupervisorTicketsTable().verifyChanelOfTheTicketsIsPresent(channelName),
@@ -175,6 +188,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then("^(.*) is the current agent of (.*) ticket$")
     public void verifyCurrentAgentOfTicket(String agentName, String userName) {
         Assert.assertEquals(getSupervisorDeskPage().getCurrentAgentOfTheChat(userName),agentName,
+                "The current agent of the ticket is not as expected");
+    }
+
+    @Then("^(.*) is the current agent of the chat$")
+    public void verifyCurrentAgentOfChat(String agentName) {
+        Assert.assertEquals(getSupervisorDeskPage().getChatHeader().getAgentName(),agentName,
                 "The current agent of the ticket is not as expected");
     }
 
@@ -256,6 +275,20 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void verifyTicketTypes(List<String> ticketTypes) {
         //ToDo add numbers of tickets verification
         Assert.assertEquals(getSupervisorDeskPage().getTicketTypes(), ticketTypes, "Ticket types are different");
+    }
+
+    @Then("^Verify Chat has pending icon in the Chat (.*)$")
+    public void verifyChatHasPendingIcon(String value) {
+        switch (value){
+            case "List":
+                 Assert.assertTrue(getSupervisorDeskPage().isChatPendingIconShown(), "Yellow Pending Icon is not shown in chat list");
+                 break;
+            case "View":
+                Assert.assertTrue(getSupervisorDeskPage().isChatPendingOnShown(), "Yellow Pending On is not shown in chat view");
+                break;
+            default:
+                Assert.fail("Incorrect string value");
+        }
     }
 
     @When("^User select (.*) ticket type$")
@@ -439,9 +472,20 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 
-    @And("^Admin checks back button is (.*) in calendar for (.*) filter 3 months ago in supervisor$")
-    public void backButtonDisability(String visibility, String filterType) {
-        getSupervisorDeskPage().checkBackButtonVisibilityThreeMonthsBack(filterType);
+    @And("^Admin checks value of start date filter is empty for (\\d+) year (\\d+) month and (\\d+) days ago$")
+    public void agentStartDateFilterEmptyCheck(int year, int month, int day) {
+        LocalDate startDate = LocalDate.now().minusYears(year).minusMonths(month).minusDays(day);
+        LocalDate endDate = LocalDate.now();
+
+        getSupervisorDeskPage().getSupervisorDeskHeader()
+                .selectStartDate(startDate)
+                .selectEndDate(endDate);
+        Assert.assertTrue(getSupervisorDeskPage().getSupervisorDeskHeader().checkStartDateFilterIsEmpty().isEmpty(), "Start date filter is not empty");
+    }
+
+    @And("^(.*) checks back button is (.*) in calendar for (.*) filter (.*) days ago in supervisor$")
+    public void backButtonDisability(String agent, String visibility, String filterType, Long day) {
+        Assert.assertTrue(new DatePicker(agent).checkBackButtonVisibilityThreeMonthsBack(filterType, day));
     }
 
     @Then("^Verify closed chats dates are fitted by filter$")
@@ -483,6 +527,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @And("^Agent load all filtered closed chats$")
     public void agentLoadAllFilteredChats() {
         getSupervisorDeskPage().loadAllClosedChats();
+    }
+
+    @And("^Supervisor clicks on chats filter for (.*) Agent$")
+    public void clickOnChatsFilterFromAgent(String Agent){
+        getSupervisorDeskPage().getSupervisorLeftPanel().selectTicketType(Agent);
     }
 
     @Then("^Verify first closed chat date are fitted by filter$")
@@ -532,5 +581,56 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then("Verify that live chats available are shown")
     public void verifyThatLiveChatAvailableAreShown(){
         getSupervisorDeskPage().getSupervisorLeftPanel().verifyLiveChatInfo();
+    }
+    @And("Agent can see whatsapp profile name")
+    public void agentCanSeeWhatsappProfileName() {
+        getSupervisorDeskPage().isUpdatedProfileNameShown();
+    }
+
+    @And("Agent click on three dot vertical menu and click on assign button")
+    public void agentClickAssignButton() {
+        getSupervisorDeskPage().getChatHeader().clickOnAssignButton();
+    }
+    
+    @When("Assign chat modal is opened")
+    public void assignChatModalOpened() {
+        Assert.assertTrue(getSupervisorDeskPage().getAssignChatWindow().isAssignWindowShown());
+    }
+
+    @Then("Agent cannot initiate a payment")
+    public void agentCannotInitiateAPayment() {
+        Assert.assertFalse(getSupervisorDeskPage().isC2pButtonPresent(),"Supervisor Can Initiate Payment");
+    }
+
+    @Then("Supervisor does not see any Chat Transfer alert")
+    public void verifyChatTransferAlertNotPresent() {
+        Assert.assertFalse(getSupervisorDeskPage().verifyChatAlertIsPresent(5), "Chat alert is present");
+    }
+
+    @And("Supervisor adds a note {string}, Jira link {string} and Ticket Number {string}")
+    public void addNewNote(String note, String jiraLink, String ticketNumber){
+        getSupervisorDeskPage().getSupervisorRightPanel().clickOnNotesTab()
+                .clickOnNewNoteButton()
+                .addTextToNote(note)
+                .addJiraLinkToNote(jiraLink)
+                .addTicketNumberToNote(ticketNumber)
+                .clickOnCreateNoteButton();
+    }
+
+    @Then("Supervisor sees note {string}, Jira link {string} and Ticket Number {string}")
+    public void verifyNoteDetails(String note, String jiraLink, String ticketNumber) {
+        getSupervisorDeskPage().getSupervisorRightPanel().clickOnNotesTab();
+
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getSupervisorDeskPage().getSupervisorRightPanel().getNoteCardText(),note,"Text inside note does not match");
+        soft.assertEquals(getSupervisorDeskPage().getSupervisorRightPanel().getNoteCardJiraLink(),jiraLink,"JIRA Link does not match");
+        soft.assertEquals(getSupervisorDeskPage().getSupervisorRightPanel().getNoteCardTicketNumber(),ticketNumber,"Ticket Number does not match");
+        soft.assertAll();
+    }
+
+    @Then("Agent is able to close the assign chat window")
+    public void agentClickCloseAssignWindow() {
+        getSupervisorDeskPage().getAssignChatWindow().clickOnCloseAssignWindow();
+        Assert.assertFalse(getSupervisorDeskPage().getAssignChatWindow().isAssignWindowShown(),"Assign Chat Window is closed");
     }
 }

@@ -1,4 +1,5 @@
 @no_widget
+@Regression
 Feature: Dashboard: Settings: Business Profile : Logo
 
   Background:
@@ -7,17 +8,14 @@ Feature: Dashboard: Settings: Business Profile : Logo
     And Navigate to Business Profile page
     When Upload: photo for tenant
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-114758")
-  @Regression
-  Scenario: CD :: Dashboard :: Settings :: Business Profile :: To verify that Incorrect/random favicon image
-  should not appear when logo image is removed from Business Details
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1931")
+  Scenario: CD :: Dashboard :: Settings :: Business Profile :: To verify that Incorrect/random favicon image should not appear when logo image is removed from Business Details
 
     Then Verify Logo is uploaded
     When Delete 'Company Logo'
     Then Verify Logo is deleted
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-1163")
-  @Regression
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2643")
   Scenario: CD :: Dashboard :: Settings :: Business Profile :: Verify that the logo can be set up for tenant
 
     Then Verify Logo is uploaded

@@ -12,6 +12,7 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -124,15 +125,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = "[cl-chat-item cl-chat-item--selected]")
     private WebElement agentLiveCustomer;
 
-    @FindBy(xpath = "//button[@aria-label='Previous Month']")
-    private WebElement backButton;
-    @FindBy(css = "[class='cl-form-control cl-form-control--input']")
-    private WebElement startDateInput;
-
-    @FindBy(xpath = "//input[contains(@class, 'cl-form-control cl-form-control--input cl-end-date')]")
-    private WebElement endDateInput;
-    private String backButtonString = "//button[@aria-label='Previous Month']";
-
     @FindAll({
             @FindBy(css = ".chats-list>.cl-empty-state"),
             @FindBy(css = ".cl-empty-state>div")
@@ -143,7 +135,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
     private String targetProfile = ".//div[contains(@class, 'info')]/h2[text()='%s']";
 
     private String loadingSpinner = ".//*[text()='Connecting...']";
-
 
     private FilterMenu filterMenu;
 
@@ -253,8 +244,20 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     public void searchUserChat(String userId) {
         clickOnSearchButton();
-        inputUserNameIntoSearch(userId);
-        getTargetChat(userId).click();
+        int wait = 10;
+
+        for (int i = 0; i < wait; i++) {
+            try {
+                inputUserNameIntoSearch(userId);
+                getTargetChat(userId).click();
+                if (newConversationRequests.size() > 0) {
+                    break;
+                }
+            } catch (AssertionError | Exception e) {
+                System.out.println("No chats are there after search, chat has not reached yet, so retrying searching");
+                waitFor(1000);
+            }
+        }
     }
 
     public void clickCloseButton() {
@@ -273,6 +276,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     public void inputUserNameIntoSearch(String userId) {
         waitForElementToBeClickable(this.getCurrentDriver(), searchChatInput, 2);
+        searchChatInput.sendKeys(Keys.chord(Keys.CONTROL, "A", Keys.BACK_SPACE));
         searchChatInput.sendKeys(userId);
         searchChatInput.sendKeys(Keys.CONTROL, Keys.ENTER);
     }
@@ -387,32 +391,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
         String actualValueForDateFilter = filterMenu.isStartDateIsEmpty();
 
         return actualValueForDateFilter;
-    }
-
-    public boolean checkBackButtonVisibilityThreeMonthsBack(String filterType) {
-        openFilterMenu();
-
-        if (filterType.equalsIgnoreCase("start date")) {
-            clickElem(this.getCurrentDriver(), startDateInput, 5, "Start date element");
-        } else if (filterType.equalsIgnoreCase("end date")) {
-            clickElem(this.getCurrentDriver(), endDateInput, 5, "End date element");
-        }
-
-        //Clicking back button 3 times for back button invisibility check
-        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
-        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
-        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
-
-        try {
-            if (filterType.equalsIgnoreCase("start date")) {
-                waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), backButtonString, 5);
-            } else if (filterType.equalsIgnoreCase("end date")) {
-                waitForElementToBeVisibleByXpath(this.getCurrentDriver(), backButtonString, 5);
-            }
-            return true;
-        } catch (Exception e) {
-            throw new AssertionError("There is issue with Back button visibility for selected filter");
-        }
     }
 
     public void removeFilter() {

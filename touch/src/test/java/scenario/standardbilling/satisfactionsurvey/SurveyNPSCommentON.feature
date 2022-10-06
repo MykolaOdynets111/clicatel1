@@ -4,10 +4,10 @@
 @no_chatdesk
 Feature: Satisfaction Survey
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-19237")
-    @TestCaseId("https://jira.clickatell.com/browse/TPORT-105173")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2243")
+    @TestCaseId("https://jira.clickatell.com/browse/CCD-1348")
     @TestCaseId("https://jira.clickatell.com/browse/CCD-1764")
-  Scenario Outline: CD :: Supervisor Desk :: Chat :: Notes :: Verify that Admin/Supervisor should be able to turn ON/OFF a request for user to Leave a note
+  Scenario Outline: CD :: Dashboard :: Configure :: Settings :: Survey :: <channelType> :: Verify that Admin/Supervisor should be able to turn ON/OFF a request for user to Leave a note
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing
       | ratingEnabled        | true        |
@@ -33,6 +33,6 @@ Feature: Satisfaction Survey
     And Agent click save survey configuration button for <channelType> survey form
     Examples:
       | channelType |
-      | whatsapp    |
-      | abc         |
-      | sms         |
+      | Whatsapp    |
+      | ABC         |
+      | SMS         |

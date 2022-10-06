@@ -27,14 +27,14 @@ public class ChatHeader extends AbstractUIElement {
     private WebElement endChatButton;
 
     @FindAll({
-            @FindBy(css = "[data-testid=header-flag-chat]"),
-            @FindBy(css = ".cl-r-chat-unflagged")
+            @FindBy(css = "[data-testid=header-toggle-flag]"),
+            @FindBy(xpath = "//div[text()='Flag chat']")
     })
     private WebElement flagChatButton;
 
     @FindAll({
-            @FindBy(css = "[data-testid=header-unflag-chat]"),
-            @FindBy(css = ".cl-r-chat-flagged")
+            @FindBy(css = "[data-testid=header-toggle-flag]"),
+            @FindBy(css = "cl-chat-header-btn-label")
     })
     private WebElement unflagChatButton;
 
@@ -69,7 +69,7 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(css = ".cl-r-avatar")
     private WebElement userAvatar;
 
-    @FindBy(css = "button>svg[name=flag-fill]")
+    @FindBy(xpath = "//div[text()='Flag ON']")
     private WebElement flagOnIcon;
 
     @FindBy(css =".cl-transfer-history__agent-name")
@@ -80,6 +80,12 @@ public class ChatHeader extends AbstractUIElement {
             @FindBy(css = "button[data-testid='header-toggle-pending']")
     })
     private WebElement pendingButton;
+
+    @FindBy(css = "svg[name = '3-dot-menu-vert']")
+    private WebElement threeDotsVerticalMenu;
+
+    @FindBy(xpath = "//button[contains(text(), 'Assign' )]")
+    private WebElement assignButton;
 
     private final String transferChatButtonXpath =  ".//button[@selenium-id='header-transfer-chat']";
     private final String sendSMSXpath = ".//button[@selenium-id='header-send-sms']";
@@ -172,7 +178,7 @@ public class ChatHeader extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), pendingButton, 2,"Pending chat");
     }
 
-    public void clickUnflagChatButton(){
+    public void clickflagOnButton(){
         clickElem(this.getCurrentDriver(), unflagChatButton, 2, "Unflag chat");
     }
 
@@ -228,5 +234,10 @@ public class ChatHeader extends AbstractUIElement {
 
     public String getAgentName(){
         return getTextFromElem(getCurrentDriver(),agentName,2,"Agent Name");
+    }
+
+    public void clickOnAssignButton() {
+        clickElem(this.getCurrentDriver(), threeDotsVerticalMenu, 3, "Three Dots Vertical Menu");
+        clickElem(this.getCurrentDriver(), assignButton, 3, "Assign Chat Button");
     }
 }

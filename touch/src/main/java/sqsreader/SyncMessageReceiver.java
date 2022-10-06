@@ -38,15 +38,6 @@ public class SyncMessageReceiver {
 
     }
 
-    public static void main(String[] args) {
-        try {
-            new SyncMessageReceiver().startSyncMessageReceiver();
-        } catch (JMSException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     public void startSyncMessageReceiver() throws JMSException {
         System.out.println("Start SQS consuming process");
 

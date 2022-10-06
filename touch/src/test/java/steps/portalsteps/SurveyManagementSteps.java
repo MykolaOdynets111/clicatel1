@@ -1,7 +1,6 @@
 package steps.portalsteps;
 
 import apihelper.ApiHelper;
-import com.github.javafaker.Faker;
 import datamanager.SurveyManagement;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -15,13 +14,10 @@ import java.util.Map;
 public class SurveyManagementSteps extends AbstractPortalSteps {
     private static final ThreadLocal<String> questionUpdate = new ThreadLocal<>();
     private static final ThreadLocal<String> thankMessageUpdate = new ThreadLocal<>();
-
     private static final ThreadLocal<String> notesMessageUpdate = new ThreadLocal<>();
-
-    Faker faker = new Faker();
     public static ThreadLocal<SurveyManagement> surveyConfiguration = new ThreadLocal<>();
 
-    @Then("^Update survey management chanel (.*) settings by ip for (.*)")
+    @Then("^Update survey management chanel (.*) settings by ip for (.*)$")
     public void updateSurveyManagementSettings(String chanel, String tenantOrgName, Map<String, String> map) {
         String channelID = ORCASteps.getChannelId();
         SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
@@ -29,7 +25,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
             configuration.updateSomeValueByMethodName(key, map.get(key));
         }
         surveyConfiguration.set(configuration);
-        ApiHelper.updateSurveyManagement(tenantOrgName, configuration, channelID, chanel);
+        ApiHelper.updateSurveyManagement(tenantOrgName, configuration, channelID, chanel.toLowerCase());
 
     }
 
@@ -135,6 +131,35 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         }
     }
 
+    @When("^Agent checks question title character limit as (.*) in survey form$")
+    public void checkSurveyQuesCharacterLimitCheck(String expectedText) {
+        String id = ORCASteps.getChannelId();
+        Assert.assertTrue(getSurveyManagementPage().getSurveyForm(id).checkInputQuestionCharacterCount().contains(expectedText),
+                "Title character limit is not correct");
+    }
+
+    @When("^Agent is able to see the number of characters typed more than (.*) in survey form$")
+    public void checkSurveyQuesNumberOfCharacters(int expectedValue) {
+        String id = ORCASteps.getChannelId();
+        Assert.assertTrue(getSurveyManagementPage().getSurveyForm(id).checkUpperQuestionCharactersLimit(expectedValue));
+    }
+
+    @Then("^Supervisor is able to see the number of characters typed for text in survey form$")
+    public void checkSurveyQuesFieldContainsCharacters() {
+        String id = ORCASteps.getChannelId();
+        Assert.assertTrue(getSurveyManagementPage().getSurveyForm(id).checkCharacterCountCompWithEnteredText());
+    }
+
+    @Then("^Supervisor is able to see character limit error with text (.*)$")
+    public void checkErrorMessage(String expectedText) {
+        String id = ORCASteps.getChannelId();
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(getSurveyManagementPage().getSurveyForm(id).isErrorMessageShown(), "Error message is not there");
+        softAssert.assertTrue(getSurveyManagementPage().getSurveyForm(id).isErrorMessageHavingText(expectedText), "Error message is not having expected text");
+
+        softAssert.assertAll();
+    }
+
     @When("^Agent checks rating dropdown visibility for (.*) survey form$")
     public void checkDropdownDisability(String surveyForm) {
         String id = ORCASteps.getChannelId();
@@ -181,6 +206,13 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         String channelID = ORCASteps.getChannelId();
         questionUpdate.set(question + " " + faker.rockBand().name());
         getSurveyManagementPage().getSurveyForm(channelID).changeQuestion(questionUpdate.get());
+    }
+
+    @When("^Customize your survey \"(.*)\" question with emoji$")
+    public void setSurveyQuestionWithEmoji(String question) {
+        String channelID = ORCASteps.getChannelId();
+        questionUpdate.set(question);
+        getSurveyManagementPage().getSurveyForm(channelID).changeQuestionEmoji(questionUpdate.get());
     }
 
     @When("^Customize your survey thank message to (.*)$")
@@ -234,7 +266,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
 
     @Then("^Preview question is updated successfully for (.*) and (.*) chanel")
     public void verifyQuestionPreviewAPI(String tenantOrgName, String chanel) {
-        String channelID = ApiHelper.getChannelID(tenantOrgName, chanel);
+        String channelID = ApiHelper.getChannelID(tenantOrgName, chanel.toLowerCase());
         SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
         Assert.assertEquals(configuration.getSurveyQuestionTitle(), questionUpdate.get(), "Preview question is not the same as was set");
     }

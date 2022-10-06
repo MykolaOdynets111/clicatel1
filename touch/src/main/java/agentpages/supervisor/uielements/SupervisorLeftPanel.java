@@ -30,6 +30,12 @@ public class SupervisorLeftPanel extends AbstractUIElement {
     @FindBy(xpath="//div[@class='chats-list live-chats-list']")
     private  WebElement livechatsinfo;
 
+    @FindBy(xpath = "//span[@data-testid='chat-item-icons-holder']")
+    private WebElement leftChatPendingIcon;
+
+    @FindBy(xpath = "//button[@data-testid='header-toggle-pending']")
+    private WebElement leftChatPendingOn;
+
     public String getFilterByDefaultName(){
         return getTextFromElem(this.getCurrentDriver(), defaultFilter,5,"Default filter").trim();
     }
@@ -46,6 +52,13 @@ public class SupervisorLeftPanel extends AbstractUIElement {
     private WebElement getLiveFilterType(String agentName) {
        return liveChatsFilters.stream().filter(a -> a.getText().trim().contains(agentName)).findFirst()
                 .orElseThrow(() -> new AssertionError("Can't find Live Chats filter for " + agentName ));
+    }
+
+    public void clickFilterType(String filterName) {
+        WebElement filter = liveChatsFilters.stream().filter(a -> a.getText().trim().contains(filterName)).findFirst()
+                .orElseThrow(() -> new AssertionError("Can't find Live Chats filter for " + filterName ));
+
+        filter.click();
     }
 
     public int getLiveChatsNumberForAgent(String agentName){

@@ -16,7 +16,7 @@ public class SupervisorDeskHeader extends AbstractUIElement {
     @FindBy(css = "[type='submit']")
     private WebElement applyFiltersButton;
 
-    @FindBy(css = ".cl-r-checkbox__label")
+    @FindBy(xpath = "//*[text()='Flagged Only']")
     private WebElement flaggedOnlyCheckbox;
 
     @FindBy(xpath = "//input[@name='waPhone']")
@@ -81,6 +81,11 @@ public class SupervisorDeskHeader extends AbstractUIElement {
     public SupervisorDeskHeader selectEndDate(LocalDate endDate) {
         fillDateInput(this.getCurrentDriver(), endDateInput, endDate, 1, "End date");
         return this;
+    }
+
+    public String checkStartDateFilterIsEmpty() {
+        String value = getAttributeFromElem(this.getCurrentDriver(), startDateInput, 2, "Start Date Element", "value");
+        return value;
     }
 
     public String getChannelFilterValue(){

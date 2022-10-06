@@ -1,6 +1,6 @@
 @skip_for_demo1
 @agent_mode
-@agent_support_hours
+@support_hours
 Feature: Chat handling in out of support hours for Agent mode tenant
 
   Background:

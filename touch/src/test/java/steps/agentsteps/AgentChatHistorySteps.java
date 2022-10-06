@@ -65,8 +65,8 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
 
     @Then("^(.*) sees correct location URL in History Details window$")
     public void compareLocationInHistoryDetailsWindows(String agent){
-        String locationInHistoryDetailes = getAgentHomePage(agent).getHistoryDetailsWindow().getLocationURL();
-        Assert.assertEquals(locationInHistoryDetailes, AgentConversationSteps.locationURL.get(), "Location URLs aro different");
+        String locationInHistoryDetails = getAgentHomePage(agent).getHistoryDetailsWindow().getLocationURL();
+        Assert.assertEquals(locationInHistoryDetails, AgentConversationSteps.locationURL.get(), "Location URLs aro different");
     }
 
     @Then("^(.*) sees the particular message (.*) in History Details window$")
@@ -197,7 +197,7 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
 
     @Then("^(.*) sees correct Location Url in closed chat body$")
     public void verifyLocationURLInClosedChat(String agent){
-        waitFor(2000);//wait till URL will be fully loaded
+        waitFor(3000);//wait till URL will be fully loaded
         String url = getAgentHomePage(agent).getChatBody().getLocationURLFromAgent();
         Assert.assertEquals(url, AgentConversationSteps.locationURL.get(), "Location URLs are different");
     }

@@ -18,6 +18,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
+import javaserver.OrcaServer;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -830,7 +831,6 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
             surveyForm.selectRatingNumber(rate).setComment(comment).clickSubmitReviewButton();
         }
     }
-
     @When("^Reject survey form submit$")
     public void rejectSurveyForm() {
         surveyForm.clickNoThanksButton();

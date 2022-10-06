@@ -4,14 +4,19 @@ import agentpages.supervisor.uielements.*;
 import agentpages.uielements.ChatBody;
 import agentpages.uielements.ChatHeader;
 import agentpages.uielements.Profile;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
-import portaluielem.*;
+import portaluielem.AssignChatWindow;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -57,21 +62,31 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(css = ".cl-agent-view-launch-btn")
     private WebElement launchAgentButton;
 
-    @FindBy(xpath = "//button[@aria-label='Previous Month']")
-    private WebElement backButton;
+    @FindBy(xpath = "//*[local-name()='svg' and @name='clock']/*[local-name()='g']")
+    private WebElement leftChatPendingIcon;
 
-    @FindBy(css = "[class='cl-form-control cl-form-control--input']")
-    private WebElement startDateInput;
+    @FindBy(xpath= "//div[contains(text(),'Pending On')]")
+    private WebElement leftChatPendingOn;
 
-    @FindBy(xpath = "//input[contains(@class, 'cl-form-control cl-form-control--input cl-end-date')]")
-    private WebElement endDateInput;
+    @FindBy(css="svg[name='puzzle']")
+    private WebElement c2pButton;
+
     private String backButtonString = "//button[@aria-label='Previous Month']";
 
     private String chatName = "//h2[@class='cl-chat-item-user-name' and text() ='%s']";
 
+    @FindBy(css = ".cl-details-value")
+    private WebElement profileName;
+
     //private String filterByDefaultXpath = "//span[text()='Conversation status:']//following-sibling::div//div[@class='cl-r-select__single-value css-1uccc91-singleValue']";
 
     private String iframeId = "ticketing-iframe";
+
+    @FindAll({
+            @FindBy(css = ".cl-modal-default-header-title']"),
+            @FindBy(css = "Chat transferred to another agent")
+    })
+    private WebElement chatTransferAlert;
 
     private AssignChatWindow assignChatWindow;
     private ChatBody chatBody;
@@ -79,13 +94,13 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private SupervisorClosedChatsTable supervisorClosedChatsTable;
     private SupervisorOpenedClosedChatsList supervisorOpenedClosedChatsList;
     private SupervisorLeftPanel supervisorLeftPanel;
+    private SupervisorRightPanel supervisorRightPanel;
     private ChatHeader chatHeader;
     private Profile profile;
     private SupervisorTicketClosedChatView supervisorTicketChatView;
     private MessageCustomerWindow messageCustomerWindow;
     private SupervisorDeskHeader supervisorDeskHeader;
     private SupervisorAvailableAsAgentDialog supervisorAvailableAsAgentDialog;
-
 
     // == Constructors == //
 
@@ -97,30 +112,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     }
     public SupervisorDeskPage(WebDriver driver) {
         super(driver);
-    }
-
-    public boolean checkBackButtonVisibilityThreeMonthsBack(String filterType) {
-        if (filterType.equalsIgnoreCase("start date")) {
-            clickElem(this.getCurrentDriver(), startDateInput, 5, "Start date element");
-        } else if (filterType.equalsIgnoreCase("end date")) {
-            clickElem(this.getCurrentDriver(), endDateInput, 5, "End date element");
-        }
-
-        //Clicking back button 3 times for back button invisibility check
-        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
-        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
-        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
-
-        try {
-            if (filterType.equalsIgnoreCase("start date")) {
-                waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), backButtonString, 5);
-            } else if (filterType.equalsIgnoreCase("end date")) {
-                waitForElementToBeVisibleByXpath(this.getCurrentDriver(), backButtonString, 5);
-            }
-            return true;
-        } catch (Exception e) {
-            throw new AssertionError("There is issue with Back button visibility for selected filter");
-        }
     }
 
     public AssignChatWindow getAssignChatWindow(){
@@ -136,6 +127,11 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     public SupervisorLeftPanel getSupervisorLeftPanel(){
         supervisorLeftPanel.setCurrentDriver(this.getCurrentDriver());
         return supervisorLeftPanel;
+    }
+
+    public SupervisorRightPanel getSupervisorRightPanel(){
+        supervisorRightPanel.setCurrentDriver(this.getCurrentDriver());
+        return supervisorRightPanel;
     }
 
     public ChatHeader getChatHeader() {
@@ -278,5 +274,25 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     public void loadAllClosedChats() {
         getSupervisorClosedChatsTable().loadAllFoundChats();
+    }
+
+    public boolean verifyChatAlertIsPresent(int wait) {
+        return isElementShown(this.getCurrentDriver(), chatTransferAlert, wait);
+    }
+
+    public boolean isChatPendingIconShown() {
+        return isElementShown(this.getCurrentDriver(), leftChatPendingIcon, 3);
+    }
+
+    public boolean isChatPendingOnShown() {
+        return isElementShown(this.getCurrentDriver(), leftChatPendingOn, 3);
+    }
+
+    public boolean isUpdatedProfileNameShown() {
+       return isElementShown(this.getCurrentDriver(), profileName, 3);
+    }
+
+    public boolean isC2pButtonPresent() {
+        return isElementShown(this.getCurrentDriver(), c2pButton, 5);
     }
 }

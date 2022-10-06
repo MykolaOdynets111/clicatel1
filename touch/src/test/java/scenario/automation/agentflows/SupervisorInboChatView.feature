@@ -1,5 +1,6 @@
 @no_widget
 @dot_control
+@skip
 Feature: Supervisor desk
 
   Background:

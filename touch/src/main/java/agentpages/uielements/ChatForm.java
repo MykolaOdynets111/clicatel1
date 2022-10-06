@@ -48,13 +48,13 @@ public class ChatForm extends AbstractUIElement {
     @FindBy(css = "div.overnight-chat-controls p")
     public WebElement overnightTicketLable;
 
-    @FindBy(css = "[id='Sentiment / Happy']")
+    @FindBy(css = "[name='sentiment-happy']")
     public WebElement emoticonButton;
 
     @FindBy(xpath = "//div[@data-name='Recent']/following-sibling::ul[@class='emoji-mart-category-list']//button")
     public List<WebElement> frequetlyUsedEmojis;
 
-    @FindBy(id ="Attachment")
+    @FindBy(css ="svg[name='attachment']")
     private WebElement attachmentButton;
 
     @FindBy(css ="svg[name='map-pin']")
@@ -65,6 +65,12 @@ public class ChatForm extends AbstractUIElement {
 
     @FindBy(xpath = "//button[text()='Start Chat']")
     private WebElement startChatButton;
+
+    @FindBy(xpath = "//div[contains(@class, 'cl-time-picker-modal__body')]//div[contains(@class, 'cl-select__indicators')]")
+    private WebElement datePickerDropdown;
+
+    @FindBy(xpath = "//div[contains(@id, 'react-select')]")
+    private List<WebElement> datePickerItems;
 
     private String emojiMartCss = "section.emoji-mart";
 
@@ -168,7 +174,7 @@ public class ChatForm extends AbstractUIElement {
     }
 
     public void clickEmoticonButton(){
-        clickElem(this.getCurrentDriver(), emoticonButton, 2,"Emoticon button in chatdesk");
+        clickElem(this.getCurrentDriver(), emoticonButton, 2, "Emoticon button");
         waitForElementToBeVisibleByCss(this.getCurrentDriver(), emojiMartCss,  5);
     }
 
@@ -192,8 +198,19 @@ public class ChatForm extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), c2pButton, 2, "c2p button");
     }
 
+    public void setDevicePickerName(String name) {
+        clickElem(this.getCurrentDriver(), datePickerDropdown, 20, "Rating number dropdown");
+
+        waitForElementsToBeVisible(this.getCurrentDriver(), datePickerItems, 5);
+        datePickerItems.stream().filter(e -> e.getText().trim().equals(name)).findFirst()
+                .orElseThrow(() -> new AssertionError(name + " name was not found in dropdown.")).click();
+    }
+
     public void openHSMForm(){
         clickElem(this.getCurrentDriver(), startChatButton, 2, "Start Chat button");
     }
 
+    public boolean c2pExtensionIconIsVisible(){
+        return isElementShown(this.getCurrentDriver(),c2pButton,3);
+    }
 }

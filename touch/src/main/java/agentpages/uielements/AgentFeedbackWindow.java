@@ -45,16 +45,16 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css = "[data-testid=chat-sentiment-icons]")
     private WebElement sentimentsAll;
 
-    @FindBy(css = ".cl-r-select__option.cl-r-multi-option")
+    @FindBy(css = "[class='css-1rhbuit-multiValue cl-select__multi-value']")
     private WebElement availableTagsContainer;
 
-    @FindBy(css = ".cl-r-select__control")
+    @FindBy(css = ".cl-select__control")
     private WebElement tagsInput;
 
     @FindBy(css = "div[id^='react-select']")
     private List<WebElement> availableTags;
 
-    @FindBy(css = ".cl-r-select__indicators svg[name^='arrow']")
+    @FindBy(xpath = "//label[text() = 'Tags']/..//div/*[name() = 'svg']")
     private WebElement openDropdownButton;
 
     @FindBy(xpath = ".//div[text() = 'No options']")
@@ -62,13 +62,12 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     private final String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
 
-    private final String inputTagField =  ".cl-r-select__input input";
+    @FindBy(css = ".cl-select__input")
+    private WebElement inputTagField;
 
     private final String tagsOptionsCss = "div[id^='react-select']";
 
-    private final String selectedButtonTagsCss = ".cl-r-select__multi-value";
-
-    private final String cleareAll = ".Select-clear";
+    private final String selectedButtonTagsCss = ".cl-select__multi-value";
 
     @FindBy(css = "[data-testid='crm-note']")
     private WebElement crmNoteTextField;
@@ -78,9 +77,6 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     @FindBy(css = "[data-testid='crm-ticket-number']")
     private WebElement crmTicketNumber;
-
-    @FindBy(css =".cl-loading-overlay")
-    private WebElement loadingState;
 
     public boolean isAgentFeedbackWindowShown(){
         return isElementShown(this.getCurrentDriver(), this.getWrappedElement(),2);
@@ -140,17 +136,13 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), sentimentUnsatisfied, 5,"Sentiment Unsatisfied" );
     }
 
-    public void setSentimentNeutral() {
-        clickElem(this.getCurrentDriver(), sentimentNeutral, 5,"Sentiment Neutral" );
-    }
-
     public void setSentimentHappy() {
         clickElem(this.getCurrentDriver(), sentimentHappy, 5,"Sentiment Happy" );
     }
 
 
     public void selectTags(int iter) {
-        for (int i = 0; i<iter; i++){
+        for (int i = 1; i<=iter; i++){
             selectTag(i);
         }
     }
@@ -164,7 +156,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         if(availableTags.size()==1 && availableTags.get(0).getText().equalsIgnoreCase("No results found")){
             Assert.fail("Have no Tags to be selected");
         }
-        availableTags.get(ordinalNumber).click();
+        moveToElemAndClick(this.getCurrentDriver(), availableTags.get(ordinalNumber));
         isElementShownByCSS(this.getCurrentDriver(), selectedButtonTagsCss, 2);
     }
 
@@ -199,7 +191,14 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     public void typeTags(String tag) {
         waitForElementToBeClickable(this.getCurrentDriver(), openDropdownButton, 6);
         tagsInput.click();
-        findElemByCSS(this.getCurrentDriver(), inputTagField).sendKeys(tag);
+        inputText(this.getCurrentDriver(), inputTagField, 5,"Tags Input field",tag);
+        pressEnterForWebElem(this.getCurrentDriver(), inputTagField, 5,"Tags Input field");
+    }
+
+    public List<String> getTagList() {
+        waitForElementToBeClickable(this.getCurrentDriver(), openDropdownButton, 6);
+        tagsInput.click();
+        return availableTags.stream().map(WebElement::getText).collect(Collectors.toList());
     }
 
     public AgentFeedbackWindow selectTagInSearch() {

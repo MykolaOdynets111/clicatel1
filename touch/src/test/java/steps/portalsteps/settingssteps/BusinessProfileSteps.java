@@ -1,20 +1,25 @@
 package steps.portalsteps.settingssteps;
 
 import agentpages.AgentHomePage;
+import apihelper.ApiHelperSupportHours;
 import datamanager.enums.Days;
-import datamanager.jacksonschemas.AgentMapping;
+import datamanager.jacksonschemas.supportHours.DepartmentSupportHoursMapping;
+import datamanager.jacksonschemas.supportHours.GeneralSupportHoursItem;
+import datamanager.jacksonschemas.supportHours.SupportHoursMapping;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.joda.time.LocalDate;
+import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.NoSuchSessionException;
 import portaluielem.BusinessProfileWindow;
 import steps.portalsteps.AbstractPortalSteps;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static apihelper.ApiHelper.getAgentSupportDaysAndHoursForMainAgent;
-import static apihelper.ApiHelper.setAgentSupportDaysAndHours;
+import static apihelper.ApiHelperSupportHours.getSupportDaysAndHoursForMainAgent;
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -64,41 +69,54 @@ public class BusinessProfileSteps extends AbstractPortalSteps {
         businessProfileWindow().selectAgentSupportHoursOption(option);
     }
 
-    @Then("^Verify 'Support hours' is default for (.*)$")
+    @Then("^Verify agent 'Support hours' are default for (.*)$")
     public void verifySupportHoursAreDefault(String tenantOrgName) {
-        verifyThatSupportHoursAreDefaultFor(tenantOrgName);
+        verifyThatAgentSupportHoursAreDefaultFor(tenantOrgName);
     }
 
-    @Then("^Uncheck current day and verify that 'Today' is unselected for (.*)$")
-    public void uncheckTodayAndVerifyIfItsUnselected(String tenantOrgName) {
-        String uncheckedDay = LocalDate.now().dayOfWeek().getAsText();
-        List<String> workingDays = Days.getAllDays().stream()
-                .filter(value -> !value.equalsIgnoreCase(uncheckedDay))
-                .collect(Collectors.toList());
+    @Then("^Select only current day and verify if other are unselected for (.*)$")
+    public void uncheckAllDaysExceptToday(String tenantOrgName) {
+        String uncheckedDay = LocalDate.now().getDayOfWeek().name();
 
-        setAgentSupportDaysAndHours(tenantOrgName, workingDays);
+        ApiHelperSupportHours.setSupportDaysAndHours(new GeneralSupportHoursItem(singletonList(uncheckedDay)));
 
-        AgentMapping getAgentSupportDaysAndHours = getAgentSupportDaysAndHoursForMainAgent(tenantOrgName)
+        SupportHoursMapping getAgentSupportDaysAndHours = getSupportDaysAndHoursForMainAgent(tenantOrgName)
                 .getAgentMapping().stream().findFirst().orElseThrow(NoSuchSessionException::new);
 
         assertThat(getAgentSupportDaysAndHours.getStartWorkTime())
                 .as("'Start Work' hour should be default").isEqualTo(DEFAULT_START_WORK_TIME);
         assertThat(getAgentSupportDaysAndHours.getEndWorkTime())
                 .as("'End Work' hour should be default").isEqualTo(DEFAULT_END_WORK_TIME);
+        assertThat(getAgentSupportDaysAndHours.getDays().size())
+                .as("Only one working day should be selected :" + uncheckedDay)
+                .isEqualTo(1);
         assertThat(uncheckedDay)
-                .as("Current day shouldn't be selected")
-                .isNotIn(getAgentSupportDaysAndHours.getDays());
+                .as("All days should be unchecked except for " + uncheckedDay)
+                .isIn(getAgentSupportDaysAndHours.getDays());
     }
 
-    @Then("^Set default 'Support Hours' value for (.*)$")
-    public void setDefaultSupportHoursValueFor(String tenantOrgName) {
-        setAgentSupportDaysAndHours(tenantOrgName, Days.getAllDays());
+    @Given("^Set for (.*) department 'Support Hours and days' (.*)$")
+    public void setDepartmentSupportHoursWithShift(String department, String shiftStrategy) {
+        ApiHelperSupportHours.setSupportDaysAndHours(new GeneralSupportHoursItem());
+        String checkedDay = LocalDate.now().minusDays(1).getDayOfWeek().name();
 
-        verifyThatSupportHoursAreDefaultFor(tenantOrgName);
+        switch (shiftStrategy) {
+            case "with day shift":
+                List<DepartmentSupportHoursMapping> departments = DepartmentSupportHoursMapping
+                        .setDaysForDepartment(department, singletonList(checkedDay));
+                GeneralSupportHoursItem supportHoursModel =
+                        new GeneralSupportHoursItem(singletonList(new SupportHoursMapping()), departments);
+                ApiHelperSupportHours.setSupportDaysAndHours(supportHoursModel);
+                break;
+            case "for all week":
+                ApiHelperSupportHours.setSupportDaysAndHours(new GeneralSupportHoursItem());
+                getAgentHomePage("main").waitFor(1500);
+                break;
+        }
     }
 
-    private static void verifyThatSupportHoursAreDefaultFor(String tenantOrgName) {
-        AgentMapping getAgentSupportDaysAndHours = getAgentSupportDaysAndHoursForMainAgent(tenantOrgName)
+    private static void verifyThatAgentSupportHoursAreDefaultFor(String tenantOrgName) {
+        SupportHoursMapping getAgentSupportDaysAndHours = getSupportDaysAndHoursForMainAgent(tenantOrgName)
                 .getAgentMapping().stream().findFirst().orElseThrow(NoSuchSessionException::new);
 
         assertThat(getAgentSupportDaysAndHours.getStartWorkTime())
@@ -106,7 +124,15 @@ public class BusinessProfileSteps extends AbstractPortalSteps {
         assertThat(getAgentSupportDaysAndHours.getEndWorkTime())
                 .as("'End Work' hour should be default").isEqualTo(DEFAULT_END_WORK_TIME);
         assertThat(getAgentSupportDaysAndHours.getDays())
-                .as("All days should be selected").isEqualTo(Days.getAllDays());
+                .as("All days should be selected")
+                .isEqualTo(Days.getDaysValue());
+    }
+
+    @NotNull
+    private static List<String> getAllDaysExcept(String uncheckedDay) {
+        return Days.getDaysValue().stream()
+                .filter(value -> !value.equalsIgnoreCase(uncheckedDay))
+                .collect(Collectors.toList());
     }
 
     private static BusinessProfileWindow businessProfileWindow() {

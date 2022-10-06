@@ -19,13 +19,15 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = ".cl-profile-info__agent-name")
     private WebElement iconAgentName;
 
-    @FindBy(css = "[selenium-id=logout-button]")
+    @FindBy(css = "[data-testid=logout-button]")
     private WebElement logOutButton;
 
     @FindBy(css = "[data-testid=profile-settings-button]")
     private WebElement profileSettingsButton;
 
-    @FindBy(css = "[selenium-id=agent-fullname]")
+    @FindAll({
+        @FindBy(css = "[selenium-id=agent-fullname]"),
+        @FindBy(css = "[data-testid=agent-fullname]")})
     private WebElement agentName;
 
     @FindBy(css = "[selenium-id=agent-role]")
@@ -34,10 +36,10 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = "[selenium-id=agent-email]")
     private WebElement agentEmail;
 
-    @FindBy(css = "[selenium-id=radio-chat]")
+    @FindBy(xpath = "//input[@value = 'AVAILABLE']/ancestor::label")
     private WebElement statusActive;
 
-    @FindBy(css = "[selenium-id=radio-away]")
+    @FindBy(xpath = "//input[@value = 'UNAVAILABLE']/ancestor::label")
     private WebElement statusUnavailable;
 
     @FindBy(css = "[selenium-id=company-info-logo]")
@@ -46,10 +48,14 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = "[selenium-id=company-info-text]")
     private WebElement tenantName;
 
-    @FindBy(css = "[selenium-id=agents-list-wrapper]")
+    @FindAll({
+            @FindBy(css = "[selenium-id=agents-list-wrapper]"),
+            @FindBy(css = "[data-testid=agents-list-wrapper]")
+    })
     private WebElement headPhones;
-
-    @FindBy(css = "[selenium-id=agents-list]")
+    @FindAll({
+            @FindBy(css = "[selenium-id=agents-list]"),
+            @FindBy(css = "[data-testid=agents-list]")    })
     private List<WebElement> headPhonesList;
 
     @FindBy(css= "[name='message-forward']")
@@ -58,7 +64,6 @@ public class PageHeader extends AbstractUIElement {
     @FindAll({
             @FindBy(css = "[selenium-id=header-whats-app-button]"),
             @FindBy(css = "[data-testid=header-whats-app-button]")
-
     })
     private WebElement sendWhatsAppButton;
 

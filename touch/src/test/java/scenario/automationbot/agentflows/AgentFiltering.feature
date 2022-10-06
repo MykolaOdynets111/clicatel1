@@ -11,7 +11,7 @@ Feature: Filtering : Chat Desk
     And Agent types a customer name "bla bla" on the search field
     Then Agent receives an error message "Sorry, no results found. Please refine your search and try again"
 
-  @agent_support_hours
+  @support_hours
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-28061) @no_widget
   Scenario: Verify if agent can filter tickets using date range
     Given I login as agent of Automation Bot
@@ -28,7 +28,6 @@ Feature: Filtering : Chat Desk
     When Agent select "Closed" left menu option
     And  Agent filter by 0 year 3 month and 0 days ago start date and today's end date
     Then Agent checks value of date filter is empty for start date filter 0 year 3 month and 0 days ago
-    And Agent checks back button is not visible in calendar for start date filter 3 months ago
-    When Agent select "Closed" left menu option
-    And Agent clicks close filter button
-    Then Agent checks back button is visible in calendar for end date filter 3 months ago
+    When Agent opens filter menu
+    And Agent checks back button is not visible in calendar for start date filter 91 days ago
+    Then Agent checks back button is visible in calendar for end date filter 90 days ago

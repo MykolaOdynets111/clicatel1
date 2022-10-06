@@ -1,11 +1,11 @@
+@Regression
 Feature: Dashboard: Customer History
 
   @no_widget
-    @off_survey_management
     @off_rating_whatsapp
     @off_rating_abc
     @orca_api
-    @TestCaseId("https://jira.clickatell.com/browse/TPORT-50411")
+    @TestCaseId("https://jira.clickatell.com/browse/CCD-2289")
   Scenario Outline: Customer History:: NPS Score:: Verify if Net Promoter Score can display a negative rating
     Given I login as agent of General Bank Demo
     And Setup ORCA <channelType> integration for General Bank Demo tenant

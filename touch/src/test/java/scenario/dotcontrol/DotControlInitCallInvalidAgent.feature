@@ -2,7 +2,7 @@
 @dot_control
 Feature: Creating .Control integration and sending messages
 
-  @agent_support_hours
+  @support_hours
   Scenario: Sending init call to .Control out of support hours
     Given Create .Control integration for Automation Bot tenant
     Given Set agent support hours with day shift
