@@ -1,6 +1,5 @@
 package steps.portalsteps.settingssteps;
 
-import agentpages.AgentHomePage;
 import apihelper.ApiHelperSupportHours;
 import datamanager.enums.Days;
 import datamanager.jacksonschemas.supportHours.DepartmentSupportHoursMapping;
@@ -9,14 +8,12 @@ import datamanager.jacksonschemas.supportHours.SupportHoursMapping;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.NoSuchSessionException;
 import portaluielem.BusinessProfileWindow;
 import steps.portalsteps.AbstractPortalSteps;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static apihelper.ApiHelperSupportHours.getSupportDaysAndHoursForMainAgent;
 import static java.util.Collections.singletonList;
@@ -55,13 +52,6 @@ public class BusinessProfileSteps extends AbstractPortalSteps {
     @Then("^Verify Logo is deleted$")
     public void verifyLogoIsDeleted() {
         assertFalse(businessProfileWindow().isLogoIsVisible(), "Logo preview should be deleted");
-    }
-
-    @Then("^Tenant logo is shown on Chat desk$")
-    public void verifyTenantLogoIsShownOnChatDesk() {
-        AgentHomePage homePage = getAgentHomePage("main");
-
-        assertTrue(homePage.getPageHeader().isIconPresent(), "Tenant logo should be shown on chatdesk");
     }
 
     @When("^Select (.*) option in Agent Supported Hours section$")
@@ -126,13 +116,6 @@ public class BusinessProfileSteps extends AbstractPortalSteps {
         assertThat(getAgentSupportDaysAndHours.getDays())
                 .as("All days should be selected")
                 .isEqualTo(Days.getDaysValue());
-    }
-
-    @NotNull
-    private static List<String> getAllDaysExcept(String uncheckedDay) {
-        return Days.getDaysValue().stream()
-                .filter(value -> !value.equalsIgnoreCase(uncheckedDay))
-                .collect(Collectors.toList());
     }
 
     private static BusinessProfileWindow businessProfileWindow() {
