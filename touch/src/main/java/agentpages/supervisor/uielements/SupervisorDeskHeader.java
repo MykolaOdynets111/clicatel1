@@ -83,6 +83,11 @@ public class SupervisorDeskHeader extends AbstractUIElement {
         return this;
     }
 
+    public String checkStartDateFilterIsEmpty() {
+        String value = getAttributeFromElem(this.getCurrentDriver(), startDateInput, 2, "Start Date Element", "value");
+        return value;
+    }
+
     public String getChannelFilterValue(){
         return getTextFromElem(this.getCurrentDriver(), channelFilterValue, 1, "Channels Filter Value");
     }
