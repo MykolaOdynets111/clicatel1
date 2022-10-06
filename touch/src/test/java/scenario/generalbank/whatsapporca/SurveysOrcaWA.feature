@@ -33,9 +33,8 @@ Feature: WhatsApp ORCA :: Surveys
       | ABC         |
       | SMS         |
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1719")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1728")
-  Scenario Outline: CD:: Survey:: CSAT:: Verify if CSAT ratings in the survey configuration to be standardized to cater for only 1-5 ratings
+  Scenario Outline: CD:: Survey:: CSAT:: Verify if "Customize Rating type" section is removed from the survey tab
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Update survey management chanel <channelType> settings by ip for General Bank Demo
       | ratingEnabled | true        |

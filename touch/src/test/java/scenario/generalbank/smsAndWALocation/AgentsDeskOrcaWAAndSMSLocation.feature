@@ -5,8 +5,7 @@ Feature: Whatsapp And SMS ORCA :: ChatDesk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1898")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1174")
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2122")
-  Scenario Outline: CD :: <channelType> :: Location:: Verify If user is able to send location through <channelType>
+  Scenario Outline: CD :: Agent Desk :: Live Chat :: Location :: Verify the end-user can share the current location on <channelType>
     Given I login as agent of General Bank Demo
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     When Send connect to agent message by ORCA
