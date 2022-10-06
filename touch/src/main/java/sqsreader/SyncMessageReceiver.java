@@ -54,6 +54,10 @@ public class SyncMessageReceiver {
 
         SqsClient sqsClient = SQSConfiguration.getSqsClient();
 
+        System.out.println("List of queues:");
+        System.out.println(sqsClient.listQueues());
+        System.out.println(sqsClient.listQueues().toString());
+
         SQSConnectionFactory connectionFactory = new SQSConnectionFactory(
                 new ProviderConfiguration(),
                 sqsClient);
@@ -65,6 +69,7 @@ public class SyncMessageReceiver {
 //        Common.ensureQueueExists(connection, config.getQueueName());
 
         Session session =  connection.createSession(false, SQSSession.CLIENT_ACKNOWLEDGE);
+
 
         MessageConsumer consumer = session.createConsumer( session.createQueue( config.getQueueName() ) );
 

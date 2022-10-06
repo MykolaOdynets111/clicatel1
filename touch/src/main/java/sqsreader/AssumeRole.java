@@ -1,6 +1,5 @@
 package sqsreader;
 
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.services.sts.StsClient;
 import software.amazon.awssdk.services.sts.model.AssumeRoleRequest;
 import software.amazon.awssdk.services.sts.model.AssumeRoleResponse;
@@ -47,7 +46,6 @@ public class AssumeRole {
 
         StsClient stsClient = StsClient.builder()
                 .region(SQSConfiguration.DEFAULT_REGION)
-                .credentialsProvider(ProfileCredentialsProvider.create())
                 .build();
         try {
             AssumeRoleRequest roleRequest = AssumeRoleRequest.builder()
