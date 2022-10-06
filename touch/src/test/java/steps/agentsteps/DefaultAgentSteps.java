@@ -781,8 +781,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void logOutAgentDesk(String agent) {
         getAgentHomePage(agent).getPageHeader().logOut();
 
-        Assert.assertTrue(getAgentHomePage(agent).isLoginDialogShown(),
+        Assert.assertTrue(getAgentHomePage(agent).isDialogShown(),
                 "Log out from agent desk not successful");
     }
-
 }

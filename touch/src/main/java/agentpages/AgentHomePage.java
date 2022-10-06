@@ -2,6 +2,7 @@ package agentpages;
 
 import abstractclasses.AgentAbstractPage;
 import agentpages.uielements.*;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
@@ -82,7 +83,7 @@ public class AgentHomePage extends AgentAbstractPage {
     private WebElement moveToPendingButton;
 
     @FindBy(css = "[role=dialog]")
-    private WebElement loginDialog;
+    private WebElement dialogElement;
 
     private final String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
 
@@ -255,7 +256,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public String isConnectionErrorShown(){
-             return getTextFromElem(this.getCurrentDriver(), connectionErrorImage, 15, "Connection error");
+        return getTextFromElem(this.getCurrentDriver(), connectionErrorImage, 15, "Connection error");
     }
 
     public void endChat() {
@@ -267,6 +268,13 @@ public class AgentHomePage extends AgentAbstractPage {
             waitForElementToBeInVisibleByCss(this.getCurrentDriver(), chatMessageContainer, 10);
         } catch (TimeoutException e) {
             Assert.fail("Chat container does not disappear after 10 second wait");
+        }
+    }
+
+    public void endChatWithoutChatMessageValidation() {
+        getChatHeader().clickEndChatButton();
+        if (getAgentFeedbackWindow().isAgentFeedbackWindowShown()) {
+            getAgentFeedbackWindow().waitForLoadingData().clickCloseButtonInCloseChatPopup();
         }
     }
 
@@ -357,7 +365,12 @@ public class AgentHomePage extends AgentAbstractPage {
         }
     }
 
-    public boolean isLoginDialogShown(){
-        return isElementShown(this.getCurrentDriver(), loginDialog, 10);
+    public boolean isDialogShown(){
+        return isElementShown(this.getCurrentDriver(), dialogElement, 10);
     }
+
+    public boolean isDisappearingDialogShown(){
+        return isElementRemoved(this.getCurrentDriver(), dialogElement, 3);
+    }
+
 }

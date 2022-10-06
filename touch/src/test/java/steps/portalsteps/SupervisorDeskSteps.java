@@ -472,6 +472,17 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 
+    @And("^Admin checks value of start date filter is empty for (\\d+) year (\\d+) month and (\\d+) days ago$")
+    public void agentStartDateFilterEmptyCheck(int year, int month, int day) {
+        LocalDate startDate = LocalDate.now().minusYears(year).minusMonths(month).minusDays(day);
+        LocalDate endDate = LocalDate.now();
+
+        getSupervisorDeskPage().getSupervisorDeskHeader()
+                .selectStartDate(startDate)
+                .selectEndDate(endDate);
+        Assert.assertTrue(getSupervisorDeskPage().getSupervisorDeskHeader().checkStartDateFilterIsEmpty().isEmpty(), "Start date filter is not empty");
+    }
+
     @And("^(.*) checks back button is (.*) in calendar for (.*) filter (.*) days ago in supervisor$")
     public void backButtonDisability(String agent, String visibility, String filterType, Long day) {
         Assert.assertTrue(new DatePicker(agent).checkBackButtonVisibilityThreeMonthsBack(filterType, day));

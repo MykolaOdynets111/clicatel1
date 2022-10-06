@@ -31,7 +31,6 @@ public class LocationWindow extends AbstractUIElement {
     public LocationWindow selectLocation(String locationName){
         clickElem(this.getCurrentDriver(),searchField,3,"Search Location");
         waitForElementsToBeVisible(this.getCurrentDriver(), locations, 5);
-        waitForFirstElementToBeVisible(this.getCurrentDriver(),locations,3);
         locations.stream().filter(e-> e.getText().contains(locationName)).findFirst().orElseThrow(() -> new AssertionError(
                 "No Location was found from: " + locationName )).click();
         return this;

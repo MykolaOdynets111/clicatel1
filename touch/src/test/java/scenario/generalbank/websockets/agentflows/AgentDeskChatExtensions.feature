@@ -1,7 +1,7 @@
+@no_widget
 Feature: Agent Date Time Picker Extension
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-860")
-    @no_widget
     @skip
   Scenario Outline: CD :: <channelType> :: Agent Desk :: Live Chat :: Verify the "Date/Time picker" extension cards for the tenant
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
@@ -23,7 +23,6 @@ Feature: Agent Date Time Picker Extension
       | ABC         | orca     |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1617")
-    @no_widget
     @skip
   Scenario Outline: CD :: <channelType> :: Verify that selected emoticons with text (title) display the title of each selected option in same format to agent as they display to user
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
@@ -42,7 +41,6 @@ Feature: Agent Date Time Picker Extension
       | ABC         | orca     |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1625")
-    @no_widget
     @Regression
   Scenario Outline: CD :: ABC :: Verify that frequently used extensions will be a sub-set of all extensions list
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
@@ -63,38 +61,37 @@ Feature: Agent Date Time Picker Extension
       | ABC         | orca     |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1650")
-    @no_widget
-    @skip
+  @Regression
   Scenario: CD :: ABC :: Verify that "Frequently Used" extension tab options according to customer, if used less than 10 extensions, then those will only show up
-    Given Setup ORCA ABC integration for General Bank Demo tenant
+    Given Setup ORCA ABC integration for Automation Bot tenant
     And Agent creates tenant extension with label and name
       | extensionType | label                            | name                         |
-      | LIST_PICKER   | MULTI SELECTION OPTION           | Travel Accident Protection   |
-      | LIST_PICKER   | MULTI SELECTION OPTION 1         | Travel Accident Protection1  |
-      | LIST_PICKER   | MULTI SELECTION OPTION 2         | Travel Accident Protection2  |
-      | LIST_PICKER   | MULTI SELECTION OPTION 3         | Travel Accident Protection3  |
-      | LIST_PICKER   | MULTI SELECTION OPTION 4         | Travel Accident Protection4  |
-      | LIST_PICKER   | MULTI SELECTION OPTION 5         | Travel Accident Protection5  |
-      | LIST_PICKER   | MULTI SELECTION OPTION 6         | Travel Accident Protection6  |
-      | LIST_PICKER   | MULTI SELECTION OPTION 7         | Travel Accident Protection7  |
-      | LIST_PICKER   | MULTI SELECTION OPTION 8         | Travel Accident Protection8  |
-      | LIST_PICKER   | MULTI SELECTION OPTION 9         | Travel Accident Protection9  |
-      | LIST_PICKER   | MULTI SELECTION OPTION 10        | Travel Accident Protection10 |
-    And I login as agent of General Bank Demo
+      | LIST_PICKER   | MULTI SELECTION OPTION A          | Travel Accident Protection   |
+      | LIST_PICKER   | MULTI SELECTION OPTION B         | Travel Accident Protection1  |
+      | LIST_PICKER   | MULTI SELECTION OPTION C         | Travel Accident Protection2  |
+      | LIST_PICKER   | MULTI SELECTION OPTION D         | Travel Accident Protection3  |
+      | LIST_PICKER   | MULTI SELECTION OPTION E         | Travel Accident Protection4  |
+      | LIST_PICKER   | MULTI SELECTION OPTION F         | Travel Accident Protection5  |
+      | LIST_PICKER   | MULTI SELECTION OPTION G         | Travel Accident Protection6  |
+      | LIST_PICKER   | MULTI SELECTION OPTION H         | Travel Accident Protection7  |
+      | LIST_PICKER   | MULTI SELECTION OPTION I         | Travel Accident Protection8  |
+      | LIST_PICKER   | MULTI SELECTION OPTION J         | Travel Accident Protection9  |
+      | LIST_PICKER   | MULTI SELECTION OPTION K        | Travel Accident Protection10 |
+    And I login as agent of Automation Bot
     When Send chat to agent message by ORCA
     And Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
     And Conversation area becomes active with chat to agent user's message
     And Agent open and select extension with name
-      | MULTI SELECTION OPTION           |
-      | MULTI SELECTION OPTION 1         |
-      | MULTI SELECTION OPTION 2         |
-      | MULTI SELECTION OPTION 3         |
-      | MULTI SELECTION OPTION 4         |
-      | MULTI SELECTION OPTION 5         |
-      | MULTI SELECTION OPTION 6         |
-      | MULTI SELECTION OPTION 7         |
-      | MULTI SELECTION OPTION 8         |
-      | MULTI SELECTION OPTION 9         |
-      | MULTI SELECTION OPTION 10        |
+      | MULTI SELECTION OPTION A          |
+      | MULTI SELECTION OPTION B         |
+      | MULTI SELECTION OPTION C         |
+      | MULTI SELECTION OPTION D         |
+      | MULTI SELECTION OPTION E         |
+      | MULTI SELECTION OPTION F         |
+      | MULTI SELECTION OPTION G         |
+      | MULTI SELECTION OPTION H         |
+      | MULTI SELECTION OPTION I         |
+      | MULTI SELECTION OPTION J         |
+      | MULTI SELECTION OPTION K        |
     And Agent checks extensions in Frequently Used tab should be less than 10

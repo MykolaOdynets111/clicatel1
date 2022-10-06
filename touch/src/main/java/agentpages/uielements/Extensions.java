@@ -29,7 +29,7 @@ public class Extensions extends AbstractUIElement {
     }
 
     public void openC2pFormWithText(String text){
-        waitForElementToBeVisible(this.getCurrentDriver(), findElemByXPATH(this.getCurrentDriver(), String.format(extensionsTabs, "All Extensions")), 5);
+        waitFor(2000);
         clickElemByXpath(this.getCurrentDriver(), String.format(extensionsTabs, "All Extensions"), 5, "All Extensions Tab button");
 
         waitForElementToBeVisible(this.getCurrentDriver(), searchExtensions, 5);

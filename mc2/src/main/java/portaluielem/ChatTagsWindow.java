@@ -94,7 +94,6 @@ public class ChatTagsWindow extends BasePortalWindow {
         return getTextFromElem(this.getCurrentDriver(), getTagName, 2, "Tag Name");
     }
 
-
     private WebElement getRowByName(String tagName) {
         waitForElementsToBeVisible(this.getCurrentDriver(), tagRows, 5);
         return tagRows.stream().filter(e -> e.getText().contains(tagName))

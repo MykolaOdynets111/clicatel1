@@ -519,6 +519,13 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).endChat();
     }
 
+    @When("^(.*) closes chat and checks error dialog$")
+    public void closeChatAndCheckErrorDialog(String agent) {
+        getAgentHomeForMainAgent().endChatWithoutChatMessageValidation();
+
+        Assert.assertTrue(getAgentHomeForMainAgent().isDisappearingDialogShown(), "Error dialog is not shown");
+    }
+
     @Then("^All session attributes are closed in DB$")
     public void verifySessionClosed() {
         SoftAssert soft = new SoftAssert();
@@ -766,6 +773,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @Then("^(.*) checks extensions in Frequently Used tab should be less than 10$")
     public void verifyFrequentExtensionTabWithLessThan10Extensions(String agent){
+        getAgentHomePage(agent).getChatForm().openExtensionsForm();
         Assert.assertTrue(getAgentHomePage(agent).getExtensionsForm().frequentExtListSize() < 10, "Frequently used extension is not less than 10");
     }
 
