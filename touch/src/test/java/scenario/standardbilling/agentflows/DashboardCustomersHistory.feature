@@ -56,9 +56,8 @@ Feature: Dashboard: Customer History
       | SMS   | Past 4 weeks   |
 
   @no_chatdesk
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1486")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2437")
-  Scenario Outline:  CD:: Survey:: Verify " no data to show now" should be shown in the CSAT column against the agent.
+  Scenario Outline:  CD :: Dashboard :: Customer Overview :: Customer History :: Verify if admin can see the message "No data to report at the moment" if there is no available CSAT Score data per period
     When I open portal
     And I login as agent of Standard Billing
     And I select Touch in left menu and Dashboard in submenu

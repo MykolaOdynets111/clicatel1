@@ -16,7 +16,7 @@ Feature: Chat console: Overview tab
 
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1698")
-  Scenario: Dashboard:: Total Agents online counter
+  Scenario: CD:: SMS:: API:: PUT:: Update SMS Orca channel chat survey config with API
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
     And I select Touch in left menu and Dashboard in submenu
