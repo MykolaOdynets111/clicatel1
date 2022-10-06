@@ -54,10 +54,6 @@ public class SyncMessageReceiver {
 
         SqsClient sqsClient = SQSConfiguration.getSqsClient();
 
-        System.out.println("List of queues:");
-        System.out.println(sqsClient.listQueues());
-        System.out.println(sqsClient.listQueues().toString());
-
         SQSConnectionFactory connectionFactory = new SQSConnectionFactory(
                 new ProviderConfiguration(),
                 sqsClient);
