@@ -48,6 +48,9 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = "[selenium-id=company-info-text]")
     private WebElement tenantName;
 
+    @FindBy(css = "img[data-testid = 'company-info-logo']")
+    private WebElement tenantLogo;
+
     @FindAll({
             @FindBy(css = "[selenium-id=agents-list-wrapper]"),
             @FindBy(css = "[data-testid=agents-list-wrapper]")
@@ -154,6 +157,10 @@ public class PageHeader extends AbstractUIElement {
     public void clickOnWhatsapp(){
         clickElem(this.getCurrentDriver(),forwadIcon,1,"forward Icon");
         scrollAndClickElem(this.getCurrentDriver(), sendWhatsAppButton, 5,"Click on Whatsapp Icon");
+    }
+
+    public boolean isTenantLogoShown(){
+        return isElementShown(this.getCurrentDriver(), tenantLogo, 10);
     }
 
 }
