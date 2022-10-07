@@ -88,9 +88,9 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
      //  Assert.assertTrue(getAgentHomePage(agent).getHSMForm().checkContactNum(), "False : waPhone Field is empty");
     }
 
-    @Then("^(.*) verify customer contact number is filled$")
-    public void checkContactNumber(String agent){
-        Assert.assertTrue(getAgentHomePage(agent).getHSMForm().checkContactNum(), "False : waPhone Field is empty");
+    @Then("^(.*) verify customer contact number (.*) is filled$")
+    public void checkContactNumber(String agent, String phoneNumber){
+        Assert.assertTrue(getAgentHomePage(agent).getHSMForm().getContactNum().equalsIgnoreCase(phoneNumber), "False : waPhone Field is empty");
     }
 
     @Then("^(.*) has (?:new|old) (.*) (?:request|shown)(?: from (.*) user|)$")
