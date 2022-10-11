@@ -15,13 +15,11 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.TimeoutException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -156,7 +154,6 @@ public class DashboardSteps extends AbstractPortalSteps {
                             "Could be affected by TPLAT-5990");
         }
     }
-
     @And("^Admin see all information about the (.*) is filled under active agent tab$")
     public void adminSeeAllInformationAboutTheSecondAgentIsFilledUnderActiveAgentTab(String agent) {
         AvailableAgent availableAgent = getAvailableAgent(agent);
@@ -186,7 +183,6 @@ public class DashboardSteps extends AbstractPortalSteps {
                 availableAgent.getAgentFullName() + " icon has incorrect number of active chats");
 
     }
-
     @When("^Admin clicks expand arrow for (.*)$")
     public void expandAgentsRowInChatConsole(String agent) {
         AvailableAgent availableAgent = getAvailableAgent(agent);
@@ -194,14 +190,12 @@ public class DashboardSteps extends AbstractPortalSteps {
                 .getTargetAgentRow(availableAgent.getName(), availableAgent.getSurname())
                 .clickExpandButton();
     }
-
     private AvailableAgent getAvailableAgent(String agent) {
         return ApiHelper.getAvailableAgents().stream()
                 .filter(e -> e.getEmail().equalsIgnoreCase(
                         Agents.getAgentFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName(), agent).getAgentEmail()))
                 .findFirst().get();
     }
-
     @When("^Admin clicks expand agents performance table arrow for (.*) department$")
     public void adminClicksExpandAgentsPerformanceTableArrow(String agent) {
         AvailableAgent availableAgent = getAvailableAgent(agent);

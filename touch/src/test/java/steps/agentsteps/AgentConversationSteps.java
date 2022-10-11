@@ -733,5 +733,4 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     public void verifyDatePickerChatBody(String agent, String name){
         Assert.assertTrue(getAgentHomePage(agent).getChatBody().getExtensionCardText().contains(name), "Date Picker with name: "+ name +"is not shown in chat body");
     }
-
 }

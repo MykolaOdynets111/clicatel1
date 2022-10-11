@@ -6,10 +6,13 @@ import io.cucumber.java.en.When;
 import org.jetbrains.annotations.NotNull;
 import portaluielem.ChatTagsWindow;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static datetimeutils.DateTimeHelper.getDD_MM_YYYY_DateFormatter;
+import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static steps.agentsteps.AbstractAgentSteps.faker;
 import static steps.portalsteps.AbstractPortalSteps.getPortalTouchPreferencesPage;
@@ -42,8 +45,17 @@ public class ChatTagsSteps {
                 .setTagName(name + faker.numerify("#####"))
                 .clickSaveButton();
         assertThat(name)
-                .as(String.format("Tag %s should be created!", name))
+                .as(format("Tag %s should be created!", name))
                 .isIn(APITagsHelper.getAllTagsTitle());
+    }
+
+    @When("^Verify (.*) column data is updated for tag (.*)$")
+    public void verifyColumnDataIsUpdatedFor(String column, String tag) {
+        String columnValue = getTagsWindow().getCellValue(column, tag);
+
+            assertThat(columnValue)
+                    .as(format("%s tag value should be displayed in %s column", tag, column ))
+                    .isEqualTo(LocalDateTime.now().format(getDD_MM_YYYY_DateFormatter()));
     }
 
     @When("^Set (.*) for (.*) tag status$")

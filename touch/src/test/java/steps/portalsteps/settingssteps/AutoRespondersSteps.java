@@ -4,16 +4,14 @@ import apihelper.ApiHelper;
 import datamanager.enums.AutoRespondersMessage;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.testng.Assert;
 import portaluielem.AutoRespondersWindow;
-import steps.ORCASteps;
 import steps.portalsteps.AbstractPortalSteps;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class AutoRespondersSteps extends AbstractPortalSteps {
 
-    @When("^Admin click expand arrow for (.*) auto responder$")
+    @When("^Agent click expand arrow for (.*) auto responder$")
     public void clickExpandArrowForAutoResponder(String autoresponder) {
         autoRespondersWindow().clickExpandArrowForMessage(autoresponder);
     }
