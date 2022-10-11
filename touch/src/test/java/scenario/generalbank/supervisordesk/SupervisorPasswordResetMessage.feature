@@ -1,6 +1,7 @@
 Feature: Supervisor desk
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-105130")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1418")
+    @Regression
   Scenario: Supervisor desk:: Verify if Supervisor receive correct message, when pressing 'reset password' in Profile Settings
     Given I open portal
     And Login into portal as an Admin of General Bank Demo account
