@@ -7,7 +7,7 @@
 Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2125")
-    @Regression
+  @Regression
   Scenario Outline: CD:: Settings :: Survey :: Verify the error message when end user send rating as "-1" or "+1" for NPS/CSAT -
     Given I login as agent of Automation Bot
     And Setup ORCA <channelType> integration for Automation Bot tenant

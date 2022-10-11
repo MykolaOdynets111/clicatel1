@@ -52,7 +52,7 @@ Feature: Chat2Pay ::Chat2PayCustomerClosedChat
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1683")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1660")
-    @Regression
+  @Regression
   Scenario Outline: CD:: C2P:: Verify if Agent can use Chat2Pay in WhatsApp
     Given I login as agent of General Bank Demo
     Given Setup ORCA <channelType> integration for General Bank Demo tenant

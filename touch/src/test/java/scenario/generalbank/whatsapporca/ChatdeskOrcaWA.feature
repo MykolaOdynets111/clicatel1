@@ -125,8 +125,8 @@ Feature: Whatsapp ORCA :: Chatdesk
       | Whatsapp    | orca    |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2787")
-  @regression
-  Scenario: Supervisor desk :: verify that supervisor able to check live chats
+  @Regression
+  Scenario: CD::Supervisor desk :: Verify if supervisor is able to check live chats
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Supervisor Desk in submenu
@@ -171,7 +171,7 @@ Feature: Whatsapp ORCA :: Chatdesk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1129")
   @Regression
-  Scenario: Supervisor Desk :: Live Chat :: Profile :: Verify that WhatsApp profile name is displayed as username on customer profile section
+  Scenario: CD :: Supervisor Desk :: Live Chat :: Profile :: Verify that WhatsApp profile name is displayed as username on customer profile section
     Given I login as agent of General Bank Demo
     And Setup ORCA whatsapp integration for General Bank Demo tenant
     And Send to agent message by ORCA

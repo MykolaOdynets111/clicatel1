@@ -20,7 +20,7 @@ Feature: Chat console: Waiting customers
   @no_chatdesk
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2586")
   @Regression
-  Scenario: Dashboards:: Chats waiting in a queue increase in case no agents online
+  Scenario: CD::Dashboards:: Chats waiting in a queue increase in case no agents online
     And Setup ORCA whatsapp integration for Automation Bot tenant
     And Send connect to agent message by ORCA
     Then Customers waiting for response widget value increased on 1
@@ -28,7 +28,7 @@ Feature: Chat console: Waiting customers
   @second_agent_availability
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2508")
   @Regression
-  Scenario: Dashboard:: Chats waiting in a queue increase in case agent not available
+  Scenario: CD:: Dashboard:: Chats waiting in a queue increase in case agent not available
     And admin changes status to: Unavailable
     And I login as second agent of Automation Bot
     When Customers waiting for response widget value set to 0
