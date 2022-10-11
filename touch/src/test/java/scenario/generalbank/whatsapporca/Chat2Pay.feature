@@ -2,10 +2,14 @@
 Feature: Chat2Pay ::Chat2PayCustomerClosedChat
 
   @orca_api
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-105084")
-    Scenario: CD :: Agent Desk :: Closed Chat :: Chat2Pay :: Verify that the customer can close a chat using //end or //stop keywords, when payment is not concluded
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1426")
+  @Regression
+  Scenario: CD :: Agent Desk :: Closed Chat :: Chat2Pay :: Verify that the customer can close a chat using //end or //stop keywords, when payment is not concluded
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    And Agent creates tenant extension with label and name
+      | extensionType | label              | name        |
+      | CHAT_2_PAY    | Send C2P Extension | Chat to Pay |
     When Send connect to Support message by ORCA
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
@@ -21,6 +25,9 @@ Feature: Chat2Pay ::Chat2PayCustomerClosedChat
   Scenario: CD :: Agent Desk :: Live Chat :: Chat2Pay :: Verify if payment link expires after 5 mins
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    And Agent creates tenant extension with label and name
+      | extensionType | label              | name        |
+      | CHAT_2_PAY    | Send C2P Extension | Chat to Pay |
     When Send connect to Support message by ORCA
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
@@ -32,10 +39,14 @@ Feature: Chat2Pay ::Chat2PayCustomerClosedChat
     Then Agent get 'payment link expired' update is sent to agent desk by C2P
 
   @orca_api
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-105082")
+  @Regression
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1359")
   Scenario: CD :: Agent Desk :: Live Chat :: Chat2Pay :: Verify that the agent gets an options to mark the chat as pending when agent tries to close a chat where payment is not conluded
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    And Agent creates tenant extension with label and name
+      | extensionType | label              | name        |
+      | CHAT_2_PAY    | Send C2P Extension | Chat to Pay |
     When Send connect to Support message by ORCA
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
@@ -56,6 +67,9 @@ Feature: Chat2Pay ::Chat2PayCustomerClosedChat
   Scenario Outline: CD:: C2P:: Verify if Agent can use Chat2Pay in WhatsApp
     Given I login as agent of General Bank Demo
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
+    And Agent creates tenant extension with label and name
+      | extensionType | label              | name        |
+      | CHAT_2_PAY    | Send C2P Extension | Chat to Pay |
     When Send connect to agent message by ORCA
     Then Agent has new conversation request from <userType> user
     When Agent click on new conversation request from <userType>
