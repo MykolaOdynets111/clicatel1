@@ -3,9 +3,9 @@ package steps.agentsteps;
 import agentpages.uielements.FilterMenu;
 import agentpages.uielements.Profile;
 import apihelper.ApiHelper;
+import apihelper.ApiHelperSupportHours;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import apihelper.ApiHelperSupportHours;
 import datamanager.Tenants;
 import datamanager.UserPersonalInfo;
 import datamanager.jacksonschemas.ChatPreferenceSettings;
@@ -22,9 +22,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import socialaccounts.FacebookUsers;
@@ -343,7 +340,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             case "for all week":
                 resp = ApiHelperSupportHours.setSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
                         "00:00", "23:59");
-                getAgentHomePage("main").waitFor(1500);
                 break;
         }
         Assert.assertEquals(resp.statusCode(), 200,
