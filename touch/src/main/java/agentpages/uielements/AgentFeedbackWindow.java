@@ -4,7 +4,6 @@ import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
@@ -12,6 +11,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 
@@ -21,10 +21,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css = "[data-testid=exit-chat-modal-cancel]")
     private WebElement cancelButton;
 
-    @FindAll({
-        @FindBy(css = "[data-testid=exit-chat-modal-save]"),
-        @FindBy(css = "[selenium-id='exit-chat-modal-save']") //todo old locator
-    })
+    @FindBy(css = "[data-testid=exit-chat-modal-save]")
     private WebElement closeChatButton;
 
     @FindBy(xpath = "//*[contains(text(),'Go to chat')]")
@@ -32,9 +29,6 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     @FindBy(css = "[data-testid=sentiment-icon-negative]")
     private WebElement sentimentUnsatisfied ;
-
-    @FindBy(css = "[data-testid=sentiment-icon-neutral]")
-    private WebElement sentimentNeutral;
 
     @FindBy(css = "[data-testid=sentiment-icon-positive]")
     private WebElement sentimentHappy;
@@ -56,9 +50,6 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     @FindBy(xpath = "//label[text() = 'Tags']/..//div/*[name() = 'svg']")
     private WebElement openDropdownButton;
-
-    @FindBy(xpath = ".//div[text() = 'No options']")
-    private WebElement noOptionsMessage;
 
     private final String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
 
@@ -195,6 +186,15 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         pressEnterForWebElem(this.getCurrentDriver(), inputTagField, 5,"Tags Input field");
     }
 
+    public AgentFeedbackWindow selectTag(String tag) {
+        waitForElementToBeClickable(this.getCurrentDriver(), openDropdownButton, 6);
+        tagsInput.click();
+        availableTags.stream().filter(t -> t.getText().equals(tag)).findFirst()
+                .orElseThrow(() -> new NoSuchElementException(tag + " tag is absent"))
+                .click();
+        return this;
+    }
+
     public List<String> getTagList() {
         waitForElementToBeClickable(this.getCurrentDriver(), openDropdownButton, 6);
         tagsInput.click();
@@ -205,10 +205,6 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         waitForElementToBeClickable(this.getCurrentDriver(), availableTagsContainer, 6);
         availableTagsContainer.click();
         return this;
-    }
-
-    public boolean noOptionMessageIsShown(){
-        return isElementShown(this.getCurrentDriver(), noOptionsMessage, 2);
     }
 
     public void deleteTags() {
@@ -236,5 +232,4 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     public void closeDropdown(){
         clickElem(this.getCurrentDriver(), openDropdownButton, 5,"Close dropdown button" );
     }
-
 }

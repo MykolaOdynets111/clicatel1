@@ -34,10 +34,6 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
 
     private static ThreadLocal<List<CRMTicket>> createdCrmTicketsList = new ThreadLocal<>();
 
-    public static CRMTicket getCreatedCRMTicket(){
-        return createdCrmTicket.get();
-    }
-
     public static List<CRMTicket> getCreatedCRMTicketsList(){
         return createdCrmTicketsList.get();
     }
@@ -398,6 +394,10 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
         getAgentFeedbackWindow(agent).selectTagInSearch().closeDropdown();
     }
 
+    @Then("^(.*) select (.*) tag$")
+    public void agentSelectsTag(String agent, String tag) {
+        getAgentFeedbackWindow(agent).selectTag(tag);
+    }
     @Then("^(.*) does not see the disabled tag (.*)$")
     public void verifyTagIsDisabledFor(String agent, String tag) {
         assertThat(tag)
@@ -439,7 +439,6 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
                 .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
 
         DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("dd MMM yyyy");
-
 
         return dateTimeFromBackend.format(formatter1).toLowerCase();
     }

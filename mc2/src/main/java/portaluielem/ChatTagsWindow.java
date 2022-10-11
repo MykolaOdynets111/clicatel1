@@ -66,6 +66,12 @@ public class ChatTagsWindow extends BasePortalWindow {
                 .collect(Collectors.toList());
     }
 
+    public String getCellValue(String column, String tag) {
+        int tagNumber = getColumnValueList("Tag Name").indexOf(tag);
+
+        return getColumnValueList(column).get(tagNumber);
+    }
+
     public void clickSortedColumn(String column, String sortingType) {
         while (!getSortButtonForColumn(column, sortingType).getAttribute("class").contains("active")) {
             getSortButtonForColumn(column, sortingType).click();
