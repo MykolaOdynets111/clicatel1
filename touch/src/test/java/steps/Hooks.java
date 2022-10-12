@@ -106,7 +106,7 @@ public class Hooks implements JSHelper {
 
             if(DriverFactory.isTouchDriverExists()) {
 //                if (scenario.isFailed()) widgetWebSocketLogs();
-                takeScreenshot();
+                makeScreenshotAndConsoleOutputFromChatdesk(scenario);
                 endTouchFlow(scenario, true);
             }
         }
@@ -120,9 +120,7 @@ public class Hooks implements JSHelper {
         }
 
         if(scenario.getSourceTagNames().contains("@auto_scheduler_disabled")){
-            TenantChatPreferences tenantChatPreferences = ApiHelper.getTenantChatPreferences();
-            tenantChatPreferences.setAutoTicketScheduling(true);
-            ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), tenantChatPreferences);
+            ApiHelper.updateFeatureStatus(new ChatPreferenceSettings());
         }
 
         if(scenario.getSourceTagNames().contains(("@remove_dep"))){
@@ -271,15 +269,17 @@ public class Hooks implements JSHelper {
     private void makeScreenshotAndConsoleOutputFromChatdesk(Scenario scenario){
         if (DriverFactory.isAgentDriverExists()) {
             takeScreenshotFromSecondDriver();
+            scenario.attach(takeScreenshotFromSecondDriver(), "image/png", scenario.getName());
             if (scenario.isFailed()) {
                 chatDeskConsoleOutput();
 //                chatdeskWebSocketLogs();
             }
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
-                takeScreenshotFromThirdDriverIfExists();
-                if (scenario.isFailed()) {
-                    secondAgentChatDeskConsoleOutput();
+            takeScreenshotFromThirdDriverIfExists();
+            scenario.attach(takeScreenshotFromThirdDriverIfExists(), "image/png", scenario.getName());
+            if (scenario.isFailed()) {
+                secondAgentChatDeskConsoleOutput();
 //                    secondAgentChatdeskWebSocketLogs();
                 }
         }

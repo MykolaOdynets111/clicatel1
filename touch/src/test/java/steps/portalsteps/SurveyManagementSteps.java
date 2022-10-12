@@ -26,7 +26,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         }
         surveyConfiguration.set(configuration);
         ApiHelper.updateSurveyManagement(tenantOrgName, configuration, channelID, chanel.toLowerCase());
-
+        waitFor(1500);
     }
 
     @Then("^Survey Management page should be shown$")

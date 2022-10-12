@@ -61,7 +61,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().getSupervisorTicketsTable().getTicketByUserName(getUserName(chanel)).clickOnUserName();
     }
 
-    @When("^Click on Massage Customer button$")
+    @When("^Click on Message Customer button$")
     public void clickOnMassageCustomer() {
         getSupervisorDeskPage().getSupervisorTicketClosedChatView().clickOnMessageCustomerButton();
     }
@@ -74,6 +74,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @When("^Supervisor send (.*) to agent trough (.*) chanel$")
     public void sendTicketMessageToCustomer(String message, String chanel) {
         getSupervisorDeskPage().getMessageCustomerWindow().selectChanel(chanel).setMessageText(message).clickSubmitButton();
+    }
+
+    @When("^Supervisor is unable to send (.*) HSM on Tickets for (.*) chat$")
+    public void hsmChannelNotShownOnParticularChannel(String channel, String originalChannel) {
+        Assert.assertTrue(getSupervisorDeskPage().getMessageCustomerWindow().isChanelNotShown(channel),
+                channel + " HSM is present in: " + originalChannel);
     }
 
     @When("^Click 'Route to scheduler' button$")
@@ -304,6 +310,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then("^Supervisor can see (.*) live chat with (.*) message to agent$")
     public void verifyLiveChatPresent(String channel, String message) {
         Assert.assertTrue(getSupervisorDeskPage().openInboxChatBody(getUserName(channel)).isUserMessageShown(message), "Messages is not the same");
+    }
+
+    @Then("^Supervisor can see (.*) ticket with (.*) message from agent$")
+    public void verifyTicketMessagePresent(String channel, String message) {
+        Assert.assertTrue(getSupervisorDeskPage().getTicketChatBody().isToUserMessageShown(message), "Messages is not the same");
     }
 
     @When("^Verify that correct messages and timestamps are shown on Chat View$")
@@ -591,7 +602,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void agentClickAssignButton() {
         getSupervisorDeskPage().getChatHeader().clickOnAssignButton();
     }
-    
+
     @When("Assign chat modal is opened")
     public void assignChatModalOpened() {
         Assert.assertTrue(getSupervisorDeskPage().getAssignChatWindow().isAssignWindowShown());
