@@ -36,6 +36,7 @@ import steps.agentsteps.AbstractAgentSteps;
 import steps.dotcontrol.DotControlSteps;
 import steps.portalsteps.AbstractPortalSteps;
 import steps.portalsteps.BasePortalSteps;
+import steps.portalsteps.TenantSteps;
 import steps.tiesteps.BaseTieSteps;
 import steps.tiesteps.TIEApiSteps;
 import touchpages.pages.MainPage;
@@ -112,6 +113,10 @@ public class Hooks implements JSHelper {
 
         if (scenario.getSourceTagNames().contains("@support_hours")){
                ApiHelperSupportHours.setSupportDaysAndHours(new GeneralSupportHoursItem());
+        }
+
+        if (scenario.getSourceTagNames().contains("@delete_tenant_logo")){
+               new TenantSteps().deleteLogo();
         }
 
         if(scenario.getSourceTagNames().contains("@auto_scheduler_disabled")){

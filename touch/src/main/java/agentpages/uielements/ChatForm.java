@@ -72,6 +72,9 @@ public class ChatForm extends AbstractUIElement {
     @FindBy(xpath = "//div[contains(@id, 'react-select')]")
     private List<WebElement> datePickerItems;
 
+    @FindBy(css = ".cl-message-composer__count-text")
+    private WebElement typingIndicator;
+
     private String emojiMartCss = "section.emoji-mart";
 
     private AttachmentWindow attachmentWindow;
@@ -99,8 +102,6 @@ public class ChatForm extends AbstractUIElement {
     }
 
     public String getTextFromMessageInputField(){
-        waitForElementToBeVisibleByXpath(this.getCurrentDriver(), messageInputLocator, 1);
-        moveToElemAndClick(this.getCurrentDriver(), findElemByXPATH(this.getCurrentDriver(), messageInputLocator));
         waitForElementToBeClickable(this.getCurrentDriver(), messageInput, 4);
         return messageInput.getText();
     }
@@ -126,6 +127,17 @@ public class ChatForm extends AbstractUIElement {
         System.out.println("2 " + LocalDateTime.now());
         messageInput.sendKeys(response);
         clickSendButton();
+    }
+
+    public ChatForm clearAndTypeResponseToUser(String response){
+        if(isSuggestionFieldShown()){
+            clickClearButton();
+        } else {
+            messageInput.clear();
+        }
+        System.out.println("2 " + LocalDateTime.now());
+        messageInput.sendKeys(response);
+        return this;
     }
 
     public ChatForm sendResponseInSuggestionWrapperToUser(String responseToUser) {
@@ -168,6 +180,8 @@ public class ChatForm extends AbstractUIElement {
 
     public String getOvernightTicketMessage(){ return getTextFromElem(this.getCurrentDriver(), overnightTicketLable, 3, "Overnight ticket message").trim(); }
 
+    public String getTypingIndicatorText(){ return getTextFromElem(this.getCurrentDriver(), typingIndicator, 3, "Typing indicator text").trim(); }
+
     public String getPlaceholderFromInputLocator(){
         waitForElementToBeVisibleByXpath(this.getCurrentDriver(), messageInputLocator, 5);
         return findElemByXPATH(this.getCurrentDriver(), messageInputLocator).getAttribute("placeholder");
@@ -195,7 +209,7 @@ public class ChatForm extends AbstractUIElement {
     }
 
     public void openExtensionsForm(){
-        clickElem(this.getCurrentDriver(), c2pButton, 2, "c2p button");
+        clickElem(this.getCurrentDriver(), c2pButton, 5, "c2p button");
     }
 
     public void setDevicePickerName(String name) {

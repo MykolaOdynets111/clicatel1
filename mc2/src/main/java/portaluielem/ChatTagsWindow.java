@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import static org.openqa.selenium.By.cssSelector;
 import static org.openqa.selenium.By.xpath;
 
 @FindBy(css = ".cl-chat-tags-page")
@@ -27,9 +28,6 @@ public class ChatTagsWindow extends BasePortalWindow {
 
     @FindBy(css = ".cl-collapsible-table__row")
     private List<WebElement> tagRows;
-
-    @FindBy(css = ".cl-tag-form__pencil-icon")
-    private WebElement clickPencilIcon;
 
     @FindBy(xpath = "//div[@class='cl-tag-form'][1]")
     private WebElement getTagName;
@@ -66,6 +64,12 @@ public class ChatTagsWindow extends BasePortalWindow {
                 .collect(Collectors.toList());
     }
 
+    public String getCellValue(String column, String tag) {
+        int tagNumber = getColumnValueList("Tag Name").indexOf(tag);
+
+        return getColumnValueList(column).get(tagNumber);
+    }
+
     public void clickSortedColumn(String column, String sortingType) {
         while (!getSortButtonForColumn(column, sortingType).getAttribute("class").contains("active")) {
             getSortButtonForColumn(column, sortingType).click();
@@ -94,7 +98,6 @@ public class ChatTagsWindow extends BasePortalWindow {
         return getTextFromElem(this.getCurrentDriver(), getTagName, 2, "Tag Name");
     }
 
-
     private WebElement getRowByName(String tagName) {
         waitForElementsToBeVisible(this.getCurrentDriver(), tagRows, 5);
         return tagRows.stream().filter(e -> e.getText().contains(tagName))
@@ -102,10 +105,11 @@ public class ChatTagsWindow extends BasePortalWindow {
                 .orElseThrow(() -> new AssertionError("Cannot find '" + tagName + "' tag."));
     }
 
-    public void clickEditTagButton(String tagName) {
+    public ChatTagsWindow clickEditTagButton(String tagName) {
         WebElement row = getRowByName(tagName);
         moveToElement(this.getCurrentDriver(), row);
-        moveToElemAndClick(this.getCurrentDriver(), clickPencilIcon);
+        row.findElement(cssSelector(".cl-tag-form__pencil-icon")).click();
+        return this;
     }
 
     public void enableDisableTag(String tagName) {

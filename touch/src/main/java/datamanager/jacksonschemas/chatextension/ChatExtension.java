@@ -35,10 +35,10 @@ public class ChatExtension {
     @JsonProperty("popularityScore")
     private int popularityScore;
 
-    public ChatExtension(String label, Optional name, String extensionType){
+    public ChatExtension(String label, String name, String extensionType){
         this.setType(extensionType);
         this.setLabel(label);
-        this.setSupportedChannels(Arrays.asList("ABC"));
+        this.setSupportedChannels(Arrays.asList("ABC", "WHATSAPP"));
         this.setConfig(new Config(name, extensionType));
         this.setPopularityScore(6);
     }
