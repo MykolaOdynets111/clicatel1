@@ -765,6 +765,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @Then("^(.*) checks extensions in Frequently Used tab should be available in All Extension tab as well$")
     public void verifyExtensionsFrequentExtTabAllExtTab(String agent){
+        getAgentHomePage(agent).getChatForm().openExtensionsForm();
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(getAgentHomePage(agent).getExtensionsForm().isFreqUsedTabsExtsExistInAllExtsTab(), "Frequently used extension is not there in all extensions" );
         softAssert.assertTrue(getAgentHomePage(agent).getExtensionsForm().frequentExtListSizeAllExtensionListSizeComparison(), "Frequently used extension size is more than all extensions" );

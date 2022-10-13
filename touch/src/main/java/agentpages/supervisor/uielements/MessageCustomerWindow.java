@@ -4,6 +4,7 @@ import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @FindBy(css = ".ReactModal__Content")
@@ -12,16 +13,16 @@ public class MessageCustomerWindow extends AbstractUIElement {
     @FindBy(css = ".ReactModal__Content header div")
     private WebElement header;
 
-    @FindBy(css =".cl-r-select__control .cl-r-select__indicators")
+    @FindBy(css =".cl-select__control .cl-select__indicators")
     private WebElement openViaDropDownButton;
 
-    @FindBy(css = ".cl-r-select__option")
-    private List<WebElement> availableChanells;
+    @FindBy(css = ".cl-select__option")
+    private List<WebElement> availableChannels;
 
-    @FindBy(css = "button.cl-r-button--primary")
+    @FindBy(css = "[class='cl-button cl-button--primary']")
     private WebElement sendButton;
 
-    @FindBy(css = "[name='smsText']")
+    @FindBy(css = "[name='note']")
     private WebElement textInput;
 
     public String getHeader(){
@@ -34,15 +35,22 @@ public class MessageCustomerWindow extends AbstractUIElement {
 
     public MessageCustomerWindow selectChanel(String channel){
         setOpenDropDownButton();
-        waitForFirstElementToBeVisible(this.getCurrentDriver(), availableChanells, 2);
-        availableChanells.stream().filter(e -> e.getText().equalsIgnoreCase(channel)).findFirst()
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), availableChannels, 2);
+        availableChannels.stream().filter(e -> e.getText().equalsIgnoreCase(channel)).findFirst()
                 .orElseThrow(() -> new AssertionError("Cannot find '" + channel + "' DropDown option")).click();
         return this;
     }
 
+    public boolean isChanelShown(String channel){
+        setOpenDropDownButton();
+        List<String> channelElementsText = new ArrayList<>();
+        availableChannels.stream().forEach(e -> {
+            channelElementsText.add(e.getText());
+        });
+        return channelElementsText.contains(channel);
+    }
+
     public MessageCustomerWindow setMessageText(String text){
-        //todo remove wait after spinner would be added
-        waitFor(3000);
         inputText(this.getCurrentDriver(), textInput, 1, "Message Input", text);
         return this;
     }

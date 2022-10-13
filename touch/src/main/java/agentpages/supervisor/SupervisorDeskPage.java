@@ -255,6 +255,11 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return chatBody;
     }
 
+    public ChatBody getTicketChatBody(){
+        chatBody.setCurrentDriver(this.getCurrentDriver());
+        return chatBody;
+    }
+
     public String getNoChatsErrorMessage(){
         return getTextFromElem(this.getCurrentDriver(), noChatsErrorMessage, 3, "No Chats Error Message");
     }

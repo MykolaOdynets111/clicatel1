@@ -36,19 +36,28 @@ Feature: Satisfaction Survey
       | channelType |
       | Whatsapp         |
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-18595")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2381")
   Scenario Outline: verify if agent is able to see NPS rating from the survey that the customer completed on the chat view
-    Given I login as agent of Standard Billing
-    And Setup ORCA <channelType> integration for Standard Billing tenant
-    And Update survey management chanel <channelType> settings by ip for Standard Billing
+    Given I login as agent of Automation Bot
+    And Setup ORCA <channelType> integration for Automation Bot tenant
+    And Update survey management chanel <channelType> settings by ip for Automation Bot
       | ratingEnabled | true        |
-      | surveyType    | NPS        |
-      | ratingScale   | ZERO_TO_TEN |
+      | surveyType    | CSAT        |
+      | ratingScale   | ONE_TO_FIVE |
       | ratingIcon    | NUMBER      |
+      | ratingTimeout | 600         |
     When Send connect to agent message by ORCA
     Then Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
     And Conversation area becomes active with connect to agent user's message
+    And Agent switches to opened Portal page
+    And I select Touch in left menu and Dashboard in submenu
+    And Navigate to Surveys page
+    And Survey Management page should be shown
+    And Admin clicks on channel toggle button for survey form
+    And Admin clicks on channel expand button for survey form
+    And Admin selects NPS survey type for <channelType> survey form
+    And Agent click save survey configuration button for <channelType> survey form
     Then I select Touch in left menu and Agent Desk in submenu
     And Agent click on new conversation request from orca
     And Conversation area becomes active with connect to agent user's message
@@ -61,6 +70,7 @@ Feature: Satisfaction Survey
     Examples:
       | channelType |
       | whatsapp    |
+      | abc         |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1861")
   Scenario Outline: CD:: Survey:: Dashboard:: Verify If the client enables NPS Survey, there will be no update in the agent scores in the CSAT in agent performance tab
