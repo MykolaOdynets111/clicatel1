@@ -30,6 +30,7 @@ Feature: Supervisor desk
     Then Supervisor sees note "Closed Chat Test Note Message", Jira link "https://closedchatdummy.com/" and Ticket Number "662220"
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-3883")
+  @support_hours
   Scenario: CD :: Supervisor Desk :: Chat :: Notes :: Verify if supervisor is able to add notes to a ticket
     Given Setup ORCA abc integration for General Bank Demo tenant
     And Set agent support hours with day shift

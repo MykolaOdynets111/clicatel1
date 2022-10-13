@@ -78,7 +78,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @When("^Supervisor is unable to send (.*) HSM on Tickets for (.*) chat$")
     public void hsmChannelNotShownOnParticularChannel(String channel, String originalChannel) {
-        Assert.assertTrue(getSupervisorDeskPage().getMessageCustomerWindow().isChanelNotShown(channel),
+        Assert.assertFalse(getSupervisorDeskPage().getMessageCustomerWindow().isChanelShown(channel),
                 channel + " HSM is present in: " + originalChannel);
     }
 

@@ -277,9 +277,9 @@ public class Hooks implements JSHelper {
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
             takeScreenshotFromThirdDriverIfExists();
-            scenario.attach(takeScreenshotFromThirdDriverIfExists(), "image/png", scenario.getName());
+            scenario.attach(takeScreenshotFromSecondDriver(), "image/png", scenario.getName());
             if (scenario.isFailed()) {
-                secondAgentChatDeskConsoleOutput();
+                    secondAgentChatDeskConsoleOutput();
 //                    secondAgentChatdeskWebSocketLogs();
                 }
         }

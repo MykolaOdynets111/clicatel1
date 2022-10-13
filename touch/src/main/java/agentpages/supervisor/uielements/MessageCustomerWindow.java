@@ -41,13 +41,13 @@ public class MessageCustomerWindow extends AbstractUIElement {
         return this;
     }
 
-    public boolean isChanelNotShown(String channel){
+    public boolean isChanelShown(String channel){
         setOpenDropDownButton();
         List<String> channelElementsText = new ArrayList<>();
         availableChannels.stream().forEach(e -> {
             channelElementsText.add(e.getText());
         });
-        return !channelElementsText.contains(channel);
+        return channelElementsText.contains(channel);
     }
 
     public MessageCustomerWindow setMessageText(String text){

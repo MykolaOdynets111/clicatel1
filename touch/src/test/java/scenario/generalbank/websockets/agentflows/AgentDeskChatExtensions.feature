@@ -45,16 +45,17 @@ Feature: Agent Date Time Picker Extension
   Scenario Outline: CD :: ABC :: Verify that frequently used extensions will be a sub-set of all extensions list
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Agent creates tenant extension with label and name
-      | extensionType | label                            | name                       |
-      | TIME_PICKER   | Schedule Appointment with picker | WaveBank Sranch            |
-      | LIST_PICKER   | MULTI SELECTION OPTION           | Travel Accident Protection |
+      | extensionType | label                    | name                         |
+      | LIST_PICKER   | MULTI SELECTION OPTION A | Travel Accident Protection A |
+      | LIST_PICKER   | MULTI SELECTION OPTION B | Travel Accident Protection B |
     And I login as agent of General Bank Demo
     When Send chat to agent message by ORCA
     And Agent has new conversation request from <userType> user
     And Agent click on new conversation request from <userType>
     And Conversation area becomes active with chat to agent user's message
-    And Agent open c2p form
-    And Agent sees extension link with MULTI SELECTION OPTION name in chat body
+    And Agent open and select extension with name
+      | MULTI SELECTION OPTION A          |
+    And Agent sees extension link with MULTI SELECTION OPTION A name in chat body
     Then Agent checks extensions in Frequently Used tab should be available in All Extension tab as well
     Examples:
       | channelType | userType |
@@ -63,7 +64,7 @@ Feature: Agent Date Time Picker Extension
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1650")
   @Regression
   Scenario: CD :: ABC :: Verify that "Frequently Used" extension tab options according to customer, if used less than 10 extensions, then those will only show up
-    Given Setup ORCA ABC integration for Automation Bot tenant
+    Given Setup ORCA ABC integration for General Bank Demo tenant
     And Agent creates tenant extension with label and name
       | extensionType | label                            | name                         |
       | LIST_PICKER   | MULTI SELECTION OPTION A          | Travel Accident Protection   |
@@ -77,7 +78,7 @@ Feature: Agent Date Time Picker Extension
       | LIST_PICKER   | MULTI SELECTION OPTION I         | Travel Accident Protection8  |
       | LIST_PICKER   | MULTI SELECTION OPTION J         | Travel Accident Protection9  |
       | LIST_PICKER   | MULTI SELECTION OPTION K        | Travel Accident Protection10 |
-    And I login as agent of Automation Bot
+    And I login as agent of General Bank Demo
     When Send chat to agent message by ORCA
     And Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
