@@ -23,7 +23,7 @@ Feature: Whatsapp ORCA :: ChatDesk
     Then Agent sees correct location URL in History Details window
 
   @start_orca_server
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-1175")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1175")
   Scenario: CD :: SMS :: Location :: Verify if location shared by agent is displayed on history tab
     Given I login as agent of General Bank Demo
     Given Setup ORCA SMS integration for General Bank Demo tenant
@@ -42,7 +42,7 @@ Feature: Whatsapp ORCA :: ChatDesk
     Then Agent sees correct location URL in History Details window
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1157")
-  Scenario: CD :: Agent Desk :: Closed Chat :: History :: Location :: Verify if location shared by user is  displayed on history tab
+  Scenario: CD :: Agent Desk :: Closed Chat :: History :: Location :: Verify if location shared by user is displayed on history tab
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     When Send connect to agent message by ORCA

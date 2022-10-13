@@ -4,8 +4,7 @@ Feature: CD :: Dashboard :: Settings :: Chat Tags
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2847")
   @orca_api
-  Scenario: CD :: Dashboard :: Settings :: Chat Tags ::
-  Verify that agent is not able to select tags that are disabled
+  Scenario: CD :: Dashboard :: Settings :: Chat Tags :: Verify that agent is not able to select tags that are disabled
 
     Given I login as Agent of Automation Bot
     And Set false for Auto_Tag tag status

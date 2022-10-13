@@ -35,7 +35,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
 
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2801")
-  Scenario: Supervisor desk:: Verify if tickets are sorted from newest to oldest by default
+  Scenario: CD :: Supervisor Desk :: Tickets :: Verify if tickets are sorted from newest to oldest by default
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Supervisor Desk in submenu

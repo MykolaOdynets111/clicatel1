@@ -24,7 +24,7 @@ Feature: End chat flow: bot mode
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2990")
   @Regression
-  Scenario: CD:: Close chat message enabling and editing for Bot mode tenant
+  Scenario: CD :: Agent Desk :: Close Chat :: Verify that close chat message enabling and editing for Bot mode tenant
     Given Taf End Chat message is set to true for Automation Bot tenant
     And Taf End Chat message message text is updated for Automation Bot tenant
     And I login as agent of Automation Bot

@@ -9,8 +9,10 @@ Feature: Dashboard: Settings: Chat Tags : Ascending and Descending sorting
     Given I login as agent of Standard Billing
     And I select Touch in left menu and Dashboard in submenu
     And Navigate to Chat Tags page
+    When Sort <column> column by asc
+    Then Verify <column> column is sorted by ASC
     When Sort <column> column by desc
-    Then Verify <column> column is sorted by desc
+    Then Verify <column> column is sorted by DESC
     Examples:
       | column     |
       | Tag Name   |

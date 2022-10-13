@@ -15,7 +15,7 @@ Feature: Satisfaction Survey
     And Click "Reset to default" button for End Chat message auto responder
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2125")
-    @Regression
+  @Regression
   Scenario Outline: CD:: Settings :: Survey :: Verify the error message when end user send rating as "-1" or "+1" for NPS/CSAT -
     Given Setup ORCA <channelType> integration for Automation Bot tenant
     And Update survey management chanel <channelType> settings by ip for Automation Bot

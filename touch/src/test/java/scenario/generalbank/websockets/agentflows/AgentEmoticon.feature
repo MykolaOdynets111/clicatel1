@@ -19,6 +19,7 @@ Feature: Agent emoticons
       | channelType | userType |
       | SMS         | sms      |
 
+  @skip
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1788")
     @Regression
     @no_widget
@@ -58,6 +59,7 @@ Feature: Agent emoticons
       | channelType | userType |
       | SMS         | sms      |
 
+  @skip
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2619")
     @Regression
     @no_widget

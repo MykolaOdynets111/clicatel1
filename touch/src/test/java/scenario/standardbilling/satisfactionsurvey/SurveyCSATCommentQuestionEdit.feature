@@ -66,7 +66,7 @@ Feature: Satisfaction Survey
       | sms         |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1868")
-    @off_survey_sms
+  @off_survey_sms
   Scenario Outline: CD:: SMS:: Settings :: Survey :: Verify if Supervisor message contains only Unicode characters then the total count should be out of 70 in the survey question
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing
