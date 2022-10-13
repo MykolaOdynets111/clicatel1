@@ -1,6 +1,6 @@
 @no_widget
 @orca_api
-@regression
+@Regression
 Feature: Supervisor desk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2799")

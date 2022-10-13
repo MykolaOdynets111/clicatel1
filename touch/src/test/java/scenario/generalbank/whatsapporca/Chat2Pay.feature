@@ -1,9 +1,9 @@
 @no_widget
+@Regression
 Feature: Chat2Pay ::Chat2PayCustomerClosedChat
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1426")
-  @Regression
   Scenario: CD :: Agent Desk :: Closed Chat :: Chat2Pay :: Verify that the customer can close a chat using //end or //stop keywords, when payment is not concluded
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -21,7 +21,6 @@ Feature: Chat2Pay ::Chat2PayCustomerClosedChat
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1163")
-  @Regression
   Scenario: CD :: Agent Desk :: Live Chat :: Chat2Pay :: Verify if payment link expires after 5 mins
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -39,7 +38,6 @@ Feature: Chat2Pay ::Chat2PayCustomerClosedChat
     Then Agent get 'payment link expired' update is sent to agent desk by C2P
 
   @orca_api
-  @Regression
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1359")
   Scenario: CD :: Agent Desk :: Live Chat :: Chat2Pay :: Verify that the agent gets an options to mark the chat as pending when agent tries to close a chat where payment is not conluded
     Given I login as agent of General Bank Demo
@@ -61,9 +59,8 @@ Feature: Chat2Pay ::Chat2PayCustomerClosedChat
     Then Agent has new conversation request from orca user
 
   @orca_api
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-1683")
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-1660")
-    @Regression
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1683")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1660")
   Scenario Outline: CD:: C2P:: Verify if Agent can use Chat2Pay in WhatsApp
     Given I login as agent of General Bank Demo
     Given Setup ORCA <channelType> integration for General Bank Demo tenant

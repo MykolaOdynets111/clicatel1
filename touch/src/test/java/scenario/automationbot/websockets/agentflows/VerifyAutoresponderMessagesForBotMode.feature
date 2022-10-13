@@ -4,8 +4,7 @@
 Feature: Auto responder massages: bot mode
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2497")
-  Scenario: CD :: Dashboard :: Configure :: Settings ::
-  Auto Responders :: Verify the welcome message text changing for Bot mode tenant
+  Scenario: CD :: Dashboard :: Configure :: Settings :: Auto Responders :: Verify the welcome message text changing for Bot mode tenant
     Given Setup ORCA Whatsapp integration for Automation Bot tenant
     And Taf Connecting Agent message (Social Channels) is set to true for Automation Bot tenant
     When Send connect to agent message by ORCA

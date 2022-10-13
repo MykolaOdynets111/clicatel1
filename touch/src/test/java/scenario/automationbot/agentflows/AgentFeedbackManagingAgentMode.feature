@@ -1,11 +1,11 @@
 @chat_preferences
+@Regression
 Feature: Turning on / off AGENT_FEEDBACK feature for Agent mode tenant
 
   Background:
     Given Setup ORCA whatsapp integration for Automation Bot tenant
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2975")
-  @Regression
   Scenario: CD:: Dashboard Setting:: Turning off 'Additional Agent Notes to Closed Chat' feature (Agent mode tenant)
     Given agentFeedback tenant feature is set to false for Automation Bot
     And I login as agent of Automation Bot

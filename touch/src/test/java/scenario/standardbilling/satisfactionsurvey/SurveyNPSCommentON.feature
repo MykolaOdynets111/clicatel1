@@ -2,11 +2,12 @@
 @off_rating_whatsapp
 @off_rating_abc
 @no_chatdesk
+@Regression
 Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2243")
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-1348")
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-1764")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1348")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1764")
   Scenario Outline: CD :: Dashboard :: Configure :: Settings :: Survey :: <channelType> :: Verify that Admin/Supervisor should be able to turn ON/OFF a request for user to Leave a note
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing

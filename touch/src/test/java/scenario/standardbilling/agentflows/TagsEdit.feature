@@ -8,6 +8,7 @@ Feature: Tags
     When Navigate to Chat Tags page
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2781")
+  @Regression
   Scenario: CD :: Dashboard :: Settings :: Chat Tags :: Verify if Admin is able to cancel editing an existing tag
     When Create chat tag
     And Click the pencil icon to edit the tag
