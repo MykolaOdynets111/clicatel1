@@ -37,6 +37,7 @@ Feature: Satisfaction Survey
       | Whatsapp         |
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-18595")
+  @skip
   Scenario Outline: verify if agent is able to see NPS rating from the survey that the customer completed on the chat view
     Given I login as agent of Standard Billing
     And Setup ORCA <channelType> integration for Standard Billing tenant
