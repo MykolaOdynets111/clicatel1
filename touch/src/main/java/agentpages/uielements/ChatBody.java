@@ -110,13 +110,16 @@ public class ChatBody extends AbstractUIElement {
     private List<WebElement> channelSeparators;
 
     @FindBy(css=".cl-c2p-event-message-title")
-    private WebElement expire_c2p_text;
+    private WebElement paymentLink_c2p_text;
 
     @FindBy (css = "[data-testid='card']")
     private WebElement c2pCard;
 
     @FindBy (css = ".cl-extension-item")
     private WebElement extensionItem;
+
+    @FindBy(css=".cl-c2p-message-footer-cancel-payment-text")
+    private WebElement cancelPaymentButton;
 
     public List<String> getChanelSeparatorsText() {
         return channelSeparators.stream().map(e->e.getText()).collect(Collectors.toList());
@@ -130,8 +133,8 @@ public class ChatBody extends AbstractUIElement {
         return getAttributeFromElem(this.getCurrentDriver(), locationHREFFormUser,5, "Location href", "href");
     }
 
-    public String getC2pExpiresCardsText(){
-        return getTextFromElem(this.getCurrentDriver(), expire_c2p_text, 5,"Expire c2p text");
+    public String getC2pPaymentCardsText(){
+        return getTextFromElem(this.getCurrentDriver(), paymentLink_c2p_text, 5,"Expire c2p text");
     }
 
     public String getC2pCardsText(){
@@ -360,4 +363,7 @@ public class ChatBody extends AbstractUIElement {
         return "Incorrect indicator was provided in steps";
     }
 
+    public void clickCancelPaymentButton(){
+        clickElem(this.getCurrentDriver(), cancelPaymentButton, 10, "Cancel Payment button");
+    }
 }

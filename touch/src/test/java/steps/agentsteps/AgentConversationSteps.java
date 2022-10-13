@@ -742,15 +742,31 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         c2pSendForm.setOrderNumberField(order).setPriceForOrder(price).clickSendButton();
     }
 
+    @And("^(.*) clicks on the cancel payment button on the payment card$")
+    public void clicksCancelPaymentButton(String agent) {
+        getAgentHomePage(agent).getChatBody().clickCancelPaymentButton();
+    }
+
+    @And("^(.*) gets pending to live chat dialog with header (.*)$")
+    public void isPendingToLiveChatDialogShown(String agent, String expectedText) {
+        Assert.assertTrue(getAgentHomePage(agent).getChatPendingToLiveForm().getFormHeaderTitle().equalsIgnoreCase(expectedText),
+                "Header Title is not correct");
+    }
+
+    @And("^(.*) clicks on go to chat button$")
+    public void agentClicksGoToChatButton(String agent) {
+        getAgentHomePage(agent).getChatPendingToLiveForm().clickGoToChatButton();
+    }
+
     @And("^Agent send date picker form with name (.*) and send$")
     public void sendDatePicker(String name) {
         getAgentHomePage("main").getChatForm().setDevicePickerName(name);
         c2pSendForm.clickSendButton();
     }
 
-    @Then("^(.*) get 'payment link expired' update is sent to agent desk by C2P$")
-    public void verifyExpirationC2p(String agent){
-        Assert.assertTrue(getAgentHomePage(agent).getChatBody().getC2pExpiresCardsText().contains("Payment link expired"), "Expire card didn't come from c2p");
+    @Then("^(.*) get (.*) update is sent to agent desk by C2P$")
+    public void verifyPaymentC2pText(String agent, String paymentText){
+        Assert.assertTrue(getAgentHomePage(agent).getChatBody().getC2pPaymentCardsText().contains(paymentText), "Expire card didn't come from c2p");
     }
 
     @Then("^(.*) sees C2P link with (.*) number in chat body$")

@@ -173,6 +173,9 @@ public class LeftMenuWithChats extends AbstractUIElement {
         new ChatInLeftMenu(getTargetChat(userName)).setCurrentDriver(this.getCurrentDriver()).openConversation();
     }
 
+    public void openFirstChat() {
+        newConversationRequests.get(0).click();
+    }
 
     public boolean isNewWebWidgetRequestIsShown(int wait) {
         return isNewConversationIsShown(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), wait);
