@@ -138,6 +138,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then  Verify that live chats available are shown
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2369")
+    @support_hours
   Scenario: CD:: Supervisor desk :: Verify if Supervisor is able to Route ticket to scheduler
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     And Set agent support hours with day shift
@@ -155,7 +156,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Agent has new conversation request from ORCA user
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2108")
-  @Regression
+  @support_hours
   Scenario: CD:: Supervisor:: Verify if supervisor is able to close "Assign Chat" modal
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     When Set agent support hours for all week
@@ -183,7 +184,6 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Agent can see whatsapp profile name
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1302")
-  @Regression
   Scenario: CD :: Supervisor Desk :: Chat :: Chat2Pay :: Verify that supervisor does not have the capability to initiate a payment transaction
     Given I login as agent of General Bank Demo
     When Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -199,7 +199,6 @@ Feature: Whatsapp ORCA :: Chatdesk
 
   @chat_preferences
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2751")
-  @Regression
   Scenario: CD :: Chat :: Verify that neutral sentiment is set by default when agent closes a chat
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     And agentFeedback tenant feature is set to true for General Bank Demo

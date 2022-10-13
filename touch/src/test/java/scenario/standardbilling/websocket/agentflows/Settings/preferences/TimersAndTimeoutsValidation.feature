@@ -1,5 +1,6 @@
 @remove_dep
-@Regression
+@skip
+#Only for checking default value. Should be run only after tenant creation
 Feature: Dashboard: Settings: Preferences: Timers & Timeouts
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2043")
