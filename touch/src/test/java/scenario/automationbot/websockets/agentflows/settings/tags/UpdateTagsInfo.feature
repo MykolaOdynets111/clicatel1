@@ -4,6 +4,7 @@ Feature: Dashboard: Settings: Chat Tags : Update tags info
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2764")
   Scenario: CD :: Dashboard :: Settings :: Chat Tags :: Verify if tag last used updates when agent adds tag to note when closing at chat
+
     Given I login as Agent of Automation Bot
     And Setup ORCA Whatsapp integration for Automation Bot tenant
     When Send connect to agent message by ORCA
