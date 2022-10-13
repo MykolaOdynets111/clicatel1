@@ -77,8 +77,8 @@ public class Hooks implements JSHelper {
         }
 
         if (scenario.getSourceTagNames().contains("@start_orca_server")) {
+            System.setProperty("sqsuse", "true");
             new SyncMessageReceiver().startSQSReader();
-//            new OrcaServer().startServer();
         }
     }
 

@@ -41,8 +41,6 @@ public class SyncMessageReceiver {
     public void startSyncMessageReceiver() throws JMSException {
         System.out.println("Start SQS consuming process");
 
-        SQSConfiguration config = SQSConfiguration.parseConfig();
-
         SqsClient sqsClient = SQSConfiguration.getSqsClient();
 
         SQSConnectionFactory connectionFactory = new SQSConnectionFactory(
@@ -58,7 +56,7 @@ public class SyncMessageReceiver {
         Session session =  connection.createSession(false, SQSSession.CLIENT_ACKNOWLEDGE);
 
 
-        MessageConsumer consumer = session.createConsumer( session.createQueue( config.getQueueName() ) );
+        MessageConsumer consumer = session.createConsumer( session.createQueue( SQSConfiguration.getQueueName() ) );
 
         connection.start();
 

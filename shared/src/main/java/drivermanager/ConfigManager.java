@@ -17,6 +17,8 @@ public class ConfigManager {
     private static final String SUITE = "suite";
     private static final String IS_MC2 = "ismc2";
     private static final String IS_WEB_WIDGET = "iswebwidget";
+    private static final String IS_SQS_USED = "sqsuse";
+
 
     // TestFLO reporter configs
     private static final String REPORT_TESTFLO = "reportToTestFLO";
@@ -173,9 +175,6 @@ public class ConfigManager {
         return isWebWidget != null && Boolean.parseBoolean(isWebWidget);
     }
 
-
-
-
      public static String getTenantOrgName(){
         String tenantOrgName = System.getProperty(TENANT_ORG_NAME);
         if(tenantOrgName==null){
@@ -198,5 +197,9 @@ public class ConfigManager {
 
     public static String getSuite(){
         return System.getProperty(SUITE, "all");
+    }
+
+    public static boolean isSQSUsed(){
+        return Boolean.parseBoolean(System.getProperty(IS_SQS_USED, "false"));
     }
 }
