@@ -61,8 +61,6 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) user's message$")
     public void verifyUserMessageOnAgentDesk(String userMessage) {
-        OrcaSQSHandler.orcaMessages.clear();
-
         if (userMessage.contains("personal info"))
         {
             userMessage = "Submitted data:\n" +
