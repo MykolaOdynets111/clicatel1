@@ -23,7 +23,7 @@ Feature: Supervisor desk
     Then Supervisor can see sms ticket with Hi from Supervisor message from agent
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1724")
-  Scenario: CD :: SMS :: Tickets :: Verify Supervisor/Agent are unable to send WhatsApp HSM for tickets in SMS
+  Scenario: CD :: SMS :: Tickets :: Verify Supervisor are unable to send WhatsApp HSM for tickets in SMS
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     And Agent select sms ticket

@@ -28,6 +28,9 @@ public class ChatBody extends AbstractUIElement {
     private final String fromUserMessagesXPATH = ".//div[contains(@class,'from')]//*[text()='%s']";
 
     private final String messagesInChatBodyXPATH = ".//div[contains(@data-testid, 'chat-message-content-PlainMessage')]";
+
+    private final String messagesInChatBodyLinkXPATH = ".//div[contains(@data-testid, 'chat-message-content-PlainMessage')]//a";
+
     private final String messagesInChatBodyHistoryXPATH = ".//div[contains(@data-testid, 'history-detail')]//div[contains(@data-testid, 'chat-message-content-PlainMessage')]";
 
     @FindBy(css = ".spinner")
@@ -247,6 +250,11 @@ public class ChatBody extends AbstractUIElement {
                     allMessages.add(e.getText());
                 });
         return allMessages;
+    }
+
+    public ChatBody clickLatestLinkMessage(String text) {
+        clickElem(this.getCurrentDriver(), findElemByXPATH(this.getCurrentDriver(), messagesInChatBodyLinkXPATH), 10, "Latest user chat message");
+        return this;
     }
 
     public List<String> getHistoryMessages() {

@@ -293,6 +293,10 @@ public class AgentHomePage extends AgentAbstractPage {
         return isElementShown(this.getCurrentDriver(), profanityPopup,10);
     }
 
+    public boolean isProfanityPopupNotShown(){
+        return isElementRemoved(this.getCurrentDriver(), profanityPopup,10);
+    }
+
     public void clickAcceptProfanityPopupButton(){
         acceptProfanityPopupButton.click();
         for(int i = 0; i<10;i++){

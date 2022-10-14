@@ -565,6 +565,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         }
     }
 
+    @Then("^(.*) checks the link (.*) is opened in the new tab$")
+    public void checkLinkIsOpenedInNewTab(String agent, String expectedURL){
+        String currentURL = DriverFactory.getDriverForAgent("main").getCurrentUrl();
+        Assert.assertTrue(currentURL.equalsIgnoreCase(expectedURL), "The URL is not as expected");
+    }
+
     @When("^Agent refresh current page$")
     public void refreshCurrentPage(){
         DriverFactory.getDriverForAgent("main").navigate().refresh();

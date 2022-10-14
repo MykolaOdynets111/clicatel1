@@ -19,6 +19,7 @@ import io.cucumber.java.en.When;
 import org.apache.commons.io.FileUtils;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import sqsreader.OrcaSQSHandler;
 import steps.DefaultTouchUserSteps;
 import steps.FacebookSteps;
 import steps.TwitterSteps;
@@ -60,6 +61,8 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) user's message$")
     public void verifyUserMessageOnAgentDesk(String userMessage) {
+        OrcaSQSHandler.orcaMessages.clear();
+
         if (userMessage.contains("personal info"))
         {
             userMessage = "Submitted data:\n" +
@@ -288,6 +291,11 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         messagesFromChatBody.set(getChatBody(agent).getAllMessages());
     }
 
+    @And("^(.*) clicks the link message (.*)$")
+    public void clickOnLinkMessage(String agent, String text){
+        getChatBody(agent).clickLatestLinkMessage(text);
+    }
+
     @Then("Sent emoji is displayed on chatdesk$")
     public void verifyEmojiDisplayedOnChatdesk() {
         Assert.assertTrue(getChatBody("main agent").getAgentEmojiResponseOnUserMessage(selectedEmoji),
@@ -467,6 +475,12 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     public void verifyProfanityNotAllowedPopupShown() {
         Assert.assertTrue(getAgentHomePage("main").isProfanityPopupShown(),
                 "'Profanity not allowed' popup not shown.");
+    }
+
+    @Then("^'Profanity not allowed' pop up is not shown$")
+    public void verifyProfanityNotAllowedPopupNotShown() {
+        Assert.assertTrue(getAgentHomePage("main").isProfanityPopupNotShown(),
+                "'Profanity not allowed' popup is shown.");
     }
 
     @When("^(.*) closes 'Profanity not allowed' popup$")
