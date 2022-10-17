@@ -12,39 +12,16 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 
-@FindBy(xpath = "//div[@class = 'agent-view--left-sidebar' or @class = 'supervisor-view-group-chats-by']/div[1]")
+@FindBy(xpath = "//div[contains(@class, 'agent-view--left-sidebar') or @class = 'supervisor-view-group-chats-by']/div[1]")
 public class LeftMenuWithChats extends AbstractUIElement {
 
-    @FindAll({
-
-            @FindBy(css = "a[data-testid^=chat-list-item]"),
-            @FindBy(css = "a[selenium-id^=chat-list-item]") //toDo old locator
-    })
+    @FindBy(css = "a[data-testid^=chat-list-item]")
     private List<WebElement> newConversationRequests;
-
-    @FindAll({
-            @FindBy(css = "[data-testid=filter-dropdown-menu]"),
-            @FindBy(css = "[selenium-id=filter-dropdown-menu]") //toDo old locator
-    })
-    private WebElement filterDropdownMenu;
-
-    @FindAll({
-            @FindBy(css = "[data-testid=filter-dropdown-menu-item]"),
-            @FindBy(css = "[selenium-id=filter-dropdown-menu-item]") //toDo old locator
-    })
-    private List<WebElement> filterOptions;
-
-    @FindAll({
-            @FindBy(css = "[data-testid=unread-msg-count]"),
-            @FindBy(css = "[selenium-id=unread-msg-count]")    //toDo old locator
-    })
-    private WebElement newConversationIcon;
 
     @FindAll({
             @FindBy(css = "[data-testid=roster-item]"),
@@ -54,12 +31,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     @FindBy(css = ".cl-chat-item--selected")
     private WebElement activeChat;
-
-    @FindAll({
-            @FindBy(css = "[data-testid=roster-scroll-container]"),
-            @FindBy(css = "[selenium-id=roster-scroll-container]")  //toDo old locator
-    })
-    private WebElement scrollableArea;
 
     @FindAll({
             @FindBy(css = "[data-testid='search-filter-btn']"),
@@ -118,37 +89,27 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = "button .cl-r-button--reset-only")
     private WebElement filterRemove;
 
-    //@FindBy (css = ".cl-message-sender .cl-message-composer .cl-message-composer__inner .cl-message-composer__tools-bar .cl-button cl-button--reset-only[selenium-id~=message-composer-location]" )
-    @FindBy(css = "#Union")
-    private WebElement locationButton;
-
-    @FindBy(css = "[cl-chat-item cl-chat-item--selected]")
-    private WebElement agentLiveCustomer;
-
     @FindAll({
             @FindBy(css = ".chats-list>.cl-empty-state"),
             @FindBy(css = ".cl-empty-state>div")
     })
     private WebElement noResultsFoundText;
 
-
     private String targetProfile = ".//div[contains(@class, 'info')]/h2[text()='%s']";
-
     private String loadingSpinner = ".//*[text()='Connecting...']";
 
     private FilterMenu filterMenu;
 
-//    private  ChatSortingMenu chatSortingMenu;
-
     private WebElement getTargetChat(String userName) {
-        return newConversationRequests.stream().filter(e -> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver())
-                .getUserName().equals(userName)).findFirst().orElseThrow(() -> new AssertionError(
-                "No chat was found from: " + userName));
+        return newConversationRequests.stream().filter(e -> new ChatInLeftMenu(e)
+                .setCurrentDriver(this.getCurrentDriver())
+                .getUserName().equals(userName))
+                .findFirst().orElseThrow(() ->
+                        new AssertionError("No chat was found from: " + userName));
     }
 
     public List<String> getAllFoundChatsUserNames() {
-        return newConversationRequests
-                .stream()
+        return newConversationRequests.stream()
                 .map(e -> new ChatInLeftMenu(e)
                         .setCurrentDriver(this.getCurrentDriver())
                         .getUserName())
@@ -201,17 +162,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
             waitFor(1000);
         }
         return false;
-    }
-
-    public boolean isNewConversationRequestFromSocialShownByChannel(String userName, String channel, int wait) {
-        try {
-            waitForElementToBeVisible(this.getCurrentDriver(), newConversationIcon, wait);
-            return newConversationRequests.stream().
-                    anyMatch(e -> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver()).getUserName().equals(userName)
-                            & new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver()).getChatsChannel().equalsIgnoreCase(channel));
-        } catch (TimeoutException | NoSuchElementException e) {
-            return false;
-        }
     }
 
     public boolean isNewConversationIsShown(String userName, int wait) {
@@ -298,7 +248,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
         return new ChatInLeftMenu(activeChat).setCurrentDriver(this.getCurrentDriver()).getLastMessageText();
     }
 
-
     public boolean isValidImgForActiveChat(String adapter) {
         return new ChatInLeftMenu(activeChat).setCurrentDriver(this.getCurrentDriver()).isValidImg(adapter);
     }
@@ -306,10 +255,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
     public boolean isValidIconSentimentForActiveChat(String message) {
         return new ChatInLeftMenu(activeChat).setCurrentDriver(this.getCurrentDriver()).isValidIconSentiment(message);
     }
-
-//    public String getExpandFilterButtonColor() {
-//        return Color.fromString(expandFilterButton.getCssValue("color")).asHex();
-//    }
 
     public String getUserPictureColor() {
         return Color.fromString(userPicture.getCssValue("background-color")).asHex();
@@ -388,9 +333,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     public String checkStartDateFilterEmpty() {
         openFilterMenu();
-        String actualValueForDateFilter = filterMenu.isStartDateIsEmpty();
-
-        return actualValueForDateFilter;
+        return filterMenu.isStartDateIsEmpty();
     }
 
     public void removeFilter() {
@@ -402,10 +345,4 @@ public class LeftMenuWithChats extends AbstractUIElement {
                 .map(e -> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver()))
                 .allMatch(chat -> chat.getAdapterIconName().equalsIgnoreCase(channelName));
     }
-
-//    public ChatSortingMenu cSortingButton(){
-//        chatSortingMenu.clicksortingButton();
-//        return chatSortingMenu;
-//    }
-
 }
