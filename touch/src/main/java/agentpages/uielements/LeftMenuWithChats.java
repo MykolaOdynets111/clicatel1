@@ -141,6 +141,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
 //    private  ChatSortingMenu chatSortingMenu;
 
     private WebElement getTargetChat(String userName) {
+        waitForElementsToBeVisible(this.getCurrentDriver(), newConversationRequests, 5);
         return newConversationRequests.stream().filter(e -> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver())
                 .getUserName().equals(userName)).findFirst().orElseThrow(() -> new AssertionError(
                 "No chat was found from: " + userName));
