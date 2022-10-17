@@ -17,7 +17,6 @@ Feature: Agent emoticons
     And Sent emoji is displayed on chatdesk
     Examples:
       | channelType | userType |
-      | Whatsapp    | orca     |
       | SMS         | sms      |
 
   @skip
@@ -71,9 +70,10 @@ Feature: Agent emoticons
     And Agent has new conversation request from <userType> user
     And Agent click on new conversation request from <userType>
     And Conversation area becomes active with chat to agent user's message
-    And Agent is able to see the typing indicator as 13 / 160 Characters on chatdesk
-    And Agent click on emoji icon
-    And Agent is able to see the typing indicator as 70 Characters on chatdesk
+    And Agent clears and types characters chat to agent in conversation input field on chatdesk
+    Then Agent is able to see the typing indicator as 13 / 160 Characters on chatdesk
+    When Agent click on emoji icon
+    Then Agent is able to see the typing indicator as 70 Characters on chatdesk
     When Agent clears and types characters Please rate your experience with our agent Please rate your experience with our agent Please rate your experience with our agent Please rate your experience with Please rate with in conversation input field on chatdesk
     Then Agent is able to see the typing indicator as 178 / 170 Characters on chatdesk
     Examples:
