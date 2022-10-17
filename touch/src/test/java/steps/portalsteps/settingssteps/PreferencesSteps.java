@@ -104,7 +104,6 @@ public class PreferencesSteps extends AbstractPortalSteps {
     @When("^Select (.*) department By Default$")
     public void selectDefaultDepartment(String name) {
         getPreferencesWindow().selectDefaultDepartment(name);
-        saveChanges();
     }
 
     @When("^Switch Last Agent routing$")

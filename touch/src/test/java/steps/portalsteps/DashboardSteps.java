@@ -21,6 +21,7 @@ import org.testng.asserts.SoftAssert;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class DashboardSteps extends AbstractPortalSteps {
@@ -30,6 +31,7 @@ public class DashboardSteps extends AbstractPortalSteps {
     private final ThreadLocal<Integer> npsPassivesPercentage = new ThreadLocal<>();
     private final ThreadLocal<Double> actualCustomerSatisfactionScoreOld = new ThreadLocal<>();
     private final ThreadLocal<Double> actualCustomerSatisfactionScoreNew = new ThreadLocal<>();
+
     @And("^Admin click on Customers Overview dashboard tab$")
     public void agentClickOnCustomersOverviewDashboardTab() {
         getDashboardPage().clickOnCustomersOverviewTab();
@@ -57,19 +59,19 @@ public class DashboardSteps extends AbstractPortalSteps {
         for (String graph : myArray) {
             if (graph.trim().equalsIgnoreCase("Net Promoter Score")) {
                 softAssert.assertTrue(getDashboardPage().getNetPromoterScoreSection().isPromoterScoreBarsDisplayed(),
-                        String.format("Promoter Score Bars is not displayed for section %s", graph));
+                        format("Promoter Score Bars is not displayed for section %s", graph));
                 softAssert.assertTrue(getDashboardPage().getNetPromoterScoreSection().isPromoterScorePieDisplayed(),
-                        String.format("Promoter Score Pie is not displayed for section %s", graph));
+                        format("Promoter Score Pie is not displayed for section %s", graph));
             }
             if (graph.trim().equalsIgnoreCase("Customer Satisfaction")) {
                 softAssert.assertTrue(getDashboardPage().getCustomerSatisfactionSection()
                                 .isCustomerSatisfactionScoreDisplayed(),
-                        String.format("Customer Satisfaction Score is not displayed for section %s", graph));
+                        format("Customer Satisfaction Score is not displayed for section %s", graph));
             }
             softAssert.assertTrue(getCustomersHistory().isGraphDisplayed(graph),
-                    String.format("%s Graph is not Displayed", graph));
+                    format("%s Graph is not Displayed", graph));
             softAssert.assertTrue(getCustomersHistory().isNoDataRemovedForGraph(graph),
-                    String.format("No data is displayed for %s Graph", graph));
+                    format("No data is displayed for %s Graph", graph));
         }
         softAssert.assertAll();
     }
@@ -85,7 +87,7 @@ public class DashboardSteps extends AbstractPortalSteps {
             getDashboardPage().getCustomersOverviewTab().selectPeriodForReport(period.get());
             SoftAssert softAssert = new SoftAssert();
             softAssert.assertTrue(getCustomersHistory().isGraphFilteredBy(channel.get(), period.get()),
-                    String.format("Graph is not filtered by %s channel and %s period", channel, period));
+                    format("Graph is not filtered by %s channel and %s period", channel, period));
             softAssert.assertAll();
         }
     }
@@ -105,7 +107,7 @@ public class DashboardSteps extends AbstractPortalSteps {
     @Then("^Admin see all graphs filtered by (.*) channel and (.*) period$")
     public void adminSeeAllGraphsFilteredByWebchatChannelAndPastDayPeriod(String channel, String period) {
         softAssert.assertTrue(getCustomersHistory().isGraphFilteredBy(channel, period),
-                String.format("Graph is not filtered by %s channel and %s period", channel, period));
+                format("Graph is not filtered by %s channel and %s period", channel, period));
         softAssert.assertAll();
     }
 
@@ -136,13 +138,13 @@ public class DashboardSteps extends AbstractPortalSteps {
     @Then("^Admin should see (.*) charts in General sentiment per channel$")
     public void adminShouldSeeAbcChartInGeneralSentimentPerChannel(String channel) {
         Assert.assertTrue(getDashboardPage().getGeneralSentimentPerChannel().isChartsForChannelShown(channel),
-                String.format("%s chart is not displayed in General sentiment per channel", channel));
+                format("%s chart is not displayed in General sentiment per channel", channel));
     }
 
     @Then("^Admin should see (.*) charts in Attended vs. Unattended Chats$")
     public void adminShouldSeeAbcChartInAttendedVsUnattendedChats(String channel) {
         Assert.assertTrue(getDashboardPage().getAttendedVsUnattendedChats().isChartsForChannelShown(channel),
-                String.format("%s chart is not displayed in Attended vs. Unattended Chats", channel));
+                format("%s chart is not displayed in Attended vs. Unattended Chats", channel));
     }
 
     @Then("^'No Active agents' on Agents Performance tab shown if there is no online agent$")
@@ -154,6 +156,7 @@ public class DashboardSteps extends AbstractPortalSteps {
                             "Could be affected by TPLAT-5990");
         }
     }
+
     @And("^Admin see all information about the (.*) is filled under active agent tab$")
     public void adminSeeAllInformationAboutTheSecondAgentIsFilledUnderActiveAgentTab(String agent) {
         AvailableAgent availableAgent = getAvailableAgent(agent);
@@ -162,13 +165,13 @@ public class DashboardSteps extends AbstractPortalSteps {
 
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(agentRow.isLiveChatsNumberShown(),
-                String.format("Live chats number is not shown for agent %s", availableAgent.getAgentFullName()));
+                format("Live chats number is not shown for agent %s", availableAgent.getAgentFullName()));
         softAssert.assertTrue(agentRow.isChannelsNumberShown(),
-                String.format("Channels number is not shown for agent %s", availableAgent.getAgentFullName()));
+                format("Channels number is not shown for agent %s", availableAgent.getAgentFullName()));
         softAssert.assertTrue(agentRow.isSentimentsShown(),
-                String.format("Sentiments are not shown for agent %s", availableAgent.getAgentFullName()));
+                format("Sentiments are not shown for agent %s", availableAgent.getAgentFullName()));
         softAssert.assertTrue(agentRow.isAverageDurationShown(),
-                String.format("Average duration is not shown for agent %s", availableAgent.getAgentFullName()));
+                format("Average duration is not shown for agent %s", availableAgent.getAgentFullName()));
         softAssert.assertAll();
     }
 
@@ -183,6 +186,7 @@ public class DashboardSteps extends AbstractPortalSteps {
                 availableAgent.getAgentFullName() + " icon has incorrect number of active chats");
 
     }
+
     @When("^Admin clicks expand arrow for (.*)$")
     public void expandAgentsRowInChatConsole(String agent) {
         AvailableAgent availableAgent = getAvailableAgent(agent);
@@ -190,12 +194,14 @@ public class DashboardSteps extends AbstractPortalSteps {
                 .getTargetAgentRow(availableAgent.getName(), availableAgent.getSurname())
                 .clickExpandButton();
     }
+
     private AvailableAgent getAvailableAgent(String agent) {
         return ApiHelper.getAvailableAgents().stream()
                 .filter(e -> e.getEmail().equalsIgnoreCase(
                         Agents.getAgentFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName(), agent).getAgentEmail()))
                 .findFirst().get();
     }
+
     @When("^Admin clicks expand agents performance table arrow for (.*) department$")
     public void adminClicksExpandAgentsPerformanceTableArrow(String agent) {
         AvailableAgent availableAgent = getAvailableAgent(agent);
@@ -218,10 +224,10 @@ public class DashboardSteps extends AbstractPortalSteps {
         LiveAgentsCustomerRow customerRow = getDashboardPage().getAgentsTableDashboard().getOpenCustomersRow(userId);
 
         softAssert.assertEquals(sentiment, customerRow.getSentiment().toUpperCase(),
-                String.format("Sentiment is wrong for %s user", userId));
+                format("Sentiment is wrong for %s user", userId));
         //need to be investigated
         softAssert.assertEquals(customerRow.getIntent(), intent,
-                String.format("Intent is wrong for %s user", userId));
+                format("Intent is wrong for %s user", userId));
 
         softAssert.assertAll();
 
@@ -344,6 +350,7 @@ public class DashboardSteps extends AbstractPortalSteps {
     public void adminIsAbleToDifferentCSATRating() {
         Assert.assertTrue(actualCustomerSatisfactionScoreOld.get() <= actualCustomerSatisfactionScoreNew.get(), "Customer Satisfaction Score are different: actual: " + actualCustomerSatisfactionScoreOld + " expected: " + actualCustomerSatisfactionScoreNew);
     }
+
     @Then("^Admin see the Net Promoter Score as negative$")
     public void adminSeeTheNetPromoterScoreAsNegative() {
         Assert.assertTrue(getDashboardPage().getNetPromoterScoreSection().getNetPromoterScore() < 0,
@@ -358,20 +365,13 @@ public class DashboardSteps extends AbstractPortalSteps {
                 "Number of sentiments is not shown for all general sentiments charts");
     }
 
-    @Then("^Verify admin can see number of positive sentiment chats when hover over (.*) channel$")
-    public void verifyAdminCanSeeNumberOfPositiveSentimentChatsWhenHoverOverChannel(String channel) {
-        Assert.assertTrue(getDashboardPage()
-                        .getGeneralSentimentPerChannel()
-                        .isNumberOfSentimentsShownForAllSentimentsCharts(channel),
-                String.format("Number of positive sentiment chats is not shown after hovering on %s chart", channel));
-    }
-
-    @Then("^Verify admin can see number of neutral sentiment chats when hover over (.*) channel$")
-    public void verifyAdminCanSeeNumberOfNeutralSentimentChatsWhenHoverOverChannel(String channel) {
-        Assert.assertTrue(getDashboardPage()
-                        .getGeneralSentimentPerChannel()
-                        .isNumberOfSentimentsShownForAllSentimentsCharts(channel),
-                String.format("Number of positive sentiment chats is not shown after hovering on %s chart", channel));
+    @Then("^Verify admin can see number of chats when hover over (.*) channel$")
+    public void verifyNumberOfChatsAreShownWhenHoverOverChannel(String channel) {
+        assertThat(getDashboardPage()
+                .getGeneralSentimentPerChannel()
+                .isNumberOfSentimentsShownForChart(channel))
+                .as(format("Number of chats should be shown after hovering on %s chart", channel))
+                .isTrue();
     }
 
     @Then("^Admin should see live customers section$")
@@ -417,7 +417,7 @@ public class DashboardSteps extends AbstractPortalSteps {
         Assert.assertTrue(getDashboardPage()
                         .getAttendedVsUnattendedChats()
                         .isNumberOfAttendedChatsDisplayedForChannel(channel),
-                String.format("Number of attended chats is not shown after hovering on %s chart", channel));
+                format("Number of attended chats is not shown after hovering on %s chart", channel));
     }
 
     @And("^Verify admin can see number of live chats per channel when hover over web chat$")
@@ -443,7 +443,7 @@ public class DashboardSteps extends AbstractPortalSteps {
         SoftAssert softAssert = new SoftAssert();
         for (List<String> graphTimelines : getCustomersHistory().getGraphsTimelines()) {
             softAssert.assertTrue(isTimelinesShownInHours(graphTimelines),
-                    String.format("Timelines %s is not shown hourly", graphTimelines));
+                    format("Timelines %s is not shown hourly", graphTimelines));
         }
         softAssert.assertAll();
     }

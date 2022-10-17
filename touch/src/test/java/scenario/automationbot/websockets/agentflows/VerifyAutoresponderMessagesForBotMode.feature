@@ -10,7 +10,7 @@ Feature: Auto responder massages: bot mode
     When Send connect to agent message by ORCA
     Then Verify Orca returns Connecting Agent message (Social Channels) autoresponder during 40 seconds
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2497")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2364")
   @support_hours
   Scenario: CD:: Dashboard:: Auto Responder:: Busy message enabling and editing for Bot mode tenant
     Given Setup ORCA Whatsapp integration for Automation Bot tenant
