@@ -22,8 +22,8 @@ Feature: Supervisor desk
     And Supervisor send Hi from Supervisor to agent trough SMS chanel
     Then Supervisor can see sms ticket with Hi from Supervisor message from agent
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1903")
-  Scenario: CD:: SMS :: Tickets :: Verify Agent is unable to send WhatsApp HSM for tickets in SMS chat
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1724")
+  Scenario: CD :: SMS :: Tickets :: Verify Supervisor are unable to send WhatsApp HSM for tickets in SMS
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     And Agent select sms ticket
