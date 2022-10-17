@@ -9,6 +9,9 @@ Feature: Chat Tags
     And Login into portal as an admin of Automation Bot account
     When I select Touch in left menu and Dashboard in submenu
     And Navigate to Business Profile page
-    Then Admin can see Settings page with - "<Tab options>"
-    |Tab options|
-    |Business Profile, Chat Tags, Auto Responders, Preferences, Surveys|
+    Then Admin can see Settings page with - all tabs
+      | Business Profile |
+      | Chat Tags        |
+      | Auto Responders  |
+      | Preferences      |
+      | Surveys          |

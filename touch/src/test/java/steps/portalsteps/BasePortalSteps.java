@@ -3,12 +3,14 @@ package steps.portalsteps;
 
 import agentpages.dashboard.DashboardSettingsPage;
 import apihelper.ApiHelper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javafaker.Faker;
 import datamanager.Agents;
 import datamanager.MC2Account;
 import datamanager.Tenants;
 import datamanager.TopUpBalanceLimits;
 import datamanager.jacksonschemas.TenantChatPreferences;
+import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.model.PaymentMethod;
 import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
@@ -1606,28 +1608,14 @@ public class BasePortalSteps extends AbstractPortalSteps {
         return mainPage;
     }
 
-    @Then("^Admin can see Settings page with - (.*)$")
-    public void verifySettingPageTabOptions(List<String> tabNames){
-        SoftAssert softAssert = new SoftAssert();
-
-        //getDashboardSettingsPage().getSettingTabsText();
-
-
-       // getSettingTabsText()
-/*        softAssert.assertTrue(getDashboardSettingsPage().isSettingTabsShown("Business Profile"),
-                " Business Profile tab is present");
-
-        softAssert.assertTrue(getDashboardSettingsPage().isSettingTabsShown("Chat Tags"),
-                " Chat Tags tab is present tab is present");
-
-        softAssert.assertTrue(getDashboardSettingsPage().isSettingTabsShown("Auto Responders"),
-                " Auto Responders tab is present");
-
-        softAssert.assertTrue(getDashboardSettingsPage().isSettingTabsShown("Preferences"),
-                " Preferences tab is present");
-
-        softAssert.assertTrue(getDashboardSettingsPage().isSettingTabsShown("Surveys"),
-                " Surveys tab is present");
-        softAssert.assertAll();*/
+    @Then("^Admin can see Settings page with - all tabs$")
+    public void verifySettingPageTabOptions(List<String> datatable){
+        List<String> actualTabNames = getDashboardSettingsPage().getSettingTabsText();
+        if(datatable.size()==actualTabNames.size()){
+            Assert.assertEquals(actualTabNames,datatable, "Comparable strings does not match");
+        }
+        else {
+            Assert.fail("List size does not match, hence, can not compare the list");
+        }
     }
 }

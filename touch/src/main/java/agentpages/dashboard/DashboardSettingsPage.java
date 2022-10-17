@@ -70,7 +70,8 @@ public class DashboardSettingsPage extends PortalAbstractPage {
         waitForAppearAndDisappear(this.getCurrentDriver(), surveySpinner, 3, 4);
     }
 
-    public List<String> getSettingTabsText(String elementType) {
+    //public List<String> getSettingTabsText(String elementType) {
+    public List<String> getSettingTabsText() {
         List<String> settingTabsText = new ArrayList<>();
         settingTabs.stream().forEach(e -> {
             settingTabsText.add(e.getText());
