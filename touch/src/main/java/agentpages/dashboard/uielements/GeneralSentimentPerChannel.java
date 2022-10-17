@@ -1,32 +1,33 @@
 package agentpages.dashboard.uielements;
 
 import abstractclasses.AbstractUIElement;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
 import static io.appium.java_client.pagefactory.utils.WebDriverUnpackUtility.unpackWebDriverFromSearchContext;
+import static java.lang.String.format;
 
 @FindBy(css = ".sentiments-box")
 public class GeneralSentimentPerChannel extends AbstractUIElement {
-    private final String numberOfSentimentInTooltipCss = ".sentiment-tooltip>b";
-
-    private final String sentimentChartsByChannelXpath =
-            ".//span[text()='%s']/ancestor::div[@class='channel-stats']//div[contains(@class, 'cl-bar-chart__bar ')]";
-
-    private final String positiveSentimentChartByChannelXpath =
-            ".//span[text()='%s']/ancestor::div[@class='channel-stats']//div[contains(@class, 'bar-positiveSentiments')]";
-
-    private final String NerutralSentimaentChartByChannelXpath =
-            ".//span[text()='%s']/ancestor::div[@class='channel-stats']//div[contains(@class, 'channel-stats__charts channel-stats__charts--sentiments')]";
 
     @FindBy(css = ".channel-stats .cl-bar-chart__bar")
     private List<WebElement> sentimentsCharts;
 
+    private final String sentimentChartsByChannelXpath =
+            ".//span[text()='%s']/ancestor::div[@class='channel-stats']//div[contains(@class, 'cl-bar-chart__bar ')]";
+
+    private WebElement getSentimentsChartForChannel(String channel){
+        String sentimentsChart = format(".//span[text()='%s']/ancestor::div[@class='channel-stats']" +
+                "//div[contains(@class, 'channel-stats__charts channel-stats__charts--sentiments')]", channel);
+        return findElementByXpath(this.getCurrentDriver(), sentimentsChart, 5);
+    }
+
     public boolean isChartsForChannelShown(String channel) {
         return findElemsByXPATH(unpackWebDriverFromSearchContext(this.getWrappedElement()),
-                String.format(sentimentChartsByChannelXpath, channel))
+                format(sentimentChartsByChannelXpath, channel))
                 .stream().allMatch(sentimentChart -> isElementShown(this.getCurrentDriver(), sentimentChart, 3));
     }
 
@@ -37,14 +38,15 @@ public class GeneralSentimentPerChannel extends AbstractUIElement {
         });
     }
 
-    public boolean isNumberOfSentimentsShownForAllSentimentsCharts(String channel) {
-        hoverElemByXpath(unpackWebDriverFromSearchContext(this.getWrappedElement()),
-                String.format(NerutralSentimaentChartByChannelXpath, channel), 5,
-                "Neutral sentiment chart");
+    public boolean isNumberOfSentimentsShownForChart(String channel) {
+        WebElement sentimentsChartForChannel = getSentimentsChartForChannel(channel)
+                .findElement(By.xpath(".//div[@class = 'cl-bar-chart__bar-container']"));
+        hoverElem(this.getCurrentDriver(), sentimentsChartForChannel, 5, "Neutral sentiment chart");
         return isNumberOfSentimentShownInTooltip();
     }
 
     public boolean isNumberOfSentimentShownInTooltip() {
+        String numberOfSentimentInTooltipCss = ".sentiment-tooltip>b";
         return isElementShownByCSS(this.getCurrentDriver(), numberOfSentimentInTooltipCss, 3);
     }
 }
