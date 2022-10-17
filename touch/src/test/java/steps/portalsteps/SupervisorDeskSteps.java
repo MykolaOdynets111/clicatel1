@@ -1,6 +1,7 @@
 package steps.portalsteps;
 
 import agentpages.uielements.ChatBody;
+import agentpages.uielements.DatePicker;
 import apihelper.ApiHelper;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.TenantChatPreferences;
@@ -60,7 +61,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().getSupervisorTicketsTable().getTicketByUserName(getUserName(chanel)).clickOnUserName();
     }
 
-    @When("^Click on Massage Customer button$")
+    @When("^Click on Message Customer button$")
     public void clickOnMassageCustomer() {
         getSupervisorDeskPage().getSupervisorTicketClosedChatView().clickOnMessageCustomerButton();
     }
@@ -73,6 +74,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @When("^Supervisor send (.*) to agent trough (.*) chanel$")
     public void sendTicketMessageToCustomer(String message, String chanel) {
         getSupervisorDeskPage().getMessageCustomerWindow().selectChanel(chanel).setMessageText(message).clickSubmitButton();
+    }
+
+    @When("^Supervisor is unable to send (.*) HSM on Tickets for (.*) chat$")
+    public void hsmChannelNotShownOnParticularChannel(String channel, String originalChannel) {
+        Assert.assertFalse(getSupervisorDeskPage().getMessageCustomerWindow().isChanelShown(channel),
+                channel + " HSM is present in: " + originalChannel);
     }
 
     @When("^Click 'Route to scheduler' button$")
@@ -305,6 +312,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertTrue(getSupervisorDeskPage().openInboxChatBody(getUserName(channel)).isUserMessageShown(message), "Messages is not the same");
     }
 
+    @Then("^Supervisor can see (.*) ticket with (.*) message from agent$")
+    public void verifyTicketMessagePresent(String channel, String message) {
+        Assert.assertTrue(getSupervisorDeskPage().getTicketChatBody().isToUserMessageShown(message), "Messages is not the same");
+    }
+
     @When("^Verify that correct messages and timestamps are shown on Chat View$")
     public void openChatViewAndVerifyMessages() {
         List<String> messagesFromChatBody = AgentConversationSteps.getMessagesFromChatBody().get();
@@ -471,9 +483,20 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 
-    @And("^Admin checks back button is (.*) in calendar for (.*) filter 3 months ago in supervisor$")
-    public void backButtonDisability(String visibility, String filterType) {
-        getSupervisorDeskPage().checkBackButtonVisibilityThreeMonthsBack(filterType);
+    @And("^Admin checks value of start date filter is empty for (\\d+) year (\\d+) month and (\\d+) days ago$")
+    public void agentStartDateFilterEmptyCheck(int year, int month, int day) {
+        LocalDate startDate = LocalDate.now().minusYears(year).minusMonths(month).minusDays(day);
+        LocalDate endDate = LocalDate.now();
+
+        getSupervisorDeskPage().getSupervisorDeskHeader()
+                .selectStartDate(startDate)
+                .selectEndDate(endDate);
+        Assert.assertTrue(getSupervisorDeskPage().getSupervisorDeskHeader().checkStartDateFilterIsEmpty().isEmpty(), "Start date filter is not empty");
+    }
+
+    @And("^(.*) checks back button is (.*) in calendar for (.*) filter (.*) days ago in supervisor$")
+    public void backButtonDisability(String agent, String visibility, String filterType, Long day) {
+        Assert.assertTrue(new DatePicker(agent).checkBackButtonVisibilityThreeMonthsBack(filterType, day));
     }
 
     @Then("^Verify closed chats dates are fitted by filter$")
@@ -579,7 +602,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void agentClickAssignButton() {
         getSupervisorDeskPage().getChatHeader().clickOnAssignButton();
     }
-    
+
     @When("Assign chat modal is opened")
     public void assignChatModalOpened() {
         Assert.assertTrue(getSupervisorDeskPage().getAssignChatWindow().isAssignWindowShown());

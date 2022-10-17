@@ -1,16 +1,15 @@
 package steps.agentsteps;
 
-import agentpages.uielements.C2pSendForm;
-import agentpages.uielements.ChatAttachment;
-import agentpages.uielements.LocationWindow;
-import agentpages.uielements.Suggestion;
+import agentpages.uielements.*;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javafaker.Faker;
 import com.google.common.io.Files;
 import datamanager.Intents;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.Intent;
+import datamanager.jacksonschemas.chatextension.ChatExtension;
 import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
@@ -44,6 +43,8 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     public static ThreadLocal<String> locationURL = new ThreadLocal<String>();
     private LocationWindow locationWindow ;
     private C2pSendForm c2pSendForm;
+
+    private Extensions extensions;
 
     public static String getSelectedEmoji() {
         return selectedEmoji;
@@ -151,7 +152,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         DefaultTouchUserSteps.mediaFileName.set(newName);
 
         getAgentHomePage("agent").openAttachmentWindow().setPathToFile(renamed.getPath());
-        Assert.assertTrue(getChatAttachmentForm("agent").isFileUploaded(), "File was not uploaded to widget");
+        Assert.assertTrue(getChatAttachmentForm("agent").isFileUploaded(), "File was not uploaded to form");
     }
 
     @When("^Agent send attached file$")
@@ -182,7 +183,8 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         File fileForUpload = new File(System.getProperty("user.dir")+"/src/test/resources/mediasupport/renamed/" + DefaultTouchUserSteps.mediaFileName.get());
 //        String sharedFolder = File.separator + File.separator+ "172.31.76.251"+File.separator + "Share" + File.separator
 //                + "chrome" + File.separator;
-        String sharedFolder = "\\\\172.31.76.251\\Share\\chrome\\";
+        //String sharedFolder = "\\\\172.31.76.251\\Share\\chrome\\";
+        String sharedFolder = System.getProperty("user.home")+ "/Downloads/";
         File downloadedFile = new File( sharedFolder +  DefaultTouchUserSteps.mediaFileName.get());
         List<String> allFiles = new ArrayList<>();
         for (int i=0; i < 10; i++){
@@ -208,6 +210,23 @@ public class AgentConversationSteps extends AbstractAgentSteps {
             e.printStackTrace();
         }
         Assert.assertTrue(fileEquality, "Files are not equal after uploading and downloading");
+    }
+
+    @Then("(.*) is able to see the File is downloaded after downloading$")
+    public boolean isFileDownloaded(String userType) {
+        String downloadPath = System.getProperty("user.home")+ "/Downloads/";
+        String fileName = DefaultTouchUserSteps.mediaFileName.get();
+        File dir = new File(downloadPath);
+        File[] dirContents = dir.listFiles();
+
+        for (int i = 0; i < dirContents.length; i++) {
+            if (dirContents[i].getName().equals(fileName)) {
+                // File has been found, it can now be deleted:
+                dirContents[i].delete();
+                return true;
+            }
+        }
+        return false;
     }
 
     @Then("^Agent can play (.*) file$")
@@ -273,6 +292,24 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     public void verifyEmojiDisplayedOnChatdesk() {
         Assert.assertTrue(getChatBody("main agent").getAgentEmojiResponseOnUserMessage(selectedEmoji),
                 "'" + selectedEmoji + "' User message is not shown in conversation area");
+    }
+
+    @Then("Sent emoji from user (.*) is displayed on chatdesk$")
+    public void verifySentUserEmojiDisplayedOnChatdesk(String emoji) {
+        Assert.assertTrue(getChatBody("main agent").isAgentEmojiUserMessageShown(emoji),
+                "'" + selectedEmoji + "' User message is not shown in conversation area");
+    }
+
+    @When("(.*) clears and types characters (.*) in conversation input field on chatdesk$")
+    public void agentTypesTextInConversationInputField(String agent, String text) {
+        Assert.assertTrue(getAgentHomePage(agent).getChatForm().clearAndTypeResponseToUser(text).getTextFromMessageInputField().contains(text),
+                "'" + text + "' input field text is not shown in conversation area");
+    }
+
+    @Then("(.*) is able to see the typing indicator as (.*) on chatdesk$")
+    public void verifyTypingIndicatorDisplayedOnChatdesk(String agent, String expectedIndicatorText) {
+        Assert.assertTrue(getAgentHomePage(agent).getChatForm().getTypingIndicatorText().contains(expectedIndicatorText),
+                "'" + expectedIndicatorText + "' typing indicator text is not shown in conversation area");
     }
 
     @Then("^There is no from (.*) response added by default for (.*) message from fb user$")
@@ -482,6 +519,13 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).endChat();
     }
 
+    @When("^(.*) closes chat and checks error dialog$")
+    public void closeChatAndCheckErrorDialog(String agent) {
+        getAgentHomeForMainAgent().endChatWithoutChatMessageValidation();
+
+        Assert.assertTrue(getAgentHomeForMainAgent().isDisappearingDialogShown(), "Error dialog is not shown");
+    }
+
     @Then("^All session attributes are closed in DB$")
     public void verifySessionClosed() {
         SoftAssert soft = new SoftAssert();
@@ -680,6 +724,14 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         c2pSendForm = getAgentHomePage(agent).openc2pSendForm();
     }
 
+    @When("^(.*) open and select extension with name$")
+    public void agentOpenC2PFormWithExtensionName(String agent, List<String> datatable){
+        for(String a : datatable) {
+            c2pSendForm = getAgentHomePage(agent).openc2pSendForm(a);
+            waitFor(1000);
+        }
+    }
+
     @When("^(.*) click start chat button$")
     public void agentClickStartChatButton(String agent){
         getAgentHomePage(agent).getChatForm().openHSMForm();
@@ -690,6 +742,12 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         c2pSendForm.setOrderNumberField(order).setPriceForOrder(price).clickSendButton();
     }
 
+    @And("^Agent send date picker form with name (.*) and send$")
+    public void sendDatePicker(String name) {
+        getAgentHomePage("main").getChatForm().setDevicePickerName(name);
+        c2pSendForm.clickSendButton();
+    }
+
     @Then("^(.*) get 'payment link expired' update is sent to agent desk by C2P$")
     public void verifyExpirationC2p(String agent){
         Assert.assertTrue(getAgentHomePage(agent).getChatBody().getC2pExpiresCardsText().contains("Payment link expired"), "Expire card didn't come from c2p");
@@ -698,6 +756,26 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @Then("^(.*) sees C2P link with (.*) number in chat body$")
     public void verifyExpirationC2p(String agent, String number){
         Assert.assertTrue(getAgentHomePage(agent).getChatBody().getC2pCardsText().contains(number), "C2P link with number: "+ number +"is not shown in chat body");
+    }
+
+    @Then("^(.*) sees extension link with (.*) name in chat body$")
+    public void verifyDatePickerChatBody(String agent, String name){
+        Assert.assertTrue(getAgentHomePage(agent).getChatBody().getExtensionCardText().contains(name), "Date Picker with name: "+ name +"is not shown in chat body");
+    }
+
+    @Then("^(.*) checks extensions in Frequently Used tab should be available in All Extension tab as well$")
+    public void verifyExtensionsFrequentExtTabAllExtTab(String agent){
+        getAgentHomePage(agent).getChatForm().openExtensionsForm();
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(getAgentHomePage(agent).getExtensionsForm().isFreqUsedTabsExtsExistInAllExtsTab(), "Frequently used extension is not there in all extensions" );
+        softAssert.assertTrue(getAgentHomePage(agent).getExtensionsForm().frequentExtListSizeAllExtensionListSizeComparison(), "Frequently used extension size is more than all extensions" );
+        softAssert.assertAll();
+    }
+
+    @Then("^(.*) checks extensions in Frequently Used tab should be less than 10$")
+    public void verifyFrequentExtensionTabWithLessThan10Extensions(String agent){
+        getAgentHomePage(agent).getChatForm().openExtensionsForm();
+        Assert.assertTrue(getAgentHomePage(agent).getExtensionsForm().frequentExtListSize() < 10, "Frequently used extension is not less than 10");
     }
 
 }

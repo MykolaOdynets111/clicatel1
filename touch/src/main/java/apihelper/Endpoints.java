@@ -38,8 +38,6 @@ public class Endpoints {
 
     public static String DELETE_AGENT_IMAGE = URLs.getTouchApiBaseURL() + "agents/%s/image";
 
-    public static String TENANT_CONFIG = URLs.getTouchApiBaseURL() + "tenants/%s/config";
-
     public static String TENANT_INFO = URLs.getTouchApiBaseURL() + "tenant";
 
     public static String ACTIVE_CHATS_BY_AGENT = URLs.getBaseWSApiURL() + "chats/search?page=0&size=200";
@@ -48,14 +46,9 @@ public class Endpoints {
 
     public static String CRM_TICKET = URLs.getTouchApiBaseURL() + "client-profiles/%s/crm-tickets";
 
-    public static String DELETE_CRM_TICKET = URLs.getTouchApiBaseURL() + "client-profiles/crm-tickets/";
-
     public static String TAGS_FOR_CRM_TICKET = URLs.getTouchApiBaseURL() + "api/tags";
 
-    public static String TENANT_BRAND_LOGO = URLs.getTouchApiBaseURL() + "tenants/%s/resources/tenant_logo";
-
-    public static String TENANT_BRAND_LOGO_TRANS = URLs.getTouchApiBaseURL() + "tenants/%s/resources/tenant_logo_trans";
-
+    public static String DELETE_TENANT_LOGO = URLs.getTouchApiBaseURL() + "api/tenant-resource/all";
     public static String TENANT_AVAILABLE_AGENTS = URLs.getTouchApiBaseURL() + "agent-availability/logged-in";
 
     public static String CLIENT_PROFILE_ATTRIBUTES = URLs.getTouchApiBaseURL() + "client-profiles/attributes";
@@ -79,6 +72,9 @@ public class Endpoints {
     public static String INTERNAL_LAST_CLIENT_SESSION = URLs.getBaseInternalApiUrl() + "sessions/tenant/%s/client/%s/last";
 
     public static String CHAT_PREFERENCES = URLs.getBaseWSApiURL() + "tenants/chat-preferences";
+
+    public static String EXTENSIONS = URLs.getBaseWSApiURL() + "extensions";
+
     public static String INTERNAL_COUNT_OF_LOGGED_IN_AGENTS = URLs.getBaseInternalApiUrl() + "loggedin-agents-count/%s";
 
     public static String INTERNAL_CREATE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles";

@@ -19,15 +19,15 @@ public class AgentDeskChatMessage extends AbstractWidget {
     private WebElement sentEmoji;
 
     @FindAll({
-            @FindBy(css = "[selenium-id=chat-message-content-PlainMessage]"),
-            @FindBy(css = "[selenium-id=chat-message-content-InputCardMessage]")
+            @FindBy(css = "[data-testid=chat-message-content-PlainMessage]"),
+            @FindBy(css = "[data-testid=chat-message-content-InputCardMessage]")
     })
     private WebElement messageText;
 
     @FindBy(css = messageTimeCssLocator)
     private WebElement messageTime;
 
-    @FindBy(css = "[selenium-id=channel-separator-title]")
+    @FindBy(css = "[data-testid=channel-separator-title]")
     private WebElement channelSeparator;
 
     public AgentDeskChatMessage(WebElement element) {
@@ -41,7 +41,7 @@ public class AgentDeskChatMessage extends AbstractWidget {
 
     public String getMessageText() {
         try {
-            return messageText.getAttribute("innerText").trim();
+            return messageText.getText().trim();
         } catch (NoSuchElementException e) {
             return "no text response found";
         }

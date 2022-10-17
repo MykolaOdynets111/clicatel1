@@ -34,10 +34,8 @@ Feature: Satisfaction Survey
       | SMS         |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1735")
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-1824")
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-1698")
     @off_survey_sms
-  Scenario Outline: CD:: SMS:: Settings :: Survey :: Verify if Supervisor should be allowed to type plain text message more then the total count of 160 in the survey question
+  Scenario Outline: CD :: SMS :: Settings :: Survey :: Verify if Supervisor should be allowed to type plain text message more then the total count of 160 in the survey question
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing
       | ratingEnabled | true        |
@@ -68,8 +66,7 @@ Feature: Satisfaction Survey
       | sms         |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1868")
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-1777")
-    @off_survey_sms
+  @off_survey_sms
   Scenario Outline: CD:: SMS:: Settings :: Survey :: Verify if Supervisor message contains only Unicode characters then the total count should be out of 70 in the survey question
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing
@@ -89,6 +86,9 @@ Feature: Satisfaction Survey
     And Agent click save survey configuration button for <channelType> survey form
     Then Agent checks question title character limit as 70 characters in survey form
     And Supervisor is able to see the number of characters typed for text in survey form
+    When Customize your survey "Please rate your experience with our agent" question with emoji
+    And Agent click save survey configuration button for <channelType> survey form
+    Then Agent checks question title character limit as 170 characters in survey form
     When Customize your survey "ふりがな" question with emoji
     And Agent click save survey configuration button for <channelType> survey form
     Then Agent checks question title character limit as 4 / 70 characters in survey form

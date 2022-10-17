@@ -54,7 +54,7 @@ public class Event {
     private String name;
     @JsonProperty("nestedEvent")
     private NestedEvent nestedEvent;
-//    @JsonProperty("size")
+    //    @JsonProperty("size")
 //    private long size;
     @JsonProperty("ref")
     private String ref;

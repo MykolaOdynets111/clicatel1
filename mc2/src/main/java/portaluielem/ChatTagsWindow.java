@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import static org.openqa.selenium.By.cssSelector;
 import static org.openqa.selenium.By.xpath;
 
 @FindBy(css = ".cl-chat-tags-page")
@@ -17,8 +18,8 @@ public class ChatTagsWindow extends BasePortalWindow {
     @FindBy(css = "[class='cl-button cl-button--secondary cl-add-button']")
     private WebElement addChatTagButton;
 
-  @FindBy(css =".cl-form-control--input-primary")
-  private WebElement nameInput;
+    @FindBy(css = "[type='text']")
+    private WebElement nameInput;
 
     @FindBy(css = "[class='cl-button cl-button--reset-only cl-tag-form__save-button']")
     private WebElement saveButton;
@@ -76,6 +77,12 @@ public class ChatTagsWindow extends BasePortalWindow {
                 .collect(Collectors.toList());
     }
 
+    public String getCellValue(String column, String tag) {
+        int tagNumber = getColumnValueList("Tag Name").indexOf(tag);
+
+        return getColumnValueList(column).get(tagNumber);
+    }
+
     public void clickSortedColumn(String column, String sortingType) {
         while (!getSortButtonForColumn(column, sortingType).getAttribute("class").contains("active")) {
             getSortButtonForColumn(column, sortingType).click();
@@ -117,9 +124,7 @@ public class ChatTagsWindow extends BasePortalWindow {
     public ChatTagsWindow clickEditTagButton(String tagName) {
         WebElement row = getRowByName(tagName);
         moveToElement(this.getCurrentDriver(), row);
-        moveToElemAndClick(this.getCurrentDriver(), clickPencilIcon);
-        row.findElement(By.cssSelector(".cl-tag-form__pencil-icon")).click();
-
+        row.findElement(cssSelector(".cl-tag-form__pencil-icon")).click();
         return this;
     }
 

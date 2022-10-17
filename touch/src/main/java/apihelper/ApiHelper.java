@@ -1,8 +1,11 @@
 package apihelper;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javafaker.Faker;
 import datamanager.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import datamanager.jacksonschemas.*;
+import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.jacksonschemas.chathistory.ChatHistory;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.departments.Department;
@@ -35,8 +38,6 @@ public class ApiHelper implements VerificationHelper {
 
     private static List<HashMap> tenantsInfo = null;
     public static ThreadLocal<String> clientProfileId = new ThreadLocal<>();
-
-    public static ThreadLocal<String> featureName = new ThreadLocal<>();
 
     public static String getInternalTenantConfig(String tenantName, String config) {
         String url = format(Endpoints.CHAT_PREFERENCES, tenantName);
@@ -180,7 +181,7 @@ public class ApiHelper implements VerificationHelper {
                 .jsonPath().getList("", AutoResponderMessage.class);
     }
 
-    public static void updateAutoresponderMessage(AutoResponderMessage tafMessage, String autoResponderId) {
+    public static void updateAutoresponderMessage(AutoResponderMessage tafMessage) {
         String url = format(Endpoints.AUTORESPONDER_CONTROLLER, tafMessage.getId());
         Response resp = RestAssured.given().log().all()
                 .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
@@ -270,16 +271,24 @@ public class ApiHelper implements VerificationHelper {
 
     }
 
-    public static void updateFeatureStatus(String tenantOrgName, ChatPreferenceSettings chatPreferenceSettings) {
-        String url = Endpoints.CHAT_PREFERENCES;
-
+    public static void updateFeatureStatus(ChatPreferenceSettings chatPreferenceSettings) {
         Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON)
                 .body(chatPreferenceSettings)
-                .put(url);
+                .put(Endpoints.CHAT_PREFERENCES);
         Assert.assertEquals(resp.statusCode(), 200,
                 "Status code is not 200 and body value is \n: " + chatPreferenceSettings.toString() + "\n error message is: " + resp.getBody().asString());
+    }
+
+    public static void createExtensions(String extensionBody) {
+        Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
+                .accept(ContentType.ANY)
+                .contentType(ContentType.JSON)
+                .body(extensionBody)
+                .put(Endpoints.EXTENSIONS);
+        Assert.assertEquals(resp.statusCode(), 200,
+                "Status code is not 200 and body value is \n: " + extensionBody + "\n error message is: " + resp.getBody().asString());
     }
 
     public static boolean getFeatureStatus(String tenantOrgName, String FEATURE) {
@@ -716,7 +725,6 @@ public class ApiHelper implements VerificationHelper {
                 .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .get(Endpoints.CUSTOMER_VIEW + sessionId)
                 .getBody().jsonPath();
-
     }
 
     public static String getCustomerSince(String customerSinceFullDate) {
@@ -737,31 +745,6 @@ public class ApiHelper implements VerificationHelper {
             Assert.fail("Agent image was not successful" + " status code = " + resp.statusCode() +
                     "\n Body: " + resp.getBody().asString());
         }
-    }
-
-    public static void deleteTenantBrandImage(String tenantOrgName) {
-        String tenantID = getTenant(tenantOrgName).get("id");
-        RestAssured.given()
-                .header("Authorization", getAccessToken(tenantOrgName, "main"))
-                .delete(format(Endpoints.TENANT_BRAND_LOGO, tenantID));
-
-        RestAssured.given()
-                .header("Authorization", getAccessToken(tenantOrgName, "main"))
-                .delete(format(Endpoints.TENANT_BRAND_LOGO_TRANS, tenantID));
-    }
-
-    public static Response getTenantBrandImage(String tenantOrgName) {
-        String tenantID = getTenant(tenantOrgName).get("id");
-        return RestAssured.given()
-                .header("Authorization", getAccessToken(tenantOrgName, "main"))
-                .get(format(Endpoints.TENANT_BRAND_LOGO, tenantID));
-    }
-
-    public static Response getTenantBrandImageTrans(String tenantOrgName) {
-        String tenantID = getTenant(tenantOrgName).get("id");
-        return RestAssured.given()
-                .header("Authorization", getAccessToken(tenantOrgName, "main"))
-                .get(format(Endpoints.TENANT_BRAND_LOGO_TRANS, tenantID));
     }
 
     public static Response getSessionDetails(String clientID) {
@@ -832,7 +815,6 @@ public class ApiHelper implements VerificationHelper {
         }
     }
 
-
     public static String getClientProfileId(String clientID) {
         return getSessionDetails(clientID).getBody().jsonPath().getString("data.clientProfileId[0]");
     }
@@ -859,14 +841,6 @@ public class ApiHelper implements VerificationHelper {
                 .post(format(Endpoints.CRM_TICKET, ticketInfo.get("clientProfileId")));
     }
 
-    public static void deleteCRMTicket(String crmTicketId) {
-        RestAssured.given().log().all()
-                .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
-                .accept(ContentType.JSON)
-                .delete(Endpoints.DELETE_CRM_TICKET + crmTicketId);
-    }
-
-
     public static Response updateTenantConfig(String tenantOrgName, TenantChatPreferences body) {
         String tenantId = getTenant(tenantOrgName).get("id");
         return RestAssured.given().log().all()
@@ -883,8 +857,6 @@ public class ApiHelper implements VerificationHelper {
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON).get(Endpoints.TENANT_CHAT_PREFERENCES).getBody().as(TenantChatPreferences.class);
     }
-
-    //    Response resp = ApiHelper.createFBChat(FacebookPages.getFBPageFromCurrentEnvByTenantOrgName(tenantOrgName).getFBPageId(), 1912835872122481l, "to agent the last");
 
     public static Response createFBChat(long linkedFBPageId, long fbUserId, String message) {
         Faker faker = new Faker();

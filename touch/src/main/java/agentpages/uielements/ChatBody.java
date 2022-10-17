@@ -14,6 +14,7 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -26,7 +27,8 @@ public class ChatBody extends AbstractUIElement {
 
     private final String fromUserMessagesXPATH = ".//div[contains(@class,'from')]//*[text()='%s']";
 
-    private final String messagesInChatBodyXPATH = ".//ul[contains(@class, 'chat-container')]/div";
+    private final String messagesInChatBodyXPATH = ".//div[contains(@data-testid, 'chat-message-content-PlainMessage')]";
+    private final String messagesInChatBodyHistoryXPATH = ".//div[contains(@data-testid, 'history-detail')]//div[contains(@data-testid, 'chat-message-content-PlainMessage')]";
 
     @FindBy(css = ".spinner")
     private WebElement spinner;
@@ -46,6 +48,8 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = "div.to .msg > span")
     private List<WebElement> toUserMessagesEmoji;
 
+    @FindBy(css = "div.from .msg > span")
+    private List<WebElement> fromUserMessagesEmoji;
     @FindBy(css = "[selenium-id=empty-avatar]")
     private WebElement agentIconWIthInitials;
 
@@ -67,7 +71,7 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = ".rate-card-feedback-text")
     private WebElement rateCardComment;
 
-    @FindBy(css = ".from.file-msg")
+    @FindBy(css = ".msg-MediaMessage")
     private WebElement attachmentMessage;
 
     @FindBy(css = "[selenium-id='chat-message-content-opted-out']")
@@ -111,6 +115,8 @@ public class ChatBody extends AbstractUIElement {
     @FindBy (css = "[data-testid='card']")
     private WebElement c2pCard;
 
+    @FindBy (css = ".cl-extension-item")
+    private WebElement extensionItem;
 
     public List<String> getChanelSeparatorsText() {
         return channelSeparators.stream().map(e->e.getText()).collect(Collectors.toList());
@@ -130,6 +136,10 @@ public class ChatBody extends AbstractUIElement {
 
     public String getC2pCardsText(){
         return getTextFromElem(this.getCurrentDriver(), c2pCard, 5,"c2p text");
+    }
+
+    public String getExtensionCardText(){
+        return getTextFromElem(this.getCurrentDriver(), extensionItem, 5,"Extension Card text");
     }
 
     public boolean isHSMShownForAgent(){
@@ -189,19 +199,25 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public boolean getAgentEmojiResponseOnUserMessage(String userMessage) {
-            for (int i = toUserMessagesEmoji.size() - 1; i >= 0; i--) {
-                wheelScrollUpToElement(this.getCurrentDriver(),
-                        this.getCurrentDriver().findElement(By.cssSelector(scrollElement)),
-                        toUserMessagesEmoji.get(i), 1);
+        for (int i = toUserMessagesEmoji.size() - 1; i >= 0; i--) {
+            scrollToElem(this.getCurrentDriver(), toUserMessagesEmoji.get(i), "User agent message element");
 
-                if (toUserMessagesEmoji.get(i).getAttribute("aria-label").trim().contains(userMessage)) {
-                    wheelScroll(this.getCurrentDriver(),
-                            this.getCurrentDriver().findElement(By.cssSelector(scrollElement)),
-                            2000, 0, 0);
-                    return true;
-                }
+            if (toUserMessagesEmoji.get(i).getAttribute("aria-label").trim().contains(userMessage)) {
+                return true;
             }
-            return false;
+        }
+        return false;
+    }
+
+    public boolean isAgentEmojiUserMessageShown(String userMessage) {
+        for (int i = fromUserMessagesEmoji.size() - 1; i >= 0; i--) {
+            scrollToElem(this.getCurrentDriver(), fromUserMessagesEmoji.get(i), "User chat message element");
+
+            if (fromUserMessagesEmoji.get(i).getAttribute("aria-label").trim().contains(userMessage)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isToUserMessageShown(String userMessage) {
@@ -221,11 +237,24 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public List<String> getAllMessages() {
+        List<String> allMessages = new ArrayList<>();
         waitForElementsToBePresentByXpath(this.getCurrentDriver(), messagesInChatBodyXPATH, 10);
-        return findElemsByXPATH(this.getCurrentDriver(), messagesInChatBodyXPATH)
-                .stream().map(e -> new AgentDeskChatMessage(e).setCurrentDriver(this.getCurrentDriver()))
-                .map(e -> e.getMessageInfo().replace("\n", " "))
-                .collect(Collectors.toList());
+        findElemsByXPATH(this.getCurrentDriver(), messagesInChatBodyXPATH)
+                .stream().forEach(e -> {
+                    allMessages.add(e.getText());
+                });
+        return allMessages;
+    }
+
+    public List<String> getHistoryMessages() {
+        List<String> historyMessages = new ArrayList<>();
+
+        waitForElementsToBePresentByXpath(this.getCurrentDriver(), messagesInChatBodyHistoryXPATH, 10);
+        findElemsByXPATH(this.getCurrentDriver(), messagesInChatBodyHistoryXPATH)
+                .stream().forEach(e -> {
+                    historyMessages.add(e.getText());
+                });
+        return historyMessages;
     }
 
     public boolean isOTPDividerDisplayed() {

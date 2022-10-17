@@ -1475,20 +1475,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         ApiHelper.deleteAgentPhotoForMainAQAAgent(Tenants.getTenantUnderTestOrgName());
     }
 
-    @Given("^(.*) tenant has no brand image$")
-    public void deleteTenantBrandImage(String tenantOrgName){
-        Tenants.setTenantUnderTestNames(tenantOrgName);
-        ApiHelper.deleteTenantBrandImage(Tenants.getTenantUnderTestOrgName());
-        String fileType = ApiHelper.getTenantBrandImage(Tenants.getTenantUnderTestOrgName()).contentType();
-        String fileTypeTrans = ApiHelper.getTenantBrandImageTrans(Tenants.getTenantUnderTestOrgName()).contentType();
-        SoftAssert soft = new SoftAssert();
-        soft.assertFalse(fileType.contains("image"),
-                "Image was not deleted on backend");
-        soft.assertFalse(fileTypeTrans.contains("image"),
-                "Image for chat desk (tenant_logo_trans) was not deleted on backend");
-        soft.assertAll();
-    }
-
     @When("^Admin logs out from portal$")
     public void logoutFromPortal(){
         getPortalUserProfileEditingPage().getPageHeader().logoutAdmin();
@@ -1506,7 +1492,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
                 updatedAgentInfo.get("email") + " agent is not present on backend");
     }
 
-
     @Then("^New image is saved on portal and backend$")
     public void verifyImageSaveOnPortal(){
         SoftAssert soft = new SoftAssert();
@@ -1518,20 +1503,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
                 "Agent photo is not shown in portal");
         soft.assertAll();
     }
-
-    @Then("^New brand image is saved on backend for (.*) tenant$")
-    public void verifyBrandImageSaveOnPortal(String tenantOrgName){
-        Tenants.setTenantUnderTestNames(tenantOrgName);
-        String fileType = ApiHelper.getTenantBrandImage(Tenants.getTenantUnderTestOrgName()).contentType();
-        String fileTypeTrans = ApiHelper.getTenantBrandImageTrans(Tenants.getTenantUnderTestOrgName()).contentType();
-        SoftAssert soft = new SoftAssert();
-        soft.assertTrue(fileType.contains("image"),
-                "Image is not saved on backend");
-        soft.assertTrue(fileTypeTrans.contains("image"),
-                "Image for chat desk (tenant_logo_trans) is not saved on backend");
-        soft.assertAll();
-    }
-
     @And("^Change business details$")
     public void changeBusinessDetails() {
         tenantInfo.put("companyName", "New company name "+faker.lorem().word());
@@ -1617,6 +1588,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void editTag() {
         getPortalTouchPreferencesPage().getChatTagsWindow().clickEditTagButton(tagname);
     }
+
     @When("^Cancel editing a tag")
     public void cancelEditingTag() {
         getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickDeleteButton();
@@ -1627,11 +1599,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         Assert.assertTrue(tagname.equalsIgnoreCase(newTagName), "Tag name has not changed");
     }
 
-    @When("^(?:Enable|Disable) tag$")
-    public void disableTag(){
-        getPortalTouchPreferencesPage().getChatTagsWindow().enableDisableTag(tagname);
-    }
-
     private MainPage getMainPage() {
         if (mainPage == null) {
             mainPage = new MainPage();
@@ -1639,10 +1606,15 @@ public class BasePortalSteps extends AbstractPortalSteps {
         return mainPage;
     }
 
-    @Then("^Admin can see Settings page with - options (.*), (.*), (.*), (.*), (.*)$")
-    public void verifySettingPageTabOptions(String a,String b, String c, String d, String e){
+    @Then("^Admin can see Settings page with - (.*)$")
+    public void verifySettingPageTabOptions(List<String> tabNames){
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(getDashboardSettingsPage().isSettingTabsShown("Business Profile"),
+
+        //getDashboardSettingsPage().getSettingTabsText();
+
+
+       // getSettingTabsText()
+/*        softAssert.assertTrue(getDashboardSettingsPage().isSettingTabsShown("Business Profile"),
                 " Business Profile tab is present");
 
         softAssert.assertTrue(getDashboardSettingsPage().isSettingTabsShown("Chat Tags"),
@@ -1656,6 +1628,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
         softAssert.assertTrue(getDashboardSettingsPage().isSettingTabsShown("Surveys"),
                 " Surveys tab is present");
-        softAssert.assertAll();
+        softAssert.assertAll();*/
     }
 }
