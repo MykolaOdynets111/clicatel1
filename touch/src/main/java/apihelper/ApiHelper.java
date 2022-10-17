@@ -776,13 +776,15 @@ public class ApiHelper implements VerificationHelper {
     public static void closeActiveChats(String agent) {
         Response resp = getActiveChatsByAgent(agent);
         List<String> conversationIds = resp.getBody().jsonPath().getList("content.chatId");
-        for (String conversationId : conversationIds) {
-            Response r = RestAssured.given()
-                    .accept(ContentType.JSON).log().all()
-                    .header("Authorization",
-                            getAccessToken(Tenants.getTenantUnderTestOrgName(), agent))
-                    .get(format(Endpoints.CLOSE_ACTIVE_CHAT, conversationId));
-            System.out.println(r.getBody().asString());
+        if(conversationIds!=null) {
+            for (String conversationId : conversationIds) {
+                Response r = RestAssured.given()
+                        .accept(ContentType.JSON).log().all()
+                        .header("Authorization",
+                                getAccessToken(Tenants.getTenantUnderTestOrgName(), agent))
+                        .get(format(Endpoints.CLOSE_ACTIVE_CHAT, conversationId));
+                System.out.println(r.getBody().asString());
+            }
         }
     }
 
