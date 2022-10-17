@@ -6,6 +6,8 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
 
+import java.util.List;
+
 public class DashboardSettingsPage extends PortalAbstractPage {
 
     public DashboardSettingsPage(WebDriver driver) {
@@ -43,6 +45,9 @@ public class DashboardSettingsPage extends PortalAbstractPage {
     @FindBy(xpath = "//div[@data-testid='spinner']")
     private WebElement surveySpinner;
 
+    @FindBy(css=".cl-routed-tabs__tab")
+    private List<WebElement> settingTabs;
+
     public void openSettingsPage(String settingsName) {
         switch (settingsName) {
             case "Business Profile":
@@ -69,29 +74,12 @@ public class DashboardSettingsPage extends PortalAbstractPage {
         waitForAppearAndDisappear(this.getCurrentDriver(), surveySpinner, 3, 4);
     }
 
-    public boolean isSettingTabsShown(String elementType) {
-        boolean flag = false;
+    public List<String> isSettingTabsShown(String elementType) {
+    List<String> settingTabsText;
 
-        switch (elementType) {
-            case "Business Profile":
-                flag = isElementShown(this.getCurrentDriver(), businessProfile, 5);
-                break;
-            case "Chat Tags":
-                flag = isElementShown(this.getCurrentDriver(), chatTags, 5);
-                break;
-            case "Auto Responders":
-                flag = isElementShown(this.getCurrentDriver(), autoResponders, 5);
-                break;
-            case "Preferences":
-                flag = isElementShown(this.getCurrentDriver(), preferences, 5);
-                break;
-            case "Surveys":
-                flag = isElementShown(this.getCurrentDriver(), surveysNavigation, 5);
-                break;
-            default :
-                throw new AssertionError("Incorrect tab type given :  "+ elementType);
-        }
-        return flag;
+        settingTabsText =
+
+
     }
 
     public boolean isBusinessProfileTabShown() {
