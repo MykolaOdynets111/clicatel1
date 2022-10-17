@@ -25,12 +25,11 @@ public class SQSConfiguration {
 
     public static final String DEFAULT_CALLBACK_URL = "https://j7q5gdrxs0.execute-api.eu-west-1.amazonaws.com/Internal/interact/chat-desk/";
 
-    protected static boolean running = true;
+    protected static ThreadLocal<Boolean> running = new ThreadLocal<>();
 
     public static void stopSQSReader() {
-        running = false;
+        running.set(false);
     }
-
 
     public static String getCallbackUrl() {
         if(ConfigManager.isSQSUsed()){

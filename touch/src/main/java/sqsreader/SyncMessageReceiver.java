@@ -68,8 +68,9 @@ public class SyncMessageReceiver {
     }
 
     private void receiveMessages(MessageConsumer consumer ) {
+        SQSConfiguration.running.set(true);
         try {
-            while( SQSConfiguration.running ) {
+            while( SQSConfiguration.running.get() ) {
                 System.out.println( "Waiting for messages");
 
                 Message message = consumer.receive(TimeUnit.MINUTES.toMillis(5));
