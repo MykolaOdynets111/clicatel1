@@ -268,7 +268,7 @@ public class ApiHelper implements VerificationHelper {
 
     }
 
-    public static TenantChatPreferences updateFeatureStatus(TenantChatPreferences tenantChatPreferences) {
+    public static void updateFeatureStatus(TenantChatPreferences tenantChatPreferences) {
         Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON)
@@ -276,7 +276,6 @@ public class ApiHelper implements VerificationHelper {
                 .put(Endpoints.CHAT_PREFERENCES);
         Assert.assertEquals(resp.statusCode(), 200,
                 "Status code is not 200 and body value is \n: " + tenantChatPreferences.toString() + "\n error message is: " + resp.getBody().asString());
-    return resp.getBody().as(TenantChatPreferences.class);
     }
 
     public static void createExtensions(String extensionBody) {

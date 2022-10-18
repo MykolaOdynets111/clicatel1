@@ -145,8 +145,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         results.put("sessionCapacity", agentMaxChatsPerAgent);
 
         if (agentMaxChatsPerAgent < 50) {
-            results.put("sessionCapacityUpdate", ApiHelper.updateFeatureStatus(new TenantChatPreferences()).getMaxChatsPerAgent());
-        } else {
+            ApiHelper.updateFeatureStatus(TenantChatPreferences.getDefaultTenantChatPreferences());
             results.put("sessionCapacityUpdate", 50);
         }
 
