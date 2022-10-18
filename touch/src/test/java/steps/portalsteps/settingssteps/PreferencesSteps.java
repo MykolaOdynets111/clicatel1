@@ -21,6 +21,10 @@ public class PreferencesSteps extends AbstractPortalSteps {
     public void changeChatPerAgent(String chats) {
         getPreferencesWindow().setChatsAvailable(chats);
     }
+    @When("^Change Pending Chats Auto-closure Time:\"(.*)\"$")
+    public void changePendingAutoClosure(String pendingTime) {
+        getPreferencesWindow().setPendingChatAutoClosure(pendingTime);
+    }
 
     @When("^Agent set (\\d*) hours and (\\d*) minutes in Agent Chat Timeout section$")
     public void setInactivityTimeout(int hours, int minutes) {
@@ -79,6 +83,10 @@ public class PreferencesSteps extends AbstractPortalSteps {
     @When("^(.*) Error message is shown$")
     public void decimalErrorIsShownInWindow(String errorMessage) {
         getPreferencesWindow().isErrorMessageShown(errorMessage);
+    }
+    @When("^(.*) Error message is displayed for Pending Auto Closure Time$")
+    public void errorIsShownInWindow(String decimalErrorMessage) {
+        getPreferencesWindow().errorMessageShown(decimalErrorMessage);
     }
 
     @When("^Click off/on Chat Conclusion$")

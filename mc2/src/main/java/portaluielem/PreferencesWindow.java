@@ -59,6 +59,9 @@ public class PreferencesWindow extends BasePortalWindow {
     @FindBy(css = "[name='pendingChatAutoClosureTimeHours']")
     private WebElement pendingChatAutoClosureHours;
 
+    @FindBy(css = ".cl-form-group__error-text")
+    private WebElement pendingErrorMessageDecimalNumbers;
+
     private WebElement getToggleElementByName(String name) {
         return findElementByXpath(this.getCurrentDriver(), String.format(".//h3[text() = '" + name
                 +"']/..//div[@class = 'cl-toggle__label']", name), 10);
@@ -81,6 +84,12 @@ public class PreferencesWindow extends BasePortalWindow {
         chatsAvailable.clear();
         inputText(this.getCurrentDriver(), chatsAvailable,1, "Chat available", chats);
     }
+    public void setPendingChatAutoClosure(String pendingTime){
+        waitForElementToBeVisible(this.getCurrentDriver(), pendingChatAutoClosureHours, 5);
+        scrollToElem(this.getCurrentDriver(), pendingChatAutoClosureHours,"Pending Auto closure time");
+        pendingChatAutoClosureHours.clear();
+        inputText(this.getCurrentDriver(), pendingChatAutoClosureHours,1, "Pending Auto closure time", pendingTime);
+    }
 
     public String getChatsAvailable(){
         waitForElementToBeVisible(this.getCurrentDriver(), chatsAvailable, 5);
@@ -90,6 +99,9 @@ public class PreferencesWindow extends BasePortalWindow {
 
     public void isErrorMessageShown(String errorMessage){
         Assert.assertEquals(chatsErrorMessageDecimalNumbers.getText(),errorMessage);
+    }
+    public void errorMessageShown(String decimalErrorMessage){
+        Assert.assertEquals(pendingErrorMessageDecimalNumbers.getText(),decimalErrorMessage);
     }
 
 
