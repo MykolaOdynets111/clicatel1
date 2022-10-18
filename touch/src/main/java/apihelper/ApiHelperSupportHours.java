@@ -17,13 +17,13 @@ public class ApiHelperSupportHours extends ApiHelper {
         } else {
             body = setSupportDaysAndHours(new GeneralSupportHoursItem(startTime, endTime, singletonList(day)));
         }
-        return postQuery(tenantOrgName, Endpoints.SUPPORT_HOURS, body);
+        return postQuery(tenantOrgName, Endpoints.SUPPORT_HOURS, body,"main");
     }
 
     public static GeneralSupportHoursItem setSupportDaysAndHours(GeneralSupportHoursItem supportHoursItem) {
 
         String tenant = Tenants.getTenantUnderTestOrgName();
-        return getPostQueryFor(tenant, Endpoints.SUPPORT_HOURS, supportHoursItem)
+        return getPostQueryFor(tenant, Endpoints.SUPPORT_HOURS, supportHoursItem,"main")
                 .as(GeneralSupportHoursItem.class);
     }
 

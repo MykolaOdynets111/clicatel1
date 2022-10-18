@@ -1,5 +1,5 @@
 @camunda
-@chat_preferences
+@setting_changes
 @no_widget
 Feature: End chat flow: bot mode
 

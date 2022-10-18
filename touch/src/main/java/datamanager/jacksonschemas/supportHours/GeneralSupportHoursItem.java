@@ -36,6 +36,7 @@ public class GeneralSupportHoursItem {
         this.agentMapping = singletonList(new SupportHoursMapping());
         this.departmentMapping = DepartmentSupportHoursMapping.getAllDepartmentsWithDefaultValue();
     }
+
     public GeneralSupportHoursItem(List<SupportHoursMapping> agentHoursModel,
                                    List<DepartmentSupportHoursMapping> departmentHoursModel) {
         this.agentMapping = agentHoursModel;
