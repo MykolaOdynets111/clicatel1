@@ -144,11 +144,10 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         agentMaxChatsPerAgent = prefs.getMaxChatsPerAgent();
         results.put("sessionCapacity", agentMaxChatsPerAgent);
 
-        //if (agentMaxChatsPerAgent < 50) {
-            //results.put("sessionCapacityUpdate", ApiHelper.updateFeatureStatus(new TenantChatPreferences().getMaxChatsPerAgent());
-        //} else {
+        if (agentMaxChatsPerAgent < 50) {
+            ApiHelper.updateFeatureStatus(TenantChatPreferences.getDefaultTenantChatPreferences());
             results.put("sessionCapacityUpdate", 50);
-        //}
+        }
 
         supportHours = ApiHelperSupportHours.getSupportDaysAndHoursForMainAgent(Tenants.getTenantUnderTestOrgName()).getAgentMapping();
         results.put("supportHours", supportHours);
