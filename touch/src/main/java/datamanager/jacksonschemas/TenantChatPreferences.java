@@ -1,9 +1,12 @@
 package datamanager.jacksonschemas;
 
-import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.openqa.selenium.NoSuchElementException;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -21,164 +24,85 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "globalInactivityTimeoutSec",
         "pendingChatAutoClosureTimeSec"
 })
-@Generated("jsonschema2pojo")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class TenantChatPreferences {
 
     @JsonProperty("maxChatsPerAgent")
-    private Integer maxChatsPerAgent;
+    private int maxChatsPerAgent = 50;
     @JsonProperty("autoTicketScheduling")
-    private Boolean autoTicketScheduling;
+    private boolean autoTicketScheduling = true;
     @JsonProperty("agentFeedback")
-    private Boolean agentFeedback;
+    private String agentFeedback = "true";
     @JsonProperty("tenantMode")
-    private String tenantMode;
+    private String tenantMode = "BOT";
     @JsonProperty("lastAgentMode")
-    private Boolean lastAgentMode;
+    private boolean lastAgentMode = true;
     @JsonProperty("routingType")
-    private String routingType;
+    private String routingType = "RANDOM";
     @JsonProperty("departmentPrimaryStatus")
-    private Boolean departmentPrimaryStatus;
+    private boolean departmentPrimaryStatus = false;
     @JsonProperty("chatTranscriptMode")
-    private String chatTranscriptMode;
+    private String chatTranscriptMode = "ALL";
     @JsonProperty("ticketTimeoutHours")
-    private Integer ticketTimeoutHours;
+    private int ticketTimeoutHours = 120;
     @JsonProperty("agentInactivityTimeoutSec")
-    private Integer agentInactivityTimeoutSec;
+    private int agentInactivityTimeoutSec = 86400;
     @JsonProperty("attachmentLifeTimeDays")
-    private Integer attachmentLifeTimeDays;
+    private int attachmentLifeTimeDays = 90;
     @JsonProperty("globalInactivityTimeoutSec")
-    private Integer globalInactivityTimeoutSec;
+    private int globalInactivityTimeoutSec = 86400;
     @JsonProperty("pendingChatAutoClosureTimeSec")
-    private Integer pendingChatAutoClosureTimeSec;
+    private int pendingChatAutoClosureTimeSec = 86400;
 
-    @JsonProperty("maxChatsPerAgent")
-    public Integer getMaxChatsPerAgent() {
-        return maxChatsPerAgent;
+    public static TenantChatPreferences getDefaultTenantChatPreferences(){
+        return new TenantChatPreferences();
     }
 
-    @JsonProperty("maxChatsPerAgent")
-    public void setMaxChatsPerAgent(Integer maxChatsPerAgent) {
-        this.maxChatsPerAgent = maxChatsPerAgent;
+    public void setFeatureStatus(String feature, String value) {
+        switch (feature) {
+            case "autoTicketScheduling":
+                setAutoTicketScheduling(Boolean.getBoolean(value));
+                break;
+            case "maxChatsPerAgent":
+                setMaxChatsPerAgent(Integer.getInteger(value));
+                break;
+            case "agentFeedback":
+                setAgentFeedback(value);
+                break;
+            case "tenantMode":
+                setTenantMode(value);
+                break;
+            case "lastAgentMode":
+                setLastAgentMode(Boolean.getBoolean(value));
+                break;
+            case "routingType":
+                setRoutingType(value);
+                break;
+            case "departmentPrimaryStatus":
+                setDepartmentPrimaryStatus(Boolean.getBoolean(value));
+                break;
+            case "chatTranscriptMode":
+                setChatTranscriptMode(value);
+                break;
+            case "ticketTimeoutHours":
+                setTicketTimeoutHours(Integer.getInteger(value));
+                break;
+            case "agentInactivityTimeoutSec":
+                setAgentInactivityTimeoutSec(Integer.getInteger(value));
+                break;
+            case "attachmentLifeTimeDays":
+                setAttachmentLifeTimeDays(Integer.getInteger(value));
+                break;
+            case "globalInactivityTimeoutSec":
+                setGlobalInactivityTimeoutSec(Integer.getInteger(value));
+                break;
+            case "pendingChatAutoClosureTimeSec":
+                setPendingChatAutoClosureTimeSec(Integer.getInteger(value));
+                break;
+            default:
+                throw new NoSuchElementException("Json element: '" + feature + "' wasn't found");
+        }
     }
-
-    @JsonProperty("autoTicketScheduling")
-    public Boolean getAutoTicketScheduling() {
-        return autoTicketScheduling;
-    }
-
-    @JsonProperty("autoTicketScheduling")
-    public void setAutoTicketScheduling(Boolean autoTicketScheduling) {
-        this.autoTicketScheduling = autoTicketScheduling;
-    }
-
-    @JsonProperty("agentFeedback")
-    public Boolean getAgentFeedback() {
-        return agentFeedback;
-    }
-
-    @JsonProperty("agentFeedback")
-    public void setAgentFeedback(Boolean agentFeedback) {
-        this.agentFeedback = agentFeedback;
-    }
-
-    @JsonProperty("tenantMode")
-    public String getTenantMode() {
-        return tenantMode;
-    }
-
-    @JsonProperty("tenantMode")
-    public void setTenantMode(String tenantMode) {
-        this.tenantMode = tenantMode;
-    }
-
-    @JsonProperty("lastAgentMode")
-    public Boolean getLastAgentMode() {
-        return lastAgentMode;
-    }
-
-    @JsonProperty("lastAgentMode")
-    public void setLastAgentMode(Boolean lastAgentMode) {
-        this.lastAgentMode = lastAgentMode;
-    }
-
-    @JsonProperty("routingType")
-    public String getRoutingType() {
-        return routingType;
-    }
-
-    @JsonProperty("routingType")
-    public void setRoutingType(String routingType) {
-        this.routingType = routingType;
-    }
-
-    @JsonProperty("departmentPrimaryStatus")
-    public Boolean getDepartmentPrimaryStatus() {
-        return departmentPrimaryStatus;
-    }
-
-    @JsonProperty("departmentPrimaryStatus")
-    public void setDepartmentPrimaryStatus(Boolean departmentPrimaryStatus) {
-        this.departmentPrimaryStatus = departmentPrimaryStatus;
-    }
-
-    @JsonProperty("chatTranscriptMode")
-    public String getChatTranscriptMode() {
-        return chatTranscriptMode;
-    }
-
-    @JsonProperty("chatTranscriptMode")
-    public void setChatTranscriptMode(String chatTranscriptMode) {
-        this.chatTranscriptMode = chatTranscriptMode;
-    }
-
-    @JsonProperty("ticketTimeoutHours")
-    public Integer getTicketTimeoutHours() {
-        return ticketTimeoutHours;
-    }
-
-    @JsonProperty("ticketTimeoutHours")
-    public void setTicketTimeoutHours(Integer ticketTimeoutHours) {
-        this.ticketTimeoutHours = ticketTimeoutHours;
-    }
-
-    @JsonProperty("agentInactivityTimeoutSec")
-    public Integer getAgentInactivityTimeoutSec() {
-        return agentInactivityTimeoutSec;
-    }
-
-    @JsonProperty("agentInactivityTimeoutSec")
-    public void setAgentInactivityTimeoutSec(Integer agentInactivityTimeoutSec) {
-        this.agentInactivityTimeoutSec = agentInactivityTimeoutSec;
-    }
-
-    @JsonProperty("attachmentLifeTimeDays")
-    public Integer getAttachmentLifeTimeDays() {
-        return attachmentLifeTimeDays;
-    }
-
-    @JsonProperty("attachmentLifeTimeDays")
-    public void setAttachmentLifeTimeDays(Integer attachmentLifeTimeDays) {
-        this.attachmentLifeTimeDays = attachmentLifeTimeDays;
-    }
-
-    @JsonProperty("globalInactivityTimeoutSec")
-    public Integer getGlobalInactivityTimeoutSec() {
-        return globalInactivityTimeoutSec;
-    }
-
-    @JsonProperty("globalInactivityTimeoutSec")
-    public void setGlobalInactivityTimeoutSec(Integer globalInactivityTimeoutSec) {
-        this.globalInactivityTimeoutSec = globalInactivityTimeoutSec;
-    }
-
-    @JsonProperty("pendingChatAutoClosureTimeSec")
-    public Integer getPendingChatAutoClosureTimeSec() {
-        return pendingChatAutoClosureTimeSec;
-    }
-
-    @JsonProperty("pendingChatAutoClosureTimeSec")
-    public void setPendingChatAutoClosureTimeSec(Integer pendingChatAutoClosureTimeSec) {
-        this.pendingChatAutoClosureTimeSec = pendingChatAutoClosureTimeSec;
-    }
-
 }

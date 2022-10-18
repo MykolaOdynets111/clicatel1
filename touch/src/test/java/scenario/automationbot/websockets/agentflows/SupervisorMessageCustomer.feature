@@ -1,6 +1,6 @@
 @no_widget
 @support_hours
-@chat_preferences
+@setting_changes
 @Regression
 Feature: Supervisor desk
 

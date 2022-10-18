@@ -1,11 +1,8 @@
 package apihelper;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javafaker.Faker;
 import datamanager.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import datamanager.jacksonschemas.*;
-import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.jacksonschemas.chathistory.ChatHistory;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.departments.Department;
@@ -271,14 +268,14 @@ public class ApiHelper implements VerificationHelper {
 
     }
 
-    public static void updateFeatureStatus(ChatPreferenceSettings chatPreferenceSettings) {
+    public static void updateFeatureStatus(TenantChatPreferences tenantChatPreferences) {
         Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON)
-                .body(chatPreferenceSettings)
+                .body(tenantChatPreferences)
                 .put(Endpoints.CHAT_PREFERENCES);
         Assert.assertEquals(resp.statusCode(), 200,
-                "Status code is not 200 and body value is \n: " + chatPreferenceSettings.toString() + "\n error message is: " + resp.getBody().asString());
+                "Status code is not 200 and body value is \n: " + tenantChatPreferences.toString() + "\n error message is: " + resp.getBody().asString());
     }
 
     public static void createExtensions(String extensionBody) {
@@ -757,34 +754,31 @@ public class ApiHelper implements VerificationHelper {
         return RestAssured.get(url);
     }
 
-    public static Response getActiveChatsByAgent(String agent) {
-        return RestAssured.given().contentType(ContentType.JSON).log().all()
-                .header("Authorization",
-                        getAccessToken(Tenants.getTenantUnderTestOrgName(), agent))
-                .body("{\n" +
+    public static ResponseBody getActiveChatsByAgent(String agent) {
+       String body = "{\n" +
                         "  \"chatStates\": [\n" +
                         "    \"LIVE_IN_SCHEDULER_QUEUE\",\n" +
                         "    \"LIVE_ASSIGNED_TO_AGENT\"\n" +
                         "  ],\n" +
                         "\"agentSearchModel\": {\n" +
                         "    \"id\": \"" + getAgentId(Tenants.getTenantUnderTestOrgName(), agent) + "\"\n" +
-                        "  }\n" +
-                        "}")
-                .post(format(Endpoints.ACTIVE_CHATS_BY_AGENT, ConfigManager.getEnv()));
+                        "  },\n" +
+                        "  \"pageType\": \"AGENT_VIEW\"\n" +
+                        "}";
+
+        return getPostQueryFor(Tenants.getTenantUnderTestOrgName(),
+                format(Endpoints.ACTIVE_CHATS_BY_AGENT, ConfigManager.getEnv()),body,agent);
     }
 
     public static void closeActiveChats(String agent) {
-        Response resp = getActiveChatsByAgent(agent);
-        List<String> conversationIds = resp.getBody().jsonPath().getList("content.chatId");
-        if(conversationIds!=null) {
-            for (String conversationId : conversationIds) {
-                Response r = RestAssured.given()
-                        .accept(ContentType.JSON).log().all()
-                        .header("Authorization",
-                                getAccessToken(Tenants.getTenantUnderTestOrgName(), agent))
-                        .get(format(Endpoints.CLOSE_ACTIVE_CHAT, conversationId));
-                System.out.println(r.getBody().asString());
-            }
+        List<String> conversationIds = getActiveChatsByAgent(agent).jsonPath().getList("content.chatId");
+        for (String conversationId : conversationIds) {
+            Response r = RestAssured.given()
+                    .accept(ContentType.JSON).log().all()
+                    .header("Authorization",
+                            getAccessToken(Tenants.getTenantUnderTestOrgName(), agent))
+                    .get(format(Endpoints.CLOSE_ACTIVE_CHAT, conversationId));
+            System.out.println(r.getBody().asString());
         }
     }
 
@@ -924,8 +918,8 @@ public class ApiHelper implements VerificationHelper {
     }
 
     @NotNull
-    protected static ResponseBody getPostQueryFor(String tenantOrgName, String endpoint, Object body) {
-        Response response = postQuery(tenantOrgName, endpoint, body);
+    protected static ResponseBody getPostQueryFor(String tenantOrgName, String endpoint, Object body,String agent) {
+        Response response = postQuery(tenantOrgName, endpoint, body, agent);
 
         if (response.getStatusCode() != 200) {
             fail("Couldn't post the value \n"
@@ -953,10 +947,10 @@ public class ApiHelper implements VerificationHelper {
         }
     }
 
-    protected static Response postQuery(String tenantOrgName, String endpoint, Object body) {
+    protected static Response postQuery(String tenantOrgName, String endpoint, Object body, String agent) {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header("Authorization", getAccessToken(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, agent))
                 .body(body)
                 .post(format(endpoint, getTenant(tenantOrgName).get("id")));
     }

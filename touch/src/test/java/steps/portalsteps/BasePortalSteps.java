@@ -728,7 +728,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^(.*) counter shows correct live chats number$")
     public void verifyChatConsoleActiveChats(String widgetName){
         activeChatsFromChatdesk = ApiHelper.getActiveChatsByAgent("Second agent")
-                .getBody().jsonPath().getList("content.id").size();
+                .jsonPath().getList("content.id").size();
 //                new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
         Assert.assertTrue(checkLiveCounterValue(widgetName, activeChatsFromChatdesk),
                 "'"+widgetName+"' widget value is not updated to " + activeChatsFromChatdesk +" expected value \n");
@@ -1567,7 +1567,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         }else{
             throw new AssertionError("Incorrect status was provided");
         }
-        ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(),tenantChatPreferences);
+        ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), tenantChatPreferences);
     }
     @When("^Create chat tag$")
     public void createChatTag(){
