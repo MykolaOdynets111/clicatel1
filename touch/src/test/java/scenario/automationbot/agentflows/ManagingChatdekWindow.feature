@@ -51,9 +51,9 @@ Feature: Managing Chat desk Window
     When Change chats per agent:"0"
     Then Maximum Chats per Agent must be a positive number Error message is shown
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2657")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2076")
   @Regression
-  Scenario: CD:: Dashboard:: Setting ::Verify that the system displays the error message "Minimum time duration allowed is at least 1 hour." when client enters value less than 1 hour and in fractional value in "Pending Chats Auto-closure Time" section
+  Scenario: CD:: Dashboard:: Setting ::Verify that the system displays the error message "Minimum time duration allowed is at least 1 hour" when client enters value less than 1 hour and in fractional value in "Pending Chats Auto-closure Time" section
     Given I open portal
     And Login into portal as an admin of Automation Bot account
     When I select Touch in left menu and Dashboard in submenu
