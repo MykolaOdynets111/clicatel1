@@ -197,7 +197,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent click On Live Supervisor Desk chat from ORCA channel
     Then Agent cannot initiate a payment
 
-  @chat_preferences
+  @setting_changes
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2751")
   Scenario: CD :: Chat :: Verify that neutral sentiment is set by default when agent closes a chat
     Given Setup ORCA whatsapp integration for General Bank Demo tenant

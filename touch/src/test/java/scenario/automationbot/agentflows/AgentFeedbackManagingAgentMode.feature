@@ -1,4 +1,4 @@
-@chat_preferences
+@setting_changes
 @Regression
 Feature: Turning on / off AGENT_FEEDBACK feature for Agent mode tenant
 
