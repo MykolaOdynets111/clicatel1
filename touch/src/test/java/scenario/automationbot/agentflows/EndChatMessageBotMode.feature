@@ -22,7 +22,6 @@ Feature: End chat flow: bot mode
     Then Agent should not see from user chat in agent desk
     Then There is no exit response
 
-  @skip
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2750")
   @Regression
   Scenario: CD :: Dashboard :: Settings :: End chat message resetting for Bot mode tenant
