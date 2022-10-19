@@ -22,21 +22,7 @@ Feature: End chat flow: bot mode
     Then Agent should not see from user chat in agent desk
     Then There is no exit response
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2990")
-  @Regression
-  Scenario: CD :: Agent Desk :: Close Chat :: Verify that close chat message enabling and editing for Bot mode tenant
-    Given Taf End Chat message is set to true for Automation Bot tenant
-    And Taf End Chat message message text is updated for Automation Bot tenant
-    And I login as agent of Automation Bot
-    When Send connect to agent message by ORCA
-    Then Agent has new conversation request from orca user
-    When Agent click on new conversation request from orca
-    Then Conversation area becomes active with connect to agent user's message
-    When Agent click "End chat" button
-    Then End chat popup for agent should be opened
-    When Agent click 'Close chat' button
-    Then Agent should not see from user chat in agent desk from orca
-
+  @skip
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2750")
   @Regression
   Scenario: CD :: Dashboard :: Settings :: End chat message resetting for Bot mode tenant
