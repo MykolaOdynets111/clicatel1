@@ -1611,11 +1611,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^Admin can see Settings page with - all tabs$")
     public void verifySettingPageTabOptions(List<String> datatable){
         List<String> actualTabNames = getDashboardSettingsPage().getSettingTabsText();
-        if(datatable.size()==actualTabNames.size()){
-            Assert.assertEquals(actualTabNames,datatable, "Comparable strings does not match");
-        }
-        else {
-            Assert.fail("List size does not match, hence, can not compare the list");
-        }
+        Assert.assertEquals(actualTabNames,datatable, "Comparable strings does not match");
     }
 }

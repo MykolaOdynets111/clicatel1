@@ -75,9 +75,7 @@ public class DashboardSettingsPage extends PortalAbstractPage {
         List<String> settingTabsText = new ArrayList<>();
         settingTabs.stream().forEach(e -> {
             settingTabsText.add(e.getText());
-
         });
-        System.out.println("Value for getSettingTabsText is "+ settingTabsText);
         return settingTabsText;
     }
 

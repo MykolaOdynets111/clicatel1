@@ -47,8 +47,8 @@ public class HSMForm extends AbstractUIElement {
     }
 
     public String getContactNum() {
-        isElementShown(this.currentDriver, waPhoneField, 3);
-        return getAttributeFromElem(this.getCurrentDriver(), waPhoneField, 3, "wa phone number", "value");
+      String fetchedContactNum =   getAttributeFromElem(this.getCurrentDriver(), waPhoneField, 3, "wa phone number", "value");
+      return fetchedContactNum;
     }
 
 }
