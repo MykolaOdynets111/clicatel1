@@ -10,10 +10,13 @@ Feature: WhatsApp ORCA :: Surveys
   Scenario Outline: CD:: <channelType>:: Settings :: Survey :: Verify if Supervisor is able to see the survey preview header for <channelType> channel and select between NPS(Net Promotor Score) or CSAT(Customer Satisfaction Score) survey type in the survey tab
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing
-      | ratingEnabled | true        |
-      | surveyType    | CSAT         |
-      | ratingScale   | ONE_TO_FIVE |
-      | ratingIcon    | NUMBER      |
+      | surveyType           | CSAT        |
+      | ratingScale          | ONE_TO_FIVE |
+      | ratingIcon           | NUMBER      |
+      | ratingTimeout        | 600         |
+      | ratingEnabled        | true        |
+      | commentEnabled       | true        |
+      | thanksMessageEnabled | true        |
     And I open portal
     Given Login into portal as an admin of Standard Billing account
     When I select Touch in left menu and Dashboard in submenu
@@ -37,10 +40,13 @@ Feature: WhatsApp ORCA :: Surveys
   Scenario Outline: CD:: Survey:: CSAT:: Verify if "Customize Rating type" section is removed from the survey tab
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing
-      | ratingEnabled | true        |
-      | surveyType    | CSAT        |
-      | ratingScale   | ONE_TO_FIVE |
-      | ratingIcon    | NUMBER      |
+      | surveyType           | CSAT        |
+      | ratingScale          | ONE_TO_FIVE |
+      | ratingIcon           | NUMBER      |
+      | ratingTimeout        | 600         |
+      | ratingEnabled        | true        |
+      | commentEnabled       | true        |
+      | thanksMessageEnabled | true        |
     And I open portal
     Given Login into portal as an admin of Standard Billing account
     When I select Touch in left menu and Dashboard in submenu

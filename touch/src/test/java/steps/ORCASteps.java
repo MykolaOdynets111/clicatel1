@@ -133,9 +133,14 @@ public class ORCASteps implements WebWait {
 
     @Then("^Verify Orca returns (.*) response during (.*) seconds$")
     public void verifyOrcaReturnedCorrectResponse(String expectedResponse, int wait) {
-
         if (expectedResponse.equalsIgnoreCase("start_new_conversation")) {
             expectedResponse = DefaultTouchUserSteps.formExpectedAutoresponder(expectedResponse);
+        } else if (expectedResponse.equalsIgnoreCase("question update")) {
+            expectedResponse = SurveyManagementSteps.questionUpdate.get();
+        } else if (expectedResponse.equalsIgnoreCase("notes update")) {
+            expectedResponse = SurveyManagementSteps.notesMessageUpdate.get();
+        } else if (expectedResponse.equalsIgnoreCase("thanks message update")) {
+            expectedResponse = SurveyManagementSteps.thankMessageUpdate.get();
         }
         verifyAutoresponder(expectedResponse, wait);
     }
@@ -258,7 +263,7 @@ public class ORCASteps implements WebWait {
         if(Objects.isNull(OrcaSQSHandler.orcaMessages)) {
             return false;
         }
-        return OrcaSQSHandler.orcaMessages.toString().contains(message);
+        return OrcaSQSHandler.orcaMessages.contains(message);
     }
 
     private boolean isExpectedResponseListCheck(String message, int expectedSize, int wait) {
