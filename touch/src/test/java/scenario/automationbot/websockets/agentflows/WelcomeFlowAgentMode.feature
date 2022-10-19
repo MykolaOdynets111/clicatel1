@@ -18,6 +18,7 @@ Feature: Welcome flow: agent mode
   @no_chatdesk
   @Regression
   @start_orca_server
+  @skip
   Scenario: CD :: Dashboard :: Settings :: Reset to default Welcome message auto responder (Agent mode)
     Given Setup ORCA Whatsapp integration for Automation Bot tenant
     And Taf Connecting Agent message (Social Channels) is set to true for Automation Bot tenant
