@@ -17,7 +17,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     Then ORCA request is shown on Supervisor Desk Live page
     And Agent click On Live Supervisor Desk chat from ORCA channel
     Then Supervisor Desk Live chat container header display "No current Agent" instead of agent name
-    Then Verify Orca returns Agent Busy message autoresponder during 40 seconds
+    Then Verify Orca returns Agent Busy message autoresponder during 40 seconds for agent for agent
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1437")
   Scenario: CD :: Supervisor :: Live Chat :: Verify the agent name and date are displayed in the visual indicator in agent chat window

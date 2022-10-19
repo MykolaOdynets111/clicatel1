@@ -37,4 +37,4 @@ Feature: out_of_support_hours auto responder (Bot mode)
     And Click "Reset to default" button for Out of Support Hours message auto responder
     Then Out of Support Hours message is reset on backend
     And Send connect to agent message by ORCA
-    Then Verify Orca returns Out of Support Hours message autoresponder during 40 seconds
+    Then Verify Orca returns Out of Support Hours message autoresponder during 40 seconds for agent
