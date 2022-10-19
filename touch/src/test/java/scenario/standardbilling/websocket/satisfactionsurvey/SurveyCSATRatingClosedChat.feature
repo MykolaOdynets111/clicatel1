@@ -7,6 +7,7 @@
 @Regression
 Feature: Satisfaction Survey
 
+  @skip
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2381")
   Scenario Outline: CD::Survey:: Agent_Desk:: verify if agent is able to see NPS rating from the survey that the customer completed on the chat view
     Given I login as agent of Standard Billing
