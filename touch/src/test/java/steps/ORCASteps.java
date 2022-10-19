@@ -14,6 +14,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
+import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
 import sqsreader.OrcaSQSHandler;
 import sqsreader.SQSConfiguration;
@@ -110,6 +111,23 @@ public class ORCASteps implements WebWait {
         } else {
             apiToken.set(ApiORCA.updateIntegration(channel, SQSConfiguration.getCallbackUrl() ,orcaChannelId.get()));
             System.out.println("apiToken was set with: " + apiToken.get());
+        }
+        verifyAndSwitchOffSurveyRatings(channel);
+    }
+
+    public void verifyAndSwitchOffSurveyRatings(String integrationType) {
+        switch (integrationType) {
+            case "sms":
+                ApiHelper.ratingEnabling(Tenants.getTenantUnderTestOrgName(), false,"sms");
+                break;
+            case "abc":
+                ApiHelper.ratingEnabling(Tenants.getTenantUnderTestOrgName(), false,"abc");
+                break;
+            case "whatsapp":
+                ApiHelper.ratingEnabling(Tenants.getTenantUnderTestOrgName(), false,"whatsapp");
+                break;
+            default:
+                throw new NoSuchElementException("Integration type '" + integrationType + "' wasn't found");
         }
     }
 

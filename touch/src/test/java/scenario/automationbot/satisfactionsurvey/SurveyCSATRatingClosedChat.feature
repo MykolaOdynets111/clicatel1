@@ -31,7 +31,7 @@ Feature: Satisfaction Survey
     And Admin selects NPS survey type for <channelType> survey form
     And Agent click save survey configuration button for <channelType> survey form
     Then I select Touch in left menu and Agent Desk in submenu
-    And Agent click on new conversation request from orca
+    And Agent click on last opened conversation request from orca
     And Conversation area becomes active with connect to agent user's message
     And Agent closes chat
     And Send 10 message by ORCA
