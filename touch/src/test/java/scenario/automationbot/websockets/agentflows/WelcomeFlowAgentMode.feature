@@ -18,6 +18,7 @@ Feature: Welcome flow: agent mode
   @no_chatdesk
   @Regression
   @start_orca_server
+  @skip
   Scenario: CD :: Dashboard :: Settings :: Reset to default Welcome message auto responder (Agent mode)
     Given Setup ORCA Whatsapp integration for Automation Bot tenant
     And Taf Connecting Agent message (Social Channels) is set to true for Automation Bot tenant
@@ -30,4 +31,4 @@ Feature: Welcome flow: agent mode
     And Click "Reset to default" button for Connecting Agent message (Social Channels) auto responder
     When Connecting Agent message (Social Channels) is reset on backend
     And Send connect to agent message by ORCA
-    Then Verify Orca returns Connecting Agent message (Social Channels) autoresponder during 40 seconds
+    Then Verify Orca returns Connecting Agent message (Social Channels) autoresponder during 40 seconds for agent

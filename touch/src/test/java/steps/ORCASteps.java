@@ -25,6 +25,8 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static apihelper.ApiHelper.getAgentInfo;
+
 public class ORCASteps implements WebWait {
 
     public static final ThreadLocal<OrcaEvent> orcaMessageCallBody = new ThreadLocal<>();
@@ -143,12 +145,13 @@ public class ORCASteps implements WebWait {
         verifyAutoResponderMessageListSize(expectedResponse, expectedSize, wait);
     }
 
-    @Then("^Verify Orca returns (.*) autoresponder during (.*) seconds$")
-    public void verifyOrcaReturnedCorrectAutoresponder(String expectedResponse, int wait) {
+    @Then("^Verify Orca returns (.*) autoresponder during (.*) seconds for (.*)$")
+    public void verifyOrcaReturnedCorrectAutoresponder(String expectedResponse, int wait, String agent) {
+        String agentInfo = getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent).get("fullName");
         expectedResponse = DefaultTouchUserSteps.formExpectedAutoresponder(expectedResponse);
 
         if(expectedResponse.contains("${agentName}")) {
-            expectedResponse = expectedResponse.replace("${agentName}", AgentLoginPage.agentName.get());
+            expectedResponse = expectedResponse.replace("${agentName}", agentInfo);
         }
         verifyAutoresponder(expectedResponse, wait);
     }

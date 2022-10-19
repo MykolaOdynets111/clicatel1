@@ -8,15 +8,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import datamanager.Tenants;
 import datamanager.UserPersonalInfo;
-import datamanager.jacksonschemas.ChatPreferenceSettings;
+import datamanager.jacksonschemas.TenantChatPreferences;
 import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
+import datamanager.jacksonschemas.supportHours.GeneralSupportHoursItem;
 import datamanager.jacksonschemas.supportHours.SupportHoursMapping;
 import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
-import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -55,9 +55,9 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Given("^(.*) tenant feature is set to (.*) for (.*)$")
     public void setFeatureStatus(String feature, String status, String tenantOrgName){
-        ChatPreferenceSettings chatPreferenceSettings = new ChatPreferenceSettings();
-        chatPreferenceSettings.setFeatureStatus(feature, status);
-        ApiHelper.updateFeatureStatus(chatPreferenceSettings);
+        TenantChatPreferences tenantChatPreferences = new TenantChatPreferences();
+        tenantChatPreferences.setFeatureStatus(feature, status);
+        ApiHelper.updateFeatureStatus(tenantChatPreferences);
     }
 
     @Given("Agent creates tenant extension with label and name$")
@@ -140,19 +140,18 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         );
     }
 
-
-    private Map<String, Object> verifyAndUpdateChatSettings(String type) {
+    public Map<String, Object> verifyAndUpdateChatSettings(String type) {
         Map<String, Object> results = new HashMap<String, Object>();
 
-        int sessionCapacity = 0;
+        int agentMaxChatsPerAgent = 0;
         List<SupportHoursMapping> supportHours = null;
         List<SupportHoursMapping> supportHoursUpdated = null;
-        sessionCapacity = ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity");
-        results.put("sessionCapacity", sessionCapacity);
+        TenantChatPreferences prefs = ApiHelper.getTenantChatPreferences();
+        agentMaxChatsPerAgent = prefs.getMaxChatsPerAgent();
+        results.put("sessionCapacity", agentMaxChatsPerAgent);
 
-        if (sessionCapacity < 50) {
-            results.put("sessionCapacityUpdate", ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50).jsonPath().get("sessionsCapacity"));
-        } else {
+        if (agentMaxChatsPerAgent < 50) {
+            ApiHelper.updateFeatureStatus(TenantChatPreferences.getDefaultTenantChatPreferences());
             results.put("sessionCapacityUpdate", 50);
         }
 
@@ -160,9 +159,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         results.put("supportHours", supportHours);
 
         if (!type.equalsIgnoreCase("ticket")) {
-            if (supportHours.size() < 7) {
-                ApiHelperSupportHours.setSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
-                supportHoursUpdated = ApiHelperSupportHours.getSupportDaysAndHoursForMainAgent(Tenants.getTenantUnderTestOrgName()).getAgentMapping();
+            if (supportHours.get(0).getDays().size() < 7
+                    && supportHours.get(0).getStartWorkTime().equals("00:00")
+                    && supportHours.get(0).getEndWorkTime().equals("23:59")) {
+                Response resp = ApiHelperSupportHours.setSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+                supportHoursUpdated = resp.getBody().as(GeneralSupportHoursItem.class).getAgentMapping();
                 results.put("supportHoursUpdated", supportHoursUpdated);
             }else {results.put("supportHoursUpdated", "were not updated because \"All week\" was set");}
         }else {results.put("supportHoursUpdated", "were not updated because it is ticket");}
@@ -642,7 +643,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         String integrationType;
         switch (clientFrom){
             case "fb dm":
-                Map chatInfo = (Map) ApiHelper.getActiveChatsByAgent("main").getBody().jsonPath().getList("content")
+                Map chatInfo = (Map) ApiHelper.getActiveChatsByAgent("main").jsonPath().getList("content")
                                         .stream()
                                         .filter(e -> ((Map)
                                                             ((Map) e).get("client")

@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 import datamanager.Agents;
 import datamanager.MC2Account;
 import datamanager.Tenants;
-import datamanager.jacksonschemas.ChatPreferenceSettings;
 import datamanager.jacksonschemas.TenantChatPreferences;
 import datamanager.jacksonschemas.supportHours.GeneralSupportHoursItem;
 import driverfactory.DriverFactory;
@@ -117,10 +116,6 @@ public class Hooks implements JSHelper {
 
         if (scenario.getSourceTagNames().contains("@delete_tenant_logo")){
                new TenantSteps().deleteLogo();
-        }
-
-        if(scenario.getSourceTagNames().contains("@auto_scheduler_disabled")){
-            ApiHelper.updateFeatureStatus(new ChatPreferenceSettings());
         }
 
         if(scenario.getSourceTagNames().contains(("@remove_dep"))){
@@ -318,12 +313,8 @@ public class Hooks implements JSHelper {
                 newAccountInfo();
             }
 
-            if (scenario.getSourceTagNames().contains("@chat_preferences")){
-                ApiHelper.updateFeatureStatus(new ChatPreferenceSettings());
-            }
-
-            if (scenario.getSourceTagNames().contains("@autoTicketScheduling")){
-                ApiHelper.updateFeatureStatus(new ChatPreferenceSettings());
+            if (scenario.getSourceTagNames().contains("@setting_changes")){
+                ApiHelper.updateFeatureStatus(TenantChatPreferences.getDefaultTenantChatPreferences());
             }
 
             if (scenario.getSourceTagNames().contains("@widget_disabling")){

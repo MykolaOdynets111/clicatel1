@@ -357,7 +357,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then("^Live chats (.*) filter has correct name and correct chats number$")
     public void verifyAgentNameOnLiveChatFilter(String agent) {
         String agentName = getAgentName(agent);
-        int numberOfChats = ApiHelper.getActiveChatsByAgent(agent).getBody().jsonPath().getList("content").size();
+        int numberOfChats = ApiHelper.getActiveChatsByAgent(agent).jsonPath().getList("content").size();
         Assert.assertEquals(getSupervisorDeskPage().getSupervisorLeftPanel().getLiveChatsNumberForAgent(agentName), numberOfChats, "Number of chats on Supervisor desk is different from Agent desk chats");
     }
 
