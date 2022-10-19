@@ -7,7 +7,7 @@
 Feature: Satisfaction Survey
 
   Background:
-    Given I login as agent of Automation Bot
+    Given I login as agent of Standard Billing
     And I select Touch in left menu and Dashboard in submenu
     When Navigate to Auto Responders page
     And Wait for auto responders page to load
@@ -17,8 +17,8 @@ Feature: Satisfaction Survey
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2125")
   @Regression
   Scenario Outline: CD:: Settings :: Survey :: Verify the error message when end user send rating as "-1" or "+1" for NPS/CSAT -
-    Given Setup ORCA <channelType> integration for Automation Bot tenant
-    And Update survey management chanel <channelType> settings by ip for Automation Bot
+    Given Setup ORCA <channelType> integration for Standard Billing tenant
+    And Update survey management chanel <channelType> settings by ip for Standard Billing
       | ratingEnabled        | true        |
       | surveyType           | CSAT        |
       | ratingScale          | ONE_TO_FIVE |
@@ -26,7 +26,12 @@ Feature: Satisfaction Survey
       | ratingTimeout        | 600         |
       | commentEnabled       | true        |
       | thanksMessageEnabled | true        |
-    When Send connect to agent message by ORCA
+    When I select Touch in left menu and Dashboard in submenu
+    And Navigate to Surveys page
+    And Survey Management page should be shown
+    And Customize your survey "Great, thanks - could you please rate our service from 0 - 10. 0 being "Very unsatisfied" and 10 being "Very satisfied". Simply type "skip" keyword to skip the survey." question
+    And Agent click save survey configuration button for <channelType> survey form
+    And Send connect to agent message by ORCA
     And I select Touch in left menu and Agent Desk in submenu
     And Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
@@ -34,7 +39,7 @@ Feature: Satisfaction Survey
     And Agent closes chat
     And Verify Orca returns Great, thanks - could you please rate our service from 0 - 10. 0 being "Very unsatisfied" and 10 being "Very satisfied". Simply type "skip" keyword to skip the survey. response during 40 seconds
     Then Send -1 message by ORCA
-    And Verify Orca returns survey Great, thanks - could you please rate our service from 0 - 10. 0 being "Very unsatisfied" and 10 being "Very satisfied". Simply type "skip" keyword to skip the survey. response 2 number of times during 40 seconds
+    And Verify Orca returns survey question response 2 number of times during 40 seconds
     Examples:
       | channelType |
       | ABC         |
@@ -42,8 +47,8 @@ Feature: Satisfaction Survey
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1703")
     @Regression
   Scenario Outline: CD:: <channelType>:: Settings :: Survey :: Verify that user can 'rate and leave comment' for SMS CSAT survey type if close chat with //end command
-    Given Setup ORCA <channelType> integration for Automation Bot tenant
-    And Update survey management chanel <channelType> settings by ip for Automation Bot
+    Given Setup ORCA <channelType> integration for Standard Billing tenant
+    And Update survey management chanel <channelType> settings by ip for Standard Billing
       | ratingEnabled        | true        |
       | surveyType           | CSAT        |
       | ratingScale          | ONE_TO_FIVE |
@@ -51,12 +56,15 @@ Feature: Satisfaction Survey
       | ratingTimeout        | 600         |
       | commentEnabled       | true        |
       | thanksMessageEnabled | true        |
-    And I select Touch in left menu and Dashboard in submenu
+    When I select Touch in left menu and Dashboard in submenu
     And Navigate to Surveys page
-    When Admin clicks on channel toggle button for survey form
+    And Admin clicks on channel toggle button for survey form
     And Admin clicks on channel expand button for survey form
     And Agent switch "Allow customer to give thank message" in survey management
     And Agent switch "Allow customer to leave a note" in survey management
+    And Customize your survey "Great, thanks - could you please rate our service from 0 - 10. 0 being "Very unsatisfied" and 10 being "Very satisfied". Simply type "skip" keyword to skip the survey." question
+    And Customize your survey notes message to Thanks, please leave a message on how we can improve our service. Simply type "skip" keyword to skip this step.
+    And Customize your survey thank message to Thank you for taking the time to provide us with your feedback.
     And Agent click save survey configuration button for <channelType> survey form
     When Send connect to agent message by ORCA
     Then I select Touch in left menu and Agent Desk in submenu
@@ -76,8 +84,8 @@ Feature: Satisfaction Survey
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1778")
     @Regression
   Scenario Outline: CD:: <channelType>:: Settings :: Survey :: Verify if User should be able to enter a Skip keyword to cancel the survey
-    Given Setup ORCA <channelType> integration for Automation Bot tenant
-    And Update survey management chanel <channelType> settings by ip for Automation Bot
+    Given Setup ORCA <channelType> integration for Standard Billing tenant
+    And Update survey management chanel <channelType> settings by ip for Standard Billing
       | ratingEnabled        | true        |
       | surveyType           | NPS         |
       | ratingScale          | ZERO_TO_TEN |
@@ -85,6 +93,11 @@ Feature: Satisfaction Survey
       | ratingTimeout        | 600         |
       | commentEnabled       | true        |
       | thanksMessageEnabled | true        |
+    When I select Touch in left menu and Dashboard in submenu
+    And Navigate to Surveys page
+    And Customize your survey "Great, thanks - could you please rate our service from 0 - 10. 0 being "Very unsatisfied" and 10 being "Very satisfied". Simply type "skip" keyword to skip the survey." question
+    And Customize your survey thank message to Thank you for taking the time to provide us with your feedback.
+    And Agent click save survey configuration button for <channelType> survey form
     When Send connect to agent message by ORCA
     And I select Touch in left menu and Agent Desk in submenu
     And Agent has new conversation request from <channelType> user
@@ -101,8 +114,8 @@ Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2443")
   Scenario Outline: CD:: Survey:: verify if user has an option to skip the survey for Whatsapp NPS survey type - Customer Feedback turned OFF in Flow
-    Given Setup ORCA <channelType> integration for Automation Bot tenant
-    And Update survey management chanel <channelType> settings by ip for Automation Bot
+    Given Setup ORCA <channelType> integration for Standard Billing tenant
+    And Update survey management chanel <channelType> settings by ip for Standard Billing
       | ratingEnabled        | true        |
       | surveyType           | NPS         |
       | ratingScale          | ZERO_TO_TEN |
@@ -123,7 +136,7 @@ Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2389")
   Scenario Outline: Verify if user receives customized Thank You message in response to answering survey
-    Given Setup ORCA <channelType> integration for Automation Bot tenant
+    Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing
       | ratingEnabled        | true              |
       | surveyType           | NPS               |
@@ -131,6 +144,10 @@ Feature: Satisfaction Survey
       | ratingIcon           | NUMBER            |
       | commentEnabled       | true              |
       | thanksMessageEnabled | true              |
+    When I select Touch in left menu and Dashboard in submenu
+    And Navigate to Surveys page
+    And Customize your survey notes message to Thanks, please leave a message on how we can improve our service. Simply type "skip" keyword to skip this step.
+    And Agent click save survey configuration button for <channelType> survey form
     When Send connect to agent message by ORCA
     And I select Touch in left menu and Agent Desk in submenu
     And Agent has new conversation request from orca user

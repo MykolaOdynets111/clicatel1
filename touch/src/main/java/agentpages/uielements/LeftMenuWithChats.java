@@ -17,7 +17,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 
-@FindBy(xpath = "//div[contains(@class, 'agent-view--left-sidebar') or @class = 'supervisor-view-group-chats-by' or contains(@class, 'cl_app_sidebar_left_primary')]/div[1]")
+@FindBy(css = "[data-testid='routed-tabs']")
 public class LeftMenuWithChats extends AbstractUIElement {
 
     @FindBy(css = "a[data-testid^=chat-list-item]")

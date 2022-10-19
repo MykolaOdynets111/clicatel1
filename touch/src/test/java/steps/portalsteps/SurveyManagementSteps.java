@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 public class SurveyManagementSteps extends AbstractPortalSteps {
-    private static final ThreadLocal<String> questionUpdate = new ThreadLocal<>();
-    private static final ThreadLocal<String> thankMessageUpdate = new ThreadLocal<>();
-    private static final ThreadLocal<String> notesMessageUpdate = new ThreadLocal<>();
+    public static final ThreadLocal<String> questionUpdate = new ThreadLocal<>();
+    public static final ThreadLocal<String> thankMessageUpdate = new ThreadLocal<>();
+    public static final ThreadLocal<String> notesMessageUpdate = new ThreadLocal<>();
     public static ThreadLocal<SurveyManagement> surveyConfiguration = new ThreadLocal<>();
 
     @Then("^Update survey management chanel (.*) settings by ip for (.*)$")

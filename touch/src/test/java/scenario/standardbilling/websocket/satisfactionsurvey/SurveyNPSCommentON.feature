@@ -1,6 +1,7 @@
 @no_widget
 @off_rating_whatsapp
 @off_rating_abc
+@off_rating_sms
 @no_chatdesk
 @Regression
 Feature: Satisfaction Survey

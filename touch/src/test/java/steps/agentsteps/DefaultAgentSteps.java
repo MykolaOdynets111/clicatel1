@@ -23,7 +23,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import socialaccounts.FacebookUsers;

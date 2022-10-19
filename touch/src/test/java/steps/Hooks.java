@@ -35,6 +35,7 @@ import steps.agentsteps.AbstractAgentSteps;
 import steps.dotcontrol.DotControlSteps;
 import steps.portalsteps.AbstractPortalSteps;
 import steps.portalsteps.BasePortalSteps;
+import steps.portalsteps.SurveyManagementSteps;
 import steps.portalsteps.TenantSteps;
 import steps.tiesteps.BaseTieSteps;
 import steps.tiesteps.TIEApiSteps;
@@ -459,6 +460,10 @@ public class Hooks implements JSHelper {
         ApiHelper.clientProfileId.remove();
         CamundaFlowsSteps.updatedMessage.remove();
         CamundaFlowsSteps.defaultMessage.remove();
+        SurveyManagementSteps.questionUpdate.remove();
+        SurveyManagementSteps.thankMessageUpdate.remove();
+        SurveyManagementSteps.notesMessageUpdate.remove();
+        SurveyManagementSteps.surveyConfiguration.remove();
     }
 
     private byte[] attach(ByteArrayOutputStream log) {

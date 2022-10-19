@@ -19,6 +19,7 @@ import org.testng.Assert;
 import sqsreader.OrcaSQSHandler;
 import sqsreader.SQSConfiguration;
 import steps.agentsteps.AgentConversationSteps;
+import steps.portalsteps.SurveyManagementSteps;
 
 import java.io.File;
 import java.io.IOException;
@@ -112,23 +113,6 @@ public class ORCASteps implements WebWait {
             apiToken.set(ApiORCA.updateIntegration(channel, SQSConfiguration.getCallbackUrl() ,orcaChannelId.get()));
             System.out.println("apiToken was set with: " + apiToken.get());
         }
-        verifyAndSwitchOffSurveyRatings(channel);
-    }
-
-    public void verifyAndSwitchOffSurveyRatings(String integrationType) {
-        switch (integrationType) {
-            case "sms":
-                ApiHelper.ratingEnabling(Tenants.getTenantUnderTestOrgName(), false,"sms");
-                break;
-            case "abc":
-                ApiHelper.ratingEnabling(Tenants.getTenantUnderTestOrgName(), false,"abc");
-                break;
-            case "whatsapp":
-                ApiHelper.ratingEnabling(Tenants.getTenantUnderTestOrgName(), false,"whatsapp");
-                break;
-            default:
-                throw new NoSuchElementException("Integration type '" + integrationType + "' wasn't found");
-        }
     }
 
     private String getIntegrationId(String channel, String transportType) {
@@ -156,8 +140,9 @@ public class ORCASteps implements WebWait {
         verifyAutoresponder(expectedResponse, wait);
     }
 
-    @Then("^Verify Orca returns survey (.*) response (.*) number of times during (.*) seconds")
-    public void verifyOrcaReturnedResponseNumberOfTimes(String expectedResponse, int expectedSize, int wait) {
+    @Then("^Verify Orca returns survey question response (.*) number of times during (.*) seconds")
+    public void verifyOrcaReturnedResponseNumberOfTimes(int expectedSize, int wait) {
+        String expectedResponse = SurveyManagementSteps.questionUpdate.get();
         verifyAutoResponderMessageListSize(expectedResponse, expectedSize, wait);
     }
 
@@ -273,7 +258,7 @@ public class ORCASteps implements WebWait {
         if(Objects.isNull(OrcaSQSHandler.orcaMessages)) {
             return false;
         }
-        return OrcaSQSHandler.orcaMessages.contains(message);
+        return OrcaSQSHandler.orcaMessages.toString().contains(message);
     }
 
     private boolean isExpectedResponseListCheck(String message, int expectedSize, int wait) {
