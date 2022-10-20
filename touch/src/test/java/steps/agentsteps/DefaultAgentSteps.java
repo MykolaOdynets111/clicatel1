@@ -102,9 +102,14 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getHSMForm().clickSendButton();
     }
 
-    @And("^(.*) fill the customer contact number$")
-    public void sendWhatsApp(String agent) {
-        getAgentHomePage(agent).getHSMForm().setWAPhoneNumber(ORCASteps.orcaMessageCallBody.get().getSourceId());
+    @And("^(.*) fill the customer contact number (.*)$")
+    public void sendWhatsApp(String agent, String contactNumber) {
+        getAgentHomePage(agent).getHSMForm().setWAPhoneNumber(contactNumber);
+     }
+
+    @Then("^(.*) verify customer contact number (.*) is filled$")
+    public void checkContactNumber(String agent, String phoneNumber){
+        Assert.assertTrue(getAgentHomePage(agent).getHSMForm().getContactNum().equalsIgnoreCase(phoneNumber), "False : waPhone Field is empty");
     }
 
     @Then("^(.*) has (?:new|old) (.*) (?:request|shown)(?: from (.*) user|)$")

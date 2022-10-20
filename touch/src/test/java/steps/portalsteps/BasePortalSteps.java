@@ -1,13 +1,16 @@
 package steps.portalsteps;
 
 
+import agentpages.dashboard.DashboardSettingsPage;
 import apihelper.ApiHelper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javafaker.Faker;
 import datamanager.Agents;
 import datamanager.MC2Account;
 import datamanager.Tenants;
 import datamanager.TopUpBalanceLimits;
 import datamanager.jacksonschemas.TenantChatPreferences;
+import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.model.PaymentMethod;
 import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
@@ -1582,6 +1585,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickSaveButton();
         AgentCRMTicketsSteps.crmTicketInfoForUpdating.get().put("agentTags",  tagname);
     }
+
     @When("^Click the pencil icon to edit the tag")
     public void editTag() {
         getPortalTouchPreferencesPage().getChatTagsWindow().clickEditTagButton(tagname);
@@ -1602,5 +1606,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
             mainPage = new MainPage();
         }
         return mainPage;
+    }
+
+    @Then("^Admin can see Settings page with - all tabs$")
+    public void verifySettingPageTabOptions(List<String> datatable){
+        List<String> actualTabNames = getDashboardSettingsPage().getSettingTabsText();
+        Assert.assertEquals(actualTabNames,datatable, "Comparable strings does not match");
     }
 }

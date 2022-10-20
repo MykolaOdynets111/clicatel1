@@ -3,6 +3,7 @@ package portaluielem;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -28,6 +29,18 @@ public class ChatTagsWindow extends BasePortalWindow {
 
     @FindBy(css = ".cl-collapsible-table__row")
     private List<WebElement> tagRows;
+
+    @FindBy(css = ".cl-collapsible-table__empty-message")
+    private WebElement emptyChatTags;
+
+    @FindBy(css = "tr.cl-collapsible-table__row:first-of-type")
+    private WebElement firstChatTagFromAll;
+
+    @FindBy(css = "tr.cl-collapsible-table__row:first-of-type")
+    private WebElement firstChatTagFromExisting;
+
+    @FindBy(css = ".cl-tag-form__pencil-icon")
+    private WebElement clickPencilIcon;
 
     @FindBy(xpath = "//div[@class='cl-tag-form'][1]")
     private WebElement getTagName;
@@ -81,8 +94,9 @@ public class ChatTagsWindow extends BasePortalWindow {
         return this;
     }
 
-    public ChatTagsWindow setTagName(String tagName) {
-        inputText(this.getCurrentDriver(), nameInput, 5, "Name field", tagName);
+    public ChatTagsWindow setTagName(String tagName){
+        clickElem(this.getCurrentDriver(), nameInput, 3,"Add chat tags text field");
+        inputText(this.getCurrentDriver(), nameInput, 2, "Name field", tagName);
         return this;
     }
 
@@ -90,12 +104,14 @@ public class ChatTagsWindow extends BasePortalWindow {
         clickElem(this.getCurrentDriver(), saveButton, 2, "Save Button");
     }
 
-    public void clickDeleteButton() {
-        clickElem(this.getCurrentDriver(), deleteButton, 2, "Delete Button");
-    }
-
     public String getTagName() {
         return getTextFromElem(this.getCurrentDriver(), getTagName, 2, "Tag Name");
+    }
+
+
+    public ChatTagsWindow clickDeleteButton(){
+        clickElem(this.getCurrentDriver(), deleteButton, 2, "Delete Button");
+        return this;
     }
 
     private WebElement getRowByName(String tagName) {
@@ -112,9 +128,11 @@ public class ChatTagsWindow extends BasePortalWindow {
         return this;
     }
 
-    public void enableDisableTag(String tagName) {
+    public ChatTagsWindow enableDisableTag(String tagName) {
         WebElement row = getRowByName(tagName);
         moveToElement(this.getCurrentDriver(), row);
         row.findElement(By.cssSelector(".cl-r-toggle-btn")).click();
+        return this;
     }
+
 }
