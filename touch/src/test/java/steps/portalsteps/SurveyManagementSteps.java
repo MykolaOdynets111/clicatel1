@@ -13,8 +13,8 @@ import java.util.Map;
 
 public class SurveyManagementSteps extends AbstractPortalSteps {
     public static final ThreadLocal<String> questionUpdate = new ThreadLocal<>();
-    public static final ThreadLocal<String> thankMessageUpdate = new ThreadLocal<>();
-    public static final ThreadLocal<String> notesMessageUpdate = new ThreadLocal<>();
+    private static final ThreadLocal<String> thankMessageUpdate = new ThreadLocal<>();
+    private static final ThreadLocal<String> notesMessageUpdate = new ThreadLocal<>();
     public static ThreadLocal<SurveyManagement> surveyConfiguration = new ThreadLocal<>();
 
     @Then("^Update survey management chanel (.*) settings by ip for (.*)$")
@@ -294,5 +294,17 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
                 "Customer note title is not displayed in survey preview");
 
         softAssert.assertAll();
+    }
+
+    public static String getExpectedSurveyResponse(String expectedResponse) {
+        if (expectedResponse.equalsIgnoreCase("question update")) {
+            expectedResponse = SurveyManagementSteps.questionUpdate.get();
+        } else if (expectedResponse.equalsIgnoreCase("notes update")) {
+            expectedResponse = SurveyManagementSteps.notesMessageUpdate.get();
+        } else if (expectedResponse.equalsIgnoreCase("thanks message update")) {
+            expectedResponse = SurveyManagementSteps.thankMessageUpdate.get();
+        }
+
+        return expectedResponse;
     }
 }

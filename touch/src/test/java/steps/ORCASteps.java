@@ -135,8 +135,8 @@ public class ORCASteps implements WebWait {
 
     @Then("^Verify Orca returns (.*) response during (.*) seconds$")
     public void verifyOrcaReturnedCorrectResponse(String expectedResponse, int wait) {
-        String expectedResponseAutoResponder = getExpectedAutoResponderResponse(expectedResponse);
-        verifyAutoresponder(expectedResponseAutoResponder, wait);
+        expectedResponse = SurveyManagementSteps.getExpectedSurveyResponse(expectedResponse);
+        verifyAutoresponder(expectedResponse, wait);
     }
 
     @Then("^Verify Orca returns survey question response (.*) number of times during (.*) seconds")
@@ -275,17 +275,5 @@ public class ORCASteps implements WebWait {
         orcaMessageCallBody.set(new OrcaEvent(apiKey, message));
         clientId.set(orcaMessageCallBody.get().getUserInfo().getUserName());
         smsSourceId.set(orcaMessageCallBody.get().getSourceId());
-    }
-
-    private String getExpectedAutoResponderResponse(String expectedResponse) {
-        if (expectedResponse.equalsIgnoreCase("question update")) {
-            expectedResponse = SurveyManagementSteps.questionUpdate.get();
-        } else if (expectedResponse.equalsIgnoreCase("notes update")) {
-            expectedResponse = SurveyManagementSteps.notesMessageUpdate.get();
-        } else if (expectedResponse.equalsIgnoreCase("thanks message update")) {
-            expectedResponse = SurveyManagementSteps.thankMessageUpdate.get();
-        }
-
-        return expectedResponse;
     }
 }
