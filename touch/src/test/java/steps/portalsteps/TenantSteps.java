@@ -1,6 +1,6 @@
 package steps.portalsteps;
 
-import apihelper.APIHelperTenant;
+import apihelper.ApiHelperTenant;
 import datamanager.Tenants;
 import io.cucumber.java.en.Then;
 
@@ -22,7 +22,7 @@ public class TenantSteps extends AbstractPortalSteps {
     }
 
     private static void deleteLogoForTenant(String tenant) {
-        APIHelperTenant.deleteTenantLogo(tenant);
+        ApiHelperTenant.deleteTenantLogo(tenant);
         getAgentHomePage("main").getCurrentDriver().navigate().refresh();
 
         assertThat(getAgentHomePage("main").getPageHeader().isTenantLogoShown())

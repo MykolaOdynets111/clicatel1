@@ -1,7 +1,7 @@
 package steps;
 
 import agentpages.AgentLoginPage;
-import apihelper.ApiHelper;
+import apihelper.ApiHelperDepartments;
 import apihelper.ApiORCA;
 import com.github.javafaker.Faker;
 import com.google.common.io.Files;
@@ -77,6 +77,14 @@ public class ORCASteps implements WebWait {
         ApiORCA.sendMessageToAgent(orcaMessageCallBody.get());
     }
 
+    @When("^Send (.*) messages (.*) by ORCA$")
+    public void sendNewOrcaMessage(int numberOfChats, String message){
+        for(int i = 0; i < numberOfChats; i++){
+            createRequestMessage(apiToken.get(), message);
+            ApiORCA.sendMessageToAgent(orcaMessageCallBody.get());
+        }
+    }
+
     @When("^User send Lviv location message to agent by ORCA$")
     public void sendLocationMessage(){
         Event locationEvent = Event.builder().address("Lviv, Lviv Oblast, Ukraine, 79000").
@@ -88,7 +96,7 @@ public class ORCASteps implements WebWait {
     @When("^Send (.*) message by ORCA to (.*) department$")
     public void sendChatToSpecificDepartment(String message, String departmentName){
         createRequestMessage(apiToken.get(), message);
-        List<Department> departments = ApiHelper.getDepartments(Tenants.getTenantUnderTestOrgName());
+        List<Department> departments = ApiHelperDepartments.getDepartments(Tenants.getTenantUnderTestOrgName());
         String departmentId = departments.stream().filter(e->e.getName().equalsIgnoreCase(departmentName)).findFirst().get().getId();
         orcaMessageCallBody.get().getContent().getExtraFields().setDepartment(departmentId);
         System.out.println("Message body is: " + orcaMessageCallBody.get().toString());

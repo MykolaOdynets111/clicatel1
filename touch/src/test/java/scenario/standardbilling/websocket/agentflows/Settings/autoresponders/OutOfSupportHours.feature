@@ -10,7 +10,7 @@ Feature: Dashboard: Settings: Auto Responder
     Given Setup ORCA whatsapp integration for Standard Billing tenant
     And Set agent support hours with day shift
     When Send to agent message by ORCA
-    Then Verify Orca returns Out of Support Hours message autoresponder during 40 seconds
+    Then Verify Orca returns Out of Support Hours message autoresponder during 40 seconds for agent
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1822")
   @remove_dep
@@ -30,4 +30,4 @@ Feature: Dashboard: Settings: Auto Responder
     When Agent switches to opened Portal page
     And I select Touch in left menu and Agent Desk in submenu
     And Send to agent message by ORCA to Auto_Department department
-    Then Verify Orca returns Out of Support Hours message autoresponder during 40 seconds
+    Then Verify Orca returns Out of Support Hours message autoresponder during 40 seconds for agent

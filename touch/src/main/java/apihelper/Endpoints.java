@@ -32,8 +32,6 @@ public class Endpoints {
 
     public static String SESSION_CAPACITY = URLs.getTouchApiBaseURL() + "tenants/sessions-capacity/";
 
-    public static String AGENT_ASSIGNED_TICKETS = URLs.getTouchApiBaseURL() + "agent/tickets";
-
     public static String CUSTOMER_VIEW = URLs.getTouchApiBaseURL() + "customer-view/";
 
     public static String DELETE_AGENT_IMAGE = URLs.getTouchApiBaseURL() + "agents/%s/image";
@@ -71,10 +69,6 @@ public class Endpoints {
 
     public static String INTERNAL_LAST_CLIENT_SESSION = URLs.getBaseInternalApiUrl() + "sessions/tenant/%s/client/%s/last";
 
-    public static String CHAT_PREFERENCES = URLs.getBaseWSApiURL() + "tenants/chat-preferences";
-
-    public static String EXTENSIONS = URLs.getBaseWSApiURL() + "extensions";
-
     public static String INTERNAL_COUNT_OF_LOGGED_IN_AGENTS = URLs.getBaseInternalApiUrl() + "loggedin-agents-count/%s";
 
     public static String INTERNAL_CREATE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles";
@@ -83,23 +77,17 @@ public class Endpoints {
 
     public static String INTERNAL_CLIENT_PROFILE_ATTRIBUTES_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles/aggregated/%s";
 
-    public static String INTERNAL_LOGOUT_AGENT = URLs.getBaseInternalApiUrl() + "v6/agents/logout/%s";
-
-    public static String INTERNAL_DECREASING_TOUCHGO_PLAN = URLs.getBaseInternalApiUrl() + "tenants/touchGo/standard";
-
     public static String INTERNAL_SESSION_DETAILS = URLs.getBaseInternalApiUrl() + "sessions?tenantName=%s&clientId=%s&page=1&count=50&dateFrom=0&dateTo=0";
 
     public static String INTERNAL_TENANTS = URLs.getBaseWSInternalURL() + "tenants";
+
+    public static String EXTENSIONS = URLs.getBaseWSApiURL() + "extensions";
 
     public static String INTERNAL_GET_CHATS_FINISHED_BY_AGENT = URLs.getBaseInternalApiUrl() + "chats/finished-by-agent?agentId=%s&page=%s&size=%s";
 
     public static String INTERNAL_CHAT_BY_CLIENT = URLs.getBaseInternalApiUrl() + "chats/by-client/paging?tenantId=%s&clientId=%s&page=0&size=10";
 
     public static String TENANT_CHAT_PREFERENCES = URLs.getBaseWSApiURL() + "tenants/chat-preferences";
-
-    public static String INTERNAL_GET_TICKETS = URLs.getBaseInternalApiUrl() + "chats/ticket?tenantId=%s&page=%s&size=10&state=UNASSIGNED&direction=ASC";
-
-    public static String INTERNAL_PROCESS_TICKET = URLs.getBaseInternalApiUrl() + "chats/ticket/process";
 
     public static String INTERNAL_CREATE_HISTORY = URLs.getBaseInternalApiUrl() + "chats/chat/history";
 

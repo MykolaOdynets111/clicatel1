@@ -6,7 +6,7 @@ import io.restassured.response.Response;
 import static java.lang.String.format;
 import static org.junit.Assert.fail;
 
-public class APIHelperTenant extends ApiHelper {
+public class ApiHelperTenant extends ApiHelper {
 
     public static void deleteTenantLogo(String tenantOrgName) {
         Response response = RestAssured.given()

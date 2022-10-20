@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ApiCustomerHistoryHelper {
+public class ApiHelperCustomerHistory {
     private static final Map<String, String> periods = new HashMap<String, String>() {{
         put("Past day", "DAY");
         put("Past week", "ONE_WEEK");

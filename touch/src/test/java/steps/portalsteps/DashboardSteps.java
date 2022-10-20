@@ -4,8 +4,8 @@ import agentpages.AgentHomePage;
 import agentpages.dashboard.uielements.CustomersHistory;
 import agentpages.dashboard.uielements.LiveAgentRowDashboard;
 import agentpages.dashboard.uielements.LiveAgentsCustomerRow;
-import apihelper.ApiCustomerHistoryHelper;
 import apihelper.ApiHelper;
+import apihelper.ApiHelperCustomerHistory;
 import apihelper.ApiHelperTie;
 import datamanager.Agents;
 import datamanager.Tenants;
@@ -255,7 +255,7 @@ public class DashboardSteps extends AbstractPortalSteps {
 
     @Then("^Admin see the message no data for Past Sentiment graph if there is no available data$")
     public void adminSeeTheMessageNoDataToReportAtTheMomentForPastSentimentGraphIfThereIsNoAvailableData() {
-        if (ApiCustomerHistoryHelper.getPastSentimentReport(Tenants.getTenantUnderTestOrgName(), period.get(), channel.get()).isEmpty()) {
+        if (ApiHelperCustomerHistory.getPastSentimentReport(Tenants.getTenantUnderTestOrgName(), period.get(), channel.get()).isEmpty()) {
             Assert.assertTrue(getCustomersHistory().isNoDataDisplayedForGraph("Past Sentiment"),
                     "No data is not displayed for Past Sentiment Graph");
         }
@@ -263,7 +263,7 @@ public class DashboardSteps extends AbstractPortalSteps {
 
     @Then("^Admin see the message no data for Customer Satisfaction graph if there is no available data$")
     public void adminSeeTheMessageNoDataForCustomerSatisfactionGraphIfThereIsNoAvailableData() {
-        if (ApiCustomerHistoryHelper.getCustomerSatisfactionReport(Tenants.getTenantUnderTestOrgName(), period.get(), channel.get()).isEmpty()) {
+        if (ApiHelperCustomerHistory.getCustomerSatisfactionReport(Tenants.getTenantUnderTestOrgName(), period.get(), channel.get()).isEmpty()) {
             Assert.assertTrue(getCustomersHistory().isNoDataDisplayedForGraph("Customer Satisfaction"),
                     "No data is displayed for Past Sentiment Graph");
         }
@@ -271,7 +271,7 @@ public class DashboardSteps extends AbstractPortalSteps {
 
     @Then("^Admin see the message no data for Customer Satisfaction gauge if there is no available data$")
     public void adminSeeTheMessageNoDataForCustomerSatisfactionGaugeIfThereIsNoAvailableData() {
-        if (ApiCustomerHistoryHelper.getCustomerSatisfactionReport(Tenants.getTenantUnderTestOrgName(), period.get(), channel.get()).isEmpty()) {
+        if (ApiHelperCustomerHistory.getCustomerSatisfactionReport(Tenants.getTenantUnderTestOrgName(), period.get(), channel.get()).isEmpty()) {
             Assert.assertTrue(getDashboardPage().getCustomersHistory().isNoGaugeDisplayedForGraph("Customer Satisfaction"),
                     "No data is displayed for Past Sentiment Graph");
         }
