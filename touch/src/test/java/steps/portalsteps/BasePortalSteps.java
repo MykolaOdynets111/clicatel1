@@ -1586,4 +1586,10 @@ public class BasePortalSteps extends AbstractPortalSteps {
         List<String> actualTabNames = getDashboardSettingsPage().getSettingTabsText();
         Assert.assertEquals(actualTabNames,datatable, "Comparable strings does not match");
     }
+
+    @When("^Tag is created")
+    public void verifyTagIsCreated() {
+        String newTagName = getPortalTouchPreferencesPage().getChatTagsWindow().getTagName();
+        Assert.assertEquals(newTagName,tagname,"Tag is not created");
+    }
 }
