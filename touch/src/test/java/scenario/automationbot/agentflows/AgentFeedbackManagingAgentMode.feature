@@ -28,4 +28,4 @@ Feature: Turning on / off AGENT_FEEDBACK feature for Agent mode tenant
     When Agent click "End chat" button
     Then Agent Feedback popup for agent should be opened
     And Agent click 'Close chat' button
-    And Agent should not see from user chat in agent desk
+    And Agent should not see from user chat in agent desk from orca

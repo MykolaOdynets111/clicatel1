@@ -37,7 +37,6 @@ public class DotControlSteps implements WebWait {
     private static ThreadLocal<DotControlCreateIntegrationInfo> createIntegrationCallBody = new ThreadLocal<>();
     private static ThreadLocal<MessageRequest> messageCallBody = new ThreadLocal<>();
     private static ThreadLocal<String> apiToken = new ThreadLocal<>();
-   // private static ThreadLocal<String> clientFullName = new ThreadLocal<>();
     private static ThreadLocal<String> clientId = new ThreadLocal<>();
     private static ThreadLocal<DotControlInitRequest> initCallBody = new ThreadLocal<>();
     private static ThreadLocal<Response> responseOnSentRequest = new ThreadLocal<>();
@@ -51,10 +50,6 @@ public class DotControlSteps implements WebWait {
 
     public static String getChatIDTranscript(){
         return chatIDTranscript.get();
-    }
-
-    public static DotControlInitRequest getInitCallBody(){
-        return initCallBody.get();
     }
 
     @Given("^Create .Control integration for (.*)(?: tenant| and adapter: )(.*)$")

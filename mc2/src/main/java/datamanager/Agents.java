@@ -147,8 +147,9 @@ public enum Agents {
                         "No second agent found for " + tenantOrgName + ", env: " + ConfigManager.getEnv()));
     }
 
-    public static  Agents getAgentFromCurrentEnvByTenantOrgName(String tenantOrgName, String ordinalAgentNumber){
-        if (ordinalAgentNumber.equalsIgnoreCase("second agent")) return getSecondAgentFromCurrentEnvByTenantOrgName(tenantOrgName);
+    public static  Agents getAgentFromCurrentEnvByTenantOrgName(String tenantOrgName, String agent){
+        if (agent.equalsIgnoreCase("second agent"))
+            return getSecondAgentFromCurrentEnvByTenantOrgName(tenantOrgName);
         else return getMainAgentFromCurrentEnvByTenantOrgName(tenantOrgName);
     }
 

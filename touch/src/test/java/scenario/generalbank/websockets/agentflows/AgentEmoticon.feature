@@ -59,7 +59,6 @@ Feature: Agent emoticons
       | channelType | userType |
       | SMS         | sms      |
 
-  @skip
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2619")
     @Regression
     @no_widget
@@ -75,7 +74,7 @@ Feature: Agent emoticons
     When Agent click on emoji icon
     Then Agent is able to see the typing indicator as 70 Characters on chatdesk
     When Agent clears and types characters Please rate your experience with our agent Please rate your experience with our agent Please rate your experience with our agent Please rate your experience with Please rate with in conversation input field on chatdesk
-    Then Agent is able to see the typing indicator as 178 / 170 Characters on chatdesk
+    Then Agent is able to see the typing indicator as 178 / 160 Characters on chatdesk
     Examples:
       | channelType | userType |
       | SMS         | sms      |

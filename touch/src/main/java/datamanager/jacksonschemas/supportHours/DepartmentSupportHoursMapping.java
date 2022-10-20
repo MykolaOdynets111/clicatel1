@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static apihelper.ApiHelper.getDepartments;
+import static apihelper.ApiHelperDepartments.getDepartments;
 
 @Data
 @NoArgsConstructor

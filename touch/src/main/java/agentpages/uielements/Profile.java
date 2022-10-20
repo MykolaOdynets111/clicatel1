@@ -73,6 +73,17 @@ public class Profile extends AbstractUIElement {
     @FindBy(xpath = "//button[text()='Edit']")
     private WebElement editButton;
 
+    @FindBy(xpath = "//*/div[@class='cl-app-header__actions-box']/div[@class='cl-app-header__actions-box-item cl-send-external-message cl-dropdown-box-h-trigger']")
+    private WebElement sendAnExternalMessageIcon;
+
+    @FindBy(xpath = "//button[text()='WhatsApp']")
+    private WebElement clickWAButton;
+
+    @FindBy(xpath = "//input[@name='waPhone']")
+    private WebElement inputWaPhone;
+
+
+
     private String phoneCSS = "[data-testid = 'user-profile-phone']";
 
     public boolean isProfilePageDisplayed() {
@@ -204,4 +215,15 @@ public class Profile extends AbstractUIElement {
     public boolean isNotVerifiedLabelDisplayed(){
         return isElementShown(this.getCurrentDriver(), notVerifiedLabel, 3);
     }
+    public void clickSendExternalMessageIcon(){
+        clickElem(this.getCurrentDriver(), sendAnExternalMessageIcon, 1, "send External Message Icon");
+    }
+    public void clickWhatsApp(){
+        clickElem(this.getCurrentDriver(), clickWAButton, 1, "Click clickWAButton message");
+    }
+    public void inputWaPhone(){
+        clickElem(this.getCurrentDriver(), inputWaPhone, 1, "Click clickWAPhone input box");
+       // need to add step for entering value in waPhone number text field
+    }
+
 }

@@ -36,6 +36,7 @@ import steps.agentsteps.AbstractAgentSteps;
 import steps.dotcontrol.DotControlSteps;
 import steps.portalsteps.AbstractPortalSteps;
 import steps.portalsteps.BasePortalSteps;
+import steps.portalsteps.SurveyManagementSteps;
 import steps.portalsteps.TenantSteps;
 import steps.tiesteps.BaseTieSteps;
 import steps.tiesteps.TIEApiSteps;
@@ -121,7 +122,7 @@ public class Hooks implements JSHelper {
         }
 
         if(scenario.getSourceTagNames().contains(("@remove_dep"))){
-            ApiHelper.deleteDepartmentsById(Tenants.getTenantUnderTestOrgName());
+            ApiHelperDepartments.deleteDepartmentsById(Tenants.getTenantUnderTestOrgName());
         }
 
         if(scenario.getSourceTagNames().contains("@agent_session_capacity")){
@@ -313,12 +314,11 @@ public class Hooks implements JSHelper {
             }
 
             if (scenario.getSourceTagNames().contains("@setting_changes")){
-                ApiHelper.updateFeatureStatus(TenantChatPreferences.getDefaultTenantChatPreferences());
+                ApiHelper.updateChatPreferencesParameter(TenantChatPreferences.getDefaultTenantChatPreferences());
             }
 
             if (scenario.getSourceTagNames().contains("@widget_disabling")){
                 ApiHelper.setIntegrationStatus(Tenants.getTenantUnderTestOrgName(), "webchat", true);
-
             }
 
             DriverFactory.getAgentDriverInstance().manage().deleteAllCookies();

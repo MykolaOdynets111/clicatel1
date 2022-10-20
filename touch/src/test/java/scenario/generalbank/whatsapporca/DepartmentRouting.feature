@@ -20,7 +20,7 @@ Feature: Departments: Route to Department
     When Agent switches to opened Portal page
     And I select Touch in left menu and Agent Desk in submenu
     When Send to agent message by ORCA to AutomationSecondAgent department
-    Then Verify Orca returns Agent Busy message autoresponder during 40 seconds
+    Then Verify Orca returns Agent Busy message autoresponder during 40 seconds for agent
     Given I login as second agent of General Bank Demo
     Then Second agent has new conversation request from orca user
 
