@@ -6,11 +6,6 @@ import software.amazon.awssdk.services.sts.model.AssumeRoleResponse;
 import software.amazon.awssdk.services.sts.model.Credentials;
 import software.amazon.awssdk.services.sts.model.StsException;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -56,18 +51,18 @@ public class AssumeRole {
             AssumeRoleResponse roleResponse = stsClient.assumeRole(roleRequest);
             myCreds = roleResponse.credentials();
 
-            // Display the time when the temp creds expire.
-            Instant exTime = myCreds.expiration();
-            String tokenInfo = myCreds.sessionToken();
-
-            // Convert the Instant to readable date.
-            DateTimeFormatter formatter =
-                    DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
-                            .withLocale(Locale.US)
-                            .withZone(ZoneId.systemDefault());
-
-            formatter.format(exTime);
-            System.out.println("The token " + tokenInfo + "  expires on " + exTime);
+//            // Display the time when the temp creds expire.
+//            Instant exTime = myCreds.expiration();
+//            String tokenInfo = myCreds.sessionToken();
+//
+//            // Convert the Instant to readable date.
+//            DateTimeFormatter formatter =
+//                    DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
+//                            .withLocale(Locale.US)
+//                            .withZone(ZoneId.systemDefault());
+//
+//            formatter.format(exTime);
+//            System.out.println("The token " + tokenInfo + "  expires on " + exTime);
 
         } catch (StsException e) {
             System.err.println(e.getMessage());
