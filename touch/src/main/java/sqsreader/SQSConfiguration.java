@@ -35,12 +35,12 @@ public class SQSConfiguration {
         if(ConfigManager.isSQSUsed()){
             return DEFAULT_CALLBACK_URL + SERVER_INDEX;
         }
-        return "https://aqadummycallback.com";
+        return "https://aqaDummyCallBack.com";
     }
 
     public static synchronized String getQueueName(){
         SERVER_INDEX +=1;
-        if (SERVER_INDEX==10){
+        if (SERVER_INDEX>10){
             SERVER_INDEX=1;
         }
         return DEFAULT_QUEUE_NAME + SERVER_INDEX;

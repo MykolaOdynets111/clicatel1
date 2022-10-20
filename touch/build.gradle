@@ -134,6 +134,13 @@ task runWebsocketsReqression(type:Test){
     }
 }
 
+task runReqression(type:Test){
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + tenantName + "/reqression.xml"
+    }
+}
+
 task runTouchPullRequestTests(type:Test) {
     useTestNG() {
         ignoreFailures = true
@@ -250,6 +257,10 @@ task runTests(type: Test) {
 
     if(suite == "websockets") {
         runTests.dependsOn(runWebsocketsReqression)
+    }
+
+    if(suite == "regression") {
+        runTests.dependsOn(runReqression)
     }
 
     if(suite == "facebook") {

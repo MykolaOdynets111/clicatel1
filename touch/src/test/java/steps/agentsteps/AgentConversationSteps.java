@@ -3,13 +3,11 @@ package steps.agentsteps;
 import agentpages.uielements.*;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javafaker.Faker;
 import com.google.common.io.Files;
 import datamanager.Intents;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.Intent;
-import datamanager.jacksonschemas.chatextension.ChatExtension;
 import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
@@ -326,7 +324,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @When("^(.*) (?:responds with|sends a new message) (.*) to User$")
     public void sendAnswerToUser(String agent, String responseToUser) {
-        getAgentHomePage(agent).getChatForm().clearAndSendResponseToUser(responseToUser);
+        getAgentHomePage(agent).getChatForm().clearAndTypeResponseToUser(responseToUser).clickSendButton();
     }
 
     @When("^(.*) sends (.*) Location to User$")
@@ -360,12 +358,12 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @When("^(.*) send (.*) message$")
     public void sendMessageOnCurrentChat(String agent, String agentMessage) {
-        getAgentHomePage(agent).getChatForm().clearAndSendResponseToUser(agentMessage);
+        getAgentHomePage(agent).getChatForm().clearAndTypeResponseToUser(agentMessage).clickSendButton();
     }
 
     @When("^(.*) clear input and send a new message (.*)$")
     public void clearAndSendAnswerToUser(String agent, String responseToUser) {
-        getAgentHomePage(agent).getChatForm().clearAndSendResponseToUser(responseToUser);
+        getAgentHomePage(agent).getChatForm().clearAndTypeResponseToUser(responseToUser).clickSendButton();
     }
 
     @When("^(.*) response with emoticon to User$")

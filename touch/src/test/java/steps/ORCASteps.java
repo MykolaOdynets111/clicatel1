@@ -14,7 +14,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
-import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
 import sqsreader.OrcaSQSHandler;
 import sqsreader.SQSConfiguration;
@@ -121,7 +120,6 @@ public class ORCASteps implements WebWait {
             orcaChannelId.set(getIntegrationId(channel, "ORCA"));
         } else {
             apiToken.set(ApiORCA.updateIntegration(channel, SQSConfiguration.getCallbackUrl() ,orcaChannelId.get()));
-            System.out.println("apiToken was set with: " + apiToken.get());
         }
     }
 

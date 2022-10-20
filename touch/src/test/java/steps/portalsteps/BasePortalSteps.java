@@ -1,16 +1,13 @@
 package steps.portalsteps;
 
 
-import agentpages.dashboard.DashboardSettingsPage;
 import apihelper.ApiHelper;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javafaker.Faker;
 import datamanager.Agents;
 import datamanager.MC2Account;
 import datamanager.Tenants;
 import datamanager.TopUpBalanceLimits;
 import datamanager.jacksonschemas.TenantChatPreferences;
-import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.model.PaymentMethod;
 import dbmanager.DBConnector;
 import driverfactory.DriverFactory;

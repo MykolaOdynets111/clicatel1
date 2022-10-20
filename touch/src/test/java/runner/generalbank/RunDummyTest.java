@@ -6,14 +6,13 @@ import io.cucumber.testng.CucumberOptions;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-@Test(groups = {"abc"})
+@Test(groups = {"dumytest"})
 @CucumberOptions(
         plugin={"pretty", "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"},
         monochrome = true,
-        features = "touch/src/test/java/scenario/generalbank/abc",
-        tags ="@Regression",
+        features = "touch/src/test/java/scenario/generalbank/DummyTestForBuidOnGitlab.feature",
         glue ="steps")
-public class RunAbcTest extends AbstractTestNGCucumberTests {
+public class RunDummyTest extends AbstractTestNGCucumberTests {
 
     @Override
     @DataProvider()
