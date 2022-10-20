@@ -141,7 +141,7 @@ public class ORCASteps implements WebWait {
 
     @Then("^Verify Orca returns survey question response (.*) number of times during (.*) seconds")
     public void verifyOrcaReturnedResponseNumberOfTimes(int expectedSize, int wait) {
-        String expectedResponse = SurveyManagementSteps.questionUpdate.get();
+        String expectedResponse = SurveyManagementSteps.getQuestionUpdate();
         verifyAutoResponderMessageListSize(expectedResponse, expectedSize, wait);
     }
 

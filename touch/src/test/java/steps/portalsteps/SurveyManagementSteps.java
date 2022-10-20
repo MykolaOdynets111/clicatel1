@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class SurveyManagementSteps extends AbstractPortalSteps {
-    public static final ThreadLocal<String> questionUpdate = new ThreadLocal<>();
+    private static final ThreadLocal<String> questionUpdate = new ThreadLocal<>();
     private static final ThreadLocal<String> thankMessageUpdate = new ThreadLocal<>();
     private static final ThreadLocal<String> notesMessageUpdate = new ThreadLocal<>();
     public static ThreadLocal<SurveyManagement> surveyConfiguration = new ThreadLocal<>();
@@ -306,5 +306,9 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         }
 
         return expectedResponse;
+    }
+
+    public static String getQuestionUpdate() {
+        return questionUpdate.get();
     }
 }
