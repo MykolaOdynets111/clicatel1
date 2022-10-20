@@ -2,7 +2,7 @@
 Feature: Supervisor desk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2401")
-  Scenario: Supervisor inbox :: Verify if Supervisor can filter closed chat and tickets by date range filtering
+  Scenario: CD:: Supervisor Desk:: Verify if Supervisor can filter closed chat and tickets by date range filtering
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Supervisor Desk in submenu

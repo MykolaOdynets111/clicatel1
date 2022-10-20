@@ -19,6 +19,7 @@ import io.cucumber.java.en.When;
 import org.apache.commons.io.FileUtils;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import sqsreader.OrcaSQSHandler;
 import steps.DefaultTouchUserSteps;
 import steps.FacebookSteps;
 import steps.TwitterSteps;
@@ -288,6 +289,11 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         messagesFromChatBody.set(getChatBody(agent).getAllMessages());
     }
 
+    @And("^(.*) clicks the link message (.*)$")
+    public void clickOnLinkMessage(String agent, String text){
+        getChatBody(agent).clickLatestLinkMessage(text);
+    }
+
     @Then("Sent emoji is displayed on chatdesk$")
     public void verifyEmojiDisplayedOnChatdesk() {
         Assert.assertTrue(getChatBody("main agent").getAgentEmojiResponseOnUserMessage(selectedEmoji),
@@ -467,6 +473,12 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     public void verifyProfanityNotAllowedPopupShown() {
         Assert.assertTrue(getAgentHomePage("main").isProfanityPopupShown(),
                 "'Profanity not allowed' popup not shown.");
+    }
+
+    @Then("^'Profanity not allowed' pop up is not shown$")
+    public void verifyProfanityNotAllowedPopupNotShown() {
+        Assert.assertTrue(getAgentHomePage("main").isProfanityPopupNotShown(),
+                "'Profanity not allowed' popup is shown.");
     }
 
     @When("^(.*) closes 'Profanity not allowed' popup$")
@@ -742,15 +754,31 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         c2pSendForm.setOrderNumberField(order).setPriceForOrder(price).clickSendButton();
     }
 
+    @And("^(.*) clicks on the cancel payment button on the payment card$")
+    public void clicksCancelPaymentButton(String agent) {
+        getAgentHomePage(agent).getChatBody().clickCancelPaymentButton();
+    }
+
+    @And("^(.*) gets pending to live chat dialog with header (.*)$")
+    public void isPendingToLiveChatDialogShown(String agent, String expectedText) {
+        Assert.assertTrue(getAgentHomePage(agent).getChatPendingToLiveForm().getFormHeaderTitle().equalsIgnoreCase(expectedText),
+                "Header Title is not correct");
+    }
+
+    @And("^(.*) clicks on go to chat button$")
+    public void agentClicksGoToChatButton(String agent) {
+        getAgentHomePage(agent).getChatPendingToLiveForm().clickGoToChatButton();
+    }
+
     @And("^Agent send date picker form with name (.*) and send$")
     public void sendDatePicker(String name) {
         getAgentHomePage("main").getChatForm().setDevicePickerName(name);
         c2pSendForm.clickSendButton();
     }
 
-    @Then("^(.*) get 'payment link expired' update is sent to agent desk by C2P$")
-    public void verifyExpirationC2p(String agent){
-        Assert.assertTrue(getAgentHomePage(agent).getChatBody().getC2pExpiresCardsText().contains("Payment link expired"), "Expire card didn't come from c2p");
+    @Then("^(.*) get (.*) update is sent to agent desk by C2P$")
+    public void verifyPaymentC2pText(String agent, String paymentText){
+        Assert.assertTrue(getAgentHomePage(agent).getChatBody().getC2pPaymentCardsText().contains(paymentText), "Expire card didn't come from c2p");
     }
 
     @Then("^(.*) sees C2P link with (.*) number in chat body$")
@@ -765,6 +793,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @Then("^(.*) checks extensions in Frequently Used tab should be available in All Extension tab as well$")
     public void verifyExtensionsFrequentExtTabAllExtTab(String agent){
+        getAgentHomePage(agent).getChatForm().openExtensionsForm();
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(getAgentHomePage(agent).getExtensionsForm().isFreqUsedTabsExtsExistInAllExtsTab(), "Frequently used extension is not there in all extensions" );
         softAssert.assertTrue(getAgentHomePage(agent).getExtensionsForm().frequentExtListSizeAllExtensionListSizeComparison(), "Frequently used extension size is more than all extensions" );

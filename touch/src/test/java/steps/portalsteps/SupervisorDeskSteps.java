@@ -61,7 +61,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().getSupervisorTicketsTable().getTicketByUserName(getUserName(chanel)).clickOnUserName();
     }
 
-    @When("^Click on Massage Customer button$")
+    @When("^Click on Message Customer button$")
     public void clickOnMassageCustomer() {
         getSupervisorDeskPage().getSupervisorTicketClosedChatView().clickOnMessageCustomerButton();
     }
@@ -74,6 +74,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @When("^Supervisor send (.*) to agent trough (.*) chanel$")
     public void sendTicketMessageToCustomer(String message, String chanel) {
         getSupervisorDeskPage().getMessageCustomerWindow().selectChanel(chanel).setMessageText(message).clickSubmitButton();
+    }
+
+    @When("^Supervisor is unable to send (.*) HSM on Tickets for (.*) chat$")
+    public void hsmChannelNotShownOnParticularChannel(String channel, String originalChannel) {
+        Assert.assertFalse(getSupervisorDeskPage().getMessageCustomerWindow().isChanelShown(channel),
+                channel + " HSM is present in: " + originalChannel);
     }
 
     @When("^Click 'Route to scheduler' button$")
@@ -306,6 +312,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertTrue(getSupervisorDeskPage().openInboxChatBody(getUserName(channel)).isUserMessageShown(message), "Messages is not the same");
     }
 
+    @Then("^Supervisor can see (.*) ticket with (.*) message from agent$")
+    public void verifyTicketMessagePresent(String channel, String message) {
+        Assert.assertTrue(getSupervisorDeskPage().getTicketChatBody().isToUserMessageShown(message), "Messages is not the same");
+    }
+
     @When("^Verify that correct messages and timestamps are shown on Chat View$")
     public void openChatViewAndVerifyMessages() {
         List<String> messagesFromChatBody = AgentConversationSteps.getMessagesFromChatBody().get();
@@ -346,7 +357,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then("^Live chats (.*) filter has correct name and correct chats number$")
     public void verifyAgentNameOnLiveChatFilter(String agent) {
         String agentName = getAgentName(agent);
-        int numberOfChats = ApiHelper.getActiveChatsByAgent(agent).getBody().jsonPath().getList("content").size();
+        int numberOfChats = ApiHelper.getActiveChatsByAgent(agent).jsonPath().getList("content").size();
         Assert.assertEquals(getSupervisorDeskPage().getSupervisorLeftPanel().getLiveChatsNumberForAgent(agentName), numberOfChats, "Number of chats on Supervisor desk is different from Agent desk chats");
     }
 
@@ -591,7 +602,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void agentClickAssignButton() {
         getSupervisorDeskPage().getChatHeader().clickOnAssignButton();
     }
-    
+
     @When("Assign chat modal is opened")
     public void assignChatModalOpened() {
         Assert.assertTrue(getSupervisorDeskPage().getAssignChatWindow().isAssignWindowShown());

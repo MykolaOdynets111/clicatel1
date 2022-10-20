@@ -1,4 +1,4 @@
-@chat_preferences
+@setting_changes
 @no_chatdesk
 Feature: out_of_support_hours auto responder (Bot mode)
 

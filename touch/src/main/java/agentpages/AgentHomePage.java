@@ -108,6 +108,8 @@ public class AgentHomePage extends AgentAbstractPage {
     private AttachmentWindow attachmentWindow;
     private LocationWindow locationWindow;
     private C2pSendForm c2pSendForm;
+
+    private ChatPendingToLiveForm chatPendingToLiveForm;
     private Extensions extensions;
     private HSMForm hsmForm;
 
@@ -123,6 +125,11 @@ public class AgentHomePage extends AgentAbstractPage {
     public ChatForm getChatForm() {
         chatForm.setCurrentDriver(this.getCurrentDriver());
         return chatForm;
+    }
+
+    public ChatPendingToLiveForm getChatPendingToLiveForm() {
+        chatPendingToLiveForm.setCurrentDriver(this.getCurrentDriver());
+        return chatPendingToLiveForm;
     }
 
     public Extensions getExtensionsForm(){
@@ -284,6 +291,10 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public boolean isProfanityPopupShown(){
         return isElementShown(this.getCurrentDriver(), profanityPopup,10);
+    }
+
+    public boolean isProfanityPopupNotShown(){
+        return isElementRemoved(this.getCurrentDriver(), profanityPopup,10);
     }
 
     public void clickAcceptProfanityPopupButton(){

@@ -38,7 +38,7 @@ public class ChatExtension {
     public ChatExtension(String label, String name, String extensionType){
         this.setType(extensionType);
         this.setLabel(label);
-        this.setSupportedChannels(Arrays.asList("ABC", "WHATSAPP"));
+        this.setSupportedChannels(Arrays.asList("ABC", "WHATSAPP", "SMS"));
         this.setConfig(new Config(name, extensionType));
         this.setPopularityScore(6);
     }

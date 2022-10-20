@@ -1,6 +1,6 @@
 @no_widget
 @support_hours
-@auto_scheduler_disabled
+@setting_changes
 @dot_control
 Feature: Supervisor desk
 

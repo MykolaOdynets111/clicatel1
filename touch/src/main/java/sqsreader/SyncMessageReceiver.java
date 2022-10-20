@@ -59,6 +59,8 @@ public class SyncMessageReceiver {
         MessageConsumer consumer = session.createConsumer( session.createQueue( SQSConfiguration.getQueueName() ) );
 
         connection.start();
+        SQSConfiguration.running = true;
+        System.out.println("SQS Connection started");
 
         receiveMessages(consumer);
 

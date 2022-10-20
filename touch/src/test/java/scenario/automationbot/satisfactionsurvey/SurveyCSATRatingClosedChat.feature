@@ -6,15 +6,18 @@
 @Regression
 Feature: Satisfaction Survey
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2443")
-  Scenario Outline: CD:: Survey:: verify if user has an option to skip the survey for Whatsapp NPS survey type - Customer Feedback turned OFF in Flow
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2381")
+  Scenario Outline: verify if agent is able to see NPS rating from the survey that the customer completed on the chat view
     Given I login as agent of Automation Bot
     And Setup ORCA <channelType> integration for Automation Bot tenant
     And Update survey management chanel <channelType> settings by ip for Automation Bot
-      | ratingEnabled | true        |
-      | surveyType    | CSAT        |
-      | ratingScale   | ONE_TO_FIVE |
-      | ratingIcon    | NUMBER      |
+      | ratingEnabled        | true        |
+      | surveyType           | CSAT        |
+      | ratingScale          | ONE_TO_FIVE |
+      | ratingIcon           | NUMBER      |
+      | ratingTimeout        | 600         |
+      | commentEnabled       | true        |
+      | thanksMessageEnabled | true        |
     When Send connect to agent message by ORCA
     Then Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
@@ -28,28 +31,6 @@ Feature: Satisfaction Survey
     And Admin selects NPS survey type for <channelType> survey form
     And Agent click save survey configuration button for <channelType> survey form
     Then I select Touch in left menu and Agent Desk in submenu
-    And Agent click on last opened conversation request from orca
-    And Agent closes chat
-    And Send skip message by ORCA
-    And Verify Orca returns Thank you. Please don't hesitate to reach out if you ever need help! response during 40 seconds
-    Examples:
-      | channelType |
-      | Whatsapp         |
-
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-18595")
-  Scenario Outline: verify if agent is able to see NPS rating from the survey that the customer completed on the chat view
-    Given I login as agent of Standard Billing
-    And Setup ORCA <channelType> integration for Standard Billing tenant
-    And Update survey management chanel <channelType> settings by ip for Standard Billing
-      | ratingEnabled | true        |
-      | surveyType    | NPS        |
-      | ratingScale   | ZERO_TO_TEN |
-      | ratingIcon    | NUMBER      |
-    When Send connect to agent message by ORCA
-    Then Agent has new conversation request from orca user
-    And Agent click on new conversation request from orca
-    And Conversation area becomes active with connect to agent user's message
-    Then I select Touch in left menu and Agent Desk in submenu
     And Agent click on new conversation request from orca
     And Conversation area becomes active with connect to agent user's message
     And Agent closes chat
@@ -61,16 +42,20 @@ Feature: Satisfaction Survey
     Examples:
       | channelType |
       | whatsapp    |
+      | abc         |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1861")
   Scenario Outline: CD:: Survey:: Dashboard:: Verify If the client enables NPS Survey, there will be no update in the agent scores in the CSAT in agent performance tab
     Given I login as agent of Automation Bot
     And Setup ORCA <channelType> integration for Automation Bot tenant
     And Update survey management chanel <channelType> settings by ip for Automation Bot
-      | ratingEnabled | true        |
-      | surveyType    | NPS         |
-      | ratingScale   | ZERO_TO_TEN |
-      | ratingIcon    | NUMBER      |
+      | ratingEnabled        | true        |
+      | surveyType           | NPS         |
+      | ratingScale          | ZERO_TO_TEN |
+      | ratingIcon           | NUMBER      |
+      | ratingTimeout        | 600         |
+      | commentEnabled       | true        |
+      | thanksMessageEnabled | true        |
     When Send connect to agent message by ORCA
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
@@ -91,8 +76,8 @@ Feature: Satisfaction Survey
     Then Admin is able to see the new average CSAT survey response converted to 0-100
     And Admin is able to see the same average CSAT rating for NPS response
     Examples:
-      | channelType | channelFilterType |
-      | whatsapp    | Whatsapp          |
+      | channelType | channelFilterType   |
+      | whatsapp    | Whatsapp            |
       | abc         | Apple Business Chat |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1170")
@@ -100,10 +85,13 @@ Feature: Satisfaction Survey
     Given I login as agent of Automation Bot
     And Setup ORCA abc integration for Automation Bot tenant
     And Update survey management chanel abc settings by ip for Automation Bot
-      | ratingEnabled | true        |
-      | surveyType    | CSAT        |
-      | ratingScale   | ONE_TO_FIVE |
-      | ratingIcon    | NUMBER      |
+      | ratingEnabled        | true        |
+      | surveyType           | CSAT        |
+      | ratingScale          | ONE_TO_FIVE |
+      | ratingIcon           | NUMBER      |
+      | ratingTimeout        | 600         |
+      | commentEnabled       | true        |
+      | thanksMessageEnabled | true        |
     And I select Touch in left menu and Dashboard in submenu
     And Navigate to Surveys page
     When Agent switch "Allow customer to give thank message" in survey management
@@ -143,10 +131,13 @@ Feature: Satisfaction Survey
     And Agent click save survey configuration button for <channelType> survey form
     When Send connect to agent message by ORCA
     And Update survey management chanel <channelType> settings by ip for Automation Bot
-      | ratingEnabled | true        |
-      | surveyType    | CSAT        |
-      | ratingScale   | ONE_TO_FIVE |
-      | ratingIcon    | NUMBER      |
+      | ratingEnabled        | true        |
+      | surveyType           | CSAT        |
+      | ratingScale          | ONE_TO_FIVE |
+      | ratingIcon           | NUMBER      |
+      | ratingTimeout        | 600         |
+      | commentEnabled       | true        |
+      | thanksMessageEnabled | true        |
     Then I select Touch in left menu and Agent Desk in submenu
     And Agent has new conversation request from <channelUserType> user
     And Agent click on new conversation request from <channelUserType>
@@ -164,5 +155,5 @@ Feature: Satisfaction Survey
     And Admin is able to see the different average CSAT rating for CSAT response
     Examples:
       | channelType | channelUserType | channelFilter       |
-      | ABC         |  orca           | Apple Business Chat |
-      | SMS         |  sms            | SMS                 |
+      | ABC         | orca            | Apple Business Chat |
+      | SMS         | sms             | SMS                 |

@@ -59,4 +59,4 @@ Feature: Apple Business Chat :: Dashboard
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Live Customers on dashboard
-    Then Verify admin can see number of neutral sentiment chats when hover over Apple Business Chat channel
+    Then Verify admin can see number of chats when hover over Apple Business Chat channel

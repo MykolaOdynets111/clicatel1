@@ -61,7 +61,7 @@ public class ChatForm extends AbstractUIElement {
     private WebElement location;
 
     @FindBy(css="svg[name='puzzle']")
-    private WebElement c2pButton;
+    private WebElement extensionsButton;
 
     @FindBy(xpath = "//button[text()='Start Chat']")
     private WebElement startChatButton;
@@ -209,7 +209,7 @@ public class ChatForm extends AbstractUIElement {
     }
 
     public void openExtensionsForm(){
-        clickElem(this.getCurrentDriver(), c2pButton, 5, "c2p button");
+        clickElem(this.getCurrentDriver(), extensionsButton, 5, "Extensions button");
     }
 
     public void setDevicePickerName(String name) {
@@ -225,6 +225,6 @@ public class ChatForm extends AbstractUIElement {
     }
 
     public boolean c2pExtensionIconIsVisible(){
-        return isElementShown(this.getCurrentDriver(),c2pButton,3);
+        return isElementShown(this.getCurrentDriver(),extensionsButton,3);
     }
 }

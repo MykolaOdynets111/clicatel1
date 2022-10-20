@@ -53,11 +53,11 @@ public enum DriverType {
 		}
 
 
-    public WebDriver getWebDriverObject(MutableCapabilities capabilities) {
+        public WebDriver getWebDriverObject(MutableCapabilities capabilities) {
             if (!ConfigManager.isRemote()) {
                 ChromeDriverManager.getInstance().setup();
                 return new ChromeDriver((ChromeOptions) capabilities);
-            }else{
+            } else {
                 ChromeDriverManager.getInstance().driverVersion("89.0.4389.82").setup();
                 return new ChromeDriver((ChromeOptions) capabilities);
             }

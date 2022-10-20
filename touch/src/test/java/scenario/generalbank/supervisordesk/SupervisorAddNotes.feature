@@ -1,6 +1,6 @@
 @no_widget
 @orca_api
-@regression
+@Regression
 Feature: Supervisor desk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1427")
@@ -16,11 +16,14 @@ Feature: Supervisor desk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-3882")
   Scenario: CD :: Supervisor Desk :: Chat :: Notes :: Verify if supervisor is able to add notes to a closed chat
+
     Given Setup ORCA abc integration for General Bank Demo tenant
     And I login as agent of General Bank Demo
-    And Send Notes for Closed Chat message by ORCA
-    When Agent click on new conversation request from ORCA
+    When Send to agent message by ORCA
+    Then Agent has new conversation request from orca user
+    When Agent click on new conversation request from orca
     And Agent closes chat
+
     And I open portal
     And Login into portal as an admin of General Bank Demo account
     And I select Touch in left menu and Supervisor Desk in submenu
@@ -30,6 +33,7 @@ Feature: Supervisor desk
     Then Supervisor sees note "Closed Chat Test Note Message", Jira link "https://closedchatdummy.com/" and Ticket Number "662220"
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-3883")
+  @support_hours
   Scenario: CD :: Supervisor Desk :: Chat :: Notes :: Verify if supervisor is able to add notes to a ticket
     Given Setup ORCA abc integration for General Bank Demo tenant
     And Set agent support hours with day shift
