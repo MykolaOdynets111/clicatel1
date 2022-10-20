@@ -460,10 +460,6 @@ public class Hooks implements JSHelper {
         ApiHelper.clientProfileId.remove();
         CamundaFlowsSteps.updatedMessage.remove();
         CamundaFlowsSteps.defaultMessage.remove();
-        SurveyManagementSteps.questionUpdate.remove();
-        SurveyManagementSteps.thankMessageUpdate.remove();
-        SurveyManagementSteps.notesMessageUpdate.remove();
-        SurveyManagementSteps.surveyConfiguration.remove();
     }
 
     private byte[] attach(ByteArrayOutputStream log) {
