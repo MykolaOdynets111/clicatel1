@@ -11,9 +11,9 @@ Feature: Chat console: Waiting customers
   @agent_session_capacity
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2674")
   Scenario: Dashboard:: Chats waiting in a queue increases in case no session capacity
-    Given I login as second agent of Automation Bot
+    Given I login as second agent of General Bank Demo
 #    And User enter connect to agent into widget input field
-    Given Setup ORCA whatsapp integration for Automation Bot tenant
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
     When Send connect to agent message by ORCA
     Then Customers waiting for response widget value increased on 1
 
