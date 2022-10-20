@@ -1,6 +1,7 @@
 @no_widget
 @off_rating_whatsapp
 @off_rating_abc
+@off_rating_sms
 @no_chatdesk
 @Regression
 Feature: Satisfaction Survey
@@ -11,10 +12,11 @@ Feature: Satisfaction Survey
   Scenario Outline: CD :: Dashboard :: Configure :: Settings :: Survey :: <channelType> :: Verify that Admin/Supervisor should be able to turn ON/OFF a request for user to Leave a note
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing
-      | ratingEnabled        | true        |
       | surveyType           | CSAT        |
       | ratingScale          | ONE_TO_FIVE |
       | ratingIcon           | NUMBER      |
+      | ratingTimeout        | 600         |
+      | ratingEnabled        | true        |
       | commentEnabled       | true        |
       | thanksMessageEnabled | true        |
     And I open portal

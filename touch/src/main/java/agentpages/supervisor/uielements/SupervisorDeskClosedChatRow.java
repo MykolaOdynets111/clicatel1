@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 
 public class SupervisorDeskClosedChatRow extends AbstractWidget {
 
-    @FindBy(xpath = ".//br/parent::div")
+    @FindBy(css = ".cl-table-cell--endedDate")
     private WebElement date;
     @FindBy(css = ".chats-list .cl-user-details")
     private WebElement chatNameCell;

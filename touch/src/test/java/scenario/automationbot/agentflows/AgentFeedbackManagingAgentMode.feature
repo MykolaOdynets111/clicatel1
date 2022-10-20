@@ -17,7 +17,6 @@ Feature: Turning on / off AGENT_FEEDBACK feature for Agent mode tenant
     Then End chat popup is not shown
     And Agent should not see from user chat in agent desk from orca
 
-  @skip
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2864")
   Scenario: CD:: Dashboard Setting:: Turning on 'Additional Agent Notes to Closed Chat' feature (Bot mode tenant)
     Given agentFeedback tenant feature is set to true for Automation Bot
@@ -29,4 +28,4 @@ Feature: Turning on / off AGENT_FEEDBACK feature for Agent mode tenant
     When Agent click "End chat" button
     Then Agent Feedback popup for agent should be opened
     And Agent click 'Close chat' button
-    And Agent should not see from user chat in agent desk
+    And Agent should not see from user chat in agent desk from orca

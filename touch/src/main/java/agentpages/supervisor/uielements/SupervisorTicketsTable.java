@@ -8,10 +8,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(css = ".supervisor-tickets")
+@FindBy(css = ".chats-list")
 public class SupervisorTicketsTable extends AbstractUIElement {
 
-    @FindBy(css=".cl-table-body .cl-table-row")
+    @FindBy(css=".cl-table-row")
     private List<WebElement> tickets;
 
     @FindBy(xpath = "//button[text() = 'Assign Manually']")

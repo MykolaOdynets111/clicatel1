@@ -14,10 +14,12 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
+import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
 import sqsreader.OrcaSQSHandler;
 import sqsreader.SQSConfiguration;
 import steps.agentsteps.AgentConversationSteps;
+import steps.portalsteps.SurveyManagementSteps;
 
 import java.io.File;
 import java.io.IOException;
@@ -141,15 +143,13 @@ public class ORCASteps implements WebWait {
 
     @Then("^Verify Orca returns (.*) response during (.*) seconds$")
     public void verifyOrcaReturnedCorrectResponse(String expectedResponse, int wait) {
-
-        if (expectedResponse.equalsIgnoreCase("start_new_conversation")) {
-            expectedResponse = DefaultTouchUserSteps.formExpectedAutoresponder(expectedResponse);
-        }
+        expectedResponse = SurveyManagementSteps.getExpectedSurveyResponse(expectedResponse);
         verifyAutoresponder(expectedResponse, wait);
     }
 
-    @Then("^Verify Orca returns survey (.*) response (.*) number of times during (.*) seconds")
-    public void verifyOrcaReturnedResponseNumberOfTimes(String expectedResponse, int expectedSize, int wait) {
+    @Then("^Verify Orca returns survey question response (.*) number of times during (.*) seconds")
+    public void verifyOrcaReturnedResponseNumberOfTimes(int expectedSize, int wait) {
+        String expectedResponse = SurveyManagementSteps.getQuestionUpdate();
         verifyAutoResponderMessageListSize(expectedResponse, expectedSize, wait);
     }
 

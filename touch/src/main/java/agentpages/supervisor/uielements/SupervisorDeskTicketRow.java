@@ -21,7 +21,7 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
     @FindBy(css = ".cl-agent-name")
     private WebElement currentAgent;
 
-    @FindBy(css = ".cl-user-name")
+    @FindBy(css = ".user-details__name")
     private WebElement userName;
 
     @FindBy(css = ".cl-table-user-description__location")

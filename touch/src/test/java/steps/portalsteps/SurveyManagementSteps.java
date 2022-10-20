@@ -295,4 +295,20 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
 
         softAssert.assertAll();
     }
+
+    public static String getExpectedSurveyResponse(String expectedResponse) {
+        if (expectedResponse.equalsIgnoreCase("question update")) {
+            expectedResponse = SurveyManagementSteps.questionUpdate.get();
+        } else if (expectedResponse.equalsIgnoreCase("notes update")) {
+            expectedResponse = SurveyManagementSteps.notesMessageUpdate.get();
+        } else if (expectedResponse.equalsIgnoreCase("thanks message update")) {
+            expectedResponse = SurveyManagementSteps.thankMessageUpdate.get();
+        }
+
+        return expectedResponse;
+    }
+
+    public static String getQuestionUpdate() {
+        return questionUpdate.get();
+    }
 }
