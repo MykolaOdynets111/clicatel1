@@ -60,13 +60,13 @@ public class TenantChatPreferences {
         return new TenantChatPreferences();
     }
 
-    public void setFeatureStatus(String feature, String value) {
+    public void setValueForChatPreferencesParameter(String feature, String value) {
         switch (feature) {
             case "autoTicketScheduling":
                 setAutoTicketScheduling(Boolean.getBoolean(value));
                 break;
             case "maxChatsPerAgent":
-                setMaxChatsPerAgent(Integer.getInteger(value));
+                setMaxChatsPerAgent(Integer.parseInt(value));
                 break;
             case "agentFeedback":
                 setAgentFeedback(value);

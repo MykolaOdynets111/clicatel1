@@ -1,5 +1,6 @@
 @no_widget
 @no_chatdesk
+@setting_changes
 Feature: Automatic Scheduler
 
  @TestCaseId("https://jira.clickatell.com/browse/TPORT-3783")

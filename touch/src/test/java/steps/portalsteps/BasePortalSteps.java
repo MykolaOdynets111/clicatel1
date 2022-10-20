@@ -965,33 +965,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalIntegrationsPage().getCreateIntegrationWindow().setUpTwitterIntegration();
     }
 
-    @When("^Delink facebook account$")
-    public void delinkFBAccount(){
-        getPortalFBIntegrationPage().delinkFBAccount();
-    }
-
-    @Then("^Touch Go plan is updated to \"(.*)\" in (.*) tenant configs$")
-    public void verifyTouchGoPlanUpdatingInTenantConfig(String expectedTouchGoPlan, String tenantOrgName){
-        String actualType = ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
-        for(int i=0; i<120; i++){
-            if (!actualType.equalsIgnoreCase(expectedTouchGoPlan)){
-                getAdminPortalMainPage().waitFor(15000);
-                DriverFactory.getAgentDriverInstance().navigate().refresh();
-                actualType = ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
-            } else{
-                break;
-            }
-        }
-        boolean isUpgraded = actualType.equalsIgnoreCase(expectedTouchGoPlan);
-        System.setProperty("tenantUpgradeSuccessful", String.valueOf(isUpgraded));
-        Assert.assertTrue(isUpgraded,
-                "TouchGo plan is not updated in tenant configs for '"+tenantOrgName+"' tenant \n"+
-                        "Expected: " + expectedTouchGoPlan + "\n" +
-                        "Found:" + actualType
-        );
-    }
-
-
     @Then("^Touch Go plan is updated to \"(.*)\" in portal page$")
     public void verifyPlanUpdatingOnPortalPage(String expectedTouchGo){
         DriverFactory.getAgentDriverInstance().navigate().refresh();
