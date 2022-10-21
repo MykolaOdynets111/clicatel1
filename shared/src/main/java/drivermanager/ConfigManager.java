@@ -1,6 +1,5 @@
 package drivermanager;
 
-import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
 
 
@@ -8,7 +7,6 @@ public class ConfigManager {
 
     // Base configs
     private static final String REMOTE_FLAG_VARIABLE = "remote";
-    private static final String BROWSER_TYPE = "browsertype";
     private static final String ENV = "env";
     private static final String DEPLOY_TO = "deploy_to";
     private static final String TENANT_ORG_NAME = "tenantorgname";
@@ -128,10 +126,6 @@ public class ConfigManager {
         System.setProperty(TENANT_ID, tenantId);
     }
 
-    public static void setBrowserType(String browserType) {
-        System.setProperty(BROWSER_TYPE, browserType);
-    }
-
     public static void setEnv(String env) {
         System.setProperty(ENV, env);
     }
@@ -144,11 +138,11 @@ public class ConfigManager {
 
     public static DriverType getDriverType() {
         DriverType driverType = DriverType.CHROME;
-        String browserType = System.getProperty(BROWSER_TYPE,"headless");
 
-        if (!StringUtils.isEmpty(browserType)) {
-            driverType = DriverType.from(browserType);
+        if (ConfigManager.isRemote()) {
+            driverType = DriverType.from("headless");
         }
+
         return driverType;
     }
 
