@@ -2,17 +2,18 @@
 @Regression
 Feature: Whatsapp ORCA :: Chatdesk
 
-  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1739")
+  @orca_api
   Scenario: ChatDesk:: The header should have whatsapp icon when user is chatting using orca whatsapp
-    Given I login as agent of General Bank Demo
+
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    And I login as agent of General Bank Demo
     When Send connect to Support message by ORCA
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
-    Then Conversation area becomes active with connect to Support user's message
-    Then Valid image for whatsapp integration are shown in left menu with chat
-    And Agent should see whatsappHeader icon in active chat header
+    And Conversation area becomes active with connect to Support user's message
+    Then Agent should see whatsapp integration icon in left menu with chat
+    And Agent should see whatsapp icon in active chat header
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1821")
@@ -125,8 +126,8 @@ Feature: Whatsapp ORCA :: Chatdesk
       | Whatsapp    | orca    |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2787")
-  @Regression
   Scenario: CD::Supervisor desk :: Verify if supervisor is able to check live chats
+
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Supervisor Desk in submenu
@@ -134,11 +135,11 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Setup ORCA whatsapp integration for General Bank Demo tenant
     And Send to agent message by ORCA
     When I select Touch in left menu and Supervisor Desk in submenu
-    When Verify "All Chats" display default
+    When Verify "All live chats" display default
     Then  Verify that live chats available are shown
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2369")
-    @support_hours
+  @support_hours
   Scenario: CD:: Supervisor desk :: Verify if Supervisor is able to Route ticket to scheduler
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     And Set agent support hours with day shift
