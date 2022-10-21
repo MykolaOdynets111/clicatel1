@@ -12,30 +12,25 @@ Feature: Satisfaction Survey
     Given I login as agent of Standard Billing
     And Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing
-      | surveyType           | CSAT        |
-      | ratingScale          | ONE_TO_FIVE |
+      | surveyType           | NPS         |
+      | ratingScale          | ZERO_TO_TEN |
       | ratingIcon           | NUMBER      |
       | ratingTimeout        | 600         |
       | ratingEnabled        | true        |
       | commentEnabled       | true        |
       | thanksMessageEnabled | true        |
-    When Send connect to agent message by ORCA
-    Then Agent has new conversation request from orca user
-    And Agent click on new conversation request from orca
-    And Conversation area becomes active with connect to agent user's message
-    And Agent switches to opened Portal page
     And I select Touch in left menu and Dashboard in submenu
     And Navigate to Surveys page
-    And Survey Management page should be shown
-    And Admin clicks on channel toggle button for survey form
-    And Admin clicks on channel expand button for survey form
-    And Admin selects NPS survey type for <channelType> survey form
+    And Customize your survey "Great, thanks - could you please rate our service from 0 - 10. 0 being "Very unsatisfied" and 10 being "Very satisfied". Simply type "skip" keyword to skip the survey." question
     And Agent click save survey configuration button for <channelType> survey form
+    When Send connect to agent message by ORCA
     Then I select Touch in left menu and Agent Desk in submenu
-    And Agent click on last opened conversation request from orca
+    And Agent has new conversation request from orca user
+    And Agent click on new conversation request from orca
     And Conversation area becomes active with connect to agent user's message
     And Agent closes chat
     And Send 10 message by ORCA
+    And Verify Orca returns question update response during 40 seconds
     When Agent select "Closed" left menu option
     And Agent searches and selects chat from orca in chat history list
     And Agent open first 'History view'
@@ -80,33 +75,6 @@ Feature: Satisfaction Survey
       | channelType | channelFilterType   |
       | whatsapp    | Whatsapp            |
       | abc         | Apple Business Chat |
-
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1170")
-  Scenario: CD:: Dashboard: Dashboard-Customers_Overview:: Verify if admin can open Customers History with CSAT customer survey
-    Given I login as agent of Standard Billing
-    And Setup ORCA abc integration for Standard Billing tenant
-    And Update survey management chanel abc settings by ip for Standard Billing
-      | surveyType           | CSAT        |
-      | ratingScale          | ONE_TO_FIVE |
-      | ratingIcon           | NUMBER      |
-      | ratingTimeout        | 600         |
-      | ratingEnabled        | true        |
-      | commentEnabled       | true        |
-      | thanksMessageEnabled | true        |
-    When Send connect to agent message by ORCA
-    Then I select Touch in left menu and Agent Desk in submenu
-    And Agent has new conversation request from orca user
-    And Agent click on new conversation request from orca
-    And Conversation area becomes active with connect to agent user's message
-    And Agent closes chat
-    And Send 5 message by ORCA
-    And Agent switches to opened Portal page
-    And I select Touch in left menu and Dashboard in submenu
-    And Admin click on Customers Overview dashboard tab
-    And Admin click on Customers History on dashboard
-    And Admin filter Customers History by channel and period
-      | Apple Business Chat | Past week |
-    And Admin is able to see Customer Satisfaction,Chats by Channel,Past Sentiment graphs
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1685")
   Scenario Outline: CD:: <channelType>:: Survey:: CSAT:: Verify if survey rating updates the % value for CSAT scores in the Agent performance reports

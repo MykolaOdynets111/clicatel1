@@ -3,9 +3,11 @@
 @Regression
 Feature: Supervisor desk
 
+  @setting_changes
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1427")
   Scenario: CD :: Supervisor Desk :: Chat :: Notes :: Verify if supervisor is able to add notes to a live chat
     Given Setup ORCA abc integration for General Bank Demo tenant
+    And autoTicketScheduling tenant feature is set to false for Automation
     And Send Notes for Live Chat message by ORCA
     And I open portal
     And Login into portal as an admin of General Bank Demo account
