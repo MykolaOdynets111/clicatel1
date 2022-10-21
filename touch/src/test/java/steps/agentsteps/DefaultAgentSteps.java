@@ -4,11 +4,10 @@ import agentpages.uielements.FilterMenu;
 import agentpages.uielements.Profile;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperSupportHours;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import datamanager.Tenants;
 import datamanager.UserPersonalInfo;
 import datamanager.jacksonschemas.TenantChatPreferences;
+import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
@@ -23,6 +22,10 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.StringUtils;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import socialaccounts.TwitterUsers;
@@ -211,6 +214,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertTrue(getLeftMenu(agent).isOvernightTicketIconRemoved(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())),
                 "Overnight ticket is still shown");
     }
+
     @Then("Message that it is overnight ticket is shown for (.*)")
     public void verifyMessageThatThisIsOvernightTicket(String agent){
         SoftAssert softAssert = new SoftAssert();
@@ -300,6 +304,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         if(!ConfigManager.isWebWidget() && socialChannel.equalsIgnoreCase("touch")){socialChannel="orca";}
         getLeftMenu(agent).openNewFromSocialConversationRequest(getUserName(socialChannel));
     }
+
     @When("^(.*) click on new conversation$")
     public void acceptUserConversation(String ordinalAgentNumber) {
         getLeftMenu(ordinalAgentNumber).openNewConversationRequestByAgent();
@@ -593,11 +598,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "Last message in left menu with chat as not expected. \n");
     }
 
-    @Then("^Valid image for (.*) integration are shown in left menu with chat$")
-    public void verifyImgForLastMessageInLeftMenu(String adapter) {
-        Assert.assertTrue(getLeftMenu("main").isValidImgForActiveChat(adapter),
-                "Image in last message in left menu for " + adapter + " adapter as not expected. \n");
-//        getLeftMenu("main").createValidImgForActiveChat(adapter); //do not delete
+    @Then("^(.*) should see (.*) integration icon in left menu with chat$")
+    public void verifyImageMessageInLeftMenu(String agent, String adapter) {
+        assertThat(getLeftMenu(agent).getChatIconName())
+                .as(format("Image should have name %s", adapter))
+                .isEqualTo(adapter);
     }
 
     @Then("^Valid sentiment icon are shown for (.*) message in left menu with chat$")
