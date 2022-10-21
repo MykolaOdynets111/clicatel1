@@ -384,20 +384,6 @@ public class DotControlSteps implements WebWait {
                         + "\nExpected: " + expectedResponse);
     }
 
-    @When("^Created .Control integration is correctly returned with GET response$")
-    public void verifyDCIntegrationCorrectlyReturnedWithGet(){
-        SoftAssert soft = new SoftAssert();
-        Integration httpIntegration = ApiHelper.getIntegration(Tenants.getTenantUnderTestOrgName(), "http");
-        soft.assertFalse(httpIntegration.getId()==null,
-                "HTTP integration ID is null after its creation");
-        soft.assertEquals(httpIntegration.getStatus(), "ACTIVE",
-                "HTTP integration hast wrong STATUS after its creation");
-        soft.assertEquals(httpIntegration.getPurchased(), Boolean.TRUE,
-                "HTTP integration hast wrong PURCHASED status after its creation");
-        soft.assertAll();
-    }
-
-
     @When("^I delete .Control integration$")
     public void deleteHTTPIntegration(){
         Response resp = APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
