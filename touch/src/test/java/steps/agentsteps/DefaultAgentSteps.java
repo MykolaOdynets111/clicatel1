@@ -7,6 +7,7 @@ import apihelper.ApiHelperSupportHours;
 import datamanager.Tenants;
 import datamanager.UserPersonalInfo;
 import datamanager.jacksonschemas.TenantChatPreferences;
+import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
 import datamanager.jacksonschemas.supportHours.GeneralSupportHoursItem;
@@ -20,6 +21,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.StringUtils;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import socialaccounts.TwitterUsers;
@@ -55,6 +58,22 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         TenantChatPreferences tenantChatPreferences = new TenantChatPreferences();
         tenantChatPreferences.setValueForChatPreferencesParameter(parameter, value);
         ApiHelper.updateChatPreferencesParameter(tenantChatPreferences);
+    }
+
+    @Given("Agent creates tenant extension with label and name$")
+    public void createExtensionForTenant(List<Map<String, String>> datatable){
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> listChatExtension = new ArrayList<>();
+        for (int i = 0; i < datatable.size(); i++) {
+            try {
+                listChatExtension.add(mapper.writeValueAsString(new ChatExtension(
+                        datatable.get(i).get("label"), datatable.get(i).get("name"),
+                        datatable.get(i).get("extensionType"))));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        ApiHelper.createExtensions(listChatExtension.toString());
     }
 
     @Then("^On backand (.*) tenant feature status is set to (.*) for (.*)$")
