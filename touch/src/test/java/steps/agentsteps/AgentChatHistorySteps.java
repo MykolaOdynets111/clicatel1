@@ -152,7 +152,7 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
     @When("^(.*) searches and selects chat from (.*) in chat history list$")
     public void selectRandomChatFromHistory(String ordinalAgentNumber, String channel){
         getAgentHomePage(ordinalAgentNumber).waitForLoadingInLeftMenuToDisappear(3,7);
-        getLeftMenu(ordinalAgentNumber).searchUserChat(getUserName(channel));
+        Assert.assertTrue(getLeftMenu(ordinalAgentNumber).searchUserChat(getUserName(channel)), "No chats visible in close chats");
     }
 
     @When("Close chat to generate history record")
