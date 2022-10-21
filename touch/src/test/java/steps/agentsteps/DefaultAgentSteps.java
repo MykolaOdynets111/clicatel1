@@ -23,13 +23,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import socialaccounts.TwitterUsers;
-import steps.ORCASteps;
 import steps.dotcontrol.DotControlSteps;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static java.lang.String.format;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 
 public class DefaultAgentSteps extends AbstractAgentSteps {
 
@@ -561,11 +564,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "Last message in left menu with chat as not expected. \n");
     }
 
-    @Then("^Valid image for (.*) integration are shown in left menu with chat$")
-    public void verifyImgForLastMessageInLeftMenu(String adapter) {
-        Assert.assertTrue(getLeftMenu("main").isValidImgForActiveChat(adapter),
-                "Image in last message in left menu for " + adapter + " adapter as not expected. \n");
-//        getLeftMenu("main").createValidImgForActiveChat(adapter); //do not delete
+    @Then("^(.*) should see (.*) integration icon in left menu with chat$")
+    public void verifyImageMessageInLeftMenu(String agent, String adapter) {
+        assertThat(getLeftMenu(agent).getChatIconName())
+                .as(format("Image should have name %s", adapter))
+                .isEqualTo(adapter);
     }
 
     @Then("^Valid sentiment icon are shown for (.*) message in left menu with chat$")
@@ -632,7 +635,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().isValidChannelImg("headerChannel"),
                 "Icon for channel in chat header as not expected");
     }
-
     @And("^Time stamp displayed in 24 hours format$")
     public void timeStampDisplayedInHoursFormat() {
         Map<String, String> sessionDetails = DBConnector.getSessionDetailsByClientID(ConfigManager.getEnv()

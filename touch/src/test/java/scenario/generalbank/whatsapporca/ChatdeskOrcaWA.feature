@@ -2,17 +2,18 @@
 @Regression
 Feature: Whatsapp ORCA :: Chatdesk
 
-  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1739")
+  @orca_api
   Scenario: ChatDesk:: The header should have whatsapp icon when user is chatting using orca whatsapp
-    Given I login as agent of General Bank Demo
+
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    And I login as agent of General Bank Demo
     When Send connect to Support message by ORCA
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
-    Then Conversation area becomes active with connect to Support user's message
-    Then Valid image for whatsapp integration are shown in left menu with chat
-    And Agent should see whatsappHeader icon in active chat header
+    And Conversation area becomes active with connect to Support user's message
+    Then Agent should see whatsapp integration icon in left menu with chat
+    And Agent should see whatsapp icon in active chat header
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1821")
