@@ -1,6 +1,6 @@
 @no_widget
 @no_chatdesk
-@agent_session_capacity
+@setting_changes
 Feature: Managing Chat desk Window
 
   Scenario: Check changing available agent and off/on Chat Conclusion

@@ -8,6 +8,7 @@ import datamanager.Tenants;
 import datamanager.UserPersonalInfo;
 import datamanager.jacksonschemas.TenantChatPreferences;
 import datamanager.jacksonschemas.chatextension.ChatExtension;
+import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
 import datamanager.jacksonschemas.supportHours.GeneralSupportHoursItem;
@@ -23,6 +24,8 @@ import io.restassured.response.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import socialaccounts.TwitterUsers;
@@ -35,7 +38,6 @@ import java.util.*;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
 
 public class DefaultAgentSteps extends AbstractAgentSteps {
 
@@ -110,6 +112,17 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("^(.*) verify customer contact number (.*) is filled$")
     public void checkContactNumber(String agent, String phoneNumber){
         Assert.assertTrue(getAgentHomePage(agent).getHSMForm().getContactNum().equalsIgnoreCase(phoneNumber), "False : waPhone Field is empty");
+    }
+
+    @Then("^Verify (.*) has (.*) conversation requests from (.*) integration$")
+    public void verifyConversationRequest(String agent, int numberOfChats, String integration) {
+        if(getNumberOfActiveChats(agent, integration) < numberOfChats){
+            waitSomeTime(10);
+        }
+
+        assertThat(getNumberOfActiveChats(agent, integration))
+                .as(format("Agent should have %s active charts by %s integration", numberOfChats, integration))
+                .isEqualTo(numberOfChats);
     }
 
     @Then("^(.*) has (?:new|old) (.*) (?:request|shown)(?: from (.*) user|)$")
@@ -190,6 +203,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")\n" +
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
     }
+
     @Then("(.*) sees 'overnight' icon in this chat")
     public void verifyOvernightIconShown(String agent){
         Assert.assertTrue(getLeftMenu(agent).isOvernightTicketIconShown(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())),
@@ -277,6 +291,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "Conversation request is not removed from Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")"
         );
     }
+
     @Then("^(.*) should not see from user chat in agent desk from (.*)$")
     public void verifyDotControllConversationRemovedFromChatDesk(String agent, String social ){
         String userName = getUserName(social);
@@ -654,6 +669,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().isValidChannelImg("headerChannel"),
                 "Icon for channel in chat header as not expected");
     }
+
     @And("^Time stamp displayed in 24 hours format$")
     public void timeStampDisplayedInHoursFormat() {
         Map<String, String> sessionDetails = DBConnector.getSessionDetailsByClientID(ConfigManager.getEnv()
@@ -749,5 +765,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
         Assert.assertTrue(getAgentHomePage(agent).isDialogShown(),
                 "Log out from agent desk not successful");
+    }
+
+    private static int getNumberOfActiveChats(String agent, String integration) {
+        return (int) ApiHelper.getActiveChatsByAgent(agent)
+                .jsonPath().getList("content.channel.type").stream()
+                .filter(ct -> ct.toString().equalsIgnoreCase(integration)).count();
     }
 }

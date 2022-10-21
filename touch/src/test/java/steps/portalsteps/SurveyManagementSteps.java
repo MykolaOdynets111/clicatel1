@@ -203,7 +203,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     @When("^Customize your survey \"(.*)\" question$")
     public void setSurveyQuestion(String question) {
         String channelID = ORCASteps.getChannelId();
-        questionUpdate.set(question + " " + faker.rockBand().name());
+        questionUpdate.set(question + " " + faker.animal().name());
         getSurveyManagementPage().getSurveyForm(channelID).changeQuestion(questionUpdate.get());
     }
 
