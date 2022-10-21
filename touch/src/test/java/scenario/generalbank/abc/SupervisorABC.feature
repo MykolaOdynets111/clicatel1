@@ -45,10 +45,8 @@ Feature: Apple Business Chat :: Supervisor Desk
     And Orca request is shown on Supervisor Desk Live page
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1325")
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1315")
   @orca_api
-  Scenario: CD :: Supervisor Desk :: Chats :: Transfer Chat ::
-            Verify if agent name is updated after chat is being transferred from agent1 to agent2 on header
+  Scenario: CD :: Supervisor Desk :: Chats :: Transfer Chat :: Verify if agent name is updated after chat is being transferred from agent1 to agent2 on header
 
     Given Setup ORCA abc integration for General Bank Demo tenant
     And I login as Agent of General Bank Demo

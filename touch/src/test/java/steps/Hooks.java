@@ -123,10 +123,6 @@ public class Hooks implements JSHelper {
             ApiHelperDepartments.deleteDepartmentsById(Tenants.getTenantUnderTestOrgName());
         }
 
-        if(scenario.getSourceTagNames().contains("@agent_session_capacity")){
-            ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50);
-        }
-
         if(scenario.getSourceTagNames().contains("@new_agent") && scenario.isFailed()) {
             new BasePortalSteps().createNewAgent("existed",
                     MC2Account.TOUCH_GO_NEW_ACCOUNT.getTenantOrgName());
