@@ -126,8 +126,8 @@ Feature: Whatsapp ORCA :: Chatdesk
       | Whatsapp    | orca    |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2787")
-  @Regression
   Scenario: CD::Supervisor desk :: Verify if supervisor is able to check live chats
+
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Supervisor Desk in submenu
@@ -135,11 +135,11 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Setup ORCA whatsapp integration for General Bank Demo tenant
     And Send to agent message by ORCA
     When I select Touch in left menu and Supervisor Desk in submenu
-    When Verify "All Chats" display default
+    When Verify "All live chats" display default
     Then  Verify that live chats available are shown
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2369")
-    @support_hours
+  @support_hours
   Scenario: CD:: Supervisor desk :: Verify if Supervisor is able to Route ticket to scheduler
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     And Set agent support hours with day shift
