@@ -54,14 +54,8 @@ public enum DriverType {
 
 
         public WebDriver getWebDriverObject(MutableCapabilities capabilities) {
-            if (!ConfigManager.isRemote()) {
                 ChromeDriverManager.getInstance().setup();
                 return new ChromeDriver((ChromeOptions) capabilities);
-            } else {
-                ChromeDriverManager.getInstance().driverVersion("89.0.4389.82").setup();
-                return new ChromeDriver((ChromeOptions) capabilities);
-            }
-
         }
 
         @Override
@@ -71,7 +65,7 @@ public enum DriverType {
     },
 
     HEADLESS_CHROME {
-        private final List<String> knownNames = Arrays.asList("headlesschrome", "chromeheadless",
+        private final List<String> knownNames = Arrays.asList("headless", "chromeheadless",
                 "chrome_headless", "headless_chrome");
 
         @Override

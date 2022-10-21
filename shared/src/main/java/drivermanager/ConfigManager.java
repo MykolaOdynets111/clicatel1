@@ -144,7 +144,7 @@ public class ConfigManager {
 
     public static DriverType getDriverType() {
         DriverType driverType = DriverType.CHROME;
-        String browserType = System.getProperty(BROWSER_TYPE);
+        String browserType = System.getProperty(BROWSER_TYPE,"headless");
 
         if (!StringUtils.isEmpty(browserType)) {
             driverType = DriverType.from(browserType);
