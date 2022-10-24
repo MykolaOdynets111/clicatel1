@@ -12,11 +12,11 @@ Feature: Satisfaction Survey
   Scenario Outline: CD:: <channelType>:: Settings :: Survey :: Verify if tenant can customize his own survey questions for CSAT survey type
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing
-      | ratingEnabled        | true        |
       | surveyType           | CSAT        |
       | ratingScale          | ONE_TO_FIVE |
       | ratingIcon           | NUMBER      |
       | ratingTimeout        | 600         |
+      | ratingEnabled        | true        |
       | commentEnabled       | true        |
       | thanksMessageEnabled | true        |
     And I open portal

@@ -20,6 +20,8 @@ Feature: Chat2Pay ::Chat2PayCustomerClosedChat
     Then Agent should not see from user chat in agent desk from orca
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1163")
+    @skip
+#    it's not stable and takes too much time
   Scenario: CD :: Agent Desk :: Live Chat :: Chat2Pay :: Verify if payment link expires after 5 mins
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant

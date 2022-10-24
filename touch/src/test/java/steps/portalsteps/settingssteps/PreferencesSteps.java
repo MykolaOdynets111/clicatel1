@@ -96,15 +96,15 @@ public class PreferencesSteps extends AbstractPortalSteps {
     }
 
     @When("^click off/on 'Automatic Scheduler'$")
-    public void clickOnOffAutoScheduler(){
-        autoSchedulerPreActionStatus =  ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled");
+    public void clickOnOffAutoScheduler() {
+        autoSchedulerPreActionStatus = ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled");
         getPortalTouchPreferencesPage().getPreferencesWindow().clickOnOffAutoScheduler();
         saveChanges();
     }
 
     @Then("^On backend AUTOMATIC_SCHEDULER status is updated for (.*)$")
-    public void verifyAutoSchedulingStatusOnBackend(String tenant){
-        Assert.assertNotEquals(ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled"),
+    public void verifyAutoSchedulingStatusOnBackend(String tenant) {
+        Assert.assertNotEquals(ApiHelper.getInternalTenantConfig(tenant, "autoSchedulingEnabled"),
                 autoSchedulerPreActionStatus,
                 "Auto scheduling status on backend is not as expected \n");
     }

@@ -1,7 +1,7 @@
 package steps;
 
 import agentpages.AgentLoginPage;
-import apihelper.ApiHelper;
+import apihelper.ApiHelperDepartments;
 import apihelper.ApiORCA;
 import com.github.javafaker.Faker;
 import com.google.common.io.Files;
@@ -14,16 +14,20 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
+import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
 import sqsreader.OrcaSQSHandler;
 import sqsreader.SQSConfiguration;
 import steps.agentsteps.AgentConversationSteps;
+import steps.portalsteps.SurveyManagementSteps;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static apihelper.ApiHelper.getAgentInfo;
 
 public class ORCASteps implements WebWait {
 
@@ -75,6 +79,14 @@ public class ORCASteps implements WebWait {
         ApiORCA.sendMessageToAgent(orcaMessageCallBody.get());
     }
 
+    @When("^Send (.*) messages (.*) by ORCA$")
+    public void sendNewOrcaMessage(int numberOfChats, String message){
+        for(int i = 0; i < numberOfChats; i++){
+            createRequestMessage(apiToken.get(), message);
+            ApiORCA.sendMessageToAgent(orcaMessageCallBody.get());
+        }
+    }
+
     @When("^User send Lviv location message to agent by ORCA$")
     public void sendLocationMessage(){
         Event locationEvent = Event.builder().address("Lviv, Lviv Oblast, Ukraine, 79000").
@@ -86,7 +98,7 @@ public class ORCASteps implements WebWait {
     @When("^Send (.*) message by ORCA to (.*) department$")
     public void sendChatToSpecificDepartment(String message, String departmentName){
         createRequestMessage(apiToken.get(), message);
-        List<Department> departments = ApiHelper.getDepartments(Tenants.getTenantUnderTestOrgName());
+        List<Department> departments = ApiHelperDepartments.getDepartments(Tenants.getTenantUnderTestOrgName());
         String departmentId = departments.stream().filter(e->e.getName().equalsIgnoreCase(departmentName)).findFirst().get().getId();
         orcaMessageCallBody.get().getContent().getExtraFields().setDepartment(departmentId);
         System.out.println("Message body is: " + orcaMessageCallBody.get().toString());
@@ -131,24 +143,23 @@ public class ORCASteps implements WebWait {
 
     @Then("^Verify Orca returns (.*) response during (.*) seconds$")
     public void verifyOrcaReturnedCorrectResponse(String expectedResponse, int wait) {
-
-        if (expectedResponse.equalsIgnoreCase("start_new_conversation")) {
-            expectedResponse = DefaultTouchUserSteps.formExpectedAutoresponder(expectedResponse);
-        }
+        expectedResponse = SurveyManagementSteps.getExpectedSurveyResponse(expectedResponse);
         verifyAutoresponder(expectedResponse, wait);
     }
 
-    @Then("^Verify Orca returns survey (.*) response (.*) number of times during (.*) seconds")
-    public void verifyOrcaReturnedResponseNumberOfTimes(String expectedResponse, int expectedSize, int wait) {
+    @Then("^Verify Orca returns survey question response (.*) number of times during (.*) seconds")
+    public void verifyOrcaReturnedResponseNumberOfTimes(int expectedSize, int wait) {
+        String expectedResponse = SurveyManagementSteps.getQuestionUpdate();
         verifyAutoResponderMessageListSize(expectedResponse, expectedSize, wait);
     }
 
-    @Then("^Verify Orca returns (.*) autoresponder during (.*) seconds$")
-    public void verifyOrcaReturnedCorrectAutoresponder(String expectedResponse, int wait) {
+    @Then("^Verify Orca returns (.*) autoresponder during (.*) seconds for (.*)$")
+    public void verifyOrcaReturnedCorrectAutoresponder(String expectedResponse, int wait, String agent) {
+        String agentInfo = getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent).get("fullName");
         expectedResponse = DefaultTouchUserSteps.formExpectedAutoresponder(expectedResponse);
 
         if(expectedResponse.contains("${agentName}")) {
-            expectedResponse = expectedResponse.replace("${agentName}", AgentLoginPage.agentName.get());
+            expectedResponse = expectedResponse.replace("${agentName}", agentInfo);
         }
         verifyAutoresponder(expectedResponse, wait);
     }

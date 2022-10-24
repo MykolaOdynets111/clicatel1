@@ -6,6 +6,9 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DashboardSettingsPage extends PortalAbstractPage {
 
     public DashboardSettingsPage(WebDriver driver) {
@@ -43,6 +46,9 @@ public class DashboardSettingsPage extends PortalAbstractPage {
     @FindBy(xpath = "//div[@data-testid='spinner']")
     private WebElement surveySpinner;
 
+    @FindBy(css=".cl-routed-tabs__tab")
+    private List<WebElement> settingTabs;
+
     public void openSettingsPage(String settingsName) {
         switch (settingsName) {
             case "Business Profile":
@@ -62,6 +68,15 @@ public class DashboardSettingsPage extends PortalAbstractPage {
         }
         this.getCurrentDriver().navigate().refresh();
         waitForAppearAndDisappear(this.getCurrentDriver(), surveySpinner, 3, 4);
+    }
+
+    //public List<String> getSettingTabsText(String elementType) {
+    public List<String> getSettingTabsText() {
+        List<String> settingTabsText = new ArrayList<>();
+        settingTabs.stream().forEach(e -> {
+            settingTabsText.add(e.getText());
+        });
+        return settingTabsText;
     }
 
     public boolean isBusinessProfileTabShown() {

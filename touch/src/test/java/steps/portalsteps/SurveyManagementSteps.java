@@ -203,7 +203,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     @When("^Customize your survey \"(.*)\" question$")
     public void setSurveyQuestion(String question) {
         String channelID = ORCASteps.getChannelId();
-        questionUpdate.set(question + " " + faker.rockBand().name());
+        questionUpdate.set(question + " " + faker.animal().name());
         getSurveyManagementPage().getSurveyForm(channelID).changeQuestion(questionUpdate.get());
     }
 
@@ -294,5 +294,21 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
                 "Customer note title is not displayed in survey preview");
 
         softAssert.assertAll();
+    }
+
+    public static String getExpectedSurveyResponse(String expectedResponse) {
+        if (expectedResponse.equalsIgnoreCase("question update")) {
+            expectedResponse = SurveyManagementSteps.questionUpdate.get();
+        } else if (expectedResponse.equalsIgnoreCase("notes update")) {
+            expectedResponse = SurveyManagementSteps.notesMessageUpdate.get();
+        } else if (expectedResponse.equalsIgnoreCase("thanks message update")) {
+            expectedResponse = SurveyManagementSteps.thankMessageUpdate.get();
+        }
+
+        return expectedResponse;
+    }
+
+    public static String getQuestionUpdate() {
+        return questionUpdate.get();
     }
 }

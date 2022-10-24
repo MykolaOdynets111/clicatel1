@@ -1,13 +1,13 @@
 @no_widget
 @no_chatdesk
-@agent_session_capacity
+@setting_changes
 Feature: Managing Chat desk Window
 
   Scenario: Check changing available agent and off/on Chat Conclusion
     Given Transfer timeout for Automation Bot tenant is set to 600 seconds
-    Given AGENT_FEEDBACK tenant feature is set to true for Automation Bot
+    Given AGENT_FEEDBACK tenant feature is set to true for General Bank Demo
     Given I open portal
-    And Login into portal as an admin of Automation Bot account
+    And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Dashboard in submenu
     And Navigate to Preferences page
     When Change chats per agent:"0"
@@ -16,14 +16,14 @@ Feature: Managing Chat desk Window
     Then Error message is shown
     When Change chats per agent:"50"
     When Click off/on Chat Conclusion
-    Then  On backand AGENT_FEEDBACK tenant feature status is set to false for Automation Bot
+    Then  On backand AGENT_FEEDBACK tenant feature status is set to false for General Bank Demo
     When Click off/on Chat Conclusion
-    Then  On backand AGENT_FEEDBACK tenant feature status is set to true for Automation Bot
+    Then  On backand AGENT_FEEDBACK tenant feature status is set to true for General Bank Demo
 
   Scenario: Check changing available chats per agent
     Given Transfer timeout for Automation Bot tenant is set to 600 seconds
     Given I open portal
-    And Login into portal as an admin of Automation Bot account
+    And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Dashboard in submenu
     And Navigate to Preferences page
     When Change chats per agent:"6"
@@ -35,7 +35,7 @@ Feature: Managing Chat desk Window
   @Regression
   Scenario: CD :: Dashboard :: Settings :: Preferences :: Verify if supervisor can't input decimal number for maximum number of chat
     Given I open portal
-    And Login into portal as an admin of Automation Bot account
+    And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Dashboard in submenu
     And Navigate to Preferences page
     When Change chats per agent:"0.5"
@@ -45,7 +45,7 @@ Feature: Managing Chat desk Window
   @Regression
   Scenario: CD:: Dashboard:: Setting ::  Verify if error is displayed if user enters 0 in the Maximum Chats per Agent
     Given I open portal
-    And Login into portal as an admin of Automation Bot account
+    And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Dashboard in submenu
     And Navigate to Preferences page
     When Change chats per agent:"0"

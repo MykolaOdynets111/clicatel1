@@ -1,7 +1,6 @@
 package datamanager;
 
 import apihelper.ApiHelper;
-import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import drivermanager.ConfigManager;
 import io.cucumber.core.exception.CucumberException;
 import org.apache.commons.io.FileUtils;
@@ -9,9 +8,7 @@ import org.testng.SkipException;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.ZoneId;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -24,7 +21,6 @@ public class Tenants {
     private static ThreadLocal<String> TENANT_ID = new ThreadLocal<>();
     private static ThreadLocal<String> MC2_ID = new ThreadLocal<>();
     private static ThreadLocal<Map<String,String>> TENANT_INFO_MAP = new ThreadLocal<>();
-
 
     public static void setTenantUnderTestOrgName(String orgName){
         TENANT_UNDER_TEST_ORG_NAME.set(orgName);
@@ -65,21 +61,8 @@ public class Tenants {
         return TENANT_UNDER_TEST_NAME.get();
     }
 
-    public static String getTenantInfo(String tenantORGName, String info) {
-        return ApiHelper.getAllTenantsInfoMap(info).get(tenantORGName.toLowerCase().trim());
-    }
-
     public static String getTenantUnderTestOrgName() {
         return TENANT_UNDER_TEST_ORG_NAME.get();
-    }
-
-    public static String getTenantBranchLocationAddress(String tenantName){
-        List<TenantAddress> addreses = ApiHelper.getTenantAddressInfo(tenantName);
-        String branchLocation  ="Loaction address: " + addreses.get(0).getFirstAddressLine() + ", " + addreses.get(0).getSecondAddressLine() + ", " + addreses.get(0).getPostalCode()+ ", ";
-        if((addreses.get(0).getPhones()).size()>0){
-            branchLocation = branchLocation +  addreses.get(0).getPhones().get(0);
-        }
-        return branchLocation;
     }
 
     public static String getLastUserSessionStatus(String userID){
@@ -91,12 +74,6 @@ public class Tenants {
             respWithAgentInfo.set(ApiHelper.getAgentInfo(tenantOrgName, "main"));
         }
         return respWithAgentInfo.get();
-    }
-
-    public static ZoneId getTenantZoneId(String tenantOrgName){
-        String tenantTimeZone = ApiHelper.getInternalTenantConfig(ApiHelper.getTenantInfoMap(tenantOrgName).get("id"), "timezone");
-        String zoneOffset = tenantTimeZone.split(":")[0].replace("GMT", "");
-        return ZoneId.of(zoneOffset);
     }
 
     public static void setTenantUnderTestNames(String tenantOrgName) {
