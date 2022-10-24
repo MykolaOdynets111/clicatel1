@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+import static org.junit.Assert.assertTrue;
+
 
 @FindBy(css = "div.cl-modal")
 public class AgentFeedbackWindow extends AbstractUIElement {
@@ -162,7 +165,6 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         if(availableTagsContainer.getText().isEmpty()) {
             Assert.fail("Have not Tags to be selected");
         }
-//        String html = MC2DriverFactory.getAgentDriverInstance().findElement(By.cssSelector("div.Select-menu-outer")).getAttribute("innerHTML");
         List<String> result = availableTags.stream().map(e -> e.getAttribute("innerText").trim()).collect(Collectors.toList());
         clickElem(this.getCurrentDriver(), openDropdownButton, 5,"Open dropdown button" );
         return result;
@@ -192,6 +194,8 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         availableTags.stream().filter(t -> t.getText().equals(tag)).findFirst()
                 .orElseThrow(() -> new NoSuchElementException(tag + " tag is absent"))
                 .click();
+
+        assertTrue(format("Tag %s should be selected!", tag), getChosenTags().contains(tag));
         return this;
     }
 

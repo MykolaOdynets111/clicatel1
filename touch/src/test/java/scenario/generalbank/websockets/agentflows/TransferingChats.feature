@@ -5,8 +5,7 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2295")
   @setting_changes
   @orca_api
-  Scenario: CD :: Chat Desk :: Live Chat :: Chat Transfer ::
-  Verify the agent with max available chats is not displayed in transfer pop-up
+  Scenario: CD :: Chat Desk :: Live Chat :: Chat Transfer :: Verify the agent with max available chats is not displayed in transfer pop-up
 
     Given Setup ORCA Whatsapp integration for General Bank Demo tenant
     And maxChatsPerAgent tenant feature is set to 1 for General Bank Demo

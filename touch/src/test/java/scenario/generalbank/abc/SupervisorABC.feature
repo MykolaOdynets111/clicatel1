@@ -43,8 +43,8 @@ Feature: Apple Business Chat :: Supervisor Desk
     And I select Touch in left menu and Supervisor Desk in submenu
     Then Agent click On Live Supervisor Desk chat from Orca channel
 
-    When Second Agent click "End chat" button
-    Then Second Agent click 'Close chat' button
+    When Second Agent closes chat
+    Then Second Agent should not see from user chat in agent desk from ORCA
 
     When Admin clicks 'Go to chat' button
     Then Orca request is shown on Supervisor Desk Live page
