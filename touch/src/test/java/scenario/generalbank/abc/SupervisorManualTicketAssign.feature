@@ -14,7 +14,7 @@ Feature: Supervisor desk
     And Agent search chat orca on Supervisor desk
     Then Ticket from orca is present on All tickets filter page
     And Select orca ticket checkbox
-    When Click 'Assign manually' button
+    When Click 'Assign manually' button for orca
     Then 'Assign chat' window is opened
     When I assign chat on second agent
     And Admin refreshes the page

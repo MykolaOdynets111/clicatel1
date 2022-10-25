@@ -23,7 +23,7 @@ Feature: Supervisor desk
     Then Ticket from dotcontrol is present on Unassigned filter page
     When Turn on tickets autoScheduling
     And Select dotcontrol ticket checkbox
-    When Click 'Assign manually' button
+    When Click 'Assign manually' button for orca
     Then 'Assign chat' window is opened
     When I assign chat on Agent
     And User select Assigned ticket type

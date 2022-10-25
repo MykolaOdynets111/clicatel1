@@ -61,8 +61,9 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().getSupervisorTicketsTable().getTicketByUserName(getUserName(chanel)).clickOnUserName();
     }
 
-    @When("^Click on Message Customer button$")
-    public void clickOnMassageCustomer() {
+    @When("^Click on Message Customer button for (.*)$")
+    public void clickOnMessageCustomer(String chanel) {
+        getSupervisorDeskPage().getSupervisorTicketsTable().clickAssignOpenTicketButton(getUserName(chanel));
         getSupervisorDeskPage().getSupervisorTicketClosedChatView().clickOnMessageCustomerButton();
     }
 
@@ -87,9 +88,9 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().getSupervisorTicketsTable().clickRouteToSchedulerButton();
     }
 
-    @When("^Click 'Assign manually' button$")
-    public void clickAssignManually() {
-        getSupervisorDeskPage().getSupervisorTicketsTable().clickAssignManuallyButton();
+    @When("^Click 'Assign manually' button for (.*)$")
+    public void clickAssignManually(String chanel) {
+        getSupervisorDeskPage().getSupervisorTicketsTable().clickAssignManuallyButton(getUserName(chanel));
     }
 
     @Then("^(.*) request is shown on Supervisor Desk Live page$")
@@ -210,8 +211,8 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
             Assert.assertTrue(getSupervisorDeskPage().getCurrentAgentOfTheChat(userName).equalsIgnoreCase("No current Agent"),
                     "Unassigned ticket should be present");
         } else if (status.equalsIgnoreCase("Assigned") || status.equalsIgnoreCase("Expired")) {
-            String agentName = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), "agent").get("fullName");
-            Assert.assertTrue(agentName.equals(getSupervisorDeskPage().getCurrentAgentOfTheChat(userName)),
+            String actualUserName = getSupervisorDeskPage().getSupervisorTicketsTable().getUsersNames().get(0);
+            Assert.assertTrue(actualUserName.equals(userName),
                     "Ticket should be present on " + status + " filter page");
         } else if (status.equalsIgnoreCase("All tickets")) {
             getSupervisorDeskPage().getSupervisorTicketsTable().getTicketByUserName(userName);

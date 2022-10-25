@@ -29,8 +29,8 @@ Feature: Satisfaction Survey
     And Agent click on new conversation request from orca
     And Conversation area becomes active with connect to agent user's message
     And Agent closes chat
-    And Send 10 message by ORCA
     And Verify Orca returns question update response during 40 seconds
+    And Send 10 message by ORCA
     When Agent select "Closed" left menu option
     And Agent searches and selects chat from orca in chat history list
     And Agent open first 'History view'

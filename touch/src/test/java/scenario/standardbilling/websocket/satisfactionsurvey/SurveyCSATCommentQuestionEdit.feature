@@ -84,18 +84,18 @@ Feature: Satisfaction Survey
     And Survey Management page should be shown
     And Customize your survey "Please rate your experience with our agent 😃" question with emoji
     And Agent click save survey configuration button for <channelType> survey form
-    Then Agent checks question title character limit as 70 characters in survey form
+    Then Agent checks question title character limit as 45 characters in survey form
     And Supervisor is able to see the number of characters typed for text in survey form
     When Customize your survey "Please rate your experience with our agent" question with emoji
     And Agent click save survey configuration button for <channelType> survey form
-    Then Agent checks question title character limit as 160 characters in survey form
+    Then Agent checks question title character limit as 42 characters in survey form
     When Customize your survey "ふりがな" question with emoji
     And Agent click save survey configuration button for <channelType> survey form
-    Then Agent checks question title character limit as 4 / 70 characters in survey form
+    Then Agent checks question title character limit as 4 characters in survey form
     And Supervisor is able to see the number of characters typed for text in survey form
     When Customize your survey "الْأَبْجَدِيَّة الْعَرَبِيَّة" question with emoji
     And Agent click save survey configuration button for <channelType> survey form
-    Then Agent checks question title character limit as 29 / 70 characters in survey form
+    Then Agent checks question title character limit as 29 characters in survey form
     And Supervisor is able to see the number of characters typed for text in survey form
     Examples:
       | channelType |
@@ -120,11 +120,11 @@ Feature: Satisfaction Survey
     And Survey Management page should be shown
     And Customize your survey "Please rate your experience with our agent 😃" question with emoji
     And Agent click save survey configuration button for <channelType> survey form
-    And Agent checks question title character limit as 70 characters in survey form
+    And Agent checks question title character limit as 45 characters in survey form
     And Supervisor is able to see the number of characters typed for text in survey form
     And Agent refreshes the page
     And Survey Management page should be shown
-    And Agent checks question title character limit as 70 characters in survey form
+    And Agent checks question title character limit as 45 characters in survey form
     And Supervisor is able to see the number of characters typed for text in survey form
     Examples:
       | channelType |

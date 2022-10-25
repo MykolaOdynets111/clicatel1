@@ -15,7 +15,7 @@ When Agent select "Tickets" left menu option
 And Agent search chat orca on Supervisor desk
 Then Ticket from orca is present on All tickets filter page
 And Select orca ticket checkbox
-When Click 'Assign manually' button
+When Click 'Assign manually' button for orca
 Then 'Assign chat' window is opened
 When I assign chat on Agent
 And User select Assigned ticket type
