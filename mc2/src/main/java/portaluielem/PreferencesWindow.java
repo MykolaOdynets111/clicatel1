@@ -84,6 +84,7 @@ public class PreferencesWindow extends BasePortalWindow {
         chatsAvailable.clear();
         inputText(this.getCurrentDriver(), chatsAvailable,1, "Chat available", chats);
     }
+
     public void setPendingChatAutoClosure(String pendingTime){
         waitForElementToBeVisible(this.getCurrentDriver(), pendingChatAutoClosureHours, 5);
         scrollToElem(this.getCurrentDriver(), pendingChatAutoClosureHours,"Pending Auto closure time");
@@ -97,11 +98,9 @@ public class PreferencesWindow extends BasePortalWindow {
         return chatsAvailable.getAttribute("value");
     }
 
-    public void isErrorMessageShown(String errorMessage){
-        Assert.assertEquals(chatsErrorMessageDecimalNumbers.getText(),errorMessage);
-    }
-    public void errorMessageShown(String decimalErrorMessage){
-        Assert.assertEquals(pendingErrorMessageDecimalNumbers.getText(),decimalErrorMessage);
+    public String errorMessageShown(){
+        return pendingErrorMessageDecimalNumbers.getText();
+        //Assert.assertEquals(pendingErrorMessageDecimalNumbers.getText(),decimalErrorMessage);
     }
 
 
@@ -205,6 +204,9 @@ public class PreferencesWindow extends BasePortalWindow {
         return pendingChatAutoClosureHours.getAttribute("value");
     }
 
+    public void isErrorMessageShown(String errorMessage){
+        Assert.assertEquals(chatsErrorMessageDecimalNumbers.getText(),errorMessage);
+    }
 
 
 

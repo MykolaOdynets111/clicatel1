@@ -86,7 +86,7 @@ public class PreferencesSteps extends AbstractPortalSteps {
     }
     @When("^(.*) Error message is displayed for Pending Auto Closure Time$")
     public void errorIsShownInWindow(String decimalErrorMessage) {
-        getPreferencesWindow().errorMessageShown(decimalErrorMessage);
+        Assert.assertEquals(getPreferencesWindow().errorMessageShown(),decimalErrorMessage, "Eror message is not displayed");
     }
 
     @When("^Click off/on Chat Conclusion$")
