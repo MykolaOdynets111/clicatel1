@@ -29,7 +29,7 @@ Feature: Satisfaction Survey
     And Survey Management page should be shown
     And Admin clicks on channel toggle button for survey form
     And Admin clicks on channel expand button for survey form
-    And Admin selects NPS survey type for <channelType> survey form
+    And Admin selects NPS survey type
     And Agent click save survey configuration button for <channelType> survey form
     Then I select Touch in left menu and Agent Desk in submenu
     And Agent click on last opened conversation request from orca

@@ -41,6 +41,7 @@ public enum DriverType {
             options.addArguments("disable-site-isolation-trials");
             options.addArguments("test-type=browser");
             options.addArguments("start-maximized");
+            options.addArguments("start-fullscreen");
             options.addArguments("disable-web-security");
             options.addArguments("disable-gpu");
             options.addArguments("disable-webgl");
@@ -78,7 +79,6 @@ public enum DriverType {
             options.addArguments("--window-size=1920,1080");
             options.addArguments("--disable-gpu");
             options.addArguments("--disable-extensions");
-            options.setExperimentalOption("useAutomationExtension", false);
             options.addArguments("--proxy-server='direct://'");
             options.addArguments("--proxy-bypass-list=*");
             options.addArguments("--start-maximized");

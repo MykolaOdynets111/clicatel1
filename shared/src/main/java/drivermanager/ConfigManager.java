@@ -140,7 +140,7 @@ public class ConfigManager {
         DriverType driverType = DriverType.CHROME;
 
         if (ConfigManager.isRemote()) {
-            driverType = DriverType.from("headless");
+            driverType = DriverType.HEADLESS_CHROME;
         }
 
         return driverType;
