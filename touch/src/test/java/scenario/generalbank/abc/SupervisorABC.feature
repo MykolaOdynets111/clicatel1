@@ -28,27 +28,30 @@ Feature: Apple Business Chat :: Supervisor Desk
     When I select Touch in left menu and Supervisor Desk in submenu
     Then Verify that Chats tab is displayed first
 
-  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1350")
+  @orca_api
   Scenario: CD :: Supervisor Desk :: Closed Chat :: Verify if roster is updated after a chat is closed on supervisor desk
+
     Given I login as Second Agent of General Bank Demo
     And Setup ORCA abc integration for General Bank Demo tenant
-    And Send chat to be closed message by ORCA
+    When Send chat to be closed message by ORCA
     Then Second Agent has new conversation request from orca user
     And Second Agent click on new conversation request from orca
+
     Given I open portal
-    And Login into portal as an admin of General Bank Demo account
+    When Login into portal as an admin of General Bank Demo account
     And I select Touch in left menu and Supervisor Desk in submenu
-    And Agent click On Live Supervisor Desk chat from Orca channel
-    And Second Agent click "End chat" button
-    Then Admin clicks 'Go to chat' button
-    And Orca request is shown on Supervisor Desk Live page
+    Then Agent click On Live Supervisor Desk chat from Orca channel
+
+    When Second Agent closes chat
+    Then Second Agent should not see from user chat in agent desk from ORCA
+
+    When Admin clicks 'Go to chat' button
+    Then Orca request is shown on Supervisor Desk Live page
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1325")
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1315")
   @orca_api
-  Scenario: CD :: Supervisor Desk :: Chats :: Transfer Chat ::
-            Verify if agent name is updated after chat is being transferred from agent1 to agent2 on header
+  Scenario: CD :: Supervisor Desk :: Chats :: Transfer Chat :: Verify if agent name is updated after chat is being transferred from agent1 to agent2 on header
 
     Given Setup ORCA abc integration for General Bank Demo tenant
     And I login as Agent of General Bank Demo

@@ -10,7 +10,7 @@ Feature: Creating .Control integration and sending messages
 #    When Send init call with provided messageId correct response without of support hours is returned
     And MessageId is not null
 
-  @agent_session_capacity
+  @setting_changes
   Scenario: Sending init call to .Control with no session capacity
     Given Set session capacity to 0 for Automation Bot tenant
     Given I login as agent of Automation Bot
