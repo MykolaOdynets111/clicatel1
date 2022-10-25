@@ -8,7 +8,6 @@ import datamanager.Tenants;
 import datamanager.UserPersonalInfo;
 import datamanager.jacksonschemas.TenantChatPreferences;
 import datamanager.jacksonschemas.chatextension.ChatExtension;
-import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
 import datamanager.jacksonschemas.supportHours.GeneralSupportHoursItem;
@@ -22,8 +21,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.StringUtils;
-import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
@@ -293,12 +290,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Then("^(.*) should not see from user chat in agent desk from (.*)$")
-    public void verifyDotControllConversationRemovedFromChatDesk(String agent, String social ){
+    public void verifyChatRemovedFromChatDesk(String agent, String social){
         String userName = getUserName(social);
         Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(20, userName),
-                "Conversation request is not removed from Agent Desk (Client ID: "+userName+")"
-        );
+                "Conversation request is not removed from Agent Desk (Client ID: "+userName+")");
     }
+
     @When("^(.*) click on (?:new|last opened) conversation request from (.*)$")
     public void acceptUserFromSocialConversation(String agent, String socialChannel) {
         if(!ConfigManager.isWebWidget() && socialChannel.equalsIgnoreCase("touch")){socialChannel="orca";}

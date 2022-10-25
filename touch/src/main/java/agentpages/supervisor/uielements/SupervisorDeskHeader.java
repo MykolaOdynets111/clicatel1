@@ -44,6 +44,7 @@ public class SupervisorDeskHeader extends AbstractUIElement {
     private WebElement sentimentsFilterValue;
 
     public void clickApplyFilterButton(){
+        scrollToElem(this.getCurrentDriver(), applyFiltersButton, "Apply Filters");
         clickElem(this.getCurrentDriver(), applyFiltersButton, 1, "Apply Filters");
     }
 

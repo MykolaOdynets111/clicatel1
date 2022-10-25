@@ -14,7 +14,6 @@ Feature: Chat console: Overview tab
     Then Customer engaging with an Agent counter shows correct live chats number
     And Average chats per Agent is correct
 
-  @skip
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2376")
   Scenario: CD :: Dashboard :: Activity Overview :: Verify the total agents online counter
     Given I open portal

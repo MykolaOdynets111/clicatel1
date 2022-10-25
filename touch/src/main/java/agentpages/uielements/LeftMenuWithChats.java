@@ -195,7 +195,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
         }
     }
 
-    public void searchUserChat(String userId) {
+    public boolean searchUserChat(String userId) {
         clickOnSearchButton();
         int wait = 10;
 
@@ -204,13 +204,14 @@ public class LeftMenuWithChats extends AbstractUIElement {
                 inputUserNameIntoSearch(userId);
                 getTargetChat(userId).click();
                 if (newConversationRequests.size() > 0) {
-                    break;
+                    return true;
                 }
             } catch (AssertionError | Exception e) {
                 System.out.println("No chats are there after search, chat has not reached yet, so retrying searching");
                 waitFor(1000);
             }
         }
+        return false;
     }
 
     public void clickCloseButton() {

@@ -2,7 +2,6 @@ package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -31,9 +30,6 @@ public class TransferChatWindow extends AbstractUIElement {
     @FindBy(xpath = " //div[contains(@class, 'cl-select__department')or contains(@class,'cl-select__option')]")
     private List<WebElement> availableAgentsOrDepartmentsList;
 
-    @FindBy(xpath = ".//div[@class='Select-control']")
-    private WebElement dropDown;
-
     @FindBy(css = "[data-testid=transfer-chat-notes-textarea]")
     private WebElement noteInput;
 
@@ -49,15 +45,8 @@ public class TransferChatWindow extends AbstractUIElement {
     @FindBy(css = ".cl-r-icon-refresh")
     private WebElement refreshButton;
 
-    private String noAvailableAgentsMessageXpath = "//*[@id='portal-placeholder']//div[text()='No available agents']";
-    private String availableDepartmentsNamesCss = ".department-name";
-
-    public TransferChatWindow (WebDriver current){
-        this.currentDriver = current;
-    }
-    public TransferChatWindow (){
-        super();
-    }
+    @FindBy(css = "svg[name = close]")
+    private WebElement closeButton;
 
     public String transferChat(String agent) {
         openDropDownAgent();
@@ -197,10 +186,6 @@ public class TransferChatWindow extends AbstractUIElement {
      return   noteInput.getCssValue("border-color");
     }
 
-    public String getDropDownColor() {
-        return  dropDown.getCssValue("border-color");
-    }
-
     public boolean isNoteShown(){
         return isElementShown(this.getCurrentDriver(), noteInput, 5);
     }
@@ -210,6 +195,7 @@ public class TransferChatWindow extends AbstractUIElement {
     }
 
     public boolean isNoAvailableAgentsDisplayed() {
+        String noAvailableAgentsMessageXpath = "//*[@id='portal-placeholder']//div[text()='No available agents']";
         return isElementShown(this.getCurrentDriver(),
                 findElemByXPATH(this.getCurrentDriver(), noAvailableAgentsMessageXpath),
                 5);
@@ -217,5 +203,8 @@ public class TransferChatWindow extends AbstractUIElement {
 
     public void waitForUpdatingAvailableAgents() {
         waitForAppearAndDisappear(this.getCurrentDriver(), loadingAvailableAgents, 1, 5);
+    }
+    public void clickCloseButton() {
+        clickElem(this.getCurrentDriver(), closeButton, 2, "Close button");
     }
 }

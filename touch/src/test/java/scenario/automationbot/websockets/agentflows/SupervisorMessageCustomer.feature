@@ -12,23 +12,21 @@ Feature: Supervisor desk
     And Login into portal as an admin of Automation account
     And Send hello message by ORCA
 
-  @skip
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1713")
   Scenario: CD:: SMS :: Tickets :: Verify if Supervisor can initiate a SMS chat from tickets tab user using "Message Customer" button
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     And Agent select sms ticket
-    And Click on Message Customer button
+    And Click on Message Customer button for sms
     And Message Customer Window is opened
     And Supervisor send Hi from Supervisor to agent trough SMS chanel
     Then Supervisor can see sms ticket with Hi from Supervisor message from agent
 
-  @skip
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1724")
   Scenario: CD :: SMS :: Tickets :: Verify Supervisor are unable to send WhatsApp HSM for tickets in SMS
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     And Agent select sms ticket
-    And Click on Message Customer button
+    And Click on Message Customer button for sms
     And Message Customer Window is opened
     And Supervisor is unable to send WhatsApp HSM on Tickets for sms chat
