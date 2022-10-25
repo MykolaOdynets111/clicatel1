@@ -100,7 +100,6 @@ public class PreferencesWindow extends BasePortalWindow {
 
     public String errorMessageShown(){
         return pendingErrorMessageDecimalNumbers.getText();
-        //Assert.assertEquals(pendingErrorMessageDecimalNumbers.getText(),decimalErrorMessage);
     }
 
 
