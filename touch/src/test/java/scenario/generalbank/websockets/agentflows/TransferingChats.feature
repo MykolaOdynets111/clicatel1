@@ -16,3 +16,4 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
     Then Transfer chat pop up appears for Second agent
     When Second agent open 'Transfer to' drop down
     Then Second agent should not see first agent in a transfer pop-up agents dropdown
+    And Close Transferring window for Second agent

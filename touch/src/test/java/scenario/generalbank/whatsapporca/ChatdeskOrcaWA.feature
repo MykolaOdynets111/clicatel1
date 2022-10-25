@@ -157,6 +157,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Agent has new conversation request from ORCA user
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2108")
+  @orca_api
   @support_hours
   Scenario: CD:: Supervisor:: Verify if supervisor is able to close "Assign Chat" modal
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
