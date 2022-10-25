@@ -284,4 +284,9 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         Assert.assertFalse(availableAgents.contains(missingAgentName),
                 String.format("Agent %s is displayed in a transfer pop-up agents dropdown", missingAgentName));
     }
+
+    @Then("^Close Transferring window for (.*)$")
+    public void closeTransferringWindow(String agent) {
+        getAgentHomePage(agent).getTransferChatWindow().clickCloseButton();
+    }
 }

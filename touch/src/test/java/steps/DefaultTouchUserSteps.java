@@ -91,12 +91,12 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
         }
     }
 
-    @Given("(.*) survey configuration for (.*)")
-    public static void switchSurveyConfiguration(String action, String tenantOrgName) {
+    @Given("^(.*) (.*) survey configuration for (.*)$")
+    public static void switchSurveyConfiguration(String action, String channel, String tenantOrgName) {
         if (action.equalsIgnoreCase("On")) {
-            ApiHelper.ratingEnabling(tenantOrgName, true, "webchat");
+            ApiHelper.ratingEnabling(tenantOrgName, true, channel);
         } else if (action.equalsIgnoreCase("Off")) {
-            ApiHelper.ratingEnabling(tenantOrgName, false, "webchat");
+            ApiHelper.ratingEnabling(tenantOrgName, false, channel);
         }
     }
 

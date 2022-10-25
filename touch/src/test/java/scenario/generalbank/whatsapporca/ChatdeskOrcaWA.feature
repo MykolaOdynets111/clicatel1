@@ -157,6 +157,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Agent has new conversation request from ORCA user
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2108")
+  @orca_api
   @support_hours
   Scenario: CD:: Supervisor:: Verify if supervisor is able to close "Assign Chat" modal
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -172,8 +173,9 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent is able to close the assign chat window
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1129")
-  @Regression
+  @orca_api
   Scenario: CD :: Supervisor Desk :: Live Chat :: Profile :: Verify that WhatsApp profile name is displayed as username on customer profile section
+
     Given I login as agent of General Bank Demo
     And Setup ORCA whatsapp integration for General Bank Demo tenant
     And Send to agent message by ORCA

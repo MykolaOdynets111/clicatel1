@@ -2,7 +2,7 @@
 Feature: Agent availability
 
   Background:
-    Given Off survey configuration for General Bank Demo
+    Given Off webchat survey configuration for General Bank Demo
     Given I login as agent of General Bank Demo
     Given User select General Bank Demo tenant
     And Click chat icon
