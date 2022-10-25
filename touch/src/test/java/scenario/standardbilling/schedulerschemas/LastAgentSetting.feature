@@ -2,7 +2,7 @@
 Feature: Last agent activate
 
   Background:
-    Given Off survey configuration for Standard Billing
+    Given Off webchat survey configuration for Standard Billing
     Given I open portal
     When Login into portal as an admin of Standard Billing account
     And Turn off the Last Agent routing

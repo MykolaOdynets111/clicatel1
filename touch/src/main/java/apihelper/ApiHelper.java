@@ -336,12 +336,12 @@ public class ApiHelper implements VerificationHelper {
         return resp.getBody().jsonPath().getObject("chatSurveyConfig", SurveyManagement.class);
     }
 
-    public static void ratingEnabling(String tenantOrgName, Boolean ratingEnabled, String chanell) {
-        String channelID = getChannelID(tenantOrgName, chanell);
+    public static void ratingEnabling(String tenantOrgName, Boolean ratingEnabled, String chanel) {
+        String channelID = getChannelID(tenantOrgName, chanel);
         SurveyManagement currentConfiguration = getSurveyManagementAttributes(channelID);
         if (!currentConfiguration.getRatingEnabled().equals(ratingEnabled)) {
             currentConfiguration.setRatingEnabled(ratingEnabled);
-            updateSurveyManagement(tenantOrgName, currentConfiguration, channelID, chanell);
+            updateSurveyManagement(tenantOrgName, currentConfiguration, channelID, chanel);
         }
     }
 
