@@ -4,7 +4,7 @@ Feature: Flagged chat is disabled to close and to transfer
   Verification of basic pin chat functionality
 
   Background:
-    Given Off survey configuration for General Bank Demo
+    Given Off webchat survey configuration for General Bank Demo
     Given AGENT_FEEDBACK tenant feature is set to true for General Bank Demo
     Given User select General Bank Demo tenant
     Given I login as agent of General Bank Demo

@@ -31,6 +31,7 @@ Feature: Whatsapp ORCA :: Dashboard
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1753")
   Scenario: Dashboard: WhatsApp support: Verify Customer overview displays correct report of Attended / Unattended chats
+
     Given I login as agent of General Bank Demo
     When Send connect to agent message by ORCA
     Then Agent has new conversation request from orca user
