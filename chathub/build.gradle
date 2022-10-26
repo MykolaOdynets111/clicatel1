@@ -1,19 +1,93 @@
-plugins {
-    id 'java'
-}
-
-group 'mc2-touch-tests'
 version '1.0-SNAPSHOT'
 
-repositories {
-    mavenCentral()
+buildscript {
+    dependencies {
+        classpath "io.qameta.allure:allure-gradle:2.8.1"
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs "src/main/resources"
+        }
+    }
+}
+
+apply plugin: 'io.qameta.allure'
+
+def allureVersion = '2.17.3'
+allure{
+    configuration = 'compile'
+    aspectjweaver = true
+    version = allureVersion
+    resultsDir = file("${rootProject.buildDir}${File.separator}allure-results")
+    reportDir = file("${rootProject.buildDir}${File.separator}allure-report")
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    api (project(':mc2')) {
+        exclude group: 'org.testng', module: 'testng'
+        exclude group: 'io.qameta.allure'
+    }
+    api  group: 'io.qameta.allure', name: 'allure-cucumber7-jvm', version: '2.17.3'
+    api  group: 'io.cucumber', name: 'cucumber-java', version: '7.2.3'
+    api  group: 'io.cucumber', name: 'cucumber-testng', version: '7.2.3'
+    api  group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.1'
+
+    api  group: 'ch.qos.logback', name: 'logback-core', version: '1.2.10'
+    api  group: 'org.slf4j', name: 'slf4j-api', version: '1.7.34'
+    api  group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.10'
+    api group: 'com.amazonaws', name: 'amazon-sqs-java-messaging-lib', version: '2.0.0'
+    api group: 'software.amazon.awssdk', name: 'auth', version: '2.17.267'
 }
 
-test {
-    useJUnitPlatform()
+tasks.withType(Copy) { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
+
+def baseXmlPath = "/src/test/resources/"
+def tenantName
+def suite="all"
+def env = 'testing'
+
+tasks.withType(Test) {
+    systemProperties = System.getProperties()
+    tenantName = System.getProperty("tenant", "all")
 }
+
+// ========= !! TASKS FOR SUITES !! ============== //
+
+
+task runTouchTests(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/uitests.xml"
+        suites baseXmlPath+tenantName+"/aggregated_onethread_tests.xml"
+        suites baseXmlPath+tenantName+"/aggregated_compatible_tests.xml"
+    }
+}
+
+
+// ========= !! MAIN TASKS !! ============== //
+
+task runTests(type: Test) {
+
+    if (System.getProperty("suite") != null) {
+        suite = System.properties.getProperty("suite")
+    }
+
+    if(suite == "websockets") {
+        runTests.dependsOn(runWebsocketsReqression)
+    }
+
+
+    if(suite == "abc") {
+        runTests.dependsOn(runAbcTests)
+    }
+
+    reportToTesFLO.dependsOn('allureReport')
+
+    runTests.finalizedBy(reportToTesFLO)
+
+    defaultTasks 'clean', 'runTests'
+}
+
