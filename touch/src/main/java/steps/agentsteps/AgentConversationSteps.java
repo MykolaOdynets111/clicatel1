@@ -17,6 +17,7 @@ import io.cucumber.java.en.When;
 import org.apache.commons.io.FileUtils;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import steps.DefaultTouchUserSteps;
 import steps.FacebookSteps;
 import steps.TwitterSteps;
 import steps.dotcontrol.DotControlSteps;
@@ -83,7 +84,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     }
 
     private boolean isTimeStampValid(String inputString) {
-        SimpleDateFormat format = new java.text.SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
         try {
             format.parse(inputString);
             return true;

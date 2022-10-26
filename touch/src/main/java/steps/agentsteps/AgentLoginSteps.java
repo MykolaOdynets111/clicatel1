@@ -1,9 +1,23 @@
-package steps;
-
-public class ChatHubSteps {
+package steps.agentsteps;
 
 
-/*
+import datamanager.Agents;
+import datamanager.Tenants;
+import datamanager.model.user.Permission;
+import driverfactory.DriverFactory;
+import driverfactory.URLs;
+import drivermanager.ConfigManager;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import org.testng.Assert;
+import portalpages.PortalMainPage;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class AgentLoginSteps extends AbstractAgentSteps {
+
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
@@ -83,6 +97,4 @@ public class ChatHubSteps {
         Assert.assertFalse(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(),
                 "Agent is redirected to chat desk.");
     }
-    */
-
 }

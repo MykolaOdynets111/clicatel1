@@ -7,7 +7,6 @@ import org.openqa.selenium.TakesScreenshot;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import steps.DefaultTouchUserSteps;
 import steps.Hooks;
 import testNGtesthelper.PlainTestNGConfigs;
 
