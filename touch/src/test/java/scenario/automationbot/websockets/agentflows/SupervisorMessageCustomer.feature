@@ -6,7 +6,7 @@ Feature: Supervisor desk
 
   Background:
     Given I open portal
-    And Setup ORCA sms integration for Automation tenant
+    And Setup ORCA sms integration for Automation Bot tenant
     And Set agent support hours with day shift
     And autoTicketScheduling tenant feature is set to false for Automation
     And Login into portal as an admin of Automation account
