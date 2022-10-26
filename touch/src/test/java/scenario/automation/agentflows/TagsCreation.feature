@@ -1,5 +1,6 @@
 @agent_feedback
 @Regression
+@orca_api
 Feature: Create tag
 
   Background:

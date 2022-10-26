@@ -1,5 +1,6 @@
 @Regression
 @no_widget
+@orca_api
 Feature: Profanity filter on agent's messages
 
   Background:

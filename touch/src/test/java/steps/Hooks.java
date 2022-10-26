@@ -35,7 +35,6 @@ import steps.agentsteps.AbstractAgentSteps;
 import steps.dotcontrol.DotControlSteps;
 import steps.portalsteps.AbstractPortalSteps;
 import steps.portalsteps.BasePortalSteps;
-import steps.portalsteps.SurveyManagementSteps;
 import steps.portalsteps.TenantSteps;
 import steps.tiesteps.BaseTieSteps;
 import steps.tiesteps.TIEApiSteps;
@@ -85,6 +84,10 @@ public class Hooks implements JSHelper {
 
     @After()
     public void afterScenario(Scenario scenario){
+
+        if (scenario.getSourceTagNames().contains("@orca_api")){
+            ORCASteps.cleanUPORCAData();
+        }
 
         try {
             makeScreenshotAndConsoleOutputFromChatdesk(scenario);
@@ -220,10 +223,6 @@ public class Hooks implements JSHelper {
             ApiHelper.ratingEnabling(Tenants.getTenantUnderTestOrgName(), false, "sms");
         }
 
-
-        if (scenario.getSourceTagNames().contains("@orca_api")){
-            ORCASteps.cleanUPORCAData();
-        }
 
         if (scenario.getSourceTagNames().contains("@close_account")){
             ApiHelperPlatform.closeMC2Account(Tenants.getTenantUnderTestOrgName());

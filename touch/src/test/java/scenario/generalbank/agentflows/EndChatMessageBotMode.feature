@@ -1,6 +1,7 @@
 @camunda
 @setting_changes
 @no_widget
+@orca_api
 Feature: End chat flow
 
   Background:
