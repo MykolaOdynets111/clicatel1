@@ -126,10 +126,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
         }
     }
 
-    public void openNewFromSocialConversationRequest(String userName) {
-        openChatByUserName(userName);
-    }
-
     public void openChatByUserName(String userName) {
         new ChatInLeftMenu(getTargetChat(userName)).setCurrentDriver(this.getCurrentDriver()).openConversation();
     }

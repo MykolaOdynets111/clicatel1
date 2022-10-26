@@ -1,5 +1,6 @@
-@no_widget
 @orca_api
+@no_widget
+@Regression
 Feature: Chat console: Waiting customers
 
   Background:
@@ -8,8 +9,8 @@ Feature: Chat console: Waiting customers
     When I select Touch in left menu and Dashboard in submenu
     And Save Customers waiting for response pre-test widget value
 
-  @setting_changes
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2674")
+  @setting_changes
   Scenario: Dashboard:: Chats waiting in a queue increases in case no session capacity
     Given I login as second agent of General Bank Demo
 #    And User enter connect to agent into widget input field
@@ -17,17 +18,16 @@ Feature: Chat console: Waiting customers
     When Send connect to agent message by ORCA
     Then Customers waiting for response widget value increased on 1
 
-  @no_chatdesk
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2586")
-  @Regression
   Scenario: CD::Dashboards:: Chats waiting in a queue increase in case no agents online
-    And Setup ORCA whatsapp integration for General Bank Demo tenant
+
+    When Setup ORCA whatsapp integration for General Bank Demo tenant
     And Send connect to agent message by ORCA
+    And Agent refresh current page
     Then Customers waiting for response widget value increased on 1
 
-  @second_agent_availability
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2508")
-  @Regression
+  @second_agent_availability
   Scenario: CD:: Dashboard:: Chats waiting in a queue increase in case agent not available
     And admin changes status to: Unavailable
     And I login as second agent of General Bank Demo

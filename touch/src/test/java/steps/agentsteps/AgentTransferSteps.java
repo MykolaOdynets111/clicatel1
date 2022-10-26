@@ -29,11 +29,6 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getTransferChatWindow().waitForUpdatingAvailableAgents();
     }
 
-    @Then("^Transfer chat pop up appears$")
-    public void transferChatPopUpAppears() {
-        Assert.assertTrue(getAgentHomeForMainAgent().getTransferChatWindow().isTransferChatShown(),"Transfer chat pop up is not appears");
-    }
-
     @Then("^Transfer chat pop up appears for (.*)$")
     public void transferChatPopUpAppears(String agent) {
         Assert.assertTrue(getAgentHomePage(agent).getTransferChatWindow().isTransferChatShown(),"Transfer chat pop up is not appears");
@@ -79,7 +74,7 @@ public class AgentTransferSteps extends AbstractAgentSteps {
             }
             if(availableAgents<2) Assert.fail(
                     "Second agent is not available after waiting 11 seconds after chat transfer");
-            getLeftMenu(agent).openNewFromSocialConversationRequest(chat.getInitContext().getFullName());
+            getLeftMenu(agent).openChatByUserName(chat.getInitContext().getFullName());
             transferChat(agent);
             getAgentHomePage(agent).waitForModalWindowToDisappear();
         }

@@ -2,8 +2,6 @@ package agentpages.dashboard;
 
 
 import agentpages.dashboard.uielements.*;
-import agentpages.uielements.C2pSendForm;
-import io.qameta.allure.Step;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -29,9 +27,6 @@ public class DashboardPage extends PortalAbstractPage {
     @FindBy(xpath = "//div[text()='Active live chats']/parent::div//span[@class = 'cl-activity-overview-item-average-value']")
     private WebElement averageChatsPerAgent;
 
-    @FindBy(css = "div[ng-show='agentsChatsStats && !agentsChatsStats.length'] h3.empty-notification")
-    private WebElement noAgentsNotification;
-
     @FindBy(xpath = "//a[text()='Settings']")
     private WebElement settingsButton;
 
@@ -43,14 +38,6 @@ public class DashboardPage extends PortalAbstractPage {
 
     @FindBy(xpath = "//a[text()='Departments Management']")
     private WebElement departmentsManagementButton;
-
-    @FindBy(xpath = "//a[text()='Chat Tags']")
-    private WebElement chatTagsButton;
-
-    @FindBy(xpath = "//a[text()='+ Add Chat Tag']")
-    private WebElement createChatTagsButton;
-
-
 
     @FindAll({
             @FindBy(css = "[data-testid='tab-navigation-panel-customers']"),
@@ -66,15 +53,11 @@ public class DashboardPage extends PortalAbstractPage {
     private AgentPerformanceTab agentPerformanceTab;
     private LiveAgentsTableDashboard agentsTableDashboard;
     private CustomersOverviewTab customersOverviewTab;
-
-    private C2pSendForm customerPaytoExtension;
-
     private CustomersHistory customersHistory;
     private LiveCustomersTab liveCustomersTab;
     private NetPromoterScoreSection netPromoterScoreSection;
     private CustomerSatisfactionSection customerSatisfactionSection;
     private LiveChatsByChannel liveChatsByChannel;
-    private LiveChatsByChannel verifyChatBackground;
     private GeneralSentimentPerChannel generalSentimentPerChannel;
     private AttendedVsUnattendedChats attendedVsUnattendedChats;
     // == Constructors == //
@@ -100,11 +83,6 @@ public class DashboardPage extends PortalAbstractPage {
     public CustomersOverviewTab getCustomersOverviewTab() {
         customersOverviewTab.setCurrentDriver(this.getCurrentDriver());
         return customersOverviewTab;
-    }
-
-    public C2pSendForm getCustomerPaytoExtension() {
-        customerPaytoExtension.setCurrentDriver(this.getCurrentDriver());
-        return customerPaytoExtension;
     }
 
     public CustomersHistory getCustomersHistory() {
@@ -134,11 +112,6 @@ public class DashboardPage extends PortalAbstractPage {
         liveChatsByChannel.setCurrentDriver(this.getCurrentDriver());
         scrollToElem(this.getCurrentDriver(), liveChatsByChannel.getWrappedElement(), "Live Chats By Chanel");
         return liveChatsByChannel;
-    }
-
-    public LiveChatsByChannel getChatBackground(){
-        verifyChatBackground.setCurrentDriver(this.getCurrentDriver());
-        return verifyChatBackground;
     }
 
     public GeneralSentimentPerChannel getGeneralSentimentPerChannel() {
@@ -178,10 +151,6 @@ public class DashboardPage extends PortalAbstractPage {
 
     public String getAverageChatsPerAgent() {
         return getTextFromElem(this.getCurrentDriver(), averageChatsPerAgent, 3, "Average chats per Agent").split(" ")[0];
-    }
-
-    public boolean isNoAgentsOnlineShown() {
-        return isElementShown(this.getCurrentDriver(), noAgentsNotification, 8);
     }
 
     public boolean waitForConnectingDisappear(int waitForSpinnerToAppear, int waitForSpinnerToDisappear) {

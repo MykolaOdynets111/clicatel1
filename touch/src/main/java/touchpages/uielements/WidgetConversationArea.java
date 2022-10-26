@@ -2,7 +2,7 @@ package touchpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import agentpages.uielements.ChatAttachment;
-import apihelper.ApiHelper;
+import apihelper.ApiHelperTenant;
 import datamanager.Tenants;
 import datamanager.VMQuoteRequestUserData;
 import org.openqa.selenium.ElementClickInterceptedException;
@@ -138,7 +138,7 @@ public class WidgetConversationArea extends AbstractUIElement {
 
     public void  waitForSalutation() {
         try {
-            ApiHelper.getTenantConfig(Tenants.getTenantUnderTestOrgName()); // need to add this call because backend before
+            ApiHelperTenant.getTenantConfig(Tenants.getTenantUnderTestOrgName()); // need to add this call because backend before
             // showing welcome_message calls this API and
             // it sometimes take longer time
         }catch(java.util.NoSuchElementException|NullPointerException|AssertionError e){
