@@ -1,4 +1,5 @@
 @Regression
+@support_hours
 Feature: Supervisor desk
 
   @orca_api
