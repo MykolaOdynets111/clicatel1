@@ -13,6 +13,7 @@ Feature: Departments: Route to Department
     And Turn off the Default department
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1857")
+  @orca_api
   Scenario: CD :: Dashboard :: Department Mgmt. :: Verify that chats is should be connected to department selected by customer when "route to specific" department is turned on
     And I select Touch in left menu and Dashboard in submenu
     When Navigate to Preferences page

@@ -1,5 +1,6 @@
 @remove_dep
 @Regression
+@orca_api
 Feature: Departments
 
   Background:
