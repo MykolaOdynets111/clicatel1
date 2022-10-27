@@ -692,24 +692,24 @@ public class BasePortalSteps extends AbstractPortalSteps {
         AbstractAgentSteps.getLeftMenu("agent").waitForConnectingDisappear(6,10);
     }
 
-    @When("^Save (.*) pre-test widget value$")
-    public void savePreTestValue(String widgetName){
+    @When("^Save (.*) counter value$")
+    public void saveCounterValue(String counterName){
         try {
-            chatConsolePretestValue.put(widgetName, Integer.valueOf(getDashboardPage().getWidgetValue(widgetName)));
+            chatConsolePretestValue.put(counterName, getDashboardPage().getCounterValue(counterName));
         } catch (NumberFormatException e){
-            Assert.fail("Cannot read value from " +widgetName + "chat console widget");
+            Assert.fail("Cannot read value from " +counterName + "chat console widget");
         }
     }
 
     @Then("^(.*) widget value (?:increased on|set to) (.*)$")
-    public void verifyWidgetValue(String widgetName, int incrementer){
+    public void verifyCounterValue(String name, int incrementer){
         int expectedValue = 0;
         if (incrementer != 0) {
-            expectedValue = chatConsolePretestValue.get(widgetName) + incrementer;
+            expectedValue = chatConsolePretestValue.get(name) + incrementer;
         }
 
-        Assert.assertTrue(checkLiveCounterValue(widgetName, expectedValue),
-                "'"+widgetName+"' widget value is not updated\n" +
+        Assert.assertTrue(checkLiveCounterValue(name, expectedValue),
+                "'"+name+"' widget value is not updated\n" +
                 "Expected value: " + expectedValue);
     }
 
@@ -722,12 +722,12 @@ public class BasePortalSteps extends AbstractPortalSteps {
     }
 
     private boolean checkLiveCounterValue(String widgetName, int expectedValue){
-        int actualValue = Integer.parseInt(getDashboardPage().getWidgetValue(widgetName));
+        int actualValue = getDashboardPage().getCounterValue(widgetName);
         boolean result = false;
         for (int i=0; i<45; i++){
             if(expectedValue!=actualValue){
                 getDashboardPage().waitFor(1000);
-                actualValue = Integer.parseInt(getDashboardPage().getWidgetValue(widgetName));
+                actualValue = getDashboardPage().getCounterValue(widgetName);
             } else {
                 result =true;
                 break;

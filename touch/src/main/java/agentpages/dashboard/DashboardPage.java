@@ -125,28 +125,29 @@ public class DashboardPage extends PortalAbstractPage {
     }
 
     public String getWaitingChatsNumber() {
-        return getTextFromElem(this.getCurrentDriver(), chatsWaitingCounter, 0, "Customers waiting for response");
+        return getTextFromElem(this.getCurrentDriver(), chatsWaitingCounter, 0, "Chats waiting in queue");
     }
 
     public String getLiveChatsNumber() {
-        return getTextFromElem(this.getCurrentDriver(), liveChatsCounter, 6, "Customer engaging with an Agent");
+        return getTextFromElem(this.getCurrentDriver(), liveChatsCounter, 6, "Active live chats");
     }
 
     public String getAgentsOnlineNumber() {
-        return getTextFromElem(this.getCurrentDriver(), agentsOnlineCounter, 6, "Total Agents online");
+        return getTextFromElem(this.getCurrentDriver(), agentsOnlineCounter, 6, "Agents available");
     }
 
-    public String getWidgetValue(String value) {
+    public int getCounterValue(String value) {
         scrollToElem(this.getCurrentDriver(), chatsWaitingCounter, "How are your Agents performing right now?");
         switch (value) {
-            case "Customers waiting for response":
-                return getWaitingChatsNumber();
-            case "Customer engaging with an Agent":
-                return getLiveChatsNumber();
-            case "Total Agents online":
-                return getAgentsOnlineNumber();
+            case "Chats waiting in queue":
+                return Integer.parseInt(getWaitingChatsNumber());
+            case "Active live chats":
+                return Integer.parseInt(getLiveChatsNumber());
+            case "Agents available":
+                return Integer.parseInt(getAgentsOnlineNumber());
+            default:
+                return -1;
         }
-        return "invalid widget name";
     }
 
     public String getAverageChatsPerAgent() {
