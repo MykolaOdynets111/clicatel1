@@ -1,10 +1,7 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
@@ -43,13 +40,6 @@ public class ChatHeader extends AbstractUIElement {
             @FindBy(css = ".cl-r-icon-transfer")
     })
     private WebElement transferButton;
-
-    @FindBy(css = "[data-testid=header-send-sms]")
-    private WebElement sendSMSButton;
-
-    //for future
-    @FindBy(css = "[data-testid=header-whats-app-button]")
-    private WebElement sendWhatsAppButton;
 
     @FindBy(css = "[data-testid=chat-header-title]")
     private WebElement chatHeaderTitle;
@@ -199,10 +189,13 @@ public class ChatHeader extends AbstractUIElement {
     }
 
     public boolean isValidChannelImg(String channelPictureName) {
-        File image = new File(System.getProperty("user.dir")+"/src/test/resources/adaptericons/"+channelPictureName+".png");
+        File image = new File(System.getProperty("user.dir") + "/src/test/resources/adaptericons/" + channelPictureName +".png");
         return isWebElementEqualsImage(this.getCurrentDriver(), channelImg, image);
     }
-        //Verify if tame stanp in 24 hours format
+
+    public String getChatIconName() {
+        return channelImg.findElement(By.cssSelector(" svg")).getAttribute("name").trim();
+    }
     public String getTimeStamp() {
         return timeStamp.getAttribute("textContent").trim();
     }

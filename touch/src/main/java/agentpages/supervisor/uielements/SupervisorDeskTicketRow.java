@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -21,7 +22,7 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
     @FindBy(css = ".cl-agent-name")
     private WebElement currentAgent;
 
-    @FindBy(css = ".cl-user-name")
+    @FindBy(css = ".user-details__name")
     private WebElement userName;
 
     @FindBy(css = ".cl-table-user-description__location")
@@ -44,6 +45,9 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
 
     private String scrollAreaCss = "[data-testid='chatslist-scroll-container'] [class='iScrollVerticalScrollbar iScrollLoneScrollbar']";
     // private String chatConsoleInboxRowNameCss = ".cl-user-name";
+
+    @FindBy(css = ".cl-table-cell--channelType svg")
+    private WebElement channelImg;
 
     public SupervisorDeskTicketRow(WebElement element) {
         super(element);
@@ -99,5 +103,10 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
 
     public String getIconName() {
         return channelIcon.getAttribute("name").trim();
+    }
+
+    public boolean isValidChannelImg(String channelPictureName) {
+        File image = new File(System.getProperty("user.dir")+"/src/test/resources/adaptericons/"+channelPictureName+".png");
+        return isWebElementEqualsImage(this.getCurrentDriver(), channelImg, image);
     }
 }

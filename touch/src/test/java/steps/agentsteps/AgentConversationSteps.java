@@ -286,6 +286,11 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         messagesFromChatBody.set(getChatBody(agent).getAllMessages());
     }
 
+    @And("^(.*) clicks the link message (.*)$")
+    public void clickOnLinkMessage(String agent, String text){
+        getChatBody(agent).clickLatestLinkMessage(text);
+    }
+
     @Then("Sent emoji is displayed on chatdesk$")
     public void verifyEmojiDisplayedOnChatdesk() {
         Assert.assertTrue(getChatBody("main agent").getAgentEmojiResponseOnUserMessage(selectedEmoji),
@@ -296,6 +301,18 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     public void verifySentUserEmojiDisplayedOnChatdesk(String emoji) {
         Assert.assertTrue(getChatBody("main agent").isAgentEmojiUserMessageShown(emoji),
                 "'" + selectedEmoji + "' User message is not shown in conversation area");
+    }
+
+    @When("(.*) clears and types characters (.*) in conversation input field on chatdesk$")
+    public void agentTypesTextInConversationInputField(String agent, String text) {
+        Assert.assertTrue(getAgentHomePage(agent).getChatForm().clearAndTypeResponseToUser(text).getTextFromMessageInputField().contains(text),
+                "'" + text + "' input field text is not shown in conversation area");
+    }
+
+    @Then("(.*) is able to see the typing indicator as (.*) on chatdesk$")
+    public void verifyTypingIndicatorDisplayedOnChatdesk(String agent, String expectedIndicatorText) {
+        Assert.assertTrue(getAgentHomePage(agent).getChatForm().getTypingIndicatorText().contains(expectedIndicatorText),
+                "'" + expectedIndicatorText + "' typing indicator text is not shown in conversation area");
     }
 
     @Then("^There is no from (.*) response added by default for (.*) message from fb user$")
@@ -319,8 +336,8 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @When("^(.*) sees (.*) Location from User$")
     public void verifyLocationFromUser(String agent, String location){
         waitFor(2000);// URL needs time for full creation
-        locationURL.set(getAgentHomePage(agent).getChatBody().getLocationURLFromUser());
-        Assert.assertTrue(locationURL.get().contains(location),  agent+ " didn't get Lviv location");
+                Assert.assertTrue(getAgentHomePage(agent).getChatBody().getLocationURLFromUser().contains(location),
+                        agent+ " didn't get Lviv location");
     }
 
     @Then("^(.*) can see message with HSM label in Conversation area$")
@@ -455,6 +472,12 @@ public class AgentConversationSteps extends AbstractAgentSteps {
                 "'Profanity not allowed' popup not shown.");
     }
 
+    @Then("^'Profanity not allowed' pop up is not shown$")
+    public void verifyProfanityNotAllowedPopupNotShown() {
+        Assert.assertTrue(getAgentHomePage("main").isProfanityPopupNotShown(),
+                "'Profanity not allowed' popup is shown.");
+    }
+
     @When("^(.*) closes 'Profanity not allowed' popup$")
     public void closeProfanityPopup(String agent) {
         getAgentHomePage(agent).clickAcceptProfanityPopupButton();
@@ -503,6 +526,13 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @When("^(.*) closes chat$")
     public void closeChat(String agent) {
         getAgentHomePage(agent).endChat();
+    }
+
+    @When("^(.*) closes chat and checks error dialog$")
+    public void closeChatAndCheckErrorDialog(String agent) {
+        getAgentHomeForMainAgent().endChatWithoutChatMessageValidation();
+
+        Assert.assertTrue(getAgentHomeForMainAgent().isDisappearingDialogShown(), "Error dialog is not shown");
     }
 
     @Then("^All session attributes are closed in DB$")
@@ -703,6 +733,14 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         c2pSendForm = getAgentHomePage(agent).openc2pSendForm();
     }
 
+    @When("^(.*) open and select extension with name$")
+    public void agentOpenC2PFormWithExtensionName(String agent, List<String> datatable){
+        for(String a : datatable) {
+            c2pSendForm = getAgentHomePage(agent).openc2pSendForm(a);
+            waitFor(1000);
+        }
+    }
+
     @When("^(.*) click start chat button$")
     public void agentClickStartChatButton(String agent){
         getAgentHomePage(agent).getChatForm().openHSMForm();
@@ -713,15 +751,31 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         c2pSendForm.setOrderNumberField(order).setPriceForOrder(price).clickSendButton();
     }
 
+    @And("^(.*) clicks on the cancel payment button on the payment card$")
+    public void clicksCancelPaymentButton(String agent) {
+        getAgentHomePage(agent).getChatBody().clickCancelPaymentButton();
+    }
+
+    @And("^(.*) gets pending to live chat dialog with header (.*)$")
+    public void isPendingToLiveChatDialogShown(String agent, String expectedText) {
+        Assert.assertTrue(getAgentHomePage(agent).getChatPendingToLiveForm().getFormHeaderTitle().equalsIgnoreCase(expectedText),
+                "Header Title is not correct");
+    }
+
+    @And("^(.*) clicks on go to chat button$")
+    public void agentClicksGoToChatButton(String agent) {
+        getAgentHomePage(agent).getChatPendingToLiveForm().clickGoToChatButton();
+    }
+
     @And("^Agent send date picker form with name (.*) and send$")
     public void sendDatePicker(String name) {
         getAgentHomePage("main").getChatForm().setDevicePickerName(name);
         c2pSendForm.clickSendButton();
     }
 
-    @Then("^(.*) get 'payment link expired' update is sent to agent desk by C2P$")
-    public void verifyExpirationC2p(String agent){
-        Assert.assertTrue(getAgentHomePage(agent).getChatBody().getC2pExpiresCardsText().contains("Payment link expired"), "Expire card didn't come from c2p");
+    @Then("^(.*) get (.*) update is sent to agent desk by C2P$")
+    public void verifyPaymentC2pText(String agent, String paymentText){
+        Assert.assertTrue(getAgentHomePage(agent).getChatBody().getC2pPaymentCardsText().contains(paymentText), "Expire card didn't come from c2p");
     }
 
     @Then("^(.*) sees C2P link with (.*) number in chat body$")
@@ -732,6 +786,21 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @Then("^(.*) sees extension link with (.*) name in chat body$")
     public void verifyDatePickerChatBody(String agent, String name){
         Assert.assertTrue(getAgentHomePage(agent).getChatBody().getExtensionCardText().contains(name), "Date Picker with name: "+ name +"is not shown in chat body");
+    }
+
+    @Then("^(.*) checks extensions in Frequently Used tab should be available in All Extension tab as well$")
+    public void verifyExtensionsFrequentExtTabAllExtTab(String agent){
+        getAgentHomePage(agent).getChatForm().openExtensionsForm();
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(getAgentHomePage(agent).getExtensionsForm().isFreqUsedTabsExtsExistInAllExtsTab(), "Frequently used extension is not there in all extensions" );
+        softAssert.assertTrue(getAgentHomePage(agent).getExtensionsForm().frequentExtListSizeAllExtensionListSizeComparison(), "Frequently used extension size is more than all extensions" );
+        softAssert.assertAll();
+    }
+
+    @Then("^(.*) checks extensions in Frequently Used tab should be less than 10$")
+    public void verifyFrequentExtensionTabWithLessThan10Extensions(String agent){
+        getAgentHomePage(agent).getChatForm().openExtensionsForm();
+        Assert.assertTrue(getAgentHomePage(agent).getExtensionsForm().frequentExtListSize() < 10, "Frequently used extension is not less than 10");
     }
 
 }

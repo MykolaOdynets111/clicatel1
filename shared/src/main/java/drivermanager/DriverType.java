@@ -36,7 +36,6 @@ public enum DriverType {
             options.setCapability("profile.block_third_party_cookies", false);
 
             options.setCapability(CapabilityType.SUPPORTS_APPLICATION_CACHE, false);
-            if(ConfigManager.isRemote())options.addArguments("window-size=1360,1020");
             options.setCapability("goog:loggingPrefs", logPrefs);
             options.addArguments("disable-site-isolation-trials");
             options.addArguments("test-type=browser");
@@ -53,11 +52,11 @@ public enum DriverType {
 		}
 
 
-    public WebDriver getWebDriverObject(MutableCapabilities capabilities) {
+        public WebDriver getWebDriverObject(MutableCapabilities capabilities) {
             if (!ConfigManager.isRemote()) {
-                ChromeDriverManager.getInstance().driverVersion("104").setup();
+                ChromeDriverManager.getInstance().setup();
                 return new ChromeDriver((ChromeOptions) capabilities);
-            }else{
+            } else {
                 ChromeDriverManager.getInstance().driverVersion("89.0.4389.82").setup();
                 return new ChromeDriver((ChromeOptions) capabilities);
             }

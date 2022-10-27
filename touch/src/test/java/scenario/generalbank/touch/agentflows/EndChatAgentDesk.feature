@@ -2,7 +2,7 @@
 Feature: Closing chat and no empty CRM ticket creating
 
   Background:
-    Given Off survey configuration for General Bank Demo
+    Given Off webchat survey configuration for General Bank Demo
     And User select General Bank Demo tenant
     Given I login as agent of General Bank Demo
     And Click chat icon

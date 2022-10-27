@@ -1,13 +1,16 @@
 package steps.portalsteps;
 
 
+import agentpages.dashboard.DashboardSettingsPage;
 import apihelper.ApiHelper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javafaker.Faker;
 import datamanager.Agents;
 import datamanager.MC2Account;
 import datamanager.Tenants;
 import datamanager.TopUpBalanceLimits;
 import datamanager.jacksonschemas.TenantChatPreferences;
+import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.model.PaymentMethod;
 import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
@@ -728,7 +731,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^(.*) counter shows correct live chats number$")
     public void verifyChatConsoleActiveChats(String widgetName){
         activeChatsFromChatdesk = ApiHelper.getActiveChatsByAgent("Second agent")
-                .getBody().jsonPath().getList("content.id").size();
+                .jsonPath().getList("content.id").size();
 //                new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
         Assert.assertTrue(checkLiveCounterValue(widgetName, activeChatsFromChatdesk),
                 "'"+widgetName+"' widget value is not updated to " + activeChatsFromChatdesk +" expected value \n");
@@ -961,33 +964,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void makeTwitterIntegration(){
         getPortalIntegrationsPage().getCreateIntegrationWindow().setUpTwitterIntegration();
     }
-
-    @When("^Delink facebook account$")
-    public void delinkFBAccount(){
-        getPortalFBIntegrationPage().delinkFBAccount();
-    }
-
-    @Then("^Touch Go plan is updated to \"(.*)\" in (.*) tenant configs$")
-    public void verifyTouchGoPlanUpdatingInTenantConfig(String expectedTouchGoPlan, String tenantOrgName){
-        String actualType = ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
-        for(int i=0; i<120; i++){
-            if (!actualType.equalsIgnoreCase(expectedTouchGoPlan)){
-                getAdminPortalMainPage().waitFor(15000);
-                DriverFactory.getAgentDriverInstance().navigate().refresh();
-                actualType = ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
-            } else{
-                break;
-            }
-        }
-        boolean isUpgraded = actualType.equalsIgnoreCase(expectedTouchGoPlan);
-        System.setProperty("tenantUpgradeSuccessful", String.valueOf(isUpgraded));
-        Assert.assertTrue(isUpgraded,
-                "TouchGo plan is not updated in tenant configs for '"+tenantOrgName+"' tenant \n"+
-                        "Expected: " + expectedTouchGoPlan + "\n" +
-                        "Found:" + actualType
-        );
-    }
-
 
     @Then("^Touch Go plan is updated to \"(.*)\" in portal page$")
     public void verifyPlanUpdatingOnPortalPage(String expectedTouchGo){
@@ -1567,7 +1543,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         }else{
             throw new AssertionError("Incorrect status was provided");
         }
-        ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(),tenantChatPreferences);
+        ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), tenantChatPreferences);
     }
     @When("^Create chat tag$")
     public void createChatTag(){
@@ -1582,6 +1558,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickSaveButton();
         AgentCRMTicketsSteps.crmTicketInfoForUpdating.get().put("agentTags",  tagname);
     }
+
     @When("^Click the pencil icon to edit the tag")
     public void editTag() {
         getPortalTouchPreferencesPage().getChatTagsWindow().clickEditTagButton(tagname);
@@ -1602,5 +1579,17 @@ public class BasePortalSteps extends AbstractPortalSteps {
             mainPage = new MainPage();
         }
         return mainPage;
+    }
+
+    @Then("^Admin can see Settings page with - all tabs$")
+    public void verifySettingPageTabOptions(List<String> datatable){
+        List<String> actualTabNames = getDashboardSettingsPage().getSettingTabsText();
+        Assert.assertEquals(actualTabNames,datatable, "Comparable strings does not match");
+    }
+
+    @When("^Tag is created")
+    public void verifyTagIsCreated() {
+        String newTagName = getPortalTouchPreferencesPage().getChatTagsWindow().getTagName();
+        Assert.assertEquals(newTagName,tagname,"Tag is not created");
     }
 }

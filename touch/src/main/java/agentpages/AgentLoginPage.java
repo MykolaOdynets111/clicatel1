@@ -2,11 +2,10 @@ package agentpages;
 
 import abstractclasses.AgentAbstractPage;
 import driverfactory.URLs;
-import org.openqa.selenium.*;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AgentLoginPage extends AgentAbstractPage {
@@ -23,8 +22,6 @@ public class AgentLoginPage extends AgentAbstractPage {
     public AgentLoginPage(String ordinalAgentNumber) {
         super(ordinalAgentNumber);
     }
-
-    public static final ThreadLocal<String> agentName = new ThreadLocal<>();
 
     public AgentLoginPage openPortalLoginPage() {
         getCurrentDriver().get(URLs.getTouchLoginForm());
@@ -62,8 +59,8 @@ public class AgentLoginPage extends AgentAbstractPage {
         dropdownSelect = new Select(agentsDropdown);
         List<WebElement> options = waitForOptionsIsDownloaded(dropdownSelect);
         String finalAgent = agent;
-        agentName.set(options.stream().filter(a -> a.getText().toLowerCase().contains(finalAgent)).findFirst().get().getText());
-        dropdownSelect.selectByVisibleText(agentName.get());
+        String agentName = options.stream().filter(a -> a.getText().toLowerCase().contains(finalAgent)).findFirst().get().getText();
+        dropdownSelect.selectByVisibleText(agentName);
         return this;
     }
 

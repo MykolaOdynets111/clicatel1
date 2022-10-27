@@ -13,6 +13,7 @@ Feature: Departments: Route to Department
     And Turn off the Default department
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1857")
+  @orca_api
   Scenario: CD :: Dashboard :: Department Mgmt. :: Verify that chats is should be connected to department selected by customer when "route to specific" department is turned on
     And I select Touch in left menu and Dashboard in submenu
     When Navigate to Preferences page
@@ -20,7 +21,7 @@ Feature: Departments: Route to Department
     When Agent switches to opened Portal page
     And I select Touch in left menu and Agent Desk in submenu
     When Send to agent message by ORCA to AutomationSecondAgent department
-    Then Verify Orca returns Agent Busy message autoresponder during 40 seconds
+    Then Verify Orca returns Agent Busy message autoresponder during 40 seconds for agent
     Given I login as second agent of General Bank Demo
     Then Second agent has new conversation request from orca user
 

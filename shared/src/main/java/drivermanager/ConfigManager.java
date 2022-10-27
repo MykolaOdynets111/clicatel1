@@ -173,9 +173,6 @@ public class ConfigManager {
         return isWebWidget != null && Boolean.parseBoolean(isWebWidget);
     }
 
-
-
-
      public static String getTenantOrgName(){
         String tenantOrgName = System.getProperty(TENANT_ORG_NAME);
         if(tenantOrgName==null){

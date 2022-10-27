@@ -14,9 +14,8 @@ Feature: Chat console: Overview tab
     Then Customer engaging with an Agent counter shows correct live chats number
     And Average chats per Agent is correct
 
-
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1698")
-  Scenario: CD:: SMS:: API:: PUT:: Update SMS Orca channel chat survey config with API
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2376")
+  Scenario: CD :: Dashboard :: Activity Overview :: Verify the total agents online counter
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
     And I select Touch in left menu and Dashboard in submenu

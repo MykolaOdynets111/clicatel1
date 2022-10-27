@@ -1,4 +1,6 @@
 @agent_feedback
+@Regression
+@orca_api
 Feature: Create tag
 
   Background:
@@ -11,7 +13,6 @@ Feature: Create tag
     When Navigate to Chat Tags page
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2839")
-  @Regression
   Scenario: CD:: Supervisor Desk:: Chat_Tags:: Verify when supervisor creates a tag, the newly created tag is available for the agent to use
     Given Create chat tag
     When Agent switches to opened Portal page

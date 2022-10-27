@@ -1,21 +1,15 @@
 package apihelper;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.javafaker.Faker;
 import datamanager.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import datamanager.jacksonschemas.*;
-import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.jacksonschemas.chathistory.ChatHistory;
 import datamanager.jacksonschemas.chatusers.UserInfo;
-import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import datamanager.jacksonschemas.usersessioninfo.ClientProfile;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
 import drivermanager.ConfigManager;
 import interfaces.VerificationHelper;
 import io.restassured.RestAssured;
-import io.restassured.config.EncoderConfig;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.exception.JsonPathException;
@@ -27,7 +21,6 @@ import org.testng.Assert;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -39,25 +32,19 @@ public class ApiHelper implements VerificationHelper {
     private static List<HashMap> tenantsInfo = null;
     public static ThreadLocal<String> clientProfileId = new ThreadLocal<>();
 
+    // TODO: delete this method and use getTenantChatPreferences instead
     public static String getInternalTenantConfig(String tenantName, String config) {
-        String url = format(Endpoints.CHAT_PREFERENCES, tenantName);
+        String url = format(Endpoints.TENANT_CHAT_PREFERENCES, tenantName);
         return RestAssured.get(url).jsonPath().get(config).toString();
     }
 
+    // TODO: delete this method and use getTenantChatPreferences instead
     public static Response getTenantConfig(String tenantOrgName) {
         String tenantId = getTenant(tenantOrgName).get("id");
         return RestAssured.given()
                 .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .log().all()
-                .get(format(Endpoints.CHAT_PREFERENCES, tenantId));
-    }
-
-    public static Map<String, String> getAllTenantsInfoMap(String theValue) {
-        Map<String, String> tenantsMap = new HashMap<>();
-        List<HashMap> tenants = getAllTenantsInfo();
-        tenants.forEach(e -> tenantsMap.put(((String) e.get("tenantOrgName")).toLowerCase(),
-                (String) e.get(theValue)));
-        return tenantsMap;
+                .get(format(Endpoints.TENANT_CHAT_PREFERENCES, tenantId));
     }
 
     public static Map<String, String> getTenantInfoMap(String tenantOrgName) {
@@ -268,27 +255,19 @@ public class ApiHelper implements VerificationHelper {
                 .accept(ContentType.JSON)
                 .get(format(Endpoints.INTERNAL_LAST_CLIENT_SESSION, tenant, userID))
                 .getBody().as(UserSession.class);
-
     }
 
-    public static void updateFeatureStatus(ChatPreferenceSettings chatPreferenceSettings) {
-        Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
-                .accept(ContentType.ANY)
+    public static void updateChatPreferencesParameter(TenantChatPreferences tenantChatPreferences) {
+        Response response = RestAssured.given().log().all()
+                .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .contentType(ContentType.JSON)
-                .body(chatPreferenceSettings)
-                .put(Endpoints.CHAT_PREFERENCES);
-        Assert.assertEquals(resp.statusCode(), 200,
-                "Status code is not 200 and body value is \n: " + chatPreferenceSettings.toString() + "\n error message is: " + resp.getBody().asString());
-    }
-
-    public static void createExtensions(String extensionBody) {
-        Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
-                .contentType(ContentType.JSON)
-                .body(extensionBody)
-                .put(Endpoints.EXTENSIONS);
-        Assert.assertEquals(resp.statusCode(), 200,
-                "Status code is not 200 and body value is \n: " + extensionBody + "\n error message is: " + resp.getBody().asString());
+                .body(tenantChatPreferences)
+                .put(Endpoints.TENANT_CHAT_PREFERENCES);
+        if (response.statusCode() != 200) {
+            Assert.fail(format("Failed to update value. Status code: %s. Body: %s",
+                    response.statusCode(), response.getBody().asString()));
+        }
     }
 
     public static boolean getFeatureStatus(String tenantOrgName, String FEATURE) {
@@ -334,7 +313,6 @@ public class ApiHelper implements VerificationHelper {
         return agents;
     }
 
-
     public static String getAgentId(String tenantOrgName, String agent) {
         return getAgentInfo(tenantOrgName, agent).get("id");
     }
@@ -347,23 +325,6 @@ public class ApiHelper implements VerificationHelper {
         return resp.getBody().jsonPath().get("jwt");
     }
 
-    public static void logoutTheAgent(String tenantOrgName) {
-        String tenantID = getTenant(tenantOrgName).get("id");
-        RestAssured.given().accept(ContentType.JSON)
-                .get(format(Endpoints.INTERNAL_LOGOUT_AGENT, tenantID));
-    }
-
-    public static void decreaseTouchGoPLan(String tenantOrgName) {
-        MC2Account targetAccount = MC2Account.getAccountByOrgName(ConfigManager.getEnv(), tenantOrgName);
-        RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .body("{\n" +
-                        "  \"accountId\": \"" + targetAccount.getAccountID() + "\",\n" +
-                        "  \"messageType\": \"TOUCH_STARTED\"" +
-                        "}")
-                .put(Endpoints.INTERNAL_DECREASING_TOUCHGO_PLAN);
-    }
-
     public static SurveyManagement getSurveyManagementAttributes(String channelId) {
         Response resp = RestAssured.given().log().all()
                 .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
@@ -373,16 +334,14 @@ public class ApiHelper implements VerificationHelper {
                     "\n Body: " + resp.getBody().asString());
         }
         return resp.getBody().jsonPath().getObject("chatSurveyConfig", SurveyManagement.class);
-
     }
 
-
-    public static void ratingEnabling(String tenantOrgName, Boolean ratingEnabled, String chanell) {
-        String channelID = getChannelID(tenantOrgName, chanell);
+    public static void ratingEnabling(String tenantOrgName, Boolean ratingEnabled, String chanel) {
+        String channelID = getChannelID(tenantOrgName, chanel);
         SurveyManagement currentConfiguration = getSurveyManagementAttributes(channelID);
         if (!currentConfiguration.getRatingEnabled().equals(ratingEnabled)) {
             currentConfiguration.setRatingEnabled(ratingEnabled);
-            updateSurveyManagement(tenantOrgName, currentConfiguration, channelID, chanell);
+            updateSurveyManagement(tenantOrgName, currentConfiguration, channelID, chanel);
         }
     }
 
@@ -448,13 +407,6 @@ public class ApiHelper implements VerificationHelper {
                 .getBody();
     }
 
-    public static ResponseBody getInfoAboutTwitterIntegration(String tenantOrgName) {
-        return RestAssured.given()
-                .header("Authorization", getAccessToken(tenantOrgName, "main"))
-                .get(Endpoints.TWITTER_INTEGRATION)
-                .getBody();
-    }
-
     public static String getInfoAboutTwitterIntegration(String tenantOrgName, String parametr) {
         return RestAssured.given()
                 .header("Authorization", getAccessToken(tenantOrgName, "main"))
@@ -474,22 +426,6 @@ public class ApiHelper implements VerificationHelper {
                 .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .delete(Endpoints.FACEBOOK_INTEGRATION)
                 .getBody();
-    }
-
-    public static void setStatusForWelcomeMesage(String tenantName, String messageStatus) {
-        RestAssured.given()
-                .contentType(ContentType.JSON)
-                .body("[\n" +
-                        "  {\n" +
-                        "    \"id\": \"welcome_message\",\n" +
-                        "    \"category\": \"greeting\",\n" +
-                        "    \"text\": \"Thank you for reaching out. How can we help you?\",\n" +
-                        "    \"description\": \"welcome flow\",\n" +
-                        "    \"enabled\": true,\n" +
-                        "    \"type\": \"TEXT\"\n" +
-                        "  }\n" +
-                        "]")
-                .put(Endpoints.INTEGRATIONS_ENABLING_DISABLING);
     }
 
     public static Integration getIntegration(String tenantOrgName, String integrationType) {
@@ -515,116 +451,6 @@ public class ApiHelper implements VerificationHelper {
                 .contentType(ContentType.JSON)
                 .header("Authorization", getAccessToken(tenantOrgName, "main"))
                 .put(Endpoints.SESSION_CAPACITY + availableChats);
-    }
-
-    public static void processTickets(List<OvernightTicket> tickets, String agentId) {
-        for (OvernightTicket ticket : tickets) {
-            String body = "{\n" +
-                    "  \"chatId\": \"" + ticket.getId() + "\",\n" +
-                    "  \"state\": \"PROCESSED\",\n" +
-                    "  \"agentId\": \"" + agentId + "\"\n" +
-                    "}";
-            RestAssured.given()
-                    .contentType(ContentType.JSON)
-                    .body(body)
-                    .post(Endpoints.INTERNAL_PROCESS_TICKET);
-        }
-    }
-
-    public static void closeAllOvernightTickets(String tenantOrgName, String ordinalAgentNumber) {
-        try {
-            String agentId = ApiHelper.getAgentInfo(tenantOrgName, ordinalAgentNumber).get("id");
-            List<OvernightTicket> allAssignedTickets = getAssignedOvernightTickets(tenantOrgName, ordinalAgentNumber);
-            List<OvernightTicket> allUnassignedTickets = getUnassignedOvernightTickets(tenantOrgName);
-
-            List<OvernightTicket> fullList = new ArrayList<>();
-            fullList.addAll(allAssignedTickets);
-            fullList.addAll(allUnassignedTickets);
-            if (fullList.size() > 0) processTickets(fullList, agentId);
-        } catch (NullPointerException e) {
-        } catch (JsonPathException e) {
-            Assert.fail("Unable to close overnight tickets");
-        }
-    }
-
-    public static List<OvernightTicket> getAssignedOvernightTickets(String tenantOrgName, String ordinalAgentNumber) {
-        List<OvernightTicket> tickets = new ArrayList<>();
-        Response resp = RestAssured.given().log().all()
-                .header("Authorization", getAccessToken(tenantOrgName, ordinalAgentNumber))
-                .get(Endpoints.AGENT_ASSIGNED_TICKETS);
-        try {
-            tickets = resp.getBody().jsonPath().getList("", OvernightTicket.class);
-        } catch (ClassCastException | JsonPathException e) {
-            Assert.fail("Getting overnight tickets by URL " +
-                    Endpoints.AGENT_ASSIGNED_TICKETS + " was not successful \n" +
-                    "Resp body: " + resp.getBody().asString());
-        }
-        return tickets;
-    }
-
-
-    public static List<OvernightTicket> getUnassignedOvernightTickets(String tenantOrgName) {
-        String tenantID = getTenant(tenantOrgName).get("id");
-        List<OvernightTicket> tickets = new ArrayList<>();
-        Response resp = RestAssured.given().log().all()
-                .get(format(Endpoints.INTERNAL_GET_TICKETS, tenantID, 0));
-        try {
-
-            List<OvernightTicket> baseTickets = resp.jsonPath().getList("content", OvernightTicket.class);
-            tickets.addAll(baseTickets);
-            int pageSize = resp.jsonPath().getInt("pageable.pageSize");
-            int unassignedTickets = resp.jsonPath().getInt("totalElements");
-            int pagesNumber = unassignedTickets / pageSize;
-            if (pagesNumber > 1) {
-                for (int i = 1; i < pageSize; i++) {
-                    resp = RestAssured.given().log().all()
-                            .get(format(Endpoints.INTERNAL_GET_TICKETS, tenantID, i));
-                    List<OvernightTicket> allUnassignedTickets = resp.jsonPath().getList("content", OvernightTicket.class);
-                    tickets.addAll(allUnassignedTickets);
-                }
-            }
-        } catch (ClassCastException | JsonPathException e) {
-            Assert.fail("Getting Unassighned overnight tickets by internal URL " +
-                    " was not successful \n" +
-                    "Resp body: " + resp.getBody().asString());
-        }
-        return tickets;
-    }
-
-    public static List<Department> getDepartments(String tenantOrgName) {
-        return getQueryFor(tenantOrgName, Endpoints.DEPARTMENTS)
-                .jsonPath().getList("", Department.class);
-    }
-
-    public static void deleteDepartmentsById(String tenantOrgName) {
-        List<Department> departments = getDepartments(tenantOrgName);
-        for (Department department : departments) {
-            if (department.getName().contains("Auto")) {
-                RestAssured.given()
-                        .header("Authorization", getAccessToken(tenantOrgName, ""))
-                        .delete(Endpoints.DEPARTMENTS + "/" + department.getId());
-            }
-        }
-    }
-
-
-    public static void createDepartment(String name, String description, String agent) {
-        String agentId = getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent).get("id");
-        Response resp;
-        resp = RestAssured.given().log().all()
-                .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
-                .contentType(ContentType.JSON)
-                .accept(ContentType.JSON)
-                .body("{ " +
-                        "\"name\": \"" + name + "\"," +
-                        "\"description\": \"" + description + "\"," +
-                        "\"agentIds\": [\"" + agentId +
-                        "\"]" +
-                        "}")
-                .post(Endpoints.DEPARTMENTS);
-        Assert.assertEquals(resp.statusCode(), 200,
-                "Creating of department was not successful\n" +
-                        "resp body: " + resp.getBody().asString());
     }
 
     public static Map getActiveSessionByClientId(String clientId) {
@@ -757,25 +583,24 @@ public class ApiHelper implements VerificationHelper {
         return RestAssured.get(url);
     }
 
-    public static Response getActiveChatsByAgent(String agent) {
-        return RestAssured.given().contentType(ContentType.JSON).log().all()
-                .header("Authorization",
-                        getAccessToken(Tenants.getTenantUnderTestOrgName(), agent))
-                .body("{\n" +
+    public static ResponseBody getActiveChatsByAgent(String agent) {
+       String body = "{\n" +
                         "  \"chatStates\": [\n" +
                         "    \"LIVE_IN_SCHEDULER_QUEUE\",\n" +
                         "    \"LIVE_ASSIGNED_TO_AGENT\"\n" +
                         "  ],\n" +
                         "\"agentSearchModel\": {\n" +
                         "    \"id\": \"" + getAgentId(Tenants.getTenantUnderTestOrgName(), agent) + "\"\n" +
-                        "  }\n" +
-                        "}")
-                .post(format(Endpoints.ACTIVE_CHATS_BY_AGENT, ConfigManager.getEnv()));
+                        "  },\n" +
+                        "  \"pageType\": \"AGENT_VIEW\"\n" +
+                        "}";
+
+        return getPostQueryFor(Tenants.getTenantUnderTestOrgName(),
+                format(Endpoints.ACTIVE_CHATS_BY_AGENT, ConfigManager.getEnv()),body,agent);
     }
 
     public static void closeActiveChats(String agent) {
-        Response resp = getActiveChatsByAgent(agent);
-        List<String> conversationIds = resp.getBody().jsonPath().getList("content.chatId");
+        List<String> conversationIds = getActiveChatsByAgent(agent).jsonPath().getList("content.chatId");
         for (String conversationId : conversationIds) {
             Response r = RestAssured.given()
                     .accept(ContentType.JSON).log().all()
@@ -841,6 +666,7 @@ public class ApiHelper implements VerificationHelper {
                 .post(format(Endpoints.CRM_TICKET, ticketInfo.get("clientProfileId")));
     }
 
+    // TODO: delete this. Use updateChatPreferencesParameter instead!
     public static Response updateTenantConfig(String tenantOrgName, TenantChatPreferences body) {
         String tenantId = getTenant(tenantOrgName).get("id");
         return RestAssured.given().log().all()
@@ -851,52 +677,23 @@ public class ApiHelper implements VerificationHelper {
                 .put(Endpoints.TENANT_CHAT_PREFERENCES);
     }
 
+    public static void createExtensions(String extensionBody) {
+        Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
+                .accept(ContentType.ANY)
+                .contentType(ContentType.JSON)
+                .body(extensionBody)
+                .put(Endpoints.EXTENSIONS);
+        Assert.assertEquals(resp.statusCode(), 200,
+                "Status code is not 200 and body value is \n: " + extensionBody + "\n error message is: " + resp.getBody().asString());
+    }
+
     public static TenantChatPreferences getTenantChatPreferences() {
         return RestAssured.given().log().all()
                 .header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.JSON)
-                .contentType(ContentType.JSON).get(Endpoints.TENANT_CHAT_PREFERENCES).getBody().as(TenantChatPreferences.class);
-    }
-
-    public static Response createFBChat(long linkedFBPageId, long fbUserId, String message) {
-        Faker faker = new Faker();
-        String mid = faker.code().isbn13(true) + "-" + faker.lorem().characters(3, 6, true);
-        ZoneId zoneId = ZoneId.systemDefault();
-        ZonedDateTime zdt = LocalDateTime.now().atZone(zoneId);
-        long timestamp = zdt.toInstant().toEpochMilli();
-        String requestBody1 = "{\n" +
-                "  \"entry\": [\n" +
-                "    {\n" +
-                "      \"changes\": [],\n" +
-                "      \"id\": \"" + linkedFBPageId + "\",\n" +
-                "      \"messaging\": [\n" +
-                "        {\n" +
-                "          \"message\": {\n" +
-                "            \"mid\": \"" + mid + "\",\n" +
-                "            \"seq\": 31478,\n" +
-                "            \"text\": \"" + message + "\"\n" +
-                "          },\n" +
-                "          \"recipient\": {\n" +
-                "            \"id\": \"" + linkedFBPageId + "\"\n" +
-                "          },\n" +
-                "          \"sender\": {\n" +
-                "            \"id\": \"" + fbUserId + "\"\n" +
-                "          },\n" +
-                "          \"timestamp\": " + timestamp + "\n" +
-                "        }\n" +
-                "      ],\n" +
-                "      \"time\": " + timestamp + "\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"object\": \"page\",\n" +
-                "  \"tenant\": null\n" +
-                "}";
-        return RestAssured.given().log().all()
-                .accept(ContentType.ANY)
                 .contentType(ContentType.JSON)
-                .config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false)))
-                .body(requestBody1)
-                .post(Endpoints.SOCIAL_FACEBOOK_HOOKS);
+                .get(Endpoints.TENANT_CHAT_PREFERENCES)
+                .getBody().as(TenantChatPreferences.class);
     }
 
     public static List<AvailableAgent> getAvailableAgents() {
@@ -922,8 +719,8 @@ public class ApiHelper implements VerificationHelper {
     }
 
     @NotNull
-    protected static ResponseBody getPostQueryFor(String tenantOrgName, String endpoint, Object body) {
-        Response response = postQuery(tenantOrgName, endpoint, body);
+    protected static ResponseBody getPostQueryFor(String tenantOrgName, String endpoint, Object body, String agent) {
+        Response response = postQuery(tenantOrgName, endpoint, body, agent);
 
         if (response.getStatusCode() != 200) {
             fail("Couldn't post the value \n"
@@ -951,10 +748,10 @@ public class ApiHelper implements VerificationHelper {
         }
     }
 
-    protected static Response postQuery(String tenantOrgName, String endpoint, Object body) {
+    protected static Response postQuery(String tenantOrgName, String endpoint, Object body, String agent) {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header("Authorization", getAccessToken(tenantOrgName, "main"))
+                .header("Authorization", getAccessToken(tenantOrgName, agent))
                 .body(body)
                 .post(format(endpoint, getTenant(tenantOrgName).get("id")));
     }

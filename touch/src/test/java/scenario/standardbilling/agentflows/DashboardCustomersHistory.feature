@@ -2,34 +2,6 @@
 @Regression
 Feature: Dashboard: Customer History
 
-  @off_rating_whatsapp
-  @orca_api
-  @start_orca_server
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1456")
-  Scenario Outline: CD:: Dashboard: Dashboard-Customers_Overview:: Verify if admin can open Customers History with <surveyType> customer survey
-    Given I login as agent of Standard Billing
-    And Setup ORCA whatsapp integration for Standard Billing tenant
-    And Update survey management chanel whatsapp settings by ip for Standard Billing
-      | ratingEnabled | true          |
-      | surveyType    | <surveyType>  |
-      | ratingScale   | <ratingScale> |
-      | ratingIcon    | NUMBER        |
-    And Send connect to agent message by ORCA
-    And Agent has new conversation request from orca user
-    And Agent click on new conversation request from orca
-    And Conversation area becomes active with connect to agent user's message
-    Then Agent closes chat
-    And Send 5 message by ORCA
-    And Agent switches to opened Portal page
-    And I select Touch in left menu and Dashboard in submenu
-    And Admin click on Customers Overview dashboard tab
-    And Admin click on Customers History on dashboard
-    Then Admin is able to see <ratingName>,Chats by Channel,Past Sentiment graphs
-    Examples:
-      | surveyType | ratingName            | ratingScale |
-      | NPS        | Net Promoter Score    | ZERO_TO_TEN |
-      | CSAT       | Customer Satisfaction | ONE_TO_FIVE |
-
   @no_chatdesk
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2427")
   Scenario: CD:: Dashboard: Verify if admin can filter Customers History report by channel and period
@@ -72,6 +44,7 @@ Feature: Dashboard: Customer History
       | SMS                 |
       | Apple Business Chat |
       | WhatsApp            |
+
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2955")
   @skip
   Scenario: Dashboard:: Verify that if NPS surveys are categorize as Passives if webchat user chooses between 7 – 8

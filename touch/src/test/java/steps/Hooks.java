@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 import datamanager.Agents;
 import datamanager.MC2Account;
 import datamanager.Tenants;
-import datamanager.jacksonschemas.ChatPreferenceSettings;
 import datamanager.jacksonschemas.TenantChatPreferences;
 import datamanager.jacksonschemas.supportHours.GeneralSupportHoursItem;
 import driverfactory.DriverFactory;
@@ -86,6 +85,10 @@ public class Hooks implements JSHelper {
     @After()
     public void afterScenario(Scenario scenario){
 
+        if (scenario.getSourceTagNames().contains("@orca_api")){
+            ORCASteps.cleanUPORCAData();
+        }
+
         try {
             makeScreenshotAndConsoleOutputFromChatdesk(scenario);
             // add this catch since a lot of time while making screenshot there's an exception
@@ -106,7 +109,7 @@ public class Hooks implements JSHelper {
 
             if(DriverFactory.isTouchDriverExists()) {
 //                if (scenario.isFailed()) widgetWebSocketLogs();
-                takeScreenshot();
+                makeScreenshotAndConsoleOutputFromChatdesk(scenario);
                 endTouchFlow(scenario, true);
             }
         }
@@ -119,18 +122,8 @@ public class Hooks implements JSHelper {
                new TenantSteps().deleteLogo();
         }
 
-        if(scenario.getSourceTagNames().contains("@auto_scheduler_disabled")){
-            TenantChatPreferences tenantChatPreferences = ApiHelper.getTenantChatPreferences();
-            tenantChatPreferences.setAutoTicketScheduling(true);
-            ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), tenantChatPreferences);
-        }
-
         if(scenario.getSourceTagNames().contains(("@remove_dep"))){
-            ApiHelper.deleteDepartmentsById(Tenants.getTenantUnderTestOrgName());
-        }
-
-        if(scenario.getSourceTagNames().contains("@agent_session_capacity")){
-            ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50);
+            ApiHelperDepartments.deleteDepartmentsById(Tenants.getTenantUnderTestOrgName());
         }
 
         if(scenario.getSourceTagNames().contains("@new_agent") && scenario.isFailed()) {
@@ -231,10 +224,6 @@ public class Hooks implements JSHelper {
         }
 
 
-        if (scenario.getSourceTagNames().contains("@orca_api")){
-            ORCASteps.cleanUPORCAData();
-        }
-
         if (scenario.getSourceTagNames().contains("@close_account")){
             ApiHelperPlatform.closeMC2Account(Tenants.getTenantUnderTestOrgName());
         }
@@ -271,14 +260,16 @@ public class Hooks implements JSHelper {
     private void makeScreenshotAndConsoleOutputFromChatdesk(Scenario scenario){
         if (DriverFactory.isAgentDriverExists()) {
             takeScreenshotFromSecondDriver();
+            scenario.attach(takeScreenshotFromSecondDriver(), "image/png", scenario.getName());
             if (scenario.isFailed()) {
                 chatDeskConsoleOutput();
 //                chatdeskWebSocketLogs();
             }
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
-                takeScreenshotFromThirdDriverIfExists();
-                if (scenario.isFailed()) {
+            takeScreenshotFromThirdDriverIfExists();
+            scenario.attach(takeScreenshotFromSecondDriver(), "image/png", scenario.getName());
+            if (scenario.isFailed()) {
                     secondAgentChatDeskConsoleOutput();
 //                    secondAgentChatdeskWebSocketLogs();
                 }
@@ -318,17 +309,12 @@ public class Hooks implements JSHelper {
                 newAccountInfo();
             }
 
-            if (scenario.getSourceTagNames().contains("@chat_preferences")){
-                ApiHelper.updateFeatureStatus(new ChatPreferenceSettings());
-            }
-
-            if (scenario.getSourceTagNames().contains("@autoTicketScheduling")){
-                ApiHelper.updateFeatureStatus(new ChatPreferenceSettings());
+            if (scenario.getSourceTagNames().contains("@setting_changes")){
+                ApiHelper.updateChatPreferencesParameter(TenantChatPreferences.getDefaultTenantChatPreferences());
             }
 
             if (scenario.getSourceTagNames().contains("@widget_disabling")){
                 ApiHelper.setIntegrationStatus(Tenants.getTenantUnderTestOrgName(), "webchat", true);
-
             }
 
             DriverFactory.getAgentDriverInstance().manage().deleteAllCookies();

@@ -3,15 +3,14 @@ package steps.agentsteps;
 import agentpages.uielements.FilterMenu;
 import agentpages.uielements.Profile;
 import apihelper.ApiHelper;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import apihelper.ApiHelperSupportHours;
 import datamanager.Tenants;
 import datamanager.UserPersonalInfo;
-import datamanager.jacksonschemas.ChatPreferenceSettings;
+import datamanager.jacksonschemas.TenantChatPreferences;
 import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
+import datamanager.jacksonschemas.supportHours.GeneralSupportHoursItem;
 import datamanager.jacksonschemas.supportHours.SupportHoursMapping;
 import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
@@ -22,14 +21,11 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import socialaccounts.FacebookUsers;
 import socialaccounts.TwitterUsers;
-import steps.ORCASteps;
 import steps.dotcontrol.DotControlSteps;
 
 import java.time.LocalDateTime;
@@ -37,10 +33,11 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static java.lang.String.format;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 public class DefaultAgentSteps extends AbstractAgentSteps {
 
-    private static final ThreadLocal<Map<String, Boolean>> PRE_TEST_FEATURE_STATUS = new ThreadLocal<>();
-    private static final ThreadLocal<Map<String, Boolean>> TEST_FEATURE_STATUS_CHANGES = new ThreadLocal<>();
     private static UserPersonalInfo userPersonalInfoForUpdating;
     public Profile profile;
 
@@ -56,22 +53,26 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Given("^(.*) tenant feature is set to (.*) for (.*)$")
-    public void setFeatureStatus(String feature, String status, String tenantOrgName){
-        ChatPreferenceSettings chatPreferenceSettings = new ChatPreferenceSettings();
-        chatPreferenceSettings.setFeatureStatus(feature, status);
-        ApiHelper.updateFeatureStatus(chatPreferenceSettings);
+    public void setFeatureStatus(String parameter, String value, String tenantOrgName){
+        TenantChatPreferences tenantChatPreferences = new TenantChatPreferences();
+        tenantChatPreferences.setValueForChatPreferencesParameter(parameter, value);
+        ApiHelper.updateChatPreferencesParameter(tenantChatPreferences);
     }
 
-    @Given("(.*) creates (.*) tenant extension with label (.*) and name (.*)$")
-    public void createExtensionForTenant(String agent, String extensionType, String label, Optional name){
-        String extensionBody;
+    @Given("Agent creates tenant extension with label and name$")
+    public void createExtensionForTenant(List<Map<String, String>> datatable){
         ObjectMapper mapper = new ObjectMapper();
-        try {
-            extensionBody = mapper.writeValueAsString(Arrays.asList(new ChatExtension(label, name, extensionType)));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+        List<String> listChatExtension = new ArrayList<>();
+        for (int i = 0; i < datatable.size(); i++) {
+            try {
+                listChatExtension.add(mapper.writeValueAsString(new ChatExtension(
+                        datatable.get(i).get("label"), datatable.get(i).get("name"),
+                        datatable.get(i).get("extensionType"))));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
         }
-        ApiHelper.createExtensions(extensionBody);
+        ApiHelper.createExtensions(listChatExtension.toString());
     }
 
     @Then("^On backand (.*) tenant feature status is set to (.*) for (.*)$")
@@ -100,9 +101,25 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getHSMForm().clickSendButton();
     }
 
-    @And("^(.*) fill the customer contact number$")
-    public void sendWhatsApp(String agent) {
-        getAgentHomePage(agent).getHSMForm().setWAPhoneNumber(ORCASteps.orcaMessageCallBody.get().getSourceId());
+    @And("^(.*) fill the customer contact number (.*)$")
+    public void sendWhatsApp(String agent, String contactNumber) {
+        getAgentHomePage(agent).getHSMForm().setWAPhoneNumber(contactNumber);
+     }
+
+    @Then("^(.*) verify customer contact number (.*) is filled$")
+    public void checkContactNumber(String agent, String phoneNumber){
+        Assert.assertTrue(getAgentHomePage(agent).getHSMForm().getContactNum().equalsIgnoreCase(phoneNumber), "False : waPhone Field is empty");
+    }
+
+    @Then("^Verify (.*) has (.*) conversation requests from (.*) integration$")
+    public void verifyConversationRequest(String agent, int numberOfChats, String integration) {
+        if(getNumberOfActiveChats(agent, integration) < numberOfChats){
+            waitSomeTime(10);
+        }
+
+        assertThat(getNumberOfActiveChats(agent, integration))
+                .as(format("Agent should have %s active charts by %s integration", numberOfChats, integration))
+                .isEqualTo(numberOfChats);
     }
 
     @Then("^(.*) has (?:new|old) (.*) (?:request|shown)(?: from (.*) user|)$")
@@ -132,19 +149,18 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         );
     }
 
-
-    private Map<String, Object> verifyAndUpdateChatSettings(String type) {
+    public Map<String, Object> verifyAndUpdateChatSettings(String type) {
         Map<String, Object> results = new HashMap<String, Object>();
 
-        int sessionCapacity = 0;
+        int agentMaxChatsPerAgent = 0;
         List<SupportHoursMapping> supportHours = null;
         List<SupportHoursMapping> supportHoursUpdated = null;
-        sessionCapacity = ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity");
-        results.put("sessionCapacity", sessionCapacity);
+        TenantChatPreferences prefs = ApiHelper.getTenantChatPreferences();
+        agentMaxChatsPerAgent = prefs.getMaxChatsPerAgent();
+        results.put("sessionCapacity", agentMaxChatsPerAgent);
 
-        if (sessionCapacity < 50) {
-            results.put("sessionCapacityUpdate", ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50).jsonPath().get("sessionsCapacity"));
-        } else {
+        if (agentMaxChatsPerAgent < 50) {
+            ApiHelper.updateChatPreferencesParameter(TenantChatPreferences.getDefaultTenantChatPreferences());
             results.put("sessionCapacityUpdate", 50);
         }
 
@@ -152,9 +168,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         results.put("supportHours", supportHours);
 
         if (!type.equalsIgnoreCase("ticket")) {
-            if (supportHours.size() < 7) {
-                ApiHelperSupportHours.setSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
-                supportHoursUpdated = ApiHelperSupportHours.getSupportDaysAndHoursForMainAgent(Tenants.getTenantUnderTestOrgName()).getAgentMapping();
+            if (supportHours.get(0).getDays().size() < 7
+                    && supportHours.get(0).getStartWorkTime().equals("00:00")
+                    && supportHours.get(0).getEndWorkTime().equals("23:59")) {
+                Response resp = ApiHelperSupportHours.setSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+                supportHoursUpdated = resp.getBody().as(GeneralSupportHoursItem.class).getAgentMapping();
                 results.put("supportHoursUpdated", supportHoursUpdated);
             }else {results.put("supportHoursUpdated", "were not updated because \"All week\" was set");}
         }else {results.put("supportHoursUpdated", "were not updated because it is ticket");}
@@ -182,6 +200,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")\n" +
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
     }
+
     @Then("(.*) sees 'overnight' icon in this chat")
     public void verifyOvernightIconShown(String agent){
         Assert.assertTrue(getLeftMenu(agent).isOvernightTicketIconShown(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())),
@@ -261,32 +280,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getLeftMenu(agent).removeFilter();
     }
 
-//    @Then("^(.*) has new (.*) request from (.*) user$")
-//    public void verifyAgentHasRequestFormSocialUser(String agent, String chatType, String social){
-//        String userName=getUserName(social);
-//        boolean isConversationShown = getLeftMenu(agent).isNewConversationIsShown(userName,25);
-//        Map settingResults = new HashMap<String, Object>();
-//
-//        if(!isConversationShown){
-//            settingResults = verifyAndUpdateChatSettings(chatType);
-//            isConversationShown = getLeftMenu(agent).isNewConversationIsShown(userName,25);
-//        }
-//
-//        Assert.assertTrue(isConversationShown,
-//                "There is no new conversation request on Agent Desk (Client ID: "+userName+")\n" +
-//                        "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n" +
-//                        "sessionsCapacity: " + settingResults.get("sessionCapacityUpdate") + " and was: "+ settingResults.get("sessionCapacity") +"before updating \n" +
-//                        "Support hours: " + settingResults.get("supportHoursUpdated") + "\n" +
-//                        "and was:" +settingResults.get("supportHours") +" before changing\n"
-//        );
-//    }
-
-//    @Then("^(.*) has new conversation request from (.*) user through (.*) channel$")
-//    public void verifyAgentHasRequestFormSocialUser(String agent, String social, String channel){
-//        String userName=getUserName(social);
-//        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestFromSocialShownByChannel(userName, channel,20),
-//                "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")");
-//    }
     @Then("^(.*) should not see from user chat in agent desk$")
     public void verifyConversationRemovedFromChatDesk(String agent){
         // ToDo: Update after clarifying timeout in System timeouts
@@ -295,13 +288,14 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "Conversation request is not removed from Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")"
         );
     }
+
     @Then("^(.*) should not see from user chat in agent desk from (.*)$")
-    public void verifyDotControllConversationRemovedFromChatDesk(String agent, String social ){
+    public void verifyChatRemovedFromChatDesk(String agent, String social){
         String userName = getUserName(social);
         Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(20, userName),
-                "Conversation request is not removed from Agent Desk (Client ID: "+userName+")"
-        );
+                "Conversation request is not removed from Agent Desk (Client ID: "+userName+")");
     }
+
     @When("^(.*) click on (?:new|last opened) conversation request from (.*)$")
     public void acceptUserFromSocialConversation(String agent, String socialChannel) {
         if(!ConfigManager.isWebWidget() && socialChannel.equalsIgnoreCase("touch")){socialChannel="orca";}
@@ -343,7 +337,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             case "for all week":
                 resp = ApiHelperSupportHours.setSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
                         "00:00", "23:59");
-                getAgentHomePage("main").waitFor(1500);
                 break;
         }
         Assert.assertEquals(resp.statusCode(), 200,
@@ -356,7 +349,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertEquals(getAgentHomeForMainAgent().getSelectedTabHeader(), headerName,
                 "Incorrect header of customer selected tab, should be " + headerName);
     }
-
 
     @Then("Correct (.*) client details are shown")
     public void verifyClientDetails(String clientFrom){
@@ -381,7 +373,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertEquals(userPersonalInfoFromChatdesk, expectedResult,
                 "User info is not as in init context \n");
     }
-
 
     @When("^Click (?:'Edit'|'Save') button in Profile$")
     public void clickEditCustomerView(){
@@ -425,7 +416,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
         }
         getAgentHomePage("main").getProfile().fillFormWithNewDetails(userPersonalInfoForUpdating);
-
     }
 
     @When("^(.*) see (.*) phone number added into User profile$")
@@ -564,6 +554,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         }
     }
 
+    @Then("^(.*) checks the link (.*) is opened in the new tab$")
+    public void checkLinkIsOpenedInNewTab(String agent, String expectedURL){
+        String currentURL = DriverFactory.getDriverForAgent("main").getCurrentUrl();
+        Assert.assertTrue(currentURL.equalsIgnoreCase(expectedURL), "The URL is not as expected");
+    }
+
     @When("^Agent refresh current page$")
     public void refreshCurrentPage(){
         DriverFactory.getDriverForAgent("main").navigate().refresh();
@@ -599,11 +595,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "Last message in left menu with chat as not expected. \n");
     }
 
-    @Then("^Valid image for (.*) integration are shown in left menu with chat$")
-    public void verifyImgForLastMessageInLeftMenu(String adapter) {
-        Assert.assertTrue(getLeftMenu("main").isValidImgForActiveChat(adapter),
-                "Image in last message in left menu for " + adapter + " adapter as not expected. \n");
-//        getLeftMenu("main").createValidImgForActiveChat(adapter); //do not delete
+    @Then("^(.*) should see (.*) integration icon in left menu with chat$")
+    public void verifyImageMessageInLeftMenu(String agent, String adapter) {
+        assertThat(getLeftMenu(agent).getChatIconName())
+                .as(format("Image should have name %s", adapter))
+                .isEqualTo(adapter);
     }
 
     @Then("^Valid sentiment icon are shown for (.*) message in left menu with chat$")
@@ -629,7 +625,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         String integrationType;
         switch (clientFrom){
             case "fb dm":
-                Map chatInfo = (Map) ApiHelper.getActiveChatsByAgent("main").getBody().jsonPath().getList("content")
+                Map chatInfo = (Map) ApiHelper.getActiveChatsByAgent("main").jsonPath().getList("content")
                                         .stream()
                                         .filter(e -> ((Map)
                                                             ((Map) e).get("client")
@@ -665,17 +661,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             return !phone.equalsIgnoreCase("");
     }
 
-    @Given("^Create (.*) chat via API$")
-    public void createChatViaAPI(String chatOrigin){
-        switch (chatOrigin){
-            case "fb dm message":
-                ApiHelper.createFBChat(socialaccounts.FacebookPages.getFBPageFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName()).getFBPageId(),
-                        socialaccounts.FacebookUsers.TOM_SMITH.getFBUserIDMsg(), "to agent message");
-                socialaccounts.FacebookUsers.setLoggedInUser(FacebookUsers.TOM_SMITH);
-
-        }
-    }
-
     @And("^Header in chat box displayed the icon for channel from which the user is chatting$")
     public void headerInChatBoxDisplayedTheIconForChannelFromWhichTheUserIsChatting() {
         Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().isValidChannelImg("headerChannel"),
@@ -701,7 +686,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertEquals(getAgentHomeForMainAgent().getChatHeader().getTextHeader(),
                 getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()),
             "Header in chat header as not expected( do not contain \"chatting to \" or 'customer name'");
-
 }
 
     @When("^(.*) click on 'headphones' icon and see (\\d+) available agents$")
@@ -776,8 +760,13 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void logOutAgentDesk(String agent) {
         getAgentHomePage(agent).getPageHeader().logOut();
 
-        Assert.assertTrue(getAgentHomePage(agent).isLoginDialogShown(),
+        Assert.assertTrue(getAgentHomePage(agent).isDialogShown(),
                 "Log out from agent desk not successful");
     }
 
+    private static int getNumberOfActiveChats(String agent, String integration) {
+        return (int) ApiHelper.getActiveChatsByAgent(agent)
+                .jsonPath().getList("content.channel.type").stream()
+                .filter(ct -> ct.toString().equalsIgnoreCase(integration)).count();
+    }
 }

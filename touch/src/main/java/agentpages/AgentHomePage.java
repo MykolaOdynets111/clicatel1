@@ -2,6 +2,7 @@ package agentpages;
 
 import abstractclasses.AgentAbstractPage;
 import agentpages.uielements.*;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
@@ -82,7 +83,7 @@ public class AgentHomePage extends AgentAbstractPage {
     private WebElement moveToPendingButton;
 
     @FindBy(css = "[role=dialog]")
-    private WebElement loginDialog;
+    private WebElement dialogElement;
 
     private final String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
 
@@ -107,6 +108,8 @@ public class AgentHomePage extends AgentAbstractPage {
     private AttachmentWindow attachmentWindow;
     private LocationWindow locationWindow;
     private C2pSendForm c2pSendForm;
+
+    private ChatPendingToLiveForm chatPendingToLiveForm;
     private Extensions extensions;
     private HSMForm hsmForm;
 
@@ -122,6 +125,11 @@ public class AgentHomePage extends AgentAbstractPage {
     public ChatForm getChatForm() {
         chatForm.setCurrentDriver(this.getCurrentDriver());
         return chatForm;
+    }
+
+    public ChatPendingToLiveForm getChatPendingToLiveForm() {
+        chatPendingToLiveForm.setCurrentDriver(this.getCurrentDriver());
+        return chatPendingToLiveForm;
     }
 
     public Extensions getExtensionsForm(){
@@ -148,6 +156,12 @@ public class AgentHomePage extends AgentAbstractPage {
         return c2pSendForm;
     }
 
+    public C2pSendForm openc2pSendForm(String text){
+        getChatForm().openExtensionsForm();
+        getExtensionsForm().openC2pFormWithText(text);
+        c2pSendForm.setCurrentDriver(this.getCurrentDriver());
+        return c2pSendForm;
+    }
 
     public DeleteCRMConfirmationPopup getDeleteCRMConfirmationPopup(){
         deleteCRMConfirmationPopup.setCurrentDriver(this.getCurrentDriver());
@@ -249,7 +263,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public String isConnectionErrorShown(){
-             return getTextFromElem(this.getCurrentDriver(), connectionErrorImage, 15, "Connection error");
+        return getTextFromElem(this.getCurrentDriver(), connectionErrorImage, 15, "Connection error");
     }
 
     public void endChat() {
@@ -264,12 +278,23 @@ public class AgentHomePage extends AgentAbstractPage {
         }
     }
 
+    public void endChatWithoutChatMessageValidation() {
+        getChatHeader().clickEndChatButton();
+        if (getAgentFeedbackWindow().isAgentFeedbackWindowShown()) {
+            getAgentFeedbackWindow().waitForLoadingData().clickCloseButtonInCloseChatPopup();
+        }
+    }
+
     public void clickAgentAssistantButton(){
         clickElem(this.getCurrentDriver(), agentAssistantButton,3,"Agent Assistant Button" );
     }
 
     public boolean isProfanityPopupShown(){
         return isElementShown(this.getCurrentDriver(), profanityPopup,10);
+    }
+
+    public boolean isProfanityPopupNotShown(){
+        return isElementRemoved(this.getCurrentDriver(), profanityPopup,10);
     }
 
     public void clickAcceptProfanityPopupButton(){
@@ -351,7 +376,12 @@ public class AgentHomePage extends AgentAbstractPage {
         }
     }
 
-    public boolean isLoginDialogShown(){
-        return isElementShown(this.getCurrentDriver(), loginDialog, 10);
+    public boolean isDialogShown(){
+        return isElementShown(this.getCurrentDriver(), dialogElement, 10);
     }
+
+    public boolean isDisappearingDialogShown(){
+        return isElementRemoved(this.getCurrentDriver(), dialogElement, 3);
+    }
+
 }

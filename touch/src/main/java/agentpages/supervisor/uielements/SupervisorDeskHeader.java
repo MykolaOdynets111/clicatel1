@@ -7,7 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import java.time.LocalDate;
 import java.util.List;
 
-@FindBy(css = ".supervisor-view-header")
+@FindBy(css = ".view-header")
 public class SupervisorDeskHeader extends AbstractUIElement {
 
     @FindBy(id = "nameOrPhone")
@@ -44,6 +44,7 @@ public class SupervisorDeskHeader extends AbstractUIElement {
     private WebElement sentimentsFilterValue;
 
     public void clickApplyFilterButton(){
+        scrollToElem(this.getCurrentDriver(), applyFiltersButton, "Apply Filters");
         clickElem(this.getCurrentDriver(), applyFiltersButton, 1, "Apply Filters");
     }
 

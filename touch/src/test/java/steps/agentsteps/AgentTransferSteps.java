@@ -11,7 +11,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
-import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.FacebookSteps;
@@ -155,7 +154,6 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         Assert.assertTrue(
                 getAgentHomePage(agent).getIncomingTransferWindow().isTransferWindowHeaderNotShown(),
                 "Transfer chat header is shown for "+ agent + " agent");
-
     }
 
     @Then("^(.*) receives incoming transfer with \"(.*)\" header$")
@@ -190,19 +188,6 @@ public class AgentTransferSteps extends AbstractAgentSteps {
                 "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(1).getClientId()+")");
         soft.assertAll();
     }
-
-    @Given("^(.*) receives one new conversation requests$")
-    public void createDotControlChats(String agent){
-        DotControlSteps dotControlSteps = new DotControlSteps();
-        dotControlSteps.createIntegration(Tenants.getTenantUnderTestOrgName(), "fbmsg");
-        DotControlSteps.cleanUPDotControlRequestMessage();
-        createdChatsViaDotControl.add(dotControlSteps.createOfferToDotControl("connect to agent"));
-        Assert.assertTrue(getLeftMenu(agent)
-                        .isNewConversationIsShown(
-                                createdChatsViaDotControl.get(createdChatsViaDotControl.size()-1).getInitContext().getFullName(),30),
-                "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(createdChatsViaDotControl.size()-1).getClientId()+")");
-    }
-
 
     @Then("^(.*) can see transferring agent name, (.*) and following user's message: '(.*)'$")
     public void verifyIncomingTransferDetails(String agent, String user, String userMessage) {
@@ -298,5 +283,10 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         List<String> availableAgents = getAgentHomePage(agent).getTransferChatWindow().getAvailableAgentsFromDropdown();
         Assert.assertFalse(availableAgents.contains(missingAgentName),
                 String.format("Agent %s is displayed in a transfer pop-up agents dropdown", missingAgentName));
+    }
+
+    @Then("^Close Transferring window for (.*)$")
+    public void closeTransferringWindow(String agent) {
+        getAgentHomePage(agent).getTransferChatWindow().clickCloseButton();
     }
 }

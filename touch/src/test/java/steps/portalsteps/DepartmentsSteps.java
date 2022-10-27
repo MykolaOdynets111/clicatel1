@@ -1,22 +1,21 @@
 package steps.portalsteps;
 
 import apihelper.ApiHelper;
-import datamanager.Agents;
+import apihelper.ApiHelperDepartments;
+import datamanager.Tenants;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import datamanager.Tenants;
-import io.restassured.response.Response;
-import org.checkerframework.checker.formatter.FormatUtil;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import portalpages.DepartmentsManagementPage;
 import portaluielem.CreateDepartmentForm;
 import steps.agentsteps.AbstractAgentSteps;
-import java.util.*;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class DepartmentsSteps extends AbstractPortalSteps {
 
@@ -99,7 +98,7 @@ public class DepartmentsSteps extends AbstractPortalSteps {
 
     @Given("^New departments with (.*) name (.*) description and (.*) is created$")
     public void createNewDepartment(String name, String department, String agent){
-        ApiHelper.createDepartment(name, department, agent);
+        ApiHelperDepartments.createDepartment(name, department, agent);
     }
 
     @Then("Verify Agent cannot create department with duplicate (.*) name")

@@ -10,7 +10,7 @@ Feature: AutoResponder
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2728")
   Scenario:CD:: Dashboard:: Auto Responder:: Reset to default connect_agent auto responder
-    And Admin click expand arrow for Connect Agent message auto responder
+    And Agent click expand arrow for Connect Agent message auto responder
     And Admin edit the text for Connect Agent message auto responder
     And Admin click save button for Connect Agent message auto responder
     And Click "Reset to default" button for Connect Agent message auto responder
