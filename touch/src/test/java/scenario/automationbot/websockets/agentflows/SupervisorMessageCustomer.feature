@@ -2,6 +2,7 @@
 @support_hours
 @setting_changes
 @Regression
+@orca_api
 Feature: Supervisor desk
 
   Background:

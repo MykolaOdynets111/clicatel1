@@ -56,6 +56,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Agent filter closed chats with WhatsApp channel, no sentiment and flagged is false
     Then Agent see only whatsapp chats in left menu
 
+  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1162")
   Scenario: CD :: Agent Desk :: Live Chat :: Location :: Verify if agent click on the small cross on search bar, the text entered in the search bar is deleted
     Given I login as agent of General Bank Demo
@@ -69,6 +70,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent click on reset button
     Then Location field becomes empty
 
+  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1171")
   Scenario: CD :: Agent Desk :: Live Chat :: Verify if agent can send plain text message to a user over WhatsApp Channel
     Given I login as agent of General Bank Demo
@@ -79,6 +81,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Conversation area becomes active with connect to Support user's message
     When Agent send Hello message
 
+  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1176")
   Scenario: CD :: Agent Desk :: Live Chat :: Profile :: Verify the text in the "not verified" label is in grey color in customer profile phone number field
     Given I login as agent of General Bank Demo
@@ -91,6 +94,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent click Save button in User profile
     Then Not verified label is displayed
 
+  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1835")
   Scenario: CD :: Agent Desk :: Live Chat :: Verify that location should auto-populate after agent try to search for second location without selecting the first one.
     Given I login as agent of General Bank Demo
@@ -125,6 +129,7 @@ Feature: Whatsapp ORCA :: Chatdesk
       | SMS         | sms     |
       | Whatsapp    | orca    |
 
+  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2787")
   Scenario: CD::Supervisor desk :: Verify if supervisor is able to check live chats
 
@@ -140,6 +145,7 @@ Feature: Whatsapp ORCA :: Chatdesk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2369")
   @support_hours
+  @orca_api
   Scenario: CD:: Supervisor desk :: Verify if Supervisor is able to Route ticket to scheduler
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     And Set agent support hours with day shift
@@ -187,6 +193,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Agent can see whatsapp profile name
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1302")
+  @orca_api
   Scenario: CD :: Supervisor Desk :: Chat :: Chat2Pay :: Verify that supervisor does not have the capability to initiate a payment transaction
     Given I login as agent of General Bank Demo
     When Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -202,6 +209,7 @@ Feature: Whatsapp ORCA :: Chatdesk
 
   @setting_changes
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2751")
+  @orca_api
   Scenario: CD :: Chat :: Verify that neutral sentiment is set by default when agent closes a chat
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     And agentFeedback tenant feature is set to true for General Bank Demo
