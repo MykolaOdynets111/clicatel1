@@ -217,6 +217,8 @@ Feature: Satisfaction Survey
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
+    And Admin filter Customers History by channel and period
+      | SMS | Past day |
     Then Admin is able to see Net Promoter Score graphs
     Then Admin see the Net Promoter Score as negative
     Examples:
