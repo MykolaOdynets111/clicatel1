@@ -37,8 +37,8 @@ public class DepartmentsSteps extends AbstractPortalSteps {
     public void createDepartmentWithSeveralAgents(String name, String description, int numberOfAgents) throws Exception {
         List<String> agentsNames = new ArrayList<>();
         List<Map> agents = ApiHelper.getAgentsInfo(Tenants.getTenantUnderTestOrgName());
-        if (agents.size()>=numberOfAgents){
-        for(int i=0; i<numberOfAgents; i++){
+        if (agents.size()>numberOfAgents){
+        for(int i=1; i<=numberOfAgents; i++){
             agentsNames.add(String.valueOf(agents.get(i).get("fullName")));
         }
         getDepartmentsManagementPage().clickAddNewDepartmentButton().setNameField(name).setDescriptionForm(description).selectSeveralDepartmentAgentsCheckbox(agentsNames).clickCreateButton();
