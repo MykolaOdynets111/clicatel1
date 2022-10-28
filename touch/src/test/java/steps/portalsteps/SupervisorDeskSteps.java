@@ -409,12 +409,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 
-    @And("^Agent filter by \"(.*)\" chat, by \"(.*)\" channel and \"(.*)\" sentiment")
-    public void filterBySetValues(String chatName, String chanellName, String sentimentName) {
-        getSupervisorDeskPage().getSupervisorDeskHeader().filterByOptions(chatName, chanellName, sentimentName);
-        getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
-    }
-
     @And("^Agent search chat (.*) on Supervisor desk$")
     public void filterByChatName(String chatName) {
         String userName = null;

@@ -37,6 +37,7 @@ public class Endpoints {
     public static String DELETE_AGENT_IMAGE = URLs.getTouchApiBaseURL() + "agents/%s/image";
 
     public static String TENANT_INFO = URLs.getTouchApiBaseURL() + "tenant";
+    public static String TENANT_CURRENT = URLs.getBaseWSApiURL() + "tenants/current";
 
     public static String ACTIVE_CHATS_BY_AGENT = URLs.getBaseWSApiURL() + "chats/search?page=0&size=200";
 

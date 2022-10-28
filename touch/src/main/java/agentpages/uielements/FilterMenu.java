@@ -23,9 +23,6 @@ public class FilterMenu extends AbstractUIElement {
     @FindBy(xpath = "//button[contains(@data-testid, 'close-filter-tab-btn')]")
     private WebElement closeFilterButton;
 
-    @FindBy(xpath = ".//label[text()='Channel']/parent::div//div[contains(@class, 'cl-r-select__control')]//input")
-    private WebElement channelInput;
-
     @FindBy(xpath = ".//label[text()='Channel']/parent::div//div[contains(@class, 'cl-select__indicators')]")
     private WebElement channelExpandColapsButton;
 
@@ -37,15 +34,6 @@ public class FilterMenu extends AbstractUIElement {
 
     @FindBy(xpath = ".//label[text()='Sentiment']/parent::div//div[contains(@class, 'cl-r-select__control')]//input")
     private WebElement sentimentsInput;
-
-    @FindBy(xpath = ".//label[text()='Channel']/parent::div//*[contains(@class, 'cl-r-icon-arrow-up')]")
-    private WebElement ChanelArrow;
-
-    @FindBy(xpath = ".//label[text()='Channel']/parent::div//div[@class='css-xb97g8 cl-r-select__multi-value__remove']/*")
-    private List<WebElement> chanelRemoveButtons;
-
-    @FindBy(xpath = ".//label[text()='Sentiment']/parent::div//div[@class='css-xb97g8 cl-r-select__multi-value__remove']/*")
-    private List<WebElement> sentimentRemoveButtons;
 
     @FindBy(css = "[class='cl-form-control cl-form-control--input']")
     private WebElement startDateInput;
