@@ -238,6 +238,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getLeftMenu(agent).waitForConnectingDisappear(5,10);
     }
 
+    @Then("^(.*) open (.*) type")
+    public void selectOption(String agent, String type){
+        getLeftMenu(agent).selectOption(type);
+    }
+
     @Then("^(.*) clicks close filter button$")
     public void clickCloseFilterButton(String agent){
         getLeftMenu(agent).clickCloseButton();

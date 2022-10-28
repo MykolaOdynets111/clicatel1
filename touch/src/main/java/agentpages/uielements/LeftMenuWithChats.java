@@ -2,10 +2,7 @@ package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import driverfactory.DriverFactory;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
@@ -88,6 +85,9 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     @FindBy(css = "button .cl-r-button--reset-only")
     private WebElement filterRemove;
+
+    @FindBy(css = ".cl-chats-group-item__inner ")
+    private List<WebElement> filterOptions;
 
     @FindAll({
             @FindBy(css = ".chats-list>.cl-empty-state"),
@@ -348,5 +348,16 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     private ChatInLeftMenu getChatInLeftMenu() {
         return new ChatInLeftMenu(activeChat).setCurrentDriver(this.getCurrentDriver());
+    }
+
+    private WebElement getFilterOptionByName(String name) {
+        return filterOptions.stream()
+                .filter(f -> f.findElement(By.cssSelector(" .cl-chats-group-item__name")).getText().contains(name))
+                .findFirst().orElseThrow(() -> new NoSuchElementException("There is no value with name: " + name));
+    }
+
+    public LeftMenuWithChats selectOption(String name) {
+         getFilterOptionByName(name).click();
+         return this;
     }
 }
