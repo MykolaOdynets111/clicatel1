@@ -44,8 +44,7 @@ Feature: Dashboard: Settings: Chat Tags : Update tags info
     Then Verify Last Used column data is updated for tag Auto_Tag_3
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2821")
-  Scenario: CD :: Dashboard :: Configure :: Settings :: Chat Tags ::
-  Verify if the edited tags are not delinked from linked chats
+  Scenario: CD :: Dashboard :: Configure :: Settings :: Chat Tags :: Verify if the edited tags are not delinked from linked chats
 
     Given I login as agent of Automation Bot
     And I select Touch in left menu and Dashboard in submenu
