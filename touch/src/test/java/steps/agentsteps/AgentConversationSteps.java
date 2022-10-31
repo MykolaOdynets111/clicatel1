@@ -17,7 +17,6 @@ import io.cucumber.java.en.When;
 import org.apache.commons.io.FileUtils;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import sqsreader.OrcaSQSHandler;
 import steps.DefaultTouchUserSteps;
 import steps.FacebookSteps;
 import steps.TwitterSteps;
@@ -337,8 +336,8 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @When("^(.*) sees (.*) Location from User$")
     public void verifyLocationFromUser(String agent, String location){
         waitFor(2000);// URL needs time for full creation
-        locationURL.set(getAgentHomePage(agent).getChatBody().getLocationURLFromUser());
-        Assert.assertTrue(locationURL.get().contains(location),  agent+ " didn't get Lviv location");
+                Assert.assertTrue(getAgentHomePage(agent).getChatBody().getLocationURLFromUser().contains(location),
+                        agent+ " didn't get Lviv location");
     }
 
     @Then("^(.*) can see message with HSM label in Conversation area$")

@@ -1,6 +1,5 @@
 package steps;
 
-import agentpages.AgentLoginPage;
 import apihelper.ApiHelperDepartments;
 import apihelper.ApiORCA;
 import com.github.javafaker.Faker;
@@ -17,7 +16,6 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import sqsreader.OrcaSQSHandler;
 import sqsreader.SQSConfiguration;
-import steps.agentsteps.AgentConversationSteps;
 import steps.portalsteps.SurveyManagementSteps;
 
 import java.io.File;
@@ -53,12 +51,10 @@ public class ORCASteps implements WebWait {
         OrcaSQSHandler.orcaMessages.clear();
         OrcaSQSHandler.orcaMessagesMap.clear();
         OrcaSQSHandler.orcaEvents.clear();
-        AgentConversationSteps.locationURL.remove();
         orcaMessageCallBody.remove();
         apiToken.remove();
         clientId.remove();
         orcaChannelId.remove();
-        AgentLoginPage.agentName.remove();
         System.out.println("Orca artifacts were removed");
     }
 

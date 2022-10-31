@@ -133,7 +133,7 @@ Feature: Satisfaction Survey
       | Whatsapp    |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2389")
-  Scenario Outline: Verify if user receives customized Thank You message in response to answering survey
+  Scenario Outline: CD:: Survey ::Verify if user receives customized Thank You message in response to answering survey
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing
       | surveyType           | NPS         |
@@ -160,7 +160,7 @@ Feature: Satisfaction Survey
       | whatsapp    |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1170")
-  Scenario: CD:: Dashboard: Dashboard-Customers_Overview:: Verify if admin can open Customers History with CSAT customer survey
+  Scenario: CD :: Dashboard :: Customers Overview :: Customers History :: Verify if admin can open Customers History with CSAT customer survey
     Given Setup ORCA abc integration for Standard Billing tenant
     And Update survey management chanel abc settings by ip for Standard Billing
       | surveyType           | CSAT        |
@@ -217,6 +217,8 @@ Feature: Satisfaction Survey
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
+    And Admin filter Customers History by channel and period
+      | SMS | Past day |
     Then Admin is able to see Net Promoter Score graphs
     Then Admin see the Net Promoter Score as negative
     Examples:

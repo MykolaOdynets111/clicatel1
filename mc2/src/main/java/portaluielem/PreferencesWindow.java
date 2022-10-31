@@ -192,10 +192,4 @@ public class PreferencesWindow extends BasePortalWindow {
         scrollToElem(this.getCurrentDriver(), pendingChatAutoClosureHours, "Pending Chat Auto-Closure Hours");
         return pendingChatAutoClosureHours.getAttribute("value");
     }
-
-
-
-
-
-
 }

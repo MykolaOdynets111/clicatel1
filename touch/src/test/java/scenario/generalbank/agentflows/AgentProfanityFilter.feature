@@ -1,10 +1,11 @@
 @Regression
 @no_widget
+@orca_api
 Feature: Profanity filter on agent's messages
 
   Background:
-    Given Setup ORCA whatsapp integration for Automation Bot tenant
-    And I login as agent of Automation Bot
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    And I login as agent of General Bank Demo
     When Send The app needs a username for activation message by ORCA
 
   @start_orca_server

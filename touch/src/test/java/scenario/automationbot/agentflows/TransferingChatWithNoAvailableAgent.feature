@@ -14,7 +14,7 @@ Feature: Transfer chat with no Agents available
     Then Agent has new conversation request
     When First Agent click on new conversation
     When Agent click on 'Transfer' chat
-    Then Transfer chat pop up appears
+    Then Transfer chat pop up appears for agent
     When Select 'Transfer to' drop down
     Then Agent is shown as current chat assignment and disabled for selection
     And Button 'Transfer chat' is not active

@@ -13,13 +13,3 @@ Feature: Chat console: Overview tab
     Then Second agent has new conversation request
     Then Customer engaging with an Agent counter shows correct live chats number
     And Average chats per Agent is correct
-
-  @skip
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2376")
-  Scenario: CD :: Dashboard :: Activity Overview :: Verify the total agents online counter
-    Given I open portal
-    And Login into portal as an admin of General Bank Demo account
-    And I select Touch in left menu and Dashboard in submenu
-    And Total Agents online widget shows correct number
-    When I login as second agent of General Bank Demo
-    Then Total Agents online widget value increased on 1

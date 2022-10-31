@@ -1,5 +1,6 @@
 Feature:  Dashboard: Agents Performance tab
 
+  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-4527")
   Scenario: Dashboard:: Info about agent on Active Agent tab
     #Given User select Standard Billing tenant

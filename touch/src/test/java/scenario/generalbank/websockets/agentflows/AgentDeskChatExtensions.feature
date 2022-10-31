@@ -1,4 +1,5 @@
 @no_widget
+@orca_api
 Feature: Agent Date Time Picker Extension
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-860")

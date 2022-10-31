@@ -1,6 +1,7 @@
 @no_widget
 @start_orca_server
 @Regression
+@orca_api
 Feature: Dashboard: Settings: Auto Responder
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1915")

@@ -42,11 +42,14 @@ public class GeneralSentimentPerChannel extends AbstractUIElement {
         WebElement sentimentsChartForChannel = getSentimentsChartForChannel(channel)
                 .findElement(By.xpath(".//div[@class = 'cl-bar-chart__bar-container']"));
         hoverElem(this.getCurrentDriver(), sentimentsChartForChannel, 5, "Neutral sentiment chart");
+        if (!isNumberOfSentimentShownInTooltip()){
+            hoverElem(this.getCurrentDriver(), sentimentsChartForChannel, 5, "Neutral sentiment chart");
+        }
         return isNumberOfSentimentShownInTooltip();
     }
 
     public boolean isNumberOfSentimentShownInTooltip() {
         String numberOfSentimentInTooltipCss = ".sentiment-tooltip>b";
-        return isElementShownByCSS(this.getCurrentDriver(), numberOfSentimentInTooltipCss, 3);
+        return isElementShownByCSS(this.getCurrentDriver(), numberOfSentimentInTooltipCss, 5);
     }
 }

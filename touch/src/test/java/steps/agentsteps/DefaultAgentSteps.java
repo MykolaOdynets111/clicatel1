@@ -26,6 +26,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import socialaccounts.TwitterUsers;
+import steps.ORCASteps;
 import steps.dotcontrol.DotControlSteps;
 
 import java.time.LocalDateTime;
@@ -101,10 +102,15 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getHSMForm().clickSendButton();
     }
 
+    @And("^(.*) fill the customer contact number$")
+    public void sendWhatsApp(String agent) {
+        getAgentHomePage(agent).getHSMForm().setWAPhoneNumber(ORCASteps.orcaMessageCallBody.get().getSourceId());
+     }
+
     @And("^(.*) fill the customer contact number (.*)$")
     public void sendWhatsApp(String agent, String contactNumber) {
         getAgentHomePage(agent).getHSMForm().setWAPhoneNumber(contactNumber);
-     }
+    }
 
     @Then("^(.*) verify customer contact number (.*) is filled$")
     public void checkContactNumber(String agent, String phoneNumber){
@@ -238,6 +244,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getLeftMenu(agent).waitForConnectingDisappear(5,10);
     }
 
+    @Then("^(.*) open (.*) type")
+    public void selectOption(String agent, String type){
+        getLeftMenu(agent).selectOption(type);
+    }
+
     @Then("^(.*) clicks close filter button$")
     public void clickCloseFilterButton(String agent){
         getLeftMenu(agent).clickCloseButton();
@@ -299,7 +310,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @When("^(.*) click on (?:new|last opened) conversation request from (.*)$")
     public void acceptUserFromSocialConversation(String agent, String socialChannel) {
         if(!ConfigManager.isWebWidget() && socialChannel.equalsIgnoreCase("touch")){socialChannel="orca";}
-        getLeftMenu(agent).openNewFromSocialConversationRequest(getUserName(socialChannel));
+        getLeftMenu(agent).openChatByUserName(getUserName(socialChannel));
     }
 
     @When("^(.*) click on new conversation$")

@@ -38,15 +38,6 @@ public class ApiHelper implements VerificationHelper {
         return RestAssured.get(url).jsonPath().get(config).toString();
     }
 
-    // TODO: delete this method and use getTenantChatPreferences instead
-    public static Response getTenantConfig(String tenantOrgName) {
-        String tenantId = getTenant(tenantOrgName).get("id");
-        return RestAssured.given()
-                .header("Authorization", getAccessToken(tenantOrgName, "main"))
-                .log().all()
-                .get(format(Endpoints.TENANT_CHAT_PREFERENCES, tenantId));
-    }
-
     public static Map<String, String> getTenantInfoMap(String tenantOrgName) {
         Tenants.setTenantUnderTestNames(tenantOrgName);
         Response resp = RestAssured.given().log().all()

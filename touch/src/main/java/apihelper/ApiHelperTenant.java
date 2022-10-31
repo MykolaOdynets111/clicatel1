@@ -8,6 +8,10 @@ import static org.junit.Assert.fail;
 
 public class ApiHelperTenant extends ApiHelper {
 
+    public static Response getTenantConfig(String tenantOrgName) {
+        return getQuery(tenantOrgName, Endpoints.TENANT_CURRENT, "main");
+    }
+
     public static void deleteTenantLogo(String tenantOrgName) {
         Response response = RestAssured.given()
                 .header("Authorization", getAccessToken(tenantOrgName, "main"))

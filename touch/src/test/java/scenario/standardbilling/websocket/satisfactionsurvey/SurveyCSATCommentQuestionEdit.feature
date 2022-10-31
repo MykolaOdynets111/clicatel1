@@ -34,8 +34,8 @@ Feature: Satisfaction Survey
       | SMS         |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1735")
-    @off_survey_sms
-  Scenario Outline: CD :: SMS :: Settings :: Survey :: Verify if Supervisor should be allowed to type plain text message more then the total count of 160 in the survey question
+  @off_survey_sms
+  Scenario Outline: CD :: SMS :: Settings :: Survey :: Verify if Supervisor is able to see the count for the number of characters typed in the survey question
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing
       | ratingEnabled        | true        |
@@ -51,16 +51,8 @@ Feature: Satisfaction Survey
     And Navigate to Surveys page
     Then Survey Management page should be shown
     When Customize your survey "Please rate your experience with our agent" question
-    Then Agent checks question title character limit as 160 characters in survey form
+#    Then Agent checks question title character limit as 42 characters in survey form
     And Supervisor is able to see the number of characters typed for text in survey form
-    When Customize your survey "Please rate your experience with our agent Please rate your experience with our agent Please rate your experience with our agent Please rate your experience with" question
-    Then Agent is able to see the number of characters typed more than 160 in survey form
-    And Supervisor is able to see the number of characters typed for text in survey form
-    And Supervisor is able to see character limit error with text Maximum text length for this field is 160 characters
-    When Customize your survey "Please rate your experience with our agent Please rate your experience with our agent Please rate your experience with our agent 😃" question with emoji
-    Then Agent is able to see the number of characters typed more than 70 in survey form
-    And Supervisor is able to see the number of characters typed for text in survey form
-    And Supervisor is able to see character limit error with text Maximum text length for this field is 70 characters
     Examples:
       | channelType |
       | sms         |

@@ -1,5 +1,6 @@
 @start_orca_server
 @Regression
+@orca_api
 Feature: Dashboard: Settings: Preferences: Route to Specific Departments
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1304")

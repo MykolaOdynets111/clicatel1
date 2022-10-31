@@ -87,7 +87,7 @@ public class PageHeader extends AbstractUIElement {
 
     public void clickIcon(){
         waitForElementToBeClickable(this.getCurrentDriver(), icon, 10);
-        icon.click();
+        moveToElemAndClick(this.getCurrentDriver(), icon);
     }
 
     public String getAgentName(){

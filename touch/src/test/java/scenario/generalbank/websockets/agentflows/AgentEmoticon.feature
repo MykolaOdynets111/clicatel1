@@ -19,10 +19,9 @@ Feature: Agent emoticons
       | channelType | userType |
       | SMS         | sms      |
 
-  @skip
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1788")
-    @Regression
-    @no_widget
+  @Regression
+  @no_widget
   Scenario Outline: CD:: <channelType>:: Emoji::Verify if user is able to send emoji to agent via <channelType>
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And I login as agent of General Bank Demo

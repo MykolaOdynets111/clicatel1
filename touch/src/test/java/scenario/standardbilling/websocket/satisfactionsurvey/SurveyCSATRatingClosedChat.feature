@@ -31,10 +31,11 @@ Feature: Satisfaction Survey
     And Agent closes chat
     And Verify Orca returns question update response during 40 seconds
     And Send 10 message by ORCA
+    And Send Skip message by ORCA
     When Agent select "Closed" left menu option
     And Agent searches and selects chat from orca in chat history list
     And Agent open first 'History view'
-    And Agent sees the particular message skip in History Details window
+    And Agent sees the particular message Skip in History Details window
     Examples:
       | channelType |
       | whatsapp    |

@@ -1,5 +1,6 @@
 @no_widget
 @Regression
+@setting_changes
 Feature: Last agent switch
 
   Background:
