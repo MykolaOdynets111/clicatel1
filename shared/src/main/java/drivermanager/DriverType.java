@@ -40,7 +40,6 @@ public enum DriverType {
             options.addArguments("disable-site-isolation-trials");
             options.addArguments("test-type=browser");
             options.addArguments("start-maximized");
-            options.addArguments("start-fullscreen");
             options.addArguments("disable-web-security");
             options.addArguments("disable-gpu");
             options.addArguments("disable-webgl");
