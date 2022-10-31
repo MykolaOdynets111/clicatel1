@@ -245,6 +245,11 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getIncomingTransferWindow().acceptTransfer();
     }
 
+    @Then("^(.*) click \"Close transfer\" button$")
+    public void closeIncomingTransfer(String agent){
+        getAgentHomePage(agent).getIncomingTransferWindow().closeTransfer();
+    }
+
     @Then("^(.*) click \"Reject transfer\" button$")
     public void rejectIncomingTransfer(String agent){
         getAgentHomePage(agent).getIncomingTransferWindow().rejectTransfer();

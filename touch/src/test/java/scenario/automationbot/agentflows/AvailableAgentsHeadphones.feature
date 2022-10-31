@@ -15,4 +15,4 @@ Feature: Available agents on headphones
     Given I login as agent of Automation Bot
     And Agent click Whatsapp message icon button on the top bar
     When Agent fill the customer contact number +1 9055197655
-    Then Agent verify customer contact number +1 9055197655 is filled
+    Then Agent verify customer contact number +1 905 519 7655 is filled

@@ -2,6 +2,7 @@
 @Regression
 @orca_api
 @start_orca_server
+  @camunda
 Feature: Auto responder massages: bot mode
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2497")
