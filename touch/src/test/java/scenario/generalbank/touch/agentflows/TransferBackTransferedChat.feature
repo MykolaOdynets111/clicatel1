@@ -8,7 +8,7 @@ Feature: Chat transfer back Verification of basic transfer chat functionality
     When Send connect to Support message by ORCA
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2978")
-  Scenario: Chat transfer: Agent should be able transfer back transferred chat
+  Scenario: CD:: Transfer Chat:: Verify if agent is able transfer back transferred chat
     Then Agent has new conversation request
     When Agent click on new conversation request from orca
     Then Conversation area becomes active with connect to Support user's message
