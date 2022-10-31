@@ -323,7 +323,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @When("^(.*) (?:responds with|sends a new message) (.*) to User$")
     public void sendAnswerToUser(String agent, String responseToUser) {
-        getAgentHomePage(agent).getChatForm().clearAndSendResponseToUser(responseToUser);
+        getAgentHomePage(agent).getChatForm().clearAndTypeResponseToUser(responseToUser).clickSendButton();
     }
 
     @When("^(.*) sends (.*) Location to User$")
@@ -357,12 +357,12 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @When("^(.*) send (.*) message$")
     public void sendMessageOnCurrentChat(String agent, String agentMessage) {
-        getAgentHomePage(agent).getChatForm().clearAndSendResponseToUser(agentMessage);
+        getAgentHomePage(agent).getChatForm().clearAndTypeResponseToUser(agentMessage).clickSendButton();
     }
 
     @When("^(.*) clear input and send a new message (.*)$")
     public void clearAndSendAnswerToUser(String agent, String responseToUser) {
-        getAgentHomePage(agent).getChatForm().clearAndSendResponseToUser(responseToUser);
+        getAgentHomePage(agent).getChatForm().clearAndTypeResponseToUser(responseToUser).clickSendButton();
     }
 
     @When("^(.*) response with emoticon to User$")

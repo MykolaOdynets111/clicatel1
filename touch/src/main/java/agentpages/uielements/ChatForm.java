@@ -9,7 +9,6 @@ import org.openqa.selenium.support.FindBy;
 import touchpages.uielements.AttachmentWindow;
 
 import java.security.SecureRandom;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @FindBy(css = ".cl-message-sender")
@@ -98,7 +97,7 @@ public class ChatForm extends AbstractUIElement {
     }
 
     public void deleteSuggestionAndAddAnother(String message) {
-        clearAndSendResponseToUser(message);
+        clearAndTypeResponseToUser(message).clickSendButton();
     }
 
     public String getTextFromMessageInputField(){
@@ -118,24 +117,12 @@ public class ChatForm extends AbstractUIElement {
         }
     }
 
-    public void clearAndSendResponseToUser(String response){
-        if(isSuggestionFieldShown()){
-            clickClearButton();
-        } else {
-            messageInput.clear();
-        }
-        System.out.println("2 " + LocalDateTime.now());
-        messageInput.sendKeys(response);
-        clickSendButton();
-    }
-
     public ChatForm clearAndTypeResponseToUser(String response){
         if(isSuggestionFieldShown()){
             clickClearButton();
         } else {
             messageInput.clear();
         }
-        System.out.println("2 " + LocalDateTime.now());
         messageInput.sendKeys(response);
         return this;
     }
@@ -149,8 +136,9 @@ public class ChatForm extends AbstractUIElement {
         return this;
     }
 
-    public void clickSendButton() {
+    public ChatForm clickSendButton() {
         clickElem(this.getCurrentDriver(), submitMessageButton, 2, "Send Message");
+    return this;
     }
 
     public boolean isMessageInputFieldEmpty(){

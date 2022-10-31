@@ -25,7 +25,7 @@ Feature: Satisfaction Survey
     Then Survey Management page should be shown
     When Admin clicks on channel toggle button for survey form
     And Admin clicks on channel expand button for survey form
-    And Admin selects CSAT survey type for <channelType> survey form
+    And Admin selects CSAT survey type
     And Agent switch "Allow customer to leave a note" in survey management
     And Agent click save survey configuration button for <channelType> survey form
     Then Agent sees comment field in Survey management form

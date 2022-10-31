@@ -116,7 +116,6 @@ public class ORCASteps implements WebWait {
             orcaChannelId.set(getIntegrationId(channel, "ORCA"));
         } else {
             apiToken.set(ApiORCA.updateIntegration(channel, SQSConfiguration.getCallbackUrl() ,orcaChannelId.get()));
-            System.out.println("apiToken was set with: " + apiToken.get());
         }
     }
 

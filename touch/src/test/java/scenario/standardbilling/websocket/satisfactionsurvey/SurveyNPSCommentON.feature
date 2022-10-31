@@ -24,7 +24,7 @@ Feature: Satisfaction Survey
     When I select Touch in left menu and Dashboard in submenu
     And Navigate to Surveys page
     Then Survey Management page should be shown
-    When Admin selects NPS survey type for <channelType> survey form
+    When Admin selects NPS survey type
     And Agent switch "Allow customer to leave a note" in survey management
     And Customize your survey notes message to Thank you for taking the time to leave a note.
     And Agent click save survey configuration button for <channelType> survey form

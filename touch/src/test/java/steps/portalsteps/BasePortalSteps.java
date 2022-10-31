@@ -1276,6 +1276,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getBusinessProfileWindow().clickUploadButton();
     }
 
+    // page_action_to_remove
     @When("^Admin clicks 'Edit user roles'$")
     public void clickEditRoles(){
         getPortalUserProfileEditingPage().clickEditUserRolesButton();

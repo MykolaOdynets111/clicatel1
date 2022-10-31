@@ -25,7 +25,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
             configuration.updateSomeValueByMethodName(key, map.get(key));
         }
         surveyConfiguration.set(configuration);
-        ApiHelper.updateSurveyManagement(tenantOrgName, configuration, channelID, chanel.toLowerCase());
+        ApiHelper.updateSurveyManagement(configuration, channelID, chanel.toLowerCase());
     }
 
     @Then("^Survey Management page should be shown$")
@@ -34,19 +34,8 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
                 "Survey Management page not shown");
     }
 
-    @Then("^Selects (.*) survey type")
+    @Then("^Admin selects (.*) survey type")
     public void selectSurvey(String type) {
-        String id = ORCASteps.getChannelId();
-
-        if (type.equalsIgnoreCase("CSAT")) {
-            getSurveyManagementPage().getSurveyForm(id).clickCSATRadioButton();
-        } else if (type.equalsIgnoreCase("NPS")) {
-            getSurveyManagementPage().getSurveyForm(id).clickNPSRadioButton();
-        }
-    }
-
-    @Then("^Admin selects (.*) survey type for (.*) survey form")
-    public void selectSurvey(String type, String surveyForm) {
         String id = ORCASteps.getChannelId();
         if (type.equalsIgnoreCase("CSAT")) {
             getSurveyManagementPage().getSurveyForm(id).clickCSATRadioButton();

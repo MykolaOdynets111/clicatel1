@@ -327,16 +327,16 @@ public class ApiHelper implements VerificationHelper {
         return resp.getBody().jsonPath().getObject("chatSurveyConfig", SurveyManagement.class);
     }
 
-    public static void ratingEnabling(String tenantOrgName, Boolean ratingEnabled, String chanel) {
-        String channelID = getChannelID(tenantOrgName, chanel);
+    public static void ratingEnabling(String tenantOrgName, Boolean ratingEnabled, String chanell) {
+        String channelID = getChannelID(tenantOrgName, chanell);
         SurveyManagement currentConfiguration = getSurveyManagementAttributes(channelID);
         if (!currentConfiguration.getRatingEnabled().equals(ratingEnabled)) {
             currentConfiguration.setRatingEnabled(ratingEnabled);
-            updateSurveyManagement(tenantOrgName, currentConfiguration, channelID, chanel);
+            updateSurveyManagement(currentConfiguration, channelID, chanell);
         }
     }
 
-    public static void updateSurveyManagement(String tenantOrgName, SurveyManagement configuration, String channelID, String channelName) {
+    public static void updateSurveyManagement(SurveyManagement configuration, String channelID, String channelName) {
         Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON).body(configuration)

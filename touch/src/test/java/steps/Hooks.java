@@ -18,6 +18,7 @@ import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.Scenario;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Attachment;
 import javaserver.DotControlServer;
 import mc2api.ApiHelperPlatform;
@@ -43,6 +44,7 @@ import touchpages.pages.Widget;
 import twitter.TwitterTenantPage;
 import twitter.uielements.DMWindow;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.Date;
@@ -77,8 +79,8 @@ public class Hooks implements JSHelper {
         }
 
         if (scenario.getSourceTagNames().contains("@start_orca_server")) {
+            System.setProperty("sqsuse", "true");
             new SyncMessageReceiver().startSQSReader();
-//            new OrcaServer().startServer();
         }
     }
 
@@ -109,7 +111,7 @@ public class Hooks implements JSHelper {
 
             if(DriverFactory.isTouchDriverExists()) {
 //                if (scenario.isFailed()) widgetWebSocketLogs();
-                makeScreenshotAndConsoleOutputFromChatdesk(scenario);
+                takeWebWidgetScreenshot();
                 endTouchFlow(scenario, true);
             }
         }
@@ -134,17 +136,17 @@ public class Hooks implements JSHelper {
         finishAgentFlowIfExists(scenario);
 
         if(scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
-            takeScreenshot();
+            takeWebWidgetScreenshot();
             finishVisibilityFlow();
         }
 
         if(scenario.getSourceTagNames().contains("@facebook")){
-            takeScreenshot();
+            takeWebWidgetScreenshot();
             endFacebookFlow(scenario);
         }
 
         if(scenario.getSourceTagNames().contains("@twitter")){
-            takeScreenshot();
+            takeWebWidgetScreenshot();
             endTwitterFlow(scenario);
         }
 
@@ -157,7 +159,7 @@ public class Hooks implements JSHelper {
         }
 
         if(scenario.getSourceTagNames().contains("@healthcheck")){
-            takeScreenshot();
+            takeWebWidgetScreenshot();
             endTouchFlow(scenario, true);
         }
 
@@ -175,12 +177,12 @@ public class Hooks implements JSHelper {
         }
 
         if (scenario.getSourceTagNames().contains("@start_orca_server")) {
-//            OrcaServer.stopServer();
+            System.setProperty("sqsuse", "false");
             SQSConfiguration.stopSQSReader();
         }
 
         if(scenario.getSourceTagNames().contains("@camunda")){
-            takeScreenshot();
+            takeWebWidgetScreenshot();
             endTouchFlow(scenario, true);
             try {
                 ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
@@ -237,39 +239,36 @@ public class Hooks implements JSHelper {
         }
     }
 
-
-    @Attachment(value = "Screenshot")
-    private byte[] takeScreenshot() {
+    private void takeWebWidgetScreenshot() {
         if (DriverFactory.isTouchDriverExists()) {
-            return ((TakesScreenshot) DriverFactory.getTouchDriverInstance()).getScreenshotAs(OutputType.BYTES);
-        } else{
-            return null;
+            takeScreenshot(DriverFactory.getTouchDriverInstance());
         }
     }
 
-    @Attachment(value = "Screenshot")
-    private byte[] takeScreenshotFromSecondDriver() {
-        return ((TakesScreenshot) DriverFactory.getAgentDriverInstance()).getScreenshotAs(OutputType.BYTES);
+    private void takeFirstAgentDriverScreenshot() {
+        takeScreenshot(DriverFactory.getAgentDriverInstance());
     }
 
-    @Attachment(value = "Screenshot")
-    private byte[] takeScreenshotFromThirdDriverIfExists() {
-        return ((TakesScreenshot) DriverFactory.getSecondAgentDriverInstance()).getScreenshotAs(OutputType.BYTES);
+    private void takeSecondAgentDriverScreenshot() {
+        takeScreenshot(DriverFactory.getSecondAgentDriverInstance());
     }
+
+    private void takeScreenshot(WebDriver driver) {
+        Allure.addAttachment("Screenshot",new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
+    }
+
 
     private void makeScreenshotAndConsoleOutputFromChatdesk(Scenario scenario){
         if (DriverFactory.isAgentDriverExists()) {
-            takeScreenshotFromSecondDriver();
-            scenario.attach(takeScreenshotFromSecondDriver(), "image/png", scenario.getName());
+            takeFirstAgentDriverScreenshot();
             if (scenario.isFailed()) {
                 chatDeskConsoleOutput();
 //                chatdeskWebSocketLogs();
             }
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
-            takeScreenshotFromThirdDriverIfExists();
-            scenario.attach(takeScreenshotFromSecondDriver(), "image/png", scenario.getName());
-            if (scenario.isFailed()) {
+                takeSecondAgentDriverScreenshot();
+                if (scenario.isFailed()) {
                     secondAgentChatDeskConsoleOutput();
 //                    secondAgentChatdeskWebSocketLogs();
                 }
