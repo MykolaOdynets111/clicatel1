@@ -77,6 +77,9 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(xpath = "//button[contains(text(), 'Assign' )]")
     private WebElement assignButton;
 
+    @FindBy(xpath = "//*[@id=\"tippy-2\"]//div[text()=\"You do not have the ability to close the chat when it has been flagged\"]")
+    private WebElement flaggedCloseChatToolTip;
+
     private final String transferChatButtonXpath =  ".//button[@selenium-id='header-transfer-chat']";
     private final String sendSMSXpath = ".//button[@selenium-id='header-send-sms']";
     private final String sendWhatsAppXpath = ".//button[text()='Send WhatsApp']";
@@ -94,6 +97,13 @@ public class ChatHeader extends AbstractUIElement {
             Assert.fail("'End chat' button is not shown.");
         } else {
             clickElem(this.getCurrentDriver(), endChatButton, 6, "End chat button");
+        }
+    }
+    public void hoverEndChatButton() {
+        if (!isEndChatShown()) {
+            Assert.fail("'End chat' button is not shown.");
+        } else {
+            hoverElem(this.getCurrentDriver(), endChatButton, 4, "End chat button");
         }
     }
 
@@ -232,5 +242,11 @@ public class ChatHeader extends AbstractUIElement {
     public void clickOnAssignButton() {
         clickElem(this.getCurrentDriver(), threeDotsVerticalMenu, 3, "Three Dots Vertical Menu");
         clickElem(this.getCurrentDriver(), assignButton, 3, "Assign Chat Button");
+    }
+    public boolean isFlaggedMessageShown() {
+        return isElementShown(this.getCurrentDriver(), flaggedCloseChatToolTip,4);
+    }
+    public boolean isCloseChatClickable() {
+        return isElementEnabled(this.getCurrentDriver(), endChatButton,4);
     }
 }
