@@ -81,6 +81,7 @@ public enum DriverType {
             options.addArguments("--proxy-bypass-list=*");
             options.addArguments("--start-maximized");
             options.addArguments("--headless");
+            options.addArguments("--disable-dev-shm-usage");
             return options;
         }
 
