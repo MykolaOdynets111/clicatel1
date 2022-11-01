@@ -18,6 +18,7 @@ Feature: Chat transfer back Verification of basic transfer chat functionality
     Then Second agent receives incoming transfer with "Incoming Transfer" header
     And Second agent can see transferring agent name, orca and following user's message: 'connect to Support'
     When Second agent click "Accept transfer" button
+    And Agent should not see from user chat in agent desk from orca
     Then Second agent has new conversation request from orca user
     When Second agent click on new conversation request from orca
     Then Conversation area becomes active with connect to Support user's message in it for second agent
