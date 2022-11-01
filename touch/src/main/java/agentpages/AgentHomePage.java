@@ -278,7 +278,7 @@ public class AgentHomePage extends AgentAbstractPage {
         }
     }
 
-    public void endChatWithoutChatMessageValidation() {
+    public void hoverCloseChatIfVisible() {
         if (getChatHeader().isEndChatShown() && !getChatHeader().isCloseChatClickable()) {
             getChatHeader().hoverEndChatButton();
         } else {

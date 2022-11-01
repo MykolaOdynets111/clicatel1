@@ -530,7 +530,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @When("^(.*) hover over \"Exit chat\" button and see error message$")
     public void closeChatAndCheckErrorMessage(String agent) {
-        getAgentHomeForMainAgent().endChatWithoutChatMessageValidation();
+        getAgentHomeForMainAgent().hoverCloseChatIfVisible();
         Assert.assertTrue(getAgentHomePage(agent).getChatHeader().isFlaggedMessageShown(), "Error Message is not shown");
     }
 
