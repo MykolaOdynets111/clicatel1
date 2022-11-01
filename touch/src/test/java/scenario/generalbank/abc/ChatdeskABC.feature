@@ -24,6 +24,9 @@ Feature: Apple Business Chat :: Chatdesk
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
     Then Conversation area becomes active with connect to Support user's message
+    When Agent responds with hello to User
+    When Send //end message by ORCA
+    Then Agent should not see from user chat in agent desk from orca
 
 
   @orca_api
