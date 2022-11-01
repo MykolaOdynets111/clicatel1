@@ -1,5 +1,6 @@
 @start_orca_server
 @orca_api
+@Regression
 Feature: Chat transfer back Verification of basic transfer chat functionality
 
   Background:
