@@ -293,7 +293,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("^(.*) should not see from user chat in agent desk$")
     public void verifyConversationRemovedFromChatDesk(String agent){
-        // ToDo: Update after clarifying timeout in System timeouts
+        // verifyChatRemovedFromChatDesk(String agent, String social) can be used instead of this
         String userName = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
         Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(20, userName),
                 "Conversation request is not removed from Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")"
