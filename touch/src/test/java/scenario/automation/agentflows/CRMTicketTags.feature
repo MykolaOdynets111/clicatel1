@@ -63,6 +63,7 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2934")
     @skip
+  @orca_api
   Scenario: Agent can select, then delete tags and the tags is not saved in created CRM ticket
     When Send connect to agent message by ORCA
     And I select Touch in left menu and Agent Desk in submenu

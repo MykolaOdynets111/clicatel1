@@ -1,6 +1,5 @@
 package steps;
 
-import agentpages.AgentLoginPage;
 import apihelper.ApiHelperDepartments;
 import apihelper.ApiORCA;
 import com.github.javafaker.Faker;
@@ -14,11 +13,9 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
-import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
 import sqsreader.OrcaSQSHandler;
 import sqsreader.SQSConfiguration;
-import steps.agentsteps.AgentConversationSteps;
 import steps.portalsteps.SurveyManagementSteps;
 
 import java.io.File;
@@ -54,12 +51,10 @@ public class ORCASteps implements WebWait {
         OrcaSQSHandler.orcaMessages.clear();
         OrcaSQSHandler.orcaMessagesMap.clear();
         OrcaSQSHandler.orcaEvents.clear();
-        AgentConversationSteps.locationURL.remove();
         orcaMessageCallBody.remove();
         apiToken.remove();
         clientId.remove();
         orcaChannelId.remove();
-        AgentLoginPage.agentName.remove();
         System.out.println("Orca artifacts were removed");
     }
 
@@ -121,7 +116,6 @@ public class ORCASteps implements WebWait {
             orcaChannelId.set(getIntegrationId(channel, "ORCA"));
         } else {
             apiToken.set(ApiORCA.updateIntegration(channel, SQSConfiguration.getCallbackUrl() ,orcaChannelId.get()));
-            System.out.println("apiToken was set with: " + apiToken.get());
         }
     }
 

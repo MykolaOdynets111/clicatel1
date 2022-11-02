@@ -3,13 +3,11 @@ package steps.agentsteps;
 import agentpages.uielements.*;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.javafaker.Faker;
 import com.google.common.io.Files;
 import datamanager.Intents;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.Intent;
-import datamanager.jacksonschemas.chatextension.ChatExtension;
 import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
@@ -19,7 +17,6 @@ import io.cucumber.java.en.When;
 import org.apache.commons.io.FileUtils;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import sqsreader.OrcaSQSHandler;
 import steps.DefaultTouchUserSteps;
 import steps.FacebookSteps;
 import steps.TwitterSteps;
@@ -326,7 +323,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @When("^(.*) (?:responds with|sends a new message) (.*) to User$")
     public void sendAnswerToUser(String agent, String responseToUser) {
-        getAgentHomePage(agent).getChatForm().clearAndSendResponseToUser(responseToUser);
+        getAgentHomePage(agent).getChatForm().clearAndTypeResponseToUser(responseToUser).clickSendButton();
     }
 
     @When("^(.*) sends (.*) Location to User$")
@@ -339,8 +336,8 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @When("^(.*) sees (.*) Location from User$")
     public void verifyLocationFromUser(String agent, String location){
         waitFor(2000);// URL needs time for full creation
-        locationURL.set(getAgentHomePage(agent).getChatBody().getLocationURLFromUser());
-        Assert.assertTrue(locationURL.get().contains(location),  agent+ " didn't get Lviv location");
+                Assert.assertTrue(getAgentHomePage(agent).getChatBody().getLocationURLFromUser().contains(location),
+                        agent+ " didn't get Lviv location");
     }
 
     @Then("^(.*) can see message with HSM label in Conversation area$")
@@ -360,12 +357,12 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @When("^(.*) send (.*) message$")
     public void sendMessageOnCurrentChat(String agent, String agentMessage) {
-        getAgentHomePage(agent).getChatForm().clearAndSendResponseToUser(agentMessage);
+        getAgentHomePage(agent).getChatForm().clearAndTypeResponseToUser(agentMessage).clickSendButton();
     }
 
     @When("^(.*) clear input and send a new message (.*)$")
     public void clearAndSendAnswerToUser(String agent, String responseToUser) {
-        getAgentHomePage(agent).getChatForm().clearAndSendResponseToUser(responseToUser);
+        getAgentHomePage(agent).getChatForm().clearAndTypeResponseToUser(responseToUser).clickSendButton();
     }
 
     @When("^(.*) response with emoticon to User$")

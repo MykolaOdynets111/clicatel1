@@ -38,15 +38,6 @@ public class ApiHelper implements VerificationHelper {
         return RestAssured.get(url).jsonPath().get(config).toString();
     }
 
-    // TODO: delete this method and use getTenantChatPreferences instead
-    public static Response getTenantConfig(String tenantOrgName) {
-        String tenantId = getTenant(tenantOrgName).get("id");
-        return RestAssured.given()
-                .header("Authorization", getAccessToken(tenantOrgName, "main"))
-                .log().all()
-                .get(format(Endpoints.TENANT_CHAT_PREFERENCES, tenantId));
-    }
-
     public static Map<String, String> getTenantInfoMap(String tenantOrgName) {
         Tenants.setTenantUnderTestNames(tenantOrgName);
         Response resp = RestAssured.given().log().all()
@@ -336,16 +327,16 @@ public class ApiHelper implements VerificationHelper {
         return resp.getBody().jsonPath().getObject("chatSurveyConfig", SurveyManagement.class);
     }
 
-    public static void ratingEnabling(String tenantOrgName, Boolean ratingEnabled, String chanel) {
-        String channelID = getChannelID(tenantOrgName, chanel);
+    public static void ratingEnabling(String tenantOrgName, Boolean ratingEnabled, String chanell) {
+        String channelID = getChannelID(tenantOrgName, chanell);
         SurveyManagement currentConfiguration = getSurveyManagementAttributes(channelID);
         if (!currentConfiguration.getRatingEnabled().equals(ratingEnabled)) {
             currentConfiguration.setRatingEnabled(ratingEnabled);
-            updateSurveyManagement(tenantOrgName, currentConfiguration, channelID, chanel);
+            updateSurveyManagement(currentConfiguration, channelID, chanell);
         }
     }
 
-    public static void updateSurveyManagement(String tenantOrgName, SurveyManagement configuration, String channelID, String channelName) {
+    public static void updateSurveyManagement(SurveyManagement configuration, String channelID, String channelName) {
         Response resp = RestAssured.given().log().all().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON).body(configuration)

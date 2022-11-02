@@ -206,9 +206,4 @@ public class PreferencesWindow extends BasePortalWindow {
     public void isErrorMessageShown(String errorMessage){
         Assert.assertEquals(chatsErrorMessageDecimalNumbers.getText(),errorMessage);
     }
-
-
-
-
-
 }

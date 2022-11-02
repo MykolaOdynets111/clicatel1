@@ -1,5 +1,6 @@
 @no_chatdesk
 @skip
+@orca_api
 Feature: Media Support: Agent sends files and user downloads
 
   Background:

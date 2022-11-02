@@ -24,11 +24,11 @@ Feature: WhatsApp ORCA :: Surveys
     Then Survey Management page should be shown
     When Admin clicks on channel toggle button for survey form
     And Admin clicks on channel expand button for survey form
-    And Admin selects NPS survey type for <channelType> survey form
+    And Admin selects NPS survey type
     And Agent switch "Allow customer to give thank message" in survey management
     And Agent switch "Allow customer to leave a note" in survey management
     Then Survey Preview should be displayed with correct data for <channelType> channel
-    When Admin selects CSAT survey type for <channelType> survey form
+    When Admin selects CSAT survey type
     Then Survey Preview should be displayed with correct data for <channelType> channel
     Examples:
       | channelType |
@@ -54,7 +54,7 @@ Feature: WhatsApp ORCA :: Surveys
     Then Survey Management page should be shown
     When Admin clicks on channel toggle button for survey form
     And Admin clicks on channel expand button for survey form
-    And Admin selects CSAT survey type for <channelType> survey form
+    And Admin selects CSAT survey type
     Then Agent checks rating dropdown visibility for <channelType> survey form
     And Survey backend was updated for Standard Billing and <channelType> chanel with following attribute
       | ratingScale | ONE_TO_FIVE |

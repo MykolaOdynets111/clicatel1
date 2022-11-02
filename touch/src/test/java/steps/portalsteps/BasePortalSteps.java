@@ -1,16 +1,14 @@
 package steps.portalsteps;
 
 
-import agentpages.dashboard.DashboardSettingsPage;
 import apihelper.ApiHelper;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import apihelper.ApiHelperTenant;
 import com.github.javafaker.Faker;
 import datamanager.Agents;
 import datamanager.MC2Account;
 import datamanager.Tenants;
 import datamanager.TopUpBalanceLimits;
 import datamanager.jacksonschemas.TenantChatPreferences;
-import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.model.PaymentMethod;
 import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
@@ -34,6 +32,7 @@ import portalpages.PaymentMethodPage;
 import portalpages.PortalLoginPage;
 import portalpages.PortalSignUpPage;
 import portalpages.PortalUserEditingPage;
+import portaluielem.BusinessProfileWindow;
 import socialaccounts.FacebookUsers;
 import socialaccounts.TwitterUsers;
 import steps.CamundaFlowsSteps;
@@ -236,11 +235,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         AGENT_PASS =  Agents.TOUCH_GO_SECOND_AGENT.getAgentPass();
         getPortalLoginPage(agent).getAccountForm().createNewPass(AGENT_PASS)
                                     .clickLogin();
-    }
-
-    @Then("^Newly created agent is deleted in DB$")
-    public void verifyAgentDelete(){
-
     }
 
     @Then("^Agent of (.*) should have all permissions to manage CRM tickets$")
@@ -698,60 +692,42 @@ public class BasePortalSteps extends AbstractPortalSteps {
         AbstractAgentSteps.getLeftMenu("agent").waitForConnectingDisappear(6,10);
     }
 
-    @When("^Save (.*) pre-test widget value$")
-    public void savePreTestValue(String widgetName){
+    @When("^Save (.*) counter value$")
+    public void saveCounterValue(String counterName){
         try {
-            chatConsolePretestValue.put(widgetName, Integer.valueOf(getDashboardPage().getWidgetValue(widgetName)));
+            chatConsolePretestValue.put(counterName, getDashboardPage().getCounterValue(counterName));
         } catch (NumberFormatException e){
-            Assert.fail("Cannot read value from " +widgetName + "chat console widget");
+            Assert.fail("Cannot read value from " +counterName + "chat console widget");
         }
     }
 
-    @Then("^(.*) widget shows correct number$")
-    public void checkTotalAgentOnlineValue(String widgetName){
-        getDashboardPage().waitForConnectingDisappear(1, 5);
-        int actualActiveAgentsCount = Integer.parseInt(getDashboardPage().getWidgetValue(widgetName));
-        chatConsolePretestValue.put(widgetName, actualActiveAgentsCount);
-        getDashboardPage().clickLaunchSupervisor();
-        List<String> agentsList = AbstractAgentSteps.getPageHeader("agent").getAvailableAgents();
-        int loggedInAgentsCountFromSuperVisorDesk = agentsList.size();
-        Assert.assertEquals(actualActiveAgentsCount, loggedInAgentsCountFromSuperVisorDesk,
-                widgetName + " counter differs from agent online count on backend");
-    }
-
     @Then("^(.*) widget value (?:increased on|set to) (.*)$")
-    public void verifyWidgetValue(String widgetName, int incrementer){
+    public void verifyCounterValue(String name, int incrementer){
         int expectedValue = 0;
-        if(incrementer!=0) expectedValue = chatConsolePretestValue.get(widgetName) + incrementer;
-        Assert.assertTrue(checkLiveCounterValue(widgetName, expectedValue),
-                "'"+widgetName+"' widget value is not updated\n" +
-                "Expected value: " + expectedValue);
-    }
+        if (incrementer != 0) {
+            expectedValue = chatConsolePretestValue.get(name) + incrementer;
+        }
 
-    @Then("^(.*) counter shows correct live chats number$")
-    public void verifyChatConsoleActiveChats(String widgetName){
-        activeChatsFromChatdesk = ApiHelper.getActiveChatsByAgent("Second agent")
-                .jsonPath().getList("content.id").size();
-//                new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
-        Assert.assertTrue(checkLiveCounterValue(widgetName, activeChatsFromChatdesk),
-                "'"+widgetName+"' widget value is not updated to " + activeChatsFromChatdesk +" expected value \n");
+        Assert.assertTrue(checkLiveCounterValue(name, expectedValue),
+                "'"+name+"' widget value is not updated\n" +
+                "Expected value: " + expectedValue);
     }
 
     @Then("^Average chats per Agent is correct$")
     public void verifyAverageChatsPerAgent(){
-       int actualAverageChats = Integer.valueOf(getDashboardPage().getAverageChatsPerAgent());
+       int actualAverageChats = Integer.parseInt(getDashboardPage().getAverageChatsPerAgent());
        int expectedAverageChats = activeChatsFromChatdesk /  ApiHelper.getNumberOfLoggedInAgents();
        Assert.assertEquals(actualAverageChats, expectedAverageChats,
                "Number of Average chats per Agent is not as expected");
     }
 
     private boolean checkLiveCounterValue(String widgetName, int expectedValue){
-        int actualValue = Integer.valueOf(getDashboardPage().getWidgetValue(widgetName));
+        int actualValue = getDashboardPage().getCounterValue(widgetName);
         boolean result = false;
         for (int i=0; i<45; i++){
             if(expectedValue!=actualValue){
                 getDashboardPage().waitFor(1000);
-                actualValue = Integer.valueOf(getDashboardPage().getWidgetValue(widgetName));
+                actualValue = getDashboardPage().getCounterValue(widgetName);
             } else {
                 result =true;
                 break;
@@ -1297,7 +1273,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Click 'Upload' button for tenant logo$")
     public void clickUploadButtonForTenantLogo(){
-        getPortalTouchPreferencesPage().getBusinessProfileWindow().clickUploadButton();
+        getBusinessProfileWindow().clickUploadButton();
     }
 
     // page_action_to_remove
@@ -1480,12 +1456,13 @@ public class BasePortalSteps extends AbstractPortalSteps {
     }
     @And("^Change business details$")
     public void changeBusinessDetails() {
-        tenantInfo.put("companyName", "New company name "+faker.lorem().word());
-        tenantInfo.put("companyCity", "San Francisco "+faker.lorem().word());
-        tenantInfo.put("companyIndustry", getPortalTouchPreferencesPage().getBusinessProfileWindow().selectRandomIndustry());
-        tenantInfo.put("companyCountry", getPortalTouchPreferencesPage().getBusinessProfileWindow().selectRandomCountry());
-        getPortalTouchPreferencesPage().getBusinessProfileWindow().setBusinessName(tenantInfo.get("companyName"));
-        getPortalTouchPreferencesPage().getBusinessProfileWindow().setCompanyCity(tenantInfo.get("companyCity"));
+        tenantInfo.put("companyName", "New company name " + faker.lorem().word());
+        tenantInfo.put("companyCity", "San Francisco " + faker.lorem().word());
+        tenantInfo.put("companyIndustry", getBusinessProfileWindow().selectRandomIndustry());
+        tenantInfo.put("companyCountry", getBusinessProfileWindow().selectRandomCountry());
+        getBusinessProfileWindow()
+                .setBusinessName(tenantInfo.get("companyName"))
+                .setCompanyCity(tenantInfo.get("companyCity"));
         agentClickSaveChangesButton();
     }
 
@@ -1499,13 +1476,17 @@ public class BasePortalSteps extends AbstractPortalSteps {
         soft.assertEquals(getPortalTouchPreferencesPage().getBusinessProfileWindow().getCompanyCountry(),tenantInfo.get("companyCountry"), "Company country was not changed");
         getPortalTouchPreferencesPage().getBusinessProfileWindow().setBusinessName("Automation Bot");
         getPortalTouchPreferencesPage().clickSaveButton();
-        Response resp = ApiHelper.getTenantConfig(tenantOrgName);
+        Response resp = ApiHelperTenant.getTenantConfig(tenantOrgName);
         String country = resp.jsonPath().get("country").toString();
         soft.assertEquals(resp.jsonPath().get("orgName"),tenantOrgName, "Company name was not changed on backend");
         soft.assertEquals(resp.jsonPath().get("city").toString(),tenantInfo.get("companyCity"), "Company city was not changed on backend");
         soft.assertEquals(resp.jsonPath().get("category"),tenantInfo.get("companyIndustry"), "Company industry was not changed on backend");
         getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
         soft.assertAll();
+    }
+
+    private static BusinessProfileWindow getBusinessProfileWindow() {
+        return getPortalTouchPreferencesPage().getBusinessProfileWindow();
     }
 
     @When("^Turn (.*) the Last Agent routing$")
@@ -1523,7 +1504,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Verify Last Agent routing is turned (.*) on backend$")
     public void verifyLastAgentRoting(String status) {
-        boolean statusOnBackend = ApiHelper.getTenantConfig(Tenants.getTenantUnderTestOrgName()).getBody().jsonPath().get("lastAgentMode");
+        boolean statusOnBackend = ApiHelperTenant.getTenantConfig(Tenants.getTenantUnderTestOrgName()).getBody().jsonPath().get("lastAgentMode");
         if (status.equalsIgnoreCase("on")){
             Assert.assertTrue(statusOnBackend, "Last Agent Roting is not turned on");
         } else if(status.equalsIgnoreCase("off")){

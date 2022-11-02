@@ -28,5 +28,4 @@ public class LiveAgentsTableDashboard extends AbstractUIElement {
                 .filter(a -> customerName.contains(a.getCustomerName().replace("...", "")))
                 .findFirst().get();
     }
-
 }

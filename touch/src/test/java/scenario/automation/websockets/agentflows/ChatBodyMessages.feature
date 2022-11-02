@@ -1,5 +1,6 @@
 @Regression
 @no_widget
+@orca_api
 Feature: Actions on chat body in agent desk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1785")

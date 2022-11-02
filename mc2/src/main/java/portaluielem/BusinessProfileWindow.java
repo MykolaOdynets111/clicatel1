@@ -41,9 +41,6 @@ public class BusinessProfileWindow extends BasePortalWindow {
     @FindBy(css = "[for='file-input-avatar'] input")
     private WebElement inputFile;
 
-    @FindBy(css = "ul.color-picker-scroll button.button-primary")
-    private WebElement acceptButton;
-
     @FindBy(xpath = ".//img[@alt = 'avatar preview']")
     private WebElement logoPreview;
 
@@ -57,11 +54,6 @@ public class BusinessProfileWindow extends BasePortalWindow {
 
     public void clickEditImageButton() {
         clickElem(this.getCurrentDriver(), editImage, 1, "'Edit Image' button");
-    }
-
-    public void clickAcceptButton() {
-        waitForElementToBeVisible(this.getCurrentDriver(), acceptButton, 5);
-        acceptButton.click();
     }
 
     public boolean isLogoIsVisible() {
@@ -94,12 +86,14 @@ public class BusinessProfileWindow extends BasePortalWindow {
         return selectCompanyCountry.getText();
     }
 
-    public void setBusinessName(String name) {
+    public BusinessProfileWindow setBusinessName(String name) {
         inputText(this.getCurrentDriver(), businessName, 2, "Business Name", name);
+        return this;
     }
 
-    public void setCompanyCity(String name) {
+    public BusinessProfileWindow setCompanyCity(String name) {
         inputText(this.getCurrentDriver(), companyCity, 2, "City", name);
+        return this;
     }
 
     public String selectRandomIndustry() {

@@ -19,6 +19,9 @@ public class IncomingTransferWindow extends AbstractUIElement {
     @FindBy(xpath = ".//button[text()='Reject']")
     private WebElement rejectTransfetButton;
 
+    @FindBy(css = "[data-testid='minimize-transfer']")
+    private WebElement closeTransferButton;
+
     @FindBy(css = "[data-testid=touch-transfer-from]")
     private WebElement fromAgentName;
 
@@ -45,6 +48,10 @@ public class IncomingTransferWindow extends AbstractUIElement {
 
     public void acceptTransfer(){
         acceptTransferButton.click();
+    }
+
+    public void closeTransfer(){
+        closeTransferButton.click();
     }
 
     public void rejectTransfer(){

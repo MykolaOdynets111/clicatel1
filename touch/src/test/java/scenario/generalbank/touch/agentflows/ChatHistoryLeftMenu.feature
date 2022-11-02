@@ -12,6 +12,7 @@ Feature: Agent should be able to see chat history in left menu
     #Then Valid image for whatsapp integration are shown in left menu with chat
     Then Agent sees correct chat history
 
+  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2857")
   Scenario: CD:: Agent Desk:: Verify agent can filter closed chats and chat history with channel icon of the channel that chat has taken place
     Given Setup ORCA whatsapp integration for General Bank Demo tenant

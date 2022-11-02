@@ -90,6 +90,5 @@ public class AutomationWidgetHealthCheck {
     private void setUpConfigs(String env, String tenantID){
         ConfigManager.setEnv(env);
         ConfigManager.setTenantId(tenantID);
-        ConfigManager.setBrowserType("headless_chrome");
     }
 }

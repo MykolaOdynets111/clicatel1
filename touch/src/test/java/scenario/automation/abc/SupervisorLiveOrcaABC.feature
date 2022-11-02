@@ -1,8 +1,8 @@
 @Regression
+@orca_api
 Feature: ABC ORCA :: Supervisor Desk
 
 @support_hours
-@orca_api
 @TestCaseId("https://jira.clickatell.com/browse/CCD-2848")
 Scenario: Supervisor desk:: Verify if supervisor can filter tickets by ticket status and apple channel filter option
 Given Setup ORCA abc integration for Automation tenant
@@ -40,8 +40,7 @@ Then Verify that only "apple-business-chat" tickets chats are shown
     Then Verify Chat has pending icon in the Chat View
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2082")
-  @orca_api
-  Scenario: CD :: Supervisor Desk :: Chats :: Verify that the "All live chats" card has both "pending and live chats" in Supervisor view
+   Scenario: CD :: Supervisor Desk :: Chats :: Verify that the "All live chats" card has both "pending and live chats" in Supervisor view
     Given Setup ORCA abc integration for Automation tenant
     When I login as agent of Automation
     And Send live chat message by ORCA

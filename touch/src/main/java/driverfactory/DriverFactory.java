@@ -69,10 +69,10 @@ public class DriverFactory {
     public static synchronized WebDriver startNewTouchInstance(){
         DriverType driverType = ConfigManager.getDriverType();
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
-        if (ConfigManager.isRemote()) {
-            touchDriver.set(createRemoteDriver(capabilities));
-            return touchDriver.get();
-        }
+//        if (ConfigManager.isRemote()) {
+//            touchDriver.set(createRemoteDriver(capabilities));
+//            return touchDriver.get();
+//        }
         touchDriver.set(driverType.getWebDriverObject(capabilities));
         return  touchDriver.get();
     }
@@ -82,10 +82,10 @@ public class DriverFactory {
         System.out.println("!!?? INSIDE startNewAgentDriverInstance");
         DriverType driverType = ConfigManager.getDriverType();
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
-        if (ConfigManager.isRemote()) {
-            agentDriver.set(createRemoteDriver(capabilities));
-            return agentDriver.get();
-        }
+//        if (ConfigManager.isRemote()) {
+//            agentDriver.set(createRemoteDriver(capabilities));
+//            return agentDriver.get();
+//        }
         agentDriver.set(driverType.getWebDriverObject(capabilities));
         return agentDriver.get();
     }
@@ -93,10 +93,10 @@ public class DriverFactory {
     public static synchronized WebDriver startNewSecondAgentDriverInstance(){
         DriverType driverType = ConfigManager.getDriverType();
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
-        if (ConfigManager.isRemote()) {
-            secondAgentDriver.set(createRemoteDriver(capabilities));
-            return secondAgentDriver.get();
-        }
+//        if (ConfigManager.isRemote()) {
+//            secondAgentDriver.set(createRemoteDriver(capabilities));
+//            return secondAgentDriver.get();
+//        }
         secondAgentDriver.set(driverType.getWebDriverObject(capabilities));
         return secondAgentDriver.get();
     }

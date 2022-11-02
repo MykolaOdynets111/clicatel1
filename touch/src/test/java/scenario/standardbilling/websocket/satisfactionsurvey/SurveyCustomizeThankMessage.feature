@@ -22,7 +22,7 @@ Feature: Satisfaction Survey
     When I select Touch in left menu and Dashboard in submenu
     And Navigate to Surveys page
     Then Survey Management page should be shown
-    When Admin selects NPS survey type for <channelType> survey form
+    When Admin selects NPS survey type
     And Agent switch "Allow customer to give thank message" in survey management
     And Customize your survey thank message to Thank you for taking the time to provide us with your feedback.
     And Agent click save survey configuration button for <channelType> survey form
