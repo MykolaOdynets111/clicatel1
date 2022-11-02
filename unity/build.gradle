@@ -26,7 +26,7 @@ allure{
 }
 
 dependencies {
-    api project (':unity')
+    api project (':touch')
 }
 
 tasks.withType(Copy) { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
@@ -77,4 +77,3 @@ task runTests(type: Test) {
 
     defaultTasks 'clean', 'runTests'
 }
-

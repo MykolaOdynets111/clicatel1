@@ -8,8 +8,8 @@ import org.testng.annotations.DataProvider;
 @CucumberOptions(
         plugin={"pretty", "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"},
         monochrome = true,
-        features ="src/test/java/scenario/homepage/",
-        glue = {"touch/src/test/java/steps/"},
+        features ={"src/test/java/scenario/homepage/"},
+        glue = {"unity/src/main/java/steps/unitysteps/"},
         tags = "@AliChat"
         )
 public class RunChatHubTest extends AbstractTestNGCucumberTests {
