@@ -109,10 +109,10 @@ public class AgentTransferSteps extends AbstractAgentSteps {
 
     @Then("^Agent is shown as current chat assignment and disabled for selection$")
     public void agentSeesCurrentlyThereSNoAgentsAvailable() {
-        List<String> Agentnames = getAgentHomeForMainAgent().getTransferChatWindow().getCurrentAgentAssignment();
+        String AgentName = getAgentHomeForMainAgent().getTransferChatWindow().getCurrentAgentAssignment();
         String expectedAgentNAme = Tenants.getPrimaryAgentInfoForTenant(Tenants.getTenantUnderTestOrgName()).get("fullName");
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(Agentnames.get(0), expectedAgentNAme + "- current chat assignment", "message in drop down menu not as expected");
+        soft.assertEquals(AgentName, expectedAgentNAme + "- current chat assignment", "message in drop down menu not as expected");
         soft.assertTrue(getAgentHomeForMainAgent().getTransferChatWindow().isAssignedAgentDisabledToSelect(), "Current chat assignment should be disabled for selection");
         soft.assertAll();
     }

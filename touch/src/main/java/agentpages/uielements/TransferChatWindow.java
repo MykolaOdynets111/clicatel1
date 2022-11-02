@@ -159,14 +159,13 @@ public class TransferChatWindow extends AbstractUIElement {
                         .filter(e -> !(e.contains("current chat assignment")))
                         .collect(Collectors.toList());
     }
-    public List<String> getCurrentAgentAssignment() {
+    public String getCurrentAgentAssignment() {
         if(isElementRemoved(this.getCurrentDriver(), availableAgentOrDepartment, 2))
             clickElem(this.getCurrentDriver(), openAgentDropdownButton, 2, "Open agent dropdown");
         waitForElementToBeVisible(this.getCurrentDriver(), availableAgentOrDepartment,5);
         return availableAgentsOrDepartmentsList.stream()
                 .map(e -> getTextFromElem(this.getCurrentDriver(), e, 3, "Agent in dropdown"))
-                .filter(e -> (e.contains("current chat assignment")))
-                .collect(Collectors.toList());
+                .filter(e -> (e.contains("current chat assignment"))).findFirst().orElse(null);
     }
 
     public String getTextDropDownMessage() {
@@ -177,16 +176,9 @@ public class TransferChatWindow extends AbstractUIElement {
         if(isElementRemoved(this.getCurrentDriver(), availableAgentOrDepartment, 2))
             clickElem(this.getCurrentDriver(), openAgentDropdownButton, 2, "Open agent dropdown");
         waitForElementToBeVisible(this.getCurrentDriver(), availableAgentOrDepartment,5);
-       List<WebElement> CurrentAgentElement = availableAgentsOrDepartmentsList.stream()
-                .filter(e -> e.getText().contains("current chat assignment"))
-                .collect(Collectors.toList());
-       if (CurrentAgentElement.get(0).isEnabled()){
-           return true;
-       }
-       else {
-           return false;
-       }
-
+       WebElement CurrentAgentElement = availableAgentsOrDepartmentsList.stream()
+                .filter(e -> e.getText().contains("current chat assignment")).findFirst().orElse(null);
+        return CurrentAgentElement.isEnabled();
     }
 
     public void clickTransferChatButton() {
