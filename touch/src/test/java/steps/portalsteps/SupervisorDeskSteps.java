@@ -23,6 +23,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     private List<String> shownUsers = new ArrayList<>();
@@ -423,8 +425,13 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @Then("^Error \"(.*)\" message is displayed$")
     public void verifyNoChatsErrorMessage(String errorMessage) {
-        Assert.assertEquals(getSupervisorDeskPage().getNoChatsErrorMessage(), errorMessage,
-                "incorrect erorr message is shown");
+        String message = getSupervisorDeskPage().getNoChatsErrorMessage();
+        if (message.contains("\n")){
+            message = message.replace("\n", "");
+        }
+        assertThat(errorMessage)
+                .as("Correct error message should be shown")
+                .isIn(message);
     }
 
     @Then("^\"All Channels\" and \"All Sentiments\" selected as default$")
