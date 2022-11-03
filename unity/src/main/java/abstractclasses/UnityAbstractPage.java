@@ -19,6 +19,11 @@ public abstract class UnityAbstractPage implements WebActions, ActionsHelper, JS
         HtmlElementLoader.populatePageObject(this, currentDriver);
     }
 
+    public UnityAbstractPage(WebDriver driver) {
+        this.currentDriver = driver;
+        HtmlElementLoader.populatePageObject(this, this.currentDriver);
+    }
+
     public boolean waitForLoadingInLeftMenuToDisappear(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
         try{
             try {

@@ -17,14 +17,14 @@ public class UnityLoginPage extends UnityAbstractPage {
     @FindBy(xpath = "//button[@type='submit']")
     private WebElement signInBtn;
 
-
+// Todo : Fix constructor
     public UnityLoginPage() {
         super();
-        getCurrentDriver().get(UnityURLs.getChatHubLoginForm());
+        getCurrentDriver().get(UnityURLs.getUnityLoginForm());
     }
 
     public UnityLoginPage openChatHubLoginPage() {
-        getCurrentDriver().get(UnityURLs.getChatHubLoginForm());
+        getCurrentDriver().get(UnityURLs.getUnityLoginForm());
         return this;
     }
 

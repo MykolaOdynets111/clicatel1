@@ -12,7 +12,7 @@ public class UnityURLs {
     private static String CHATHUB_LOGIN_FORM = "https://%s-mc2-app-foxtrot.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com//login";
 
 
-    public static String getChatHubLoginForm(){
+    public static String getUnityLoginForm(){
 
         return String.format(CHATHUB_LOGIN_FORM, ConfigManager.getEnv());
     }
