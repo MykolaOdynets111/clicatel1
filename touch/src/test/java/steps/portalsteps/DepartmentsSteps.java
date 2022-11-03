@@ -90,10 +90,9 @@ public class DepartmentsSteps extends AbstractPortalSteps {
         softAssert.assertAll();
     }
 
-    @When("Add newly created agent to department with (.*) name and (.*) description")
-    public void addNewAgentToDepartment(String name, String description){
-        String newAgent = AbstractAgentSteps.getListOfCreatedAgents().get((0)).get("name");
-        getDepartmentsManagementPage().openDepartmentManageForm(name, description).selectDepartmentAgentsCheckbox(newAgent).clickSaveButton();
+    @When("^Add (.*) agent to department with (.*) name and (.*) description$")
+    public void addAgentsToDepartment(Integer numberOfAgents, String name, String description){
+        getDepartmentsManagementPage().openDepartmentManageForm(name, description).addRandomAgentsCheckbox(numberOfAgents).clickSaveButton();
     }
 
     @Given("^New departments with (.*) name (.*) description and (.*) is created$")
