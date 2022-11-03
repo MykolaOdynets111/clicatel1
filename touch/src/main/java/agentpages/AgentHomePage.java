@@ -2,7 +2,6 @@ package agentpages;
 
 import abstractclasses.AgentAbstractPage;
 import agentpages.uielements.*;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
@@ -10,14 +9,12 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import touchpages.uielements.AttachmentWindow;
-import agentpages.uielements.LocationWindow;
 
 import java.util.List;
 
 public class AgentHomePage extends AgentAbstractPage {
 
     private final String chatMessageContainer = ".cl-chat-messages";
-    private final String cancelCloseChatButtonXPATH = "//span[text()='Cancel']";
     private final String modalWindow = "div.modal-content";
 
     @FindBy(css = "div.agent-view--main")
@@ -58,9 +55,6 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//h4[text()='Agent limit reached']")
     private WebElement agentLimitReachedPopup;
 
-    @FindBy(css = "div.history-details")
-    private WebElement historyDetails;
-
     @FindBy(css = "div > div.active")
     private WebElement userProfileButton;
 
@@ -84,8 +78,6 @@ public class AgentHomePage extends AgentAbstractPage {
 
     @FindBy(css = "[role=dialog]")
     private WebElement dialogElement;
-
-    private final String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
 
     private DeleteCRMConfirmationPopup deleteCRMConfirmationPopup;
     private EditCRMTicketWindow editCRMTicketWindow;
@@ -353,17 +345,6 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public void clickMoveToPendingButton(){
         clickElem(this.getCurrentDriver(), moveToPendingButton, 1, "Move To Pending Button");
-    }
-
-    public void acceptAllTransfers(){
-        try {
-            for (WebElement elem : getCollapsedTransfers()) {
-                elem.click();
-                getIncomingTransferWindow().acceptTransfer();
-            }
-        }catch(TimeoutException o){
-
-        }
     }
 
     public void waitForModalWindowToDisappear(){

@@ -69,6 +69,7 @@ public enum DriverType {
 
         @Override
         public MutableCapabilities getDesiredCapabilities() {
+            System.setProperty("webdriver.chrome.whitelistedIps", "");// added because of error - Cannot assign requested address (99)
             LoggingPreferences logPrefs = new LoggingPreferences();
             logPrefs.enable(LogType.BROWSER, Level.ALL);
 
@@ -81,6 +82,7 @@ public enum DriverType {
             options.addArguments("--proxy-bypass-list=*");
             options.addArguments("--start-maximized");
             options.addArguments("--headless");
+            options.addArguments("--disable-dev-shm-usage");
             return options;
         }
 

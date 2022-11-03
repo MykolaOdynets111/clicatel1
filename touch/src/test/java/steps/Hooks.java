@@ -96,6 +96,7 @@ public class Hooks implements JSHelper {
             // add this catch since a lot of time while making screenshot there's an exception
             // and other important hooks are skipped
         } catch (Exception | AssertionError e) {
+            System.out.println("Error on screenshot taking step:");
             e.printStackTrace();
         } try {
 
@@ -261,17 +262,17 @@ public class Hooks implements JSHelper {
     private void makeScreenshotAndConsoleOutputFromChatdesk(Scenario scenario){
         if (DriverFactory.isAgentDriverExists()) {
             takeFirstAgentDriverScreenshot();
-            if (scenario.isFailed()) {
-                chatDeskConsoleOutput();
+//            if (scenario.isFailed()) {
+//                chatDeskConsoleOutput();
 //                chatdeskWebSocketLogs();
-            }
+//            }
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
                 takeSecondAgentDriverScreenshot();
-                if (scenario.isFailed()) {
-                    secondAgentChatDeskConsoleOutput();
+//                if (scenario.isFailed()) {
+//                    secondAgentChatDeskConsoleOutput();
 //                    secondAgentChatdeskWebSocketLogs();
-                }
+//                }
         }
     }
 
