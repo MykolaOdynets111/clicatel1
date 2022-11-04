@@ -273,7 +273,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void verifyFilterOptions(String agent, String chatType){
         FilterMenu filterMenu = getLeftMenu(agent).getFilterMenu();
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(filterMenu.expandChannels().getDropdownOptions(),  Arrays.asList("Webchat", "Facebook", "Twitter", "WhatsApp", "Apple Business Chat"),
+        softAssert.assertEquals(filterMenu.expandChannels().getDropdownOptions(),  Arrays.asList("WhatsApp","SMS", "Apple Business Chat"),
                 "Channel dropdown has incorrect options");
         filterMenu.expandChannels();
         softAssert.assertEquals(filterMenu.expandSentiment().getDropdownOptions(), Arrays.asList("Positive", "Neutral", "Negative"),
