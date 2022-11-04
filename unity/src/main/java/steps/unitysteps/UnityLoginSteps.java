@@ -12,13 +12,13 @@ public class UnityLoginSteps extends AbstractUnitySteps {
        AbstractUnitySteps.getLoginForUnity().loginToUnity(email, password);
     }
 
-    @And("I open My Workspace page")
+    @And("User clicks on My Workspace page link")
     public void openMyWorkspacePage(){
 
         getUnityLandingPage().clickOnMyWorkspace();
     }
 
-    @And("I open Products & Services page")
+    @And("User clicks on Products & Services page link")
     public void openProductsAndServicesPage(){
 
         getUnityLandingPage().clickOnProductsAndServices();

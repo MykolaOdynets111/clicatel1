@@ -1,11 +1,10 @@
 package steps.unitysteps;
 
-import abstractclasses.UnityAbstractPage;
-import agentpages.AgentLoginPage;
 import driverfactory.UnityDriverFactory;
 import interfaces.JSHelper;
 import interfaces.VerificationHelper;
 import interfaces.WebWait;
+import myworkspacepages.MyWorkspacePage;
 import productsandservicespages.ProductsAndServicesPage;
 import unitypages.UnityLandingPage;
 import unitypages.UnityLoginPage;
@@ -17,6 +16,8 @@ public class AbstractUnitySteps implements JSHelper, VerificationHelper, WebWait
 
     private static final ThreadLocal<UnityLandingPage> currentUnityLandingPage = new ThreadLocal<>();
     private static final ThreadLocal<ProductsAndServicesPage> ProductsAndServicesPage = new ThreadLocal<>();
+
+    private static final ThreadLocal<MyWorkspacePage> currentMyWorkspacePage = new ThreadLocal<>();
 
     public static void cleanAllPages() {
         currentUnityLoginPage.remove();
@@ -44,6 +45,15 @@ public class AbstractUnitySteps implements JSHelper, VerificationHelper, WebWait
             return ProductsAndServicesPage.get();
         } else {
             return ProductsAndServicesPage.get();
+        }
+    }
+
+    public static MyWorkspacePage getMyWorkspacePage() {
+        if (currentMyWorkspacePage.get() == null) {
+            currentMyWorkspacePage.set(new MyWorkspacePage(UnityDriverFactory.getUnityDriverInstance()));
+            return currentMyWorkspacePage.get();
+        } else {
+            return currentMyWorkspacePage.get();
         }
     }
 }
