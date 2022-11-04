@@ -455,7 +455,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertTrue(getSupervisorDeskPage().getSupervisorDeskLiveRow(userName).isFlagIconRemoved(),
                 String.format("Chat with user %s is flagged", userName));
     }
-
     @When("^Supervisor agent launch as agent$")
     public void supervisorAgentLaunchAsAgent() {
         getSupervisorDeskPage().clickOnLaunchAgent();

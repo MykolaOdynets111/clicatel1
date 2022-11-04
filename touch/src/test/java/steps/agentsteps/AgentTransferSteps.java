@@ -1,5 +1,6 @@
 package steps.agentsteps;
 
+import agentpages.uielements.IncomingTransferWindow;
 import apihelper.ApiHelper;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.TenantChatPreferences;
@@ -147,21 +148,23 @@ public class AgentTransferSteps extends AbstractAgentSteps {
 
     @Then("^(.*) has not see incoming transfer pop-up$")
     public void secondAgentHasNotSeeIncomingTransferPopUp(String agent) {
-        Assert.assertTrue(
-                getAgentHomePage(agent).getIncomingTransferWindow().isTransferWindowHeaderNotShown(),
+        Assert.assertTrue(getIncomingTransferWindow(agent).isTransferWindowHeaderNotShown(),
                 "Transfer chat header is shown for "+ agent + " agent");
+    }
+
+    private static IncomingTransferWindow getIncomingTransferWindow(String agent) {
+        return getAgentHomePage(agent).getIncomingTransferWindow();
     }
 
     @Then("^(.*) receives incoming transfer with \"(.*)\" header$")
     public void verifyIncomingTransferHeader(String agent, String expectedHeader){
-        Assert.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getTransferWindowHeader(),
-                expectedHeader,
+        Assert.assertEquals(getIncomingTransferWindow(agent).getTransferWindowHeader(), expectedHeader,
                 "Header in incoming transfer window is not as expected");
     }
 
     @Then("^(.*) receives incoming transfer with \"(.*)\" note from the another agent$")
     public void verifyIncomingTransferReceived(String agent, String notes){
-        Assert.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getTransferNotes(), notes,
+        Assert.assertEquals(getIncomingTransferWindow(agent).getTransferNotes(), notes,
                 "Notes in incoming transfer window is not as added by the first agent");
     }
 
@@ -197,11 +200,11 @@ public class AgentTransferSteps extends AbstractAgentSteps {
             }
             String expectedAgentNAme = Tenants.getPrimaryAgentInfoForTenant(Tenants.getTenantUnderTestOrgName()).get("fullName");
 
-            soft.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getClientName(), expectedUserName,
+            soft.assertEquals(getIncomingTransferWindow(agent).getClientName(), expectedUserName,
                     "User name in Incoming transfer window is not as expected");
-            soft.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getClientMessage(), userMessage,
+            soft.assertEquals(getIncomingTransferWindow(agent).getClientMessage(), userMessage,
                     "User message in Incoming transfer window is not as expected");
-            soft.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getFromAgentName(), expectedAgentNAme,
+            soft.assertEquals(getIncomingTransferWindow(agent).getFromAgentName(), expectedAgentNAme,
                     "Transferring agent name in Incoming transfer window is not as expected");
             soft.assertAll();
     }
@@ -209,14 +212,14 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     @Then("^(.*) receives incoming transfer on the right side of the screen with user's profile picture, channel and sentiment$")
     public void secondAgentReceivesIncomingTransferOnTheRightSideOfTheScreenWithUserSProfilePicturePriorityChannelAndSentiment(String agent) {
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImgTransferPicture(
+        softAssert.assertTrue(getIncomingTransferWindow(agent).isValidImgTransferPicture(
                 getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())),
                 "User picture as not expected");
-        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImgTransferSentiment("connect to agent"),
+        softAssert.assertTrue(getIncomingTransferWindow(agent).isValidImgTransferSentiment("connect to agent"),
                 "Sentiment picture as not expected");
-        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isRigthSideTransferChatWindow(),
+        softAssert.assertTrue(getIncomingTransferWindow(agent).isRigthSideTransferChatWindow(),
                 "Transfered chat window not on the right side of the screen");
-        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImTransferChannel("touchTransfer"),
+        softAssert.assertTrue(getIncomingTransferWindow(agent).isValidImTransferChannel("touchTransfer"),
                 "Channel picture as not expected");
         softAssert.assertAll();
 
@@ -236,29 +239,29 @@ public class AgentTransferSteps extends AbstractAgentSteps {
 
     @Then("^Correct Rejected by field is shown for (.*)$")
     public void verifyRejectedByField(String agent){
-        Assert.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getRejectedBy(),
+        Assert.assertEquals(getIncomingTransferWindow(agent).getRejectedBy(),
                 "Rejected by:\n" + secondAgentName,
                 "Header in incoming transfer window is not as expected");
     }
 
     @Then("^(.*) click \"Accept transfer\" button$")
     public void acceptIncomingTransfer(String agent){
-        getAgentHomePage(agent).getIncomingTransferWindow().acceptTransfer();
+        getIncomingTransferWindow(agent).acceptTransfer();
     }
 
     @Then("^(.*) click \"Close transfer\" button$")
     public void closeIncomingTransfer(String agent){
-        getAgentHomePage(agent).getIncomingTransferWindow().closeTransfer();
+        getIncomingTransferWindow(agent).closeTransfer();
     }
 
     @Then("^(.*) click \"Reject transfer\" button$")
     public void rejectIncomingTransfer(String agent){
-        getAgentHomePage(agent).getIncomingTransferWindow().rejectTransfer();
+        getIncomingTransferWindow(agent).rejectTransfer();
     }
 
     @Then("^(.*) click \"Accept\" button$")
     public void acceptRejectedTransfer(String agent){
-        getAgentHomePage(agent).getIncomingTransferWindow().acceptRejectTransfer();
+        getIncomingTransferWindow(agent).acceptRejectTransfer();
     }
 
     @Given("Transfer timeout for (.*) tenant is set to (.*) seconds")

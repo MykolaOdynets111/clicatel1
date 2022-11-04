@@ -1,15 +1,5 @@
 Feature: Filtering : Chat Desk
 
-  @support_hours
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-28061) @no_widget
-  Scenario: Verify if agent can filter tickets using date range
-    Given I login as agent of Automation Bot
-    And Agent select "Tickets" left menu option
-    And Set agent support hours with day shift
-    And Agent receives a few conversation requests
-    When Agent filter by 0 year 0 month and 1 days ago start date and today's end date
-    Then Verify filtered tickets dates are fitted by filter for agent
-
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1154")
   @Regression
   Scenario: CD :: Agent Desk :: Closed Chat :: Verify calendar picker should be limited to max 90 days back in closed chats
