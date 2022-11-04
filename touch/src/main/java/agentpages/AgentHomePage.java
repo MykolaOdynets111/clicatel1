@@ -67,8 +67,8 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = ".dashboard .cl-empty-state")
     private WebElement tipNoteInRightArea;
 
-    @FindBy(css = "[selenium-id = transfer-notification-waiting]")
-    private List<WebElement> notificationsList;
+    @FindBy(xpath = "//button[@data-testid = 'transfer-notification']")
+    private List<WebElement> transferWaitingButtons;
 
     @FindBy(css =".cl-c2p-close-modal-note")
     private WebElement c2pMoveToPendingMessage;
@@ -100,7 +100,6 @@ public class AgentHomePage extends AgentAbstractPage {
     private AttachmentWindow attachmentWindow;
     private LocationWindow locationWindow;
     private C2pSendForm c2pSendForm;
-
     private ChatPendingToLiveForm chatPendingToLiveForm;
     private Extensions extensions;
     private HSMForm hsmForm;
@@ -203,6 +202,9 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public IncomingTransferWindow getIncomingTransferWindow() {
+        if (transferWaitingButtons.size() != 0){
+            transferWaitingButtons.get(getCollapsedTransfers().size() - 1).click();
+        }
         incomingTransferWindow.setCurrentDriver(this.getCurrentDriver());
         return incomingTransferWindow;
     }
@@ -334,8 +336,8 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public List<WebElement> getCollapsedTransfers(){
-        waitForElementsToBeVisible(this.getCurrentDriver(), notificationsList, 6);
-        return notificationsList;
+        waitForElementsToBeVisible(this.getCurrentDriver(), transferWaitingButtons, 6);
+        return transferWaitingButtons;
     }
 
     public String getC2pMoveToPendingMessage(){

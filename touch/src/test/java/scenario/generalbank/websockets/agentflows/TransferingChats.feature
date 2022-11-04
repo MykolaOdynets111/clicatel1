@@ -11,7 +11,7 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
     And maxChatsPerAgent tenant feature is set to 1 for General Bank Demo
     When I login as second agent of General Bank Demo
     And Send 1 messages chat to agent by ORCA
-    When Second agent click on new conversation request from touch
+    When Second agent click on new conversation request from orca
     When Second agent click on 'Transfer' chat
     Then Transfer chat pop up appears for Second agent
     When Second agent open 'Transfer to' drop down
