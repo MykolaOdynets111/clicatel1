@@ -651,7 +651,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then ("^Agent see channel and dates as filter options for tickets$")
     public void verifyChannelOptionsAndDates(List<String> channels){
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(getSupervisorDeskPage().getSupervisorDeskHeader().expandChannels().getChannelDropdownOptions(),  channels,
+        softAssert.assertEquals(getSupervisorDeskPage().getSupervisorDeskHeader().expandChannels().getDropdownOptions(),  channels,
                 "Channel dropdown has incorrect options");
             softAssert.assertTrue(getSupervisorDeskPage().getSupervisorDeskHeader().isStartDateIsPresent(),"Start day option should be present in tickets");
             softAssert.assertTrue(getSupervisorDeskPage().getSupervisorDeskHeader().isEndDateIsPresent(),"End day option should be present in tickets");
@@ -659,7 +659,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     }
     @Then ("^Agent see sentiments as filter options for tickets$")
     public void verifyFilterOptions(List<String> sentiments) {
-        Assert.assertEquals(getSupervisorDeskPage().getSupervisorDeskHeader().expandSentiments().getSentimentsDropdownOptions(), sentiments,
+        Assert.assertEquals(getSupervisorDeskPage().getSupervisorDeskHeader().expandSentiments().getDropdownOptions(), sentiments,
                 "Sentiment dropdown has incorrect options");
     }
 }

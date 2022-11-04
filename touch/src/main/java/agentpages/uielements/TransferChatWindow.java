@@ -160,12 +160,7 @@ public class TransferChatWindow extends AbstractUIElement {
                         .collect(Collectors.toList());
     }
     public String getCurrentAgentAssignment() {
-        if(isElementRemoved(this.getCurrentDriver(), availableAgentOrDepartment, 2))
-            clickElem(this.getCurrentDriver(), openAgentDropdownButton, 2, "Open agent dropdown");
-        waitForElementToBeVisible(this.getCurrentDriver(), availableAgentOrDepartment,5);
-        return availableAgentsOrDepartmentsList.stream()
-                .map(e -> getTextFromElem(this.getCurrentDriver(), e, 3, "Agent in dropdown"))
-                .filter(e -> (e.contains("current chat assignment"))).findFirst().orElse(null);
+        return getCurrentAgentFromAssignmentDropdown().getText();
     }
 
     public String getTextDropDownMessage() {
@@ -173,12 +168,15 @@ public class TransferChatWindow extends AbstractUIElement {
     }
 
     public boolean isAssignedAgentDisabledToSelect(){
+        return getCurrentAgentFromAssignmentDropdown().isEnabled();
+    }
+
+    private WebElement getCurrentAgentFromAssignmentDropdown(){
         if(isElementRemoved(this.getCurrentDriver(), availableAgentOrDepartment, 2))
             clickElem(this.getCurrentDriver(), openAgentDropdownButton, 2, "Open agent dropdown");
         waitForElementToBeVisible(this.getCurrentDriver(), availableAgentOrDepartment,5);
-       WebElement CurrentAgentElement = availableAgentsOrDepartmentsList.stream()
-                .filter(e -> e.getText().contains("current chat assignment")).findFirst().orElse(null);
-        return CurrentAgentElement.isEnabled();
+        return availableAgentsOrDepartmentsList.stream()
+                .filter(e -> e.getText().contains("current chat assignment")).findFirst().orElseThrow(() -> new AssertionError("Cannot find the current agent assignment in dropdown"));
     }
 
     public void clickTransferChatButton() {

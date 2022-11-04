@@ -122,10 +122,7 @@ public class SupervisorDeskHeader extends AbstractUIElement {
                 "Filter start date", "value");
         return LocalDate.parse(stringDate);
     }
-    public List<String> getChannelDropdownOptions(){
-        return dropdownValues.stream().map(e -> e.getText().trim()).collect(Collectors.toList());
-    }
-    public List<String> getSentimentsDropdownOptions(){
+    public List<String> getDropdownOptions(){
         return dropdownValues.stream().map(e -> e.getText().trim()).collect(Collectors.toList());
     }
     public SupervisorDeskHeader expandChannels() {

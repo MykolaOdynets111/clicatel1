@@ -239,7 +239,7 @@ public class ChatHeader extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), threeDotsVerticalMenu, 3, "Three Dots Vertical Menu");
         clickElem(this.getCurrentDriver(), assignButton, 3, "Assign Chat Button");
     }
-    public String isFlaggedMessageShown() {
+    public String getFlaggedMessageText() {
         return getTextFromElem(this.getCurrentDriver(), flaggedCloseChatToolTip, 4, "Tool Tip for flagged chat");
     }
     public boolean isCloseChatClickable() {
