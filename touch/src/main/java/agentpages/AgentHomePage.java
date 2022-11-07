@@ -272,10 +272,11 @@ public class AgentHomePage extends AgentAbstractPage {
         }
     }
 
-    public void endChatWithoutChatMessageValidation() {
-        getChatHeader().clickEndChatButton();
-        if (getAgentFeedbackWindow().isAgentFeedbackWindowShown()) {
-            getAgentFeedbackWindow().waitForLoadingData().clickCloseButtonInCloseChatPopup();
+    public void hoverCloseChatIfVisible() {
+        if (getChatHeader().isEndChatShown() && !getChatHeader().isCloseChatClickable()) {
+            getChatHeader().hoverEndChatButton();
+        } else {
+            Assert.fail("'Close chat' button is not shown or clickable.");
         }
     }
 

@@ -1,18 +1,18 @@
 @agent_mode
+@orca_api
+@start_orca_server
 Feature: Flagged chat is disabled to close and to transfer
 
   Verification of basic pin chat functionality
 
   Background:
-    Given Off webchat survey configuration for General Bank Demo
-    Given AGENT_FEEDBACK tenant feature is set to true for General Bank Demo
     Given User select General Bank Demo tenant
     Given I login as agent of General Bank Demo
-    And Click chat icon
-    When User enter connect to agent into widget input field
-    Then Agent has new conversation request
-    When Agent click on new conversation request from touch
-    Then Conversation area becomes active with connect to agent user's message
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    When Send connect to Support message by ORCA
+    Then Agent has new conversation request from orca user
+    When Agent click on new conversation request from orca
+    Then Conversation area becomes active with connect to Support user's message
 
 
   @Issue("https://jira.clickatell.com/browse/TPORT-26904")
@@ -29,8 +29,8 @@ Feature: Flagged chat is disabled to close and to transfer
     Then Agent should not see from user chat in agent desk
     Then User should see 'exit' text response for his 'connect to agent' input
 
-
-  Scenario: "Transfer chat" button is not shown on chat desk for flagged chat
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2922")
+  Scenario: CD :: Agent Desk :: Live Chat :: Flag Chat :: Verify "Transfer chat" button is not shown on chat desk for flagged chat
     When Agent click 'Flag chat' button
     Then Agent can not click 'Transfer chat' button
     Then Agent click 'Unflag chat' button
@@ -39,10 +39,10 @@ Feature: Flagged chat is disabled to close and to transfer
     Then Second agent receives incoming transfer with "Incoming Transfer" header
     Then Second agent receives incoming transfer with "Please take care of this one" note from the another agent
     When Second agent click "Accept transfer" button
-    Then Second agent has new conversation request
-    And Agent should not see from user chat in agent desk
-    When Second agent click on new conversation
-    Then Conversation area becomes active with connect to agent user's message in it for second agent
+    Then Second agent has new conversation request from orca user
+    And Agent should not see from user chat in agent desk from orca
+    When Second agent click on new conversation request from orca
+    Then Conversation area becomes active with connect to Support user's message in it for Second agent
     When Second agent responds with hello to User
-    Then User should see 'hello' text response for his 'connect to agent' input
+    Then Verify Orca returns hello response during 40 seconds
 

@@ -2,6 +2,7 @@ package steps.portalsteps;
 
 import agentpages.uielements.ChatBody;
 import agentpages.uielements.DatePicker;
+import agentpages.uielements.FilterMenu;
 import apihelper.ApiHelper;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.TenantChatPreferences;
@@ -644,5 +645,20 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void agentClickCloseAssignWindow() {
         getSupervisorDeskPage().getAssignChatWindow().clickOnCloseAssignWindow();
         Assert.assertFalse(getSupervisorDeskPage().getAssignChatWindow().isAssignWindowShown(),"Assign Chat Window is closed");
+    }
+
+    @Then ("^Agent see channel and dates as filter options for tickets$")
+    public void verifyChannelOptionsAndDates(List<String> channels){
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertEquals(getSupervisorDeskPage().getSupervisorDeskHeader().expandChannels().getDropdownOptions(),  channels,
+                "Channel dropdown has incorrect options");
+            softAssert.assertTrue(getSupervisorDeskPage().getSupervisorDeskHeader().isStartDateIsPresent(),"Start day option should be present in tickets");
+            softAssert.assertTrue(getSupervisorDeskPage().getSupervisorDeskHeader().isEndDateIsPresent(),"End day option should be present in tickets");
+        softAssert.assertAll();
+    }
+    @Then ("^Agent see sentiments as filter options for tickets$")
+    public void verifyFilterOptions(List<String> sentiments) {
+        Assert.assertEquals(getSupervisorDeskPage().getSupervisorDeskHeader().expandSentiments().getDropdownOptions(), sentiments,
+                "Sentiment dropdown has incorrect options");
     }
 }

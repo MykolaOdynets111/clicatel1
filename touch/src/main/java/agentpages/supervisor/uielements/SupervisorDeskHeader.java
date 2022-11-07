@@ -1,11 +1,10 @@
 package agentpages.supervisor.uielements;
-
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @FindBy(css = ".view-header")
 public class SupervisorDeskHeader extends AbstractUIElement {
@@ -42,6 +41,9 @@ public class SupervisorDeskHeader extends AbstractUIElement {
 
     @FindBy(css = "#sentiments .cl-r-select__placeholder")
     private WebElement sentimentsFilterValue;
+
+    @FindBy(css="div[class^='cl-select__menu-list'] div[id^='react-select']")
+    private List<WebElement> dropdownValues;
 
     public void clickApplyFilterButton(){
         scrollToElem(this.getCurrentDriver(), applyFiltersButton, "Apply Filters");
@@ -119,5 +121,23 @@ public class SupervisorDeskHeader extends AbstractUIElement {
         String stringDate = getAttributeFromElem(getCurrentDriver(), endDateInput, 1,
                 "Filter start date", "value");
         return LocalDate.parse(stringDate);
+    }
+    public List<String> getDropdownOptions(){
+        return dropdownValues.stream().map(e -> e.getText().trim()).collect(Collectors.toList());
+    }
+    public SupervisorDeskHeader expandChannels() {
+        clickElem(this.getCurrentDriver(), channelsDropdown, 3, "Channels expand button");
+        return this;
+    }
+    public SupervisorDeskHeader expandSentiments() {
+        clickElem(this.getCurrentDriver(), sentimentDropdown, 3, "Channels expand button");
+        return this;
+    }
+
+    public boolean isStartDateIsPresent(){ return isElementShown(this.getCurrentDriver(), startDateInput, 1);
+    }
+
+    public boolean isEndDateIsPresent(){
+        return isElementShown(this.getCurrentDriver(), endDateInput, 1);
     }
 }
