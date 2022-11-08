@@ -43,13 +43,18 @@ public class SupervisorTicketsTable extends AbstractUIElement {
                 .findFirst().orElseThrow(() -> new AssertionError("Cannot find ticket with user " + userName));
     }
 
-    public void selectTicketCheckbox(String getTicketByName){
+    public SupervisorTicketsTable selectTicketCheckbox(String getTicketByName){
         getTicketByUserName(getTicketByName).selectCheckbox();
+        return this;
     }
 
     public void clickAssignManuallyButton(String userName){
         getTicketByUserName(userName)
                 .clickElem(this.getCurrentDriver(), assignTicketButton, 5, "Assign ticket button");
+    }
+
+    public void clickCloseButton(String userName){
+        getTicketByUserName(userName).clickElem(this.getCurrentDriver(), closeTicketButton, 5, "Close ticket button");
     }
 
     public void clickAssignOpenTicketButton(String userName){
@@ -120,8 +125,16 @@ public class SupervisorTicketsTable extends AbstractUIElement {
 
     public boolean verifyChanelOfTheTicketsIsPresent(String channelName) {
         waitForFirstElementToBeVisible(this.getCurrentDriver(), tickets, 7);
-        return  tickets.stream()
+        return tickets.stream()
                 .map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver()).isValidChannelImg(channelName)).findFirst().get();
+    }
+
+    public boolean isTicketPresent(String userName) {
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), tickets, 7);
+        return tickets.stream().anyMatch(e ->
+                new SupervisorDeskTicketRow(e)
+                        .setCurrentDriver(this.getCurrentDriver())
+                        .getName().equals(userName));
     }
 
     public void openFirstTicket() {

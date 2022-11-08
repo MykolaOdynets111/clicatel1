@@ -155,11 +155,6 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
         Assert.assertTrue(getLeftMenu(ordinalAgentNumber).searchUserChat(getUserName(channel)), "No chats visible in close chats");
     }
 
-    @When("Close chat to generate history record")
-    public void closeChat() {
-        ApiHelper.closeActiveChats("main");
-    }
-
     @When("^(.*) sees correct chat history$")
     public void getChatHistoryFromBackend(String agent){
         List<String> messagesFromChatBody = getChatBody(agent).getAllMessages();

@@ -394,10 +394,11 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
         getAgentFeedbackWindow(agent).selectTagInSearch().closeDropdown();
     }
 
-    @Then("^(.*) select (.*) tag$")
+    @Then("^(.*) select tag by name (.*)$")
     public void agentSelectsTag(String agent, String tag) {
         getAgentFeedbackWindow(agent).selectTag(tag);
     }
+
     @Then("^(.*) does not see the disabled tag (.*)$")
     public void verifyTagIsDisabledFor(String agent, String tag) {
         assertThat(tag)
