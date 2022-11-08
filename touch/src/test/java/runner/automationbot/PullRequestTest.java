@@ -1,19 +1,13 @@
 package runner.automationbot;
 
 
-import cucubmerrunner.TestNgCucumberFeatureRunner;
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
-import io.cucumber.testng.TestNGCucumberRunner;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static runner.automationbot.Path.PATH;
 import static runner.automationbot.Path.DOTCONTROL;
+import static runner.automationbot.Path.PATH;
 
 @Test(groups = "General Bank agent UI tests")
 @CucumberOptions(
@@ -26,7 +20,7 @@ import static runner.automationbot.Path.DOTCONTROL;
                 PATH + "ClosingSession.feature",
                 PATH + "TransferingChatWithNoAvailableAgent.feature",
                 PATH + "AgentPhotoManaging.feature",
-                PATH + "AvailableAgentsHeadphones.feature",
+                PATH + "AvailableUnavailableAgents.feature",
                 PATH + "ChatConsoleWaitingCustomers.feature",
                 PATH + "EditAutorespondersViaPortalUI.feature",
                 PATH + "OutOfSupportHoursBotMode.feature",
