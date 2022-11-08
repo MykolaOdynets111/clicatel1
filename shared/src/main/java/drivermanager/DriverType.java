@@ -38,6 +38,7 @@ public enum DriverType {
             options.setCapability(CapabilityType.SUPPORTS_APPLICATION_CACHE, false);
             if(ConfigManager.isRemote())options.addArguments("window-size=1360,1020");
             options.setCapability("goog:loggingPrefs", logPrefs);
+            options.setCapability("build", "CaptchaInSelenium");
             options.addArguments("disable-site-isolation-trials");
             options.addArguments("test-type=browser");
             options.addArguments("start-maximized");

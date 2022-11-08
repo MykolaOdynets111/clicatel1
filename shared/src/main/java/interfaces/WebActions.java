@@ -39,6 +39,14 @@ public interface WebActions extends WebWait {
         }
     }
 
+    default void switchToFrameByXpath(WebDriver driver, WebElement element, int wait, String elemName) {
+        try {
+            waitForFrameToBeAvailableAndSwitchToIt(driver, element, wait);
+        } catch (TimeoutException | NoSuchElementException e) {
+            Assert.fail("Cannot switch to '" + elemName + "' because element is not available.");
+        }
+    }
+
     default void clickHoldRelease(WebDriver driver, WebElement element, int wait, String elemName) {
         try {
             waitForElementToBeClickable(driver, element, wait);

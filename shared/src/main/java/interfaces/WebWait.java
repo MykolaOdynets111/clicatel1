@@ -54,6 +54,14 @@ public interface WebWait {
                 .until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
     }
 
+    // ================================== Elements to be Switchable  ======================================== //
+    default void waitForFrameToBeAvailableAndSwitchToIt(WebDriver driver, WebElement element, int time){
+        initWait(driver, time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(element));
+    }
+
+
     // ================================== Elements to be Visible  ======================================== //
 
 
