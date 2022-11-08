@@ -352,7 +352,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     private WebElement getFilterOptionByName(String name) {
         return filterOptions.stream()
-                .filter(f -> f.findElement(By.cssSelector(" .cl-chats-group-item__name")).getText().contains(name))
+                .filter(f -> f.findElement(By.cssSelector(".cl-chats-group-item__name")).getText().contains(name))
                 .findFirst().orElseThrow(() -> new NoSuchElementException("There is no value with name: " + name));
     }
 
