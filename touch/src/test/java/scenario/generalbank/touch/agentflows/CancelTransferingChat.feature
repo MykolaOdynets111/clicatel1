@@ -1,21 +1,24 @@
+@orca_api
+@start_orca_server
+@Regression
 Feature: Canceling chat transfer
 
-  Background:
-    Given User select General Bank Demo tenant
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2465")
+  Scenario: CD :: Agent Desk :: Live Chat :: Transfer Chat :: Verify the agent is able to cancel the transferred chat
     Given I login as agent of General Bank Demo
-    And Click chat icon
-
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-5955")
-  Scenario: Transfer :: Chat Desk should cancel "transfer offer"
-    When User enter connect to agent into widget input field
-    Then Agent has new conversation request
-    When First Agent click on new conversation
-    Given I login as second agent of General Bank Demo
+    Given Setup ORCA abc integration for General Bank Demo tenant
+    When Send connect to agent message by ORCA
+    Then Agent has new conversation request from orca user
+    When I login as second agent of General Bank Demo
+    When Agent click on new conversation request from orca
+    Then Conversation area becomes active with connect to agent user's message
     And Agent transfers chat
     Then Second agent receives incoming transfer with "Incoming Transfer" header
+    Then Second agent receives incoming transfer with "Please take care of this one" note from the another agent
+    And Second agent can see transferring agent name, orca and following user's message: 'connect to agent'
     When First Agent click 'Cancel transfer' button
     Then Second agent has not see incoming transfer pop-up
     Then Conversation area becomes active with connect to agent user's message in it for first agent
-    When First agent responds with hello to User
-    Then User should see 'hello' text response for his 'connect to agent' input
+    When Agent responds with hello to User
+    Then Verify Orca returns hello response during 40 seconds
 

@@ -34,7 +34,7 @@ public class IncomingTransferWindow extends AbstractUIElement {
     @FindBy(css = ".cl-transfer-chat-info__latest-message")
     private WebElement clientMessage;
 
-    @FindBy(css = ".cl-r-transfer-source")
+    @FindBy(css = ".cl-transfer-details__from")
     private WebElement rejectedBy;
 
     @FindBy(css = "[data-testid='avatar']")

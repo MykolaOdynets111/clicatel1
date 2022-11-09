@@ -53,7 +53,7 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(css = ".cl-chat-header-time")
     private WebElement dateTime;
 
-    @FindBy(css = "[selenium-id=header-cancel-transfer]")
+    @FindBy(css = "[data-testid=header-transfer-chat]")
     private WebElement cancelTransferButton;
 
     @FindBy(css = ".cl-r-avatar")
