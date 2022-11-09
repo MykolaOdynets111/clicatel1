@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static steps.agentsteps.AbstractAgentSteps.getAgentHomePage;
 
 public class SupervisorDeskSteps extends AbstractPortalSteps {
 
@@ -94,6 +95,17 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @When("^Click 'Assign manually' button for (.*)$")
     public void clickAssignManually(String chanel) {
         getSupervisorDeskPage().getSupervisorTicketsTable().clickAssignManuallyButton(getUserName(chanel));
+    }
+
+    @When("^(.*) closed ticket for (.*)$")
+    public void clickCloseButtonFor(String agent, String chanel) {
+        getSupervisorDeskPage()
+                .getSupervisorTicketsTable()
+                .selectTicketCheckbox(getUserName(chanel))
+                .clickCloseButton(getUserName(chanel));
+        getAgentHomePage(agent)
+                .getAgentFeedbackWindow()
+                .clickCloseButtonInCloseChatPopup();
     }
 
     @Then("^(.*) request is shown on Supervisor Desk Live page$")
@@ -375,6 +387,15 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void verifyTicketsSorting(String order) {
         List<LocalDateTime> listOfDates = getSupervisorDeskPage().getSupervisorTicketsTable().getTicketsStartDates();
         Assert.assertTrue(isDateSorted(order, listOfDates), "Tickets are not sorted in " + order + " order");
+    }
+
+    @Then("^Verify ticket is present for (.*)$")
+    public void verifyTicketIsPresent(String chanel) {
+        boolean isTicketPresent = getSupervisorDeskPage()
+                .getSupervisorTicketsTable()
+                .isTicketPresent(getUserName(chanel));
+
+        Assert.assertTrue(isTicketPresent, "Ticket should be present");
     }
 
     private boolean isDateSorted(String order, List<LocalDateTime> listOfDates) {
