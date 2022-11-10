@@ -16,7 +16,7 @@ public class UnityLoginPage extends UnityAbstractPage {
     @FindBy(css = "[id='password']")
     private WebElement passwordField;
 
-    @FindBy(xpath = "//iframe[@title='reCAPTCHA']")
+    @FindBy(xpath = "//iframe[starts-with(@name,'a-')]")
     private WebElement captchaFrame;
 
     @FindBy(xpath = "//div[@class='recaptcha-checkbox-border']")
@@ -40,17 +40,15 @@ public class UnityLoginPage extends UnityAbstractPage {
         inputText(this.getCurrentDriver(),emailAddressField,3,"Email Field",email);
         inputText(this.getCurrentDriver(),passwordField,3,"Password Field",password);
         bypassCaptcha();
-        clickElem(this.getCurrentDriver(),signInBtn,10,"Sign In Button");
+        clickElem(this.getCurrentDriver(),signInBtn,15,"Sign In Button");
         return this;
     }
 
     private void bypassCaptcha(){
-        String parentWindow = getCurrentDriver().getWindowHandle();
-
         switchToFrameByXpath(this.getCurrentDriver(),captchaFrame,25,"Captcha Frame");
 
         clickElem(this.getCurrentDriver(),captchaCheck,10,"Captcha Check Mark");
 
-        getCurrentDriver().switchTo().window(parentWindow);
+        getCurrentDriver().switchTo().defaultContent();
     }
 }
