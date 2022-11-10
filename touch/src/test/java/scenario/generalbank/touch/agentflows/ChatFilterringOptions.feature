@@ -2,7 +2,7 @@
 Feature: Chat Filtering
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2997")
-  Scenario: Verify agent can set filter for live chat, closed chat or tickets
+  Scenario: CD:: Sorting_Chats:: Verify agent can set filter for live chat, closed chat or tickets
     Given I login as agent of General Bank Demo
     When Agent click on filter button
     Then Agent see channel, sentiment and flagged as filter options for live chats

@@ -1,4 +1,5 @@
 @agent_feedback
+@Regression
 Feature: AutoResponder
 
   Background:
