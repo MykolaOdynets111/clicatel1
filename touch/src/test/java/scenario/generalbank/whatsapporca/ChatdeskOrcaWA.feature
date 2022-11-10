@@ -144,6 +144,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then  Verify that live chats available are shown
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2369")
+  @skip
   @support_hours
   @orca_api
   Scenario: CD:: Supervisor desk :: Verify if Supervisor is able to Route ticket to scheduler

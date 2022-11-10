@@ -1,6 +1,7 @@
 @remove_dep
 @start_orca_server
 @Regression
+@setting_changes
 Feature: Departments: Route to Department
 
   Background:

@@ -240,7 +240,7 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     @Then("^Correct Rejected by field is shown for (.*)$")
     public void verifyRejectedByField(String agent){
         Assert.assertEquals(getIncomingTransferWindow(agent).getRejectedBy(),
-                "Rejected by:\n" + secondAgentName,
+                "Rejected by: " + secondAgentName,
                 "Header in incoming transfer window is not as expected");
     }
 
