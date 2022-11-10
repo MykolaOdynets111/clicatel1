@@ -18,7 +18,6 @@ import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.Scenario;
-import io.qameta.allure.Allure;
 import io.qameta.allure.Attachment;
 import javaserver.DotControlServer;
 import mc2api.ApiHelperPlatform;
@@ -44,7 +43,6 @@ import touchpages.pages.Widget;
 import twitter.TwitterTenantPage;
 import twitter.uielements.DMWindow;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.Date;
@@ -112,7 +110,7 @@ public class Hooks implements JSHelper {
 
             if(DriverFactory.isTouchDriverExists()) {
 //                if (scenario.isFailed()) widgetWebSocketLogs();
-                takeWebWidgetScreenshot();
+                takeWebWidgetScreenshot(scenario);
                 endTouchFlow(scenario, true);
             }
         }
@@ -137,17 +135,17 @@ public class Hooks implements JSHelper {
         finishAgentFlowIfExists(scenario);
 
         if(scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
-            takeWebWidgetScreenshot();
+            takeWebWidgetScreenshot(scenario);
             finishVisibilityFlow();
         }
 
         if(scenario.getSourceTagNames().contains("@facebook")){
-            takeWebWidgetScreenshot();
+            takeWebWidgetScreenshot(scenario);
             endFacebookFlow(scenario);
         }
 
         if(scenario.getSourceTagNames().contains("@twitter")){
-            takeWebWidgetScreenshot();
+            takeWebWidgetScreenshot(scenario);
             endTwitterFlow(scenario);
         }
 
@@ -160,7 +158,7 @@ public class Hooks implements JSHelper {
         }
 
         if(scenario.getSourceTagNames().contains("@healthcheck")){
-            takeWebWidgetScreenshot();
+            takeWebWidgetScreenshot(scenario);
             endTouchFlow(scenario, true);
         }
 
@@ -183,7 +181,7 @@ public class Hooks implements JSHelper {
         }
 
         if(scenario.getSourceTagNames().contains("@camunda")){
-            takeWebWidgetScreenshot();
+            takeWebWidgetScreenshot(scenario);
             endTouchFlow(scenario, true);
             try {
                 ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
@@ -240,35 +238,36 @@ public class Hooks implements JSHelper {
         }
     }
 
-    private void takeWebWidgetScreenshot() {
+    private void takeWebWidgetScreenshot(Scenario scenario) {
         if (DriverFactory.isTouchDriverExists()) {
-            takeScreenshot(DriverFactory.getTouchDriverInstance());
+            takeScreenshot(DriverFactory.getTouchDriverInstance(),scenario);
         }
     }
 
-    private void takeFirstAgentDriverScreenshot() {
-        takeScreenshot(DriverFactory.getAgentDriverInstance());
+    private void takeFirstAgentDriverScreenshot(Scenario scenario) {
+        takeScreenshot(DriverFactory.getAgentDriverInstance(),scenario);
     }
 
-    private void takeSecondAgentDriverScreenshot() {
-        takeScreenshot(DriverFactory.getSecondAgentDriverInstance());
+    private void takeSecondAgentDriverScreenshot(Scenario scenario) {
+        takeScreenshot(DriverFactory.getSecondAgentDriverInstance(),scenario);
     }
 
-    private void takeScreenshot(WebDriver driver) {
-        Allure.addAttachment("Screenshot",new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
+    private void takeScreenshot(WebDriver driver, Scenario scenario) {
+        scenario.attach(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES), "image/png", scenario.getName());
+//        Allure.addAttachment("Screenshot",new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
     }
 
 
     private void makeScreenshotAndConsoleOutputFromChatdesk(Scenario scenario){
         if (DriverFactory.isAgentDriverExists()) {
-            takeFirstAgentDriverScreenshot();
+            takeFirstAgentDriverScreenshot(scenario);
 //            if (scenario.isFailed()) {
 //                chatDeskConsoleOutput();
 //                chatdeskWebSocketLogs();
 //            }
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
-                takeSecondAgentDriverScreenshot();
+                takeSecondAgentDriverScreenshot(scenario);
 //                if (scenario.isFailed()) {
 //                    secondAgentChatDeskConsoleOutput();
 //                    secondAgentChatdeskWebSocketLogs();

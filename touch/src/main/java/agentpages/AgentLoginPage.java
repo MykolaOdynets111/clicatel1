@@ -2,6 +2,7 @@ package agentpages;
 
 import abstractclasses.AgentAbstractPage;
 import driverfactory.URLs;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
@@ -64,7 +65,23 @@ public class AgentLoginPage extends AgentAbstractPage {
         return this;
     }
 
-    public void clickAuthenticateButton(){
+    public AgentLoginPage clickAuthenticateButton(){
         clickElem(this.getCurrentDriver(), authenticateButton, 2, "Authenticate");
+        verifyJVT();
+        return this;
+    }
+
+    private void verifyJVT(){
+        Cookie cookie = this.getCurrentDriver().manage().getCookieNamed("chatdesk");
+        for (int i = 0; i<3; i++ ){
+            if (cookie == null){
+                waitFor(1000);
+                clickElem(this.getCurrentDriver(), authenticateButton, 2, "Authenticate");
+                cookie = this.getCurrentDriver().manage().getCookieNamed("chatdesk");
+            } else {
+                return;
+            }
+        }
+        throw new AssertionError("JWT token was not generated");
     }
 }
