@@ -11,6 +11,7 @@ Feature: Chat console: Waiting customers
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2674")
   @setting_changes
+  @skip
   Scenario: Dashboard:: Chats waiting in a queue increases in case no session capacity
     Given I login as second agent of General Bank Demo
 #    And User enter connect to agent into widget input field

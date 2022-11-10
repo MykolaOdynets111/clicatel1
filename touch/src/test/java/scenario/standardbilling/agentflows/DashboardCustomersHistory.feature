@@ -29,6 +29,7 @@ Feature: Dashboard: Customer History
 
   @no_chatdesk
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2437")
+  @skip
   Scenario Outline:  CD :: Dashboard :: Customer Overview :: Customer History :: Verify if admin can see the message "No data to report at the moment" if there is no available CSAT Score data per period
     When I open portal
     And I login as agent of Standard Billing
