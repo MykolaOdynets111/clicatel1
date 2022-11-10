@@ -80,7 +80,7 @@ Feature: Dashboard: Customer History
 
   @no_chatdesk
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2338")
-  Scenario: Dashboard:: Verify that if supervisor selects 'past day' date filter, reports should be displayed hourly
+  Scenario: CD::Dashboard:: Verify that if supervisor selects 'past day' date filter, reports should be displayed hourly
     When I open portal
     And Login into portal as an admin of Standard Billing account
     And I select Touch in left menu and Dashboard in submenu

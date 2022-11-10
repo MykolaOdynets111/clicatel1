@@ -54,7 +54,7 @@ public class SQSConfiguration {
         }
 
         return SqsClient.builder().region(SQSConfiguration.DEFAULT_REGION)
-                .credentialsProvider(ProfileCredentialsProvider.create("215418463085_vulcan-mc2-dev"))
+                .credentialsProvider(ProfileCredentialsProvider.create("215418463085_sg.interact.chatdesk.qa.nprod"))
                 .build();
     }
 }
