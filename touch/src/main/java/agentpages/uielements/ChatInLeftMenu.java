@@ -45,6 +45,9 @@ public class ChatInLeftMenu extends AbstractWidget {
     @FindBy(css = "span.text-parsed-by-emoji")
     private WebElement messageText;
 
+    @FindBy(css = ".transferring-chat")
+    private WebElement transferringChatMessage;
+
     private String overnightTicketIcon = ".cl-r-icon.cl-r-icon-tickets.cl-r-icon--fill-bright-orange"; //""span.icon>svg.overnight"; old locator
 
     public ChatInLeftMenu(WebElement element) {
@@ -97,5 +100,9 @@ public class ChatInLeftMenu extends AbstractWidget {
 
     public boolean isProfileIconNotShown() {
         return isElementRemoved(this.getCurrentDriver(), usercImg, 3);
+    }
+
+    public boolean isChatTransferringMessageShown() {
+        return isElementShown(this.getCurrentDriver(), transferringChatMessage, 3);
     }
 }
