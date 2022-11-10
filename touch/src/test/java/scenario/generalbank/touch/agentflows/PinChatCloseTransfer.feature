@@ -30,6 +30,7 @@ Feature: Flagged chat is disabled to close and to transfer
     Then User should see 'exit' text response for his 'connect to agent' input
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2922")
+  @Regression
   Scenario: CD :: Agent Desk :: Live Chat :: Flag Chat :: Verify "Transfer chat" button is not shown on chat desk for flagged chat
     When Agent click 'Flag chat' button
     Then Agent can not click 'Transfer chat' button

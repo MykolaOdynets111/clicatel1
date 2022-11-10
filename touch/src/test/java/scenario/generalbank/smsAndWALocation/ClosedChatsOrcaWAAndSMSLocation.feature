@@ -24,7 +24,7 @@ Feature: Whatsapp ORCA :: ChatDesk
 
   @start_orca_server
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1175")
-  Scenario: CD :: SMS :: Location :: Verify if location shared by agent is displayed on history tab
+  Scenario: CD :: Agent Desk :: Close Chat :: History :: Whatsapp :: Location :: Verify if location shared by agent is displayed on history tab
     Given I login as agent of General Bank Demo
     Given Setup ORCA SMS integration for General Bank Demo tenant
     When Send connect to agent message by ORCA

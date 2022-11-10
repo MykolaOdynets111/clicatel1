@@ -4,7 +4,7 @@
 Feature: Managing business details
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2537")
-  Scenario: CD :: Dashboard :: Settings :: Business Profile :: Verify if admin is able to change/edit on business details
+  Scenario: CD :: Dashboard :: Configure Settings :: Business Profile :: Verify if admin is able to change/edit on business details
 
     And I login as agent of Automation Bot
     When I select Touch in left menu and Dashboard in submenu
