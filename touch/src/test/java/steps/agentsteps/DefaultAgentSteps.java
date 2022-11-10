@@ -186,6 +186,21 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         return results;
     }
 
+    @Then("^(.*) click the bulk message icon$")
+    public void bulkMessageButtonClick(String agent){
+        getLeftMenu(agent).clickBulkButton();
+    }
+
+    @Then("^(.*) checks number of checked bulk checkboxes is (.*)$")
+    public void bulkMessageCheckboxesClickAndCheck(String agent, int checkedBulkChats){
+        Assert.assertTrue(getLeftMenu(agent).bulkPanelElementsClick(), "Required checked checkboxes count is incorrect");
+    }
+
+    @Then("^(.*) sees checkbox is (.*) for the blocked chat$")
+    public void isBulkButtonInPanelDisabled(String agent, String disability){
+        Assert.assertTrue(getLeftMenu(agent).isBulkPanelEnabled(disability));
+    }
+
     @Then("^(.*) button is (.+) on Chat header$")
     public void isButtonEnabled(String button, String state){
         if (state.equalsIgnoreCase("disabled"))
@@ -779,6 +794,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
         Assert.assertTrue(getAgentHomePage(agent).isDialogShown(),
                 "Log out from agent desk not successful");
+    }
+
+    @Given("^(.*) checks error is displayed if selected more then 15 chats$")
+    public void errorMessageCheckMoreThan15BulkChats(String agent) {
+        Assert.assertTrue(getAgentHomePage(agent).isMultipleBulkMessagesTextShown(),
+                "Bulk messages more than 15 selected error not shown");
     }
 
     private static int getNumberOfActiveChats(String agent, String integration) {
