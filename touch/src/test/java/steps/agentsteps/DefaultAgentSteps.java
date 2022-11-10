@@ -244,7 +244,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getLeftMenu(agent).waitForConnectingDisappear(5,10);
     }
 
-    @Then("^(.*) open (.*) type")
+    @Then("^(.*) open (.*) type$")
     public void selectOption(String agent, String type){
         getLeftMenu(agent).selectOption(type);
     }
@@ -273,7 +273,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void verifyFilterOptions(String agent, String chatType){
         FilterMenu filterMenu = getLeftMenu(agent).getFilterMenu();
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(filterMenu.expandChannels().getDropdownOptions(),  Arrays.asList("Webchat", "Facebook", "Twitter", "WhatsApp", "Apple Business Chat"),
+        softAssert.assertEquals(filterMenu.expandChannels().getDropdownOptions(),  Arrays.asList("WhatsApp","SMS", "Apple Business Chat"),
                 "Channel dropdown has incorrect options");
         filterMenu.expandChannels();
         softAssert.assertEquals(filterMenu.expandSentiment().getDropdownOptions(), Arrays.asList("Positive", "Neutral", "Negative"),
@@ -293,7 +293,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("^(.*) should not see from user chat in agent desk$")
     public void verifyConversationRemovedFromChatDesk(String agent){
-        // ToDo: Update after clarifying timeout in System timeouts
+        // verifyChatRemovedFromChatDesk(String agent, String social) can be used instead of this
         String userName = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
         Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(20, userName),
                 "Conversation request is not removed from Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")"
@@ -323,6 +323,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             getAgentHomePage(agent).getPageHeader().clickIcon();
             getAgentHomePage(agent).getPageHeader().selectStatus(newStatus);
     }
+
+    @When("^Verify (.*) status: (.*) is displayed on the icon$")
+    public void verifyStatusOnByIcon(String agent, String status) {
+        getAgentHomePage(agent).getPageHeader().verifyUserStatusOnIcon(status);
+    }
+
 
     @When("^(.*) refreshes the page$")
     public void refreshThePage(String agent){

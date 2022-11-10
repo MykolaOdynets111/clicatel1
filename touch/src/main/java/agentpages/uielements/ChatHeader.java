@@ -53,7 +53,7 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(css = ".cl-chat-header-time")
     private WebElement dateTime;
 
-    @FindBy(css = "[selenium-id=header-cancel-transfer]")
+    @FindBy(css = "[data-testid=header-transfer-chat]")
     private WebElement cancelTransferButton;
 
     @FindBy(css = ".cl-r-avatar")
@@ -77,6 +77,9 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(xpath = "//button[contains(text(), 'Assign' )]")
     private WebElement assignButton;
 
+    @FindBy(xpath = "//div[@class='tippy-content']/div")
+    private WebElement flaggedCloseChatToolTip;
+
     private final String transferChatButtonXpath =  ".//button[@selenium-id='header-transfer-chat']";
     private final String sendSMSXpath = ".//button[@selenium-id='header-send-sms']";
     private final String sendWhatsAppXpath = ".//button[text()='Send WhatsApp']";
@@ -95,6 +98,9 @@ public class ChatHeader extends AbstractUIElement {
         } else {
             clickElem(this.getCurrentDriver(), endChatButton, 6, "End chat button");
         }
+    }
+    public void hoverEndChatButton() {
+            hoverElem(this.getCurrentDriver(), endChatButton, 4, "End chat button");
     }
 
     public boolean isEndChatShown(){
@@ -232,5 +238,11 @@ public class ChatHeader extends AbstractUIElement {
     public void clickOnAssignButton() {
         clickElem(this.getCurrentDriver(), threeDotsVerticalMenu, 3, "Three Dots Vertical Menu");
         clickElem(this.getCurrentDriver(), assignButton, 3, "Assign Chat Button");
+    }
+    public String getFlaggedMessageText() {
+        return getTextFromElem(this.getCurrentDriver(), flaggedCloseChatToolTip, 4, "Tool Tip for flagged chat");
+    }
+    public boolean isCloseChatClickable() {
+        return isElementEnabled(this.getCurrentDriver(), endChatButton,4);
     }
 }

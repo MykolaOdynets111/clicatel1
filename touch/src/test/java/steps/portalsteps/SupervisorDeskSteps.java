@@ -2,6 +2,7 @@ package steps.portalsteps;
 
 import agentpages.uielements.ChatBody;
 import agentpages.uielements.DatePicker;
+import agentpages.uielements.FilterMenu;
 import apihelper.ApiHelper;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.TenantChatPreferences;
@@ -22,6 +23,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static steps.agentsteps.AbstractAgentSteps.getAgentHomePage;
 
 public class SupervisorDeskSteps extends AbstractPortalSteps {
 
@@ -91,6 +95,17 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @When("^Click 'Assign manually' button for (.*)$")
     public void clickAssignManually(String chanel) {
         getSupervisorDeskPage().getSupervisorTicketsTable().clickAssignManuallyButton(getUserName(chanel));
+    }
+
+    @When("^(.*) closed ticket for (.*)$")
+    public void clickCloseButtonFor(String agent, String chanel) {
+        getSupervisorDeskPage()
+                .getSupervisorTicketsTable()
+                .selectTicketCheckbox(getUserName(chanel))
+                .clickCloseButton(getUserName(chanel));
+        getAgentHomePage(agent)
+                .getAgentFeedbackWindow()
+                .clickCloseButtonInCloseChatPopup();
     }
 
     @Then("^(.*) request is shown on Supervisor Desk Live page$")
@@ -374,6 +389,15 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertTrue(isDateSorted(order, listOfDates), "Tickets are not sorted in " + order + " order");
     }
 
+    @Then("^Verify ticket is present for (.*)$")
+    public void verifyTicketIsPresent(String chanel) {
+        boolean isTicketPresent = getSupervisorDeskPage()
+                .getSupervisorTicketsTable()
+                .isTicketPresent(getUserName(chanel));
+
+        Assert.assertTrue(isTicketPresent, "Ticket should be present");
+    }
+
     private boolean isDateSorted(String order, List<LocalDateTime> listOfDates) {
         boolean sortedStatus;
         if (order.contains("desc")) {
@@ -423,8 +447,13 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @Then("^Error \"(.*)\" message is displayed$")
     public void verifyNoChatsErrorMessage(String errorMessage) {
-        Assert.assertEquals(getSupervisorDeskPage().getNoChatsErrorMessage(), errorMessage,
-                "incorrect erorr message is shown");
+        String message = getSupervisorDeskPage().getNoChatsErrorMessage();
+        if (message.contains("\n")){
+            message = message.replace("\n", "");
+        }
+        assertThat(errorMessage)
+                .as("Correct error message should be shown")
+                .isIn(message);
     }
 
     @Then("^\"All Channels\" and \"All Sentiments\" selected as default$")
@@ -447,7 +476,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertTrue(getSupervisorDeskPage().getSupervisorDeskLiveRow(userName).isFlagIconRemoved(),
                 String.format("Chat with user %s is flagged", userName));
     }
-
     @When("^Supervisor agent launch as agent$")
     public void supervisorAgentLaunchAsAgent() {
         getSupervisorDeskPage().clickOnLaunchAgent();
@@ -638,5 +666,20 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void agentClickCloseAssignWindow() {
         getSupervisorDeskPage().getAssignChatWindow().clickOnCloseAssignWindow();
         Assert.assertFalse(getSupervisorDeskPage().getAssignChatWindow().isAssignWindowShown(),"Assign Chat Window is closed");
+    }
+
+    @Then ("^Agent see channel and dates as filter options for tickets$")
+    public void verifyChannelOptionsAndDates(List<String> channels){
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertEquals(getSupervisorDeskPage().getSupervisorDeskHeader().expandChannels().getDropdownOptions(),  channels,
+                "Channel dropdown has incorrect options");
+            softAssert.assertTrue(getSupervisorDeskPage().getSupervisorDeskHeader().isStartDateIsPresent(),"Start day option should be present in tickets");
+            softAssert.assertTrue(getSupervisorDeskPage().getSupervisorDeskHeader().isEndDateIsPresent(),"End day option should be present in tickets");
+        softAssert.assertAll();
+    }
+    @Then ("^Agent see sentiments as filter options for tickets$")
+    public void verifyFilterOptions(List<String> sentiments) {
+        Assert.assertEquals(getSupervisorDeskPage().getSupervisorDeskHeader().expandSentiments().getDropdownOptions(), sentiments,
+                "Sentiment dropdown has incorrect options");
     }
 }

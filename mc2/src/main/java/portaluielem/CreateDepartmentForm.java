@@ -2,6 +2,7 @@ package portaluielem;
 
 import abstractclasses.AbstractUIElement;
 import io.qameta.allure.Step;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -18,6 +19,10 @@ public class CreateDepartmentForm extends AbstractUIElement {
 
     @FindBy(css = ".cl-checkbox__label")
     private List<WebElement> departmentAgentsCheckbox;
+
+    @FindBy(css = ".cl-checkbox__input")
+    private List<WebElement> departmentAgentsCheckboxes;
+
 
     @FindBy(xpath = ".//button[text() = 'Cancel']")
     private WebElement cancelButton;
@@ -52,6 +57,16 @@ public class CreateDepartmentForm extends AbstractUIElement {
         departmentAgentsCheckbox.stream().filter(a -> a.getText().trim().equals(agentName)).findFirst().orElseThrow(() -> new AssertionError("Cannot find '" + agentName + "' checkbox")).click();
         return this;
     }
+    public CreateDepartmentForm addRandomAgentsCheckbox(Integer numberOfAgents){
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), departmentAgentsCheckbox,7);
+        if (departmentAgentsCheckboxes.size() > numberOfAgents){
+            for(int i=0; i<numberOfAgents; i++){
+                departmentAgentsCheckboxes.stream().filter(a -> !Boolean.parseBoolean(a.getAttribute("aria-checked"))).findAny().orElseThrow(() -> new AssertionError("All agents are assigned")).findElement(By.xpath("./..")).click();
+            }
+        }
+        return this;
+    }
+
 
     @Step(value = "Select Department Agents checkbox")
     public CreateDepartmentForm selectSeveralDepartmentAgentsCheckbox(List<String> agentNames){

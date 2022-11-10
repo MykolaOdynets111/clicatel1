@@ -30,5 +30,5 @@ Feature: Supervisor can unflag live chat
     And Agent click on new conversation request from ORCA
     When Agent click 'Flag chat' button
     And Agent sees 'flag' icon in this chat
-    Then Agent closes chat and checks error dialog
+    Then Agent hover over "Exit chat" button and see You do not have the ability to close the chat when it has been flagged message
     And Conversation area becomes active with to agent user's message

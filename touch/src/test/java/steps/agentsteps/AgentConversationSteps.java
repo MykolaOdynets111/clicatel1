@@ -528,11 +528,10 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).endChat();
     }
 
-    @When("^(.*) closes chat and checks error dialog$")
-    public void closeChatAndCheckErrorDialog(String agent) {
-        getAgentHomeForMainAgent().endChatWithoutChatMessageValidation();
-
-        Assert.assertTrue(getAgentHomeForMainAgent().isDisappearingDialogShown(), "Error dialog is not shown");
+    @When("^(.*) hover over \"Exit chat\" button and see (.*) message$")
+    public void closeChatAndCheckErrorMessage(String agent, String errorMessage) {
+        getAgentHomeForMainAgent().hoverCloseChatIfVisible();
+        Assert.assertEquals(getAgentHomePage(agent).getChatHeader().getFlaggedMessageText(),errorMessage,"Error message is wrong");
     }
 
     @Then("^All session attributes are closed in DB$")
