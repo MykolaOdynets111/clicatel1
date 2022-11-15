@@ -35,7 +35,7 @@ public class UnityLoginPage extends UnityAbstractPage {
     }
 
     public UnityLoginPage loginToUnity(String email, String password){
-        inputText(this.getCurrentDriver(),emailAddressField,3,"Email Field",email);
+        inputText(this.getCurrentDriver(),emailAddressField,10,"Email Field",email);
         inputText(this.getCurrentDriver(),passwordField,3,"Password Field",password);
 //        bypassCaptcha();
         clickElem(this.getCurrentDriver(),signInBtn,15,"Sign In Button");
