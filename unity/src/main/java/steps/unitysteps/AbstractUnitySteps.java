@@ -33,27 +33,21 @@ public class AbstractUnitySteps implements JSHelper, VerificationHelper, WebWait
     public static UnityLandingPage getUnityLandingPage() {
         if (currentUnityLandingPage.get() == null) {
             currentUnityLandingPage.set(new UnityLandingPage(UnityDriverFactory.getUnityDriverInstance()));
-            return currentUnityLandingPage.get();
-        } else {
-            return currentUnityLandingPage.get();
         }
+        return currentUnityLandingPage.get();
     }
 
     public static ProductsAndServicesPage getProductsAndServicesPage() {
         if (ProductsAndServicesPage.get() == null) {
             ProductsAndServicesPage.set(new ProductsAndServicesPage(UnityDriverFactory.getUnityDriverInstance()));
-            return ProductsAndServicesPage.get();
-        } else {
-            return ProductsAndServicesPage.get();
         }
+        return ProductsAndServicesPage.get();
     }
 
     public static MyWorkspacePage getMyWorkspacePage() {
         if (currentMyWorkspacePage.get() == null) {
             currentMyWorkspacePage.set(new MyWorkspacePage(UnityDriverFactory.getUnityDriverInstance()));
-            return currentMyWorkspacePage.get();
-        } else {
-            return currentMyWorkspacePage.get();
         }
+        return currentMyWorkspacePage.get();
     }
 }

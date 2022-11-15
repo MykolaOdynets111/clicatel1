@@ -39,6 +39,7 @@ public enum DriverType {
             if(ConfigManager.isRemote())options.addArguments("window-size=1360,1020");
             options.setCapability("goog:loggingPrefs", logPrefs);
             options.setCapability("build", "CaptchaInSelenium");
+            options.setCapability("name", "TCaptchaInSeleniumSample");
             options.addArguments("disable-site-isolation-trials");
             options.addArguments("test-type=browser");
             options.addArguments("start-maximized");
@@ -49,6 +50,7 @@ public enum DriverType {
             options.addArguments("no-proxy-server");
             options.addArguments("no-sandbox");
             options.addArguments("disable-notifications");
+            options.addArguments("--disable-extensions");
             options.addArguments("incognito");
             return options;
 		}

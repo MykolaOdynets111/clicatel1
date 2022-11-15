@@ -23,6 +23,7 @@ public class UnityDriverFactory {
 
     public static synchronized WebDriver startNewUnityInstance(){
         DriverType driverType = ConfigManager.getDriverType();
+
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
         unityDriver.set(driverType.getWebDriverObject(capabilities));
         return  unityDriver.get();
