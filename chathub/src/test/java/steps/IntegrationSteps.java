@@ -20,5 +20,4 @@ public class IntegrationSteps extends AbstractUnitySteps{
 
             Assert.assertTrue(getIntegrationsPage().availableIntegrationsDisplayed());
         }
-
 }

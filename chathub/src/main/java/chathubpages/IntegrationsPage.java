@@ -25,6 +25,6 @@ public class IntegrationsPage extends UnityAbstractPage {
     }
 
     public boolean availableIntegrationsDisplayed(){
-      return isElementShown(this.getCurrentDriver(), availableIntegrations,3);
+        return isElementShown(this.getCurrentDriver(), availableIntegrations,3);
     }
 }
