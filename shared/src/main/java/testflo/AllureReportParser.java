@@ -17,12 +17,12 @@ public class AllureReportParser {
    private static final String ALLURE_REPORT_DATA_FOLDER = System.getProperty("user.dir") + "/build/allure-report/data/";
 
 
-   private static AllureScenarioInterface parseJSONfILE(File file, ObjectMapper objectMapper, boolean isAllure2Report){
-       if(isAllure2Report){
+   private static AllureScenarioInterface parseJSONfILE(File file, ObjectMapper objectMapper){
+//       if(isAllure2Report){
            return parseAllure2(file, objectMapper);
-       } else{
-           return parseLocalAllure(file, objectMapper);
-       }
+//       } else{
+//           return parseLocalAllure(file, objectMapper);
+//       }
    }
 
    private static AllureScenarioInterface parseLocalAllure(File file, ObjectMapper objectMapper){
@@ -61,7 +61,7 @@ public class AllureReportParser {
 
        ObjectMapper objectMapper = new ObjectMapper();
        return allureTestCases.stream()
-               .map(allureTC -> parseJSONfILE(allureTC, objectMapper, isRemoteAllureReport))
+               .map(allureTC -> parseJSONfILE(allureTC, objectMapper))
                .collect(Collectors.toList());
    }
 
