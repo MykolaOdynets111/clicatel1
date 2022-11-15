@@ -2,7 +2,7 @@ package unitypages;
 
 import abstractclasses.UnityAbstractPage;
 import driverfactory.UnityURLs;
-import org.openqa.selenium.*;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 
@@ -37,8 +37,8 @@ public class UnityLoginPage extends UnityAbstractPage {
     public UnityLoginPage loginToUnity(String email, String password){
         inputText(this.getCurrentDriver(),emailAddressField,10,"Email Field",email);
         inputText(this.getCurrentDriver(),passwordField,3,"Password Field",password);
-        //bypassCaptcha();
-        clickElem(this.getCurrentDriver(),signInBtn,10,"Sign In Button");
+//        bypassCaptcha();
+        clickElem(this.getCurrentDriver(),signInBtn,15,"Sign In Button");
         return this;
     }
 

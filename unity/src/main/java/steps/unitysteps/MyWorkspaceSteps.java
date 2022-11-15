@@ -1,6 +1,5 @@
 package steps.unitysteps;
 
-import driverfactory.DriverFactory;
 import driverfactory.UnityDriverFactory;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;

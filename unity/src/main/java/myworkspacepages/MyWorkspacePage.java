@@ -45,7 +45,4 @@ public class MyWorkspacePage extends UnityAbstractPage {
         clickElem(this.getCurrentDriver(), apiIntegrationsTab, 3, "API Integrations Tab");
     }
 
-
-
-
 }

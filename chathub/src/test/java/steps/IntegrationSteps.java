@@ -1,6 +1,8 @@
 package steps;
 
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import org.junit.Assert;
 import steps.unitysteps.AbstractUnitySteps;
 
 import static abstractclasses.IntegrationsAbstractSteps.getIntegrationsPage;
@@ -13,4 +15,9 @@ public class IntegrationSteps extends AbstractUnitySteps{
             getIntegrationsPage().clickOnZendeskSupport();
         }
 
+        @Then("Number of available integrations is displayed on integrations card")
+        public void numberOfIntegrationsIsDisplayed() {
+
+            Assert.assertTrue(getIntegrationsPage().availableIntegrationsDisplayed());
+        }
 }

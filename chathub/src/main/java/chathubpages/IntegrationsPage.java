@@ -11,6 +11,9 @@ public class IntegrationsPage extends UnityAbstractPage {
     @FindBy(xpath = "//*[@class='integrations-details_title u-s3 mb-10' and text()='Zendesk Support']")
     private WebElement zendeskIntegrationsCard;
 
+    @FindBy(xpath = "//span[text()='4 Available Integrations ']")
+    private WebElement availableIntegrations;
+
     public IntegrationsPage(WebDriver driver) {
 
         super(driver);
@@ -19,5 +22,9 @@ public class IntegrationsPage extends UnityAbstractPage {
     //Todo : Make this function generic and take Integration card name as input
     public void clickOnZendeskSupport() {
         clickElem(this.getCurrentDriver(), zendeskIntegrationsCard, 3, "Zendesk Support");
+    }
+
+    public boolean availableIntegrationsDisplayed(){
+        return isElementShown(this.getCurrentDriver(), availableIntegrations,3);
     }
 }
