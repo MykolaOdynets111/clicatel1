@@ -1,15 +1,15 @@
 package steps.unitysteps;
 
+import datamanager.UnityClients;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.WebDriver;
-import unitypages.UnityLandingPage;
 
 public class UnityLoginSteps extends AbstractUnitySteps {
 
-    @When("I login to Unity with email {string} and password {string}")
-    public void loginToUnity(String email, String password){
-       AbstractUnitySteps.getLoginForUnity().loginToUnity(email, password);
+    @When("I login to Unity as (.*)$")
+    public void loginToUnity(String unityClient){
+        UnityClients unityUser = UnityClients.valueOf(unityClient);
+        AbstractUnitySteps.getLoginForUnity().loginToUnity(unityUser.getUnityClientEmail(), unityUser.getUnityClientPass());
     }
 
     @And("User clicks on My Workspace page link")
