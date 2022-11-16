@@ -14,6 +14,9 @@ public class IntegrationsPage extends UnityAbstractPage {
     @FindBy(xpath = "//span[text()='4 Available Integrations ']")
     private WebElement availableIntegrations;
 
+    @FindBy(xpath = "//*[@class ='mat-card-title info-card__title'][1]")
+    private WebElement firstCard;
+
     public IntegrationsPage(WebDriver driver) {
 
         super(driver);
@@ -27,4 +30,9 @@ public class IntegrationsPage extends UnityAbstractPage {
     public boolean availableIntegrationsDisplayed(){
         return isElementShown(this.getCurrentDriver(), availableIntegrations,3);
     }
+
+    public String integrationsIsFirstCard(){
+        return getTextFromElem(this.getCurrentDriver(), firstCard,3,"First Card of Numbers & Integrations");
+    }
+
 }
