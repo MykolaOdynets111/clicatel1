@@ -19,7 +19,7 @@ public class NewTCBodyGenerator {
      public static String newIssueBody = "{\n" +
              "  \"fields\": {\n" +
              "    \"project\": {\n" +
-             "      \"key\": \"TPORT\"\n" +
+             "      \"key\": \"CCD\"\n" +
              "    },\n" +
              "    \"parent\": {\"key\": \"%s\"},\n" +
              "    \"summary\": \"%s\",\n" +
@@ -79,8 +79,9 @@ public class NewTCBodyGenerator {
              }
          }
 
-         return String.format(newIssueBody, testPlanKey, scenario.getName().replace("\"", "\\\""),
-                 scenario.getDescription().replace("null", "").trim(),
+         return String.format(newIssueBody, testPlanKey,
+                 scenario.getName().replace("\"", "\\\""),
+                 "Creating new TC by autotests in:  " + testPlanKey,
                  testTemplateId, testCaseSteps.toString());
      }
 

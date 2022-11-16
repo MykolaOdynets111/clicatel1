@@ -23,6 +23,7 @@ public class TestFloReporter {
 //    System.setProperty("jirauser", "");
 //    System.setProperty("jirapass", "");
 
+        System.out.println("Test flow reporter is set to: " + ConfigManager.reportToTouchFlo());
 
         if(ConfigManager.reportToTouchFlo()) {
 
@@ -46,6 +47,7 @@ public class TestFloReporter {
             List<AllureScenarioInterface> executedTests = AllureReportParser
                     .parseAllureResultsToGetTestCases(ConfigManager.isAllure2Report());
 
+            System.out.println("numbers of executed TCs: " + executedTests.size());
             // 4. Filter the cases that should be created in Test Plan
             List<AllureScenarioInterface> executedTestsToBeCreatedInTestPlan = executedTests
                     .stream()
