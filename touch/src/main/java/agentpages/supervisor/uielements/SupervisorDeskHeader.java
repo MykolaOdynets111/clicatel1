@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(css = ".view-header")
+@FindBy(css = ".supervisor-view-header")
 public class SupervisorDeskHeader extends AbstractUIElement {
 
     @FindBy(id = "nameOrPhone")
