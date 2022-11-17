@@ -17,6 +17,6 @@ Feature: Max chat functionality for Bot mode tenant
     When maxChatsPerAgent tenant feature is set to 50 for Automation Bot
     And Send 2 messages chat to agent by ORCA
     Then Verify agent has 4 conversation requests from Whatsapp integration
-    When Agent click on new conversation request from touch
+    When Agent click on new conversation request from orca
     Then Conversation area becomes active with chat to agent user's message
     And Verify Orca returns Connecting Agent message (Social Channels) autoresponder during 40 seconds for agent
