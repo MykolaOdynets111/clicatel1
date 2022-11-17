@@ -43,6 +43,9 @@ import touchpages.pages.MainPage;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+import static org.assertj.core.api.Java6Assertions.assertThat;
+
 public class BasePortalSteps extends AbstractPortalSteps {
 
     public static final String FIRST_AND_LAST_NAME = "Clickatell Test";
@@ -352,7 +355,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("I use activation ID and opens activation page")
     public void openActivationAccountPage(){
-        String activationURL = String.format(EndpointsPlatform.PORTAL_ACCOUNT_ACTIVATION, activationAccountID);
+        String activationURL = format(EndpointsPlatform.PORTAL_ACCOUNT_ACTIVATION, activationAccountID);
         DriverFactory.getAgentDriverInstance().get(activationURL);
     }
 
@@ -708,9 +711,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
             expectedValue = chatConsolePretestValue.get(name) + incrementer;
         }
 
-        Assert.assertTrue(checkLiveCounterValue(name, expectedValue),
-                "'"+name+"' widget value is not updated\n" +
-                "Expected value: " + expectedValue);
+        assertThat(checkLiveCounterValue(name, expectedValue))
+                .as(format("'%s' widget value should be updated. Expected value: %s", name, expectedValue))
+                .isTrue();
     }
 
     @Then("^Average chats per Agent is correct$")

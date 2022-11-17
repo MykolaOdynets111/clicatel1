@@ -11,4 +11,5 @@ Feature: Activity Overview
     When I select Touch in left menu and Dashboard in submenu
     Then Save Agents available counter value
     When I login as second agent of General Bank Demo
+    And Admin refreshes the page
     Then Agents available widget value increased on 1

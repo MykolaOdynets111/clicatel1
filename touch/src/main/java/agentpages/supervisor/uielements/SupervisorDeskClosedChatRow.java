@@ -30,6 +30,10 @@ public class SupervisorDeskClosedChatRow extends AbstractWidget {
         return this;
     }
 
+    public String getName(){
+        return  userName.getText();
+    }
+
     public LocalDateTime getDate() {
         wheelScrollDownToElement(this.getCurrentDriver(),
                 findElemByCSS(this.getCurrentDriver(), scrollAreaCss), date, 3);

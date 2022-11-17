@@ -9,8 +9,6 @@ import org.openqa.selenium.support.FindBy;
 
 public class SupervisorDeskLiveRow extends AbstractWidget {
 
-    private WebElement baseWebElem = this.getWrappedElement();
-
     @FindBy(css = ".cl-chat-item-user-name")
     private WebElement userName;
 
@@ -24,28 +22,24 @@ public class SupervisorDeskLiveRow extends AbstractWidget {
         super(element);
     }
 
-    public SupervisorDeskLiveRow setCurrentDriver(WebDriver currentDriver){
+    public SupervisorDeskLiveRow setCurrentDriver(WebDriver currentDriver) {
         this.currentDriver = currentDriver;
         return this;
     }
 
-    public String getUserName(){
-        return userName.getText();//getTextFromElem(this.getCurrentDriver(), userName, 5, "User name");
+    public String getUserName() {
+        return userName.getText();
     }
 
-    public void clickOnUserName(){
+    public void clickOnUserName() {
         clickElem(this.getCurrentDriver(), userName, 5, "User Name");
     }
 
-    public String getIconName(){
+    public String getIconName() {
         return chanelIcon.getAttribute("name").trim();
     }
 
-    public boolean isFlagIconShown(){
-        return isElementShown(this.getCurrentDriver(), flaggedChatIcon, 5);
-    }
-
-    public boolean isFlagIconRemoved(){
+    public boolean isFlagIconRemoved() {
         return isElementRemoved(this.getCurrentDriver(), flaggedChatIcon, 3);
     }
 }

@@ -72,8 +72,9 @@ public class PageHeader extends AbstractUIElement {
     }
 
     public boolean verifyUserStatusOnIcon(String status) {
+        isElementShown(this.getCurrentDriver(), icon, 5);
         WebElement statusIcon = icon.findElement(By.cssSelector(format(" [data-status = '%s']", status.toUpperCase())));
-        return isElementShown(this.getCurrentDriver(), statusIcon,5);
+        return isElementShown(this.getCurrentDriver(), statusIcon, 10);
     }
 
     public void clickIcon() {

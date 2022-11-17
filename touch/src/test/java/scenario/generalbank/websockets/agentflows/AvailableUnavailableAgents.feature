@@ -18,11 +18,12 @@ Feature: Available/Unavailable agents
     Then Agent verify customer contact number +1 905 519 7655 is filled
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2984")
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2984")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2875")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2683")
   Scenario: CD :: Agent Desk :: Verify that clicking on radio button near "Unavailable" - red dot is appears on agent profile picture
 
     Given I login as agent of General Bank Demo
+    And Agent of General Bank Demo is logged in
     When Agent changes status to: Unavailable
     Then Verify Agent status: Unavailable is displayed on the icon
     When Agent changes status to: Available
