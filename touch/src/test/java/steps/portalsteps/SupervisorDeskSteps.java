@@ -157,6 +157,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().getSupervisorDeskLiveRow(getUserName(channel)).clickOnUserName();
     }
 
+
     @Then("^Supervisor Desk Live chat container header has (.*) User photo, name and (.*) channel$")
     public void verifyCorrectHeaderInfo(String channel, String image) {
         String userName = getUserName(channel);
@@ -387,6 +388,17 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         List<LocalDateTime> listOfDates = getSupervisorDeskPage().getSupervisorTicketsTable().getTicketsStartDates();
         Assert.assertTrue(isDateSorted(order, listOfDates), "Tickets are not sorted in " + order + " order");
     }
+
+    @And("^Chat from (.*) channel is present in the Live Chat list$")
+    public void verifyChatIsPresent(String channel) {
+        boolean channelNamePresent = getSupervisorDeskPage()
+                .getSupervisorDeskLiveRow(getUserName(channel))
+                .isChannelNamePresent();
+
+        assertThat(channelNamePresent)
+                .as("Chat should be present!")
+                .isTrue();
+}
 
     @Then("^Verify ticket is present for (.*)$")
     public void verifyTicketIsPresent(String chanel) {
