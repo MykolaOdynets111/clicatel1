@@ -34,7 +34,7 @@ Feature: Apple Business Chat :: Supervisor Desk
 
     Given I login as Second Agent of General Bank Demo
     And Setup ORCA abc integration for General Bank Demo tenant
-    When Send chat to be closed message by ORCA
+    When Send chat to message message by ORCA
     Then Second Agent has new conversation request from orca user
     And Second Agent click on new conversation request from orca
 
@@ -46,8 +46,8 @@ Feature: Apple Business Chat :: Supervisor Desk
     When Second Agent closes chat
     Then Second Agent should not see from user chat in agent desk from ORCA
 
-    When Admin clicks 'Go to chat' button
-    Then Orca request is shown on Supervisor Desk Live page
+    When Agent select "Closed" left menu option
+    Then Verify closed chat is present for orca
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1325")
   @orca_api
