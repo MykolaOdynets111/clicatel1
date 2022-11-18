@@ -1,7 +1,7 @@
 package abstractclasses;
 
 import chathubpages.IntegrationsPage;
-import driverfactory.UnityDriverFactory;
+import driverfactory.DriverFactory;
 import interfaces.JSHelper;
 import interfaces.VerificationHelper;
 import interfaces.WebWait;
@@ -13,11 +13,9 @@ public class IntegrationsAbstractSteps implements JSHelper, VerificationHelper, 
 
     public static IntegrationsPage getIntegrationsPage() {
         if (currentIntegrationsPage.get() == null) {
-            currentIntegrationsPage.set(new IntegrationsPage(UnityDriverFactory.getUnityDriverInstance()));
-            return currentIntegrationsPage.get();
-        } else {
-            return currentIntegrationsPage.get();
+            currentIntegrationsPage.set(new IntegrationsPage(DriverFactory.getTouchDriverInstance()));
         }
+        return currentIntegrationsPage.get();
     }
 
 

@@ -9,7 +9,7 @@ public class UnityLoginSteps extends AbstractUnitySteps {
     @When("I login to Unity as (.*)$")
     public void loginToUnity(String unityClient){
         UnityClients unityUser = UnityClients.valueOf(unityClient);
-        AbstractUnitySteps.getLoginForUnity().loginToUnity(unityUser.getUnityClientEmail(), unityUser.getUnityClientPass());
+        AbstractUnitySteps.getUnityLoginPage().loginToUnity(unityUser.getUnityClientEmail(), unityUser.getUnityClientPass());
     }
 
     @And("User clicks on My Workspace page link")

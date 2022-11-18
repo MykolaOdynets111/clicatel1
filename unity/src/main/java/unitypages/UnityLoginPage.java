@@ -2,6 +2,7 @@ package unitypages;
 
 import abstractclasses.UnityAbstractPage;
 import driverfactory.UnityURLs;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -23,23 +24,19 @@ public class UnityLoginPage extends UnityAbstractPage {
     @FindBy(xpath = "//button[@type='submit']")
     private WebElement signInBtn;
 
-// Todo : Fix constructor
-    public UnityLoginPage() {
-        super();
-        getCurrentDriver().get(UnityURLs.getUnityLoginForm());
+    public UnityLoginPage(WebDriver driver) {
+        super(driver);
+        driver.get(UnityURLs.getUnityLoginForm());
     }
 
-    public UnityLoginPage openChatHubLoginPage() {
-        getCurrentDriver().get(UnityURLs.getUnityLoginForm());
-        return this;
-    }
 
-    public UnityLoginPage loginToUnity(String email, String password){
-        inputText(this.getCurrentDriver(),emailAddressField,10,"Email Field",email);
-        inputText(this.getCurrentDriver(),passwordField,3,"Password Field",password);
-//        bypassCaptcha();
-        clickElem(this.getCurrentDriver(),signInBtn,15,"Sign In Button");
-        return this;
+    public void loginToUnity(String email, String password){
+
+        WebDriver driver = this.getCurrentDriver();
+
+        inputText(driver,emailAddressField,10,"Email Field",email);
+        inputText(driver,passwordField,3,"Password Field",password);
+        clickElem(driver,signInBtn,15,"Sign In Button");
     }
 
     private void bypassCaptcha(){

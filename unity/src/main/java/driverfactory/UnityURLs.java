@@ -6,15 +6,15 @@ import drivermanager.ConfigManager;
 public class UnityURLs {
 
 
-    // ================== API BASE URLs ========================= //
+    // ================== BASE UNITY URLs ========================= //
 
-    private static String BASE_CHATHUB_API_URL = "https://%s-mc2-app-foxtrot.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/";
-    private static String CHATHUB_LOGIN_FORM = "https://%s-mc2-app-foxtrot.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/login";
+    private static String BASE_UNITY_URL = "https://%s-mc2-app-foxtrot.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/";
+    private static String UNITY_LOGIN_FORM = "https://%s-mc2-app-foxtrot.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/login";
 
 
     public static String getUnityLoginForm(){
 
-        return String.format(CHATHUB_LOGIN_FORM, ConfigManager.getEnv());
+        return String.format(UNITY_LOGIN_FORM, ConfigManager.getEnv());
     }
 
 }

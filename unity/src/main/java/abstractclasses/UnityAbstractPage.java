@@ -1,6 +1,6 @@
 package abstractclasses;
 
-import driverfactory.UnityDriverFactory;
+import driverfactory.DriverFactory;
 import interfaces.ActionsHelper;
 import interfaces.JSHelper;
 import interfaces.WebActions;
@@ -15,7 +15,7 @@ public abstract class UnityAbstractPage implements WebActions, ActionsHelper, JS
     protected WebDriver currentDriver;
 
     public UnityAbstractPage() {
-        currentDriver = UnityDriverFactory.getUnityDriverInstance();
+        currentDriver = DriverFactory.getTouchDriverInstance();
         HtmlElementLoader.populatePageObject(this, currentDriver);
     }
 

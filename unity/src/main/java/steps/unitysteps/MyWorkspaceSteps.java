@@ -1,6 +1,6 @@
 package steps.unitysteps;
 
-import driverfactory.UnityDriverFactory;
+import driverfactory.DriverFactory;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import org.testng.asserts.SoftAssert;
@@ -15,10 +15,13 @@ public class MyWorkspaceSteps extends AbstractUnitySteps{
 
     @Then("Application redirects to (.*) page$")
     public void verifyApplicationIsRedirectedToPage(String page) {
-        String pageUrl = UnityDriverFactory.getUnityDriverInstance().getCurrentUrl();
+
+        waitFor(2000);
+        String pageUrl = DriverFactory.getTouchDriverInstance().getCurrentUrl();
+
         SoftAssert softAssert = new SoftAssert();
         if(page.equalsIgnoreCase("integrations")) {
-            softAssert.assertTrue(pageUrl.contains("product/integrations"),
+            softAssert.assertTrue(pageUrl.contains("products/integrations"),
                     String.format("User is not redirected to %s", page));
         } else if(page.equalsIgnoreCase("Long Numbers & Short Codes")) {
             softAssert.assertTrue(pageUrl.contains("my-workspace/numbers"),
