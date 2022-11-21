@@ -1,4 +1,5 @@
 @Regression
+@skip
 Feature: Supervisor desk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2810")

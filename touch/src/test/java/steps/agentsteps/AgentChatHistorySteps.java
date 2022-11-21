@@ -66,7 +66,7 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
     @Then("^(.*) sees correct location URL in History Details window$")
     public void compareLocationInHistoryDetailsWindows(String agent){
         String locationInHistoryDetails = getAgentHomePage(agent).getHistoryDetailsWindow().getLocationURL();
-        Assert.assertEquals(locationInHistoryDetails, AgentConversationSteps.locationURL.get(), "Location URLs aro different");
+        Assert.assertEquals(locationInHistoryDetails, AgentConversationSteps.getLocationURL(), "Location URLs aro different");
     }
 
     @Then("^(.*) sees the particular message (.*) in History Details window$")
@@ -93,8 +93,8 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
         soft.assertAll();
     }
 
-    @Given("Chat history of the client is available for the (.*) of (.*)")
-    public void createHistory(String agent, String tenantOrgName){
+    @Given("^Chat history of the client is available for (.*) channel, the (.*) of (.*)$")
+    public void createHistory(String channel, String agent, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         String previousChatId = "aqa_" + faker.lorem().characters(15) + System.currentTimeMillis();
         String sessionId = "aqa_" + faker.lorem().characters(15) + System.currentTimeMillis();
@@ -114,16 +114,16 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
 
         String tenantId = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         String agentId = ApiHelper.getAgentInfo(tenantOrgName, agent).get("id");
-        String channelId = ApiHelper.getChannelID(tenantOrgName, "webchat");
+        String channelId = ApiHelper.getChannelID(tenantOrgName, channel);
 
 
 
         Message userMessage = createMessageInHistory(previousChatId, tenantId, sessionId, chatStarted.atZone(zoneId).toInstant().toString(),
                 ApiHelper.clientProfileId.get(), "USER", channelId,
-                                        "webchat", "user_message " + faker.book().title());
+                                        channel, "user_message " + faker.book().title());
         Message agentMessage = createMessageInHistory(previousChatId, tenantId, sessionId, chatStarted.plusMinutes(5).atZone(zoneId).toInstant().toString(),
                 agentId, "AGENT", channelId,
-                "webchat", "agent_message " + faker.book().title());
+                channel, "agent_message " + faker.book().title());
         List<Message> messages = Arrays.asList(userMessage, agentMessage);
 
         chatHistory  = new ChatHistory(previousChatId, tenantId, ApiHelper.clientProfileId.get(), agentId, channelId,
@@ -152,18 +152,15 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
     @When("^(.*) searches and selects chat from (.*) in chat history list$")
     public void selectRandomChatFromHistory(String ordinalAgentNumber, String channel){
         getAgentHomePage(ordinalAgentNumber).waitForLoadingInLeftMenuToDisappear(3,7);
-        getLeftMenu(ordinalAgentNumber).searchUserChat(getUserName(channel));
-    }
-
-    @When("Close chat to generate history record")
-    public void closeChat() {
-        ApiHelper.closeActiveChats("main");
+        Assert.assertTrue(getLeftMenu(ordinalAgentNumber).searchUserChat(getUserName(channel)), "No chats visible in close chats");
     }
 
     @When("^(.*) sees correct chat history$")
     public void getChatHistoryFromBackend(String agent){
         List<String> messagesFromChatBody = getChatBody(agent).getAllMessages();
-        List<String> expectedMessagesList = getExpectedChatHistoryItems(chatHistory);
+
+        getAgentHomePage(agent).getChatHistoryContainer().getChatHistoryItemsByIndex(0).clickViewButton();
+        List<String> expectedMessagesList = getChatBody(agent).getHistoryMessages();
 
         Assert.assertEquals(messagesFromChatBody, expectedMessagesList,
                 "Shown on chatdesk messages are not as expected from API \n" +
@@ -199,7 +196,7 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
     public void verifyLocationURLInClosedChat(String agent){
         waitFor(3000);//wait till URL will be fully loaded
         String url = getAgentHomePage(agent).getChatBody().getLocationURLFromAgent();
-        Assert.assertEquals(url, AgentConversationSteps.locationURL.get(), "Location URLs are different");
+        Assert.assertEquals(url, AgentConversationSteps.getLocationURL(), "Location URLs are different");
     }
 
 

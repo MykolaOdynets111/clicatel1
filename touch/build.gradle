@@ -41,6 +41,8 @@ dependencies {
     api  group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.10'
     api group: 'com.amazonaws', name: 'amazon-sqs-java-messaging-lib', version: '2.0.0'
     api group: 'software.amazon.awssdk', name: 'auth', version: '2.17.267'
+    // https://mvnrepository.com/artifact/software.amazon.awssdk/sts
+    api group: 'software.amazon.awssdk', name: 'sts', version: '2.17.286'
 }
 
 tasks.withType(Copy) { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
@@ -129,6 +131,13 @@ task runWebsocketsReqression(type:Test){
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath + tenantName + "/websockets_reqression.xml"
+    }
+}
+
+task runReqression(type:Test){
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + tenantName + "/reqression.xml"
     }
 }
 
@@ -248,6 +257,10 @@ task runTests(type: Test) {
 
     if(suite == "websockets") {
         runTests.dependsOn(runWebsocketsReqression)
+    }
+
+    if(suite == "regression") {
+        runTests.dependsOn(runReqression)
     }
 
     if(suite == "facebook") {

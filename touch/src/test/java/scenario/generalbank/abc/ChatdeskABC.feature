@@ -2,21 +2,21 @@
 @Regression
 Feature: Apple Business Chat :: Chatdesk
 
-  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-3001")
+  @orca_api
   Scenario: CD :: Agent Desk :: Live Chat :: ABC :: Verify that chat header should have apple icon when user is chatting using apple chat
-    Given I login as agent of General Bank Demo
+
     Given Setup ORCA abc integration for General Bank Demo tenant
+    And I login as agent of General Bank Demo
     When Send connect to Support message by ORCA
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
-    Then Conversation area becomes active with connect to Support user's message
-    Then Valid image for abc integration are shown in left menu with chat
-    And Agent should see abcHeader icon in active chat header
+    And Conversation area becomes active with connect to Support user's message
+    Then Agent should see apple-business-chat integration icon in left menu with chat
+    And Agent should see apple-business-chat icon in active chat header
 
-
-  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2328")
+  @orca_api
   Scenario: CD:: ABC:: Agent Desk:: //END message works for apple business chat
     Given I login as agent of General Bank Demo
     Given Setup ORCA abc integration for General Bank Demo tenant
@@ -24,6 +24,9 @@ Feature: Apple Business Chat :: Chatdesk
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
     Then Conversation area becomes active with connect to Support user's message
+    When Agent responds with hello to User
+    When Send //end message by ORCA
+    Then Agent should not see from user chat in agent desk from orca
 
 
   @orca_api

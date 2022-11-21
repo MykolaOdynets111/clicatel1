@@ -31,6 +31,7 @@ Feature: Whatsapp ORCA :: Dashboard
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1753")
   Scenario: Dashboard: WhatsApp support: Verify Customer overview displays correct report of Attended / Unattended chats
+
     Given I login as agent of General Bank Demo
     When Send connect to agent message by ORCA
     Then Agent has new conversation request from orca user
@@ -55,4 +56,4 @@ Feature: Whatsapp ORCA :: Dashboard
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Live Customers on dashboard
-    Then Verify admin can see number of positive sentiment chats when hover over WhatsApp channel
+    Then Verify admin can see number of chats when hover over WhatsApp channel

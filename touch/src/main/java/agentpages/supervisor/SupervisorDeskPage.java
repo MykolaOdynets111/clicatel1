@@ -4,7 +4,6 @@ import agentpages.supervisor.uielements.*;
 import agentpages.uielements.ChatBody;
 import agentpages.uielements.ChatHeader;
 import agentpages.uielements.Profile;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
@@ -12,11 +11,7 @@ import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
 import portaluielem.AssignChatWindow;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,23 +21,14 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(css = ".cl-chat-item")
     private List<WebElement> chatsLive;
 
-    @FindBy(xpath = "//h2[text() ='Loading...']")
-    private WebElement loading;
-
     @FindBy (css = ".ReactModal__Content.ReactModal__Content--after-open.cl-modal")
     private WebElement assignWindowsDialog;
-
-    @FindBy(css = ".chats-list-extended-view-header-text")
-    private WebElement openedChatHeader;
 
     @FindAll({
             @FindBy(css = ".bottom-action-bar--send-notification>button"),
             @FindBy(css = "[data-testid=chat-form-send-email]")
     })
     private WebElement openedClosedChatMessageUserButton;
-
-    @FindBy(xpath = "//span[contains(@class,'chats-list-extended-view-header-text')]/following-sibling::a[@href='/supervisor/closed']")
-    private WebElement closeOpenedClosedChatView;
 
     @FindBy(xpath = "//div[text()='Loading results']")
     private WebElement loadingResults;
@@ -71,16 +57,10 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(css="svg[name='puzzle']")
     private WebElement c2pButton;
 
-    private String backButtonString = "//button[@aria-label='Previous Month']";
-
     private String chatName = "//h2[@class='cl-chat-item-user-name' and text() ='%s']";
 
     @FindBy(css = ".cl-details-value")
     private WebElement profileName;
-
-    //private String filterByDefaultXpath = "//span[text()='Conversation status:']//following-sibling::div//div[@class='cl-r-select__single-value css-1uccc91-singleValue']";
-
-    private String iframeId = "ticketing-iframe";
 
     @FindAll({
             @FindBy(css = ".cl-modal-default-header-title']"),
@@ -102,14 +82,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private SupervisorDeskHeader supervisorDeskHeader;
     private SupervisorAvailableAsAgentDialog supervisorAvailableAsAgentDialog;
 
-    // == Constructors == //
-
-    public SupervisorDeskPage() {
-        super();
-    }
-    public SupervisorDeskPage(String agent) {
-        super(agent);
-    }
     public SupervisorDeskPage(WebDriver driver) {
         super(driver);
     }
@@ -255,6 +227,11 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return chatBody;
     }
 
+    public ChatBody getTicketChatBody(){
+        chatBody.setCurrentDriver(this.getCurrentDriver());
+        return chatBody;
+    }
+
     public String getNoChatsErrorMessage(){
         return getTextFromElem(this.getCurrentDriver(), noChatsErrorMessage, 3, "No Chats Error Message");
     }
@@ -266,14 +243,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     public void clickOnLaunchAgent() {
         clickElem(this.getCurrentDriver(), supervisorButton, 3, "Supervisor Button Dropdown");
         clickElem(this.getCurrentDriver(), launchAgentButton, 3, "Launch supervisor as agent button");
-    }
-
-    public void loadAllTickets() {
-        getSupervisorTicketsTable().loadAllFoundTickets();
-    }
-
-    public void loadAllClosedChats() {
-        getSupervisorClosedChatsTable().loadAllFoundChats();
     }
 
     public boolean verifyChatAlertIsPresent(int wait) {

@@ -1,10 +1,7 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
@@ -44,13 +41,6 @@ public class ChatHeader extends AbstractUIElement {
     })
     private WebElement transferButton;
 
-    @FindBy(css = "[data-testid=header-send-sms]")
-    private WebElement sendSMSButton;
-
-    //for future
-    @FindBy(css = "[data-testid=header-whats-app-button]")
-    private WebElement sendWhatsAppButton;
-
     @FindBy(css = "[data-testid=chat-header-title]")
     private WebElement chatHeaderTitle;
 
@@ -63,7 +53,7 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(css = ".cl-chat-header-time")
     private WebElement dateTime;
 
-    @FindBy(css = "[selenium-id=header-cancel-transfer]")
+    @FindBy(css = "[data-testid=header-transfer-chat]")
     private WebElement cancelTransferButton;
 
     @FindBy(css = ".cl-r-avatar")
@@ -87,6 +77,9 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(xpath = "//button[contains(text(), 'Assign' )]")
     private WebElement assignButton;
 
+    @FindBy(xpath = "//div[@class='tippy-content']/div")
+    private WebElement flaggedCloseChatToolTip;
+
     private final String transferChatButtonXpath =  ".//button[@selenium-id='header-transfer-chat']";
     private final String sendSMSXpath = ".//button[@selenium-id='header-send-sms']";
     private final String sendWhatsAppXpath = ".//button[text()='Send WhatsApp']";
@@ -105,6 +98,9 @@ public class ChatHeader extends AbstractUIElement {
         } else {
             clickElem(this.getCurrentDriver(), endChatButton, 6, "End chat button");
         }
+    }
+    public void hoverEndChatButton() {
+            hoverElem(this.getCurrentDriver(), endChatButton, 4, "End chat button");
     }
 
     public boolean isEndChatShown(){
@@ -199,10 +195,13 @@ public class ChatHeader extends AbstractUIElement {
     }
 
     public boolean isValidChannelImg(String channelPictureName) {
-        File image = new File(System.getProperty("user.dir")+"/src/test/resources/adaptericons/"+channelPictureName+".png");
+        File image = new File(System.getProperty("user.dir") + "/src/test/resources/adaptericons/" + channelPictureName +".png");
         return isWebElementEqualsImage(this.getCurrentDriver(), channelImg, image);
     }
-        //Verify if tame stanp in 24 hours format
+
+    public String getChatIconName() {
+        return channelImg.findElement(By.cssSelector(" svg")).getAttribute("name").trim();
+    }
     public String getTimeStamp() {
         return timeStamp.getAttribute("textContent").trim();
     }
@@ -239,5 +238,11 @@ public class ChatHeader extends AbstractUIElement {
     public void clickOnAssignButton() {
         clickElem(this.getCurrentDriver(), threeDotsVerticalMenu, 3, "Three Dots Vertical Menu");
         clickElem(this.getCurrentDriver(), assignButton, 3, "Assign Chat Button");
+    }
+    public String getFlaggedMessageText() {
+        return getTextFromElem(this.getCurrentDriver(), flaggedCloseChatToolTip, 4, "Tool Tip for flagged chat");
+    }
+    public boolean isCloseChatClickable() {
+        return isElementEnabled(this.getCurrentDriver(), endChatButton,4);
     }
 }

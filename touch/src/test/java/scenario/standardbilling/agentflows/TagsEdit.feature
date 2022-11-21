@@ -8,6 +8,7 @@ Feature: Tags
     When Navigate to Chat Tags page
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2781")
+  @Regression
   Scenario: CD :: Dashboard :: Settings :: Chat Tags :: Verify if Admin is able to cancel editing an existing tag
     When Create chat tag
     And Click the pencil icon to edit the tag
@@ -31,3 +32,13 @@ Feature: Tags
     Then CRM ticket is created on backend with correct information
     When Update chat tag
     Then CRM ticket is updated on backend with correct information
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2843")
+  @Regression
+  Scenario:CD:: Dashboard:: Settings :: Chat Tags:: Verify if a supervisor can create and save tag
+    Given I open portal
+    And Login into portal as an admin of Standard Billing account
+    And I select Touch in left menu and Dashboard in submenu
+    When Navigate to Chat Tags page
+    When Create chat tag
+    Then Tag is created

@@ -1,4 +1,4 @@
-@chat_preferences
+@setting_changes
 @no_chatdesk
 Feature: out_of_support_hours auto responder (Bot mode)
 
@@ -25,6 +25,7 @@ Feature: out_of_support_hours auto responder (Bot mode)
   @Regression
   @start_orca_server
   @support_hours
+  @orca_api
   Scenario: CD :: Dashboard :: Settings :: out_of_support_hours resetting to default for Bot mode tenant
     Given Taf Out of Support Hours message is set to true for Automation Bot tenant
     And Taf Out of Support Hours message message text is updated for Automation Bot tenant
@@ -37,4 +38,4 @@ Feature: out_of_support_hours auto responder (Bot mode)
     And Click "Reset to default" button for Out of Support Hours message auto responder
     Then Out of Support Hours message is reset on backend
     And Send connect to agent message by ORCA
-    Then Verify Orca returns Out of Support Hours message autoresponder during 40 seconds
+    Then Verify Orca returns Out of Support Hours message autoresponder during 40 seconds for agent

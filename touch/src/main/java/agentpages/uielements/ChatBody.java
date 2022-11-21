@@ -14,6 +14,7 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -26,7 +27,11 @@ public class ChatBody extends AbstractUIElement {
 
     private final String fromUserMessagesXPATH = ".//div[contains(@class,'from')]//*[text()='%s']";
 
-    private final String messagesInChatBodyXPATH = ".//ul[contains(@class, 'chat-container')]/div";
+    private final String messagesInChatBodyXPATH = ".//div[contains(@data-testid, 'chat-message-content-PlainMessage')]";
+
+    private final String messagesInChatBodyLinkXPATH = ".//div[contains(@data-testid, 'chat-message-content-PlainMessage')]//a";
+
+    private final String messagesInChatBodyHistoryXPATH = ".//div[contains(@data-testid, 'history-detail')]//div[contains(@data-testid, 'chat-message-content-PlainMessage')]";
 
     @FindBy(css = ".spinner")
     private WebElement spinner;
@@ -108,13 +113,16 @@ public class ChatBody extends AbstractUIElement {
     private List<WebElement> channelSeparators;
 
     @FindBy(css=".cl-c2p-event-message-title")
-    private WebElement expire_c2p_text;
+    private WebElement paymentLink_c2p_text;
 
     @FindBy (css = "[data-testid='card']")
     private WebElement c2pCard;
 
     @FindBy (css = ".cl-extension-item")
     private WebElement extensionItem;
+
+    @FindBy(css=".cl-c2p-message-footer-cancel-payment-text")
+    private WebElement cancelPaymentButton;
 
     public List<String> getChanelSeparatorsText() {
         return channelSeparators.stream().map(e->e.getText()).collect(Collectors.toList());
@@ -128,8 +136,8 @@ public class ChatBody extends AbstractUIElement {
         return getAttributeFromElem(this.getCurrentDriver(), locationHREFFormUser,5, "Location href", "href");
     }
 
-    public String getC2pExpiresCardsText(){
-        return getTextFromElem(this.getCurrentDriver(), expire_c2p_text, 5,"Expire c2p text");
+    public String getC2pPaymentCardsText(){
+        return getTextFromElem(this.getCurrentDriver(), paymentLink_c2p_text, 5,"Expire c2p text");
     }
 
     public String getC2pCardsText(){
@@ -197,31 +205,21 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public boolean getAgentEmojiResponseOnUserMessage(String userMessage) {
-            for (int i = toUserMessagesEmoji.size() - 1; i >= 0; i--) {
-                wheelScrollUpToElement(this.getCurrentDriver(),
-                        this.getCurrentDriver().findElement(By.cssSelector(scrollElement)),
-                        toUserMessagesEmoji.get(i), 1);
+        for (int i = toUserMessagesEmoji.size() - 1; i >= 0; i--) {
+            scrollToElem(this.getCurrentDriver(), toUserMessagesEmoji.get(i), "User agent message element");
 
-                if (toUserMessagesEmoji.get(i).getAttribute("aria-label").trim().contains(userMessage)) {
-                    wheelScroll(this.getCurrentDriver(),
-                            this.getCurrentDriver().findElement(By.cssSelector(scrollElement)),
-                            2000, 0, 0);
-                    return true;
-                }
+            if (toUserMessagesEmoji.get(i).getAttribute("aria-label").trim().contains(userMessage)) {
+                return true;
             }
-            return false;
+        }
+        return false;
     }
 
     public boolean isAgentEmojiUserMessageShown(String userMessage) {
         for (int i = fromUserMessagesEmoji.size() - 1; i >= 0; i--) {
-            wheelScrollUpToElement(this.getCurrentDriver(),
-                    this.getCurrentDriver().findElement(By.cssSelector(scrollElement)),
-                    fromUserMessagesEmoji.get(i), 1);
+            scrollToElem(this.getCurrentDriver(), fromUserMessagesEmoji.get(i), "User chat message element");
 
             if (fromUserMessagesEmoji.get(i).getAttribute("aria-label").trim().contains(userMessage)) {
-                wheelScroll(this.getCurrentDriver(),
-                        this.getCurrentDriver().findElement(By.cssSelector(scrollElement)),
-                        2000, 0, 0);
                 return true;
             }
         }
@@ -245,11 +243,29 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public List<String> getAllMessages() {
+        List<String> allMessages = new ArrayList<>();
         waitForElementsToBePresentByXpath(this.getCurrentDriver(), messagesInChatBodyXPATH, 10);
-        return findElemsByXPATH(this.getCurrentDriver(), messagesInChatBodyXPATH)
-                .stream().map(e -> new AgentDeskChatMessage(e).setCurrentDriver(this.getCurrentDriver()))
-                .map(e -> e.getMessageInfo().replace("\n", " "))
-                .collect(Collectors.toList());
+        findElemsByXPATH(this.getCurrentDriver(), messagesInChatBodyXPATH)
+                .stream().forEach(e -> {
+                    allMessages.add(e.getText());
+                });
+        return allMessages;
+    }
+
+    public ChatBody clickLatestLinkMessage(String text) {
+        clickElem(this.getCurrentDriver(), findElemByXPATH(this.getCurrentDriver(), messagesInChatBodyLinkXPATH), 10, "Latest user chat message");
+        return this;
+    }
+
+    public List<String> getHistoryMessages() {
+        List<String> historyMessages = new ArrayList<>();
+
+        waitForElementsToBePresentByXpath(this.getCurrentDriver(), messagesInChatBodyHistoryXPATH, 10);
+        findElemsByXPATH(this.getCurrentDriver(), messagesInChatBodyHistoryXPATH)
+                .stream().forEach(e -> {
+                    historyMessages.add(e.getText());
+                });
+        return historyMessages;
     }
 
     public boolean isOTPDividerDisplayed() {
@@ -355,4 +371,7 @@ public class ChatBody extends AbstractUIElement {
         return "Incorrect indicator was provided in steps";
     }
 
+    public void clickCancelPaymentButton(){
+        clickElem(this.getCurrentDriver(), cancelPaymentButton, 10, "Cancel Payment button");
+    }
 }

@@ -1,8 +1,10 @@
+@Regression
+@support_hours
 Feature: Supervisor desk
 
   @orca_api
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-7388")
-  Scenario: Supervisor desk :: Assign ticket manually to agent
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2846")
+  Scenario: CD::Supervisor desk:: Supervisor_Desk-Chat:: Supervisor_Desk-Tickets-All_Tickets:: Assign ticket manually to agent
     Given Setup ORCA abc integration for General Bank Demo tenant
     And Set agent support hours with day shift
     When Send Manual Ticket Assignment message by ORCA
@@ -13,7 +15,7 @@ Feature: Supervisor desk
     And Agent search chat orca on Supervisor desk
     Then Ticket from orca is present on All tickets filter page
     And Select orca ticket checkbox
-    When Click 'Assign manually' button
+    When Click 'Assign manually' button for orca
     Then 'Assign chat' window is opened
     When I assign chat on second agent
     And Admin refreshes the page

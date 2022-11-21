@@ -1,6 +1,7 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import com.sun.jna.WString;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -45,6 +46,9 @@ public class HSMForm extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), sendButton, 10, "Send button");
     }
 
+    public String getContactNum() {
+      String fetchedContactNum =   getAttributeFromElem(this.getCurrentDriver(), waPhoneField, 3, "wa phone number", "value");
+      return fetchedContactNum;
+    }
+
 }
-
-

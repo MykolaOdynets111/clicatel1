@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static java.lang.String.format;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class AgentCRMTicketsSteps extends AbstractAgentSteps {
 
@@ -32,10 +33,6 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
     public static ThreadLocal<Map<String, String>> crmTicketInfoForUpdating = new ThreadLocal<>();
 
     private static ThreadLocal<List<CRMTicket>> createdCrmTicketsList = new ThreadLocal<>();
-
-    public static CRMTicket getCreatedCRMTicket(){
-        return createdCrmTicket.get();
-    }
 
     public static List<CRMTicket> getCreatedCRMTicketsList(){
         return createdCrmTicketsList.get();
@@ -392,13 +389,21 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
 
     @Then("^(.*) select precreated tag$")
     public void agentAddSelectedTag(String agent) {
+        getAgentHomePage(agent).getAgentFeedbackWindow().typeTags(BasePortalSteps.tagname);
         getAgentFeedbackWindow(agent).typeTags(BasePortalSteps.tagname);
         getAgentFeedbackWindow(agent).selectTagInSearch().closeDropdown();
     }
 
+    @Then("^(.*) select tag by name (.*)$")
+    public void agentSelectsTag(String agent, String tag) {
+        getAgentFeedbackWindow(agent).selectTag(tag);
+    }
+
     @Then("^(.*) does not see the disabled tag (.*)$")
     public void verifyTagIsDisabledFor(String agent, String tag) {
-
+        assertThat(tag)
+                .as(format("Verify disabled tag %s is not in the list", tag))
+                .isNotIn(getAgentFeedbackWindow(agent).getTagList());
     }
 
     @Then("^Agent delete all tags$")
@@ -435,7 +440,6 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
                 .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
 
         DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("dd MMM yyyy");
-
 
         return dateTimeFromBackend.format(formatter1).toLowerCase();
     }

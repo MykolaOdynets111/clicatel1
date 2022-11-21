@@ -4,7 +4,6 @@ import com.amazon.sqs.javamessaging.ProviderConfiguration;
 import com.amazon.sqs.javamessaging.SQSConnection;
 import com.amazon.sqs.javamessaging.SQSConnectionFactory;
 import com.amazon.sqs.javamessaging.SQSSession;
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.services.sqs.SqsClient;
 
 import javax.jms.JMSException;
@@ -39,13 +38,10 @@ public class SyncMessageReceiver {
 
     }
 
-    private void startSyncMessageReceiver() throws JMSException {
-        SQSConfiguration config = SQSConfiguration.parseConfig();
+    public void startSyncMessageReceiver() throws JMSException {
+        System.out.println("Start SQS consuming process");
 
-        SqsClient sqsClient = SqsClient.builder()
-                .region(config.getRegion())
-                .credentialsProvider(ProfileCredentialsProvider.create("215418463085_sg.interact.chatdesk.qa.nprod"))
-                .build();
+        SqsClient sqsClient = SQSConfiguration.getSqsClient();
 
         SQSConnectionFactory connectionFactory = new SQSConnectionFactory(
                 new ProviderConfiguration(),
@@ -59,7 +55,7 @@ public class SyncMessageReceiver {
 
         Session session =  connection.createSession(false, SQSSession.CLIENT_ACKNOWLEDGE);
 
-        MessageConsumer consumer = session.createConsumer( session.createQueue( config.getQueueName() ) );
+        MessageConsumer consumer = session.createConsumer( session.createQueue( SQSConfiguration.getQueueName() ) );
 
         connection.start();
 
@@ -71,8 +67,9 @@ public class SyncMessageReceiver {
     }
 
     private void receiveMessages(MessageConsumer consumer ) {
+        SQSConfiguration.running.set(true);
         try {
-            while( SQSConfiguration.running ) {
+            while( SQSConfiguration.running.get() ) {
                 System.out.println( "Waiting for messages");
 
                 Message message = consumer.receive(TimeUnit.MINUTES.toMillis(5));

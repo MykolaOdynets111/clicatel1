@@ -3,8 +3,7 @@
 <suite name="One Thread Suite (chatdesk)" parallel="tests" thread-count="5" >
     <test name="User to Agent conversation (General Bank Demo tenant)">
         <classes>
-            <class name="runner.generalbank.RunWhatsAppORCATest" />
-            <class name="runner.generalbank.RunAbcTest" />
+            <class name="runner.generalbank.RunDummyTest" />
         </classes>
     </test>
 </suite>

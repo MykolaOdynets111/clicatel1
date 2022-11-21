@@ -37,6 +37,7 @@ public class AbstractPortalSteps implements JSHelper, VerificationHelper, WebWai
     private static final ThreadLocal<PortalTouchPreferencesPage> portalTouchPreferencesPage = new ThreadLocal<>();
     private static final ThreadLocal<PortalUserManagementPage> portalUserManagementPage = new ThreadLocal<>();
     private static final ThreadLocal<DashboardPage> dashboardPage = new ThreadLocal<>();
+
     private static final ThreadLocal<SupervisorDeskPage> chatConsoleInboxPage = new ThreadLocal<>();
     private static final ThreadLocal<PortalBillingDetailsPage> sendChatToPayLinkPage = new ThreadLocal<>();
     private static final ThreadLocal<DepartmentsManagementPage> departmentsManagementPage = new ThreadLocal<>();

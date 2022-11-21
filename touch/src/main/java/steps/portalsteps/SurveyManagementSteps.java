@@ -25,8 +25,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
             configuration.updateSomeValueByMethodName(key, map.get(key));
         }
         surveyConfiguration.set(configuration);
-        ApiHelper.updateSurveyManagement(tenantOrgName, configuration, channelID, chanel.toLowerCase());
-
+        ApiHelper.updateSurveyManagement(configuration, channelID, chanel.toLowerCase());
     }
 
     @Then("^Survey Management page should be shown$")
@@ -35,19 +34,8 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
                 "Survey Management page not shown");
     }
 
-    @Then("^Selects (.*) survey type")
+    @Then("^Admin selects (.*) survey type")
     public void selectSurvey(String type) {
-        String id = ORCASteps.getChannelId();
-
-        if (type.equalsIgnoreCase("CSAT")) {
-            getSurveyManagementPage().getSurveyForm(id).clickCSATRadioButton();
-        } else if (type.equalsIgnoreCase("NPS")) {
-            getSurveyManagementPage().getSurveyForm(id).clickNPSRadioButton();
-        }
-    }
-
-    @Then("^Admin selects (.*) survey type for (.*) survey form")
-    public void selectSurvey(String type, String surveyForm) {
         String id = ORCASteps.getChannelId();
         if (type.equalsIgnoreCase("CSAT")) {
             getSurveyManagementPage().getSurveyForm(id).clickCSATRadioButton();
@@ -204,7 +192,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     @When("^Customize your survey \"(.*)\" question$")
     public void setSurveyQuestion(String question) {
         String channelID = ORCASteps.getChannelId();
-        questionUpdate.set(question + " " + faker.rockBand().name());
+        questionUpdate.set(question + " " + faker.animal().name());
         getSurveyManagementPage().getSurveyForm(channelID).changeQuestion(questionUpdate.get());
     }
 
@@ -295,5 +283,21 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
                 "Customer note title is not displayed in survey preview");
 
         softAssert.assertAll();
+    }
+
+    public static String getExpectedSurveyResponse(String expectedResponse) {
+        if (expectedResponse.equalsIgnoreCase("question update")) {
+            expectedResponse = SurveyManagementSteps.questionUpdate.get();
+        } else if (expectedResponse.equalsIgnoreCase("notes update")) {
+            expectedResponse = SurveyManagementSteps.notesMessageUpdate.get();
+        } else if (expectedResponse.equalsIgnoreCase("thanks message update")) {
+            expectedResponse = SurveyManagementSteps.thankMessageUpdate.get();
+        }
+
+        return expectedResponse;
+    }
+
+    public static String getQuestionUpdate() {
+        return questionUpdate.get();
     }
 }

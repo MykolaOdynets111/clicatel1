@@ -1,6 +1,7 @@
 package steps.portalsteps;
 
 import apihelper.ApiHelper;
+import apihelper.ApiHelperDepartments;
 import datamanager.Tenants;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -10,7 +11,6 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import portalpages.DepartmentsManagementPage;
 import portaluielem.CreateDepartmentForm;
-import steps.agentsteps.AbstractAgentSteps;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +36,8 @@ public class DepartmentsSteps extends AbstractPortalSteps {
     public void createDepartmentWithSeveralAgents(String name, String description, int numberOfAgents) throws Exception {
         List<String> agentsNames = new ArrayList<>();
         List<Map> agents = ApiHelper.getAgentsInfo(Tenants.getTenantUnderTestOrgName());
-        if (agents.size()>=numberOfAgents){
-        for(int i=0; i<numberOfAgents; i++){
+        if (agents.size()>numberOfAgents){
+        for(int i=1; i<=numberOfAgents; i++){
             agentsNames.add(String.valueOf(agents.get(i).get("fullName")));
         }
         getDepartmentsManagementPage().clickAddNewDepartmentButton().setNameField(name).setDescriptionForm(description).selectSeveralDepartmentAgentsCheckbox(agentsNames).clickCreateButton();
@@ -89,15 +89,14 @@ public class DepartmentsSteps extends AbstractPortalSteps {
         softAssert.assertAll();
     }
 
-    @When("Add newly created agent to department with (.*) name and (.*) description")
-    public void addNewAgentToDepartment(String name, String description){
-        String newAgent = AbstractAgentSteps.getListOfCreatedAgents().get((0)).get("name");
-        getDepartmentsManagementPage().openDepartmentManageForm(name, description).selectDepartmentAgentsCheckbox(newAgent).clickSaveButton();
+    @When("^Add (.*) agent to department with (.*) name and (.*) description$")
+    public void addAgentsToDepartment(Integer numberOfAgents, String name, String description){
+        getDepartmentsManagementPage().openDepartmentManageForm(name, description).addRandomAgentsCheckbox(numberOfAgents).clickSaveButton();
     }
 
     @Given("^New departments with (.*) name (.*) description and (.*) is created$")
     public void createNewDepartment(String name, String department, String agent){
-        ApiHelper.createDepartment(name, department, agent);
+        ApiHelperDepartments.createDepartment(name, department, agent);
     }
 
     @Then("Verify Agent cannot create department with duplicate (.*) name")

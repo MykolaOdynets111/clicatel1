@@ -1,6 +1,7 @@
 @no_widget
 @start_orca_server
 @Regression
+@orca_api
 Feature: Dashboard: Settings: Auto Responder
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1915")
@@ -10,13 +11,12 @@ Feature: Dashboard: Settings: Auto Responder
     Given Setup ORCA whatsapp integration for Standard Billing tenant
     And Set agent support hours with day shift
     When Send to agent message by ORCA
-    Then Verify Orca returns Out of Support Hours message autoresponder during 40 seconds
+    Then Verify Orca returns Out of Support Hours message autoresponder during 40 seconds for agent
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1822")
   @remove_dep
   @support_hours
-  Scenario: CD :: Dashboard :: Settings :: Auto Responder :: Verify that user should receive"out of support hours"
-  autoresponder message when user try to reach out of specific support hours per department time
+  Scenario: CD :: Dashboard :: Configure Settings :: Auto Responder :: Verify that user should receive "out of support hours" autoresponder message when user try to reach out of specific support hours per department time
 
     Given I login as agent of Standard Billing
     And Setup ORCA whatsapp integration for Standard Billing tenant
@@ -31,4 +31,4 @@ Feature: Dashboard: Settings: Auto Responder
     When Agent switches to opened Portal page
     And I select Touch in left menu and Agent Desk in submenu
     And Send to agent message by ORCA to Auto_Department department
-    Then Verify Orca returns Out of Support Hours message autoresponder during 40 seconds
+    Then Verify Orca returns Out of Support Hours message autoresponder during 40 seconds for agent

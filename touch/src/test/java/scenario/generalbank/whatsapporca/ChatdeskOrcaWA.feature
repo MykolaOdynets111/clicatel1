@@ -2,17 +2,18 @@
 @Regression
 Feature: Whatsapp ORCA :: Chatdesk
 
-  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1739")
+  @orca_api
   Scenario: ChatDesk:: The header should have whatsapp icon when user is chatting using orca whatsapp
-    Given I login as agent of General Bank Demo
+
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    And I login as agent of General Bank Demo
     When Send connect to Support message by ORCA
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
-    Then Conversation area becomes active with connect to Support user's message
-    Then Valid image for whatsapp integration are shown in left menu with chat
-    And Agent should see whatsappHeader icon in active chat header
+    And Conversation area becomes active with connect to Support user's message
+    Then Agent should see whatsapp integration icon in left menu with chat
+    And Agent should see whatsapp icon in active chat header
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1821")
@@ -55,6 +56,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Agent filter closed chats with WhatsApp channel, no sentiment and flagged is false
     Then Agent see only whatsapp chats in left menu
 
+  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1162")
   Scenario: CD :: Agent Desk :: Live Chat :: Location :: Verify if agent click on the small cross on search bar, the text entered in the search bar is deleted
     Given I login as agent of General Bank Demo
@@ -68,6 +70,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent click on reset button
     Then Location field becomes empty
 
+  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1171")
   Scenario: CD :: Agent Desk :: Live Chat :: Verify if agent can send plain text message to a user over WhatsApp Channel
     Given I login as agent of General Bank Demo
@@ -78,6 +81,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Conversation area becomes active with connect to Support user's message
     When Agent send Hello message
 
+  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1176")
   Scenario: CD :: Agent Desk :: Live Chat :: Profile :: Verify the text in the "not verified" label is in grey color in customer profile phone number field
     Given I login as agent of General Bank Demo
@@ -90,6 +94,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent click Save button in User profile
     Then Not verified label is displayed
 
+  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1835")
   Scenario: CD :: Agent Desk :: Live Chat :: Verify that location should auto-populate after agent try to search for second location without selecting the first one.
     Given I login as agent of General Bank Demo
@@ -124,9 +129,10 @@ Feature: Whatsapp ORCA :: Chatdesk
       | SMS         | sms     |
       | Whatsapp    | orca    |
 
+  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2787")
-  @regression
-  Scenario: Supervisor desk :: verify that supervisor able to check live chats
+  Scenario: CD::Supervisor desk :: Verify if supervisor is able to check live chats
+
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Supervisor Desk in submenu
@@ -134,10 +140,13 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Setup ORCA whatsapp integration for General Bank Demo tenant
     And Send to agent message by ORCA
     When I select Touch in left menu and Supervisor Desk in submenu
-    When Verify "All Chats" display default
+    When Verify "All live chats" display default
     Then  Verify that live chats available are shown
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2369")
+  @skip
+  @support_hours
+  @orca_api
   Scenario: CD:: Supervisor desk :: Verify if Supervisor is able to Route ticket to scheduler
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     And Set agent support hours with day shift
@@ -155,7 +164,8 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Agent has new conversation request from ORCA user
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2108")
-  @Regression
+  @orca_api
+  @support_hours
   Scenario: CD:: Supervisor:: Verify if supervisor is able to close "Assign Chat" modal
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     When Set agent support hours for all week
@@ -170,8 +180,9 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent is able to close the assign chat window
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1129")
-  @Regression
-  Scenario: Supervisor Desk :: Live Chat :: Profile :: Verify that WhatsApp profile name is displayed as username on customer profile section
+  @orca_api
+  Scenario: CD :: Supervisor Desk :: Live Chat :: Profile :: Verify that WhatsApp profile name is displayed as username on customer profile section
+
     Given I login as agent of General Bank Demo
     And Setup ORCA whatsapp integration for General Bank Demo tenant
     And Send to agent message by ORCA
@@ -183,6 +194,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Agent can see whatsapp profile name
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1302")
+  @orca_api
   Scenario: CD :: Supervisor Desk :: Chat :: Chat2Pay :: Verify that supervisor does not have the capability to initiate a payment transaction
     Given I login as agent of General Bank Demo
     When Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -196,9 +208,9 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent click On Live Supervisor Desk chat from ORCA channel
     Then Agent cannot initiate a payment
 
-  @chat_preferences
+  @setting_changes
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2751")
-  @Regression
+  @orca_api
   Scenario: CD :: Chat :: Verify that neutral sentiment is set by default when agent closes a chat
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     And agentFeedback tenant feature is set to true for General Bank Demo

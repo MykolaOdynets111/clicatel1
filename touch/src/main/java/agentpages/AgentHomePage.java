@@ -9,14 +9,12 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import touchpages.uielements.AttachmentWindow;
-import agentpages.uielements.LocationWindow;
 
 import java.util.List;
 
 public class AgentHomePage extends AgentAbstractPage {
 
     private final String chatMessageContainer = ".cl-chat-messages";
-    private final String cancelCloseChatButtonXPATH = "//span[text()='Cancel']";
     private final String modalWindow = "div.modal-content";
 
     @FindBy(css = "div.agent-view--main")
@@ -57,9 +55,6 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//h4[text()='Agent limit reached']")
     private WebElement agentLimitReachedPopup;
 
-    @FindBy(css = "div.history-details")
-    private WebElement historyDetails;
-
     @FindBy(css = "div > div.active")
     private WebElement userProfileButton;
 
@@ -72,8 +67,8 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = ".dashboard .cl-empty-state")
     private WebElement tipNoteInRightArea;
 
-    @FindBy(css = "[selenium-id = transfer-notification-waiting]")
-    private List<WebElement> notificationsList;
+    @FindBy(xpath = "//button[@data-testid = 'transfer-notification']")
+    private List<WebElement> transferWaitingButtons;
 
     @FindBy(css =".cl-c2p-close-modal-note")
     private WebElement c2pMoveToPendingMessage;
@@ -82,9 +77,7 @@ public class AgentHomePage extends AgentAbstractPage {
     private WebElement moveToPendingButton;
 
     @FindBy(css = "[role=dialog]")
-    private WebElement loginDialog;
-
-    private final String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
+    private WebElement dialogElement;
 
     private DeleteCRMConfirmationPopup deleteCRMConfirmationPopup;
     private EditCRMTicketWindow editCRMTicketWindow;
@@ -107,6 +100,7 @@ public class AgentHomePage extends AgentAbstractPage {
     private AttachmentWindow attachmentWindow;
     private LocationWindow locationWindow;
     private C2pSendForm c2pSendForm;
+    private ChatPendingToLiveForm chatPendingToLiveForm;
     private Extensions extensions;
     private HSMForm hsmForm;
 
@@ -122,6 +116,11 @@ public class AgentHomePage extends AgentAbstractPage {
     public ChatForm getChatForm() {
         chatForm.setCurrentDriver(this.getCurrentDriver());
         return chatForm;
+    }
+
+    public ChatPendingToLiveForm getChatPendingToLiveForm() {
+        chatPendingToLiveForm.setCurrentDriver(this.getCurrentDriver());
+        return chatPendingToLiveForm;
     }
 
     public Extensions getExtensionsForm(){
@@ -148,6 +147,12 @@ public class AgentHomePage extends AgentAbstractPage {
         return c2pSendForm;
     }
 
+    public C2pSendForm openc2pSendForm(String text){
+        getChatForm().openExtensionsForm();
+        getExtensionsForm().openC2pFormWithText(text);
+        c2pSendForm.setCurrentDriver(this.getCurrentDriver());
+        return c2pSendForm;
+    }
 
     public DeleteCRMConfirmationPopup getDeleteCRMConfirmationPopup(){
         deleteCRMConfirmationPopup.setCurrentDriver(this.getCurrentDriver());
@@ -197,6 +202,9 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public IncomingTransferWindow getIncomingTransferWindow() {
+        if (transferWaitingButtons.size() != 0){
+            transferWaitingButtons.get(getCollapsedTransfers().size() - 1).click();
+        }
         incomingTransferWindow.setCurrentDriver(this.getCurrentDriver());
         return incomingTransferWindow;
     }
@@ -249,7 +257,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public String isConnectionErrorShown(){
-             return getTextFromElem(this.getCurrentDriver(), connectionErrorImage, 15, "Connection error");
+        return getTextFromElem(this.getCurrentDriver(), connectionErrorImage, 15, "Connection error");
     }
 
     public void endChat() {
@@ -264,12 +272,24 @@ public class AgentHomePage extends AgentAbstractPage {
         }
     }
 
+    public void hoverCloseChatIfVisible() {
+        if (getChatHeader().isEndChatShown() && !getChatHeader().isCloseChatClickable()) {
+            getChatHeader().hoverEndChatButton();
+        } else {
+            Assert.fail("'Close chat' button is not shown or clickable.");
+        }
+    }
+
     public void clickAgentAssistantButton(){
         clickElem(this.getCurrentDriver(), agentAssistantButton,3,"Agent Assistant Button" );
     }
 
     public boolean isProfanityPopupShown(){
         return isElementShown(this.getCurrentDriver(), profanityPopup,10);
+    }
+
+    public boolean isProfanityPopupNotShown(){
+        return isElementRemoved(this.getCurrentDriver(), profanityPopup,10);
     }
 
     public void clickAcceptProfanityPopupButton(){
@@ -317,8 +337,8 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public List<WebElement> getCollapsedTransfers(){
-        waitForElementsToBeVisible(this.getCurrentDriver(), notificationsList, 6);
-        return notificationsList;
+        waitForElementsToBeVisible(this.getCurrentDriver(), transferWaitingButtons, 6);
+        return transferWaitingButtons;
     }
 
     public String getC2pMoveToPendingMessage(){
@@ -327,17 +347,6 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public void clickMoveToPendingButton(){
         clickElem(this.getCurrentDriver(), moveToPendingButton, 1, "Move To Pending Button");
-    }
-
-    public void acceptAllTransfers(){
-        try {
-            for (WebElement elem : getCollapsedTransfers()) {
-                elem.click();
-                getIncomingTransferWindow().acceptTransfer();
-            }
-        }catch(TimeoutException o){
-
-        }
     }
 
     public void waitForModalWindowToDisappear(){
@@ -351,7 +360,12 @@ public class AgentHomePage extends AgentAbstractPage {
         }
     }
 
-    public boolean isLoginDialogShown(){
-        return isElementShown(this.getCurrentDriver(), loginDialog, 10);
+    public boolean isDialogShown(){
+        return isElementShown(this.getCurrentDriver(), dialogElement, 10);
     }
+
+    public boolean isDisappearingDialogShown(){
+        return isElementRemoved(this.getCurrentDriver(), dialogElement, 3);
+    }
+
 }

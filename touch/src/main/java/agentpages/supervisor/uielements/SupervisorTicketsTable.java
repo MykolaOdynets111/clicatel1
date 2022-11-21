@@ -8,14 +8,20 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(css = ".supervisor-tickets")
+@FindBy(css = ".chats-list")
 public class SupervisorTicketsTable extends AbstractUIElement {
 
-    @FindBy(css=".cl-table-body .cl-table-row")
+    @FindBy(css=".cl-table-row")
     private List<WebElement> tickets;
 
-    @FindBy(xpath = "//button[text() = 'Assign Manually']")
-    private WebElement assignManuallyButton;
+    @FindBy(xpath = "//button[text() = 'Assign']")
+    private WebElement assignTicketButton;
+
+    @FindBy(xpath = "//button[text() = 'Close']")
+    private WebElement closeTicketButton;
+
+    @FindBy(xpath = "//a[text() = 'Open']")
+    private WebElement openTicketButton;
 
     @FindBy(css = "[data-testid=roster-scroll-container]")
     private WebElement scrolArea;
@@ -37,12 +43,23 @@ public class SupervisorTicketsTable extends AbstractUIElement {
                 .findFirst().orElseThrow(() -> new AssertionError("Cannot find ticket with user " + userName));
     }
 
-    public void selectTicketCheckbox(String getTicketByName){
+    public SupervisorTicketsTable selectTicketCheckbox(String getTicketByName){
         getTicketByUserName(getTicketByName).selectCheckbox();
+        return this;
     }
 
-    public void clickAssignManuallyButton(){
-        clickElem(this.getCurrentDriver(), assignManuallyButton, 5, "'Route to scheduler' button");
+    public void clickAssignManuallyButton(String userName){
+        getTicketByUserName(userName)
+                .clickElem(this.getCurrentDriver(), assignTicketButton, 5, "Assign ticket button");
+    }
+
+    public void clickCloseButton(String userName){
+        getTicketByUserName(userName).clickElem(this.getCurrentDriver(), closeTicketButton, 5, "Close ticket button");
+    }
+
+    public void clickAssignOpenTicketButton(String userName){
+        getTicketByUserName(userName)
+                .clickElem(this.getCurrentDriver(), openTicketButton, 5, "Open ticket button");
     }
 
     public List<String> getUsersNames(){
@@ -108,9 +125,16 @@ public class SupervisorTicketsTable extends AbstractUIElement {
 
     public boolean verifyChanelOfTheTicketsIsPresent(String channelName) {
         waitForFirstElementToBeVisible(this.getCurrentDriver(), tickets, 7);
-        return  tickets.stream()
-                .map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver()))
-                .allMatch(closedChat -> closedChat.getIconName().equalsIgnoreCase(channelName));
+        return tickets.stream()
+                .map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver()).isValidChannelImg(channelName)).findFirst().get();
+    }
+
+    public boolean isTicketPresent(String userName) {
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), tickets, 7);
+        return tickets.stream().anyMatch(e ->
+                new SupervisorDeskTicketRow(e)
+                        .setCurrentDriver(this.getCurrentDriver())
+                        .getName().equals(userName));
     }
 
     public void openFirstTicket() {

@@ -36,10 +36,7 @@ public enum DriverType {
             options.setCapability("profile.block_third_party_cookies", false);
 
             options.setCapability(CapabilityType.SUPPORTS_APPLICATION_CACHE, false);
-            if(ConfigManager.isRemote())options.addArguments("window-size=1360,1020");
             options.setCapability("goog:loggingPrefs", logPrefs);
-            options.setCapability("build", "CaptchaInSelenium");
-            options.setCapability("name", "TCaptchaInSeleniumSample");
             options.addArguments("disable-site-isolation-trials");
             options.addArguments("test-type=browser");
             options.addArguments("start-maximized");
@@ -50,21 +47,14 @@ public enum DriverType {
             options.addArguments("no-proxy-server");
             options.addArguments("no-sandbox");
             options.addArguments("disable-notifications");
-            options.addArguments("--disable-extensions");
             options.addArguments("incognito");
             return options;
 		}
 
 
-    public WebDriver getWebDriverObject(MutableCapabilities capabilities) {
-            if (!ConfigManager.isRemote()) {
-                ChromeDriverManager.getInstance().driverVersion("106").setup();
+        public WebDriver getWebDriverObject(MutableCapabilities capabilities) {
+                ChromeDriverManager.getInstance().setup();
                 return new ChromeDriver((ChromeOptions) capabilities);
-            }else{
-                ChromeDriverManager.getInstance().driverVersion("89.0.4389.82").setup();
-                return new ChromeDriver((ChromeOptions) capabilities);
-            }
-
         }
 
         @Override
@@ -74,11 +64,12 @@ public enum DriverType {
     },
 
     HEADLESS_CHROME {
-        private final List<String> knownNames = Arrays.asList("headlesschrome", "chromeheadless",
+        private final List<String> knownNames = Arrays.asList("headless", "chromeheadless",
                 "chrome_headless", "headless_chrome");
 
         @Override
         public MutableCapabilities getDesiredCapabilities() {
+            System.setProperty("webdriver.chrome.whitelistedIps", "");// added because of error - Cannot assign requested address (99)
             LoggingPreferences logPrefs = new LoggingPreferences();
             logPrefs.enable(LogType.BROWSER, Level.ALL);
 
@@ -87,11 +78,11 @@ public enum DriverType {
             options.addArguments("--window-size=1920,1080");
             options.addArguments("--disable-gpu");
             options.addArguments("--disable-extensions");
-            options.setExperimentalOption("useAutomationExtension", false);
             options.addArguments("--proxy-server='direct://'");
             options.addArguments("--proxy-bypass-list=*");
             options.addArguments("--start-maximized");
             options.addArguments("--headless");
+            options.addArguments("--disable-dev-shm-usage");
             return options;
         }
 

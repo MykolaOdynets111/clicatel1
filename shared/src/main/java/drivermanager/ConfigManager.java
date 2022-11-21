@@ -1,6 +1,5 @@
 package drivermanager;
 
-import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
 
 
@@ -8,7 +7,6 @@ public class ConfigManager {
 
     // Base configs
     private static final String REMOTE_FLAG_VARIABLE = "remote";
-    private static final String BROWSER_TYPE = "browsertype";
     private static final String ENV = "env";
     private static final String DEPLOY_TO = "deploy_to";
     private static final String TENANT_ORG_NAME = "tenantorgname";
@@ -17,6 +15,8 @@ public class ConfigManager {
     private static final String SUITE = "suite";
     private static final String IS_MC2 = "ismc2";
     private static final String IS_WEB_WIDGET = "iswebwidget";
+    private static final String IS_SQS_USED = "sqsuse";
+
 
     // TestFLO reporter configs
     private static final String REPORT_TESTFLO = "reportToTestFLO";
@@ -126,10 +126,6 @@ public class ConfigManager {
         System.setProperty(TENANT_ID, tenantId);
     }
 
-    public static void setBrowserType(String browserType) {
-        System.setProperty(BROWSER_TYPE, browserType);
-    }
-
     public static void setEnv(String env) {
         System.setProperty(ENV, env);
     }
@@ -142,11 +138,11 @@ public class ConfigManager {
 
     public static DriverType getDriverType() {
         DriverType driverType = DriverType.CHROME;
-        String browserType = System.getProperty(BROWSER_TYPE);
 
-        if (!StringUtils.isEmpty(browserType)) {
-            driverType = DriverType.from(browserType);
+        if (ConfigManager.isRemote()) {
+            driverType = DriverType.HEADLESS_CHROME;
         }
+
         return driverType;
     }
 
@@ -173,9 +169,6 @@ public class ConfigManager {
         return isWebWidget != null && Boolean.parseBoolean(isWebWidget);
     }
 
-
-
-
      public static String getTenantOrgName(){
         String tenantOrgName = System.getProperty(TENANT_ORG_NAME);
         if(tenantOrgName==null){
@@ -198,5 +191,9 @@ public class ConfigManager {
 
     public static String getSuite(){
         return System.getProperty(SUITE, "all");
+    }
+
+    public static boolean isSQSUsed(){
+        return Boolean.parseBoolean(System.getProperty(IS_SQS_USED, "false"));
     }
 }

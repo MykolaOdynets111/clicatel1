@@ -1,11 +1,10 @@
 package steps;
 
 import apihelper.ApiHelper;
-import io.cucumber.java.en.Given;
 import datamanager.Tenants;
 import drivermanager.ConfigManager;
+import io.cucumber.java.en.Given;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,9 +44,6 @@ public class WidgetVisibilitySteps {
 //        }
 //    }
 
-    private LocalDateTime getCurrentTimeInTenantTimeZone(String tenantOrgName){
-        return LocalDateTime.now(Tenants.getTenantZoneId(tenantOrgName));
-    }
 
     @Given("^(.*) territory availability is applied for (.*)$")
     public void setUpWidgetVisibilityByTerritory(List<String> territoryConfig, String tenant){

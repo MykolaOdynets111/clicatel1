@@ -25,6 +25,11 @@ public class AgentFilteringSteps extends AbstractAgentSteps {
         }
     }
 
+    @Then("^(.*) selects random chat in (.*) chat list$")
+    public void selectsRandomChatFromList(String agent, String chatType) {
+        getAgentHomePage(agent).getLeftMenuWithChats().openFirstChat();
+    }
+
     private void verifyDateTimeIsInRangeOfTwoDates(LocalDateTime dateTime, LocalDate startDate, LocalDate endDate) {
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(startDate.compareTo(dateTime.toLocalDate()) <= 0,

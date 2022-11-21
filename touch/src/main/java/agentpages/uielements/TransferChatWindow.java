@@ -2,7 +2,6 @@ package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -31,9 +30,6 @@ public class TransferChatWindow extends AbstractUIElement {
     @FindBy(xpath = " //div[contains(@class, 'cl-select__department')or contains(@class,'cl-select__option')]")
     private List<WebElement> availableAgentsOrDepartmentsList;
 
-    @FindBy(xpath = ".//div[@class='Select-control']")
-    private WebElement dropDown;
-
     @FindBy(css = "[data-testid=transfer-chat-notes-textarea]")
     private WebElement noteInput;
 
@@ -49,15 +45,8 @@ public class TransferChatWindow extends AbstractUIElement {
     @FindBy(css = ".cl-r-icon-refresh")
     private WebElement refreshButton;
 
-    private String noAvailableAgentsMessageXpath = "//*[@id='portal-placeholder']//div[text()='No available agents']";
-    private String availableDepartmentsNamesCss = ".department-name";
-
-    public TransferChatWindow (WebDriver current){
-        this.currentDriver = current;
-    }
-    public TransferChatWindow (){
-        super();
-    }
+    @FindBy(css = "svg[name = close]")
+    private WebElement closeButton;
 
     public String transferChat(String agent) {
         openDropDownAgent();
@@ -170,13 +159,24 @@ public class TransferChatWindow extends AbstractUIElement {
                         .filter(e -> !(e.contains("current chat assignment")))
                         .collect(Collectors.toList());
     }
+    public String getCurrentAgentAssignment() {
+        return getCurrentAgentFromAssignmentDropdown().getText();
+    }
 
     public String getTextDropDownMessage() {
         return getTextFromElem(this.getCurrentDriver(), availableAgentOrDepartment,6,"Drop down menu");
     }
 
     public boolean isAssignedAgentDisabledToSelect(){
-        return availableAgentOrDepartment.getAttribute("class").contains("disabled");
+        return getCurrentAgentFromAssignmentDropdown().isEnabled();
+    }
+
+    private WebElement getCurrentAgentFromAssignmentDropdown(){
+        if(isElementRemoved(this.getCurrentDriver(), availableAgentOrDepartment, 2))
+            clickElem(this.getCurrentDriver(), openAgentDropdownButton, 2, "Open agent dropdown");
+        waitForElementToBeVisible(this.getCurrentDriver(), availableAgentOrDepartment,5);
+        return availableAgentsOrDepartmentsList.stream()
+                .filter(e -> e.getText().contains("current chat assignment")).findFirst().orElseThrow(() -> new AssertionError("Cannot find the current agent assignment in dropdown"));
     }
 
     public void clickTransferChatButton() {
@@ -197,10 +197,6 @@ public class TransferChatWindow extends AbstractUIElement {
      return   noteInput.getCssValue("border-color");
     }
 
-    public String getDropDownColor() {
-        return  dropDown.getCssValue("border-color");
-    }
-
     public boolean isNoteShown(){
         return isElementShown(this.getCurrentDriver(), noteInput, 5);
     }
@@ -210,6 +206,7 @@ public class TransferChatWindow extends AbstractUIElement {
     }
 
     public boolean isNoAvailableAgentsDisplayed() {
+        String noAvailableAgentsMessageXpath = "//*[@id='portal-placeholder']//div[text()='No available agents']";
         return isElementShown(this.getCurrentDriver(),
                 findElemByXPATH(this.getCurrentDriver(), noAvailableAgentsMessageXpath),
                 5);
@@ -217,5 +214,8 @@ public class TransferChatWindow extends AbstractUIElement {
 
     public void waitForUpdatingAvailableAgents() {
         waitForAppearAndDisappear(this.getCurrentDriver(), loadingAvailableAgents, 1, 5);
+    }
+    public void clickCloseButton() {
+        clickElem(this.getCurrentDriver(), closeButton, 2, "Close button");
     }
 }

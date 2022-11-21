@@ -23,7 +23,6 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.agentsteps.AgentConversationSteps;
 import steps.portalsteps.BasePortalSteps;
-import steps.portalsteps.SurveyManagementSteps;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 import touchpages.uielements.SurveyForm;
@@ -42,6 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static apihelper.ApiHelper.getAutoResponderMessageText;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebWait {
 
@@ -91,12 +91,12 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
         }
     }
 
-    @Given("(.*) survey configuration for (.*)")
-    public static void switchSurveyConfiguration(String action, String tenantOrgName) {
+    @Given("^(.*) (.*) survey configuration for (.*)$")
+    public static void switchSurveyConfiguration(String action, String channel, String tenantOrgName) {
         if (action.equalsIgnoreCase("On")) {
-            ApiHelper.ratingEnabling(tenantOrgName, true, "webchat");
+            ApiHelper.ratingEnabling(tenantOrgName, true, channel);
         } else if (action.equalsIgnoreCase("Off")) {
-            ApiHelper.ratingEnabling(tenantOrgName, false, "webchat");
+            ApiHelper.ratingEnabling(tenantOrgName, false, channel);
         }
     }
 
@@ -429,28 +429,6 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
         softAssert.assertAll();
     }
 
-
-    /**
-     * Method that strictly verifies is there expected response shown as an second response in the widget
-     *
-     * @param textResponse expected text response
-     * @param place        expected place for text response
-     * @param userInput    user input on which we are expecting response
-     */
-    @Then("^User have to receive '(.*)' (?:text response|url) as a (.*) response for his '(.*)' input$")
-    public void verifyCertainTextResponse(String textResponse, int place, String userInput) {
-        int waitForResponse = 10;
-        String expectedTextResponse = formExpectedAutoresponder(textResponse);
-        SoftAssert softAssert = new SoftAssert();
-        widgetConversationArea = widget.getWidgetConversationArea();
-        softAssert.assertTrue(widgetConversationArea.isResponseTextShownOnCorrectPlace(userInput, waitForResponse, place),
-                "No second text response is shown on '" + userInput + "' user's input (Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + ")");
-        softAssert.assertEquals(widgetConversationArea.getCertaiNumberResponseTextOnUserInput(userInput, place - 1).replace("\n", "")
-                , expectedTextResponse,
-                "Incorrect second text response is shown on '" + userInput + "' user's input (Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + ")");
-        softAssert.assertAll();
-    }
-
     /**
      * Method that verifies is there expected response among shown text responses,
      * regardless position and any other unexpected messages
@@ -481,11 +459,9 @@ public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebW
     public void quickVerifyIsResponseShown(String text) {
         String message = formExpectedAutoresponder(text);
 
-    }
-
-    @Then("^User see correct Thanks message from Survey management$")
-    public void verifyThankSurveyResponse() {
-        quickVerifyIsResponseShown(SurveyManagementSteps.surveyConfiguration.get().getRatingThanksMessage());
+        assertThat(widget.getWidgetConversationArea().isTextShown(message, 10))
+                .as("Message should be visible: " + message)
+                .isTrue();
     }
 
     @Then("^Card with a (?:button|buttons) (.*) is shown (?:on|after) user (.*) (?:message|input)$")

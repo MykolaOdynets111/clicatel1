@@ -11,8 +11,8 @@ import java.io.File;
 
 public class ChatInLeftMenu extends AbstractWidget {
     @FindAll({
-        @FindBy(css = "[data-testid='avatar']"),
-        @FindBy(css = "[selenium-id='Avatar']"), //toDo old locator
+            @FindBy(css = "[data-testid='avatar']"),
+            @FindBy(css = "[selenium-id='Avatar']"), //toDo old locator
     })
     private WebElement userIcon;
 
@@ -20,21 +20,13 @@ public class ChatInLeftMenu extends AbstractWidget {
     private WebElement userName;
 
     @FindAll({
-        @FindBy(css = "[data-testid=roster-item-location]"),
-        @FindBy(css = "[selenium-id=roster-item-location]"), //toDo old locator
+            @FindBy(css = "[data-testid=roster-item-location]"),
+            @FindBy(css = "[selenium-id=roster-item-location]"), //toDo old locator
     })
     private WebElement location;
 
-    @FindAll({
-            @FindBy(css = "[data-testid=chat-item-icons-holder]"),
-            @FindBy(css = "[selenium-id=chat-item-icons-holder]") //toDo old locator
-    })
-    private WebElement channelIcon;
-
-    @FindAll({
-            @FindBy(css = "[data-testid='chat-item-icons-holder'] svg"),
-    })
-    private WebElement adapterWrappedIcon;
+    @FindBy(css = "[data-testid='chat-item-icons-holder'] svg")
+    private WebElement chatIcon;
 
     @FindAll({
             @FindBy(css = "[data-testid='header-toggle-flag']"),
@@ -42,7 +34,7 @@ public class ChatInLeftMenu extends AbstractWidget {
     })
     private WebElement flagIcon;
 
-    private String flagIconCss = "[data-testid='icon-flag-filled'] g"; //""span.icon.svg-icon-flagged";
+    private String flagIconCss = "[data-testid='icon-flag-filled'] g";
 
     @FindBy(css = "[selenium-icon-user-single]")
     private WebElement usercImg;
@@ -52,6 +44,9 @@ public class ChatInLeftMenu extends AbstractWidget {
 
     @FindBy(css = "span.text-parsed-by-emoji")
     private WebElement messageText;
+
+    @FindBy(css = ".transferring-chat")
+    private WebElement transferringChatMessage;
 
     private String overnightTicketIcon = ".cl-r-icon.cl-r-icon-tickets.cl-r-icon--fill-bright-orange"; //""span.icon>svg.overnight"; old locator
 
@@ -81,35 +76,14 @@ public class ChatInLeftMenu extends AbstractWidget {
         return messageText.getAttribute("innerText").trim();
     }
 
-    public boolean isValidImg(String adapter) {
-        File image = new File(System.getProperty("user.dir")+"/src/test/resources/adaptericons/" + adapter + ".png");
-        waitForElementToBeVisible(this.getCurrentDriver(), adapterWrappedIcon,4);
-        return isWebElementEqualsImage(this.getCurrentDriver(), adapterWrappedIcon,image);
-    }
-
-
     public boolean isValidIconSentiment(String message) {
         String sentiment = ApiHelperTie.getTIESentimentOnMessage(message).toLowerCase();
         File image = new File(System.getProperty("user.dir") + "/touch/src/test/resources/sentimenticons/" + sentiment + ".png");
         return isWebElementEqualsImage(this.getCurrentDriver(), userSentiment, image);
     }
 
-    public String getChatsChannel() {
-        String iconClass = channelIcon.getAttribute("class");
-        switch (iconClass) {
-            case "icon svg-icon-webchat":
-                return "touch";
-            case "icon svg-icon-fbmsg":
-                return "fb messenger";
-            case "icon icon-fbpost":
-                return "fb post";
-            default:
-                return "unknown icon with tag span[@class='" + iconClass + "']";
-        }
-    }
-
-    public String getAdapterIconName() {
-        return adapterWrappedIcon.getAttribute("name").trim();
+    public String getChatIconName() {
+        return chatIcon.getAttribute("name").trim();
     }
 
     public boolean isOvernightTicketIconShown() {
@@ -128,7 +102,7 @@ public class ChatInLeftMenu extends AbstractWidget {
         return isElementRemoved(this.getCurrentDriver(), usercImg, 3);
     }
 
-    public boolean isOvernightTicketRemoved() {
-        return isElementRemovedByCSS(this.getCurrentDriver(), overnightTicketIcon, 10);
+    public boolean isChatTransferringMessageShown() {
+        return isElementShown(this.getCurrentDriver(), transferringChatMessage, 3);
     }
 }

@@ -2,6 +2,7 @@ package steps.portalsteps;
 
 
 import apihelper.ApiHelper;
+import apihelper.ApiHelperTenant;
 import com.github.javafaker.Faker;
 import datamanager.Agents;
 import datamanager.MC2Account;
@@ -31,6 +32,7 @@ import portalpages.PaymentMethodPage;
 import portalpages.PortalLoginPage;
 import portalpages.PortalSignUpPage;
 import portalpages.PortalUserEditingPage;
+import portaluielem.BusinessProfileWindow;
 import socialaccounts.FacebookUsers;
 import socialaccounts.TwitterUsers;
 import steps.CamundaFlowsSteps;
@@ -39,6 +41,9 @@ import touchpages.pages.MainPage;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.lang.String.format;
+import static org.assertj.core.api.Java6Assertions.assertThat;
 
 public class BasePortalSteps extends AbstractPortalSteps {
 
@@ -234,11 +239,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
                                     .clickLogin();
     }
 
-    @Then("^Newly created agent is deleted in DB$")
-    public void verifyAgentDelete(){
-
-    }
-
     @Then("^Agent of (.*) should have all permissions to manage CRM tickets$")
     public void verifyAgentCRMPermissions(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
@@ -354,7 +354,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("I use activation ID and opens activation page")
     public void openActivationAccountPage(){
-        String activationURL = String.format(EndpointsPlatform.PORTAL_ACCOUNT_ACTIVATION, activationAccountID);
+        String activationURL = format(EndpointsPlatform.PORTAL_ACCOUNT_ACTIVATION, activationAccountID);
         DriverFactory.getAgentDriverInstance().get(activationURL);
     }
 
@@ -694,60 +694,42 @@ public class BasePortalSteps extends AbstractPortalSteps {
         AbstractAgentSteps.getLeftMenu("agent").waitForConnectingDisappear(6,10);
     }
 
-    @When("^Save (.*) pre-test widget value$")
-    public void savePreTestValue(String widgetName){
+    @When("^Save (.*) counter value$")
+    public void saveCounterValue(String counterName){
         try {
-            chatConsolePretestValue.put(widgetName, Integer.valueOf(getDashboardPage().getWidgetValue(widgetName)));
+            chatConsolePretestValue.put(counterName, getDashboardPage().getCounterValue(counterName));
         } catch (NumberFormatException e){
-            Assert.fail("Cannot read value from " +widgetName + "chat console widget");
+            Assert.fail("Cannot read value from " +counterName + "chat console widget");
         }
     }
 
-    @Then("^(.*) widget shows correct number$")
-    public void checkTotalAgentOnlineValue(String widgetName){
-        getDashboardPage().waitForConnectingDisappear(1, 5);
-        int actualActiveAgentsCount = Integer.parseInt(getDashboardPage().getWidgetValue(widgetName));
-        chatConsolePretestValue.put(widgetName, actualActiveAgentsCount);
-        getDashboardPage().clickLaunchSupervisor();
-        List<String> agentsList = AbstractAgentSteps.getPageHeader("agent").getAvailableAgents();
-        int loggedInAgentsCountFromSuperVisorDesk = agentsList.size();
-        Assert.assertEquals(actualActiveAgentsCount, loggedInAgentsCountFromSuperVisorDesk,
-                widgetName + " counter differs from agent online count on backend");
-    }
-
     @Then("^(.*) widget value (?:increased on|set to) (.*)$")
-    public void verifyWidgetValue(String widgetName, int incrementer){
+    public void verifyCounterValue(String name, int incrementer){
         int expectedValue = 0;
-        if(incrementer!=0) expectedValue = chatConsolePretestValue.get(widgetName) + incrementer;
-        Assert.assertTrue(checkLiveCounterValue(widgetName, expectedValue),
-                "'"+widgetName+"' widget value is not updated\n" +
-                "Expected value: " + expectedValue);
-    }
+        if (incrementer != 0) {
+            expectedValue = chatConsolePretestValue.get(name) + incrementer;
+        }
 
-    @Then("^(.*) counter shows correct live chats number$")
-    public void verifyChatConsoleActiveChats(String widgetName){
-        activeChatsFromChatdesk = ApiHelper.getActiveChatsByAgent("Second agent")
-                .getBody().jsonPath().getList("content.id").size();
-//                new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
-        Assert.assertTrue(checkLiveCounterValue(widgetName, activeChatsFromChatdesk),
-                "'"+widgetName+"' widget value is not updated to " + activeChatsFromChatdesk +" expected value \n");
+        assertThat(checkLiveCounterValue(name, expectedValue))
+                .as(format("'%s' widget value should be updated. Expected value: %s", name, expectedValue))
+                .isTrue();
     }
 
     @Then("^Average chats per Agent is correct$")
     public void verifyAverageChatsPerAgent(){
-       int actualAverageChats = Integer.valueOf(getDashboardPage().getAverageChatsPerAgent());
+       int actualAverageChats = Integer.parseInt(getDashboardPage().getAverageChatsPerAgent());
        int expectedAverageChats = activeChatsFromChatdesk /  ApiHelper.getNumberOfLoggedInAgents();
        Assert.assertEquals(actualAverageChats, expectedAverageChats,
                "Number of Average chats per Agent is not as expected");
     }
 
     private boolean checkLiveCounterValue(String widgetName, int expectedValue){
-        int actualValue = Integer.valueOf(getDashboardPage().getWidgetValue(widgetName));
+        int actualValue = getDashboardPage().getCounterValue(widgetName);
         boolean result = false;
         for (int i=0; i<45; i++){
             if(expectedValue!=actualValue){
                 getDashboardPage().waitFor(1000);
-                actualValue = Integer.valueOf(getDashboardPage().getWidgetValue(widgetName));
+                actualValue = getDashboardPage().getCounterValue(widgetName);
             } else {
                 result =true;
                 break;
@@ -960,33 +942,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void makeTwitterIntegration(){
         getPortalIntegrationsPage().getCreateIntegrationWindow().setUpTwitterIntegration();
     }
-
-    @When("^Delink facebook account$")
-    public void delinkFBAccount(){
-        getPortalFBIntegrationPage().delinkFBAccount();
-    }
-
-    @Then("^Touch Go plan is updated to \"(.*)\" in (.*) tenant configs$")
-    public void verifyTouchGoPlanUpdatingInTenantConfig(String expectedTouchGoPlan, String tenantOrgName){
-        String actualType = ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
-        for(int i=0; i<120; i++){
-            if (!actualType.equalsIgnoreCase(expectedTouchGoPlan)){
-                getAdminPortalMainPage().waitFor(15000);
-                DriverFactory.getAgentDriverInstance().navigate().refresh();
-                actualType = ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
-            } else{
-                break;
-            }
-        }
-        boolean isUpgraded = actualType.equalsIgnoreCase(expectedTouchGoPlan);
-        System.setProperty("tenantUpgradeSuccessful", String.valueOf(isUpgraded));
-        Assert.assertTrue(isUpgraded,
-                "TouchGo plan is not updated in tenant configs for '"+tenantOrgName+"' tenant \n"+
-                        "Expected: " + expectedTouchGoPlan + "\n" +
-                        "Found:" + actualType
-        );
-    }
-
 
     @Then("^Touch Go plan is updated to \"(.*)\" in portal page$")
     public void verifyPlanUpdatingOnPortalPage(String expectedTouchGo){
@@ -1320,7 +1275,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Click 'Upload' button for tenant logo$")
     public void clickUploadButtonForTenantLogo(){
-        getPortalTouchPreferencesPage().getBusinessProfileWindow().clickUploadButton();
+        getBusinessProfileWindow().clickUploadButton();
     }
 
     // page_action_to_remove
@@ -1473,20 +1428,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         ApiHelper.deleteAgentPhotoForMainAQAAgent(Tenants.getTenantUnderTestOrgName());
     }
 
-    @Given("^(.*) tenant has no brand image$")
-    public void deleteTenantBrandImage(String tenantOrgName){
-        Tenants.setTenantUnderTestNames(tenantOrgName);
-        ApiHelper.deleteTenantBrandImage(Tenants.getTenantUnderTestOrgName());
-        String fileType = ApiHelper.getTenantBrandImage(Tenants.getTenantUnderTestOrgName()).contentType();
-        String fileTypeTrans = ApiHelper.getTenantBrandImageTrans(Tenants.getTenantUnderTestOrgName()).contentType();
-        SoftAssert soft = new SoftAssert();
-        soft.assertFalse(fileType.contains("image"),
-                "Image was not deleted on backend");
-        soft.assertFalse(fileTypeTrans.contains("image"),
-                "Image for chat desk (tenant_logo_trans) was not deleted on backend");
-        soft.assertAll();
-    }
-
     @When("^Admin logs out from portal$")
     public void logoutFromPortal(){
         getPortalUserProfileEditingPage().getPageHeader().logoutAdmin();
@@ -1504,7 +1445,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
                 updatedAgentInfo.get("email") + " agent is not present on backend");
     }
 
-
     @Then("^New image is saved on portal and backend$")
     public void verifyImageSaveOnPortal(){
         SoftAssert soft = new SoftAssert();
@@ -1516,28 +1456,15 @@ public class BasePortalSteps extends AbstractPortalSteps {
                 "Agent photo is not shown in portal");
         soft.assertAll();
     }
-
-    @Then("^New brand image is saved on backend for (.*) tenant$")
-    public void verifyBrandImageSaveOnPortal(String tenantOrgName){
-        Tenants.setTenantUnderTestNames(tenantOrgName);
-        String fileType = ApiHelper.getTenantBrandImage(Tenants.getTenantUnderTestOrgName()).contentType();
-        String fileTypeTrans = ApiHelper.getTenantBrandImageTrans(Tenants.getTenantUnderTestOrgName()).contentType();
-        SoftAssert soft = new SoftAssert();
-        soft.assertTrue(fileType.contains("image"),
-                "Image is not saved on backend");
-        soft.assertTrue(fileTypeTrans.contains("image"),
-                "Image for chat desk (tenant_logo_trans) is not saved on backend");
-        soft.assertAll();
-    }
-
     @And("^Change business details$")
     public void changeBusinessDetails() {
-        tenantInfo.put("companyName", "New company name "+faker.lorem().word());
-        tenantInfo.put("companyCity", "San Francisco "+faker.lorem().word());
-        tenantInfo.put("companyIndustry", getPortalTouchPreferencesPage().getBusinessProfileWindow().selectRandomIndustry());
-        tenantInfo.put("companyCountry", getPortalTouchPreferencesPage().getBusinessProfileWindow().selectRandomCountry());
-        getPortalTouchPreferencesPage().getBusinessProfileWindow().setBusinessName(tenantInfo.get("companyName"));
-        getPortalTouchPreferencesPage().getBusinessProfileWindow().setCompanyCity(tenantInfo.get("companyCity"));
+        tenantInfo.put("companyName", "New company name " + faker.lorem().word());
+        tenantInfo.put("companyCity", "San Francisco " + faker.lorem().word());
+        tenantInfo.put("companyIndustry", getBusinessProfileWindow().selectRandomIndustry());
+        tenantInfo.put("companyCountry", getBusinessProfileWindow().selectRandomCountry());
+        getBusinessProfileWindow()
+                .setBusinessName(tenantInfo.get("companyName"))
+                .setCompanyCity(tenantInfo.get("companyCity"));
         agentClickSaveChangesButton();
     }
 
@@ -1551,13 +1478,17 @@ public class BasePortalSteps extends AbstractPortalSteps {
         soft.assertEquals(getPortalTouchPreferencesPage().getBusinessProfileWindow().getCompanyCountry(),tenantInfo.get("companyCountry"), "Company country was not changed");
         getPortalTouchPreferencesPage().getBusinessProfileWindow().setBusinessName("Automation Bot");
         getPortalTouchPreferencesPage().clickSaveButton();
-        Response resp = ApiHelper.getTenantConfig(tenantOrgName);
+        Response resp = ApiHelperTenant.getTenantConfig(tenantOrgName);
         String country = resp.jsonPath().get("country").toString();
         soft.assertEquals(resp.jsonPath().get("orgName"),tenantOrgName, "Company name was not changed on backend");
         soft.assertEquals(resp.jsonPath().get("city").toString(),tenantInfo.get("companyCity"), "Company city was not changed on backend");
         soft.assertEquals(resp.jsonPath().get("category"),tenantInfo.get("companyIndustry"), "Company industry was not changed on backend");
         getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
         soft.assertAll();
+    }
+
+    private static BusinessProfileWindow getBusinessProfileWindow() {
+        return getPortalTouchPreferencesPage().getBusinessProfileWindow();
     }
 
     @When("^Turn (.*) the Last Agent routing$")
@@ -1575,7 +1506,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Verify Last Agent routing is turned (.*) on backend$")
     public void verifyLastAgentRoting(String status) {
-        boolean statusOnBackend = ApiHelper.getTenantConfig(Tenants.getTenantUnderTestOrgName()).getBody().jsonPath().get("lastAgentMode");
+        boolean statusOnBackend = ApiHelperTenant.getTenantConfig(Tenants.getTenantUnderTestOrgName()).getBody().jsonPath().get("lastAgentMode");
         if (status.equalsIgnoreCase("on")){
             Assert.assertTrue(statusOnBackend, "Last Agent Roting is not turned on");
         } else if(status.equalsIgnoreCase("off")){
@@ -1595,7 +1526,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         }else{
             throw new AssertionError("Incorrect status was provided");
         }
-        ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(),tenantChatPreferences);
+        ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), tenantChatPreferences);
     }
     @When("^Create chat tag$")
     public void createChatTag(){
@@ -1610,10 +1541,12 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickSaveButton();
         AgentCRMTicketsSteps.crmTicketInfoForUpdating.get().put("agentTags",  tagname);
     }
+
     @When("^Click the pencil icon to edit the tag")
     public void editTag() {
         getPortalTouchPreferencesPage().getChatTagsWindow().clickEditTagButton(tagname);
     }
+
     @When("^Cancel editing a tag")
     public void cancelEditingTag() {
         getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickDeleteButton();
@@ -1624,15 +1557,22 @@ public class BasePortalSteps extends AbstractPortalSteps {
         Assert.assertTrue(tagname.equalsIgnoreCase(newTagName), "Tag name has not changed");
     }
 
-    @When("^(?:Enable|Disable) tag$")
-    public void disableTag(){
-        getPortalTouchPreferencesPage().getChatTagsWindow().enableDisableTag(tagname);
-    }
-
     private MainPage getMainPage() {
         if (mainPage == null) {
             mainPage = new MainPage();
         }
         return mainPage;
+    }
+
+    @Then("^Admin can see Settings page with - all tabs$")
+    public void verifySettingPageTabOptions(List<String> datatable){
+        List<String> actualTabNames = getDashboardSettingsPage().getSettingTabsText();
+        Assert.assertEquals(actualTabNames,datatable, "Comparable strings does not match");
+    }
+
+    @When("^Tag is created")
+    public void verifyTagIsCreated() {
+        String newTagName = getPortalTouchPreferencesPage().getChatTagsWindow().getTagName();
+        Assert.assertEquals(newTagName,tagname,"Tag is not created");
     }
 }

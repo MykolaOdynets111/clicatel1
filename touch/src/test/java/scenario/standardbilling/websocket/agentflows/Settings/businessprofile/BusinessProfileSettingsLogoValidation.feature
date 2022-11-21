@@ -16,15 +16,19 @@ Feature: Dashboard: Settings: Business Profile : Logo
     Then Verify Logo is deleted
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2643")
+  @delete_tenant_logo
   Scenario: CD :: Dashboard :: Settings :: Business Profile :: Verify that the logo can be set up for tenant
 
     Then Verify Logo is uploaded
     When Agent click 'Save changes' button
-    Then Tenant logo is shown on Chat desk
-#    cleanup
-    When Delete 'Company Logo'
-    Then Verify Logo is deleted
-    And Agent click 'Save changes' button
+    Then Tenant logo is shown on Chat Desk
 
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2488")
+  @delete_tenant_logo
+  Scenario: CD:: Dashboard:: Adding tenant new image
 
-
+    Then Verify Logo is uploaded
+    When Agent click 'Save changes' button
+    Then Tenant logo is shown on Chat Desk
+    When I select Touch in left menu and Agent Desk in submenu
+    Then Tenant logo is shown on Chat Desk

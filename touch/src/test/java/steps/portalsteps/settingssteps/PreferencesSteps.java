@@ -21,6 +21,10 @@ public class PreferencesSteps extends AbstractPortalSteps {
     public void changeChatPerAgent(String chats) {
         getPreferencesWindow().setChatsAvailable(chats);
     }
+    @When("^Change Pending Chats Auto-closure Time:\"(.*)\"$")
+    public void changePendingAutoClosure(String pendingTime) {
+        getPreferencesWindow().setPendingChatAutoClosure(pendingTime);
+    }
 
     @When("^Agent set (\\d*) hours and (\\d*) minutes in Agent Chat Timeout section$")
     public void setInactivityTimeout(int hours, int minutes) {
@@ -80,6 +84,10 @@ public class PreferencesSteps extends AbstractPortalSteps {
     public void decimalErrorIsShownInWindow(String errorMessage) {
         getPreferencesWindow().isErrorMessageShown(errorMessage);
     }
+    @When("^(.*) Error message is displayed for Pending Auto Closure Time$")
+    public void errorIsShownInWindow(String decimalErrorMessage) {
+        Assert.assertEquals(getPreferencesWindow().errorMessageShown(),decimalErrorMessage, "Eror message is not displayed");
+    }
 
     @When("^Click off/on Chat Conclusion$")
     public void clickOffOnChatConclusion() {
@@ -88,15 +96,15 @@ public class PreferencesSteps extends AbstractPortalSteps {
     }
 
     @When("^click off/on 'Automatic Scheduler'$")
-    public void clickOnOffAutoScheduler(){
-        autoSchedulerPreActionStatus =  ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled");
+    public void clickOnOffAutoScheduler() {
+        autoSchedulerPreActionStatus = ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled");
         getPortalTouchPreferencesPage().getPreferencesWindow().clickOnOffAutoScheduler();
         saveChanges();
     }
 
     @Then("^On backend AUTOMATIC_SCHEDULER status is updated for (.*)$")
-    public void verifyAutoSchedulingStatusOnBackend(String tenant){
-        Assert.assertNotEquals(ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled"),
+    public void verifyAutoSchedulingStatusOnBackend(String tenant) {
+        Assert.assertNotEquals(ApiHelper.getInternalTenantConfig(tenant, "autoSchedulingEnabled"),
                 autoSchedulerPreActionStatus,
                 "Auto scheduling status on backend is not as expected \n");
     }
@@ -104,7 +112,6 @@ public class PreferencesSteps extends AbstractPortalSteps {
     @When("^Select (.*) department By Default$")
     public void selectDefaultDepartment(String name) {
         getPreferencesWindow().selectDefaultDepartment(name);
-        saveChanges();
     }
 
     @When("^Switch Last Agent routing$")

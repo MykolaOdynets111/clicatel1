@@ -22,7 +22,7 @@ Feature: Satisfaction Survey
     Then Survey Management page should be shown
     And Admin clicks on channel toggle button for survey form
     And Admin clicks on channel expand button for survey form
-    And Admin selects CSAT survey type for whatsapp survey form
+    And Admin selects CSAT survey type
     #Then CSAT scale has correct limit variants 1 to 5, 1 to 7, 1 to 10 in dropdown and number set as type
     When Agent select 1 to 5 as number limit from dropdown
     And Agent click save survey configuration button
