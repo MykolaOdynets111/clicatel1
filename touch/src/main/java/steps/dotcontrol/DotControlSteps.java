@@ -24,6 +24,7 @@ import javaserver.DotControlServer;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import sqsreader.SQSConfiguration;
+import steps.DefaultTouchUserSteps;
 
 import java.io.File;
 import java.io.IOException;
