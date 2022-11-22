@@ -29,6 +29,24 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = ".cl-chat-item--selected")
     private WebElement activeChat;
 
+    @FindBy(css = "[data-testid = 'bulk-messages-toggle']")
+    private WebElement bulkButton;
+
+    @FindBy(css = ".cl-chat-item-bulk-message-checkbox label")
+    private WebElement bulkPanelChat;
+
+    @FindBy(css = ".cl-chat-item-bulk-message-checkbox label")
+    private List<WebElement> bulkPanelChatItems;
+
+    @FindBy(css = "[data-testid = 'chats-list-scroll-container']")
+    private WebElement chatsScrollBar;
+
+    @FindBy(css = ".cl-checkbox__input")
+    private WebElement bulkChatCheckboxes;
+
+    @FindBy(css = ".agent-view-bulk-mode-main--header")
+    private WebElement bulkChatMiddlePaneMessage;
+
     @FindAll({
             @FindBy(css = "[data-testid='search-filter-btn']"),
             @FindBy(css = "[selenium-id='search-filter-btn']") //toDo old locator
@@ -132,6 +150,44 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     public void openFirstChat() {
         newConversationRequests.get(0).click();
+    }
+
+    public void clickBulkButton() {
+        bulkButton.click();
+    }
+
+    public boolean isBulkPanelEnabled(String isEnabled) {
+        return getAttributeFromElem(this.getCurrentDriver(), bulkPanelChat, 5, "Bulk panel", "class").contains(isEnabled);
+    }
+
+    public void scrollLeftPane() {
+        while (bulkPanelChatItems.size() <= 30) {
+            wheelScroll(this.getCurrentDriver(), chatsScrollBar, 950, 0,0);
+            waitFor(1000);
+            //scrollToElem(this.getCurrentDriver(), bulkPanelChatItems.get(bulkPanelChatItems.size() - 1), "Bulk panel checkbox");
+        }
+    }
+
+    public boolean bulkPanelElementsClick(int bulkCheckedChats) {
+        int count = 0;
+        scrollLeftPane();
+        wheelScroll(this.getCurrentDriver(), chatsScrollBar, -5500, 0, 0);
+        waitFor(2500);
+
+        for (WebElement webElement : bulkPanelChatItems) {
+                scrollToElem(this.getCurrentDriver(), webElement, "Bulk panel checkbox");
+                waitFor(1500);
+                if (!getAttributeFromElem(this.getCurrentDriver(), webElement, 5, "Bulk panel", "class").contains("disabled")) {
+                    webElement.findElement(By.tagName("span")).click();
+                    count++;
+                    System.out.println("Clicking the bulk checkbox");
+                }
+
+                if(count == bulkCheckedChats) {
+                    return true;
+                }
+            }
+        return false;
     }
 
     public boolean isNewWebWidgetRequestIsShown(int wait) {

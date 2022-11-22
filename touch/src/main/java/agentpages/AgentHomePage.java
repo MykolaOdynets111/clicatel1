@@ -23,6 +23,9 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = ".cl-r-suggestions-count")
     private WebElement agentAssistantButton;
 
+    @FindBy(css = ".bulk-mode-popup-message-limit-reached-msg")
+    private WebElement bulkChatMessage;
+
     @FindAll({
             @FindBy(xpath = "//li[text()='History']"),
             @FindBy(css = "[selenium-id='tab-right-panel-2']")
@@ -362,6 +365,10 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public boolean isDialogShown(){
         return isElementShown(this.getCurrentDriver(), dialogElement, 10);
+    }
+
+    public String isMultipleBulkMessagesTextShown(){
+        return getTextFromElem(this.getCurrentDriver(), bulkChatMessage, 10, "Bulk chat error message");
     }
 
     public boolean isDisappearingDialogShown(){
