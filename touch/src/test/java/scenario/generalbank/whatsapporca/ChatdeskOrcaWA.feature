@@ -221,3 +221,15 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Agent click "End chat" button
     And Agent Feedback popup for agent should be opened
     Then Correct neutral sentiment selected
+
+  @orca_api
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1479")
+  Scenario: CD:: Agent Desk:: Verify if I can see a notification about the new message in an existing chat
+
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    Given I login as agent of General Bank Demo
+    And Send to agent message by ORCA
+    When Send Hello message by ORCA
+    Then Agent has new conversation request
+    When Agent click on new conversation request from orca
+    Then The few seconds time set for last message in left menu with chat for agent

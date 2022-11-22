@@ -48,6 +48,9 @@ public class ChatInLeftMenu extends AbstractWidget {
     @FindBy(css = ".transferring-chat")
     private WebElement transferringChatMessage;
 
+    @FindBy(css = "span.cl-chat-item__footer__date")
+    private WebElement chatReceivingTime;
+
     private String overnightTicketIcon = ".cl-r-icon.cl-r-icon-tickets.cl-r-icon--fill-bright-orange"; //""span.icon>svg.overnight"; old locator
 
     public ChatInLeftMenu(WebElement element) {
@@ -74,6 +77,10 @@ public class ChatInLeftMenu extends AbstractWidget {
 
     public String getLastMessageText() {
         return messageText.getAttribute("innerText").trim();
+    }
+
+    public String getMessageReceivingTime() {
+        return getAttributeFromElem(this.getCurrentDriver(), chatReceivingTime, 5, "receiving_time","innerText").trim();
     }
 
     public boolean isValidIconSentiment(String message) {
