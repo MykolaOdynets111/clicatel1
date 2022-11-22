@@ -14,7 +14,6 @@ Feature: Supervisor desk
     Then Chats Ended are sorted in ascending order
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1131")
-  @Regression
   Scenario: CD :: Supervisor Desk :: Closed Chat :: Verify calendar picker should be limited to max 90 days back in closed chats
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
