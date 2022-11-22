@@ -193,7 +193,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("^(.*) checks number of checked bulk checkboxes is (.*)$")
     public void bulkMessageCheckboxesClickAndCheck(String agent, int checkedBulkChats){
-        Assert.assertTrue(getLeftMenu(agent).bulkPanelElementsClick(), "Required checked checkboxes count is incorrect");
+        Assert.assertTrue(getLeftMenu(agent).bulkPanelElementsClick(checkedBulkChats), "Required checked checkboxes count is incorrect");
     }
 
     @Then("^(.*) sees checkbox is (.*) for the blocked chat$")

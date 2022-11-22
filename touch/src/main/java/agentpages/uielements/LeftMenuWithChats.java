@@ -168,7 +168,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
         }
     }
 
-    public boolean bulkPanelElementsClick() {
+    public boolean bulkPanelElementsClick(int bulkCheckedChats) {
         int count = 0;
         scrollLeftPane();
         wheelScroll(this.getCurrentDriver(), chatsScrollBar, -5500, 0, 0);
@@ -183,7 +183,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
                     System.out.println("Clicking the bulk checkbox");
                 }
 
-                if(count >14) {
+                if(count == bulkCheckedChats) {
                     return true;
                 }
             }
