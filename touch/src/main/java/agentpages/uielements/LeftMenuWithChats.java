@@ -20,6 +20,15 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = "a[data-testid^=chat-list-item]")
     private List<WebElement> newConversationRequests;
 
+    @FindBy(xpath = "//button[text() = 'Continue']")
+    private WebElement continueButton;
+
+    @FindBy(xpath = "//button[text() = 'Wait, I want to stay here!']")
+    private WebElement waitAndStayButton;
+
+    @FindBy(css = ".cl-routed-tabs__tab--selected")
+    private WebElement selectedTab;
+
     @FindAll({
             @FindBy(css = "[data-testid=roster-item]"),
             @FindBy(css = "[selenium-id=roster-item]") //toDo old locator
@@ -41,8 +50,8 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = "[data-testid = 'chats-list-scroll-container']")
     private WebElement chatsScrollBar;
 
-    @FindBy(css = ".cl-checkbox__input")
-    private WebElement bulkChatCheckboxes;
+    @FindBy(xpath = "//input[contains(@class, 'checkbox__input')]")
+    private WebElement bulkChatCheckbox;
 
     @FindBy(css = ".agent-view-bulk-mode-main--header")
     private WebElement bulkChatMiddlePaneMessage;
@@ -118,6 +127,8 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     private FilterMenu filterMenu;
 
+    private int count = 0;
+
     private WebElement getTargetChat(String userName) {
         return newConversationRequests.stream().filter(e -> new ChatInLeftMenu(e)
                 .setCurrentDriver(this.getCurrentDriver())
@@ -160,6 +171,14 @@ public class LeftMenuWithChats extends AbstractUIElement {
         return getAttributeFromElem(this.getCurrentDriver(), bulkPanelChat, 5, "Bulk panel", "class").contains(isEnabled);
     }
 
+    public Boolean isNumberOfCheckedChats(int numberOfCheckedBulkChats ) {
+        return count == numberOfCheckedBulkChats;
+    }
+
+    public String getBulkChatsButtonSelectedStatus() {
+        return getAttributeFromElem(this.getCurrentDriver(), bulkButton, 5, "Bulk chats button", "class");
+    }
+
     public void scrollLeftPane() {
         while (bulkPanelChatItems.size() <= 30) {
             wheelScroll(this.getCurrentDriver(), chatsScrollBar, 950, 0,0);
@@ -168,8 +187,22 @@ public class LeftMenuWithChats extends AbstractUIElement {
         }
     }
 
+    public boolean bulkPanelElementsClickWithoutScroll(int bulkCheckedChats) {
+        for (WebElement webElement : bulkPanelChatItems) {
+            if (!getAttributeFromElem(this.getCurrentDriver(), webElement, 5, "Bulk panel", "class").contains("disabled")) {
+                webElement.findElement(By.tagName("span")).click();
+                count++;
+                System.out.println("Clicking the bulk checkbox");
+            }
+
+            if(count == bulkCheckedChats) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean bulkPanelElementsClick(int bulkCheckedChats) {
-        int count = 0;
         scrollLeftPane();
         wheelScroll(this.getCurrentDriver(), chatsScrollBar, -5500, 0, 0);
         waitFor(2500);
@@ -292,6 +325,11 @@ public class LeftMenuWithChats extends AbstractUIElement {
                 "No results found text").replace("\n", " ");
     }
 
+    public String getCurrentSelectedTabText() {
+        return getTextFromElem(this.getCurrentDriver(), selectedTab, 4,
+                "Current selected tab text");
+    }
+
     public String getActiveChatUserName() {
         return getChatInLeftMenu().getUserName();
     }
@@ -400,6 +438,14 @@ public class LeftMenuWithChats extends AbstractUIElement {
         return chatsList.stream()
                 .map(e -> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver()))
                 .allMatch(chat -> chat.getChatIconName().equalsIgnoreCase(channelName));
+    }
+
+    public void clickContinueButton(){
+        clickElem(this.getCurrentDriver(), continueButton, 1, "Continue Button");
+    }
+
+    public void clickWaitAndStayButton(){
+        clickElem(this.getCurrentDriver(), waitAndStayButton, 1, "Wait And Stay Button");
     }
 
     public LeftMenuWithChats selectOption(String name) {

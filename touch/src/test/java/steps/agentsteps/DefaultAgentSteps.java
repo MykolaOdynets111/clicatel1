@@ -193,12 +193,23 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("^(.*) checks number of checked bulk checkboxes is (.*)$")
     public void bulkMessageCheckboxesClickAndCheck(String agent, int checkedBulkChats){
-        Assert.assertTrue(getLeftMenu(agent).bulkPanelElementsClick(checkedBulkChats), "Required checked checkboxes count is incorrect");
+        if (checkedBulkChats > 5) {
+            Assert.assertTrue(getLeftMenu(agent).bulkPanelElementsClick(checkedBulkChats), "Required checked checkboxes count is incorrect");
+        }
+        else {
+            Assert.assertTrue(getLeftMenu(agent).bulkPanelElementsClickWithoutScroll(checkedBulkChats), "Required checked checkboxes count is incorrect");
+        }
     }
 
     @Then("^(.*) sees checkbox is (.*) for the blocked chat$")
     public void isBulkButtonInPanelDisabled(String agent, String disability){
         Assert.assertTrue(getLeftMenu(agent).isBulkPanelEnabled(disability));
+    }
+
+    @Then("^(.*) sees number of checked checkboxes is (.*)")
+    public void isBulkCheckboxChecked(String agent, int numberOfCheckedBulkChats){
+        Assert.assertTrue(getLeftMenu(agent).isNumberOfCheckedChats(numberOfCheckedBulkChats),
+                "Number of checked bulk chats count is not the same");
     }
 
     @Then("^(.*) button is (.+) on Chat header$")
@@ -257,6 +268,44 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void selectFilterOption(String agent,String option){
         getLeftMenu(agent).selectChatsMenu(option);
         getLeftMenu(agent).waitForConnectingDisappear(5,10);
+    }
+
+    @Then("^(.*) checks current tab selected in left menu is (.*) tab")
+    public void checkCurrentSelectedTab(String agent,String currentTab){
+        Assert.assertTrue(getLeftMenu(agent).getCurrentSelectedTabText().equalsIgnoreCase(currentTab),
+                "Current tab selected is not correct");
+    }
+
+    @Then("^(.*) checks all chats from the previous tab should get deselected")
+    public void checksBulkChatsUnSelected(String agent){
+        Assert.assertTrue(!getLeftMenu(agent).getBulkChatsButtonSelectedStatus().contains("active"),
+                "Bulk chats are still not deselected");
+    }
+
+    @Then("^(.*) checks customer should stay on the same tab and all selected items stay selected")
+    public void checksBulkChatsSelected(String agent){
+        Assert.assertTrue(getLeftMenu(agent).getBulkChatsButtonSelectedStatus().contains("active"),
+                "Bulk chats are still not deselected");
+    }
+
+    @Then("^(.*) select Continue button$")
+    public void selectFilterOption(String agent){
+        getLeftMenu(agent).clickContinueButton();
+    }
+
+    @Then("^(.*) select Wait and Stay button$")
+    public void selectWaitAndStayButton(String agent){
+        getLeftMenu(agent).clickWaitAndStayButton();
+    }
+
+    @Then("^(.*) select cross button wait and stay dialog$")
+    public void selectWaitAndStayCrossButton(String agent){
+        getAgentHomePage(agent).clickCrossButtonWarningDialog();
+    }
+
+    @Then("^(.*) select Don't show this message again checkbox$")
+    public void selectDontShowWarningCheckbox(String agent){
+        getAgentHomePage(agent).clickDontShowMessageCheckbox();
     }
 
     @Then("^(.*) open (.*) type$")
@@ -800,6 +849,13 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertTrue(getAgentHomePage(agent).isMultipleBulkMessagesTextShown()
                         .equalsIgnoreCase("You have reached your max bulk of 15 selected chats."),
                 "Bulk messages more than 15 selected error not shown");
+    }
+
+    @Then("^(.*) checks notification message (.*) should appear$")
+    public void bulkChatsotificationMessageCheck(String agent, String bulkNotificationMessage) {
+        Assert.assertTrue(getAgentHomePage(agent).bulkMessagesTabSwitchNotification()
+                        .equalsIgnoreCase(bulkNotificationMessage),
+                "Bulk messages tab switch message not shown");
     }
 
     private static int getNumberOfActiveChats(String agent, String integration) {

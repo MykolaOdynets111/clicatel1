@@ -23,8 +23,17 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = ".cl-r-suggestions-count")
     private WebElement agentAssistantButton;
 
+    @FindBy(css = "#Close")
+    private WebElement crossButtonWarningDialog;
+
+    @FindBy(css = ".cl-modal__footer-buttons span")
+    private WebElement notShowDialogCheckbox;
+
     @FindBy(css = ".bulk-mode-popup-message-limit-reached-msg")
     private WebElement bulkChatMessage;
+
+    @FindBy(css = ".bulk-mode-exit-modal-body__text")
+    private WebElement bulkChatTabSwitchMessage;
 
     @FindAll({
             @FindBy(xpath = "//li[text()='History']"),
@@ -371,8 +380,19 @@ public class AgentHomePage extends AgentAbstractPage {
         return getTextFromElem(this.getCurrentDriver(), bulkChatMessage, 10, "Bulk chat error message");
     }
 
+    public String bulkMessagesTabSwitchNotification(){
+        return getTextFromElem(this.getCurrentDriver(), bulkChatTabSwitchMessage, 10, "Bulk chat tab switch message");
+    }
+
     public boolean isDisappearingDialogShown(){
         return isElementRemoved(this.getCurrentDriver(), dialogElement, 3);
     }
 
+    public void clickCrossButtonWarningDialog(){
+        clickElem(this.getCurrentDriver(), crossButtonWarningDialog, 1, "Cross Button");
+    }
+
+    public void clickDontShowMessageCheckbox(){
+        clickElem(this.getCurrentDriver(), notShowDialogCheckbox, 1, "Don't show warning checkbox");
+    }
 }
