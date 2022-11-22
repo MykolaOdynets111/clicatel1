@@ -367,8 +367,8 @@ public class AgentHomePage extends AgentAbstractPage {
         return isElementShown(this.getCurrentDriver(), dialogElement, 10);
     }
 
-    public boolean isMultipleBulkMessagesTextShown(){
-        return isElementShown(this.getCurrentDriver(), bulkChatMessage, 10);
+    public String isMultipleBulkMessagesTextShown(){
+        return getTextFromElem(this.getCurrentDriver(), bulkChatMessage, 10, "Bulk chat error message");
     }
 
     public boolean isDisappearingDialogShown(){

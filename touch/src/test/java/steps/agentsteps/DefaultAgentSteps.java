@@ -798,7 +798,8 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Given("^(.*) checks error is displayed if selected more then 15 chats$")
     public void errorMessageCheckMoreThan15BulkChats(String agent) {
-        Assert.assertTrue(getAgentHomePage(agent).isMultipleBulkMessagesTextShown(),
+        Assert.assertTrue(getAgentHomePage(agent).isMultipleBulkMessagesTextShown()
+                        .equalsIgnoreCase("You have reached your max bulk of 15 selected chats."),
                 "Bulk messages more than 15 selected error not shown");
     }
 
