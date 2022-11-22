@@ -191,7 +191,7 @@ Feature: Satisfaction Survey
     And Admin is able to see Customer Satisfaction,Chats by Channel,Past Sentiment graphs
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2289")
-  Scenario Outline: Customer History:: NPS Score:: Verify if Net Promoter Score can display a negative rating
+  Scenario Outline: Dashboard :: Customers Overview :: Customers History :: NPS Score :: Verify if Net Promoter Score can display a negative rating
     And Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing
       | surveyType           | NPS         |

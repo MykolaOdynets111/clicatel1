@@ -222,8 +222,6 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         softAssert.assertTrue(getIncomingTransferWindow(agent).isValidImTransferChannel("touchTransfer"),
                 "Channel picture as not expected");
         softAssert.assertAll();
-
-
     }
 
     @When("^(.*) receives incoming transfer notification with \"Transfer waiting\" header and collapsed view$")
@@ -240,7 +238,7 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     @Then("^Correct Rejected by field is shown for (.*)$")
     public void verifyRejectedByField(String agent){
         Assert.assertEquals(getIncomingTransferWindow(agent).getRejectedBy(),
-                "Rejected by:\n" + secondAgentName,
+                "Rejected by: " + secondAgentName,
                 "Header in incoming transfer window is not as expected");
     }
 
@@ -292,5 +290,10 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     @Then("^Close Transferring window for (.*)$")
     public void closeTransferringWindow(String agent) {
         getAgentHomePage(agent).getTransferChatWindow().clickCloseButton();
+    }
+
+    @Then("^(.*) can see 'Transferring chat...' message$")
+    public void verifyChatTransferringMassage(String agent) {
+        getLeftMenu(agent).verifyChatTransferringShown();
     }
 }

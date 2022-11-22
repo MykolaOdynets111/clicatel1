@@ -14,8 +14,6 @@ import java.util.Locale;
 
 public class SupervisorDeskTicketRow extends AbstractWidget {
 
-    private WebElement baseWebElem = this.getWrappedElement();
-
     @FindBy(css = ".cl-checkbox")
     private WebElement checkbox;
 
@@ -44,7 +42,6 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
     private WebElement channelIcon;
 
     private String scrollAreaCss = "[data-testid='chatslist-scroll-container'] [class='iScrollVerticalScrollbar iScrollLoneScrollbar']";
-    // private String chatConsoleInboxRowNameCss = ".cl-user-name";
 
     @FindBy(css = ".cl-table-cell--channelType svg")
     private WebElement channelImg;
@@ -63,7 +60,6 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
     }
 
     public String getName(){
-        //WebElement name = baseWebElem.findElement(By.cssSelector(chatConsoleInboxRowNameCss));
         return  userName.getText();
     }
 
@@ -99,10 +95,6 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
 
     public String getPhone(){
         return  getTextFromElem(this.getCurrentDriver(), phone, 2, "Phone");
-    }
-
-    public String getIconName() {
-        return channelIcon.getAttribute("name").trim();
     }
 
     public boolean isValidChannelImg(String channelPictureName) {

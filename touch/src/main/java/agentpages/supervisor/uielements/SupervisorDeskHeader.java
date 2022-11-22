@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(css = ".view-header")
+@FindBy(css = ".supervisor-view-header")
 public class SupervisorDeskHeader extends AbstractUIElement {
 
     @FindBy(id = "nameOrPhone")
@@ -17,9 +17,6 @@ public class SupervisorDeskHeader extends AbstractUIElement {
 
     @FindBy(xpath = "//*[text()='Flagged Only']")
     private WebElement flaggedOnlyCheckbox;
-
-    @FindBy(xpath = "//input[@name='waPhone']")
-    private WebElement contactNub;
 
     @FindBy(id = "channel")
     private WebElement channelsDropdown;
@@ -87,8 +84,7 @@ public class SupervisorDeskHeader extends AbstractUIElement {
     }
 
     public String checkStartDateFilterIsEmpty() {
-        String value = getAttributeFromElem(this.getCurrentDriver(), startDateInput, 2, "Start Date Element", "value");
-        return value;
+        return getAttributeFromElem(this.getCurrentDriver(), startDateInput, 2, "Start Date Element", "value");
     }
 
     public String getChannelFilterValue(){

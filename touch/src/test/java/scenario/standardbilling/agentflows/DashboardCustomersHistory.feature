@@ -29,6 +29,7 @@ Feature: Dashboard: Customer History
 
   @no_chatdesk
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2437")
+  @skip
   Scenario Outline:  CD :: Dashboard :: Customer Overview :: Customer History :: Verify if admin can see the message "No data to report at the moment" if there is no available CSAT Score data per period
     When I open portal
     And I login as agent of Standard Billing
@@ -79,7 +80,7 @@ Feature: Dashboard: Customer History
 
   @no_chatdesk
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2338")
-  Scenario: Dashboard:: Verify that if supervisor selects 'past day' date filter, reports should be displayed hourly
+  Scenario: CD::Dashboard:: Verify that if supervisor selects 'past day' date filter, reports should be displayed hourly
     When I open portal
     And Login into portal as an admin of Standard Billing account
     And I select Touch in left menu and Dashboard in submenu

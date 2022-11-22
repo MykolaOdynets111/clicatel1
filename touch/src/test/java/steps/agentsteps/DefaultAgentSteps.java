@@ -344,7 +344,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getPageHeader().verifyUserStatusOnIcon(status);
     }
 
-
     @When("^(.*) refreshes the page$")
     public void refreshThePage(String agent){
         DriverFactory.getDriverForAgent(agent).navigate().refresh();

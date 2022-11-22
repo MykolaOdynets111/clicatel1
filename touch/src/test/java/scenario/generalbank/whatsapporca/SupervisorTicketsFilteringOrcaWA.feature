@@ -45,7 +45,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6052")
   Scenario: CD:: Supervisor Desk:: Tickets:: Supervisor_Desk-Tickets-Closed:: Verify if Supervisor is able to view all the tickets in the closed tab
 
-    Given Setup ORCA Whatsapp integration for Automation Bot tenant
+    Given Setup ORCA Whatsapp integration for General Bank Demo tenant
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
     And Send 1 messages chat to agent by ORCA

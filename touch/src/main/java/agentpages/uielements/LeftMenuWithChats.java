@@ -402,8 +402,14 @@ public class LeftMenuWithChats extends AbstractUIElement {
                 .allMatch(chat -> chat.getChatIconName().equalsIgnoreCase(channelName));
     }
 
-    private ChatInLeftMenu getChatInLeftMenu() {
-        return new ChatInLeftMenu(activeChat).setCurrentDriver(this.getCurrentDriver());
+    public LeftMenuWithChats selectOption(String name) {
+         getFilterOptionByName(name).click();
+         return this;
+    }
+
+    public LeftMenuWithChats verifyChatTransferringShown() {
+        getChatInLeftMenu().isChatTransferringMessageShown();
+        return this;
     }
 
     private WebElement getFilterOptionByName(String name) {
@@ -412,8 +418,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
                 .findFirst().orElseThrow(() -> new NoSuchElementException("There is no value with name: " + name));
     }
 
-    public LeftMenuWithChats selectOption(String name) {
-         getFilterOptionByName(name).click();
-         return this;
+    private ChatInLeftMenu getChatInLeftMenu() {
+        return new ChatInLeftMenu(activeChat).setCurrentDriver(this.getCurrentDriver());
     }
 }
