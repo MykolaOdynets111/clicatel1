@@ -7,6 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @FindBy(css = ".ReactModal__Content.ReactModal__Content--after-open.cl-modal")
@@ -47,6 +48,9 @@ public class TransferChatWindow extends AbstractUIElement {
 
     @FindBy(css = "svg[name = close]")
     private WebElement closeButton;
+
+    @FindBy(xpath = "//div[contains(text(),'agent')]/..//input")
+    private WebElement agentsInput;
 
     public String transferChat(String agent) {
         openDropDownAgent();
@@ -163,10 +167,6 @@ public class TransferChatWindow extends AbstractUIElement {
         return getCurrentAgentFromAssignmentDropdown().getText();
     }
 
-    public String getTextDropDownMessage() {
-        return getTextFromElem(this.getCurrentDriver(), availableAgentOrDepartment,6,"Drop down menu");
-    }
-
     public boolean isAssignedAgentDisabledToSelect(){
         return getCurrentAgentFromAssignmentDropdown().isEnabled();
     }
@@ -215,7 +215,17 @@ public class TransferChatWindow extends AbstractUIElement {
     public void waitForUpdatingAvailableAgents() {
         waitForAppearAndDisappear(this.getCurrentDriver(), loadingAvailableAgents, 1, 5);
     }
+
     public void clickCloseButton() {
         clickElem(this.getCurrentDriver(), closeButton, 2, "Close button");
+    }
+
+    public TransferChatWindow selectAgent(String agentName){
+        inputText(this.getCurrentDriver(), agentsInput, 2, "Agents input", agentName);
+
+        availableAgentsOrDepartmentsList.stream().filter(e -> e.getText().contains(agentName))
+                .findFirst().orElseThrow(() -> new NoSuchElementException("There is no such agent: " + agentName))
+                .click();
+        return this;
     }
 }

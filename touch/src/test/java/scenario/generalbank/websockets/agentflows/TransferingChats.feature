@@ -19,6 +19,7 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
     And Close Transferring window for Second agent
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2694")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2913")
   @setting_changes
   @orca_api
   Scenario: CD :: Agent Desk :: Live Chat :: Transfer Chat :: Verify that when Agent is transferring chat, "Transferring chat..." is displayed in roster view
@@ -31,7 +32,13 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
     Then Conversation area becomes active with connect to Support user's message
 
     Given I login as second agent of General Bank Demo
-    When Agent transfers chat
+    When Agent click on 'Transfer' chat
+    Then Transfer chat pop up appears for Agent
+    When Agent open 'Transfer to' drop down
+    Then Agent select an second agent in 'Transfer to' drop down
+    And Agent complete 'Note' field
+    And  Click on 'Transfer' button in pop-up
+
     And Agent can see 'Transferring chat...' message
     Then Second agent receives incoming transfer with "Incoming Transfer" header
     And Second agent click "Reject transfer" button
@@ -52,6 +59,23 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
     When Agent transfers chat
     Then Second agent receives incoming transfer with "Incoming Transfer" header
     When Second agent click "Reject transfer" button
-    Then Agent receives incoming transfer with "Rejected Transfer" header
-    And Agent click "Accept" button
     And Chat from orca channel is present in the Live Chat list
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2738")
+
+  @setting_changes
+  @orca_api
+  Scenario: CD :: Agent Desk :: Live Chat :: Transfer Chat :: Verify if chat transfer is accepted, "Successful transfer" should be shown in roster view
+
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    Given I login as agent of General Bank Demo
+    When Send connect to Support message by ORCA
+    Then Agent has new conversation request
+    When Agent click on new conversation request from orca
+    Then Conversation area becomes active with connect to Support user's message
+
+    Given I login as second agent of General Bank Demo
+    When Agent transfers chat
+    Then Second agent receives incoming transfer with "Incoming Transfer" header
+    When Second agent click "Accept transfer" button
+    And Chat from orca channel is absent in chats list
