@@ -865,6 +865,13 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "Bulk messages tab switch message not shown");
     }
 
+    @Then("^(.*) checks selected chats should be shown in the (.*) message on the right pane$")
+    public void bulkChatsMiddlePaneMessageCheck(String agent, String middlePaneBulkMessage) {
+        Assert.assertTrue(getAgentHomePage(agent).bulkChatMiddlePaneMessage()
+                        .equalsIgnoreCase(middlePaneBulkMessage),
+                "Bulk messages middle pane message not shown");
+    }
+
     @When("^(.*) hover over \"Bulk chat\" button and see (.*) message$")
     public void bulkChatToolTipMessage(String agent, String toolTipMessage) {
         getLeftMenu(agent).hoverBulkChatButton();

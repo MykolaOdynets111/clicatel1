@@ -35,6 +35,9 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = ".bulk-mode-exit-modal-body__text")
     private WebElement bulkChatTabSwitchMessage;
 
+    @FindBy(css = ".agent-view-bulk-mode-main--header")
+    private WebElement middlePaneBulkChatMessage;
+
     @FindAll({
             @FindBy(xpath = "//li[text()='History']"),
             @FindBy(css = "[selenium-id='tab-right-panel-2']")
@@ -389,6 +392,10 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public String bulkMessagesTabSwitchNotification(){
         return getTextFromElem(this.getCurrentDriver(), bulkChatTabSwitchMessage, 10, "Bulk chat tab switch message");
+    }
+
+    public String bulkChatMiddlePaneMessage(){
+        return getTextFromElem(this.getCurrentDriver(), middlePaneBulkChatMessage, 10, "Bulk chat middle pane message");
     }
 
     public boolean isDisappearingDialogShown(){

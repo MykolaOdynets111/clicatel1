@@ -141,6 +141,10 @@ public class ChatForm extends AbstractUIElement {
     return this;
     }
 
+    public boolean isSendButtonEnabled() {
+        return isElementEnabled(this.getCurrentDriver(), submitMessageButton, 5);
+    }
+
     public boolean isMessageInputFieldEmpty(){
         waitForElementToBeVisible(this.getCurrentDriver(), messageInput, 3);
         boolean result = false;

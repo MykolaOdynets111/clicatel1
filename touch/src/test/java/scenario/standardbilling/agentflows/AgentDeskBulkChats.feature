@@ -101,6 +101,22 @@ Feature: Bulk chat left menu actions
     When Agent select "Closed" left menu option
     Then Agent checks all chats from the previous tab should get deselected
 
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-6641")
+  Scenario: CD :: Agent Desk :: Live Chat :: Bulk Messages :: Verify that while selecting bulk messages Agent sees the total number of selected chats in the right-hand panel and revert back to default view once bulk message is sent
+    Given I login as agent of Standard Billing
+    And Setup ORCA whatsapp integration for Standard Billing tenant
+    When Send 2 messages chat to agent by ORCA
+    And Agent has new conversation request from orca user
+    And Agent click on new conversation request from orca
+    And Agent click the bulk message icon
+    Then Agent checks selected chats should be shown in the (0) Live Chats Have Been Selected message on the right pane
+    When Agent checks number of checked bulk checkboxes is 2
+    And Agent sees number of checked checkboxes is 2
+    Then Agent checks selected chats should be shown in the (2) Live Chats Have Been Selected message on the right pane
+    And Agent clear input and type Bulk message, check send button gets enabled
+    When Agent send Hello this is bulk message message
+    Then Agent checks all chats from the previous tab should get deselected
+
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6643")
   Scenario: CD :: Agent Desk :: Live Chat :: Bulk Messages :: Verify that the maximum chat selected for bulk messages is 15, post that remaining chats checkboxes gets disabled
     Given I login as agent of Standard Billing

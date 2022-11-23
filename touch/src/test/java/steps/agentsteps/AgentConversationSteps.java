@@ -365,6 +365,12 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getChatForm().clearAndTypeResponseToUser(responseToUser).clickSendButton();
     }
 
+    @When("^(.*) clear input and type (.*), check send button gets enabled$")
+    public void checkSendButtonEnabled(String agent, String responseToUser) {
+        getAgentHomePage(agent).getChatForm().clearAndTypeResponseToUser(responseToUser);
+        Assert.assertTrue(getAgentHomePage(agent).getChatForm().isSendButtonEnabled());
+    }
+
     @When("^(.*) response with emoticon to User$")
     public void clickSendMessageButton(String agent) {
         getAgentHomePage(agent).getChatForm().clickSendButton();

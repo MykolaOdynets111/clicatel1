@@ -19,7 +19,7 @@ public class AutoRespondersSteps extends AbstractPortalSteps {
     @When("^Click \"Reset to default\" button for (.*) auto responder$")
     public void clickResetToDefaultButton(String autoresponder) {
         autoRespondersWindow().clickResetToDefaultForMessage(autoresponder);
-        getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
+        getPortalTouchPreferencesPage().waitWhileProcessing(8, 20);
     }
 
     @When("^Admin edit the text for (.*) auto responder$")
