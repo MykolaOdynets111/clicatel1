@@ -23,8 +23,17 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = ".cl-r-suggestions-count")
     private WebElement agentAssistantButton;
 
+    @FindBy(css = "#Close")
+    private WebElement crossButtonWarningDialog;
+
+    @FindBy(css = ".cl-modal__footer-buttons span")
+    private WebElement notShowDialogCheckbox;
+
     @FindBy(css = ".bulk-mode-popup-message-limit-reached-msg")
     private WebElement bulkChatMessage;
+
+    @FindBy(css = ".bulk-mode-exit-modal-body__text")
+    private WebElement bulkChatTabSwitchMessage;
 
     @FindAll({
             @FindBy(xpath = "//li[text()='History']"),
@@ -40,6 +49,9 @@ public class AgentHomePage extends AgentAbstractPage {
 
     @FindBy(xpath = "//p[@class='cl-pending-chat-mark-toast-content']")
     private WebElement pendingAlertMessage;
+
+    @FindBy(xpath = "//div[@class='tippy-content']/div")
+    private WebElement flaggedCloseChatToolTip;
 
     private final String pinErrorMessageXpath = "//div[text()='You do not have the ability to close the chat when it has been flagged']";
 
@@ -205,7 +217,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public IncomingTransferWindow getIncomingTransferWindow() {
-        if (transferWaitingButtons.size() != 0){
+        if (transferWaitingButtons.size() > 0){
             transferWaitingButtons.get(getCollapsedTransfers().size() - 1).click();
         }
         incomingTransferWindow.setCurrentDriver(this.getCurrentDriver());
@@ -281,6 +293,10 @@ public class AgentHomePage extends AgentAbstractPage {
         } else {
             Assert.fail("'Close chat' button is not shown or clickable.");
         }
+    }
+
+    public String getBulkMessageToolTipText() {
+        return getTextFromElem(this.getCurrentDriver(), flaggedCloseChatToolTip, 4, "Tool Tip for Bulk chat");
     }
 
     public void clickAgentAssistantButton(){
@@ -371,8 +387,19 @@ public class AgentHomePage extends AgentAbstractPage {
         return getTextFromElem(this.getCurrentDriver(), bulkChatMessage, 10, "Bulk chat error message");
     }
 
+    public String bulkMessagesTabSwitchNotification(){
+        return getTextFromElem(this.getCurrentDriver(), bulkChatTabSwitchMessage, 10, "Bulk chat tab switch message");
+    }
+
     public boolean isDisappearingDialogShown(){
         return isElementRemoved(this.getCurrentDriver(), dialogElement, 3);
     }
 
+    public void clickCrossButtonWarningDialog(){
+        clickElem(this.getCurrentDriver(), crossButtonWarningDialog, 1, "Cross Button");
+    }
+
+    public void clickDontShowMessageCheckbox(){
+        clickElem(this.getCurrentDriver(), notShowDialogCheckbox, 1, "Don't show warning checkbox");
+    }
 }

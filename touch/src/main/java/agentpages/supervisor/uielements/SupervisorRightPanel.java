@@ -45,11 +45,13 @@ public class SupervisorRightPanel extends AbstractUIElement{
 
     // <<================= ACTION METHODS ==========================>>
     public SupervisorRightPanel clickOnNotesTab() {
+        scrollToElem(this.getCurrentDriver(),notesTab,"Notes");
         clickElem(this.getCurrentDriver(),notesTab,3,"Notes");
         return this;
     }
 
     public SupervisorRightPanel clickOnNewNoteButton() {
+        scrollToElem(this.getCurrentDriver(),newNoteButton,"New Note");
         clickElem(this.getCurrentDriver(),newNoteButton,3,"New Note");
         return this;
     }
