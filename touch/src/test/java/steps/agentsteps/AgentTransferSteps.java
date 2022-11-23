@@ -20,6 +20,8 @@ import steps.dotcontrol.DotControlSteps;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class AgentTransferSteps extends AbstractAgentSteps {
 
     private String secondAgentName;
@@ -97,9 +99,9 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getTransferChatWindow().openDropDownAgent();
     }
 
-    @When("^(.*) select an agent in 'Transfer to' drop down$")
-    public void selectAgentTransferToDropDown(String agent) {
-        getAgentHomePage(agent).getTransferChatWindow().selectDropDownAgent(agent);
+    @When("^(.*) select an (.*) in 'Transfer to' drop down$")
+    public void selectAgentTransferToDropDown(String agent, String agentTransferTo) {
+        getAgentHomePage(agent).getTransferChatWindow().selectAgent(getAgentName(agentTransferTo));
     }
 
     @Then("^Agent notes field is appeared$")
@@ -129,11 +131,10 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         soft.assertAll();
     }
 
-    @When("^Complete 'Note' field$")
-    public void sentNotesTransferChatPopup() {
-        getAgentHomeForMainAgent().getTransferChatWindow().sentNote();
+    @When("^(.*) complete 'Note' field$")
+    public void sentNotesTransferChatPopup(String agent) {
+        getAgentHomePage(agent).getTransferChatWindow().sentNote();
     }
-
 
     @When("^Click on 'Transfer' button in pop-up$")
     public void clickOnTransferButtonInPopUp() {
@@ -285,6 +286,16 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         List<String> availableAgents = getAgentHomePage(agent).getTransferChatWindow().getAvailableAgentsFromDropdown();
         Assert.assertFalse(availableAgents.contains(missingAgentName),
                 String.format("Agent %s is displayed in a transfer pop-up agents dropdown", missingAgentName));
+    }
+
+    @Then("^(.*) can see (.*) in a transfer pop-up agents dropdown$")
+    public void agentIsAvailableAgentsInATransferPopUp(String agent, String agentToTransferChat) {
+        String agentForTransferringChatTo = getAgentName(agentToTransferChat);
+        List<String> availableAgents = getAgentHomePage(agent).getTransferChatWindow().getAvailableAgentsFromDropdown();
+
+        assertThat(getAgentName(agentToTransferChat))
+                .as(String.format("Agent %s is displayed in a transfer pop-up agents dropdown", agentForTransferringChatTo))
+                .isIn(availableAgents);
     }
 
     @Then("^Close Transferring window for (.*)$")

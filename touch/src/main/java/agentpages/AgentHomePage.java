@@ -217,7 +217,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public IncomingTransferWindow getIncomingTransferWindow() {
-        if (transferWaitingButtons.size() != 0){
+        if (transferWaitingButtons.size() > 0){
             transferWaitingButtons.get(getCollapsedTransfers().size() - 1).click();
         }
         incomingTransferWindow.setCurrentDriver(this.getCurrentDriver());
