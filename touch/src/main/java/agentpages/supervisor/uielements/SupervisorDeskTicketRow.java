@@ -9,6 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -45,6 +46,9 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
 
     @FindBy(css = ".cl-table-cell--channelType svg")
     private WebElement channelImg;
+
+    @FindBy(xpath = ".//a[contains(text(), 'Open')]")
+    private List<WebElement> openBtns;
 
     public SupervisorDeskTicketRow(WebElement element) {
         super(element);
@@ -100,5 +104,9 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
     public boolean isValidChannelImg(String channelPictureName) {
         File image = new File(System.getProperty("user.dir")+"/src/test/resources/adaptericons/"+channelPictureName+".png");
         return isWebElementEqualsImage(this.getCurrentDriver(), channelImg, image);
+    }
+
+    public void openTicket (int ticketNum){
+        clickElem(this.getCurrentDriver(),openBtns.get(ticketNum-1), 5, "openTicketBtn");
     }
 }

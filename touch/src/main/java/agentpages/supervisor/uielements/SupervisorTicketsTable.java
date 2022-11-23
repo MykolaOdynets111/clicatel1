@@ -138,8 +138,9 @@ public class SupervisorTicketsTable extends AbstractUIElement {
     }
 
     public void openFirstTicket() {
-        new SupervisorDeskTicketRow(tickets.get(0))
-                .setCurrentDriver(this.getCurrentDriver())
-                .clickOnUserName();
+        SupervisorDeskTicketRow supervisorDeskTicketRow = new SupervisorDeskTicketRow(tickets.get(0))
+                .setCurrentDriver(this.getCurrentDriver());
+        supervisorDeskTicketRow.clickOnUserName();
+        supervisorDeskTicketRow.openTicket(1);
     }
 }
