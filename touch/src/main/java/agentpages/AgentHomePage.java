@@ -50,6 +50,9 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//p[@class='cl-pending-chat-mark-toast-content']")
     private WebElement pendingAlertMessage;
 
+    @FindBy(xpath = "//div[@class='tippy-content']/div")
+    private WebElement flaggedCloseChatToolTip;
+
     private final String pinErrorMessageXpath = "//div[text()='You do not have the ability to close the chat when it has been flagged']";
 
     @FindBy(xpath = "//div[text()='You do not have the ability to close the chat when it has been flagged']")
@@ -290,6 +293,10 @@ public class AgentHomePage extends AgentAbstractPage {
         } else {
             Assert.fail("'Close chat' button is not shown or clickable.");
         }
+    }
+
+    public String getBulkMessageToolTipText() {
+        return getTextFromElem(this.getCurrentDriver(), flaggedCloseChatToolTip, 4, "Tool Tip for Bulk chat");
     }
 
     public void clickAgentAssistantButton(){

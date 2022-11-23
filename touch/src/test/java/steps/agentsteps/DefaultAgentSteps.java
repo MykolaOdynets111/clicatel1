@@ -254,7 +254,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         softAssert.assertAll();
     }
 
-    @Then("Conversation area contains (.*) to user message")
+    @Then("^Conversation area contains (.*) to user message$")
     public void verifyOutOfSupportMessageShownOnChatdesk(String message){
         String userMessage = message;
         if(message.contains("out_of_support_hours")) {
@@ -856,6 +856,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertTrue(getAgentHomePage(agent).bulkMessagesTabSwitchNotification()
                         .equalsIgnoreCase(bulkNotificationMessage),
                 "Bulk messages tab switch message not shown");
+    }
+
+    @When("^(.*) hover over \"Bulk chat\" button and see (.*) message$")
+    public void bulkChatToolTipMessage(String agent, String toolTipMessage) {
+        getLeftMenu(agent).hoverBulkChatButton();
+        Assert.assertEquals(getAgentHomePage(agent).getBulkMessageToolTipText(),toolTipMessage,"Bulk chat hover message is wrong");
     }
 
     private static int getNumberOfActiveChats(String agent, String integration) {
