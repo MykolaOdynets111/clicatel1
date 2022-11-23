@@ -345,6 +345,10 @@ public class LeftMenuWithChats extends AbstractUIElement {
         return getChatInLeftMenu().getLastMessageText();
     }
 
+    public String getActiveChatReceivingTime() {
+        return getChatInLeftMenu().getMessageReceivingTime();
+    }
+
     public String getChatIconName() {
         return getChatInLeftMenu().getChatIconName();
     }

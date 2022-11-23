@@ -682,6 +682,13 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 .isEqualTo(adapter);
     }
 
+    @Then("^The (.*) time set for last message in left menu with chat for (.*)$")
+    public void verifyTheMessageArrivedTime(String messageTime, String agent) {
+        assertThat(getLeftMenu(agent).getActiveChatReceivingTime())
+                .as("Chat receiving time in left menu as not expected.")
+                .contains(messageTime);
+    }
+
     @Then("^Valid sentiment icon are shown for (.*) message in left menu with chat$")
     public void verifyIconSentimentForLastMessageInLeftMenu(String message) {
         Assert.assertTrue(getLeftMenu("main").isValidIconSentimentForActiveChat(message),
