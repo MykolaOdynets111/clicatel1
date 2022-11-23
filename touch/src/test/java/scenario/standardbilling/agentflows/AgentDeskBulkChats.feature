@@ -165,3 +165,23 @@ Feature: Bulk chat left menu actions
     And Agent send Hello this is bulk message message
     And Agent click on new conversation request from orca
     Then Conversation area contains Hello this is bulk message to user message
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-5714")
+  @start_orca_server
+  Scenario: CD :: Agent Desk :: Verify that if Agent is able to see the sent bulk message as a part of chat in the chat window
+    Given I login as agent of Standard Billing
+    And Setup ORCA whatsapp integration for Standard Billing tenant
+    When Send connect to Support message by ORCA
+    And Agent has new conversation request from orca user
+    And Agent click on new conversation request from orca
+    And Agent click the bulk message icon
+    And Agent checks number of checked bulk checkboxes is 1
+    And Agent send Hello this is bulk message message
+    And Agent click on new conversation request from orca
+    Then Conversation area contains Hello this is bulk message to user message
+    When Send //end message by ORCA
+    And Agent should not see from user chat in agent desk from orca
+    And Agent select "Closed" left menu option
+    And Agent has new conversation request from orca user
+    And Agent click on new conversation request from orca
+    Then Conversation area contains Hello this is bulk message to user message
