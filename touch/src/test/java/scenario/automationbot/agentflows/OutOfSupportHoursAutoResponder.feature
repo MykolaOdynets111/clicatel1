@@ -26,6 +26,7 @@ Feature: out_of_support_hours auto responder (Bot mode)
   @start_orca_server
   @support_hours
   @orca_api
+  @skip
   Scenario: CD :: Dashboard :: Settings :: out_of_support_hours resetting to default for Bot mode tenant
     Given Taf Out of Support Hours message is set to true for Automation Bot tenant
     And Taf Out of Support Hours message message text is updated for Automation Bot tenant
