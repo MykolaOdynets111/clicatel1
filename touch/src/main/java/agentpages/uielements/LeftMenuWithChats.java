@@ -53,9 +53,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(xpath = "//input[contains(@class, 'checkbox__input')]")
     private WebElement bulkChatCheckbox;
 
-    @FindBy(css = ".agent-view-bulk-mode-main--header")
-    private WebElement bulkChatMiddlePaneMessage;
-
     @FindAll({
             @FindBy(css = "[data-testid='search-filter-btn']"),
             @FindBy(css = "[selenium-id='search-filter-btn']") //toDo old locator
