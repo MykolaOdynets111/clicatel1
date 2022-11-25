@@ -370,6 +370,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 "User name is not correct");
     }
 
+    @Then("^WA chat show the correct tag name$")
+    public void verifyTagName() {
+        Assert.assertEquals(getSupervisorDeskPage().getSupervisorClosedChatsTable().getTagName(), BasePortalSteps.tagname,
+                "Tag name is not correct");
+    }
+
     @Then("^Live chats (.*) filter has correct name and correct chats number$")
     public void verifyAgentNameOnLiveChatFilter(String agent) {
         String agentName = getAgentName(agent);
