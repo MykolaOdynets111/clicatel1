@@ -18,11 +18,10 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
     Then Second agent should not see first agent in a transfer pop-up agents dropdown
     And Close Transferring window for Second agent
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2694")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2913")
   @setting_changes
   @orca_api
-  Scenario: CD :: Agent Desk :: Live Chat :: Transfer Chat :: Verify that when Agent is transferring chat, "Transferring chat..." is displayed in roster view
+  Scenario: CD :: Agent Desk :: Live Chat :: Transfer Chat :: Verify that agent is able to transfer chat to other available Agents
 
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     Given I login as agent of General Bank Demo
