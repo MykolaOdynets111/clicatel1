@@ -4,6 +4,7 @@ import agentpages.supervisor.uielements.*;
 import agentpages.uielements.ChatBody;
 import agentpages.uielements.ChatHeader;
 import agentpages.uielements.Profile;
+import agentpages.uielements.RightPanelWindow;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
@@ -74,7 +75,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private SupervisorClosedChatsTable supervisorClosedChatsTable;
     private SupervisorOpenedClosedChatsList supervisorOpenedClosedChatsList;
     private SupervisorLeftPanel supervisorLeftPanel;
-    private SupervisorRightPanel supervisorRightPanel;
+    private RightPanelWindow supervisorRightPanel;
     private ChatHeader chatHeader;
     private Profile profile;
     private SupervisorTicketClosedChatView supervisorTicketChatView;
@@ -101,7 +102,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return supervisorLeftPanel;
     }
 
-    public SupervisorRightPanel getSupervisorRightPanel(){
+    public RightPanelWindow getSupervisorRightPanel(){
         supervisorRightPanel.setCurrentDriver(this.getCurrentDriver());
         return supervisorRightPanel;
     }

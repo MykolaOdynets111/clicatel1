@@ -1,14 +1,13 @@
-package agentpages.supervisor.uielements;
+package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Assert;
 
 import java.util.List;
 
 @FindBy(css = "[data-testid=right-panel]")
-public class SupervisorRightPanel extends AbstractUIElement{
+public class RightPanelWindow extends AbstractUIElement{
 
     // <<================= LOCATORS ==========================>>
     @FindBy(css = "[data-testid='tab-right-panel-1']")
@@ -44,29 +43,29 @@ public class SupervisorRightPanel extends AbstractUIElement{
 
 
     // <<================= ACTION METHODS ==========================>>
-    public SupervisorRightPanel clickOnNotesTab() {
+    public RightPanelWindow clickOnNotesTab() {
         scrollToElem(this.getCurrentDriver(),notesTab,"Notes");
         clickElem(this.getCurrentDriver(),notesTab,3,"Notes");
         return this;
     }
 
-    public SupervisorRightPanel clickOnNewNoteButton() {
+    public RightPanelWindow clickOnNewNoteButton() {
         scrollToElem(this.getCurrentDriver(),newNoteButton,"New Note");
         clickElem(this.getCurrentDriver(),newNoteButton,3,"New Note");
         return this;
     }
 
-    public SupervisorRightPanel addTextToNote(String note) {
+    public RightPanelWindow addTextToNote(String note) {
         inputText(this.getCurrentDriver(),notesTextBox,3,"Notes Text Box",note);
         return this;
     }
 
-    public SupervisorRightPanel addJiraLinkToNote(String jiraLink) {
+    public RightPanelWindow addJiraLinkToNote(String jiraLink) {
         inputText(this.getCurrentDriver(),jiraLinkBox,3,"JIRA link",jiraLink);
         return this;
     }
 
-    public SupervisorRightPanel addTicketNumberToNote(String ticketNumber) {
+    public RightPanelWindow addTicketNumberToNote(String ticketNumber) {
         inputText(this.getCurrentDriver(),ticketNumberBox,3,"Ticket Number",ticketNumber);
         return this;
     }

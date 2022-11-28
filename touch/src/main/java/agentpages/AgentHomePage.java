@@ -116,6 +116,8 @@ public class AgentHomePage extends AgentAbstractPage {
     private ChatHistoryContainer chatHistoryContainer;
     private HistoryDetailsWindow historyDetailsWindow;
     private ChatForm chatForm;
+
+    private RightPanelWindow agentRightPanelWindow;
     private VerifyPhoneNumberWindow verifyPhoneNumberWindow;
     private ChatAttachmentForm chatAttachmentForm;
     private AttachmentWindow attachmentWindow;
@@ -137,6 +139,11 @@ public class AgentHomePage extends AgentAbstractPage {
     public ChatForm getChatForm() {
         chatForm.setCurrentDriver(this.getCurrentDriver());
         return chatForm;
+    }
+
+    public RightPanelWindow getAgentRightPanel(){
+        agentRightPanelWindow.setCurrentDriver(this.getCurrentDriver());
+        return agentRightPanelWindow;
     }
 
     public ChatPendingToLiveForm getChatPendingToLiveForm() {

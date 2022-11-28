@@ -790,6 +790,21 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         }
     }
 
+    @When("^(.*) checks agent name initials are (.*)$")
+    public void checkAgentNameInitials(String agent, String expectedAgentInitials) {
+        Assert.assertTrue(getAgentHomePage(agent).getPageHeader().getAgentInitials().equalsIgnoreCase(expectedAgentInitials),
+                "Agent initials are incorrect");
+    }
+
+    @When("^(.*) checks agent details contain name (.*) and email (.*)$")
+    public void checkAgentInfo(String agent, String expectedAgentName, String expectedAgentEmail) {
+        softAssert.assertTrue(getAgentHomePage(agent).getPageHeader().getAgentName().equalsIgnoreCase(expectedAgentName),
+                "Agent Name is incorrect");
+        softAssert.assertTrue(getAgentHomePage(agent).getPageHeader().getAgentEmail().equalsIgnoreCase(expectedAgentEmail),
+                "Agent Email is incorrect");
+        softAssert.assertAll();
+    }
+
     @And("^(.*) search ticket with a customer name \"([^\"]*)\"$")
     public void agentTypesACustomerNameBlaBlaOnTheSearchField(String agent, String userName) {
         getAgentHomePage(agent).getLeftMenuWithChats().searchTicket(userName);

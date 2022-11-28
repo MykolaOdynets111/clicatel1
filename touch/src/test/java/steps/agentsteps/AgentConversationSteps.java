@@ -808,4 +808,9 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         Assert.assertTrue(getAgentHomePage(agent).getExtensionsForm().frequentExtListSize() < 10, "Frequently used extension is not less than 10");
     }
 
+    @Then("^(.*) checks visual indicator with text (.*) is shown during (.*) seconds$")
+    public void verifyVisualIndicatorText(String agent, String visualIndicatorText, int wait){
+        Assert.assertTrue(getChatBody(agent).istVisualIndicatorTextShown(wait, visualIndicatorText),
+                String.format("Visual Indicator Text '%s' is incorrect",visualIndicatorText));
+    }
 }

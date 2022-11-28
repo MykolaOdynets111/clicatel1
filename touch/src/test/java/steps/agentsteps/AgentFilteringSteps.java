@@ -1,7 +1,9 @@
 package steps.agentsteps;
 
+import agentpages.AgentHomePage;
 import agentpages.uielements.ChatInLeftMenu;
 import agentpages.uielements.DatePicker;
+import datamanager.jacksonschemas.AvailableAgent;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -72,5 +74,12 @@ public class AgentFilteringSteps extends AbstractAgentSteps {
         Assert.assertTrue( getLeftMenu(agent).verifyChanelOfTheChatsIsPresent(channelName),
                 channelName + " channel name should be shown.");
 
+    }
+
+    @Then("^(.*) sees Correct number of filtered chats shown as (.*)$")
+    public void verifyChatConsoleAgentsContainsChats(String agent, int filteredChatsCount) {
+        int filteredChatsFromChatDesk = new AgentHomePage(agent).getLeftMenuWithChats().getNewChatsCount();
+        Assert.assertTrue(filteredChatsFromChatDesk==filteredChatsCount,
+                "Filtered chats count is not correct");
     }
 }

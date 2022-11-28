@@ -36,6 +36,9 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = ".spinner")
     private WebElement spinner;
 
+    @FindBy(css = ".channel-separator div")
+    private WebElement visualIndicator;
+
     @FindBy(xpath = ".//li[contains(@class, 'from')]/div[contains(@class, 'avatar')]")
     private WebElement userProfileIcon;
 
@@ -373,5 +376,14 @@ public class ChatBody extends AbstractUIElement {
 
     public void clickCancelPaymentButton(){
         clickElem(this.getCurrentDriver(), cancelPaymentButton, 10, "Cancel Payment button");
+    }
+
+    public boolean istVisualIndicatorTextShown(int wait, String visualIndicatorText) {
+        for (int i = 0; i < wait; i++) {
+            if (getTextFromElem(this.getCurrentDriver(), visualIndicator, 2, "visual Indicator")
+                    .contains(visualIndicatorText)) return true;
+            waitFor(1000);
+        }
+        return false;
     }
 }

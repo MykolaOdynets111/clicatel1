@@ -225,7 +225,6 @@ Feature: Whatsapp ORCA :: Chatdesk
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1479")
   Scenario: CD:: Agent Desk:: Verify if I can see a notification about the new message in an existing chat
-
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     Given I login as agent of General Bank Demo
     And Send to agent message by ORCA
