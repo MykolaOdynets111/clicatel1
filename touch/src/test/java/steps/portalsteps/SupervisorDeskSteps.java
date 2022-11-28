@@ -404,7 +404,14 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         assertThat(channelNamePresent)
                 .as("Chat should be present!")
                 .isTrue();
-}
+    }
+
+    @And("^Chat from (.*) channel is absent in chats list$")
+    public void verifyChatIsAbsent(String channel) {
+        assertThat(getUserName(channel))
+                .as("Chat should not be present!")
+                .isNotIn(getSupervisorDeskPage().getChatsNames());
+    }
 
     @Then("^Verify ticket is present for (.*)$")
     public void verifyTicketIsPresent(String chanel) {

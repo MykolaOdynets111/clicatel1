@@ -5,6 +5,7 @@ import agentpages.uielements.ChatBody;
 import agentpages.uielements.ChatHeader;
 import agentpages.uielements.Profile;
 import agentpages.uielements.RightPanelWindow;
+import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
@@ -154,27 +155,24 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     public SupervisorDeskLiveRow getSupervisorDeskLiveRow(String userName){
         waitForFirstElementToBeVisible(this.getCurrentDriver(), chatsLive, 7);
         waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), "//h2[text() ='Loading...']", 6);
-        return chatsLive.stream()
-                 .map(e -> new SupervisorDeskLiveRow(e).setCurrentDriver(this.getCurrentDriver()))
-                 .collect(Collectors.toList())
-                 .stream().filter(a -> a.getUserName().toLowerCase()
-                        .contains(userName.toLowerCase()))
+        return getLiveChatRows()
+                 .stream().filter(a -> a.getUserName().toLowerCase().contains(userName.toLowerCase()))
                 .findFirst().orElseThrow(() -> new AssertionError("Cannot find chat with user " + userName));
     }
 
     public boolean verifyChanelFilter(){
-        Set<String> channels = chatsLive.stream()
-                .map(e -> new SupervisorDeskLiveRow(e).setCurrentDriver(this.getCurrentDriver()))
-                .collect(Collectors.toList())
+        Set<String> channels = getLiveChatRows()
                 .stream().map(a -> a.getIconName()).collect(Collectors.toSet());
         return channels.size() == 1;
     }
 
+    public List<String> getChatsNames(){
+        return getLiveChatRows().stream().map(SupervisorDeskLiveRow::getUserName).collect(Collectors.toList());
+    }
+
     public boolean verifyChanelOfTheChatIsPresent(String channelName){
         waitForFirstElementToBeVisible(this.getCurrentDriver(), chatsLive, 7);
-        return  chatsLive.stream()
-                .map(e -> new SupervisorDeskLiveRow(e).setCurrentDriver(this.getCurrentDriver()))
-                .collect(Collectors.toList()).get(0).getIconName().equalsIgnoreCase(channelName);
+        return getLiveChatRows().get(0).getIconName().equalsIgnoreCase(channelName);
     }
 
     public String getCurrentAgentOfTheChat(String userName){
@@ -264,5 +262,12 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     public boolean isC2pButtonPresent() {
         return isElementShown(this.getCurrentDriver(), c2pButton, 5);
+    }
+
+    @NotNull
+    private List<SupervisorDeskLiveRow> getLiveChatRows() {
+        return chatsLive.stream()
+                .map(e -> new SupervisorDeskLiveRow(e).setCurrentDriver(this.getCurrentDriver()))
+                .collect(Collectors.toList());
     }
 }

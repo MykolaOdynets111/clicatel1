@@ -16,6 +16,7 @@ Feature: Dashboard: Settings: Auto Responder
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1822")
   @remove_dep
   @support_hours
+  @skip
   Scenario: CD :: Dashboard :: Configure Settings :: Auto Responder :: Verify that user should receive "out of support hours" autoresponder message when user try to reach out of specific support hours per department time
 
     Given I login as agent of Standard Billing
