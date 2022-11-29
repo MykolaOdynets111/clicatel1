@@ -1,13 +1,13 @@
 package unitypages;
 
-import abstractclasses.UnityAbstractPage;
+import abstractclasses.AgentAbstractPage;
 import driverfactory.UnityURLs;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 
-public class UnityLoginPage extends UnityAbstractPage {
+public class UnityLoginPage extends AgentAbstractPage {
 
     @FindBy(css = "[id='email']")
     private WebElement emailAddressField;
@@ -24,9 +24,8 @@ public class UnityLoginPage extends UnityAbstractPage {
     @FindBy(xpath = "//button[@type='submit']")
     private WebElement signInBtn;
 
-    public UnityLoginPage(WebDriver driver) {
-        super(driver);
-        driver.get(UnityURLs.getUnityLoginForm());
+    public UnityLoginPage() {
+        getCurrentDriver().get(UnityURLs.getUnityLoginForm());
     }
 
 

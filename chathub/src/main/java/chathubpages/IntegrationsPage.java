@@ -1,11 +1,10 @@
 package chathubpages;
 
-import abstractclasses.UnityAbstractPage;
-import org.openqa.selenium.WebDriver;
+import abstractclasses.AgentAbstractPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class IntegrationsPage extends UnityAbstractPage {
+public class IntegrationsPage extends AgentAbstractPage {
 
     //Todo : Make this locator generic and take Integration card name as input
     @FindBy(xpath = "//*[@class='integrations-details_title u-s3 mb-10' and text()='Zendesk Support']")
@@ -17,9 +16,8 @@ public class IntegrationsPage extends UnityAbstractPage {
     @FindBy(xpath = "//*[@class ='mat-card-title info-card__title'][1]")
     private WebElement firstCard;
 
-    public IntegrationsPage(WebDriver driver) {
-
-        super(driver);
+    public IntegrationsPage() {
+        super();
     }
 
     //Todo : Make this function generic and take Integration card name as input
