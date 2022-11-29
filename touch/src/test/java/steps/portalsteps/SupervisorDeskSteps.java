@@ -157,7 +157,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().getSupervisorDeskLiveRow(getUserName(channel)).clickOnUserName();
     }
 
-
     @Then("^Supervisor Desk Live chat container header has (.*) User photo, name and (.*) channel$")
     public void verifyCorrectHeaderInfo(String channel, String image) {
         String userName = getUserName(channel);
