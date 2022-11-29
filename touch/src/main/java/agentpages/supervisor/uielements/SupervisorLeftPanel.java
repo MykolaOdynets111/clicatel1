@@ -55,6 +55,7 @@ public class SupervisorLeftPanel extends AbstractUIElement {
     }
 
     public void clickFilterType(String filterName) {
+        scrollToElem(this.getCurrentDriver(), allChats, "All Chats Button");
         WebElement filter = liveChatsFilters.stream().filter(a -> a.getText().trim().contains(filterName)).findFirst()
                 .orElseThrow(() -> new AssertionError("Can't find Live Chats filter for " + filterName ));
 
