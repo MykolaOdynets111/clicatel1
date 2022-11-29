@@ -1,4 +1,4 @@
-package agentpages.supervisor.uielements;
+package agentpages.tickets;
 
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;

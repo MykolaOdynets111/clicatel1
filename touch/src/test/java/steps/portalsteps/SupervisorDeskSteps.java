@@ -67,7 +67,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @When("^Click on Message Customer button for (.*)$")
     public void clickOnMessageCustomer(String chanel) {
         getSupervisorDeskPage().getSupervisorTicketsTable().clickAssignOpenTicketButton(getUserName(chanel));
-        getSupervisorDeskPage().getSupervisorTicketClosedChatView().clickOnMessageCustomerButton();
+        getSupervisorDeskPage().getSupervisorTicketClosedChatView().clickOnMessageCustomerOrStartChatButton();
     }
 
     @Then("^Message Customer Window is opened$")
@@ -360,7 +360,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then("^Verify that closed chats have Message Customer button$")
     public void verifyMessageCustomerButtonForClosedChats() {
         getSupervisorDeskPage().getSupervisorClosedChatsTable().openFirstClosedChat();
-        Assert.assertTrue(getSupervisorDeskPage().getSupervisorTicketClosedChatView().isMessageCustomerButtonPresent(),
+        Assert.assertTrue(getSupervisorDeskPage().getSupervisorTicketClosedChatView().isMessageCustomerButtonOrStartChatPresent(),
                 "Closed chat does not have Message Customer button");
     }
 
@@ -521,10 +521,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         DriverFactory.getDriverForAgent("main").switchTo().window(windowHandles.get(windowHandles.size() - 1));
     }
 
-    @And("^Admin filter by (.) year (.) month and (.*) days ago start date and today's end date$")
-    public void agentFilterByMonthBeforeStartDateAndTodaySEndDate(int year, int month, int day) {
+    @And("^Admin filter by (.) year (.) month and (.*) days ago start date and (.) year (.) month and (.*) days ago end date$")
+    public void agentFilterByMonthBeforeStartDateAndTodaySEndDate(int year, int month, int day,
+                                                                  int year1, int month1, int day1) {
         LocalDate startDate = LocalDate.now().minusYears(year).minusMonths(month).minusDays(day);
-        LocalDate endDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now().minusYears(year1).minusMonths(month1).minusDays(day1);
 
         getSupervisorDeskPage().getSupervisorDeskHeader()
                 .selectStartDate(startDate)

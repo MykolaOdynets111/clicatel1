@@ -1,6 +1,9 @@
 package agentpages.supervisor;
 
 import agentpages.supervisor.uielements.*;
+import agentpages.tickets.MessageCustomerWindow;
+import agentpages.tickets.TicketClosedChatView;
+import agentpages.tickets.TicketsTable;
 import agentpages.uielements.ChatBody;
 import agentpages.uielements.ChatHeader;
 import agentpages.uielements.Profile;
@@ -71,14 +74,14 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     private AssignChatWindow assignChatWindow;
     private ChatBody chatBody;
-    private SupervisorTicketsTable supervisorTicketsTable;
+    private TicketsTable supervisorTicketsTable;
     private SupervisorClosedChatsTable supervisorClosedChatsTable;
     private SupervisorOpenedClosedChatsList supervisorOpenedClosedChatsList;
     private SupervisorLeftPanel supervisorLeftPanel;
     private SupervisorRightPanel supervisorRightPanel;
     private ChatHeader chatHeader;
     private Profile profile;
-    private SupervisorTicketClosedChatView supervisorTicketChatView;
+    private TicketClosedChatView supervisorTicketChatView;
     private MessageCustomerWindow messageCustomerWindow;
     private SupervisorDeskHeader supervisorDeskHeader;
     private SupervisorAvailableAsAgentDialog supervisorAvailableAsAgentDialog;
@@ -92,7 +95,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return assignChatWindow;
     }
 
-    public SupervisorTicketsTable getSupervisorTicketsTable(){
+    public TicketsTable getSupervisorTicketsTable(){
         supervisorTicketsTable.setCurrentDriver(this.getCurrentDriver());
         return supervisorTicketsTable;
     }
@@ -117,7 +120,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return profile;
     }
 
-    public SupervisorTicketClosedChatView getSupervisorTicketClosedChatView(){
+    public TicketClosedChatView getSupervisorTicketClosedChatView(){
         supervisorTicketChatView.setCurrentDriver(this.getCurrentDriver());
         return supervisorTicketChatView;
     }

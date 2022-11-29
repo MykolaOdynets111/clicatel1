@@ -1,4 +1,4 @@
-package agentpages.supervisor.uielements;
+package agentpages.tickets;
 
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @FindBy(css = ".chats-list")
-public class SupervisorTicketsTable extends AbstractUIElement {
+public class TicketsTable extends AbstractUIElement {
 
     @FindBy(css=".cl-table-row")
     private List<WebElement> tickets;
@@ -35,15 +35,15 @@ public class SupervisorTicketsTable extends AbstractUIElement {
     @FindBy (xpath = "//span[text()='Ticket Creation Date']/ancestor::span/following-sibling::span/span[contains(@class, 'sorting-box__arrow--top')]")
     private  WebElement ascendingArrowOfEndDateColumn;
 
-    public SupervisorDeskTicketRow getTicketByUserName(String userName){
+    public TicketRow getTicketByUserName(String userName){
         waitForFirstElementToBeVisible(this.getCurrentDriver(), tickets, 7);
-        return tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
+        return tickets.stream().map(e -> new TicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
                 .stream().filter(a -> a.getName().toLowerCase()
                         .contains(userName.toLowerCase()))
                 .findFirst().orElseThrow(() -> new AssertionError("Cannot find ticket with user " + userName));
     }
 
-    public SupervisorTicketsTable selectTicketCheckbox(String getTicketByName){
+    public TicketsTable selectTicketCheckbox(String getTicketByName){
         getTicketByUserName(getTicketByName).selectCheckbox();
         return this;
     }
@@ -64,21 +64,21 @@ public class SupervisorTicketsTable extends AbstractUIElement {
 
     public List<String> getUsersNames(){
         List<String> list =  tickets.stream()
-                .map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver()))
+                .map(e -> new TicketRow(e).setCurrentDriver(this.getCurrentDriver()))
                 .map(e -> e.getName())
                 .collect(Collectors.toList());
         return list;
     }
 
     public List<LocalDateTime> getTicketsStartDates() {
-        List<LocalDateTime> startDates = tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
+        List<LocalDateTime> startDates = tickets.stream().map(e -> new TicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
                 .stream().map(a -> a.getStartDate()).collect(Collectors.toList());
         scrollTicketsToTheTop();
         return startDates;
     }
 
     public List<LocalDateTime> getTicketsEndDates(){
-        List<LocalDateTime> endDates = tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
+        List<LocalDateTime> endDates = tickets.stream().map(e -> new TicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
                 .stream().map(a -> a.getEndDate()).collect(Collectors.toList());
         scrollTicketsToTheTop();
         return endDates;
@@ -100,22 +100,12 @@ public class SupervisorTicketsTable extends AbstractUIElement {
         waitForAppearAndDisappear(this.getCurrentDriver(), loadingMoreTickets, waitForSpinnerToAppear, waitForSpinnerToDisappear);
     }
 
-    public void loadAllFoundTickets() {
-        int ticketsSize;
-        do {
-            ticketsSize = tickets.size();
-            scrollTicketsToTheButtom();
-            waitForMoreTicketsAreLoading(2, 5);
-        } while (ticketsSize != tickets.size());
-        scrollTicketsToTheTop();
-    }
-
     public LocalDateTime getFirstTicketStartDates() {
-        return new SupervisorDeskTicketRow(tickets.get(0)).setCurrentDriver(this.getCurrentDriver()).getStartDate();
+        return new TicketRow(tickets.get(0)).setCurrentDriver(this.getCurrentDriver()).getStartDate();
     }
 
     public LocalDateTime getFirstTicketEndDates() {
-        return new SupervisorDeskTicketRow(tickets.get(0)).setCurrentDriver(this.getCurrentDriver()).getStartDate();
+        return new TicketRow(tickets.get(0)).setCurrentDriver(this.getCurrentDriver()).getEndDate();
     }
 
     public void clickAscendingArrowOfEndDateColumn() {
@@ -126,19 +116,19 @@ public class SupervisorTicketsTable extends AbstractUIElement {
     public boolean verifyChanelOfTheTicketsIsPresent(String channelName) {
         waitForFirstElementToBeVisible(this.getCurrentDriver(), tickets, 7);
         return tickets.stream()
-                .map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver()).isValidChannelImg(channelName)).findFirst().get();
+                .map(e -> new TicketRow(e).setCurrentDriver(this.getCurrentDriver()).isValidChannelImg(channelName)).findFirst().get();
     }
 
     public boolean isTicketPresent(String userName) {
         waitForFirstElementToBeVisible(this.getCurrentDriver(), tickets, 7);
         return tickets.stream().anyMatch(e ->
-                new SupervisorDeskTicketRow(e)
+                new TicketRow(e)
                         .setCurrentDriver(this.getCurrentDriver())
                         .getName().equals(userName));
     }
 
     public void openFirstTicket() {
-        SupervisorDeskTicketRow supervisorDeskTicketRow = new SupervisorDeskTicketRow(tickets.get(0))
+        TicketRow supervisorDeskTicketRow = new TicketRow(tickets.get(0))
                 .setCurrentDriver(this.getCurrentDriver());
         supervisorDeskTicketRow.clickOnUserName();
         supervisorDeskTicketRow.openTicket(1);
