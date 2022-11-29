@@ -1,6 +1,5 @@
 package datamanager.jacksonschemas.tenantagentsws;
 
-import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -19,7 +18,6 @@ import lombok.Builder;
         "mc2UserId",
         "state"
 })
-@Generated("jsonschema2pojo")
 public class Agent {
 
     @JsonProperty("agentType")
