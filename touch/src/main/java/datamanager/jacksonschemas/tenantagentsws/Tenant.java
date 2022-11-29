@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.javafaker.Faker;
 
-import javax.annotation.Generated;
-
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -35,7 +33,6 @@ import javax.annotation.Generated;
         "timezone",
         "transferTimeoutSec"
 })
-@Generated("jsonschema2pojo")
 public class Tenant {
 
     @JsonProperty("agentFeedback")
