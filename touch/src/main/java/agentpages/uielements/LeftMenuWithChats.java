@@ -104,6 +104,9 @@ public class LeftMenuWithChats extends AbstractUIElement {
     })
     private WebElement pending;
 
+    @FindBy(css = "[data-testid='tab-navigation-panel-tagged']")
+    private WebElement tagged;
+
     @FindAll({
             @FindBy(css = "[data-testid=open-filter-tab-btn]"),
             @FindBy(css = "[selenium-id=open-filter-tab-btn]") //toDo old locator
@@ -278,6 +281,8 @@ public class LeftMenuWithChats extends AbstractUIElement {
             clickElem(this.getCurrentDriver(), closed, 1, "Closed menu");
         } else if (option.equalsIgnoreCase("Pending")) {
             clickElem(this.getCurrentDriver(), pending, 1, "Closed menu");
+        } else if (option.equalsIgnoreCase("Tagged")) {
+            clickElem(this.getCurrentDriver(), tagged, 1, "Tagged menu");
         } else {
             throw new AssertionError("Incorrect menu option was provided");
         }

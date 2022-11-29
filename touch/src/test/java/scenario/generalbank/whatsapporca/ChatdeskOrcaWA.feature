@@ -193,6 +193,16 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Agent click On Live Supervisor Desk chat from ORCA channel
     Then Agent can see whatsapp profile name
 
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1145")
+  @orca_api
+  Scenario: CD :: Agent Desk :: Live Chat :: Profile :: Verify that WhatsApp profile name is displayed as username on customer profile section
+    Given I login as agent of General Bank Demo
+    And Setup ORCA whatsapp integration for General Bank Demo tenant
+    When Send to agent message by ORCA
+    And Agent has new conversation request
+    And Agent click on new conversation request from orca
+    Then Agent can see the whatsapp profile name updated in the username section of the customer profile
+
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1302")
   @orca_api
   Scenario: CD :: Supervisor Desk :: Chat :: Chat2Pay :: Verify that supervisor does not have the capability to initiate a payment transaction
