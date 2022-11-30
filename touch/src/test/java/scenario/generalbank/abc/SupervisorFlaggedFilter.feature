@@ -17,7 +17,5 @@ Feature: Supervisor desk
     And I select Touch in left menu and Supervisor Desk in submenu
     When Supervisor put a check mark on "Flagged Only" and click "Apply Filters" button
     Then Orca request is shown on Supervisor Desk Live page
+    And Agent click On Live Supervisor Desk chat from ORCA channel
     And Agent click 'Unflag chat' button
-
-
-

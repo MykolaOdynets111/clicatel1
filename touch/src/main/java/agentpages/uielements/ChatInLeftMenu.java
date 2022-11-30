@@ -29,8 +29,7 @@ public class ChatInLeftMenu extends AbstractWidget {
     private WebElement chatIcon;
 
     @FindAll({
-            @FindBy(css = "[data-testid='header-toggle-flag']"),
-            @FindBy(xpath = "//div[text()='Unflag chat']")
+            @FindBy(css = "[name='flag-filled']")
     })
     private WebElement flagIcon;
 

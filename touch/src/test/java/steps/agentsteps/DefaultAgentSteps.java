@@ -661,6 +661,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         soft.assertAll();
     }
 
+    @Then("^(.*) checks as per sorting preference selected, the chat is at (.*) index of chats section for (.*) user$")
+    public void checkActiveChatIndex(String agent, int indexOfActiveChat, String integration){
+        Assert.assertTrue(getLeftMenu(agent).getTargetChatIndex(getUserName(integration))==indexOfActiveChat,
+                "Current selected chat is not on top");
+    }
+
     @And("^Empty image is not shown for chat with (.*) user$")
     public void verifyEmptyImgNotShown(String customerFrom){
         String user = "";
