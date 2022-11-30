@@ -192,7 +192,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     public boolean bulkPanelElementsClickWithoutScroll(int bulkCheckedChats) {
         waitFor(1500);
-        waitForElementToBeVisible(this.getCurrentDriver(), bulkPanelChatItems.get(0), 5);
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), bulkPanelChatItems, 5);
         for (WebElement webElement : bulkPanelChatItems) {
             if (!getAttributeFromElem(this.getCurrentDriver(), webElement, 5, "Bulk panel", "class").contains("disabled")) {
                 webElement.findElement(By.tagName("span")).click();
@@ -211,7 +211,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
         scrollLeftPane();
         wheelScroll(this.getCurrentDriver(), chatsScrollBar, -5500, 0, 0);
         waitFor(2500);
-        waitForElementToBeVisible(this.getCurrentDriver(), bulkPanelChatItems.get(0), 5);
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), bulkPanelChatItems, 5);
 
         for (WebElement webElement : bulkPanelChatItems) {
                 scrollToElem(this.getCurrentDriver(), webElement, "Bulk panel checkbox");

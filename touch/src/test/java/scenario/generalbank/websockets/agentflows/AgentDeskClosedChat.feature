@@ -10,7 +10,7 @@ Feature: Closed chats :: Chatdesk
     When Send Hello message by ORCA
     And Agent has new conversation request
     And Agent click on new conversation request from orca
-    Then Agent checks visual indicator with text This chat has been assigned to GBD Main is shown during 1 seconds
+    Then Agent checks visual indicator with text This chat has been assigned to GBD Main is shown during 2 seconds
     When Agent click 'Flag chat' button
     Then Agent checks visual indicator with text This chat has been flagged by GBD Main is shown during 2 seconds
     When Agent click 'Unflag chat' button

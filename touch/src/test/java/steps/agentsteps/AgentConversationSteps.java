@@ -811,7 +811,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @Then("^(.*) checks visual indicator with text (.*) is shown during (.*) seconds$")
     public void verifyVisualIndicatorText(String agent, String visualIndicatorText, int wait){
-        Assert.assertTrue(getChatBody(agent).istVisualIndicatorTextShown(wait, visualIndicatorText),
+        Assert.assertTrue(getChatBody(agent).isVisualIndicatorTextShown(wait, visualIndicatorText),
                 String.format("Visual Indicator Text '%s' is incorrect",visualIndicatorText));
     }
 }

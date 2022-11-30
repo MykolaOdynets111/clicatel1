@@ -378,7 +378,7 @@ public class ChatBody extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), cancelPaymentButton, 10, "Cancel Payment button");
     }
 
-    public boolean istVisualIndicatorTextShown(int wait, String visualIndicatorText) {
+    public boolean isVisualIndicatorTextShown(int wait, String visualIndicatorText) {
         for (int i = 0; i < wait; i++) {
             if (getTextFromElem(this.getCurrentDriver(), visualIndicator, 2, "visual Indicator")
                     .contains(visualIndicatorText)) return true;
