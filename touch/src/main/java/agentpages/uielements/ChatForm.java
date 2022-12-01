@@ -216,7 +216,17 @@ public class ChatForm extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), startChatButton, 2, "Start Chat button");
     }
 
-    public boolean c2pExtensionIconIsVisible(){
+    public boolean c2pExtensionIconIsVisible(String visibility){
         return isElementShown(this.getCurrentDriver(),extensionsButton,3);
+    }
+
+    public boolean c2pExtensionIconVisibility(String visibility) {
+        if (visibility.equalsIgnoreCase("can")) {
+            return isElementShown(this.getCurrentDriver(), extensionsButton, 3);
+        } else if (visibility.equalsIgnoreCase("can't")) {
+            return isElementRemoved(this.getCurrentDriver(), extensionsButton, 3);
+        } else {
+            return false;
+        }
     }
 }
