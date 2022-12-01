@@ -231,14 +231,6 @@ public class ChatHeader extends AbstractUIElement {
         return isElementShown(getCurrentDriver(), flagOnIcon, 5);
     }
 
-    public boolean isTransferButtonDisplayed() {
-        return isElementShown(getCurrentDriver(), transferButton, 5);
-    }
-
-    public boolean isTransferButtonNotDisplayed() {
-        return isElementRemoved(getCurrentDriver(), transferButton, 5);
-    }
-
     public String getAgentName(){
         return getTextFromElem(getCurrentDriver(),agentName,2,"Agent Name");
     }

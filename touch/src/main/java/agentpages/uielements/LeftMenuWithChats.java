@@ -140,10 +140,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
                         new AssertionError("No chat was found from: " + userName));
     }
 
-    public int getTargetChatIndex(String userName) {
-        return (getAllFoundChatsUserNames().indexOf(userName) + 1);
-    }
-
     public List<String> getAllFoundChatsUserNames() {
         return newConversationRequests.stream()
                 .map(e -> new ChatInLeftMenu(e)
