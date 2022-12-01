@@ -114,6 +114,15 @@ public interface WebActions extends WebWait {
 
     }
 
+    default void selectListBoxItem(WebDriver driver, List<WebElement> element, String element1, int wait, String fieldName) {
+        try {
+            waitForElementToBeVisible(driver, element.get(0), wait);
+            element.stream().filter(e -> e.findElement(By.cssSelector(element1))
+                    .getText().equalsIgnoreCase(fieldName)).findFirst().get().click();
+        } catch (TimeoutException e) {
+            Assert.fail("Cannot click item '" + fieldName + "' because element is not available in list box.");
+        }
+    }
 
     // ============================== Elements State Verification ================================== //
 

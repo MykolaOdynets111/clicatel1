@@ -35,6 +35,12 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = ".bulk-mode-exit-modal-body__text")
     private WebElement bulkChatTabSwitchMessage;
 
+    @FindBy(css = ".agent-view-bulk-mode-main--header")
+    private WebElement middlePaneBulkChatMessage;
+
+    @FindBy(css = ".agent-view-bulk-mode-main--icon-row")
+    private WebElement middlePaneBulkMessageHeader;
+
     @FindAll({
             @FindBy(xpath = "//li[text()='History']"),
             @FindBy(css = "[selenium-id='tab-right-panel-2']")
@@ -110,6 +116,8 @@ public class AgentHomePage extends AgentAbstractPage {
     private ChatHistoryContainer chatHistoryContainer;
     private HistoryDetailsWindow historyDetailsWindow;
     private ChatForm chatForm;
+
+    private RightPanelWindow agentRightPanelWindow;
     private VerifyPhoneNumberWindow verifyPhoneNumberWindow;
     private ChatAttachmentForm chatAttachmentForm;
     private AttachmentWindow attachmentWindow;
@@ -131,6 +139,11 @@ public class AgentHomePage extends AgentAbstractPage {
     public ChatForm getChatForm() {
         chatForm.setCurrentDriver(this.getCurrentDriver());
         return chatForm;
+    }
+
+    public RightPanelWindow getAgentRightPanel(){
+        agentRightPanelWindow.setCurrentDriver(this.getCurrentDriver());
+        return agentRightPanelWindow;
     }
 
     public ChatPendingToLiveForm getChatPendingToLiveForm() {
@@ -390,6 +403,15 @@ public class AgentHomePage extends AgentAbstractPage {
     public String bulkMessagesTabSwitchNotification(){
         return getTextFromElem(this.getCurrentDriver(), bulkChatTabSwitchMessage, 10, "Bulk chat tab switch message");
     }
+
+    public String bulkChatMiddlePaneMessage(){
+        return getTextFromElem(this.getCurrentDriver(), middlePaneBulkChatMessage, 10, "Bulk chat middle pane message");
+    }
+
+    public String bulkChatMiddlePaneHeaderMessage(){
+        return getTextFromElem(this.getCurrentDriver(), middlePaneBulkMessageHeader, 10, "Bulk chat middle pane header");
+    }
+
 
     public boolean isDisappearingDialogShown(){
         return isElementRemoved(this.getCurrentDriver(), dialogElement, 3);

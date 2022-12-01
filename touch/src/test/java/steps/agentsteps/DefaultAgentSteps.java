@@ -790,6 +790,21 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         }
     }
 
+    @When("^(.*) checks agent name initials are (.*)$")
+    public void checkAgentNameInitials(String agent, String expectedAgentInitials) {
+        Assert.assertTrue(getAgentHomePage(agent).getPageHeader().getAgentInitials().equalsIgnoreCase(expectedAgentInitials),
+                "Agent initials are incorrect");
+    }
+
+    @When("^(.*) checks agent details contain name (.*) and email (.*)$")
+    public void checkAgentInfo(String agent, String expectedAgentName, String expectedAgentEmail) {
+        softAssert.assertTrue(getAgentHomePage(agent).getPageHeader().getAgentName().equalsIgnoreCase(expectedAgentName),
+                "Agent Name is incorrect");
+        softAssert.assertTrue(getAgentHomePage(agent).getPageHeader().getAgentEmail().equalsIgnoreCase(expectedAgentEmail),
+                "Agent Email is incorrect");
+        softAssert.assertAll();
+    }
+
     @And("^(.*) search ticket with a customer name \"([^\"]*)\"$")
     public void agentTypesACustomerNameBlaBlaOnTheSearchField(String agent, String userName) {
         getAgentHomePage(agent).getLeftMenuWithChats().searchTicket(userName);
@@ -863,6 +878,20 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertTrue(getAgentHomePage(agent).bulkMessagesTabSwitchNotification()
                         .equalsIgnoreCase(bulkNotificationMessage),
                 "Bulk messages tab switch message not shown");
+    }
+
+    @Then("^(.*) checks selected chats should be shown in the (.*) message on the right pane$")
+    public void bulkChatsMiddlePaneMessageCheck(String agent, String middlePaneBulkMessage) {
+        Assert.assertTrue(getAgentHomePage(agent).bulkChatMiddlePaneMessage()
+                        .equalsIgnoreCase(middlePaneBulkMessage),
+                "Bulk messages middle pane message not shown");
+    }
+
+    @Then("^(.*) checks Bulk Messages section should get displayed on the right side with header (.*)$")
+    public void bulkChatsMiddlePaneHeaderCheck(String agent, String middlePaneBulkMessageHeader) {
+        Assert.assertTrue(getAgentHomePage(agent).bulkChatMiddlePaneHeaderMessage()
+                        .contains(middlePaneBulkMessageHeader),
+                "Bulk messages middle pane header not shown");
     }
 
     @When("^(.*) hover over \"Bulk chat\" button and see (.*) message$")

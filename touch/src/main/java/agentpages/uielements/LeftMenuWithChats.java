@@ -53,8 +53,8 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(xpath = "//input[contains(@class, 'checkbox__input')]")
     private WebElement bulkChatCheckbox;
 
-    @FindBy(css = ".agent-view-bulk-mode-main--header")
-    private WebElement bulkChatMiddlePaneMessage;
+    @FindBy(css = ".cl-checkbox")
+    private WebElement flaggedCheckbox;
 
     @FindAll({
             @FindBy(css = "[data-testid='search-filter-btn']"),
@@ -103,6 +103,9 @@ public class LeftMenuWithChats extends AbstractUIElement {
             @FindBy(css = "[selenium-id='tab-navigation-panel-pending']") //toDo old locator
     })
     private WebElement pending;
+
+    @FindBy(css = "[data-testid='tab-navigation-panel-tagged']")
+    private WebElement tagged;
 
     @FindAll({
             @FindBy(css = "[data-testid=open-filter-tab-btn]"),
@@ -189,7 +192,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     public boolean bulkPanelElementsClickWithoutScroll(int bulkCheckedChats) {
         waitFor(1500);
-        waitForElementToBeVisible(this.getCurrentDriver(), bulkPanelChatItems.get(0), 5);
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), bulkPanelChatItems, 5);
         for (WebElement webElement : bulkPanelChatItems) {
             if (!getAttributeFromElem(this.getCurrentDriver(), webElement, 5, "Bulk panel", "class").contains("disabled")) {
                 webElement.findElement(By.tagName("span")).click();
@@ -208,7 +211,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
         scrollLeftPane();
         wheelScroll(this.getCurrentDriver(), chatsScrollBar, -5500, 0, 0);
         waitFor(2500);
-        waitForElementsToBeVisible(this.getCurrentDriver(), bulkPanelChatItems, 5);
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), bulkPanelChatItems, 5);
 
         for (WebElement webElement : bulkPanelChatItems) {
                 scrollToElem(this.getCurrentDriver(), webElement, "Bulk panel checkbox");
@@ -278,6 +281,8 @@ public class LeftMenuWithChats extends AbstractUIElement {
             clickElem(this.getCurrentDriver(), closed, 1, "Closed menu");
         } else if (option.equalsIgnoreCase("Pending")) {
             clickElem(this.getCurrentDriver(), pending, 1, "Closed menu");
+        } else if (option.equalsIgnoreCase("Tagged")) {
+            clickElem(this.getCurrentDriver(), tagged, 1, "Tagged menu");
         } else {
             throw new AssertionError("Incorrect menu option was provided");
         }

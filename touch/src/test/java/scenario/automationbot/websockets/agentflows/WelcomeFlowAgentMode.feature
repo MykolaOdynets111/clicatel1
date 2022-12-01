@@ -31,4 +31,8 @@ Feature: Welcome flow: agent mode
     And Click "Reset to default" button for Connecting Agent message (Social Channels) auto responder
     When Connecting Agent message (Social Channels) is reset on backend
     And Send connect to agent message by ORCA
+    And I select Touch in left menu and Agent Desk in submenu
+    And Agent has new conversation request from orca user
+    And Agent click on new conversation request from orca
+    And Conversation area becomes active with connect to agent user's message
     Then Verify Orca returns Connecting Agent message (Social Channels) autoresponder during 40 seconds for agent
