@@ -15,7 +15,7 @@ Feature: AutoResponder
     And Admin edit the text for Connect Agent message auto responder
     And Admin click save button for Connect Agent message auto responder
     And Click "Reset to default" button for Connect Agent message auto responder
-    Then The Connect Agent message Auto Responder message was reset again
+    Then The Connect Agent message message was reset again
 
 
 
