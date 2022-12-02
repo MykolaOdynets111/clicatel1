@@ -7,6 +7,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class SupervisorDeskClosedChatRow extends AbstractWidget {
 
@@ -43,7 +44,13 @@ public class SupervisorDeskClosedChatRow extends AbstractWidget {
                 findElemByCSS(this.getCurrentDriver(), scrollAreaCss), date, 3);
         String stringDate = getTextFromElem(this.getCurrentDriver(),
                 date, 5, "Date cell").replace("\n", " ");
-        return LocalDateTime.parse(stringDate, DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"));
+        if (stringDate.contains("am")) {
+            stringDate = stringDate.replace("am","AM");
+        } else {
+            stringDate = stringDate.replace("pm","PM");
+        }
+        DateTimeFormatter formater = DateTimeFormatter.ofPattern("dd MMM. yyyy 'at' h:mm a", Locale.US);
+        return LocalDateTime.parse(stringDate, formater);
     }
 
     public void clickOnChat() {

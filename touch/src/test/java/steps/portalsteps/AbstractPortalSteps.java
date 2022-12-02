@@ -4,6 +4,7 @@ import agentpages.dashboard.DashboardPage;
 import agentpages.dashboard.DashboardSettingsPage;
 import agentpages.supervisor.SupervisorDeskPage;
 import agentpages.survey.SurveyManagementPage;
+import agentpages.tickets.TicketsPage;
 import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
 import datamanager.Tenants;
@@ -38,12 +39,12 @@ public class AbstractPortalSteps implements JSHelper, VerificationHelper, WebWai
     private static final ThreadLocal<PortalUserManagementPage> portalUserManagementPage = new ThreadLocal<>();
     private static final ThreadLocal<DashboardPage> dashboardPage = new ThreadLocal<>();
 
-    private static final ThreadLocal<SupervisorDeskPage> chatConsoleInboxPage = new ThreadLocal<>();
+    private static final ThreadLocal<SupervisorDeskPage> supervisorDeskPage = new ThreadLocal<>();
     private static final ThreadLocal<PortalBillingDetailsPage> sendChatToPayLinkPage = new ThreadLocal<>();
     private static final ThreadLocal<DepartmentsManagementPage> departmentsManagementPage = new ThreadLocal<>();
     private static final ThreadLocal<SurveyManagementPage> surveyManagementPage = new ThreadLocal<>();
     private static final ThreadLocal<DashboardSettingsPage> dashboardSettingsPage = new ThreadLocal<>();
-
+    private static final ThreadLocal<TicketsPage> ticketsPage  = new ThreadLocal<>();
     protected static Faker faker = new Faker();
     protected static SoftAssert softAssert = new SoftAssert();
 
@@ -267,13 +268,13 @@ public class AbstractPortalSteps implements JSHelper, VerificationHelper, WebWai
     }
 
     public static SupervisorDeskPage getSupervisorDeskPage() {
-        if (chatConsoleInboxPage.get() == null) {
-            chatConsoleInboxPage.set(new SupervisorDeskPage(DriverFactory.getDriverForAgent("admin")));
+        if (supervisorDeskPage.get() == null) {
+            supervisorDeskPage.set(new SupervisorDeskPage(DriverFactory.getDriverForAgent("admin")));
             // ToDo decrease time for spinner wait
-            chatConsoleInboxPage.get().waitForConnectingDisappear(3, 10);
-            return chatConsoleInboxPage.get();
+            supervisorDeskPage.get().waitForConnectingDisappear(3, 10);
+            return supervisorDeskPage.get();
         } else {
-            return chatConsoleInboxPage.get();
+            return supervisorDeskPage.get();
         }
     }
 
@@ -331,7 +332,7 @@ public class AbstractPortalSteps implements JSHelper, VerificationHelper, WebWai
         portalTouchPreferencesPage.remove();
         portalUserManagementPage.remove();
         dashboardPage.remove();
-        chatConsoleInboxPage.remove();
+        supervisorDeskPage.remove();
         departmentsManagementPage.remove();
         surveyManagementPage.remove();
         dashboardSettingsPage.remove();

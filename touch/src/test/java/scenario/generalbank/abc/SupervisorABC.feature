@@ -26,7 +26,7 @@ Feature: Apple Business Chat :: Supervisor Desk
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Supervisor Desk in submenu
-    Then Verify that Chats tab is displayed first
+    Then Chats tab is displayed first for Agent
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1350")
   @orca_api
@@ -65,7 +65,7 @@ Feature: Apple Business Chat :: Supervisor Desk
     When I open portal
     And Login into portal as an admin of General Bank Demo account
     Then I select Touch in left menu and Supervisor Desk in submenu
-    When Supervisor clicks on chats filter for GBD Second Agent
+    And Agent select GBD Second filter on Left Panel
     And Agent click On Live Supervisor Desk chat from Orca channel
     Then GBD Second is the current agent of the chat
 
