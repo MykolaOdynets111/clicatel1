@@ -1461,35 +1461,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         soft.assertAll();
     }
 
-    private static BusinessProfileWindow getBusinessProfileWindow() {
-        return getPortalTouchPreferencesPage().getBusinessProfileWindow();
-    }
-
-    @When("^Turn (.*) the Last Agent routing$")
-    public void changeLastAgentRoting(String status){
-        TenantChatPreferences tenantChatPreferences = ApiHelper.getTenantChatPreferences();
-        if (status.equalsIgnoreCase("on")){
-            tenantChatPreferences.setLastAgentMode(true);
-        } else if(status.equalsIgnoreCase("off")){
-            tenantChatPreferences.setLastAgentMode(false);
-        }else{
-            throw new AssertionError("Incorrect status was provided");
-        }
-        ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), tenantChatPreferences);
-    }
-
-    @When("^Verify Last Agent routing is turned (.*) on backend$")
-    public void verifyLastAgentRoting(String status) {
-        boolean statusOnBackend = ApiHelperTenant.getTenantConfig(Tenants.getTenantUnderTestOrgName()).getBody().jsonPath().get("lastAgentMode");
-        if (status.equalsIgnoreCase("on")){
-            Assert.assertTrue(statusOnBackend, "Last Agent Roting is not turned on");
-        } else if(status.equalsIgnoreCase("off")){
-            Assert.assertFalse(statusOnBackend, "Last Agent Roting is not turned off");
-        }else{
-            throw new AssertionError("Incorrect status was provided");
-        }
-    }
-
     @When("^Turn (.*) the Default department$")
     public void changeDepartmentPrimaryStatus(String status){
         TenantChatPreferences tenantChatPreferences = ApiHelper.getTenantChatPreferences();
@@ -1502,6 +1473,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         }
         ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), tenantChatPreferences);
     }
+
     @When("^Create chat tag$")
     public void createChatTag(){
         tagname = faker.artist().name() + faker.numerify("#####");
@@ -1524,6 +1496,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void cancelEditingTag() {
         getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickDeleteButton();
     }
+
     @When("^Existing TagName is not changed")
     public void verifyTagName() {
         String newTagName = getPortalTouchPreferencesPage().getChatTagsWindow().getTagName();
@@ -1547,5 +1520,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void verifyTagIsCreated() {
         String newTagName = getPortalTouchPreferencesPage().getChatTagsWindow().getTagName();
         Assert.assertEquals(newTagName,tagname,"Tag is not created");
+    }
+
+    private static BusinessProfileWindow getBusinessProfileWindow() {
+        return getPortalTouchPreferencesPage().getBusinessProfileWindow();
     }
 }

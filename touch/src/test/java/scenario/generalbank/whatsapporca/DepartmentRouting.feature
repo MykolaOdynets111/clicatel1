@@ -10,7 +10,7 @@ Feature: Departments: Route to Department
     And New departments with AutomationFirstAgent name AutomationFirstAgentDescription description and first agent is created
     And New departments with AutomationSecondAgent name AutomationSecondAgent description and second agent is created
     When Setup ORCA whatsapp integration for General Bank Demo tenant
-    And Turn off the Last Agent routing
+    And lastAgentMode tenant feature is set to false for General Bank Demo
     And Turn off the Default department
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1857")

@@ -15,7 +15,7 @@ Feature: Turning on / off AGENT_FEEDBACK feature for Agent mode tenant
     When Agent click on new conversation request from orca
     Then Conversation area becomes active with connect to agent user's message
     When Agent click "End chat" button
-    Then End chat popup is not shown
+    Then End chat popup is not shown for Agent
     And Agent should not see from user chat in agent desk from orca
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2864")
