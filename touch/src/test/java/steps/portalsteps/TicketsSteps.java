@@ -8,6 +8,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.TimeoutException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.dotcontrol.DotControlSteps;
@@ -66,9 +67,16 @@ public class TicketsSteps extends AbstractPortalSteps{
         getTicketsTable("main")
                 .selectTicketCheckbox(getUserName(chanel))
                 .clickCloseButton(getUserName(chanel));
-        getAgentHomePage(agent)
-                .getAgentFeedbackWindow()
-                .clickCloseButtonInCloseChatPopup();
+        waitFor(1000);
+
+        if (getAgentHomePage(agent).getAgentFeedbackWindow().isAgentFeedbackWindowShown()) {
+            getAgentHomePage(agent).getAgentFeedbackWindow().waitForLoadingData().clickCloseButtonInCloseChatPopup();
+        }
+    }
+
+    @When("^(.*) checks closed ticket is disabled$")
+    public void checkCloseButtonStatus(String agent) {
+        Assert.assertTrue(Boolean.parseBoolean(getTicketsTable(agent).closeButtonStatus()), "Close ticket button is enabled");
     }
 
     @When("^Supervisor clicks on first ticket$")
@@ -166,11 +174,14 @@ public class TicketsSteps extends AbstractPortalSteps{
         Assert.assertTrue(isDateSorted(order, listOfDates), "Tickets are not sorted in " + order + " order");
     }
 
-    @Then("^Verify ticket is present for (.*)$")
-    public void verifyTicketIsPresent(String chanel) {
-        boolean isTicketPresent = getTicketsTable("main")
-                .isTicketPresent(getUserName(chanel));
+    @Then("^Verify ticket is present for (.*) for (.*) seconds$")
+    public void verifyTicketIsPresent(String chanel, int wait) {
+        boolean isTicketPresent = false;
 
+        for (int i = 0; i < wait; i++) {
+            if (!getTicketsTable("main").isTicketPresent(getUserName(chanel)))
+                waitFor(1000);
+        }
         Assert.assertTrue(isTicketPresent, "Ticket should be present");
     }
 
