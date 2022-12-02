@@ -5,7 +5,7 @@ Feature: Departments: Select department by default
     Given I open portal
     When Login into portal as an admin of Standard Billing account
     And New departments with AutomationDefault name AutomationDefaultDescription description and second agent is created
-    When Turn off the Last Agent routing
+    When lastAgentMode tenant feature is set to false for Standard Billing
     And Turn off the Default department
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-20925")

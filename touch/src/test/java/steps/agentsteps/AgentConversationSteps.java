@@ -34,6 +34,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class AgentConversationSteps extends AbstractAgentSteps {
 
     private static String selectedEmoji;
@@ -593,13 +595,14 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         Assert.assertEquals(getSuggestedGroup("main").getSuggestionsNotAvailableMessage(), expectedMessage,
                 "Error message that Agent Assist feature is not available is not as expected");
     }
+    @Then("^(?:End chat|Agent Feedback) popup is not shown for (.*)$")
+    public void verifyFeedbackPopupNotOpened(String agent) {
+        AgentFeedbackWindow feedbackWindow = getAgentHomePage(agent).getAgentFeedbackWindow();
 
-    @Then("^(?:End chat|Agent Feedback) popup is not shown$")
-    public void verifyAgentFeedbackPopupNotOpened() {
-        Assert.assertFalse(getAgentHomePage("main").getAgentFeedbackWindow().isEndChatPopupShown(),
-                "Agent Feedback popup is opened");
+        assertThat(feedbackWindow.isEndChatPopupShown())
+                .as("Agent Feedback popup should not be opened")
+                .isFalse();
     }
-
     @Then("^Correct sentiment on (.*) user's message is stored in DB$")
     public void verifyCorrectSentimentStoredInDb(String userMessage) {
         String expectedSentiment = ApiHelperTie.getTIESentimentOnMessage(userMessage);

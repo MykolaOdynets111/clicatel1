@@ -112,12 +112,6 @@ public class PreferencesSteps extends AbstractPortalSteps {
         saveChanges();
     }
 
-    @When("^Switch Last Agent routing$")
-    public void activateLastAgent() {
-        getPreferencesWindow().clickOnLiveChatRoating();
-        saveChanges();
-    }
-
     @Then("^All default values on Preferences page are correct$")
     public void verifyAllDefaultPreferences(Map<String, String> pref) {
         PreferencesWindow preferencesWindow = getPreferencesWindow();
