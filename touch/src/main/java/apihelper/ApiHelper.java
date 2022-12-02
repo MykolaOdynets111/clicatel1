@@ -4,7 +4,6 @@ import datamanager.*;
 import datamanager.jacksonschemas.*;
 import datamanager.jacksonschemas.chathistory.ChatHistory;
 import datamanager.jacksonschemas.chatusers.UserInfo;
-import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import datamanager.jacksonschemas.usersessioninfo.ClientProfile;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
 import drivermanager.ConfigManager;
@@ -231,15 +230,6 @@ public class ApiHelper implements VerificationHelper {
                         "}")
                 .post(Endpoints.WIDGET_VISIBILITY_TERRITORIES);
     }
-
-
-    public static List<TenantAddress> getTenantAddressInfo(String tenantName) {
-        return RestAssured.given()
-                .accept(ContentType.JSON)
-                .get(format(Endpoints.INTERNAL_TENANT_ADDRESS, tenantName))
-                .jsonPath().getList("addresses", TenantAddress.class);
-    }
-
 
     public static UserSession getLastUserSession(String userID, String tenant) {
         return RestAssured.given()
