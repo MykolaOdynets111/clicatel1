@@ -72,15 +72,11 @@ public class TicketRow extends AbstractWidget {
     }
 
     public LocalDateTime getOpenDate(){
-//        wheelScrollDownToElement(this.getCurrentDriver(),
-//                this.getWrappedElement(), startDate, 3);
         String stringDate = getTextFromElem(this.getCurrentDriver(), startDate, 5, "Date cell").trim();
         return parseDate(stringDate);
     }
 
     public LocalDateTime getEndDate(){
-//        wheelScrollDownToElement(this.getCurrentDriver(),
-//                this.getWrappedElement(), endDate, 3);
         String stringDate = getTextFromElem(this.getCurrentDriver(), endDate, 5, "Date cell").trim();
         return parseDate(stringDate);
     }
