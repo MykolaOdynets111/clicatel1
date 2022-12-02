@@ -1,6 +1,9 @@
 package agentpages;
 
 import abstractclasses.AgentAbstractPage;
+import agentpages.commonelements.SupervisorAndTicketsHeader;
+import agentpages.leftmenu.LeftMenuWithChats;
+import agentpages.tickets.TicketsPage;
 import agentpages.uielements.*;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -118,6 +121,8 @@ public class AgentHomePage extends AgentAbstractPage {
     private ChatPendingToLiveForm chatPendingToLiveForm;
     private Extensions extensions;
     private HSMForm hsmForm;
+    private SupervisorAndTicketsHeader supervisorAndTicketsHeader;
+    private TicketsPage ticketsPage;
 
     public AgentHomePage(String agent) {
         super(agent);
@@ -258,6 +263,15 @@ public class AgentHomePage extends AgentAbstractPage {
         waitForElementToBePresentByCss(this.getCurrentDriver(), chatMessageContainer, 10);
         chatBody.setCurrentDriver(this.getCurrentDriver());
         return chatBody;
+    }
+    public SupervisorAndTicketsHeader getSupervisorAndTicketsHeader(){
+        supervisorAndTicketsHeader.setCurrentDriver(this.getCurrentDriver());
+        return supervisorAndTicketsHeader;
+    }
+
+    public TicketsPage getTicketsPage(){
+        ticketsPage.setCurrentDriver(this.getCurrentDriver());
+        return ticketsPage;
     }
 
     public HSMForm getHSMForm() {

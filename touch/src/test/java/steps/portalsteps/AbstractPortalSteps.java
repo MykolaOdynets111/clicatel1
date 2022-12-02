@@ -4,6 +4,7 @@ import agentpages.dashboard.DashboardPage;
 import agentpages.dashboard.DashboardSettingsPage;
 import agentpages.supervisor.SupervisorDeskPage;
 import agentpages.survey.SurveyManagementPage;
+import agentpages.tickets.TicketsPage;
 import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
 import datamanager.Tenants;
@@ -43,7 +44,7 @@ public class AbstractPortalSteps implements JSHelper, VerificationHelper, WebWai
     private static final ThreadLocal<DepartmentsManagementPage> departmentsManagementPage = new ThreadLocal<>();
     private static final ThreadLocal<SurveyManagementPage> surveyManagementPage = new ThreadLocal<>();
     private static final ThreadLocal<DashboardSettingsPage> dashboardSettingsPage = new ThreadLocal<>();
-
+    private static final ThreadLocal<TicketsPage> ticketsPage  = new ThreadLocal<>();
     protected static Faker faker = new Faker();
     protected static SoftAssert softAssert = new SoftAssert();
 

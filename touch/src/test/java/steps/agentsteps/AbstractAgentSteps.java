@@ -2,12 +2,13 @@ package steps.agentsteps;
 
 import agentpages.AgentHomePage;
 import agentpages.AgentLoginPage;
+import agentpages.commonelements.SupervisorAndTicketsHeader;
+import agentpages.leftmenu.LeftMenuWithChats;
+import agentpages.tickets.TicketsPage;
 import agentpages.uielements.*;
 import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
 import datamanager.jacksonschemas.dotcontrol.DotControlInitRequest;
-import driverfactory.DriverFactory;
-import drivermanager.ConfigManager;
 import steps.dotcontrol.DotControlSteps;
 import steps.portalsteps.AbstractPortalSteps;
 
@@ -17,15 +18,11 @@ import java.util.Map;
 
 public class AbstractAgentSteps extends AbstractPortalSteps {
 
-    private static final ThreadLocal<AgentLoginPage> currentAgentLoginPage = new ThreadLocal<>();
-
     private static final ThreadLocal<AgentLoginPage> secondAgentLoginPage = new ThreadLocal<>();
 
     private static final ThreadLocal<AgentLoginPage> mainAgentLoginPage = new ThreadLocal<>();
 
     private static final ThreadLocal<AgentHomePage> mainAgentHomePage = new ThreadLocal<>();
-
-    private static final ThreadLocal<AgentHomePage> currentAgentHomePage = new ThreadLocal<>();
 
     private static final ThreadLocal<AgentHomePage> secondAgentHomePage = new ThreadLocal<>();
 
@@ -36,14 +33,6 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
     public List<DotControlInitRequest> createdChatsViaDotControl = new ArrayList<>();
 
     private static final ThreadLocal<List<Map<String, String>>> createdAgentsMails = new ThreadLocal<>();
-
-    public static void setAgentLoginPage(String ordinalAgentNumber, AgentLoginPage loginPage) {
-        if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
-            secondAgentLoginPage.set(loginPage);
-        } else {
-            mainAgentLoginPage.set(loginPage);
-        }
-    }
 
     public static List<Map<String, String>> getListOfCreatedAgents() {
         if (createdAgentsMails.get()==null) {
@@ -75,32 +64,7 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         return mainAgentLoginPage.get();
     }
 
-    public static void setCurrentLoginPage(AgentLoginPage loginPage) {
-        currentAgentLoginPage.set(loginPage);
-    }
-
-    public static AgentLoginPage getCurrentLoginPage() {
-        return currentAgentLoginPage.get();
-    }
-
-
-    public static void getCurrentAgentHomePage(AgentHomePage homePage){
-        currentAgentHomePage.set(homePage);
-    }
-
-    public static AgentHomePage setCurrentAgentHomePage(String ordinalAgentNumber){
-        return currentAgentHomePage.get();
-    }
-
     public static AgentHomePage getAgentHomePage(String ordinalAgentNumber){
-        if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
-            return getAgentHomeForSecondAgent();
-        } else {
-            return getAgentHomeForMainAgent();
-        }
-    }
-
-    public static AgentHomePage setAgentHomePage(String ordinalAgentNumber){
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
             return getAgentHomeForSecondAgent();
         } else {
@@ -122,16 +86,20 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         return mainAgentHomePage.get();
     }
 
-    public static ProfileWindow getProfileWindow(String ordinalAgentNumber){
-        return getAgentHomePage(ordinalAgentNumber).getProfileWindow();
-    }
-
     public static LeftMenuWithChats getLeftMenu(String agent) {
         return getAgentHomePage(agent).getLeftMenuWithChats();
     }
 
     public static ChatBody getChatBody(String agent) {
         return getAgentHomePage(agent).getChatBody();
+    }
+
+    public static TicketsPage getTicketsPage(String agent){
+        return getAgentHomePage(agent).getTicketsPage();
+    }
+
+    public static SupervisorAndTicketsHeader getSupervisorAndTicketsHeader(String agent){
+        return getAgentHomePage(agent).getSupervisorAndTicketsHeader();
     }
 
     public static ChatAttachmentForm getChatAttachmentForm(String agent){
@@ -154,35 +122,11 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         return getAgentHomePage(agent).getChatHeader();
     }
     public static void cleanAllPages(){
-        currentAgentLoginPage.remove();
         secondAgentLoginPage.remove();
         mainAgentLoginPage.remove();
 
         mainAgentHomePage.remove();
-        currentAgentHomePage.remove();
         secondAgentHomePage.remove();
-    }
-
-    public String getUserName(String userFrom){
-        if(userFrom.contains("first chat")){
-            return createdChatsViaDotControl.get(0).getInitContext().getFullName();
-        }
-        if (ConfigManager.getSuite().equalsIgnoreCase("twitter")) {
-            return super.getUserName("twitter");
-        }
-        if(ConfigManager.getSuite().equalsIgnoreCase("facebook")) {
-            return super.getUserName("facebook");
-        }
-        if(userFrom.equalsIgnoreCase("dotcontrol")) {
-            return super.getUserName("dotcontrol");
-        }
-        if(userFrom.equalsIgnoreCase("orca")) {
-            return super.getUserName("orca");
-        }
-        if(userFrom.equalsIgnoreCase("sms")) {
-            return super.getUserName("sms");
-        }
-        return getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
     }
 
     public synchronized void saveClientIDValue(String userFrom){

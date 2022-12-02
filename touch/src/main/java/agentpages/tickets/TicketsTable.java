@@ -88,8 +88,9 @@ public class TicketsTable extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), routeToSchedulerButton, 5, "'Route to scheduler' button");
     }
 
-    public void scrollTicketsToTheButtom(){
+    public TicketsTable scrollTicketsToTheButtom(){
         wheelScroll(this.getCurrentDriver(), scrolArea, 2000, 0,0);
+        return this;
     }
 
     public void scrollTicketsToTheTop(){

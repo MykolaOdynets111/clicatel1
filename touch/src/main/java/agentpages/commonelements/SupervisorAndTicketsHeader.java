@@ -1,4 +1,4 @@
-package agentpages.supervisor.uielements;
+package agentpages.commonelements;
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @FindBy(css = ".view-header")
-public class SupervisorDeskHeader extends AbstractUIElement {
+public class SupervisorAndTicketsHeader extends AbstractUIElement {
 
     @FindBy(id = "nameOrPhone")
     private WebElement searchInput;
@@ -47,17 +47,17 @@ public class SupervisorDeskHeader extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), applyFiltersButton, 1, "Apply Filters");
     }
 
-    public SupervisorDeskHeader setSearchInput(String text){
+    public SupervisorAndTicketsHeader setSearchInput(String text){
         inputText(this.getCurrentDriver(), searchInput, 1, "Search input", text);
         return this;
     }
 
-    public SupervisorDeskHeader clickFlaggedOnlyCheckbox(){
+    public SupervisorAndTicketsHeader clickFlaggedOnlyCheckbox(){
         clickElem(this.getCurrentDriver(), flaggedOnlyCheckbox, 1, "Flagged Only");
         return this;
     }
 
-    public SupervisorDeskHeader selectChanel(String chanelName){
+    public SupervisorAndTicketsHeader selectChanel(String chanelName){
         clickElem(this.getCurrentDriver(), channelsDropdown, 1, "Channels Dropdown");
         dropdownOptions.stream().filter(e -> e.getText().equalsIgnoreCase(chanelName))
                 .findFirst().orElseThrow(() ->
@@ -65,7 +65,7 @@ public class SupervisorDeskHeader extends AbstractUIElement {
     return this;
     }
 
-    public SupervisorDeskHeader selectSentiment(String sentimentName){
+    public SupervisorAndTicketsHeader selectSentiment(String sentimentName){
         clickElem(this.getCurrentDriver(), sentimentDropdown, 4, "Sentiment Dropdown");
         dropdownOptions.stream().filter(e -> e.getText().equalsIgnoreCase(sentimentName))
                 .findFirst().orElseThrow(() ->
@@ -73,12 +73,12 @@ public class SupervisorDeskHeader extends AbstractUIElement {
         return this;
     }
 
-    public SupervisorDeskHeader selectStartDate(LocalDate startDate) {
+    public SupervisorAndTicketsHeader selectStartDate(LocalDate startDate) {
         fillDateInput(this.getCurrentDriver(), startDateInput, startDate, 1, "Start date");
         return this;
     }
 
-    public SupervisorDeskHeader selectEndDate(LocalDate endDate) {
+    public SupervisorAndTicketsHeader selectEndDate(LocalDate endDate) {
         fillDateInput(this.getCurrentDriver(), endDateInput, endDate, 1, "End date");
         return this;
     }
@@ -121,11 +121,11 @@ public class SupervisorDeskHeader extends AbstractUIElement {
     public List<String> getDropdownOptions(){
         return dropdownValues.stream().map(e -> e.getText().trim()).collect(Collectors.toList());
     }
-    public SupervisorDeskHeader expandChannels() {
+    public SupervisorAndTicketsHeader expandChannels() {
         clickElem(this.getCurrentDriver(), channelsDropdown, 3, "Channels expand button");
         return this;
     }
-    public SupervisorDeskHeader expandSentiments() {
+    public SupervisorAndTicketsHeader expandSentiments() {
         clickElem(this.getCurrentDriver(), sentimentDropdown, 3, "Channels expand button");
         return this;
     }

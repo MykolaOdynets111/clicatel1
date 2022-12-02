@@ -1,6 +1,8 @@
-package agentpages.uielements;
+package agentpages.leftmenu;
 
 import abstractclasses.AbstractUIElement;
+import agentpages.uielements.ChatInLeftMenu;
+import agentpages.uielements.FilterMenu;
 import driverfactory.DriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.Color;
@@ -28,6 +30,9 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     @FindBy(css = ".cl-routed-tabs__tab--selected")
     private WebElement selectedTab;
+
+    @FindBy(xpath = "//div[@class='cl-routed-tabs__tab-list']//a[1]")
+    private WebElement firstElementInHeader;
 
     @FindAll({
             @FindBy(css = "[data-testid=roster-item]"),
@@ -81,30 +86,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
     private WebElement userMsgCount;
 
     @FindAll({
-            @FindBy(css = "[data-testid='tab-navigation-panel-live']"),
-            @FindBy(css = "[selenium-id='tab-navigation-panel-live']") //toDo old locator
-    })
-    private WebElement liveChats;
-
-    @FindAll({
-            @FindBy(css = "[data-testid='tab-navigation-panel-tickets']"),
-            @FindBy(css = "[selenium-id='tab-navigation-panel-tickets']")
-    })
-    private WebElement tickets;
-
-    @FindAll({
-            @FindBy(css = "[data-testid='tab-navigation-panel-closed']"),
-            @FindBy(css = "[selenium-id='tab-navigation-panel-closed']") //toDo old locator
-    })
-    private WebElement closed;
-
-    @FindAll({
-            @FindBy(css = "[data-testid='tab-navigation-panel-pending']"),
-            @FindBy(css = "[selenium-id='tab-navigation-panel-pending']") //toDo old locator
-    })
-    private WebElement pending;
-
-    @FindAll({
             @FindBy(css = "[data-testid=open-filter-tab-btn]"),
             @FindBy(css = "[selenium-id=open-filter-tab-btn]") //toDo old locator
     })
@@ -126,6 +107,18 @@ public class LeftMenuWithChats extends AbstractUIElement {
     private String loadingSpinner = ".//*[text()='Connecting...']";
 
     private FilterMenu filterMenu;
+    private LMHeader lMHeader;
+    private SupervisorAndTicketsPart supervisorAndTicketsPart;
+
+    public LMHeader getLMHeader() {
+        lMHeader.setCurrentDriver(this.getCurrentDriver());
+        return lMHeader;
+    }
+
+    public SupervisorAndTicketsPart getSupervisorAndTicketsPart(){
+        supervisorAndTicketsPart.setCurrentDriver(this.getCurrentDriver());
+        return supervisorAndTicketsPart;
+    }
 
     private int count = 0;
 
@@ -266,20 +259,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
             return true;
         } catch (TimeoutException e) {
             return false;
-        }
-    }
-
-    public void selectChatsMenu(String option) {
-        if (option.equalsIgnoreCase("Live Chats")) {
-            clickElem(this.getCurrentDriver(), liveChats, 1, "Live chats menu");
-        } else if (option.equalsIgnoreCase("Tickets")) {
-            clickElem(this.getCurrentDriver(), tickets, 1, "Tickets menu");
-        } else if (option.equalsIgnoreCase("Closed")) {
-            clickElem(this.getCurrentDriver(), closed, 1, "Closed menu");
-        } else if (option.equalsIgnoreCase("Pending")) {
-            clickElem(this.getCurrentDriver(), pending, 1, "Closed menu");
-        } else {
-            throw new AssertionError("Incorrect menu option was provided");
         }
     }
 

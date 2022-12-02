@@ -31,8 +31,6 @@ Feature: ABC ORCA :: Supervisor Desk
     And Agent has new conversation request from ORCA user
     And Agent click on new conversation request from ORCA
     And Agent click 'Pending' chat button
-    And I open portal
-    And Login into portal as an admin of Automation account
     And I select Touch in left menu and Supervisor Desk in submenu
     And Agent search chat orca on Supervisor desk
     And Agent click On Live Supervisor Desk chat from ORCA channel
@@ -44,20 +42,14 @@ Feature: ABC ORCA :: Supervisor Desk
     Given Setup ORCA abc integration for Automation tenant
     When I login as agent of Automation
     And Send live chat message by ORCA
-    And I open portal
-    And Login into portal as an admin of Automation account
     And I select Touch in left menu and Supervisor Desk in submenu
     And Agent search chat orca on Supervisor desk
     And All live chats filter is selected
     Then Agent click On Live Supervisor Desk chat from ORCA channel
-    Given Setup ORCA abc integration for Automation tenant
-    When I login as agent of Automation
-    And Send pending chat message by ORCA
+    And I select Touch in left menu and Agent Desk in submenu
     And Agent has new conversation request from ORCA user
     And Agent click on new conversation request from ORCA
     And Agent click 'Pending' chat button
-    And I open portal
-    And Login into portal as an admin of Automation account
     And I select Touch in left menu and Supervisor Desk in submenu
     And Agent search chat orca on Supervisor desk
     And All live chats filter is selected
