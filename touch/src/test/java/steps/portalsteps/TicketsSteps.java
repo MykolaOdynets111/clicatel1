@@ -181,7 +181,11 @@ public class TicketsSteps extends AbstractPortalSteps{
         for (int i = 0; i < wait; i++) {
             if (!getTicketsTable("main").isTicketPresent(getUserName(chanel)))
                 waitFor(1000);
+            else {
+                break;
+            }
         }
+        isTicketPresent = getTicketsTable("main").isTicketPresent(getUserName(chanel));
         Assert.assertTrue(isTicketPresent, "Ticket should be present");
     }
 

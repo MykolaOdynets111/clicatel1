@@ -49,6 +49,8 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     And Agent search chat orca on Supervisor desk
+    And Wait for 2 second
+    #added 2 seconds wait as tickets are taking time to reflect after search and after closing in the mid section
     Then Ticket from orca is present on All tickets filter page
     When Agent closed ticket for orca
     And Agent open Closed type
