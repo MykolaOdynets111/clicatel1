@@ -102,6 +102,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getHSMForm().clickSendButton();
     }
 
+    @Then("^(.*) checks channel icon (.*) is displayed in HSM form$")
+    public void verifyCorrectHSMChannelIcon(String agent, String image) {
+        Assert.assertTrue(getAgentHomePage(agent).getHSMForm().isValidChannelImg(image),
+                "Icon for channel in Continue HSM form is not as expected");
+    }
+
     @And("^(.*) fill the customer contact number$")
     public void sendWhatsApp(String agent) {
         getAgentHomePage(agent).getHSMForm().setWAPhoneNumber(ORCASteps.orcaMessageCallBody.get().getSourceId());
