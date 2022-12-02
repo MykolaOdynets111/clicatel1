@@ -19,16 +19,16 @@ Feature: Supervisor desk
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     Then Verify All tickets, Unassigned, Expired, Assigned ticket types are available
-    And User select Unassigned ticket type
+    And Agent select Unassigned filter on Left Panel
     Then Ticket from dotcontrol is present on Unassigned filter page
     When Turn on tickets autoScheduling
     And Select dotcontrol ticket checkbox
     When Click 'Assign manually' button for orca
     Then 'Assign chat' window is opened
     When I assign chat on Agent
-    And User select Assigned ticket type
+    And Agent select Assigned filter on Left Panel
     Then Ticket from dotcontrol is present on Assigned filter page
     And Update ticket with OVERDUE status
     And Wait for 2 second
-    When User select Expired ticket type
+    And Agent select Expired filter on Left Panel
     Then Ticket from dotcontrol is present on Expired filter page

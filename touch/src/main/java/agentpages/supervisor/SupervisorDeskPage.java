@@ -72,16 +72,12 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     private AssignChatWindow assignChatWindow;
     private ChatBody chatBody;
-    private SupervisorTicketsTable supervisorTicketsTable;
     private SupervisorClosedChatsTable supervisorClosedChatsTable;
     private SupervisorOpenedClosedChatsList supervisorOpenedClosedChatsList;
-    private SupervisorLeftPanel supervisorLeftPanel;
     private RightPanelWindow supervisorRightPanel;
+
     private ChatHeader chatHeader;
     private Profile profile;
-    private SupervisorTicketClosedChatView supervisorTicketChatView;
-    private MessageCustomerWindow messageCustomerWindow;
-    private SupervisorDeskHeader supervisorDeskHeader;
     private SupervisorAvailableAsAgentDialog supervisorAvailableAsAgentDialog;
 
     public SupervisorDeskPage(WebDriver driver) {
@@ -91,16 +87,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     public AssignChatWindow getAssignChatWindow(){
         assignChatWindow.setCurrentDriver(this.getCurrentDriver());
         return assignChatWindow;
-    }
-
-    public SupervisorTicketsTable getSupervisorTicketsTable(){
-        supervisorTicketsTable.setCurrentDriver(this.getCurrentDriver());
-        return supervisorTicketsTable;
-    }
-
-    public SupervisorLeftPanel getSupervisorLeftPanel(){
-        supervisorLeftPanel.setCurrentDriver(this.getCurrentDriver());
-        return supervisorLeftPanel;
     }
 
     public RightPanelWindow getSupervisorRightPanel(){
@@ -118,24 +104,9 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return profile;
     }
 
-    public SupervisorTicketClosedChatView getSupervisorTicketClosedChatView(){
-        supervisorTicketChatView.setCurrentDriver(this.getCurrentDriver());
-        return supervisorTicketChatView;
-    }
-
-    public MessageCustomerWindow getMessageCustomerWindow(){
-        messageCustomerWindow.setCurrentDriver(this.getCurrentDriver());
-        return messageCustomerWindow;
-    }
-
     public SupervisorClosedChatsTable getSupervisorClosedChatsTable(){
         supervisorClosedChatsTable.setCurrentDriver(this.getCurrentDriver());
         return supervisorClosedChatsTable;
-    }
-
-    public SupervisorDeskHeader getSupervisorDeskHeader(){
-        supervisorDeskHeader.setCurrentDriver(this.getCurrentDriver());
-        return  supervisorDeskHeader;
     }
 
     public SupervisorOpenedClosedChatsList getSupervisorOpenedClosedChatsList(){
@@ -175,11 +146,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return getLiveChatRows().get(0).getIconName().equalsIgnoreCase(channelName);
     }
 
-    public String getCurrentAgentOfTheChat(String userName){
-        String currentAgent = getSupervisorTicketsTable().getTicketByUserName(userName).getCurrentAgent();
-        return currentAgent.substring(3);
-    }
-
     public boolean isAssignChatWindowOpened(){
         return isElementShown(this.getCurrentDriver(), getAssignChatWindow().getWrappedElement(), 4);
     }
@@ -190,11 +156,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         waitUntilElementNotDisplayed(this.getCurrentDriver(), assignWindowsDialog, 3);
     }
 
-    public void scrollTicketsDown(){
-        getSupervisorTicketsTable().scrollTicketsToTheButtom();
-        getSupervisorTicketsTable().waitForMoreTicketsAreLoading(2,5);
-    }
-
     public void waitForConnectingDisappear(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
         waitForAppearAndDisappear(this.getCurrentDriver(), spinner, waitForSpinnerToAppear, waitForSpinnerToDisappear);
     }
@@ -202,23 +163,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
      public void waitForLoadingResultsDisappear(int timeToAppear, int timeToDisappear){
          waitForAppearAndDisappear(this.getCurrentDriver(), loadingResults, timeToAppear, timeToDisappear);
      }
-
-    public boolean areNewChatsLoaded(int previousChats, int wait){
-        for(int i = 0; i< wait*2; i++){
-            if(getSupervisorTicketsTable().getUsersNames().size() > previousChats) return true;
-            else waitFor(500);
-        }
-        return false;
-    }
-
-    public SupervisorDeskPage selectTicketType(String option){
-        getSupervisorLeftPanel().selectTicketType(option);
-        return this;
-    }
-
-    public List<String> getTicketTypes(){
-        return getSupervisorLeftPanel().getFilterNames();
-    }
 
     public ChatBody openInboxChatBody(String userName){
         getSupervisorDeskLiveRow(userName).clickOnUserName();

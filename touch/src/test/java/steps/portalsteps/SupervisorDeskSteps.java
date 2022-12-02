@@ -5,9 +5,7 @@ import agentpages.uielements.DatePicker;
 import apihelper.ApiHelper;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.TenantChatPreferences;
-import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
-import drivermanager.ConfigManager;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -24,11 +22,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static steps.agentsteps.AbstractAgentSteps.getAgentHomePage;
+import static steps.agentsteps.AbstractAgentSteps.*;
 
 public class SupervisorDeskSteps extends AbstractPortalSteps {
-
-    private List<String> shownUsers = new ArrayList<>();
 
     @Given("^Turn (.*) tickets autoScheduling$")
     public void changeTicketsAutoScheduling(String status) {
@@ -43,68 +39,17 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), tenantChatPreferences);
     }
 
-    @Then("^Filter \"(.*)\" is selected by default$")
-    public void filterIsSelectedByDefault(String filterName) {
-        Assert.assertEquals(getSupervisorDeskPage().getSupervisorLeftPanel().getFilterByDefaultName(), filterName,
-                "Filter name by default does not match expected");
-    }
 
-    @When("^(.*) filter is selected$")
-    public void filterIsSelected(String filterName) {
-        getSupervisorDeskPage().getSupervisorLeftPanel().clickFilterType(filterName);
-    }
-
-    @Then("^Select (.*) ticket checkbox$")
-    public void clickThreeDotsButton(String channel) {
-        getSupervisorDeskPage().getSupervisorTicketsTable().selectTicketCheckbox(getUserName(channel));
-    }
-
-    @When("^Agent select (.*) ticket$")
-    public void selectTicket(String chanel) {
-        getSupervisorDeskPage().getSupervisorTicketsTable().getTicketByUserName(getUserName(chanel)).clickOnUserName();
-    }
-
-    @When("^Click on Message Customer button for (.*)$")
-    public void clickOnMessageCustomer(String chanel) {
-        getSupervisorDeskPage().getSupervisorTicketsTable().clickAssignOpenTicketButton(getUserName(chanel));
-        getSupervisorDeskPage().getSupervisorTicketClosedChatView().clickOnMessageCustomerButton();
-    }
-
-    @Then("^Message Customer Window is opened$")
-    public void verifyMessageCustomerWindowIsOpened() {
-        Assert.assertEquals(getSupervisorDeskPage().getMessageCustomerWindow().getHeader(), "Message Customer", "incorrect header Was shown for   Message Customer Window");
-    }
 
     @When("^Supervisor send (.*) to agent trough (.*) chanel$")
     public void sendTicketMessageToCustomer(String message, String chanel) {
-        getSupervisorDeskPage().getMessageCustomerWindow().selectChanel(chanel).setMessageText(message).clickSubmitButton();
+        getTicketsPage("main").getMessageCustomerWindow().selectChanel(chanel).setMessageText(message).clickSubmitButton();
     }
 
     @When("^Supervisor is unable to send (.*) HSM on Tickets for (.*) chat$")
     public void hsmChannelNotShownOnParticularChannel(String channel, String originalChannel) {
-        Assert.assertFalse(getSupervisorDeskPage().getMessageCustomerWindow().isChanelShown(channel),
+        Assert.assertFalse(getTicketsPage("main").getMessageCustomerWindow().isChanelShown(channel),
                 channel + " HSM is present in: " + originalChannel);
-    }
-
-    @When("^Click 'Route to scheduler' button$")
-    public void clickRouteToScheduler() {
-        getSupervisorDeskPage().getSupervisorTicketsTable().clickRouteToSchedulerButton();
-    }
-
-    @When("^Click 'Assign manually' button for (.*)$")
-    public void clickAssignManually(String chanel) {
-        getSupervisorDeskPage().getSupervisorTicketsTable().clickAssignManuallyButton(getUserName(chanel));
-    }
-
-    @When("^(.*) closed ticket for (.*)$")
-    public void clickCloseButtonFor(String agent, String chanel) {
-        getSupervisorDeskPage()
-                .getSupervisorTicketsTable()
-                .selectTicketCheckbox(getUserName(chanel))
-                .clickCloseButton(getUserName(chanel));
-        getAgentHomePage(agent)
-                .getAgentFeedbackWindow()
-                .clickCloseButtonInCloseChatPopup();
     }
 
     @Then("^(.*) request is shown on Supervisor Desk Live page$")
@@ -139,17 +84,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @When("^Supervisor opens closed chat$")
     public void openFirstClosedChat() {
         getSupervisorDeskPage().getSupervisorClosedChatsTable().openFirstClosedChat();
-    }
-
-    @When("^Supervisor clicks on first ticket$")
-    public void openFirstTicket() {
-        getSupervisorDeskPage().getSupervisorTicketsTable().openFirstTicket();
-    }
-
-    @Then("^Verify that only \"(.*)\" tickets chats are shown$")
-    public void verifyTicketsChatsChannelsFilter(String channelName) {
-        Assert.assertTrue(getSupervisorDeskPage().getSupervisorTicketsTable().verifyChanelOfTheTicketsIsPresent(channelName),
-                channelName + " channel name should be shown.");
     }
 
     @And("^Agent click On Live Supervisor Desk chat from (.*) channel$")
@@ -192,74 +126,10 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 "Profile form is not shown");
     }
 
-    @Then("^(.*) is set as 'current agent' for dot control ticket$")
-    public void verifyCurrentAgent(String agent) {
-        String agentName = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent).get("fullName");
-        getSupervisorDeskPage().getCurrentDriver().navigate().refresh();
-        getSupervisorDeskPage().waitForConnectingDisappear(2, 5);
-        boolean result = false;
-        for (int i = 0; i < 8; i++) {
-            if (agentName.equals(getSupervisorDeskPage().getCurrentAgentOfTheChat(DotControlSteps.getClient()))) {
-                result = true;
-                break;
-            } else waitFor(1000);
-        }
-        Assert.assertTrue(result, "Agent " + agentName + " is not set up as 'Current agent'");
-    }
-    @Then("^(.*) is the current agent of (.*) ticket$")
-    public void verifyCurrentAgentOfTicket(String agentName, String userName) {
-        Assert.assertEquals(getSupervisorDeskPage().getCurrentAgentOfTheChat(userName),agentName,
-                "The current agent of the ticket is not as expected");
-    }
-
     @Then("^(.*) is the current agent of the chat$")
     public void verifyCurrentAgentOfChat(String agentName) {
         Assert.assertEquals(getSupervisorDeskPage().getChatHeader().getAgentName(),agentName,
                 "The current agent of the ticket is not as expected");
-    }
-
-    @Then("^Ticket from (.*) is present on (.*) filter page$")
-    public void verifyUnassignedType(String channel, String status) {
-        String userName = getUserName(channel);
-        if (status.equalsIgnoreCase("Unassigned")) {
-            Assert.assertTrue(getSupervisorDeskPage().getCurrentAgentOfTheChat(userName).equalsIgnoreCase("No current Agent"),
-                    "Unassigned ticket should be present");
-        } else if (status.equalsIgnoreCase("Assigned") || status.equalsIgnoreCase("Expired")) {
-            String actualUserName = getSupervisorDeskPage().getSupervisorTicketsTable().getUsersNames().get(0);
-            Assert.assertTrue(actualUserName.equals(userName),
-                    "Ticket should be present on " + status + " filter page");
-        } else if (status.equalsIgnoreCase("All tickets")) {
-            getSupervisorDeskPage().getSupervisorTicketsTable().getTicketByUserName(userName);
-        }
-    }
-
-    @Then("^Verify that only (.*) ticket is shown$")
-    public void verifyChatsChannelsFilter(int tickets) {
-        Assert.assertEquals(getSupervisorDeskPage().getSupervisorTicketsTable().getUsersNames().size(), tickets,
-                "Only " + tickets + " ticket(s) number should be present on Supervisor Tickets page" +
-                        "Could be because of TPLAT-5959");
-        //todo uncomment step in the feature when search with spaces will be fixed
-    }
-
-    @Then("^Ticket from (.*) is not present on Supervisor Desk$")
-    public void verifyUnassignedType(String channel) {
-        String userName = getUserName(channel);
-        boolean isTicketShown = true;
-        try {
-            getSupervisorDeskPage().getSupervisorTicketsTable().getTicketByUserName(userName);
-        } catch (AssertionError e) {
-            isTicketShown = false;
-        }
-        Assert.assertFalse(isTicketShown, "Ticket should not be shown");
-    }
-
-    @Then("^Update ticket with (.*) status$")
-    public void updateTicketStatus(String status) {
-        String chatId = DBConnector.getchatId(ConfigManager.getEnv(), DotControlSteps.getClientId());
-        DBConnector.updateAgentHistoryTicketStatus(ConfigManager.getEnv(), status, chatId);
-        Map elasticSearchModel = ApiHelper.getElasticSearchModel(chatId);
-        elasticSearchModel.replace("ticketState", status);
-        ApiHelper.updateElasticSearchModel(elasticSearchModel);
     }
 
     @Then("^'Assign chat' window is opened$")
@@ -272,30 +142,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void assignChatManually(String agent) {
         String agentName = getAgentName(agent);
         getSupervisorDeskPage().assignChatOnAgent(agentName);
-    }
-
-    @Given("^Save shown tickets$")
-    public void saveChats() {
-        shownUsers = getSupervisorDeskPage().getSupervisorTicketsTable().getUsersNames();
-    }
-
-    @Given("^Supervisor scroll page to the bottom$")
-    public void scrollTicketsDown() {
-        getSupervisorDeskPage().scrollTicketsDown();
-    }
-
-    @Given("^More tickets are loaded$")
-    public void moreRecordsAreShown() {
-        SoftAssert soft = new SoftAssert();
-        boolean result = getSupervisorDeskPage().areNewChatsLoaded(shownUsers.size(), 4);
-        soft.assertTrue(result, "New chats are not loaded\n");
-        soft.assertAll();
-    }
-
-    @Then("^Verify (.*) ticket types are available$")
-    public void verifyTicketTypes(List<String> ticketTypes) {
-        //ToDo add numbers of tickets verification
-        Assert.assertEquals(getSupervisorDeskPage().getTicketTypes(), ticketTypes, "Ticket types are different");
     }
 
     @Then("^Verify Chat has pending icon in the Chat (.*)$")
@@ -312,10 +158,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         }
     }
 
-    @When("^User select (.*) ticket type$")
-    public void selectTicketType(String type) {
-        getSupervisorDeskPage().selectTicketType(type);
-    }
 
     @Then("^Verify that live chat is displayed with (.*) message to agent$")
     public void verifyLiveChatPresent(String message) {
@@ -359,7 +201,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then("^Verify that closed chats have Message Customer button$")
     public void verifyMessageCustomerButtonForClosedChats() {
         getSupervisorDeskPage().getSupervisorClosedChatsTable().openFirstClosedChat();
-        Assert.assertTrue(getSupervisorDeskPage().getSupervisorTicketClosedChatView().isMessageCustomerButtonPresent(),
+        Assert.assertTrue(getTicketsPage("main").getSupervisorTicketClosedChatView().isMessageCustomerButtonOrStartChatPresent(),
                 "Closed chat does not have Message Customer button");
     }
 
@@ -369,29 +211,10 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 "User name is not correct");
     }
 
-    @Then("^WA chat show the correct tag name$")
-    public void verifyTagName() {
-        Assert.assertEquals(getSupervisorDeskPage().getSupervisorClosedChatsTable().getTagName(), BasePortalSteps.tagname,
-                "Tag name is not correct");
-    }
-
-    @Then("^Live chats (.*) filter has correct name and correct chats number$")
-    public void verifyAgentNameOnLiveChatFilter(String agent) {
-        String agentName = getAgentName(agent);
-        int numberOfChats = ApiHelper.getActiveChatsByAgent(agent).jsonPath().getList("content").size();
-        Assert.assertEquals(getSupervisorDeskPage().getSupervisorLeftPanel().getLiveChatsNumberForAgent(agentName), numberOfChats, "Number of chats on Supervisor desk is different from Agent desk chats");
-    }
-
     @Then("^Chats Ended are sorted in (.*) order$")
     public void verifyClosedChatsSorting(String order) {
         List<LocalDateTime> listOfDates = getSupervisorDeskPage().getSupervisorClosedChatsTable().getClosedChatsDates();
         Assert.assertTrue(isDateSorted(order, listOfDates), "Closed chats are not sorted in " + order + " order");
-    }
-
-    @Then("^Tickets are sorted in (.*) order$")
-    public void verifyTicketsSorting(String order) {
-        List<LocalDateTime> listOfDates = getSupervisorDeskPage().getSupervisorTicketsTable().getTicketsStartDates();
-        Assert.assertTrue(isDateSorted(order, listOfDates), "Tickets are not sorted in " + order + " order");
     }
 
     @And("^Chat from (.*) channel is present in the Live Chat list$")
@@ -410,15 +233,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         assertThat(getSupervisorDeskPage().getChatsNames())
                 .as("Chat should not be present!")
                 .doesNotContain(channel);
-    }
-
-    @Then("^Verify ticket is present for (.*)$")
-    public void verifyTicketIsPresent(String chanel) {
-        boolean isTicketPresent = getSupervisorDeskPage()
-                .getSupervisorTicketsTable()
-                .isTicketPresent(getUserName(chanel));
-
-        Assert.assertTrue(isTicketPresent, "Ticket should be present");
     }
 
     @Then("^Verify closed chat is present for (.*)$")
@@ -449,19 +263,19 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @And("^Supervisor put a check mark on \"Flagged Only\" and click \"Apply Filters\" button$")
     public void filterFlaggedChats() {
-        getSupervisorDeskPage().getSupervisorDeskHeader().clickFlaggedOnlyCheckbox().clickApplyFilterButton();
+        getSupervisorAndTicketsHeader("main").clickFlaggedOnlyCheckbox().clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 
     @And("^Agent select \"(.*)\" in Chanel container and click \"Apply filters\" button$")
     public void selectChanelFilter(String name) {
-        getSupervisorDeskPage().getSupervisorDeskHeader().selectChanel(name).clickApplyFilterButton();
+        getSupervisorAndTicketsHeader("main").selectChanel(name).clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 
     @And("^Agent filter by \"(.*)\" channel and \"(.*)\" sentiment$")
     public void selectChanelAndSentimentFilter(String name, String sentiment) {
-        getSupervisorDeskPage().getSupervisorDeskHeader().selectChanel(name).selectSentiment(sentiment).clickApplyFilterButton();
+        getSupervisorAndTicketsHeader("main").selectChanel(name).selectSentiment(sentiment).clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 
@@ -473,7 +287,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         } catch (AssertionError e) {
             userName = chatName;
         }
-        getSupervisorDeskPage().getSupervisorDeskHeader().setSearchInput(userName).clickApplyFilterButton();
+        getSupervisorAndTicketsHeader("main").setSearchInput(userName).clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 
@@ -491,8 +305,8 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then("^\"All Channels\" and \"All Sentiments\" selected as default$")
     public void defaultLiveChatsFilters() {
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getSupervisorDeskPage().getSupervisorDeskHeader().clickFlaggedOnlyCheckbox().getChannelFilterValue(), "All Channels", "Incorrect default Channels filter is set by default");
-        soft.assertEquals(getSupervisorDeskPage().getSupervisorDeskHeader().clickFlaggedOnlyCheckbox().getSentimentsFilterValue(), "All Sentiments", "Incorrect default Sentiments filter is set by default");
+        soft.assertEquals(getSupervisorAndTicketsHeader("main").clickFlaggedOnlyCheckbox().getChannelFilterValue(), "All Channels", "Incorrect default Channels filter is set by default");
+        soft.assertEquals(getSupervisorAndTicketsHeader("main").clickFlaggedOnlyCheckbox().getSentimentsFilterValue(), "All Sentiments", "Incorrect default Sentiments filter is set by default");
         soft.assertAll();
     }
 
@@ -526,12 +340,13 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         DriverFactory.getDriverForAgent("main").switchTo().window(windowHandles.get(windowHandles.size() - 1));
     }
 
-    @And("^Admin filter by (.) year (.) month and (.*) days ago start date and today's end date$")
-    public void agentFilterByMonthBeforeStartDateAndTodaySEndDate(int year, int month, int day) {
+    @And("^Admin filter by (.) year (.) month and (.*) days ago start date and (.) year (.) month and (.*) days ago end date$")
+    public void agentFilterByMonthBeforeStartDateAndTodaySEndDate(int year, int month, int day,
+                                                                  int year1, int month1, int day1) {
         LocalDate startDate = LocalDate.now().minusYears(year).minusMonths(month).minusDays(day);
-        LocalDate endDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now().minusYears(year1).minusMonths(month1).minusDays(day1);
 
-        getSupervisorDeskPage().getSupervisorDeskHeader()
+        getSupervisorAndTicketsHeader("main")
                 .selectStartDate(startDate)
                 .selectEndDate(endDate)
                 .clickApplyFilterButton();
@@ -543,10 +358,10 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         LocalDate startDate = LocalDate.now().minusYears(year).minusMonths(month).minusDays(day);
         LocalDate endDate = LocalDate.now();
 
-        getSupervisorDeskPage().getSupervisorDeskHeader()
+        getSupervisorAndTicketsHeader("main")
                 .selectStartDate(startDate)
                 .selectEndDate(endDate);
-        Assert.assertTrue(getSupervisorDeskPage().getSupervisorDeskHeader().checkStartDateFilterIsEmpty().isEmpty(), "Start date filter is not empty");
+        Assert.assertTrue(getSupervisorAndTicketsHeader("main").checkStartDateFilterIsEmpty().isEmpty(), "Start date filter is not empty");
     }
 
     @And("^(.*) checks back button is (.*) in calendar for (.*) filter (.*) days ago in supervisor$")
@@ -554,53 +369,19 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertTrue(new DatePicker(agent).checkBackButtonVisibilityThreeMonthsBack(filterType, day));
     }
 
-    @And("^Supervisor clicks on chats filter for (.*) Agent$")
-    public void clickOnChatsFilterFromAgent(String Agent){
-        getSupervisorDeskPage().getSupervisorLeftPanel().selectTicketType(Agent);
-    }
-
     @Then("^Verify first closed chat date are fitted by filter$")
     public void verifyFirstClosedChatDateAreFittedByFilter() {
-        LocalDate startDate = getSupervisorDeskPage().getSupervisorDeskHeader().getStartDateFilterValue();
-        LocalDate endDate = getSupervisorDeskPage().getSupervisorDeskHeader().getEndDateFilterValue();
+        LocalDate startDate = getSupervisorAndTicketsHeader("main").getStartDateFilterValue();
+        LocalDate endDate = getSupervisorAndTicketsHeader("main").getEndDateFilterValue();
         LocalDateTime firstClosedChatDate = getSupervisorDeskPage().getSupervisorClosedChatsTable().getFirstClosedChatDate();
         verifyDateTimeIsInRangeOfTwoDates(firstClosedChatDate, startDate, endDate);
-    }
-
-    @Then("^Verify first closed ticket date are fitted by filter$")
-    public void verifyFirstClosedTicketDateAreFittedByFilter() {
-        LocalDate startDate = getSupervisorDeskPage().getSupervisorDeskHeader().getStartDateFilterValue();
-        LocalDate endDate = getSupervisorDeskPage().getSupervisorDeskHeader().getEndDateFilterValue();
-        LocalDateTime firstTicketStartDate = getSupervisorDeskPage().getSupervisorTicketsTable().getFirstTicketStartDates();
-        LocalDateTime firstTicketEndDate = getSupervisorDeskPage().getSupervisorTicketsTable().getFirstTicketEndDates();
-        verifyDateTimeIsInRangeOfTwoDates(firstTicketStartDate, startDate, endDate);
-        verifyDateTimeIsInRangeOfTwoDates(firstTicketEndDate, startDate, endDate);
-    }
-
-    @And("^Agent click on the arrow of Ticket End Date$")
-    public void agentClickOnTheArrowOfTicketEndDate() {
-        getSupervisorDeskPage().getSupervisorTicketsTable().clickAscendingArrowOfEndDateColumn();
-    }
-
-    @Then("Verify that Chats tab is displayed first")
-    public void verifyThatChatsTabIsDisplayedFirst() {
-        getSupervisorDeskPage().getSupervisorLeftPanel().getChatElement();
-    }
-
-    @When("Verify {string} display default")
-    public void verifyDisplayDefault(String liveChats) {
-        getSupervisorDeskPage().getSupervisorLeftPanel().verifyChatgroup(liveChats);
-    }
-
-    @Then("Verify that live chats available are shown")
-    public void verifyThatLiveChatAvailableAreShown(){
-        getSupervisorDeskPage().getSupervisorLeftPanel().verifyLiveChatInfo();
     }
 
     @And("Agent can see whatsapp profile name")
     public void agentCanSeeWhatsappProfileName() {
         getSupervisorDeskPage().isUpdatedProfileNameShown();
     }
+
     @And("Agent click on three dot vertical menu and click on assign button")
     public void agentClickAssignButton() {
         getSupervisorDeskPage().getChatHeader().clickOnAssignButton();
@@ -651,16 +432,16 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then ("^Agent see channel and dates as filter options for tickets$")
     public void verifyChannelOptionsAndDates(List<String> channels){
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(getSupervisorDeskPage().getSupervisorDeskHeader().expandChannels().getDropdownOptions(),  channels,
+        softAssert.assertEquals(getSupervisorAndTicketsHeader("main").expandChannels().getDropdownOptions(),  channels,
                 "Channel dropdown has incorrect options");
-            softAssert.assertTrue(getSupervisorDeskPage().getSupervisorDeskHeader().isStartDateIsPresent(),"Start day option should be present in tickets");
-            softAssert.assertTrue(getSupervisorDeskPage().getSupervisorDeskHeader().isEndDateIsPresent(),"End day option should be present in tickets");
+            softAssert.assertTrue(getSupervisorAndTicketsHeader("main").isStartDateIsPresent(),"Start day option should be present in tickets");
+            softAssert.assertTrue(getSupervisorAndTicketsHeader("main").isEndDateIsPresent(),"End day option should be present in tickets");
         softAssert.assertAll();
     }
 
     @Then ("^Agent see sentiments as filter options for tickets$")
     public void verifyFilterOptions(List<String> sentiments) {
-        Assert.assertEquals(getSupervisorDeskPage().getSupervisorDeskHeader().expandSentiments().getDropdownOptions(), sentiments,
+        Assert.assertEquals(getSupervisorAndTicketsHeader("main").expandSentiments().getDropdownOptions(), sentiments,
                 "Sentiment dropdown has incorrect options");
     }
     private void verifyDateTimeIsInRangeOfTwoDates(LocalDateTime dateTime, LocalDate startDate, LocalDate endDate) {

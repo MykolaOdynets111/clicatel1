@@ -140,7 +140,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Setup ORCA whatsapp integration for General Bank Demo tenant
     And Send to agent message by ORCA
     When I select Touch in left menu and Supervisor Desk in submenu
-    When Verify "All live chats" display default
+    When Verify "All live chats" display as default
     Then  Verify that live chats available are shown
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2369")

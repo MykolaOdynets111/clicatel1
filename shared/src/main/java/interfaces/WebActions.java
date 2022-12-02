@@ -146,7 +146,7 @@ public interface WebActions extends WebWait {
     default boolean isElementShown(WebDriver driver, WebElement element, int wait) {
         try {
             return waitForElementToBeVisible(driver, element, wait).isDisplayed();
-        } catch (TimeoutException | NoSuchElementException e) {
+        } catch (TimeoutException | NoSuchElementException | StaleElementReferenceException e) {
             return false;
         }
     }
