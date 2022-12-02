@@ -53,6 +53,11 @@ public class SupervisorClosedChatsTable extends AbstractUIElement {
         return new SupervisorDeskClosedChatRow(closedChats.get(0)).setCurrentDriver(this.getCurrentDriver()).getUserName();
     }
 
+    public String getTagName(){
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), closedChats, 7);
+        return new SupervisorDeskClosedChatRow(closedChats.get(0)).setCurrentDriver(this.getCurrentDriver()).getTagName();
+    }
+
     public boolean isClosedChatPresent(String userName) {
         waitForFirstElementToBeVisible(this.getCurrentDriver(), closedChats, 7);
         return closedChats.stream().anyMatch(e ->

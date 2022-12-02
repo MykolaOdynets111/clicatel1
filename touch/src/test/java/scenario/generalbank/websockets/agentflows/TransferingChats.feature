@@ -18,11 +18,10 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
     Then Second agent should not see first agent in a transfer pop-up agents dropdown
     And Close Transferring window for Second agent
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2694")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2913")
   @setting_changes
   @orca_api
-  Scenario: CD :: Agent Desk :: Live Chat :: Transfer Chat :: Verify that when Agent is transferring chat, "Transferring chat..." is displayed in roster view
+  Scenario: CD :: Agent Desk :: Live Chat :: Transfer Chat :: Verify that agent is able to transfer chat to other available Agents
 
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     Given I login as agent of General Bank Demo
@@ -79,3 +78,20 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
     Then Second agent receives incoming transfer with "Incoming Transfer" header
     When Second agent click "Accept transfer" button
     And Chat from orca channel is absent in chats list
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1271")
+  @orca_api
+  Scenario: CD :: Agent Desk :: Live Chat :: Profile :: Verify that Agent2 can view edited User profile without refresh
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    And I login as agent of General Bank Demo
+    When Send connect to Support message by ORCA
+    And Agent has new conversation request
+    And Agent click on new conversation request from orca
+    And Conversation area becomes active with connect to Support user's message
+    And I login as second agent of General Bank Demo
+    And Agent invites GBD Second to conversation via internal comments
+    And Agent edits User Profile with location Canada and clicks Save
+    And Second Agent select "Tagged" left menu option
+    And Second Agent has new conversation request
+    And Second Agent click on new conversation request from orca
+    Then Second Agent views User profile with no name Canada location no email without refreshing Agent Desk

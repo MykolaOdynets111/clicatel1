@@ -32,7 +32,7 @@ public class TicketsTable extends AbstractUIElement {
     @FindBy(css = ".supervisor-tickets__loading-more")
     private WebElement loadingMoreTickets;
 
-    @FindBy (xpath = "//span[text()='Ticket Creation Date']/ancestor::span/following-sibling::span/span[contains(@class, 'sorting-box__arrow--top')]")
+    @FindBy (xpath = "//span[text()='Ticket Opened']/ancestor::span/following-sibling::span/span[contains(@class, 'sorting-box__arrow--top')]")
     private  WebElement ascendingArrowOfEndDateColumn;
 
     public TicketRow getTicketByUserName(String userName){
@@ -72,7 +72,7 @@ public class TicketsTable extends AbstractUIElement {
 
     public List<LocalDateTime> getTicketsStartDates() {
         List<LocalDateTime> startDates = tickets.stream().map(e -> new TicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
-                .stream().map(a -> a.getStartDate()).collect(Collectors.toList());
+                .stream().map(a -> a.getOpenDate()).collect(Collectors.toList());
         scrollTicketsToTheTop();
         return startDates;
     }
@@ -101,8 +101,8 @@ public class TicketsTable extends AbstractUIElement {
         waitForAppearAndDisappear(this.getCurrentDriver(), loadingMoreTickets, waitForSpinnerToAppear, waitForSpinnerToDisappear);
     }
 
-    public LocalDateTime getFirstTicketStartDates() {
-        return new TicketRow(tickets.get(0)).setCurrentDriver(this.getCurrentDriver()).getStartDate();
+    public LocalDateTime getFirstTicketOpenDates() {
+        return new TicketRow(tickets.get(0)).setCurrentDriver(this.getCurrentDriver()).getOpenDate();
     }
 
     public LocalDateTime getFirstTicketEndDates() {

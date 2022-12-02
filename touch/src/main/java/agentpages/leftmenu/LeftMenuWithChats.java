@@ -58,31 +58,19 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(xpath = "//input[contains(@class, 'checkbox__input')]")
     private WebElement bulkChatCheckbox;
 
-    @FindBy(css = ".agent-view-bulk-mode-main--header")
-    private WebElement bulkChatMiddlePaneMessage;
+    @FindBy(css = ".cl-checkbox")
+    private WebElement flaggedCheckbox;
 
-    @FindAll({
-            @FindBy(css = "[data-testid='search-filter-btn']"),
-            @FindBy(css = "[selenium-id='search-filter-btn']") //toDo old locator
-    })
+    @FindBy(css = "[data-testid='search-filter-btn']")
     private WebElement searchButton;
 
-    @FindAll({
-            @FindBy(css = "[data-testid='search-filter-input']"),
-            @FindBy(css = "[selenium-id='search-filter-input']")//toDo old locator
-    })
+    @FindBy(css = "[data-testid='search-filter-input']")
     private WebElement searchChatInput;
 
-    @FindAll({
-            @FindBy(css = "[data-testid=icon-user-single]"),
-            @FindBy(css = "[selenium-id=icon-user-single]") //toDo old locator
-    })
+    @FindBy(css = "[data-testid=icon-user-single]")
     private WebElement userPicture;
 
-    @FindAll({
-            @FindBy(css = "[data-testid=unread-msg-count]"),
-            @FindBy(css = "[selenium-id=unread-msg-count]") //toDo old locator
-    })
+    @FindBy(css = "[data-testid=unread-msg-count]")
     private WebElement userMsgCount;
 
     @FindAll({
@@ -182,7 +170,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     public boolean bulkPanelElementsClickWithoutScroll(int bulkCheckedChats) {
         waitFor(1500);
-        waitForElementToBeVisible(this.getCurrentDriver(), bulkPanelChatItems.get(0), 5);
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), bulkPanelChatItems, 5);
         for (WebElement webElement : bulkPanelChatItems) {
             if (!getAttributeFromElem(this.getCurrentDriver(), webElement, 5, "Bulk panel", "class").contains("disabled")) {
                 webElement.findElement(By.tagName("span")).click();
@@ -201,7 +189,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
         scrollLeftPane();
         wheelScroll(this.getCurrentDriver(), chatsScrollBar, -5500, 0, 0);
         waitFor(2500);
-        waitForElementsToBeVisible(this.getCurrentDriver(), bulkPanelChatItems, 5);
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), bulkPanelChatItems, 5);
 
         for (WebElement webElement : bulkPanelChatItems) {
                 scrollToElem(this.getCurrentDriver(), webElement, "Bulk panel checkbox");

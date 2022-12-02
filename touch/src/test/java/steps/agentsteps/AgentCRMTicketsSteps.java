@@ -389,9 +389,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
 
     @Then("^(.*) select precreated tag$")
     public void agentAddSelectedTag(String agent) {
-        getAgentHomePage(agent).getAgentFeedbackWindow().typeTags(BasePortalSteps.tagname);
-        getAgentFeedbackWindow(agent).typeTags(BasePortalSteps.tagname);
-        getAgentFeedbackWindow(agent).selectTagInSearch().closeDropdown();
+        getAgentFeedbackWindow(agent).selectTag(BasePortalSteps.tagname);
     }
 
     @Then("^(.*) select tag by name (.*)$")

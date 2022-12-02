@@ -17,11 +17,12 @@ Feature: Supervisor desk
     And Agent click on the arrow of Chat Ended
     Then Verify first closed chat date are fitted by filter
     And Agent select "Tickets" left menu option
-    And Admin filter by 0 year 0 month and 90 days ago start date and 0 year 0 month and 3 days ago end date
+    And Agent select Closed filter on Left Panel
+    And Admin filter by 0 year 0 month and 90 days ago start date and 0 year 0 month and 0 days ago end date
     Then Verify first closed ticket date are fitted by filter
     And Agent click on the arrow of Ticket End Date
     Then Verify first closed ticket date are fitted by filter
-    And Admin filter by 0 year 1 month and 0 days ago start date and 0 year 0 month and 3 days ago end date
+    And Admin filter by 0 year 1 month and 0 days ago start date and 0 year 0 month and 0 days ago end date
     Then Verify first closed ticket date are fitted by filter
     And Agent click on the arrow of Ticket End Date
     Then Verify first closed ticket date are fitted by filter

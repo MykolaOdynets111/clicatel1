@@ -1,12 +1,17 @@
 package agentpages.tickets;
 
-import abstractclasses.AbstractUIElement;
+import org.openqa.selenium.WebDriver;
+import portalpages.PortalAbstractPage;
 
-public class TicketsPage extends AbstractUIElement {
+public class TicketsPage extends PortalAbstractPage {
 
     private TicketsTable ticketsTable;
     private TicketClosedChatView supervisorTicketChatView;
     private MessageCustomerWindow messageCustomerWindow;
+
+    public TicketsPage(WebDriver driver) {
+        super(driver);
+    }
 
     public TicketsTable getTicketsTable(){
         ticketsTable.setCurrentDriver(this.getCurrentDriver());
@@ -22,6 +27,5 @@ public class TicketsPage extends AbstractUIElement {
         messageCustomerWindow.setCurrentDriver(this.getCurrentDriver());
         return messageCustomerWindow;
     }
-
 
 }

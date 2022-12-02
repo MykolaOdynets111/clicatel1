@@ -47,7 +47,7 @@ public class AutoResponderItem extends AbstractWidget {
     }
 
     public void clickResetToDefaultButton(){
-        clickElem(this.getCurrentDriver(), resetToDefaultButton, 1,"Reset to default button");
+        clickElem(this.getCurrentDriver(), resetToDefaultButton, 4,"Reset to default button");
     }
     public void  InputText(String message){
         clickElem(this.getCurrentDriver(), textArea, 1,"Remove text");

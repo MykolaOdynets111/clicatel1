@@ -4,6 +4,7 @@ import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.AutoResponderMessage;
+import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import interfaces.JSHelper;
@@ -11,10 +12,9 @@ import interfaces.WebActions;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import socialaccounts.TwitterUsers;
-import dbmanager.DBConnector;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
+import socialaccounts.TwitterUsers;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -41,14 +41,13 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
     @Given("^Taf (.*) message text is updated for (.*) tenant$")
     public void updateTafMessageText(String autoResponderMessageId, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        AutoResponderMessage autoResponderMessageUpdates = ApiHelper.getAutoResponderMessage(autoResponderMessageId);;
+        AutoResponderMessage autoResponderMessageUpdates = ApiHelper.getAutoResponderMessage(autoResponderMessageId);
         updatedMessage.set(generateNewMessageText(autoResponderMessageId));
         autoResponderMessageUpdates.setText(updatedMessage.get());
         ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates);
-        AutoResponderMessage tafMessageBackend = ApiHelper.getAutoResponderMessage(autoResponderMessageId);;
+        AutoResponderMessage tafMessageBackend = ApiHelper.getAutoResponderMessage(autoResponderMessageId);
         Assert.assertEquals(tafMessageBackend.getText(), autoResponderMessageUpdates.getText(),
                 "Message text is not updated for tenant");
-
     }
 
     @When("^Changes user id$")

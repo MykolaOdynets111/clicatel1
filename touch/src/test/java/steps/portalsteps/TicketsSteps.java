@@ -27,7 +27,7 @@ public class TicketsSteps extends AbstractPortalSteps{
     private List<String> shownUsers = new ArrayList<>();
 
     private TicketsTable getTicketsTable(String agent){
-        return getTicketsPage("main").getTicketsTable();
+        return getTicketsPage(agent).getTicketsTable();
     }
 
     @Then("^Message Customer Window is opened$")
@@ -178,7 +178,7 @@ public class TicketsSteps extends AbstractPortalSteps{
     public void verifyFirstClosedTicketDateAreFittedByFilter() {
         LocalDate startDate = getSupervisorAndTicketsHeader("main").getStartDateFilterValue();
         LocalDate endDate = getSupervisorAndTicketsHeader("main").getEndDateFilterValue();
-        LocalDateTime firstTicketStartDate = getTicketsTable("main").getFirstTicketStartDates();
+        LocalDateTime firstTicketStartDate = getTicketsTable("main").getFirstTicketOpenDates();
         LocalDateTime firstTicketEndDate = getTicketsTable("main").getFirstTicketEndDates();
         verifyDateTimeIsInRangeOfTwoDates(firstTicketStartDate, startDate, endDate);
         verifyDateTimeIsInRangeOfTwoDates(firstTicketEndDate, startDate, endDate);

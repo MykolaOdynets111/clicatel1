@@ -4,11 +4,13 @@ import agentpages.AgentHomePage;
 import agentpages.AgentLoginPage;
 import agentpages.commonelements.SupervisorAndTicketsHeader;
 import agentpages.leftmenu.LeftMenuWithChats;
+import agentpages.supervisor.SupervisorDeskPage;
 import agentpages.tickets.TicketsPage;
 import agentpages.uielements.*;
 import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
 import datamanager.jacksonschemas.dotcontrol.DotControlInitRequest;
+import driverfactory.DriverFactory;
 import steps.dotcontrol.DotControlSteps;
 import steps.portalsteps.AbstractPortalSteps;
 
@@ -25,6 +27,8 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
     private static final ThreadLocal<AgentHomePage> mainAgentHomePage = new ThreadLocal<>();
 
     private static final ThreadLocal<AgentHomePage> secondAgentHomePage = new ThreadLocal<>();
+
+    private static final ThreadLocal<TicketsPage> ticketsPage = new ThreadLocal<>();
 
     public static Faker faker = new Faker();
 
@@ -95,7 +99,12 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
     }
 
     public static TicketsPage getTicketsPage(String agent){
-        return getAgentHomePage(agent).getTicketsPage();
+        if (ticketsPage.get() == null) {
+            ticketsPage.set(new TicketsPage(DriverFactory.getDriverForAgent(agent)));
+            return ticketsPage.get();
+        } else {
+            return ticketsPage.get();
+        }
     }
 
     public static SupervisorAndTicketsHeader getSupervisorAndTicketsHeader(String agent){

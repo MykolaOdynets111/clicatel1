@@ -322,19 +322,9 @@ public class LeftMenuSteps extends AbstractAgentSteps {
         Assert.assertEquals(getLeftMenu("main").getSupervisorAndTicketsPart().getFilterNames(), ticketTypes, "Ticket types are different");
     }
 
-    @When("^User select (.*) ticket type$")
-    public void selectTicketType(String type) {
-        getLeftMenu("main").getSupervisorAndTicketsPart().selectTicketType(type);
-    }
-
-    @And("^Supervisor clicks on chats filter for (.*) Agent$")
-    public void clickOnChatsFilterFromAgent(String Agent){
-        getLeftMenu("main").getSupervisorAndTicketsPart().selectTicketType(Agent);
-    }
-
-    @When("^(.*) filter is selected$")
-    public void filterIsSelected(String filterName) {
-        getLeftMenu("main").getSupervisorAndTicketsPart().clickFilterType(filterName);
+    @When("^(.*) select (.*) filter on Left Panel$")
+    public void selectTicketType(String agent, String type) {
+        getLeftMenu(agent).getSupervisorAndTicketsPart().selectFilter(type);
     }
 
     @Then("^Live chats (.*) filter has correct name and correct chats number$")
@@ -347,7 +337,7 @@ public class LeftMenuSteps extends AbstractAgentSteps {
 
     @When("Verify {string} display as default")
     public void verifyDisplayDefault(String liveChats) {
-        Assert.assertEquals(getLeftMenu("main").getSupervisorAndTicketsPart().verifyChatGroup(),liveChats,"All chats text is not selected default");
+        Assert.assertEquals(getLeftMenu("main").getSupervisorAndTicketsPart().getFirstFilterName(),liveChats,"All chats text is not selected default");
     }
 
     @Then("Verify that live chats available are shown")

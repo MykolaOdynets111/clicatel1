@@ -4,7 +4,6 @@ import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Assert;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,13 +15,7 @@ public class SupervisorAndTicketsPart extends AbstractUIElement {
     private WebElement defaultFilter;
 
     @FindBy(css = ".cl-chats-group-item__name")
-    private List<WebElement> ticketsFilterNames;
-
-    @FindBy(css = ".cl-chats-group-item__inner")
-    private List<WebElement> liveChatsFilters;
-
-    @FindBy(css = ".cl-chats-group-item__name")
-    private  WebElement allChats;
+    private List<WebElement> filters;
 
     @FindBy(xpath="//div[@class='chats-list live-chats-list']")
     private  WebElement liveChatsInfo;
@@ -33,31 +26,25 @@ public class SupervisorAndTicketsPart extends AbstractUIElement {
     }
 
     public List<String> getFilterNames(){
-        return ticketsFilterNames.stream().map(a-> a.getText().trim()).collect(Collectors.toList());
+        return filters.stream().map(a-> a.getText().trim()).collect(Collectors.toList());
     }
 
-    public void selectTicketType(String type) {
-        ticketsFilterNames.stream().filter(a -> a.getText().trim().equalsIgnoreCase(type)).findFirst()
+    public void selectFilter(String type) {
+        filters.stream().filter(a -> a.getText().trim().equalsIgnoreCase(type)).findFirst()
                 .orElseThrow(() -> new AssertionError("Cannot find " + type + " conversation type filter")).click();
     }
 
-    private WebElement getLiveFilterType(String agentName) {
-        return liveChatsFilters.stream().filter(a -> a.getText().trim().contains(agentName)).findFirst()
+    private WebElement getFilter(String agentName) {
+        return filters.stream().filter(a -> a.getText().trim().contains(agentName)).findFirst()
                 .orElseThrow(() -> new AssertionError("Can't find Live Chats filter for " + agentName ));
     }
 
-    public void clickFilterType(String filterName) {
-        liveChatsFilters.stream().filter(a -> a.getText().trim().contains(filterName)).findFirst()
-                .orElseThrow(() -> new AssertionError("Can't find Live Chats filter for " + filterName ))
-                .click();
-    }
-
     public int getLiveChatsNumberForAgent(String agentName){
-        return Integer.valueOf(getLiveFilterType(agentName).findElement(By.cssSelector(".cl-chats-group-item__count--round")).getText().trim());
+        return Integer.valueOf(getFilter(agentName).findElement(By.cssSelector(".cl-chats-group-item__count--round")).getText().trim());
     }
 
-    public String verifyChatGroup(){
-        return getTextFromElem(this.getCurrentDriver(), allChats, 2,"All Chats");
+    public String getFirstFilterName(){
+        return getTextFromElem(this.getCurrentDriver(), filters.get(0), 2,"All Chats");
     }
 
     public boolean isLiveChatsInfoDisplayed() {

@@ -18,7 +18,7 @@ Feature: ABC ORCA :: Supervisor Desk
   When Click 'Assign manually' button for orca
   Then 'Assign chat' window is opened
   When I assign chat on Agent
-  And User select Assigned ticket type
+  And Agent select Assigned filter on Left Panel
   Then Ticket from orca is present on Assigned filter page
   When Agent select "Apple Business Chat" in Chanel container and click "Apply filters" button
   Then Verify that only "apple-business-chat" tickets chats are shown
@@ -44,7 +44,7 @@ Feature: ABC ORCA :: Supervisor Desk
     And Send live chat message by ORCA
     And I select Touch in left menu and Supervisor Desk in submenu
     And Agent search chat orca on Supervisor desk
-    And All live chats filter is selected
+    And Agent select All live chats filter on Left Panel
     Then Agent click On Live Supervisor Desk chat from ORCA channel
     And I select Touch in left menu and Agent Desk in submenu
     And Agent has new conversation request from ORCA user
@@ -52,6 +52,6 @@ Feature: ABC ORCA :: Supervisor Desk
     And Agent click 'Pending' chat button
     And I select Touch in left menu and Supervisor Desk in submenu
     And Agent search chat orca on Supervisor desk
-    And All live chats filter is selected
+    And Agent select All live chats filter on Left Panel
     And Agent click On Live Supervisor Desk chat from ORCA channel
     Then Verify Chat has pending icon in the Chat List

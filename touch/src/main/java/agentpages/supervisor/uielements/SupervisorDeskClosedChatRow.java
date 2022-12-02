@@ -17,6 +17,10 @@ public class SupervisorDeskClosedChatRow extends AbstractWidget {
     private WebElement chatNameCell;
     @FindBy(css = ".chats-list .cl-table-cell:nth-child(2)>svg")
     private WebElement channelIcon;
+
+    @FindBy(css = ".chats-list .chat-tags-list")
+    private WebElement tagName;
+
     @FindBy(css = "h6.user-details__name")
     private WebElement userName;
 
@@ -55,6 +59,10 @@ public class SupervisorDeskClosedChatRow extends AbstractWidget {
 
     public String getIconName() {
         return channelIcon.getAttribute("name").trim();
+    }
+
+    public String getTagName() {
+        return getTextFromElem(this.getCurrentDriver(), tagName, 2, "Tag Name");
     }
 
     public String getUserName(){

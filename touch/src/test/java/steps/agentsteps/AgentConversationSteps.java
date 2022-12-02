@@ -338,6 +338,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         waitFor(2000);// URL needs time for full creation
                 Assert.assertTrue(getAgentHomePage(agent).getChatBody().getLocationURLFromUser().contains(location),
                         agent+ " didn't get Lviv location");
+        locationURL.set(getAgentHomePage(agent).getChatBody().getLocationURLFromAgent());
     }
 
     @Then("^(.*) can see message with HSM label in Conversation area$")
@@ -363,6 +364,12 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @When("^(.*) clear input and send a new message (.*)$")
     public void clearAndSendAnswerToUser(String agent, String responseToUser) {
         getAgentHomePage(agent).getChatForm().clearAndTypeResponseToUser(responseToUser).clickSendButton();
+    }
+
+    @When("^(.*) clear input and type (.*), check send button gets enabled$")
+    public void checkSendButtonEnabled(String agent, String responseToUser) {
+        getAgentHomePage(agent).getChatForm().clearAndTypeResponseToUser(responseToUser);
+        Assert.assertTrue(getAgentHomePage(agent).getChatForm().isSendButtonEnabled());
     }
 
     @When("^(.*) response with emoticon to User$")
@@ -722,10 +729,10 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         Assert.assertTrue(locationWindow.isSendLocationsButtonInvisible(buttonElementText) == 0, "Send location button is visible");
     }
 
-    @Then("^(.*) can see c2p extension icon$")
-    public void c2PExtensionIsVisible(String agent){
-        Assert.assertTrue(getAgentHomePage(agent).getChatForm().c2pExtensionIconIsVisible(), "C2P Extension Icon is not visible");
-        }
+    @Then("^(.*) (.*) see c2p extension icon$")
+    public void c2PExtensionIsVisible(String agent, String visibility) {
+        Assert.assertTrue(getAgentHomePage(agent).getChatForm().c2pExtensionIconVisibility(visibility), "C2P Extension Icon is not visible");
+    }
 
     @When("^(.*) open c2p form$")
     public void agentOpenC2PForm(String agent){
@@ -802,4 +809,9 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         Assert.assertTrue(getAgentHomePage(agent).getExtensionsForm().frequentExtListSize() < 10, "Frequently used extension is not less than 10");
     }
 
+    @Then("^(.*) checks visual indicator with text (.*) is shown during (.*) seconds$")
+    public void verifyVisualIndicatorText(String agent, String visualIndicatorText, int wait){
+        Assert.assertTrue(getChatBody(agent).isVisualIndicatorTextShown(wait, visualIndicatorText),
+                String.format("Visual Indicator Text '%s' is incorrect",visualIndicatorText));
+    }
 }

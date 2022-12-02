@@ -101,6 +101,22 @@ Feature: Bulk chat left menu actions
     When Agent select "Closed" left menu option
     Then Agent checks all chats from the previous tab should get deselected
 
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-6641")
+  Scenario: CD :: Agent Desk :: Live Chat :: Bulk Messages :: Verify that while selecting bulk messages Agent sees the total number of selected chats in the right-hand panel and revert back to default view once bulk message is sent
+    Given I login as agent of Standard Billing
+    And Setup ORCA whatsapp integration for Standard Billing tenant
+    When Send 2 messages chat to agent by ORCA
+    And Agent has new conversation request from orca user
+    And Agent click on new conversation request from orca
+    And Agent click the bulk message icon
+    Then Agent checks selected chats should be shown in the (0) Live Chats Have Been Selected message on the right pane
+    When Agent checks number of checked bulk checkboxes is 2
+    And Agent sees number of checked checkboxes is 2
+    Then Agent checks selected chats should be shown in the (2) Live Chats Have Been Selected message on the right pane
+    And Agent clear input and type Bulk message, check send button gets enabled
+    When Agent send Hello this is bulk message message
+    Then Agent checks all chats from the previous tab should get deselected
+
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6643")
   Scenario: CD :: Agent Desk :: Live Chat :: Bulk Messages :: Verify that the maximum chat selected for bulk messages is 15, post that remaining chats checkboxes gets disabled
     Given I login as agent of Standard Billing
@@ -149,3 +165,35 @@ Feature: Bulk chat left menu actions
     And Agent send Hello this is bulk message message
     And Agent click on new conversation request from orca
     Then Conversation area contains Hello this is bulk message to user message
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-5714")
+  @start_orca_server
+  Scenario: CD :: Agent Desk :: Verify that if Agent is able to see the sent bulk message as a part of chat in the chat window
+    Given I login as agent of Standard Billing
+    And Setup ORCA whatsapp integration for Standard Billing tenant
+    When Send connect to Support message by ORCA
+    And Agent has new conversation request from orca user
+    And Agent click on new conversation request from orca
+    And Agent click the bulk message icon
+    And Agent checks number of checked bulk checkboxes is 1
+    And Agent send Hello this is bulk message message
+    And Agent click on new conversation request from orca
+    Then Conversation area contains Hello this is bulk message to user message
+    When Send //end message by ORCA
+    And Agent should not see from user chat in agent desk from orca
+    And Agent select "Closed" left menu option
+    And Agent has new conversation request from orca user
+    And Agent click on new conversation request from orca
+    Then Conversation area contains Hello this is bulk message to user message
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-6017")
+  Scenario: CD :: Agent Desk :: Live Chat :: Bulk Messages :: Verify that selecting Bulk Messages icon result into showing Checkboxes
+    Given I login as agent of Standard Billing
+    And Setup ORCA whatsapp integration for Standard Billing tenant
+    When Send 1 messages chat to agent by ORCA
+    And Agent has new conversation request from orca user
+    And Agent click on new conversation request from orca
+    And Conversation area becomes active with chat to agent user's message in it for agent
+    And Agent click the bulk message icon
+    And Agent checks number of checked bulk checkboxes is 1
+    Then Agent checks Bulk Messages section should get displayed on the right side with header Send Bulk Message

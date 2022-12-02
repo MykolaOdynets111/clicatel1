@@ -37,7 +37,6 @@ import socialaccounts.FacebookUsers;
 import socialaccounts.TwitterUsers;
 import steps.CamundaFlowsSteps;
 import steps.agentsteps.AbstractAgentSteps;
-import steps.agentsteps.AgentCRMTicketsSteps;
 import touchpages.pages.MainPage;
 
 import java.util.*;
@@ -766,32 +765,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void agentClickSaveChangesButton() {
         getPortalTouchPreferencesPage().clickSaveButton();
         getPortalTouchPreferencesPage().waitForSaveMessage();
-    }
-
-    @When("^Agent click On/Off button for (.*) auto responder$")
-    public void clickOnOffForAutoResponder(String autoresponder){
-        getPortalTouchPreferencesPage().getAutoRespondersWindow().waitToBeLoaded();
-        getPortalTouchPreferencesPage().getAutoRespondersWindow()
-                .clickOnOffForMessage(autoresponder);
-    }
-
-    @When("^Type new message: (.*) to: (.*) message field$")
-    public void typeNewMessage(String message, String autoresponder){
-        getPortalTouchPreferencesPage().getAutoRespondersWindow().waitToBeLoaded();
-        if (!getPortalTouchPreferencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).isMessageShown()) {
-            getPortalTouchPreferencesPage().getAutoRespondersWindow()
-                    .clickExpandArrowForMessage(autoresponder);
-        }
-        getPortalTouchPreferencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).typeMessage(message + faker.letterify("????")).clickSaveButton();
-        getPortalTouchPreferencesPage().waitWhileProcessing(1, 4);
-    }
-
-    @Then("^(.*) on backend corresponds to (.*) on frontend$")
-    public void messageWasUpdatedOnBackend(String tafMessageId, String messageName) {
-        String messageOnfrontend = getPortalTouchPreferencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(messageName).getMessage();
-        String actualMessage = ApiHelper.getAutoResponderMessageText(tafMessageId);
-        Assert.assertEquals(actualMessage, messageOnfrontend,
-                messageName + " message is not updated on backend");
     }
 
     @Then("^(.*) is reset on backend$")
@@ -1540,7 +1513,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalTouchPreferencesPage().getChatTagsWindow().clickEditTagButton(tagname);
         tagname = faker.artist().name() + faker.numerify("#####");
         getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickSaveButton();
-        AgentCRMTicketsSteps.crmTicketInfoForUpdating.get().put("agentTags",  tagname);
     }
 
     @When("^Click the pencil icon to edit the tag")

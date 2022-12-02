@@ -71,21 +71,28 @@ public class TicketRow extends AbstractWidget {
         return getTextFromElem(this.getCurrentDriver(), currentAgent, 5, "Current agent");
     }
 
-    public LocalDateTime getStartDate(){
-        wheelScrollDownToElement(this.getCurrentDriver(),
-                this.getWrappedElement(), startDate, 3);
+    public LocalDateTime getOpenDate(){
+//        wheelScrollDownToElement(this.getCurrentDriver(),
+//                this.getWrappedElement(), startDate, 3);
         String stringDate = getTextFromElem(this.getCurrentDriver(), startDate, 5, "Date cell").trim();
         return parseDate(stringDate);
     }
 
     public LocalDateTime getEndDate(){
-        wheelScrollDownToElement(this.getCurrentDriver(),
-                this.getWrappedElement(), endDate, 3);
+//        wheelScrollDownToElement(this.getCurrentDriver(),
+//                this.getWrappedElement(), endDate, 3);
         String stringDate = getTextFromElem(this.getCurrentDriver(), endDate, 5, "Date cell").trim();
         return parseDate(stringDate);
     }
 
     private LocalDateTime parseDate(String stringDate){
+
+        if(stringDate.contains("Yesterday")){
+            return LocalDateTime.now().minusDays(1);
+        } else if(stringDate.contains("Today")) {
+            return LocalDateTime.now();
+        }
+
         if (stringDate.contains("am")) {
             stringDate = stringDate.replace("am","AM");
         } else {

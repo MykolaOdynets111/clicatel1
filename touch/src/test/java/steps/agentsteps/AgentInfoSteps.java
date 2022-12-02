@@ -32,6 +32,20 @@ public class AgentInfoSteps extends AbstractAgentSteps {
                 message, "Password reset success message does not match");
     }
 
+    @Then("^(.*) views (.*) agent first name, (.*) last name and (.*) email in Profile Settings$")
+    public void verifyAgentInfoProfileSettings(String agent, String firstName, String lastName, String email) {
+        softAssert.assertEquals(getAgentHomePage(agent).getProfileWindow().getFirstName(),
+                firstName, "First name is incorrect");
+
+        softAssert.assertEquals(getAgentHomePage(agent).getProfileWindow().getLastName(),
+                lastName, "Last name is incorrect");
+
+        softAssert.assertEquals(getAgentHomePage(agent).getProfileWindow().getMail(),
+                email, "Email is incorrect");
+
+        softAssert.assertAll();
+    }
+
     @And("^(.*) should see (.*) icon in active chat header$")
     public void agentShouldSeeAppleChatIconInHeader(String agent, String adapter) {
         assertThat(getAgentHomePage(agent).getChatHeader().getChatIconName())
