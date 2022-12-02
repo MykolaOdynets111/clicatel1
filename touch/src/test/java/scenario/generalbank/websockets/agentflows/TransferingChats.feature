@@ -61,7 +61,6 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
     And Chat from orca channel is present in the Live Chat list
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2738")
-
   @setting_changes
   @orca_api
   Scenario: CD :: Agent Desk :: Live Chat :: Transfer Chat :: Verify if chat transfer is accepted, "Successful transfer" should be shown in roster view
