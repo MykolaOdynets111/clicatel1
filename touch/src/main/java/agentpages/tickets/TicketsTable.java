@@ -20,6 +20,9 @@ public class TicketsTable extends AbstractUIElement {
     @FindBy(xpath = "//button[text() = 'Close']")
     private WebElement closeTicketButton;
 
+    @FindBy(xpath = "//button[@name = 'Close Ticket']")
+    private WebElement closeTicket;
+
     @FindBy(xpath = "//a[text() = 'Open']")
     private WebElement openTicketButton;
 
@@ -55,6 +58,10 @@ public class TicketsTable extends AbstractUIElement {
 
     public void clickCloseButton(String userName){
         getTicketByUserName(userName).clickElem(this.getCurrentDriver(), closeTicketButton, 5, "Close ticket button");
+    }
+
+    public String closeButtonStatus(){
+        return getAttributeFromElem(this.getCurrentDriver(), closeTicket, 5, "Close ticket button", "disabled");
     }
 
     public void clickAssignOpenTicketButton(String userName){

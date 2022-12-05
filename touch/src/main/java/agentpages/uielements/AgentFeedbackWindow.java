@@ -87,7 +87,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     }
 
     public void clickCloseButtonInCloseChatPopup(){
-        scrollAndClickElem(this.getCurrentDriver(), closeChatButton, 5, "Close button");
+        scrollAndClickElem(this.getCurrentDriver(), closeChatButton, 10, "Close button");
     }
 
     public void clickGoToChatButtonInCloseChatPopup(){

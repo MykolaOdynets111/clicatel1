@@ -70,3 +70,17 @@ Feature: HSMTemplate
     And Agent has new conversation request from orca user
     Then Agent click on new conversation request from orca
     Then Agent can see message with HSM label in Conversation area
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-7786")
+  Scenario: CD :: ABC:: Agent Desk :: Closed chats:: Verify when Agent message from the closed chats section then "No icon" is not displayed for ABC chats
+    Given I login as agent of General Bank Demo
+    When Setup ORCA abc integration for General Bank Demo tenant
+    And Send connect to agent message by ORCA
+    And Agent has new conversation request from orca user
+    And Agent click on new conversation request from orca
+    And Conversation area becomes active with connect to agent user's message
+    And Agent closes chat
+    And Agent select "Closed" left menu option
+    And Agent searches and selects chat from orca in chat history list
+    And Agent click start chat button
+    Then Agent checks channel icon abcHSM is displayed in HSM form
