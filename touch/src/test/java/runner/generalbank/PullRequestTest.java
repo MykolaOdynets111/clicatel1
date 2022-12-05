@@ -24,7 +24,6 @@ import static runner.generalbank.Path.PATH;
                 PATH + "CancelTransferingChat.feature",
                 PATH + "TransferBackTransferedChat.feature", // +
                 PATH + "Transfering2Chats.feature", // +
-                PATH + "TransferingChat.feature", // +
                 DOTCONTROL + "DotControlInitCallWithLiveAgent.feature", // +
                 DOTCONTROL + "DotControlMessagingWithAgent.feature", // +
         },
