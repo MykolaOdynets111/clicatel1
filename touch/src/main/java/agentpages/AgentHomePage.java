@@ -103,6 +103,9 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "[role=dialog]")
     private WebElement dialogElement;
 
+    @FindBy(xpath = "//div[@class='chats-list-wrapper chats-list-extended-view']//div")
+    private WebElement noChatsMessage;
+
     private DeleteCRMConfirmationPopup deleteCRMConfirmationPopup;
     private EditCRMTicketWindow editCRMTicketWindow;
     private CRMTicketContainer crmTicketContainer;
@@ -433,5 +436,10 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public void clickDontShowMessageCheckbox(){
         clickElem(this.getCurrentDriver(), notShowDialogCheckbox, 1, "Don't show warning checkbox");
+    }
+
+    public String getNoResultsFoundMessage() {
+        return getTextFromElem(this.getCurrentDriver(), this.noChatsMessage, 8,
+                "No results found text").replace("\n", " ");
     }
 }
