@@ -13,14 +13,14 @@ Feature: Supervisor desk
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     And Agent search chat orca on Supervisor desk
-    Then Ticket from orca is present on All tickets filter page
+    Then Agent see tickets from orca on Unassigned filter page
     And Select orca ticket checkbox
     When Click 'Assign manually' button for orca
     Then 'Assign chat' window is opened
     When I assign chat on second agent
-    And Admin refreshes the page
-    And Agent search chat orca on Supervisor desk
+    And Agent select Assigned filter on Left Panel
     Then GBD Second is the current agent of orca ticket
     And I login as second agent of General Bank Demo
     And Second agent select "Tickets" left menu option
-    Then Second agent has new conversation request from orca user
+    And Second agent select Assigned filter on Left Panel
+    Then Agent see tickets from orca on Assigned filter page

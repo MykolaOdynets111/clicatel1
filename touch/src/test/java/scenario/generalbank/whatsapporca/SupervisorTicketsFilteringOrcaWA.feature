@@ -15,8 +15,9 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     When Send to agent message by ORCA
     And I select Touch in left menu and Supervisor Desk in submenu
     When Agent select "Tickets" left menu option
+    And Agent select Assigned filter on Left Panel
     And Agent search chat orca on Supervisor desk
-    Then Ticket from orca is present on All tickets filter page
+    Then Agent see tickets from orca on Assigned filter page
     When Agent refreshes the page
 #toDo Uncomment when sentiments will be configured for tenant
 #    And Agent filter by "Apple Business Chat" channel and "Positive" sentiment
@@ -51,10 +52,12 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Send 1 messages chat to agent by ORCA
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
+    And Agent select Assigned filter on Left Panel
+
 
     And Agent search chat orca on Supervisor desk
-    Then Ticket from orca is present on All tickets filter page
+    Then Agent see tickets from orca on Assigned filter page
     When Agent closed ticket for orca
 
-    And Agent open Closed type
-    Then Verify ticket is present for orca
+    And Agent select Closed filter on Left Panel
+    Then Agent see tickets from orca on Closed filter page
