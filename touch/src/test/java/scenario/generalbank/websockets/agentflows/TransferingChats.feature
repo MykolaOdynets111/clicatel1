@@ -36,7 +36,7 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
     When Agent transfers chat
     Then Second agent receives incoming transfer with "Incoming Transfer" header
     When Second agent click "Reject transfer" button
-    And Chat from orca channel is present in the Live Chat list
+    And Chat from orca channel is present for Agent
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2738")
   @setting_changes
@@ -76,3 +76,13 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
     When Second Agent click on new conversation request from orca
     Then Conversation area becomes active with connect to Support user's message in it for second agent
     And Second agent responds with hello to User
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2961")
+  @orca_api
+  Scenario: CD :: Agent Desk :: Live Chat :: Transfer chat :: Verify that agent A gets notification, that chat transfer was accepted by Agent B
+
+    And I login as second agent of General Bank Demo
+    When Agent transfers chat
+    Then Second agent receives incoming transfer with "Incoming Transfer" header
+    When Second agent click "Accept transfer" button
+    And Chat from orca channel is present for Second Agent
