@@ -16,7 +16,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And I select Touch in left menu and Supervisor Desk in submenu
     When Agent select "Tickets" left menu option
     And Agent search chat orca on Supervisor desk
-    Then Ticket from orca is present on All tickets filter page
+    Then Agent see tickets from orca on Assigned filter page
     When Agent refreshes the page
 #toDo Uncomment when sentiments will be configured for tenant
 #    And Agent filter by "Apple Business Chat" channel and "Positive" sentiment
@@ -36,8 +36,6 @@ Feature: WhatsApp ORCA :: Supervisor Desk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2801")
   Scenario: CD :: Supervisor Desk :: Tickets :: Verify if tickets are sorted from newest to oldest by default
-    Given I open portal
-    And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     Then Tickets are sorted in descending order
@@ -51,11 +49,8 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     And Agent search chat orca on Supervisor desk
-    And Wait for 2 second
-    #added 2 seconds wait as tickets are taking time to reflect after search and after closing in the mid section
-    Then Ticket from orca is present on All tickets filter page
+    Then Agent see tickets from orca on Assigned filter page
     When Agent closed ticket for orca
-    And Agent open Closed type
     And Wait for 2 second
     Then Verify ticket is present for orca for 2 seconds
     When Admin filter by 0 year 0 month and 1 days ago start date and 0 year 0 month and 0 days ago end date
@@ -69,7 +64,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Send 1 messages chat to agent by ORCA
     When Agent select "Tickets" left menu option
     And Agent search chat orca on Supervisor desk
-    And Ticket from orca is present on All Tickets filter page
+    And Agent see tickets from orca on Unassigned filter page
     And Select orca ticket checkbox
     And Click 'Assign manually' button for orca
     And 'Assign chat' window is opened

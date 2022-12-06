@@ -102,6 +102,21 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "[role=dialog]")
     private WebElement dialogElement;
 
+    @FindBy(xpath = "//div[@class='chats-list-wrapper chats-list-extended-view']//div")
+    private WebElement noChatsMessage;
+
+    @FindBy(css = "#Bell")
+    private WebElement bellNotificationIcon;
+
+    @FindBy(css = ".cl-notifications-counter")
+    private WebElement bellNotificationsCount;
+
+    @FindBy(css = ".cl-agent-notifications-row-message")
+    private WebElement bellNotificationItem;
+
+    @FindBy(css = ".cl-agent-notifications-row-buttons-time")
+    private WebElement bellNotificationTime;
+
     private DeleteCRMConfirmationPopup deleteCRMConfirmationPopup;
     private EditCRMTicketWindow editCRMTicketWindow;
     private CRMTicketContainer crmTicketContainer;
@@ -129,8 +144,6 @@ public class AgentHomePage extends AgentAbstractPage {
     private Extensions extensions;
     private HSMForm hsmForm;
     private SupervisorAndTicketsHeader supervisorAndTicketsHeader;
-
-    private TicketsAgentPage ticketsAgentPage;
 
     public AgentHomePage(String agent) {
         super(agent);
@@ -267,11 +280,6 @@ public class AgentHomePage extends AgentAbstractPage {
         return leftMenuWithChats;
     }
 
-    public TicketsAgentPage getTicketsAgentPage() {
-        ticketsAgentPage.setCurrentDriver(this.getCurrentDriver());
-        return ticketsAgentPage;
-    }
-
     public VerifyPhoneNumberWindow getVerifyPhoneNumberWindow() {
         verifyPhoneNumberWindow.setCurrentDriver(this.getCurrentDriver());
         return verifyPhoneNumberWindow;
@@ -301,6 +309,22 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public String isConnectionErrorShown(){
         return getTextFromElem(this.getCurrentDriver(), connectionErrorImage, 15, "Connection error");
+    }
+
+    public void hoverBellNotificationIcon(){
+        hoverElem(this.getCurrentDriver(), bellNotificationIcon, 5, "Bell icon");
+    }
+
+    public String getNotificationCount(){
+        return getTextFromElem(this.getCurrentDriver(), bellNotificationsCount, 15, "Bell notification icon");
+    }
+
+    public String getNotificationText(){
+        return getTextFromElem(this.getCurrentDriver(), bellNotificationItem, 15, "Bell notification latest item");
+    }
+
+    public String getNotificationTime(){
+        return getTextFromElem(this.getCurrentDriver(), bellNotificationTime, 15, "Bell notification time");
     }
 
     public void endChat() {
@@ -438,5 +462,10 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public void clickDontShowMessageCheckbox(){
         clickElem(this.getCurrentDriver(), notShowDialogCheckbox, 1, "Don't show warning checkbox");
+    }
+
+    public String getNoResultsFoundMessage() {
+        return getTextFromElem(this.getCurrentDriver(), this.noChatsMessage, 8,
+                "No results found text").replace("\n", " ");
     }
 }

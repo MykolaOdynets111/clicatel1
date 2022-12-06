@@ -34,3 +34,11 @@ Feature: Supervisor desk
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Closed" left menu option
     Then Admin checks back button is not visible in calendar for start date filter 91 days ago in supervisor
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-7810")
+  Scenario: CD :: Verify the verbiage of message under unassigned tickets for the tenant
+
+    Given I login as second agent of Standard Billing
+    When Second Agent select "Tickets" left menu option
+    Then Verify  unassigned tickets section is empty
+    And Second Agent can see the message There are no available unassigned tickets in the pool

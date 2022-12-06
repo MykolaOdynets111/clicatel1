@@ -18,11 +18,15 @@ import steps.dotcontrol.DotControlSteps;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static steps.agentsteps.AbstractAgentSteps.*;
+import static steps.agentsteps.AbstractAgentSteps.getSupervisorAndTicketsHeader;
+import static steps.agentsteps.AbstractAgentSteps.getTicketsPage;
 
 public class SupervisorDeskSteps extends AbstractPortalSteps {
 
@@ -38,8 +42,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         }
         ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), tenantChatPreferences);
     }
-
-
 
     @When("^Supervisor send (.*) to agent trough (.*) chanel$")
     public void sendTicketMessageToCustomer(String message, String chanel) {
@@ -164,12 +166,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         }
     }
 
-
-    @Then("^Verify that live chat is displayed with (.*) message to agent$")
-    public void verifyLiveChatPresent(String message) {
-        Assert.assertTrue(getSupervisorDeskPage().openInboxChatBody(DotControlSteps.getClient()).isUserMessageShown(message), "Messages is not the same");
-    }
-
     @Then("^Supervisor can see (.*) live chat with (.*) message to agent$")
     public void verifyLiveChatPresent(String channel, String message) {
         Assert.assertTrue(getSupervisorDeskPage().openInboxChatBody(getUserName(channel)).isUserMessageShown(message), "Messages is not the same");
@@ -197,13 +193,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 "Incorrect agent picture shown");
     }
 
-    @When("^Verify that closed chats have Send email button$")
-    public void verifyButtonForClosedChats() {
-        getSupervisorDeskPage().getSupervisorClosedChatsTable().openFirstClosedChat();
-        Assert.assertTrue(getSupervisorDeskPage().getSupervisorOpenedClosedChatsList().isClosedChatsHaveSendEmailButton(),
-                "Closed chats doesn't have email button");
-    }
-
     @Then("^Verify that closed chats have Message Customer button$")
     public void verifyMessageCustomerButtonForClosedChats() {
         getSupervisorDeskPage().getSupervisorClosedChatsTable().openFirstClosedChat();
@@ -223,9 +212,9 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertTrue(isDateSorted(order, listOfDates), "Closed chats are not sorted in " + order + " order");
     }
 
-    @And("^Chat from (.*) channel is present in the Live Chat list$")
-    public void verifyChatIsPresent(String channel) {
-        boolean channelNamePresent = getSupervisorDeskPage()
+    @And("^Chat from (.*) channel is present for (.*)$")
+    public void verifyChatIsPresent(String channel, String agent) {
+        boolean channelNamePresent = getChatDeskPage(agent)
                 .getSupervisorDeskLiveRow(getUserName(channel))
                 .isChannelNamePresent();
 
@@ -248,18 +237,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 .isClosedChatPresent(getUserName(chanel));
 
         Assert.assertTrue(isClosedChatPresent, "Closed chat should be present");
-    }
-
-    private boolean isDateSorted(String order, List<LocalDateTime> listOfDates) {
-        boolean sortedStatus;
-        if (order.contains("desc")) {
-            sortedStatus = listOfDates.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList()).equals(listOfDates);
-        } else if (order.contains("asc")) {
-            sortedStatus = listOfDates.stream().sorted().collect(Collectors.toList()).equals(listOfDates);
-        } else {
-            throw new AssertionError("Incorrect order type was provided");
-        }
-        return sortedStatus;
     }
 
     @When("^Agent click on the arrow of Chat Ended$")
@@ -328,11 +305,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertTrue(getSupervisorDeskPage().getSupervisorDeskLiveRow(userName).isFlagIconRemoved(),
                 String.format("Chat with user %s is flagged", userName));
     }
+
     @When("^Supervisor agent launch as agent$")
     public void supervisorAgentLaunchAsAgent() {
         getSupervisorDeskPage().clickOnLaunchAgent();
     }
-
     @Then("^Supervisor agent sees confirmation popup with \"(.*)\" message$")
     public void supervisorAgentSeesConfirmationPopupWithAvailableAsAgentMessage(String message) {
         Assert.assertEquals(getSupervisorDeskPage().getSupervisorAvailableAsAgentDialog().getFullMessage(),
@@ -450,6 +427,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertEquals(getSupervisorAndTicketsHeader("main").expandSentiments().getDropdownOptions(), sentiments,
                 "Sentiment dropdown has incorrect options");
     }
+
     private void verifyDateTimeIsInRangeOfTwoDates(LocalDateTime dateTime, LocalDate startDate, LocalDate endDate) {
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(startDate.compareTo(dateTime.toLocalDate()) <= 0,
@@ -459,5 +437,17 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 String.format("One of the chats was ended before filtered value. Expected: before %s, Found: %s",
                         endDate, dateTime));
         softAssert.assertAll();
+    }
+
+    private boolean isDateSorted(String order, List<LocalDateTime> listOfDates) {
+        boolean sortedStatus;
+        if (order.contains("desc")) {
+            sortedStatus = listOfDates.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList()).equals(listOfDates);
+        } else if (order.contains("asc")) {
+            sortedStatus = listOfDates.stream().sorted().collect(Collectors.toList()).equals(listOfDates);
+        } else {
+            throw new AssertionError("Incorrect order type was provided");
+        }
+        return sortedStatus;
     }
 }

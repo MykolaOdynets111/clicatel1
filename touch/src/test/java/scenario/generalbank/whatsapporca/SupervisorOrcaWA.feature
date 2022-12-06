@@ -35,13 +35,13 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Wait for 10 second
     When Agent select "Tickets" left menu option
     And Agent search chat orca on Supervisor desk
-    Then Ticket from orca is present on All tickets filter page
+    Then Agent see tickets from orca on Unassigned filter page
     And Select orca ticket checkbox
     When Click 'Assign manually' button for orca
     Then 'Assign chat' window is opened
     When I assign chat on Agent for Agent dropdown
 
     And Agent select Assigned filter on Left Panel
-    Then Ticket from orca is present on Assigned filter page
+    Then Agent see tickets from orca on Assigned filter page
     When Agent select "WhatsApp" in Chanel container and click "Apply filters" button
     Then Verify that only "whatsapp" tickets chats are shown

@@ -41,6 +41,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     private static UserPersonalInfo userPersonalInfoForUpdating;
     public Profile profile;
+    private static String initialNotificationCount;
 
     @When("Save clientID value for (.*) user")
     public void saveClientIDValues(String userFrom){
@@ -182,10 +183,47 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).clickDontShowMessageCheckbox();
     }
 
+
+    @Then("^Verify (.*) tickets section is empty$")
+    public void verifyTicketsSectionEmpty(String sectionName) {
+        int ticketsCount = getAgentHomeForSecondAgent().getLeftMenuWithChats().getNewChatsCount();
+        assertThat(ticketsCount)
+                .as(format("Some tickets are present in %s section, but mustn't be", sectionName))
+                .isNotPositive();
+    }
+
+    @Then("^(.*) can see the message (.*)$")
+    public void messageIsPResentInHomePage(String agent, String errorMessage) {
+        Assert.assertEquals(getAgentHomePage(agent).getNoResultsFoundMessage(), errorMessage,
+                "Wrong no results found error message found");
+    }
+
     @When("^(.*) changes status to: (.*)$")
     public void changeAgentStatus(String agent, String newStatus){
             getAgentHomePage(agent).getPageHeader().clickIcon();
             getAgentHomePage(agent).getPageHeader().selectStatus(newStatus);
+    }
+
+    @Then("^(.*) checks initial bell notification count$")
+    public void getInitialBellNotificationCount(String agent){
+        initialNotificationCount = getAgentHomePage(agent).getNotificationCount();
+    }
+
+    @Then("^(.*) receive increase in the count of the bell icon notification$")
+    public void verifyIncreasedBellNotificationCount(String agent){
+        String expectedCount = String.valueOf((Integer.parseInt(initialNotificationCount) + 1));
+        Assert.assertEquals(getAgentHomePage(agent).getNotificationCount(), expectedCount,
+                "Bell Notification count has not increased");
+    }
+
+    @Then("^(.*) should see notifications (.*) at time (.*) ago in the notification frame$")
+    public void verifyLatestBellNotification(String agent, String expectedNotificationText, String expectedTime){
+        getAgentHomePage(agent).hoverBellNotificationIcon();
+        softAssert.assertEquals(getAgentHomePage(agent).getNotificationText(), expectedNotificationText,
+                "Latest bell Notification text is not correct");
+        softAssert.assertTrue(getAgentHomePage(agent).getNotificationTime().contains(expectedTime),
+                "Latest bell Notification time is not correct");
+        softAssert.assertAll();
     }
 
     @When("^Verify (.*) status: (.*) is displayed on the icon$")

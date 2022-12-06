@@ -109,16 +109,14 @@ public class TicketsSteps extends AbstractPortalSteps{
     }
 
     @Then("^(.*) is the current agent of (.*) ticket$")
-    public void verifyCurrentAgentOfTicket(String agentName, String userName) {
-        Assert.assertEquals(getTicketsTable("main").getTicketByUserName(userName).getCurrentAgent().substring(3),agentName,
+    public void verifyCurrentAgentOfTicket(String agentName, String chanelName) {
+        Assert.assertEquals(getTicketsTable("main").getTicketByUserName(getUserName(chanelName)).getCurrentAgent().substring(3),agentName,
                 "The current agent of the ticket is not as expected");
     }
 
-    @Then("^Ticket from (.*) is present on (.*) filter page$")
-    public void verifyUnassignedType(String channel, String status) {
-        String userName = getUserName(channel);
-        Assert.assertTrue(getTicketsTable("main").getTicketByUserName(userName).getName().equalsIgnoreCase(userName),
-                "Ticket is not present on the page");
+    @Then("^(.*) see tickets from (.*) on (?:Unassigned|Assigned|Closed) filter page$")
+    public void verifyTicketPresent(String agent, String channel) {
+        getTicketsTable(agent).getTicketByUserName(getUserName(channel));
     }
 
     @Then("^Verify that only (.*) ticket is shown$")
@@ -130,7 +128,7 @@ public class TicketsSteps extends AbstractPortalSteps{
     }
 
     @Then("^Ticket from (.*) is not present on Supervisor Desk$")
-    public void verifyUnassignedType(String channel) {
+    public void verifyTicketPresent(String channel) {
         String userName = getUserName(channel);
         boolean isTicketShown = true;
         try {
@@ -185,10 +183,9 @@ public class TicketsSteps extends AbstractPortalSteps{
             if (!getTicketsTable("main").isTicketPresent(getUserName(chanel)))
                 waitFor(1000);
             else {
-                break;
+                isTicketPresent = true;
             }
         }
-        isTicketPresent = getTicketsTable("main").isTicketPresent(getUserName(chanel));
         Assert.assertTrue(isTicketPresent, "Ticket should be present");
     }
 

@@ -156,7 +156,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     And Agent search chat ORCA on Supervisor desk
-    Then Ticket from orca is present on All tickets filter page
+    Then Agent see tickets from orca on Assigned filter page
     And Select orca ticket checkbox
     When Click 'Route to scheduler' button
     Given I login as agent of General Bank Demo

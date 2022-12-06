@@ -1,8 +1,3 @@
-@support_hours
-@setting_changes
-@dot_control
-@no_widget
-Feature: Supervisor desk
 
   Background:
     Given Create .Control integration for Automation and adapter: fbmsg
