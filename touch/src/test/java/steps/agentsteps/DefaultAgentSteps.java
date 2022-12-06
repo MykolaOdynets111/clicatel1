@@ -97,6 +97,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getHSMForm().clickSendButton();
     }
 
+    @Then("^(.*) checks channel icon (.*) is displayed in HSM form$")
+    public void verifyCorrectHSMChannelIcon(String agent, String image) {
+        Assert.assertTrue(getAgentHomePage(agent).getHSMForm().isValidChannelImg(image),
+                "Icon for channel in Continue HSM form is not as expected");
+    }
+
     @And("^(.*) fill the customer contact number$")
     public void sendWhatsApp(String agent) {
         getAgentHomePage(agent).getHSMForm().setWAPhoneNumber(ORCASteps.orcaMessageCallBody.get().getSourceId());
@@ -174,6 +180,21 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("^(.*) select Don't show this message again checkbox$")
     public void selectDontShowWarningCheckbox(String agent){
         getAgentHomePage(agent).clickDontShowMessageCheckbox();
+    }
+
+
+    @Then("^Verify (.*) tickets section is empty$")
+    public void verifyTicketsSectionEmpty(String sectionName) {
+        int ticketsCount = getAgentHomeForSecondAgent().getLeftMenuWithChats().getNewChatsCount();
+        assertThat(ticketsCount)
+                .as(format("Some tickets are present in %s section, but mustn't be", sectionName))
+                .isNotPositive();
+    }
+
+    @Then("^(.*) can see the message (.*)$")
+    public void messageIsPResentInHomePage(String agent, String errorMessage) {
+        Assert.assertEquals(getAgentHomePage(agent).getNoResultsFoundMessage(), errorMessage,
+                "Wrong no results found error message found");
     }
 
     @When("^(.*) changes status to: (.*)$")

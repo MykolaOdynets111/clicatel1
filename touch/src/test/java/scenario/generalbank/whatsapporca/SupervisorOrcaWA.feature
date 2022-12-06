@@ -35,7 +35,6 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Wait for 10 second
     When Agent select "Tickets" left menu option
     And Agent search chat orca on Supervisor desk
-    And Agent select Assigned filter on Left Panel
     Then Agent see tickets from orca on Unassigned filter page
     And Select orca ticket checkbox
     When Click 'Assign manually' button for orca

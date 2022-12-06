@@ -155,7 +155,6 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
-    And Agent select Assigned filter on Left Panel
     And Agent search chat ORCA on Supervisor desk
     Then Agent see tickets from orca on Assigned filter page
     And Select orca ticket checkbox

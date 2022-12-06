@@ -2,33 +2,18 @@
 @Regression
 Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2295")
-  @setting_changes
-  @orca_api
-  Scenario: CD :: Chat Desk :: Live Chat :: Chat Transfer :: Verify the agent with max available chats is not displayed in transfer pop-up
-
-    Given Setup ORCA Whatsapp integration for General Bank Demo tenant
-    And maxChatsPerAgent tenant feature is set to 1 for General Bank Demo
-    When I login as second agent of General Bank Demo
-    And Send 1 messages chat to agent by ORCA
-    When Second agent click on new conversation request from orca
-    When Second agent click on 'Transfer' chat
-    Then Transfer chat pop up appears for Second agent
-    When Second agent open 'Transfer to' drop down
-    Then Second agent should not see first agent in a transfer pop-up agents dropdown
-    And Close Transferring window for Second agent
+  Background:
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    And I login as agent of General Bank Demo
+    When Send connect to Support message by ORCA
+    Then Agent has new conversation request
+    When Agent click on new conversation request from orca
+    Then Conversation area becomes active with connect to Support user's message
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2913")
   @setting_changes
   @orca_api
   Scenario: CD :: Agent Desk :: Live Chat :: Transfer Chat :: Verify that agent is able to transfer chat to other available Agents
-
-    Given Setup ORCA whatsapp integration for General Bank Demo tenant
-    Given I login as agent of General Bank Demo
-    When Send connect to Support message by ORCA
-    Then Agent has new conversation request
-    When Agent click on new conversation request from orca
-    Then Conversation area becomes active with connect to Support user's message
 
     Given I login as second agent of General Bank Demo
     When Agent click on 'Transfer' chat
@@ -47,30 +32,16 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
   @orca_api
   Scenario: CD :: Agent Desk :: Live Chat :: Transfer Chat :: Verify if transfer were rejected, "Transfer rejected" should be shown in roster view
 
-    Given Setup ORCA whatsapp integration for General Bank Demo tenant
-    Given I login as agent of General Bank Demo
-    When Send connect to Support message by ORCA
-    Then Agent has new conversation request
-    When Agent click on new conversation request from orca
-    Then Conversation area becomes active with connect to Support user's message
-
     Given I login as second agent of General Bank Demo
     When Agent transfers chat
     Then Second agent receives incoming transfer with "Incoming Transfer" header
     When Second agent click "Reject transfer" button
-    And Chat from orca channel is present in the Live Chat list
+    And Chat from orca channel is present for Agent
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2738")
   @setting_changes
   @orca_api
   Scenario: CD :: Agent Desk :: Live Chat :: Transfer Chat :: Verify if chat transfer is accepted, "Successful transfer" should be shown in roster view
-
-    Given Setup ORCA whatsapp integration for General Bank Demo tenant
-    Given I login as agent of General Bank Demo
-    When Send connect to Support message by ORCA
-    Then Agent has new conversation request
-    When Agent click on new conversation request from orca
-    Then Conversation area becomes active with connect to Support user's message
 
     Given I login as second agent of General Bank Demo
     When Agent transfers chat
@@ -81,12 +52,7 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1271")
   @orca_api
   Scenario: CD :: Agent Desk :: Live Chat :: Profile :: Verify that Agent2 can view edited User profile without refresh
-    Given Setup ORCA whatsapp integration for General Bank Demo tenant
-    And I login as agent of General Bank Demo
-    When Send connect to Support message by ORCA
-    And Agent has new conversation request
-    And Agent click on new conversation request from orca
-    And Conversation area becomes active with connect to Support user's message
+
     And I login as second agent of General Bank Demo
     And Agent invites GBD Second to conversation via internal comments
     And Agent edits User Profile with location Canada and clicks Save
@@ -94,3 +60,29 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
     And Second Agent has new conversation request
     And Second Agent click on new conversation request from orca
     Then Second Agent views User profile with no name Canada location no email without refreshing Agent Desk
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2662")
+  Scenario: CD :: Agent Desk :: Live Chat :: Transfer Chat :: Verify if agent is able to transfer chat via "Transfer chat" button
+
+    Given I login as second agent of General Bank Demo
+    When Agent transfers chat
+    Then Second agent receives incoming transfer with "Incoming Transfer" header
+    And Second agent receives incoming transfer with "Please take care of this one" note from the another agent
+    And Second agent can see transferring agent name, orca and following user's message: 'connect to Support'
+    When Second agent click "Accept transfer" button
+    Then Second agent has new conversation request
+
+    And Chat from orca channel is absent in chats list
+    When Second Agent click on new conversation request from orca
+    Then Conversation area becomes active with connect to Support user's message in it for second agent
+    And Second agent responds with hello to User
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2961")
+  @orca_api
+  Scenario: CD :: Agent Desk :: Live Chat :: Transfer chat :: Verify that agent A gets notification, that chat transfer was accepted by Agent B
+
+    And I login as second agent of General Bank Demo
+    When Agent transfers chat
+    Then Second agent receives incoming transfer with "Incoming Transfer" header
+    When Second agent click "Accept transfer" button
+    And Chat from orca channel is present for Second Agent
