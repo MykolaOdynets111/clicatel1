@@ -182,6 +182,21 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).clickDontShowMessageCheckbox();
     }
 
+
+    @Then("^Verify (.*) tickets section is empty$")
+    public void verifyTicketsSectionEmpty(String sectionName) {
+        int ticketsCount = getAgentHomeForSecondAgent().getLeftMenuWithChats().getNewChatsCount();
+        assertThat(ticketsCount)
+                .as(format("Some tickets are present in %s section, but mustn't be", sectionName))
+                .isNotPositive();
+    }
+
+    @Then("^(.*) can see the message (.*)$")
+    public void messageIsPResentInHomePage(String agent, String errorMessage) {
+        Assert.assertEquals(getAgentHomePage(agent).getNoResultsFoundMessage(), errorMessage,
+                "Wrong no results found error message found");
+    }
+
     @When("^(.*) changes status to: (.*)$")
     public void changeAgentStatus(String agent, String newStatus){
             getAgentHomePage(agent).getPageHeader().clickIcon();
