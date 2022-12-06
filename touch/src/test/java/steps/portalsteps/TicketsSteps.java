@@ -98,24 +98,14 @@ public class TicketsSteps extends AbstractPortalSteps{
     }
 
     @Then("^(.*) is the current agent of (.*) ticket$")
-    public void verifyCurrentAgentOfTicket(String agentName, String userName) {
-        Assert.assertEquals(getTicketsTable("main").getTicketByUserName(userName).getCurrentAgent().substring(3),agentName,
+    public void verifyCurrentAgentOfTicket(String agentName, String chanelName) {
+        Assert.assertEquals(getTicketsTable("main").getTicketByUserName(getUserName(chanelName)).getCurrentAgent().substring(3),agentName,
                 "The current agent of the ticket is not as expected");
     }
 
-    @Then("^Ticket from (.*) is present on (.*) filter page$")
-    public void verifyUnassignedType(String channel, String status) {
-        String userName = getUserName(channel);
-        if (status.equalsIgnoreCase("Unassigned")) {
-            Assert.assertTrue(getTicketsTable("main").getTicketByUserName(userName).getCurrentAgent().substring(3).equalsIgnoreCase("No current Agent"),
-                    "Unassigned ticket should be present");
-        } else if (status.equalsIgnoreCase("Assigned") || status.equalsIgnoreCase("Expired")) {
-            String actualUserName = getTicketsTable("main").getUsersNames().get(0);
-            Assert.assertTrue(actualUserName.equals(userName),
-                    "Ticket should be present on " + status + " filter page");
-        } else if (status.equalsIgnoreCase("All tickets")) {
-            getTicketsTable("main").getTicketByUserName(userName);
-        }
+    @Then("^(.*) see tickets from (.*) on (?:Unassigned|Assigned|Closed) filter page$")
+    public void verifyTicketPresent(String agent, String channel) {
+        getTicketsTable(agent).getTicketByUserName(getUserName(channel));
     }
 
     @Then("^Verify that only (.*) ticket is shown$")
@@ -127,7 +117,7 @@ public class TicketsSteps extends AbstractPortalSteps{
     }
 
     @Then("^Ticket from (.*) is not present on Supervisor Desk$")
-    public void verifyUnassignedType(String channel) {
+    public void verifyTicketPresent(String channel) {
         String userName = getUserName(channel);
         boolean isTicketShown = true;
         try {
@@ -174,6 +164,7 @@ public class TicketsSteps extends AbstractPortalSteps{
         Assert.assertTrue(isDateSorted(order, listOfDates), "Tickets are not sorted in " + order + " order");
     }
 
+
     @Then("^Verify ticket is present for (.*) for (.*) seconds$")
     public void verifyTicketIsPresent(String chanel, int wait) {
         boolean isTicketPresent = false;
@@ -182,12 +173,12 @@ public class TicketsSteps extends AbstractPortalSteps{
             if (!getTicketsTable("main").isTicketPresent(getUserName(chanel)))
                 waitFor(1000);
             else {
-                break;
+                isTicketPresent = true;
             }
         }
-        isTicketPresent = getTicketsTable("main").isTicketPresent(getUserName(chanel));
         Assert.assertTrue(isTicketPresent, "Ticket should be present");
     }
+
 
     @Then("^Verify first closed ticket date are fitted by filter$")
     public void verifyFirstClosedTicketDateAreFittedByFilter() {
