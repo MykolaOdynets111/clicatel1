@@ -20,6 +20,9 @@ public class TicketsTable extends AbstractUIElement {
     @FindBy(xpath = "//button[text() = 'Close']")
     private WebElement closeTicketButton;
 
+    @FindBy(xpath = "//button[text() = 'Accept']")
+    private WebElement acceptTicketButton;
+
     @FindBy(xpath = "//button[@name = 'Close Ticket']")
     private WebElement closeTicket;
 
@@ -58,6 +61,10 @@ public class TicketsTable extends AbstractUIElement {
 
     public void clickCloseButton(String userName){
         getTicketByUserName(userName).clickElem(this.getCurrentDriver(), closeTicketButton, 5, "Close ticket button");
+    }
+
+    public void clickAcceptButton(String userName){
+        getTicketByUserName(userName).clickElem(this.getCurrentDriver(), acceptTicketButton, 5, "Accept ticket button");
     }
 
     public String closeButtonStatus(){
@@ -140,5 +147,12 @@ public class TicketsTable extends AbstractUIElement {
                 .setCurrentDriver(this.getCurrentDriver());
         supervisorDeskTicketRow.clickOnUserName();
         supervisorDeskTicketRow.openTicket(1);
+    }
+
+    public void acceptFirstTicket() {
+        TicketRow supervisorDeskTicketRow = new TicketRow(tickets.get(0))
+                .setCurrentDriver(this.getCurrentDriver());
+        supervisorDeskTicketRow.clickOnUserName();
+        supervisorDeskTicketRow.acceptTicket();
     }
 }

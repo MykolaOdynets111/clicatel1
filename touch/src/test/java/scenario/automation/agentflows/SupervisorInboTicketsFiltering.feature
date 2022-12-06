@@ -25,7 +25,7 @@ Feature: Supervisor desk
     And Select dotcontrol ticket checkbox
     When Click 'Assign manually' button for orca
     Then 'Assign chat' window is opened
-    When I assign chat on Agent
+    When I assign chat on Agent for Agent dropdown
     And Agent select Assigned filter on Left Panel
     Then Ticket from dotcontrol is present on Assigned filter page
     And Update ticket with OVERDUE status

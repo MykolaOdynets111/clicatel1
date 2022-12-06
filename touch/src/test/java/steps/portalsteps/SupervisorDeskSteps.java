@@ -138,10 +138,16 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 , "'Assign chat' window is not opened");
     }
 
-    @When("^I assign chat on (.*)$")
-    public void assignChatManually(String agent) {
-        String agentName = getAgentName(agent);
-        getSupervisorDeskPage().assignChatOnAgent(agentName);
+    @When("^I assign chat on (.*) for (.*) dropdown$")
+    public void assignChatManually(String agent, String assignmentType) {
+        String agentName = null;
+        if(assignmentType.equalsIgnoreCase("Agent")) {
+            agentName = getAgentName(agent);
+        }
+        else {
+            agentName = agent;
+        }
+        getSupervisorDeskPage().assignChat(assignmentType, agentName);
     }
 
     @Then("^Verify Chat has pending icon in the Chat (.*)$")

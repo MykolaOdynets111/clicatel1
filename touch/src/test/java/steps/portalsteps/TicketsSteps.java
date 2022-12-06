@@ -74,6 +74,12 @@ public class TicketsSteps extends AbstractPortalSteps{
         }
     }
 
+    @When("^(.*) accept ticket for (.*)$")
+    public void clickAcceptButtonFor(String chanel) {
+        getTicketsTable("main")
+                .clickAcceptButton(getUserName(chanel));
+    }
+
     @When("^(.*) checks closed ticket is disabled$")
     public void checkCloseButtonStatus(String agent) {
         Assert.assertTrue(Boolean.parseBoolean(getTicketsTable(agent).closeButtonStatus()), "Close ticket button is enabled");
@@ -84,6 +90,11 @@ public class TicketsSteps extends AbstractPortalSteps{
         getTicketsTable("main").openFirstTicket();
     }
 
+    @When("^(.*) accepts (.*) unassigned tickets$")
+    public void acceptTickets(String agent, String numberOfTickets) {
+        getTicketsPage(agent).getTicketsQuickActionBar().inputNumberOfTicketsForAccept(numberOfTickets);
+        getTicketsPage(agent).getTicketsQuickActionBar().clickAcceptButtonInHeader();
+    }
 
     @Then("^Verify that only \"(.*)\" tickets chats are shown$")
     public void verifyTicketsChatsChannelsFilter(String channelName) {
@@ -106,16 +117,8 @@ public class TicketsSteps extends AbstractPortalSteps{
     @Then("^Ticket from (.*) is present on (.*) filter page$")
     public void verifyUnassignedType(String channel, String status) {
         String userName = getUserName(channel);
-        if (status.equalsIgnoreCase("Unassigned")) {
-            Assert.assertTrue(getTicketsTable("main").getTicketByUserName(userName).getCurrentAgent().substring(3).equalsIgnoreCase("No current Agent"),
-                    "Unassigned ticket should be present");
-        } else if (status.equalsIgnoreCase("Assigned") || status.equalsIgnoreCase("Expired")) {
-            String actualUserName = getTicketsTable("main").getUsersNames().get(0);
-            Assert.assertTrue(actualUserName.equals(userName),
-                    "Ticket should be present on " + status + " filter page");
-        } else if (status.equalsIgnoreCase("All tickets")) {
-            getTicketsTable("main").getTicketByUserName(userName);
-        }
+        Assert.assertTrue(getTicketsTable("main").getTicketByUserName(userName).getName().equalsIgnoreCase(userName),
+                "Ticket is not present on the page");
     }
 
     @Then("^Verify that only (.*) ticket is shown$")
@@ -225,5 +228,27 @@ public class TicketsSteps extends AbstractPortalSteps{
             throw new AssertionError("Incorrect order type was provided");
         }
         return sortedStatus;
+    }
+
+    @Then("^(.*) checks quick & custom assign options on the page are (.*)$")
+    public void verifyQuickActionsBarTicket(String agent, String quickBarVisibility) {
+        Assert.assertTrue(getTicketsPage(agent).quickActionBarVisibility(quickBarVisibility),
+                "Visibility of quick action bar is incorrect or incorrect visibility check done");
+    }
+
+    @Then("^(.*) checks ticket assigned toast message on the page appears and disappears$")
+    public void verifyTicketAssignedToastMessage(String agent) {
+        getTicketsPage(agent).toastMessageVisibility();
+    }
+
+    @Then("^(.*) hover over question info button and see (.*) message$")
+    public void quickActionToolTipMessage(String agent, String toolTipMessage) {
+        getTicketsPage(agent).getTicketsQuickActionBar().hoverQuickActionBar();
+        Assert.assertEquals(getTicketsPage(agent).getQuickActionToolTipText(),toolTipMessage,"Quick Action hover message is wrong");
+    }
+
+    @Then("^(.*) sees toast message with (.*) text")
+    public void verifyToastMessage(String agent, String toastMessageText) {
+        Assert.assertEquals(getTicketsPage(agent).getToastMessageText(),toastMessageText,"Toast message is wrong");
     }
 }

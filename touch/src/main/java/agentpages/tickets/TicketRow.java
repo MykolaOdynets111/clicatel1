@@ -50,6 +50,9 @@ public class TicketRow extends AbstractWidget {
     @FindBy(xpath = ".//a[contains(text(), 'Open')]")
     private List<WebElement> openBtns;
 
+    @FindBy(xpath = ".//a[contains(text(), 'Open')]")
+    private WebElement acceptButton;
+
     public TicketRow(WebElement element) {
         super(element);
     }
@@ -119,7 +122,11 @@ public class TicketRow extends AbstractWidget {
         return isWebElementEqualsImage(this.getCurrentDriver(), channelImg, image);
     }
 
-    public void openTicket (int ticketNum){
+    public void openTicket(int ticketNum){
         clickElem(this.getCurrentDriver(),openBtns.get(ticketNum-1), 5, "openTicketBtn");
+    }
+
+    public void acceptTicket(){
+        clickElem(this.getCurrentDriver(),acceptButton, 5, "Accept Button");
     }
 }

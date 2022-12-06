@@ -2,10 +2,14 @@
 @Regression
 Feature: Bulk chat left menu actions
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-6288")
-  Scenario: CD :: Agent Desk :: Closed Chat :: Verify that if the bulk checkbox is disabled for the blocked chat ( //stop)
+  Background:
     Given I login as agent of Standard Billing
     And Setup ORCA whatsapp integration for Standard Billing tenant
+    And Update survey management chanel whatsapp settings by ip for Standard Billing
+      | ratingEnabled | false        |
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-6288")
+  Scenario: CD :: Agent Desk :: Closed Chat :: Verify that if the bulk checkbox is disabled for the blocked chat ( //stop)
     When Send connect to Support message by ORCA
     And Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
@@ -18,8 +22,6 @@ Feature: Bulk chat left menu actions
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6286")
   Scenario: CD:: Agent Desk:: : Verify if Agent is able to select only maximum 15 chats while sending the bulk message
-    Given I login as agent of Standard Billing
-    And Setup ORCA whatsapp integration for Standard Billing tenant
     When Send connect to Support message by ORCA
     And Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
@@ -33,8 +35,6 @@ Feature: Bulk chat left menu actions
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6613")
   Scenario: CD :: Agent Desk :: Live Chat :: Bulk Messages :: Verify that notification message pop-up on selecting bulk messages and navigating to another tab using 'Continue' button
-    Given I login as agent of Standard Billing
-    And Setup ORCA whatsapp integration for Standard Billing tenant
     When Send connect to Support message by ORCA
     And Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
@@ -53,8 +53,6 @@ Feature: Bulk chat left menu actions
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6614")
   Scenario: CD :: Agent Desk :: Live Chat :: Bulk Messages :: Verify that clicking on "Wait, I want to stay here" or 'X' means user would stay on the same tab with selected items stay selected
-    Given I login as agent of Standard Billing
-    And Setup ORCA whatsapp integration for Standard Billing tenant
     When Send connect to Support message by ORCA
     And Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
@@ -77,8 +75,6 @@ Feature: Bulk chat left menu actions
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6619")
   Scenario: CD :: Agent Desk :: Live Chat :: Bulk Messages :: Verify that selecting "Don't show this message again" checkbox, didn't show it again while switching to another tab using bulk message
-    Given I login as agent of Standard Billing
-    And Setup ORCA whatsapp integration for Standard Billing tenant
     When Send connect to Support message by ORCA
     And Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
@@ -103,8 +99,6 @@ Feature: Bulk chat left menu actions
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6641")
   Scenario: CD :: Agent Desk :: Live Chat :: Bulk Messages :: Verify that while selecting bulk messages Agent sees the total number of selected chats in the right-hand panel and revert back to default view once bulk message is sent
-    Given I login as agent of Standard Billing
-    And Setup ORCA whatsapp integration for Standard Billing tenant
     When Send 2 messages chat to agent by ORCA
     And Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
@@ -119,8 +113,6 @@ Feature: Bulk chat left menu actions
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6643")
   Scenario: CD :: Agent Desk :: Live Chat :: Bulk Messages :: Verify that the maximum chat selected for bulk messages is 15, post that remaining chats checkboxes gets disabled
-    Given I login as agent of Standard Billing
-    And Setup ORCA whatsapp integration for Standard Billing tenant
     When Send 2 messages chat to agent by ORCA
     And Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
@@ -141,8 +133,6 @@ Feature: Bulk chat left menu actions
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6650")
   Scenario: CD :: Agent Desk :: Live Chat / Closed Chat :: Bulk Messages :: Verify that hovering over Bulk Messages icon displays a tooltip
-    Given I login as agent of Standard Billing
-    And Setup ORCA whatsapp integration for Standard Billing tenant
     When Send 1 messages chat to agent by ORCA
     And Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
@@ -151,8 +141,6 @@ Feature: Bulk chat left menu actions
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6656")
     @start_orca_server
   Scenario: CD :: Agent Desk :: Closed Chat :: Bulk Messages :: Verify that free text message is delivered for the selected closed bulk chat
-    Given I login as agent of Standard Billing
-    And Setup ORCA whatsapp integration for Standard Billing tenant
     When Send connect to Support message by ORCA
     And Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
@@ -169,8 +157,6 @@ Feature: Bulk chat left menu actions
   @TestCaseId("https://jira.clickatell.com/browse/CCD-5714")
   @start_orca_server
   Scenario: CD :: Agent Desk :: Verify that if Agent is able to see the sent bulk message as a part of chat in the chat window
-    Given I login as agent of Standard Billing
-    And Setup ORCA whatsapp integration for Standard Billing tenant
     When Send connect to Support message by ORCA
     And Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
@@ -188,8 +174,6 @@ Feature: Bulk chat left menu actions
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6017")
   Scenario: CD :: Agent Desk :: Live Chat :: Bulk Messages :: Verify that selecting Bulk Messages icon result into showing Checkboxes
-    Given I login as agent of Standard Billing
-    And Setup ORCA whatsapp integration for Standard Billing tenant
     When Send 1 messages chat to agent by ORCA
     And Agent has new conversation request from orca user
     And Agent click on new conversation request from orca

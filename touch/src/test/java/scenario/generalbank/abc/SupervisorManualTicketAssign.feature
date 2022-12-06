@@ -17,7 +17,7 @@ Feature: Supervisor desk
     And Select orca ticket checkbox
     When Click 'Assign manually' button for orca
     Then 'Assign chat' window is opened
-    When I assign chat on second agent
+    When I assign chat on second agent for Agent dropdown
     And Admin refreshes the page
     And Agent search chat orca on Supervisor desk
     Then GBD Second is the current agent of orca ticket

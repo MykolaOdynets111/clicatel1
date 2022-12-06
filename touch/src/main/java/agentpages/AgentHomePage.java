@@ -3,7 +3,6 @@ package agentpages;
 import abstractclasses.AgentAbstractPage;
 import agentpages.commonelements.SupervisorAndTicketsHeader;
 import agentpages.leftmenu.LeftMenuWithChats;
-import agentpages.tickets.TicketsPage;
 import agentpages.uielements.*;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -130,7 +129,8 @@ public class AgentHomePage extends AgentAbstractPage {
     private Extensions extensions;
     private HSMForm hsmForm;
     private SupervisorAndTicketsHeader supervisorAndTicketsHeader;
-    private TicketsPage ticketsPage;
+
+    private TicketsAgentPage ticketsAgentPage;
 
     public AgentHomePage(String agent) {
         super(agent);
@@ -265,6 +265,11 @@ public class AgentHomePage extends AgentAbstractPage {
     public LeftMenuWithChats getLeftMenuWithChats() {
         leftMenuWithChats.setCurrentDriver(this.getCurrentDriver());
         return leftMenuWithChats;
+    }
+
+    public TicketsAgentPage getTicketsAgentPage() {
+        ticketsAgentPage.setCurrentDriver(this.getCurrentDriver());
+        return ticketsAgentPage;
     }
 
     public VerifyPhoneNumberWindow getVerifyPhoneNumberWindow() {
