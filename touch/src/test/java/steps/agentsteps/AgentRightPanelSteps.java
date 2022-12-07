@@ -9,7 +9,7 @@ import steps.ORCASteps;
 
 public class AgentRightPanelSteps extends AbstractAgentSteps implements JSHelper {
 
-    @And("^(.*) adds a note (.*) Jira link (.*) and Ticket Number (.*)$")
+    @And("^(.*) adds a note text (.*) with Jira link (.*) and Ticket Number (.*)$")
     public void addNewNoteAgentRightPanel(String agent, String note, String jiraLink, String ticketNumber){
         getAgentHomePage(agent).getAgentRightPanel().clickOnNotesTab()
                 .clickOnNewNoteButton()
@@ -18,7 +18,7 @@ public class AgentRightPanelSteps extends AbstractAgentSteps implements JSHelper
                 .addTicketNumberToNote(ticketNumber)
                 .clickOnCreateNoteButton();
     }
-    @Then("^(.*) sees note (.*) Jira link (.*) and Ticket Number (.*)$")
+    @Then("^(.*) sees note text (.*) with Jira link (.*) and Ticket Number (.*)$")
     public void verifyNoteDetailsAgentRightPanel(String agent, String note, String jiraLink, String ticketNumber) {
         getAgentHomePage(agent).getAgentRightPanel().clickOnNotesTab();
 

@@ -101,8 +101,8 @@ Feature: Pending chats :: Chatdesk
     Then Agent receives pending message with orca user name
     And Agent select "Pending" left menu option
     And Agent click on new conversation request from orca
-    And Agent adds a note Live Chat Test Note Message Jira link https://livechatdummy.com and Ticket Number 662210
-    Then Agent sees note Live Chat Test Note Message Jira link https://livechatdummy.com/ and Ticket Number 662210
+    And Agent adds a note text Live Chat Test Note Message with Jira link https://livechatdummy.com and Ticket Number 662210
+    Then Agent sees note text Live Chat Test Note Message with Jira link https://livechatdummy.com/ and Ticket Number 662210
     And Agent click 'Pending On' chat button
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1975")

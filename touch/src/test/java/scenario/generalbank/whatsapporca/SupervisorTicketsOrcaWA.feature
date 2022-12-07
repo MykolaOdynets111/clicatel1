@@ -36,8 +36,9 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And I assign chat on Agent for Agent dropdown
     And I select Touch in left menu and Agent Desk in submenu
     And Agent select "Tickets" left menu option
+    And Agent select Assigned filter on Left Panel
     And Agent search chat orca on Supervisor desk
-    Then Agent see tickets from orca on Unassigned filter page
+    Then Agent see tickets from orca on Assigned filter page
     When Supervisor clicks on first ticket
     Then Agent checks closed ticket is disabled
     When Agent send new ticket message message
