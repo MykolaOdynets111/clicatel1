@@ -1,6 +1,9 @@
 package agentpages.supervisor;
 
-import agentpages.supervisor.uielements.*;
+import agentpages.supervisor.uielements.SupervisorAvailableAsAgentDialog;
+import agentpages.supervisor.uielements.SupervisorClosedChatsTable;
+import agentpages.supervisor.uielements.SupervisorDeskLiveRow;
+import agentpages.supervisor.uielements.SupervisorOpenedClosedChatsList;
 import agentpages.uielements.ChatBody;
 import agentpages.uielements.ChatHeader;
 import agentpages.uielements.Profile;
@@ -78,7 +81,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private SupervisorClosedChatsTable supervisorClosedChatsTable;
     private SupervisorOpenedClosedChatsList supervisorOpenedClosedChatsList;
     private RightPanelWindow supervisorRightPanel;
-
     private ChatHeader chatHeader;
     private Profile profile;
     private SupervisorAvailableAsAgentDialog supervisorAvailableAsAgentDialog;

@@ -1,6 +1,7 @@
 @no_widget
 @Regression
-Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
+@orca_api
+Feature: CD :: Chat Desk :: Live Chat :: Chat Transferring
 
   Background:
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -12,7 +13,6 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2913")
   @setting_changes
-  @orca_api
   Scenario: CD :: Agent Desk :: Live Chat :: Transfer Chat :: Verify that agent is able to transfer chat to other available Agents
 
     Given I login as second agent of General Bank Demo
@@ -29,7 +29,6 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2647")
   @setting_changes
-  @orca_api
   Scenario: CD :: Agent Desk :: Live Chat :: Transfer Chat :: Verify if transfer were rejected, "Transfer rejected" should be shown in roster view
 
     Given I login as second agent of General Bank Demo
@@ -40,7 +39,6 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2738")
   @setting_changes
-  @orca_api
   Scenario: CD :: Agent Desk :: Live Chat :: Transfer Chat :: Verify if chat transfer is accepted, "Successful transfer" should be shown in roster view
 
     Given I login as second agent of General Bank Demo
@@ -50,7 +48,6 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
     And Chat from orca channel is absent in chats list
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1271")
-  @orca_api
   Scenario: CD :: Agent Desk :: Live Chat :: Profile :: Verify that Agent2 can view edited User profile without refresh
 
     And I login as second agent of General Bank Demo
@@ -78,7 +75,6 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
     And Second agent responds with hello to User
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2961")
-  @orca_api
   Scenario: CD :: Agent Desk :: Live Chat :: Transfer chat :: Verify that agent A gets notification, that chat transfer was accepted by Agent B
 
     And I login as second agent of General Bank Demo
@@ -86,3 +82,12 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transfer
     Then Second agent receives incoming transfer with "Incoming Transfer" header
     When Second agent click "Accept transfer" button
     And Chat from orca channel is present for Second Agent
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2950")
+  Scenario: CD :: Agent Desk :: Live Chat :: Verify that agent should be able to choose available Agent for transferring chat
+
+    And I login as second agent of General Bank Demo
+    When Agent click on 'Transfer' chat
+    Then Transfer chat pop up appears for Agent
+    When Agent open 'Transfer to' drop down
+    Then Agent can see second agent in a transfer pop-up agents dropdown

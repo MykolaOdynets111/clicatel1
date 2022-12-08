@@ -163,6 +163,7 @@ public class TransferChatWindow extends AbstractUIElement {
                         .filter(e -> !(e.contains("current chat assignment")))
                         .collect(Collectors.toList());
     }
+
     public String getCurrentAgentAssignment() {
         return getCurrentAgentFromAssignmentDropdown().getText();
     }
@@ -205,13 +206,6 @@ public class TransferChatWindow extends AbstractUIElement {
         return getTextFromElem(this.getCurrentDriver(), noteInputError, 3, "Required notes error");
     }
 
-    public boolean isNoAvailableAgentsDisplayed() {
-        String noAvailableAgentsMessageXpath = "//*[@id='portal-placeholder']//div[text()='No available agents']";
-        return isElementShown(this.getCurrentDriver(),
-                findElemByXPATH(this.getCurrentDriver(), noAvailableAgentsMessageXpath),
-                5);
-    }
-
     public void waitForUpdatingAvailableAgents() {
         waitForAppearAndDisappear(this.getCurrentDriver(), loadingAvailableAgents, 1, 5);
     }
@@ -223,9 +217,16 @@ public class TransferChatWindow extends AbstractUIElement {
     public TransferChatWindow selectAgent(String agentName){
         inputText(this.getCurrentDriver(), agentsInput, 2, "Agents input", agentName);
 
-        availableAgentsOrDepartmentsList.stream().filter(e -> e.getText().contains(agentName))
+        availableAgentsOrDepartmentsList.stream()
+                .filter(e -> e.getText().contains(agentName))
                 .findFirst().orElseThrow(() -> new NoSuchElementException("There is no such agent: " + agentName))
                 .click();
         return this;
+    }
+
+    public List<String> getOnlineAgentsFromDropdown() {
+        return getAvailableAgentsFromDropdown().stream()
+                .filter(a -> !a.contains("offline"))
+                .collect(Collectors.toList());
     }
 }
