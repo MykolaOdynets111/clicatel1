@@ -31,9 +31,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = ".cl-routed-tabs__tab--selected")
     private WebElement selectedTab;
 
-    @FindBy(xpath = "//div[@class='cl-routed-tabs__tab-list']//a[1]")
-    private WebElement firstElementInHeader;
-
     @FindAll({
             @FindBy(css = "[data-testid=roster-item]"),
             @FindBy(css = "[selenium-id=roster-item]") //toDo old locator
@@ -54,12 +51,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     @FindBy(css = "[data-testid = 'chats-list-scroll-container']")
     private WebElement chatsScrollBar;
-
-    @FindBy(xpath = "//input[contains(@class, 'checkbox__input')]")
-    private WebElement bulkChatCheckbox;
-
-    @FindBy(css = ".cl-checkbox")
-    private WebElement flaggedCheckbox;
 
     @FindBy(css = "[data-testid='search-filter-btn']")
     private WebElement searchButton;
@@ -433,6 +424,11 @@ public class LeftMenuWithChats extends AbstractUIElement {
         return this;
     }
 
+    public void hoverBulkChatButton() {
+        waitForElementToBeVisible(this.getCurrentDriver(), bulkButton, 5);
+        moveToElement(this.getCurrentDriver(), bulkButton);
+    }
+
     private WebElement getFilterOptionByName(String name) {
         return filterOptions.stream()
                 .filter(f -> f.findElement(By.cssSelector(".cl-chats-group-item__name")).getText().contains(name))
@@ -441,10 +437,5 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     private ChatInLeftMenu getChatInLeftMenu() {
         return new ChatInLeftMenu(activeChat).setCurrentDriver(this.getCurrentDriver());
-    }
-
-    public void hoverBulkChatButton() {
-        waitForElementToBeVisible(this.getCurrentDriver(), bulkButton, 5);
-        moveToElement(this.getCurrentDriver(), bulkButton);
     }
 }
