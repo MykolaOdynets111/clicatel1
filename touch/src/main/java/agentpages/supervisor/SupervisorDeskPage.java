@@ -70,6 +70,9 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     })
     private WebElement chatTransferAlert;
 
+    @FindBy(css = ".toast-content-message")
+    private WebElement agentAssignTicketMessage;
+
     private AssignChatWindow assignChatWindow;
     private ChatBody chatBody;
     private SupervisorClosedChatsTable supervisorClosedChatsTable;
@@ -119,6 +122,10 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return supervisorAvailableAsAgentDialog;
     }
 
+    public String isAgentAssignMessageShown(){
+        return getTextFromElem(this.getCurrentDriver(), agentAssignTicketMessage, 15, "Toast message");
+    }
+
     public boolean isLiveChatShownInSD(String userName, int wait) {
         return isElementShownByXpath(this.getCurrentDriver(), String.format(chatName, userName), wait);
     }
@@ -150,8 +157,8 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return isElementShown(this.getCurrentDriver(), getAssignChatWindow().getWrappedElement(), 4);
     }
 
-    public void assignChatOnAgent(String agentName){
-        getAssignChatWindow().selectDropDownAgent(agentName);
+    public void assignChat(String dropdownType, String agentName){
+        getAssignChatWindow().selectDropDown(dropdownType, agentName);
         getAssignChatWindow().clickAssignChatButton();
         waitUntilElementNotDisplayed(this.getCurrentDriver(), assignWindowsDialog, 3);
     }

@@ -169,6 +169,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
     }
 
     public boolean bulkPanelElementsClickWithoutScroll(int bulkCheckedChats) {
+        count = 0;
         waitFor(1500);
         waitForFirstElementToBeVisible(this.getCurrentDriver(), bulkPanelChatItems, 5);
         for (WebElement webElement : bulkPanelChatItems) {

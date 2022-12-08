@@ -30,5 +30,5 @@ Feature: Closed chats :: Chatdesk
     When Agent closes chat
     And Agent select "Closed" left menu option
     And Agent searches and selects chat from orca in chat history list
-    And Agent adds a note Live Chat Test Note Message Jira link https://livechatdummy.com and Ticket Number 662210
-    Then Agent sees note Live Chat Test Note Message Jira link https://livechatdummy.com/ and Ticket Number 662210
+    And Agent adds a note text Live Chat Test Note Message with Jira link https://livechatdummy.com and Ticket Number 662210
+    Then Agent sees note text Live Chat Test Note Message with Jira link https://livechatdummy.com/ and Ticket Number 662210
