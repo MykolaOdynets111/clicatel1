@@ -5,7 +5,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.junit.Assert;
 import steps.unitysteps.AbstractUnitySteps;
-import restHandler.RestHandlerChatHub;
+import restHandler.RestHandler_ChatHub;
 
 import static abstractclasses.IntegrationsAbstractSteps.getIntegrationsPage;
 
@@ -30,7 +30,7 @@ public class IntegrationSteps extends AbstractUnitySteps {
 
     @Given("User is able to execute GET provider API")
     public void userIsAbleToExecuteGETProviderAPI() {
-        RestHandlerChatHub RH = new RestHandlerChatHub();
-        RH.get("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7XCJpZFwiOlwiMzFhZTQ1ODQ5MWVlNDhkNjhiNDVhMmVlNzMyNDlkNTJcIixcImlzQWRtaW5cIjpmYWxzZX0iLCJleHAiOjE2NzA2MTM1OTQsImlhdCI6MTY2OTQwMzk5NH0.acduce65og8Jg13qt5gL-qt1rVscIgg_tcSgdMz6PLg","https://demo-chathub-config-manager.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/api/providers");
+        RestHandler_ChatHub RH = new RestHandler_ChatHub();
+        RH.get("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7XCJpZFwiOlwiMzFhZTQ1ODQ5MWVlNDhkNjhiNDVhMmVlNzMyNDlkNTJcIixcImlzQWRtaW5cIjpmYWxzZX0iLCJleHAiOjE2NzEzODMyODQsImlhdCI6MTY3MDE3MzY4NH0.XPNqaV0YyF30sKWhZJc_rRXXmOCBXMBqoxsuBROQvoU", "https://demo-chathub-config-manager.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/admin/providers");
     }
 }
