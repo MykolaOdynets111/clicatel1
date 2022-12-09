@@ -30,7 +30,7 @@ public class IntegrationSteps extends AbstractUnitySteps {
 
     @Given("User is able to execute GET provider API")
     public void userIsAbleToExecuteGETProviderAPI() {
-        RestHandler_ChatHub RH = new RestHandler_ChatHub();
-        RH.get("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7XCJpZFwiOlwiMzFhZTQ1ODQ5MWVlNDhkNjhiNDVhMmVlNzMyNDlkNTJcIixcImlzQWRtaW5cIjpmYWxzZX0iLCJleHAiOjE2NzEzODMyODQsImlhdCI6MTY3MDE3MzY4NH0.XPNqaV0YyF30sKWhZJc_rRXXmOCBXMBqoxsuBROQvoU", "https://demo-chathub-config-manager.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/admin/providers");
+        RestHandler_ChatHub rh = new RestHandler_ChatHub();
+        rh.get("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7XCJpZFwiOlwiMzFhZTQ1ODQ5MWVlNDhkNjhiNDVhMmVlNzMyNDlkNTJcIixcImlzQWRtaW5cIjpmYWxzZX0iLCJleHAiOjE2NzEzODMyODQsImlhdCI6MTY3MDE3MzY4NH0.XPNqaV0YyF30sKWhZJc_rRXXmOCBXMBqoxsuBROQvoU", "https://demo-chathub-config-manager.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/admin/providers");
     }
 }
