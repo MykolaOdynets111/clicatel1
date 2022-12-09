@@ -1,11 +1,10 @@
 package myworkspacepages;
 
-import abstractclasses.UnityAbstractPage;
-import org.openqa.selenium.WebDriver;
+import abstractclasses.AgentAbstractPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class MyWorkspacePage extends UnityAbstractPage {
+public class MyWorkspacePage extends AgentAbstractPage {
 
     // NUMBERS AND INTEGRATIONS
     @FindBy(xpath = "//*[@class='mat-card-title info-card__title' and text()=' Integrations ']")
@@ -20,9 +19,8 @@ public class MyWorkspacePage extends UnityAbstractPage {
     @FindBy(xpath = "//*[@class='mat-card-title info-card__title' and text()=' API Integrations ']")
     private WebElement apiIntegrationsTab;
 
-    public MyWorkspacePage(WebDriver driver) {
-
-        super(driver);
+    public MyWorkspacePage() {
+        super();
     }
 
     public void clickOnIntegrationsTab() {

@@ -1,11 +1,10 @@
 package productsandservicespages;
 
-import abstractclasses.UnityAbstractPage;
-import org.openqa.selenium.WebDriver;
+import abstractclasses.AgentAbstractPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class ProductsAndServicesPage extends UnityAbstractPage {
+public class ProductsAndServicesPage extends AgentAbstractPage {
 
     @FindBy(xpath = "//div[contains(text(),'Explore')]")
     private WebElement exploreBtn;
@@ -19,9 +18,8 @@ public class ProductsAndServicesPage extends UnityAbstractPage {
     @FindBy(xpath = "//div[contains(text(),'Integrations')]")
     private WebElement integrationsBtn;
 
-    public ProductsAndServicesPage(WebDriver driver) {
-
-        super(driver);
+    public ProductsAndServicesPage() {
+        super();
     }
 
     public void clickOnExplore() {

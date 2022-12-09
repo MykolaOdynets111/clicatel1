@@ -1,11 +1,10 @@
 package unitypages;
 
-import abstractclasses.UnityAbstractPage;
-import org.openqa.selenium.WebDriver;
+import abstractclasses.AgentAbstractPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class UnityLandingPage extends UnityAbstractPage {
+public class UnityLandingPage extends AgentAbstractPage {
 
     @FindBy(xpath = "//div[contains(text(),'My Workspace')]")
     private WebElement myWorkspaceMenuButton;
@@ -13,8 +12,8 @@ public class UnityLandingPage extends UnityAbstractPage {
     @FindBy(xpath = "//div[contains(text(),'Products & Services')]")
     private WebElement productsAndServicesButton;
 
-    public UnityLandingPage(WebDriver driver) {
-        super(driver);
+    public UnityLandingPage() {
+        super();
     }
 
     public void clickOnMyWorkspace() {
