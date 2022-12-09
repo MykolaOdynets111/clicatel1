@@ -62,6 +62,18 @@ public class TicketsSteps extends AbstractPortalSteps{
         getTicketsTable("main").clickAssignManuallyButton(getUserName(chanel));
     }
 
+    @Then("^Assign button is not displayed in the closed ticket tab for (.*)$")
+    public void assignManuallyTopPanelButtonNotVisible(String chanel) {
+        Assert.assertTrue(getTicketsTable("main").assignManuallyButtonTopPanelVisibility(getUserName(chanel)),
+                "Assign button is visible");
+    }
+
+    @Then("^Hover to one of the ticket And Assign button is not displayed$")
+    public void assignManuallyButtonRowNotVisible() {
+        Assert.assertTrue(getTicketsTable("main").assignManuallyButtonFirstRowHoverVisibility(),
+                "Assign button is visible");
+    }
+
     @When("^(.*) closed ticket for (.*)$")
     public void clickCloseButtonFor(String agent, String chanel) {
         getTicketsTable("main")

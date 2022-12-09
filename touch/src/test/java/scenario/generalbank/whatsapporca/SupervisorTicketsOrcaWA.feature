@@ -137,3 +137,18 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And I assign chat on second agent for Agent dropdown
     Then Second Agent receive increase in the count of the bell icon notification
     And Second Agent should see notifications GBD Main has assigned you 1 ticket. at time minutes ago in the notification frame
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-6079")
+  Scenario: CD:: Supervisor Desk:: Tickets:: Supervisor_Desk-Tickets-Closed:: Verify if Supervisor cannot assign closed ticket
+    Given Setup ORCA Whatsapp integration for General Bank Demo tenant
+    And Update survey management chanel whatsapp settings by ip for Standard Billing
+      | ratingEnabled | false        |
+    And Send to agent message by ORCA
+    When I select Touch in left menu and Supervisor Desk in submenu
+    And Agent select "Tickets" left menu option
+    And Agent search chat orca on Supervisor desk
+    Then Agent see tickets from orca on Assigned filter page
+    When Agent closed ticket for orca
+    And Agent select Closed filter on Left Panel
+    Then Assign button is not displayed in the closed ticket tab for orca
+    And Hover to one of the ticket And Assign button is not displayed
