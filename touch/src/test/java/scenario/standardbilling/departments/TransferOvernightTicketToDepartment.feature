@@ -2,6 +2,7 @@
 @support_hours
 @Regression
 @orca_api
+  @skip
 Feature: Departments
 
   Background:

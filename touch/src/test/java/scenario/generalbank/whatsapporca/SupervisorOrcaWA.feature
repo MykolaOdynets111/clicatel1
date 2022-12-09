@@ -32,7 +32,6 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Login into portal as an admin of General Bank Demo account
     And I select Touch in left menu and Supervisor Desk in submenu
 #    ToDo added wait till issue with filter will be resolved
-    And Wait for 10 second
     When Agent select "Tickets" left menu option
     And Agent search chat orca on Supervisor desk
     Then Agent see tickets from orca on Unassigned filter page
