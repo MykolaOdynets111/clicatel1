@@ -124,9 +124,11 @@ public class PreferencesSteps extends AbstractPortalSteps {
         softAssert.assertAll();
     }
 
-    @Then("^Verify 'Pending Chats Auto-closure Time' is (.*) hours$")
-    public void verifyPendingChatsAutoClosureTimeIs(String hours) {
-        assertThat(getPreferencesWindow().getPendingChatAutoClosureHours()).as(format("'Pending Chats Auto-closure Time' should be %s hours", hours)).isEqualTo(hours);
+    @Then("^Verify 'Pending Chats Auto-closure Time' is between (.*) and (.*) hours$")
+    public void verifyPendingChatsAutoClosureTimeIs(int min, int max) {
+        assertThat(Integer.parseInt(getPreferencesWindow().getPendingChatAutoClosureHours()))
+                .as(format("'Pending Chats Auto-closure Time' should be between %s and %s hours", min, max))
+                .isBetween(min, max);
     }
 
     @Then("^Verify if user can change (.*) status to (.*)$")
