@@ -1,11 +1,9 @@
-@remove_dep
-@skip
-#Only for checking default value. Should be run only after tenant creation
-Feature: Dashboard: Settings: Preferences: Timers & Timeouts
+Feature: Dashboard: Settings: Preferences
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2043")
-  Scenario: CD :: Dashboard :: Settings :: Preferences :: Verify if the default value of "Pending Chats Auto-closure Time" is 8 hours
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1356")
+  Scenario: CD :: Dashboard :: Settings :: Preferences :: Verify the default value in "pending chats auto-closure time" section is displayed between 1 to 24 hours for new client
+
     Given I login as agent of Standard Billing
     And I select Touch in left menu and Dashboard in submenu
     When Navigate to Preferences page
-    Then Verify 'Pending Chats Auto-closure Time' is 8 hours
+    Then Verify 'Pending Chats Auto-closure Time' is between 1 and 24 hours
