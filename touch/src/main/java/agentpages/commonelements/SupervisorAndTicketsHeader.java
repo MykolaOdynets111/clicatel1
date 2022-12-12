@@ -42,6 +42,9 @@ public class SupervisorAndTicketsHeader extends AbstractUIElement {
     @FindBy(css="div[class^='cl-select__menu-list'] div[id^='react-select']")
     private List<WebElement> dropdownValues;
 
+    @FindBy(css = ".cl-checkbox__label")
+    private WebElement selectAllCheckBox;
+
     public void clickApplyFilterButton(){
         scrollToElem(this.getCurrentDriver(), applyFiltersButton, "Apply Filters");
         clickElem(this.getCurrentDriver(), applyFiltersButton, 1, "Apply Filters");
@@ -55,6 +58,10 @@ public class SupervisorAndTicketsHeader extends AbstractUIElement {
     public SupervisorAndTicketsHeader clickFlaggedOnlyCheckbox(){
         clickElem(this.getCurrentDriver(), flaggedOnlyCheckbox, 1, "Flagged Only");
         return this;
+    }
+
+    public boolean isSelectAllCheckboxNotShown(){
+        return isElementRemoved(this.getCurrentDriver(), selectAllCheckBox,10);
     }
 
     public SupervisorAndTicketsHeader selectChanel(String chanelName){

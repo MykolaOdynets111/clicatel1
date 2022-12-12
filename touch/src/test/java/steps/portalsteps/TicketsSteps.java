@@ -74,6 +74,12 @@ public class TicketsSteps extends AbstractPortalSteps{
                 "Assign button is visible");
     }
 
+    @Then("^Select all checkbox is not displayed in the closed ticket tab$")
+    public void verifySelectAllCheckboxNotShown() {
+        Assert.assertTrue(getSupervisorAndTicketsHeader("main").isSelectAllCheckboxNotShown(),
+                "'Select All checkbox' is shown.");
+    }
+
     @When("^(.*) closed ticket for (.*)$")
     public void clickCloseButtonFor(String agent, String chanel) {
         getTicketsTable("main")
