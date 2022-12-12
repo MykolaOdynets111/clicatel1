@@ -18,3 +18,4 @@ Feature: Integrations feature
     Given I login to Unity as QA_C2P_USER_ONE
     And User clicks on My Workspace page link
     Then Integrations card is displayed as first card
+
