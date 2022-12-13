@@ -11,6 +11,7 @@ import io.cucumber.java.en.When;
 import org.openqa.selenium.TimeoutException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import steps.agentsteps.AbstractAgentSteps;
 import steps.dotcontrol.DotControlSteps;
 
 import java.time.LocalDate;
@@ -23,9 +24,11 @@ import java.util.stream.Collectors;
 
 import static steps.agentsteps.AbstractAgentSteps.*;
 
-public class TicketsSteps extends AbstractPortalSteps{
+public class TicketsSteps extends AbstractAgentSteps {
 
     private List<String> shownUsers = new ArrayList<>();
+
+    private static int initialTicketsCount;
 
     private TicketsTable getTicketsTable(String agent){
         return getTicketsPage(agent).getTicketsTable();
@@ -265,5 +268,17 @@ public class TicketsSteps extends AbstractPortalSteps{
     @Then("^(.*) sees toast message with (.*) text")
     public void verifyToastMessage(String agent, String toastMessageText) {
         Assert.assertEquals(getTicketsPage(agent).getToastMessageText(),toastMessageText,"Toast message is wrong");
+    }
+
+    @Then("^(.*) checks initial ticket count is displayed in the (.*) ticket tab$")
+    public void getInitialTicketsCount(String agent, String ticketType) {
+        initialTicketsCount = getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(ticketType);
+    }
+
+    @Then("^(.*) checks final ticket count value in the (.*) ticket tab$")
+    public void verifyFinalTicketsCount(String agent, String ticketType) {
+        int finalTicketsCount = getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(ticketType);
+        Assert.assertTrue(finalTicketsCount== (initialTicketsCount + 1),
+                "Final ticket count is incorrect");
     }
 }

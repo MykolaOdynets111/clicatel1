@@ -26,10 +26,10 @@ public class SupervisorAndTicketsPart extends AbstractUIElement {
         return getTextFromElem(this.getCurrentDriver(), defaultFilter,5,"Default filter").trim();
     }
 
-    public String getTicketsCount(String filterType){
+    public int getTicketsCount(String filterType){
         String locator = String.format(closedTicketsCountCSS, filterType);
         WebElement element = waitForElementToBePresentByCss(this.getCurrentDriver(), locator, 10);
-        return getTextFromElem(this.getCurrentDriver(), element,5,"Default filter").trim();
+        return Integer.parseInt(getTextFromElem(this.getCurrentDriver(), element,5,"Default filter").trim());
     }
 
     public List<String> getFilterNames(){

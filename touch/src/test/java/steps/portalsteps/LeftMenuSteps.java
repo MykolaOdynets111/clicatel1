@@ -28,8 +28,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class LeftMenuSteps extends AbstractAgentSteps {
 
-    private static String initialTicketsCount;
-
     @Given("^(.*) has no active chats$")
     public void closeActiveChats(String agent){
         ApiHelper.closeActiveChats(agent);
@@ -143,18 +141,6 @@ public class LeftMenuSteps extends AbstractAgentSteps {
     public void selectFilterOption(String agent,String option){
         getLeftMenu(agent).getLMHeader().selectChatsMenu(option);
         getLeftMenu(agent).waitForConnectingDisappear(5,10);
-    }
-
-    @Then("^(.*) checks initial ticket count is displayed in the (.*) ticket tab$")
-    public void getInitialTicketsCount(String agent, String ticketType) {
-        initialTicketsCount = getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(ticketType);
-    }
-
-    @Then("^(.*) checks final ticket count value in the (.*) ticket tab$")
-    public void verifyFinalTicketsCount(String agent, String ticketType) {
-        String finalTicketsCount = getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(ticketType);
-        Assert.assertTrue(finalTicketsCount.equalsIgnoreCase(String.valueOf((Integer.parseInt(initialTicketsCount) + 1))),
-                "Final ticket count is incorrect");
     }
 
     @Then("^(.*) checks current tab selected in left menu is (.*) tab")
@@ -335,8 +321,6 @@ public class LeftMenuSteps extends AbstractAgentSteps {
     public void selectTicketType(String agent, String type) {
         getLeftMenu(agent).getSupervisorAndTicketsPart().selectFilter(type);
     }
-
-
 
     @Then("^Live chats (.*) filter has correct name and correct chats number$")
     public void verifyAgentNameOnLiveChatFilter(String agent) {
