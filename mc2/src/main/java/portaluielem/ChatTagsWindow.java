@@ -3,7 +3,6 @@ package portaluielem;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Assert;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -29,18 +28,6 @@ public class ChatTagsWindow extends BasePortalWindow {
 
     @FindBy(css = ".cl-collapsible-table__row")
     private List<WebElement> tagRows;
-
-    @FindBy(css = ".cl-collapsible-table__empty-message")
-    private WebElement emptyChatTags;
-
-    @FindBy(css = "tr.cl-collapsible-table__row:first-of-type")
-    private WebElement firstChatTagFromAll;
-
-    @FindBy(css = "tr.cl-collapsible-table__row:first-of-type")
-    private WebElement firstChatTagFromExisting;
-
-    @FindBy(css = ".cl-tag-form__pencil-icon")
-    private WebElement clickPencilIcon;
 
     @FindBy(xpath = "//div[@class='cl-tag-form'][1]")
     private WebElement getTagName;
@@ -134,5 +121,4 @@ public class ChatTagsWindow extends BasePortalWindow {
         row.findElement(By.cssSelector(".cl-r-toggle-btn")).click();
         return this;
     }
-
 }

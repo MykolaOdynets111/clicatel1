@@ -1,4 +1,4 @@
-package agentpages.supervisor.uielements;
+package agentpages.tickets;
 
 
 import abstractclasses.AbstractWidget;
@@ -9,10 +9,11 @@ import org.openqa.selenium.support.FindBy;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 
 
-public class SupervisorDeskTicketRow extends AbstractWidget {
+public class TicketRow extends AbstractWidget {
 
     @FindBy(css = ".cl-checkbox")
     private WebElement checkbox;
@@ -32,10 +33,10 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
     @FindBy(xpath = "//div[@class = 'cl-table-user-data__description']/div[2]")
     private WebElement phone;
 
-    @FindBy(xpath = ".//span[@class ='time-cell-content'][1]")
+    @FindBy(css = ".cl-table-cell--ticketCreatedDate")
     private WebElement startDate;
 
-    @FindBy(xpath = ".//span[@class ='time-cell-content'][2]")
+    @FindBy(css = ".cl-table-cell--endedDate")
     private WebElement endDate;
 
     @FindBy(css = ".cl-user-details-cell__top-section svg")
@@ -46,11 +47,17 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
     @FindBy(css = ".cl-table-cell--channelType svg")
     private WebElement channelImg;
 
-    public SupervisorDeskTicketRow(WebElement element) {
+    @FindBy(xpath = ".//a[contains(text(), 'Open')]")
+    private List<WebElement> openBtns;
+
+    @FindBy(xpath = ".//a[contains(text(), 'Open')]")
+    private WebElement acceptButton;
+
+    public TicketRow(WebElement element) {
         super(element);
     }
 
-    public SupervisorDeskTicketRow setCurrentDriver(WebDriver currentDriver){
+    public TicketRow setCurrentDriver(WebDriver currentDriver){
         this.currentDriver = currentDriver;
         return this;
     }
@@ -67,18 +74,31 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
         return getTextFromElem(this.getCurrentDriver(), currentAgent, 5, "Current agent");
     }
 
-    public LocalDateTime getStartDate(){
-        wheelScrollDownToElement(this.getCurrentDriver(),
-                findElemByCSS(this.getCurrentDriver(), scrollAreaCss), startDate, 3);
-        String stringDate = getTextFromElem(this.getCurrentDriver(), startDate, 5, "Date cell").trim() + " " + LocalDateTime.now().getYear();
-        return LocalDateTime.parse(stringDate, DateTimeFormatter.ofPattern("d, MMM, HH:mm yyyy", Locale.US));
+    public LocalDateTime getOpenDate(){
+        String stringDate = getTextFromElem(this.getCurrentDriver(), startDate, 5, "Date cell").trim();
+        return parseDate(stringDate);
     }
 
     public LocalDateTime getEndDate(){
-        wheelScrollDownToElement(this.getCurrentDriver(),
-                findElemByCSS(this.getCurrentDriver(), scrollAreaCss), endDate, 3);
-        String stringDate = getTextFromElem(this.getCurrentDriver(), endDate, 5, "Date cell").trim() + " " + LocalDateTime.now().getYear();
-        return LocalDateTime.parse(stringDate, DateTimeFormatter.ofPattern("dd, MMM, HH:mm yyyy", Locale.US));
+        String stringDate = getTextFromElem(this.getCurrentDriver(), endDate, 5, "Date cell").trim();
+        return parseDate(stringDate);
+    }
+
+    private LocalDateTime parseDate(String stringDate){
+
+        if(stringDate.contains("Yesterday")){
+            return LocalDateTime.now().minusDays(1);
+        } else if(stringDate.contains("Today")) {
+            return LocalDateTime.now();
+        }
+
+        if (stringDate.contains("am")) {
+            stringDate = stringDate.replace("am","AM");
+        } else {
+            stringDate = stringDate.replace("pm","PM");
+        }
+        DateTimeFormatter formater = DateTimeFormatter.ofPattern("dd MMM. yyyy 'at' h:mm a", Locale.US);
+        return LocalDateTime.parse(stringDate, formater);
     }
 
     public void clickOnUserName(){
@@ -100,5 +120,13 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
     public boolean isValidChannelImg(String channelPictureName) {
         File image = new File(System.getProperty("user.dir")+"/src/test/resources/adaptericons/"+channelPictureName+".png");
         return isWebElementEqualsImage(this.getCurrentDriver(), channelImg, image);
+    }
+
+    public void openTicket(int ticketNum){
+        clickElem(this.getCurrentDriver(),openBtns.get(ticketNum-1), 5, "openTicketBtn");
+    }
+
+    public void acceptTicket(){
+        clickElem(this.getCurrentDriver(),acceptButton, 5, "Accept Button");
     }
 }

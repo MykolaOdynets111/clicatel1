@@ -145,6 +145,9 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
         return targetButton != null;
     }
 
+    public boolean isSaveButtonClickable(){
+        return isElementEnabled(this.getCurrentDriver(), saveChangesButton,1);
+    }
 
     public void clickSaveButton(){
         clickElem(this.getCurrentDriver(), saveChangesButton,1, "Save changes");

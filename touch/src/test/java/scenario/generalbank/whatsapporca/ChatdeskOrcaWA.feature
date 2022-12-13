@@ -140,7 +140,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Setup ORCA whatsapp integration for General Bank Demo tenant
     And Send to agent message by ORCA
     When I select Touch in left menu and Supervisor Desk in submenu
-    When Verify "All live chats" display default
+    When Verify "All live chats" display as default
     Then  Verify that live chats available are shown
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2369")
@@ -156,7 +156,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     And Agent search chat ORCA on Supervisor desk
-    Then Ticket from orca is present on All tickets filter page
+    Then Agent see tickets from orca on Assigned filter page
     And Select orca ticket checkbox
     When Click 'Route to scheduler' button
     Given I login as agent of General Bank Demo
@@ -193,6 +193,16 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Agent click On Live Supervisor Desk chat from ORCA channel
     Then Agent can see whatsapp profile name
 
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1145")
+  @orca_api
+  Scenario: CD :: Agent Desk :: Live Chat :: Profile :: Verify that WhatsApp profile name is displayed as username on customer profile section
+    Given I login as agent of General Bank Demo
+    And Setup ORCA whatsapp integration for General Bank Demo tenant
+    When Send to agent message by ORCA
+    And Agent has new conversation request
+    And Agent click on new conversation request from orca
+    Then Agent can see the whatsapp profile name updated in the username section of the customer profile
+
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1302")
   @orca_api
   Scenario: CD :: Supervisor Desk :: Chat :: Chat2Pay :: Verify that supervisor does not have the capability to initiate a payment transaction
@@ -221,3 +231,14 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Agent click "End chat" button
     And Agent Feedback popup for agent should be opened
     Then Correct neutral sentiment selected
+
+  @orca_api
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1479")
+  Scenario: CD:: Agent Desk:: Verify if I can see a notification about the new message in an existing chat
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    Given I login as agent of General Bank Demo
+    And Send to agent message by ORCA
+    When Send Hello message by ORCA
+    Then Agent has new conversation request
+    When Agent click on new conversation request from orca
+    Then The few seconds time set for last message in left menu with chat for agent

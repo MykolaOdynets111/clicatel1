@@ -5,6 +5,7 @@ import com.sun.jna.WString;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.io.File;
 import java.util.List;
 
 @FindBy(css = ".ReactModal__Content")
@@ -25,6 +26,9 @@ public class HSMForm extends AbstractUIElement {
     @FindBy(css ="[type='submit']")
     private WebElement sendButton;
 
+    @FindBy(css =".cl-option-with-icon svg")
+    private WebElement appleImageIcon;
+
     public HSMForm setWAPhoneNumber(String variable) {
         inputText(this.getCurrentDriver(), waPhoneField, 5, "Send to field", variable);
         return this;
@@ -35,6 +39,11 @@ public class HSMForm extends AbstractUIElement {
                 .findFirst().orElseThrow(() ->
                         new AssertionError(templateName + " Template is not found")).click();
         return this;
+    }
+
+    public boolean isValidChannelImg(String channelPictureName) {
+        File image = new File(System.getProperty("user.dir") + "/src/test/resources/adaptericons/" + channelPictureName +".jpg");
+        return isWebElementEqualsImage(this.getCurrentDriver(), appleImageIcon, image);
     }
 
     public HSMForm insertVariableForWhatsapp(String variable) {

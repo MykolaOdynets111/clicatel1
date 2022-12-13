@@ -38,6 +38,7 @@ public class SupervisorDeskLiveRow extends AbstractWidget {
     public String getIconName() {
         return chanelIcon.getAttribute("name").trim();
     }
+
     public boolean isChannelNamePresent() {
         return isElementShown(this.getCurrentDriver(), userName, 5);
     }

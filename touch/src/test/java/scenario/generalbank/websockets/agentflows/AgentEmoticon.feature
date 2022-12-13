@@ -18,6 +18,8 @@ Feature: Agent emoticons
     Examples:
       | channelType | userType |
       | SMS         | sms      |
+      | Whatsapp    | orca     |
+      | ABC         | orca     |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1788")
   @Regression

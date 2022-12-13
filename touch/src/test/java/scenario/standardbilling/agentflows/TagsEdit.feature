@@ -1,4 +1,4 @@
-@agent_feedback
+@Regression
 Feature: Tags
 
   Background:
@@ -8,33 +8,35 @@ Feature: Tags
     When Navigate to Chat Tags page
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2781")
-  @Regression
   Scenario: CD :: Dashboard :: Settings :: Chat Tags :: Verify if Admin is able to cancel editing an existing tag
     When Create chat tag
     And Click the pencil icon to edit the tag
     Then Cancel editing a tag
     And Existing TagName is not changed
 
-
-  Scenario: verify when a supervisor edits a tag that the chats/tickets associated with the tag also be edited and has the new name.
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2837")
+  @setting_changes
+  Scenario: CD:: Supervisor Desk:: Chat_Tags:: verify when a supervisor edits a tag that the chats/tickets associated with the tag also be edited and has the new name.
     And Create chat tag
     And I login as second agent of Standard Billing
-    When Click chat icon
-    And User enter connect to Support into widget input field
-    Then Second agent has new conversation request
-    When Second agent click on new conversation request from touch
-    When Second agent click "End chat" button
-    Then End chat popup for second agent should be opened
-    Then Second agent select precreated tag
-    Then Second agent type Note:CheckTTagEdit, Link:http://TagEdit.com, Number:14544 for CRM ticket
-    When Second agent click 'Close chat' button
-    Then Second agent should not see from user chat in agent desk
-    Then CRM ticket is created on backend with correct information
+    When Setup ORCA whatsapp integration for Standard Billing tenant
+    And agentFeedback tenant feature is set to true for Standard Billing
+    And Send connect to agent message by ORCA
+    And Second agent has new conversation request from orca user
+    And Second agent click on new conversation request from orca
+    And Conversation area becomes active with connect to agent user's message in it for Second agent
+    And Second agent click "End chat" button
+    And End chat popup for second agent should be opened
+    And Second agent select precreated tag
+    And Second agent click 'Close chat' button
+    And Second Agent should not see from user chat in agent desk from orca
     When Update chat tag
-    Then CRM ticket is updated on backend with correct information
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Agent select "Closed" left menu option
+    And Agent search chat orca on Supervisor desk
+    Then WA chat show the correct tag name
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2843")
-  @Regression
   Scenario:CD:: Dashboard:: Settings :: Chat Tags:: Verify if a supervisor can create and save tag
     Given I open portal
     And Login into portal as an admin of Standard Billing account

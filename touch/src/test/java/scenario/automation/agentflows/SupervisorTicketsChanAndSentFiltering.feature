@@ -13,53 +13,19 @@ Feature: Supervisor desk
     And I select Touch in left menu and Supervisor Desk in submenu
     When Agent select "Tickets" left menu option
     And Agent search chat touch on Supervisor desk
-    Then Ticket from touch is present on All tickets filter page
+    Then Agent see tickets from orca on Unassigned filter page
     And Verify that only 1 ticket is shown
     When Agent refreshes the page
     When Agent filter by "Webchat" channel and "Positive" sentiment
-    Then Ticket from touch is present on All tickets filter page
+    Then Agent see tickets from orca on Unassigned filter page
     And User enter dsdfsdf into widget input field
     When User enter sfdsfsdfsd into widget input field
     And Agent refreshes the page
     When Agent filter by "Webchat" channel and "Neutral" sentiment
-    Then Ticket from touch is present on All tickets filter page
+    Then Agent see tickets from orca on Unassigned filter page
     When User enter hate you into widget input field
     And Agent refreshes the page
     When Agent filter by "Webchat" channel and "Negative" sentiment
-    Then Ticket from touch is present on All tickets filter page
+    Then Agent see tickets from orca on Unassigned filter page
     When Agent filter by "Webchat" channel and "Positive" sentiment
     Then Ticket from Touch is not present on Supervisor Desk
-
-
-  @no_widget
-  @dot_control
-  Scenario Outline: Supervisor desk: Verify if supervisor can use different filter options for filtering <channelName> tickets
-    Given Create .Control integration for Automation and adapter: <adapter>
-    When Prepare payload for sending chat to agent message for .Control
-    Given Send parameterized init call with clientId context correct response is returned
-    When Send message call
-    And I select Touch in left menu and Supervisor Desk in submenu
-    When Agent select "Tickets" left menu option
-    And Agent search chat dotcontrol on Supervisor desk
-    Then Ticket from dotcontrol is present on All tickets filter page
-#    And Verify that only 1 ticket is shown
-    When Agent refreshes the page
-    And Agent filter by "<channelName>" channel and "Positive" sentiment
-    Then Ticket from dotcontrol is present on All tickets filter page
-    When Send dsdfsdf message for .Control
-    And Send sfdsfsdfsd message for .Control
-    When Agent refreshes the page
-    And Agent filter by "<channelName>" channel and "Neutral" sentiment
-    Then Ticket from dotcontrol is present on All tickets filter page
-    When Send hate you message for .Control
-    When Agent refreshes the page
-    And Agent filter by "<channelName>" channel and "Negative" sentiment
-    Then Ticket from dotcontrol is present on All tickets filter page
-    When Agent filter by "<channelName>" channel and "Positive" sentiment
-    Then Ticket from dotcontrol is not present on Supervisor Desk
-
-    Examples:
-      |adapter                                             |channelName|
-      |fbmsg                                               |Facebook|
-      |whatsapp                                            |WhatsApp|
-      |twdm                                                |Twitter|

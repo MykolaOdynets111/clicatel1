@@ -767,32 +767,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalTouchPreferencesPage().waitForSaveMessage();
     }
 
-    @When("^Agent click On/Off button for (.*) auto responder$")
-    public void clickOnOffForAutoResponder(String autoresponder){
-        getPortalTouchPreferencesPage().getAutoRespondersWindow().waitToBeLoaded();
-        getPortalTouchPreferencesPage().getAutoRespondersWindow()
-                .clickOnOffForMessage(autoresponder);
-    }
-
-    @When("^Type new message: (.*) to: (.*) message field$")
-    public void typeNewMessage(String message, String autoresponder){
-        getPortalTouchPreferencesPage().getAutoRespondersWindow().waitToBeLoaded();
-        if (!getPortalTouchPreferencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).isMessageShown()) {
-            getPortalTouchPreferencesPage().getAutoRespondersWindow()
-                    .clickExpandArrowForMessage(autoresponder);
-        }
-        getPortalTouchPreferencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).typeMessage(message + faker.letterify("????")).clickSaveButton();
-        getPortalTouchPreferencesPage().waitWhileProcessing(1, 4);
-    }
-
-    @Then("^(.*) on backend corresponds to (.*) on frontend$")
-    public void messageWasUpdatedOnBackend(String tafMessageId, String messageName) {
-        String messageOnfrontend = getPortalTouchPreferencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(messageName).getMessage();
-        String actualMessage = ApiHelper.getAutoResponderMessageText(tafMessageId);
-        Assert.assertEquals(actualMessage, messageOnfrontend,
-                messageName + " message is not updated on backend");
-    }
-
     @Then("^(.*) is reset on backend$")
     public void verifyTafMessageIsReset(String autoresponderId){
         String actualMessage = ApiHelper.getAutoResponderMessageText(autoresponderId);
@@ -1487,35 +1461,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         soft.assertAll();
     }
 
-    private static BusinessProfileWindow getBusinessProfileWindow() {
-        return getPortalTouchPreferencesPage().getBusinessProfileWindow();
-    }
-
-    @When("^Turn (.*) the Last Agent routing$")
-    public void changeLastAgentRoting(String status){
-        TenantChatPreferences tenantChatPreferences = ApiHelper.getTenantChatPreferences();
-        if (status.equalsIgnoreCase("on")){
-            tenantChatPreferences.setLastAgentMode(true);
-        } else if(status.equalsIgnoreCase("off")){
-            tenantChatPreferences.setLastAgentMode(false);
-        }else{
-            throw new AssertionError("Incorrect status was provided");
-        }
-        ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), tenantChatPreferences);
-    }
-
-    @When("^Verify Last Agent routing is turned (.*) on backend$")
-    public void verifyLastAgentRoting(String status) {
-        boolean statusOnBackend = ApiHelperTenant.getTenantConfig(Tenants.getTenantUnderTestOrgName()).getBody().jsonPath().get("lastAgentMode");
-        if (status.equalsIgnoreCase("on")){
-            Assert.assertTrue(statusOnBackend, "Last Agent Roting is not turned on");
-        } else if(status.equalsIgnoreCase("off")){
-            Assert.assertFalse(statusOnBackend, "Last Agent Roting is not turned off");
-        }else{
-            throw new AssertionError("Incorrect status was provided");
-        }
-    }
-
     @When("^Turn (.*) the Default department$")
     public void changeDepartmentPrimaryStatus(String status){
         TenantChatPreferences tenantChatPreferences = ApiHelper.getTenantChatPreferences();
@@ -1528,6 +1473,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         }
         ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), tenantChatPreferences);
     }
+
     @When("^Create chat tag$")
     public void createChatTag(){
         tagname = faker.artist().name() + faker.numerify("#####");
@@ -1539,7 +1485,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalTouchPreferencesPage().getChatTagsWindow().clickEditTagButton(tagname);
         tagname = faker.artist().name() + faker.numerify("#####");
         getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickSaveButton();
-        AgentCRMTicketsSteps.crmTicketInfoForUpdating.get().put("agentTags",  tagname);
     }
 
     @When("^Click the pencil icon to edit the tag")
@@ -1551,6 +1496,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void cancelEditingTag() {
         getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickDeleteButton();
     }
+
     @When("^Existing TagName is not changed")
     public void verifyTagName() {
         String newTagName = getPortalTouchPreferencesPage().getChatTagsWindow().getTagName();
@@ -1574,5 +1520,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void verifyTagIsCreated() {
         String newTagName = getPortalTouchPreferencesPage().getChatTagsWindow().getTagName();
         Assert.assertEquals(newTagName,tagname,"Tag is not created");
+    }
+
+    private static BusinessProfileWindow getBusinessProfileWindow() {
+        return getPortalTouchPreferencesPage().getBusinessProfileWindow();
     }
 }

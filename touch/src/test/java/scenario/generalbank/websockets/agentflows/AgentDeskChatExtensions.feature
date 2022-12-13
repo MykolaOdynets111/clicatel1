@@ -97,3 +97,19 @@ Feature: Agent Date Time Picker Extension
       | MULTI SELECTION OPTION J         |
       | MULTI SELECTION OPTION K        |
     And Agent checks extensions in Frequently Used tab should be less than 10
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1954")
+  Scenario: CD :: Agent Desk :: Pending Chat :: Chat2Pay :: Verify that extension icon is not available for agent in Pending Chat
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    And Agent creates tenant extension with label and name
+      | extensionType | label              | name        |
+      | CHAT_2_PAY    | Send C2P Extension | Chat to Pay |
+    And I login as agent of General Bank Demo
+    When Send chat to agent message by ORCA
+    And Agent has new conversation request
+    And Agent click on new conversation request from orca
+    And Agent click 'Pending On' chat button
+    And Agent select "Pending" left menu option
+    And Agent click on new conversation request from orca
+    And Agent checks visual indicator with text This chat has been marked as Pending by GBD Main is shown during 2 seconds
+    Then Agent can't see c2p extension icon

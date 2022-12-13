@@ -21,13 +21,13 @@ public class ProfileWindow extends AbstractUIElement {
     })
     private WebElement closeProfileWindowButton;
 
-    @FindBy(id ="profile-first-name-input")
+    @FindBy(css ="[data-testid = profile-first-name-input]")
     private WebElement firstName;
 
-    @FindBy(id ="profile-last-name-input")
+    @FindBy(css ="[data-testid = profile-last-name-input]")
     private WebElement lastName;
 
-    @FindBy(id ="profile-email-input")
+    @FindBy(css ="[data-testid = profile-email-input]")
     private WebElement mail;
 
     @FindBy(css = "[data-testid=profile-reset-password]")

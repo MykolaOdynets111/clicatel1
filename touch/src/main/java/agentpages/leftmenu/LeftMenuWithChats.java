@@ -1,6 +1,8 @@
-package agentpages.uielements;
+package agentpages.leftmenu;
 
 import abstractclasses.AbstractUIElement;
+import agentpages.uielements.ChatInLeftMenu;
+import agentpages.uielements.FilterMenu;
 import driverfactory.DriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.Color;
@@ -20,6 +22,15 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = "a[data-testid^=chat-list-item]")
     private List<WebElement> newConversationRequests;
 
+    @FindBy(xpath = "//button[text() = 'Continue']")
+    private WebElement continueButton;
+
+    @FindBy(xpath = "//button[text() = 'Wait, I want to stay here!']")
+    private WebElement waitAndStayButton;
+
+    @FindBy(css = ".cl-routed-tabs__tab--selected")
+    private WebElement selectedTab;
+
     @FindAll({
             @FindBy(css = "[data-testid=roster-item]"),
             @FindBy(css = "[selenium-id=roster-item]") //toDo old locator
@@ -29,53 +40,29 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = ".cl-chat-item--selected")
     private WebElement activeChat;
 
-    @FindAll({
-            @FindBy(css = "[data-testid='search-filter-btn']"),
-            @FindBy(css = "[selenium-id='search-filter-btn']") //toDo old locator
-    })
+    @FindBy(css = "[data-testid = 'bulk-messages-toggle']")
+    private WebElement bulkButton;
+
+    @FindBy(css = ".cl-chat-item-bulk-message-checkbox label")
+    private WebElement bulkPanelChat;
+
+    @FindBy(css = ".cl-chat-item-bulk-message-checkbox label")
+    private List<WebElement> bulkPanelChatItems;
+
+    @FindBy(css = "[data-testid = 'chats-list-scroll-container']")
+    private WebElement chatsScrollBar;
+
+    @FindBy(css = "[data-testid='search-filter-btn']")
     private WebElement searchButton;
 
-    @FindAll({
-            @FindBy(css = "[data-testid='search-filter-input']"),
-            @FindBy(css = "[selenium-id='search-filter-input']")//toDo old locator
-    })
+    @FindBy(css = "[data-testid='search-filter-input']")
     private WebElement searchChatInput;
 
-    @FindAll({
-            @FindBy(css = "[data-testid=icon-user-single]"),
-            @FindBy(css = "[selenium-id=icon-user-single]") //toDo old locator
-    })
+    @FindBy(css = "[data-testid=icon-user-single]")
     private WebElement userPicture;
 
-    @FindAll({
-            @FindBy(css = "[data-testid=unread-msg-count]"),
-            @FindBy(css = "[selenium-id=unread-msg-count]") //toDo old locator
-    })
+    @FindBy(css = "[data-testid=unread-msg-count]")
     private WebElement userMsgCount;
-
-    @FindAll({
-            @FindBy(css = "[data-testid='tab-navigation-panel-live']"),
-            @FindBy(css = "[selenium-id='tab-navigation-panel-live']") //toDo old locator
-    })
-    private WebElement liveChats;
-
-    @FindAll({
-            @FindBy(css = "[data-testid='tab-navigation-panel-tickets']"),
-            @FindBy(css = "[selenium-id='tab-navigation-panel-tickets']")
-    })
-    private WebElement tickets;
-
-    @FindAll({
-            @FindBy(css = "[data-testid='tab-navigation-panel-closed']"),
-            @FindBy(css = "[selenium-id='tab-navigation-panel-closed']") //toDo old locator
-    })
-    private WebElement closed;
-
-    @FindAll({
-            @FindBy(css = "[data-testid='tab-navigation-panel-pending']"),
-            @FindBy(css = "[selenium-id='tab-navigation-panel-pending']") //toDo old locator
-    })
-    private WebElement pending;
 
     @FindAll({
             @FindBy(css = "[data-testid=open-filter-tab-btn]"),
@@ -99,6 +86,20 @@ public class LeftMenuWithChats extends AbstractUIElement {
     private String loadingSpinner = ".//*[text()='Connecting...']";
 
     private FilterMenu filterMenu;
+    private LMHeader lMHeader;
+    private SupervisorAndTicketsPart supervisorAndTicketsPart;
+
+    public LMHeader getLMHeader() {
+        lMHeader.setCurrentDriver(this.getCurrentDriver());
+        return lMHeader;
+    }
+
+    public SupervisorAndTicketsPart getSupervisorAndTicketsPart(){
+        supervisorAndTicketsPart.setCurrentDriver(this.getCurrentDriver());
+        return supervisorAndTicketsPart;
+    }
+
+    private int count = 0;
 
     private WebElement getTargetChat(String userName) {
         return newConversationRequests.stream().filter(e -> new ChatInLeftMenu(e)
@@ -132,6 +133,70 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     public void openFirstChat() {
         newConversationRequests.get(0).click();
+    }
+
+    public void clickBulkButton() {
+        bulkButton.click();
+    }
+
+    public boolean isBulkPanelEnabled(String isEnabled) {
+        return getAttributeFromElem(this.getCurrentDriver(), bulkPanelChat, 5, "Bulk panel", "class").contains(isEnabled);
+    }
+
+    public Boolean isNumberOfCheckedChats(int numberOfCheckedBulkChats ) {
+        return count == numberOfCheckedBulkChats;
+    }
+
+    public String getBulkChatsButtonSelectedStatus() {
+        return getAttributeFromElem(this.getCurrentDriver(), bulkButton, 5, "Bulk chats button", "class");
+    }
+
+    public void scrollLeftPane() {
+        while (bulkPanelChatItems.size() <= 30) {
+            wheelScroll(this.getCurrentDriver(), chatsScrollBar, 950, 0,0);
+            waitFor(1000);
+            //scrollToElem(this.getCurrentDriver(), bulkPanelChatItems.get(bulkPanelChatItems.size() - 1), "Bulk panel checkbox");
+        }
+    }
+
+    public boolean bulkPanelElementsClickWithoutScroll(int bulkCheckedChats) {
+        count = 0;
+        waitFor(1500);
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), bulkPanelChatItems, 5);
+        for (WebElement webElement : bulkPanelChatItems) {
+            if (!getAttributeFromElem(this.getCurrentDriver(), webElement, 5, "Bulk panel", "class").contains("disabled")) {
+                webElement.findElement(By.tagName("span")).click();
+                count++;
+                System.out.println("Clicking the bulk checkbox");
+            }
+
+            if(count == bulkCheckedChats) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean bulkPanelElementsClick(int bulkCheckedChats) {
+        scrollLeftPane();
+        wheelScroll(this.getCurrentDriver(), chatsScrollBar, -5500, 0, 0);
+        waitFor(2500);
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), bulkPanelChatItems, 5);
+
+        for (WebElement webElement : bulkPanelChatItems) {
+                scrollToElem(this.getCurrentDriver(), webElement, "Bulk panel checkbox");
+                waitFor(1500);
+                if (!getAttributeFromElem(this.getCurrentDriver(), webElement, 5, "Bulk panel", "class").contains("disabled")) {
+                    webElement.findElement(By.tagName("span")).click();
+                    count++;
+                    System.out.println("Clicking the bulk checkbox");
+                }
+
+                if(count == bulkCheckedChats) {
+                    return true;
+                }
+            }
+        return false;
     }
 
     public boolean isNewWebWidgetRequestIsShown(int wait) {
@@ -174,20 +239,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
             return true;
         } catch (TimeoutException e) {
             return false;
-        }
-    }
-
-    public void selectChatsMenu(String option) {
-        if (option.equalsIgnoreCase("Live Chats")) {
-            clickElem(this.getCurrentDriver(), liveChats, 1, "Live chats menu");
-        } else if (option.equalsIgnoreCase("Tickets")) {
-            clickElem(this.getCurrentDriver(), tickets, 1, "Tickets menu");
-        } else if (option.equalsIgnoreCase("Closed")) {
-            clickElem(this.getCurrentDriver(), closed, 1, "Closed menu");
-        } else if (option.equalsIgnoreCase("Pending")) {
-            clickElem(this.getCurrentDriver(), pending, 1, "Closed menu");
-        } else {
-            throw new AssertionError("Incorrect menu option was provided");
         }
     }
 
@@ -236,6 +287,11 @@ public class LeftMenuWithChats extends AbstractUIElement {
                 "No results found text").replace("\n", " ");
     }
 
+    public String getCurrentSelectedTabText() {
+        return getTextFromElem(this.getCurrentDriver(), selectedTab, 4,
+                "Current selected tab text");
+    }
+
     public String getActiveChatUserName() {
         return getChatInLeftMenu().getUserName();
     }
@@ -246,6 +302,10 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     public String getActiveChatLastMessage() {
         return getChatInLeftMenu().getLastMessageText();
+    }
+
+    public String getActiveChatReceivingTime() {
+        return getChatInLeftMenu().getMessageReceivingTime();
     }
 
     public String getChatIconName() {
@@ -346,6 +406,14 @@ public class LeftMenuWithChats extends AbstractUIElement {
                 .allMatch(chat -> chat.getChatIconName().equalsIgnoreCase(channelName));
     }
 
+    public void clickContinueButton(){
+        clickElem(this.getCurrentDriver(), continueButton, 1, "Continue Button");
+    }
+
+    public void clickWaitAndStayButton(){
+        clickElem(this.getCurrentDriver(), waitAndStayButton, 1, "Wait And Stay Button");
+    }
+
     public LeftMenuWithChats selectOption(String name) {
          getFilterOptionByName(name).click();
          return this;
@@ -354,6 +422,11 @@ public class LeftMenuWithChats extends AbstractUIElement {
     public LeftMenuWithChats verifyChatTransferringShown() {
         getChatInLeftMenu().isChatTransferringMessageShown();
         return this;
+    }
+
+    public void hoverBulkChatButton() {
+        waitForElementToBeVisible(this.getCurrentDriver(), bulkButton, 5);
+        moveToElement(this.getCurrentDriver(), bulkButton);
     }
 
     private WebElement getFilterOptionByName(String name) {

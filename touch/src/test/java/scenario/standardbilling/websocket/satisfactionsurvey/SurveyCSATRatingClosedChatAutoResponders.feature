@@ -121,7 +121,8 @@ Feature: Satisfaction Survey
       | ratingEnabled        | true        |
       | commentEnabled       | true        |
       | thanksMessageEnabled | true        |
-    When Send connect to agent message by ORCA
+    When I select Touch in left menu and Agent Desk in submenu
+    And Send connect to agent message by ORCA
     And Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
     And Conversation area becomes active with connect to agent user's message

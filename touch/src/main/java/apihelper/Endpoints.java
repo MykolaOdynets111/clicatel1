@@ -19,6 +19,7 @@ public class Endpoints {
     public static String TWITTER_INTEGRATION = URLs.getTouchApiBaseURL() + "twitter-registration/integration";
 
     public static String AGENT_INFO_ME = URLs.getBaseWSInternalURL() + "agents/%s";
+    public static String AGENT_INFO = URLs.getTouchApiBaseURL() + "api/agents";
 
     public static String FEATURE = URLs.getTouchApiBaseURL() + "internal/tenants/%s";
 
@@ -33,73 +34,41 @@ public class Endpoints {
     public static String SESSION_CAPACITY = URLs.getTouchApiBaseURL() + "tenants/sessions-capacity/";
 
     public static String CUSTOMER_VIEW = URLs.getTouchApiBaseURL() + "customer-view/";
-
     public static String DELETE_AGENT_IMAGE = URLs.getTouchApiBaseURL() + "agents/%s/image";
-
     public static String TENANT_INFO = URLs.getTouchApiBaseURL() + "tenant";
     public static String TENANT_CURRENT = URLs.getBaseWSApiURL() + "tenants/current";
-
     public static String ACTIVE_CHATS_BY_AGENT = URLs.getBaseWSApiURL() + "chats/search?page=0&size=200";
-
     public static String CLOSE_ACTIVE_CHAT = URLs.getBaseWSApiURL() + "chats/close-chat-by-id?chatId=%s";
-
     public static String CRM_TICKET = URLs.getTouchApiBaseURL() + "client-profiles/%s/crm-tickets";
-
     public static String TAGS_FOR_CRM_TICKET = URLs.getTouchApiBaseURL() + "api/tags";
-
     public static String DELETE_TENANT_LOGO = URLs.getTouchApiBaseURL() + "api/tenant-resource/all";
     public static String TENANT_AVAILABLE_AGENTS = URLs.getTouchApiBaseURL() + "agent-availability/logged-in";
-
     public static String CLIENT_PROFILE_ATTRIBUTES = URLs.getTouchApiBaseURL() + "client-profiles/attributes";
-
-    public static String SURVEY_MANAGEMENT = URLs. getBaseWSApiURL() + "channel/%s";
-
+    public static String SURVEY_MANAGEMENT = URLs.getBaseWSApiURL() + "channel/%s";
     public static String UPDATE_SURVEY_MANAGEMENT = URLs.getAgentDeskURL() + "api/platform/channel/%s-orca/%s/survey-config";
-
     public static String CHATS_INFO = URLs.getTouchApiBaseIntegrationURL() + "chats/%s";
-
     public static String AUTORESPONDER_CONTROLLER = URLs.getTouchApiBaseURL() + "api/autoresponders/%s";
-
     public static String PAST_SENTIMENT_REPORT = URLs.getBaseWSApiURL() + "dashboard/customer-history-report/past-sentiment-report";
-
     public static String AVERAGE_CUSTOMER_SATISFACTION_REPORT = URLs.getBaseWSApiURL() + "dashboard/customer-history-report/average-customer-satisfaction-report";
 
     // ================== INTERNAL ============== //
 
-    public static String INTERNAL_TENANT_ADDRESS = URLs.getBaseInternalApiUrl() + "tenants/%s/addresses";
-
     public static String INTERNAL_LAST_CLIENT_SESSION = URLs.getBaseInternalApiUrl() + "sessions/tenant/%s/client/%s/last";
-
     public static String INTERNAL_COUNT_OF_LOGGED_IN_AGENTS = URLs.getBaseInternalApiUrl() + "loggedin-agents-count/%s";
-
     public static String INTERNAL_CREATE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles";
-
     public static String INTERNAL_DELETE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles/%s/TOUCH/%s";
-
     public static String INTERNAL_CLIENT_PROFILE_ATTRIBUTES_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles/aggregated/%s";
-
     public static String INTERNAL_SESSION_DETAILS = URLs.getBaseInternalApiUrl() + "sessions?tenantName=%s&clientId=%s&page=1&count=50&dateFrom=0&dateTo=0";
-
     public static String INTERNAL_TENANTS = URLs.getBaseWSInternalURL() + "tenants";
-
     public static String EXTENSIONS = URLs.getBaseWSApiURL() + "extensions";
-
     public static String INTERNAL_GET_CHATS_FINISHED_BY_AGENT = URLs.getBaseInternalApiUrl() + "chats/finished-by-agent?agentId=%s&page=%s&size=%s";
-
     public static String INTERNAL_CHAT_BY_CLIENT = URLs.getBaseInternalApiUrl() + "chats/by-client/paging?tenantId=%s&clientId=%s&page=0&size=10";
-
     public static String TENANT_CHAT_PREFERENCES = URLs.getBaseWSApiURL() + "tenants/chat-preferences";
-
     public static String INTERNAL_CREATE_HISTORY = URLs.getBaseInternalApiUrl() + "chats/chat/history";
-
-    public static String INTERNAL_AUTORESPONDER_CONTROLLER = URLs.getTouchApiBaseURL() +  "api/autoresponders";
-
+    public static String INTERNAL_AUTORESPONDER_CONTROLLER = URLs.getTouchApiBaseURL() + "api/autoresponders";
     public static String INTERNAL_CHAT_USER_BY_ID = URLs.getBaseInternalApiUrl() + "api/chat-users/by-external-user-id/%s/%s/%s";
-
     public static String INTERNAL_CHAT_USERS = URLs.getBaseInternalApiUrl() + "api/chat-users";
-
     public static String INTERNAL_ELASTIC_CHAT_SEARCH = URLs.getBaseInternalApiUrl() + "api/search/chats";
-
     public static String INTERNAL_ELASTIC_CHAT_INDEX = URLs.getBaseInternalApiUrl() + "api/search/chats/index";
 
     // ====================  tie ================= //
@@ -159,12 +128,6 @@ public class Endpoints {
     public static String TIE_ALL_INTENTS = URLs.getBaseTieURL() + "%s/intents";
 
     public static String TIE_SLOTS_MANAGEMENT = URLs.getBaseTieURL() + "%s/slots-management";
-
-    // ====================  SOCIAL ================= //
-
-    public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "internal/actuator/health";
-
-    public static String SOCIAL_FACEBOOK_HOOKS = URLs.getBaseSocialUrl() + "facebook/hooks";
 
 
     // ====================  .Control ================= //

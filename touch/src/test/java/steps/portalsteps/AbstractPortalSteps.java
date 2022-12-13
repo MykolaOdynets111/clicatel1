@@ -37,9 +37,7 @@ public class AbstractPortalSteps implements JSHelper, VerificationHelper, WebWai
     private static final ThreadLocal<PortalTouchPreferencesPage> portalTouchPreferencesPage = new ThreadLocal<>();
     private static final ThreadLocal<PortalUserManagementPage> portalUserManagementPage = new ThreadLocal<>();
     private static final ThreadLocal<DashboardPage> dashboardPage = new ThreadLocal<>();
-
-    private static final ThreadLocal<SupervisorDeskPage> chatConsoleInboxPage = new ThreadLocal<>();
-    private static final ThreadLocal<PortalBillingDetailsPage> sendChatToPayLinkPage = new ThreadLocal<>();
+    private static final ThreadLocal<SupervisorDeskPage> supervisorDeskPage = new ThreadLocal<>();
     private static final ThreadLocal<DepartmentsManagementPage> departmentsManagementPage = new ThreadLocal<>();
     private static final ThreadLocal<SurveyManagementPage> surveyManagementPage = new ThreadLocal<>();
     private static final ThreadLocal<DashboardSettingsPage> dashboardSettingsPage = new ThreadLocal<>();
@@ -101,28 +99,22 @@ public class AbstractPortalSteps implements JSHelper, VerificationHelper, WebWai
     public static PortalLoginPage getMainPortalLoginPage(WebDriver driver) {
         if (portalLoginPage.get() == null) {
             portalLoginPage.set(new PortalLoginPage(driver));
-            return portalLoginPage.get();
-        } else {
-            return portalLoginPage.get();
         }
+        return portalLoginPage.get();
     }
 
     public static PortalLoginPage getSecondPortalLoginPage(WebDriver driver) {
         if (secondAgentPortalLoginPage.get() == null) {
             secondAgentPortalLoginPage.set(new PortalLoginPage(driver));
-            return secondAgentPortalLoginPage.get();
-        } else {
-            return secondAgentPortalLoginPage.get();
         }
+        return secondAgentPortalLoginPage.get();
     }
 
     public static PortalMainPage getAdminPortalMainPage() {
         if (portalMainPage.get() == null) {
             portalMainPage.set(new PortalMainPage(DriverFactory.getDriverForAgent("admin")));
-            return portalMainPage.get();
-        } else {
-            return portalMainPage.get();
         }
+        return portalMainPage.get();
     }
 
     public static synchronized PortalMainPage getPortalMainPage(String agent) {
@@ -136,10 +128,8 @@ public class AbstractPortalSteps implements JSHelper, VerificationHelper, WebWai
     public static PortalMainPage getSecondPortalMainPage() {
         if (secondPortalMainPage.get() == null) {
             secondPortalMainPage.set(new PortalMainPage(DriverFactory.getDriverForAgent("second agent")));
-            return secondPortalMainPage.get();
-        } else {
-            return secondPortalMainPage.get();
         }
+        return secondPortalMainPage.get();
     }
 
     public static void setPortalMainPage(PortalMainPage mainPage) {
@@ -149,23 +139,15 @@ public class AbstractPortalSteps implements JSHelper, VerificationHelper, WebWai
     public static PortalTouchIntegrationsPage getPortalIntegrationsPage() {
         if (portalIntegrationsPage.get() == null) {
             portalIntegrationsPage.set(new PortalTouchIntegrationsPage(DriverFactory.getDriverForAgent("admin")));
-            return portalIntegrationsPage.get();
-        } else {
-            return portalIntegrationsPage.get();
         }
-    }
-
-    public static void setPortalIntegrationsPage(PortalTouchIntegrationsPage integrationsPage) {
-        portalIntegrationsPage.set(integrationsPage);
+        return portalIntegrationsPage.get();
     }
 
     public static PortalBillingDetailsPage getPortalBillingDetailsPage() {
         if (portalBillingDetailsPage.get() == null) {
             portalBillingDetailsPage.set(new PortalBillingDetailsPage(DriverFactory.getDriverForAgent("admin")));
-            return portalBillingDetailsPage.get();
-        } else {
-            return portalBillingDetailsPage.get();
         }
+        return portalBillingDetailsPage.get();
     }
 
     public static void setPortalBillingDetailsPage(PortalBillingDetailsPage billingDetailsPage) {
@@ -175,10 +157,8 @@ public class AbstractPortalSteps implements JSHelper, VerificationHelper, WebWai
     public static PortalSignUpPage getPortalSignUpPage() {
         if (portalSignUpPage.get() == null) {
             portalSignUpPage.set(new PortalSignUpPage(DriverFactory.getDriverForAgent("admin")));
-            return portalSignUpPage.get();
-        } else {
-            return portalSignUpPage.get();
         }
+        return portalSignUpPage.get();
     }
 
     public static void setPortalSignUpPage(PortalSignUpPage signUpPage) {
@@ -188,49 +168,22 @@ public class AbstractPortalSteps implements JSHelper, VerificationHelper, WebWai
     public PortalAccountDetailsPage getPortalAccountDetailsPage() {
         if (portalAccountDetailsPage.get() == null) {
             portalAccountDetailsPage.set(new PortalAccountDetailsPage(DriverFactory.getDriverForAgent("admin")));
-            return portalAccountDetailsPage.get();
-        } else {
-            return portalAccountDetailsPage.get();
         }
-    }
-
-    public void setPortalAccountDetailsPage(PortalAccountDetailsPage accountDetailsPageThreadLocal) {
-        portalAccountDetailsPage.set(accountDetailsPageThreadLocal);
-    }
-
-    public static PortalFBIntegrationPage getPortalFBIntegrationPage() {
-        if (portalFBIntegrationPage.get() == null) {
-            portalFBIntegrationPage.set(new PortalFBIntegrationPage(DriverFactory.getDriverForAgent("admin")));
-            return portalFBIntegrationPage.get();
-        } else {
-            return portalFBIntegrationPage.get();
-        }
-    }
-
-    public static void setPortalFBIntegrationPage(PortalFBIntegrationPage FBIntegrationPage) {
-        portalFBIntegrationPage.set(FBIntegrationPage);
+        return portalAccountDetailsPage.get();
     }
 
     public static PortalManageAgentUsersPage getPortalManagingUsersPage() {
         if (portalManagingUsersPage.get() == null) {
             portalManagingUsersPage.set(new PortalManageAgentUsersPage(DriverFactory.getDriverForAgent("admin")));
-            return portalManagingUsersPage.get();
-        } else {
-            return portalManagingUsersPage.get();
         }
-    }
-
-    public static void setPortalManagingUsersPage(PortalManageAgentUsersPage managingUsers) {
-        portalManagingUsersPage.set(managingUsers);
+        return portalManagingUsersPage.get();
     }
 
     public static PortalUserEditingPage getPortalUserProfileEditingPage() {
         if (portalUserProfileEditingPage.get() == null) {
             portalUserProfileEditingPage.set(new PortalUserEditingPage(DriverFactory.getDriverForAgent("admin")));
-            return portalUserProfileEditingPage.get();
-        } else {
-            return portalUserProfileEditingPage.get();
         }
+        return portalUserProfileEditingPage.get();
     }
 
     public static void setPortalUserProfileEditingPage(PortalUserEditingPage userProfileEditingPage) {
@@ -244,64 +197,45 @@ public class AbstractPortalSteps implements JSHelper, VerificationHelper, WebWai
         return portalTouchPreferencesPage.get();
     }
 
-    public static void setPortalTouchPreferencesPage(PortalTouchPreferencesPage touchPreferencesPage) {
-        portalTouchPreferencesPage.set(touchPreferencesPage);
-    }
-
     public static PortalUserManagementPage getPortalUserManagementPage() {
         if (portalUserManagementPage.get() == null) {
             portalUserManagementPage.set(new PortalUserManagementPage(DriverFactory.getDriverForAgent("admin")));
-            return portalUserManagementPage.get();
-        } else {
-            return portalUserManagementPage.get();
         }
+        return portalUserManagementPage.get();
     }
 
     public static DashboardPage getDashboardPage() {
         if (dashboardPage.get() == null) {
             dashboardPage.set(new DashboardPage(DriverFactory.getDriverForAgent("admin")));
-            return dashboardPage.get();
-        } else {
-            return dashboardPage.get();
         }
+        return dashboardPage.get();
     }
 
     public static SupervisorDeskPage getSupervisorDeskPage() {
-        if (chatConsoleInboxPage.get() == null) {
-            chatConsoleInboxPage.set(new SupervisorDeskPage(DriverFactory.getDriverForAgent("admin")));
+        return getChatDeskPage("admin");
+    }
+
+    public static SupervisorDeskPage getChatDeskPage(String agent) {
+        if (supervisorDeskPage.get() == null) {
+            supervisorDeskPage.set(new SupervisorDeskPage(DriverFactory.getDriverForAgent(agent)));
             // ToDo decrease time for spinner wait
-            chatConsoleInboxPage.get().waitForConnectingDisappear(3, 10);
-            return chatConsoleInboxPage.get();
-        } else {
-            return chatConsoleInboxPage.get();
+            supervisorDeskPage.get().waitForConnectingDisappear(3, 10);
         }
+        return supervisorDeskPage.get();
     }
 
     public static DepartmentsManagementPage getDepartmentsManagementPage() {
         if (departmentsManagementPage.get() == null) {
             departmentsManagementPage.set(new DepartmentsManagementPage(DriverFactory.getDriverForAgent("admin")));
-            return departmentsManagementPage.get();
-        } else {
-            return departmentsManagementPage.get();
         }
-    }
-
-    public static PortalBillingDetailsPage getSendChatToPayLinkPage() {
-        if (sendChatToPayLinkPage.get() == null) {
-            sendChatToPayLinkPage.set(new PortalBillingDetailsPage(DriverFactory.getDriverForAgent("admin")));
-            return sendChatToPayLinkPage.get();
-        } else {
-            return sendChatToPayLinkPage.get();
-        }
+        return departmentsManagementPage.get();
     }
 
     public static SurveyManagementPage getSurveyManagementPage() {
         if (surveyManagementPage.get() == null) {
             surveyManagementPage.set(new SurveyManagementPage(DriverFactory.getDriverForAgent("admin")));
-            return surveyManagementPage.get();
-        } else {
-            return surveyManagementPage.get();
         }
+        return surveyManagementPage.get();
     }
 
     public static DashboardSettingsPage getDashboardSettingsPage() {
@@ -331,7 +265,7 @@ public class AbstractPortalSteps implements JSHelper, VerificationHelper, WebWai
         portalTouchPreferencesPage.remove();
         portalUserManagementPage.remove();
         dashboardPage.remove();
-        chatConsoleInboxPage.remove();
+        supervisorDeskPage.remove();
         departmentsManagementPage.remove();
         surveyManagementPage.remove();
         dashboardSettingsPage.remove();

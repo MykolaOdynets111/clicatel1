@@ -24,5 +24,5 @@ Feature: Filtering : Chat Desk
     When Agent select "Tickets" left menu option
     And Set agent support hours with day shift
     And Send 2 messages chat to agent by ORCA
-    When Admin filter by 0 year 0 month and 1 days ago start date and today's end date
+    When Admin filter by 0 year 0 month and 1 days ago start date and 0 year 0 month and 0 days ago end date
     Then Verify filtered tickets dates are fitted by filter for agent

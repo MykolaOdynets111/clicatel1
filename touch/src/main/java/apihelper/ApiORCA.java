@@ -10,8 +10,6 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.Assert;
 
-import java.time.Instant;
-
 public class ApiORCA extends ApiHelper{
 
      public static String createIntegration(String channel, String callBackUrl){
@@ -22,11 +20,11 @@ public class ApiORCA extends ApiHelper{
         return validateIntegrationResponse(resp, "Create");
     }
 
-    public static String updateIntegration(String channel, String callBackUrl, String orcaId){
+    public static String updateIntegration(String channel, String callBackUrl, String orcaChannelId){
         Response resp = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .body(prepareIntegrationCAllData(callBackUrl))
-                .put(String.format(Endpoints.UPDATE_ORCA_INTEGRATION, channel.toLowerCase(), Tenants.getTenantId(),orcaId));
+                .body(prepareIntegrationCAllDataForUpdate(callBackUrl, orcaChannelId))
+                .put(String.format(Endpoints.UPDATE_ORCA_INTEGRATION, channel.toLowerCase(), Tenants.getTenantId(),orcaChannelId));
         return validateIntegrationResponse(resp, "Update");
     }
 
@@ -35,7 +33,19 @@ public class ApiORCA extends ApiHelper{
                 "  \"enabled\": true,\n" +
                 "  \"config\": {\n" +
                 "    \"businessId\": \"cam_flow\",\n" +
-                "    \"apiToken\": \"AQAApiToken"+ Instant.now().getEpochSecond() +"\",\n" +
+                "    \"callbackUrl\": \""+ callBackUrl +"\",\n" +
+                "    \"location\": true,\n" +
+                "    \"media\": true\n" +
+                "  }\n" +
+                "}";
+    }
+
+    private static String prepareIntegrationCAllDataForUpdate(String callBackUrl, String channelId){
+        return  "{\n" +
+                "  \"enabled\": true,\n" +
+                "  \"config\": {\n" +
+                "    \"businessId\": \"cam_flow\",\n" +
+                "    \"apiToken\": \"" + channelId + "\",\n" +
                 "    \"callbackUrl\": \""+ callBackUrl +"\",\n" +
                 "    \"location\": true,\n" +
                 "    \"media\": true\n" +
@@ -105,7 +115,7 @@ public class ApiORCA extends ApiHelper{
                         "  },\n" +
                         "  \"transportType\": \"ORCA\",\n" +
                         "  \"endUserId\": \"" + createNewUser(orcaEvent, channelId) + "\",\n" +
-                        "  \"assignedToAgentId\": \"" + ApiHelper.getAgentId(Tenants.getTenantUnderTestOrgName(), agent) + "\",\n" +
+                        "  \"assignedToAgentId\": \"" + ApiHelperAgent.getAgentId(Tenants.getTenantUnderTestOrgName(), agent) + "\",\n" +
                         "  \"initialMessage\": \"" + orcaEvent.getContent().getEvent().getText() + "\",\n" +
                         "  \"createdTime\": \"" + DateTimeHelper.getDateTimeWithHoursShift(time) + "\"\n" +
                         "}")
@@ -115,6 +125,4 @@ public class ApiORCA extends ApiHelper{
                     resp.statusCode(), resp.getBody().asString()));
         };
     }
-
-
 }

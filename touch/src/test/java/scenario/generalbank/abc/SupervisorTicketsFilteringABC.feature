@@ -17,7 +17,7 @@ Feature: Apple Business Chat :: Supervisor Desk
     And I select Touch in left menu and Supervisor Desk in submenu
     When Agent select "Tickets" left menu option
     And Agent search chat orca on Supervisor desk
-    Then Ticket from orca is present on All tickets filter page
+    Then Agent see tickets from orca on Unassigned filter page
     When Agent refreshes the page
 #    And Agent filter by "Apple Business Chat" channel and "Positive" sentiment
 #    Then Ticket from orca is present on "All tickets" filter page
@@ -25,7 +25,7 @@ Feature: Apple Business Chat :: Supervisor Desk
     And Send sfdsfsdfsd message by ORCA
 #    When Agent refreshes the page
      And Agent filter by "Apple Business Chat" channel and "Neutral" sentiment
-     Then Ticket from orca is present on All tickets filter page
+    Then Agent see tickets from orca on Assigned filter page
 #    When Send hate you message by ORCA
 #    When Agent refreshes the page
 #    And Agent filter by "Apple Business Chat" channel and "Negative" sentiment

@@ -8,5 +8,5 @@ Feature: Supervisor desk
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     Given Save shown tickets
-    When Supervisor scroll page to the bottom
+    When Supervisor scroll Tickets page to the bottom
     Then More tickets are loaded

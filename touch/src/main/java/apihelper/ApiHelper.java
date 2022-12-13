@@ -4,7 +4,6 @@ import datamanager.*;
 import datamanager.jacksonschemas.*;
 import datamanager.jacksonschemas.chathistory.ChatHistory;
 import datamanager.jacksonschemas.chatusers.UserInfo;
-import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import datamanager.jacksonschemas.usersessioninfo.ClientProfile;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
 import drivermanager.ConfigManager;
@@ -24,6 +23,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static apihelper.ApiHelperAgent.getAgentId;
 import static java.lang.String.format;
 import static org.junit.Assert.fail;
 
@@ -232,15 +232,6 @@ public class ApiHelper implements VerificationHelper {
                 .post(Endpoints.WIDGET_VISIBILITY_TERRITORIES);
     }
 
-
-    public static List<TenantAddress> getTenantAddressInfo(String tenantName) {
-        return RestAssured.given()
-                .accept(ContentType.JSON)
-                .get(format(Endpoints.INTERNAL_TENANT_ADDRESS, tenantName))
-                .jsonPath().getList("addresses", TenantAddress.class);
-    }
-
-
     public static UserSession getLastUserSession(String userID, String tenant) {
         return RestAssured.given()
                 .accept(ContentType.JSON)
@@ -299,14 +290,13 @@ public class ApiHelper implements VerificationHelper {
         Response resp = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .get(format(Endpoints.AGENT_INFO_ME, Tenants.getTenantId()));
-        Assert.assertEquals(resp.getStatusCode(), 200, format("Agent is not return status code is : %s and Body is: %s", resp.getStatusCode(), resp.getBody().asString()));
-        List<Map> agents = resp.getBody().jsonPath().getList("");
-        return agents;
+
+        Assert.assertEquals(resp.getStatusCode(), 200,
+                format("Agent is not return status code is : %s and Body is: %s",
+                        resp.getStatusCode(), resp.getBody().asString()));
+        return resp.getBody().jsonPath().getList("");
     }
 
-    public static String getAgentId(String tenantOrgName, String agent) {
-        return getAgentInfo(tenantOrgName, agent).get("id");
-    }
 
     public static String getJWTToken(String tenantOrgName, String agent) {
         Response resp = RestAssured.given().log().all()

@@ -9,14 +9,16 @@ Feature: Supervisor desk
     Given I open portal
     And Setup ORCA sms integration for Automation Bot tenant
     And Set agent support hours with day shift
-    And autoTicketScheduling tenant feature is set to false for Automation
-    And Login into portal as an admin of Automation account
+    And autoTicketScheduling tenant feature is set to false for Automation Bot
+    And Login into portal as an admin of Automation Bot account
     And Send hello message by ORCA
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1713")
   Scenario: CD:: SMS :: Tickets :: Verify if Supervisor can initiate a SMS chat from tickets tab user using "Message Customer" button
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
+    And Agent search chat sms on Supervisor desk
+    And Agent see tickets from sms on Unassigned filter page
     And Agent select sms ticket
     And Click on Message Customer button for sms
     And Message Customer Window is opened

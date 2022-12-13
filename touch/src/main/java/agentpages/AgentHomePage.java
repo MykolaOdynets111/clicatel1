@@ -1,6 +1,8 @@
 package agentpages;
 
 import abstractclasses.AgentAbstractPage;
+import agentpages.commonelements.SupervisorAndTicketsHeader;
+import agentpages.leftmenu.LeftMenuWithChats;
 import agentpages.uielements.*;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -23,6 +25,24 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = ".cl-r-suggestions-count")
     private WebElement agentAssistantButton;
 
+    @FindBy(css = "#Close")
+    private WebElement crossButtonWarningDialog;
+
+    @FindBy(css = ".cl-modal__footer-buttons span")
+    private WebElement notShowDialogCheckbox;
+
+    @FindBy(css = ".bulk-mode-popup-message-limit-reached-msg")
+    private WebElement bulkChatMessage;
+
+    @FindBy(css = ".bulk-mode-exit-modal-body__text")
+    private WebElement bulkChatTabSwitchMessage;
+
+    @FindBy(css = ".agent-view-bulk-mode-main--header")
+    private WebElement middlePaneBulkChatMessage;
+
+    @FindBy(css = ".agent-view-bulk-mode-main--icon-row")
+    private WebElement middlePaneBulkMessageHeader;
+
     @FindAll({
             @FindBy(xpath = "//li[text()='History']"),
             @FindBy(css = "[selenium-id='tab-right-panel-2']")
@@ -37,6 +57,9 @@ public class AgentHomePage extends AgentAbstractPage {
 
     @FindBy(xpath = "//p[@class='cl-pending-chat-mark-toast-content']")
     private WebElement pendingAlertMessage;
+
+    @FindBy(xpath = "//div[@class='tippy-content']/div")
+    private WebElement flaggedCloseChatToolTip;
 
     private final String pinErrorMessageXpath = "//div[text()='You do not have the ability to close the chat when it has been flagged']";
 
@@ -79,6 +102,21 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "[role=dialog]")
     private WebElement dialogElement;
 
+    @FindBy(xpath = "//div[@class='chats-list-wrapper chats-list-extended-view']//div")
+    private WebElement noChatsMessage;
+
+    @FindBy(css = "#Bell")
+    private WebElement bellNotificationIcon;
+
+    @FindBy(css = ".cl-notifications-counter")
+    private WebElement bellNotificationsCount;
+
+    @FindBy(css = ".cl-agent-notifications-row-message")
+    private WebElement bellNotificationItem;
+
+    @FindBy(css = ".cl-agent-notifications-row-buttons-time")
+    private WebElement bellNotificationTime;
+
     private DeleteCRMConfirmationPopup deleteCRMConfirmationPopup;
     private EditCRMTicketWindow editCRMTicketWindow;
     private CRMTicketContainer crmTicketContainer;
@@ -95,6 +133,8 @@ public class AgentHomePage extends AgentAbstractPage {
     private ChatHistoryContainer chatHistoryContainer;
     private HistoryDetailsWindow historyDetailsWindow;
     private ChatForm chatForm;
+
+    private RightPanelWindow agentRightPanelWindow;
     private VerifyPhoneNumberWindow verifyPhoneNumberWindow;
     private ChatAttachmentForm chatAttachmentForm;
     private AttachmentWindow attachmentWindow;
@@ -103,6 +143,7 @@ public class AgentHomePage extends AgentAbstractPage {
     private ChatPendingToLiveForm chatPendingToLiveForm;
     private Extensions extensions;
     private HSMForm hsmForm;
+    private SupervisorAndTicketsHeader supervisorAndTicketsHeader;
 
     public AgentHomePage(String agent) {
         super(agent);
@@ -116,6 +157,11 @@ public class AgentHomePage extends AgentAbstractPage {
     public ChatForm getChatForm() {
         chatForm.setCurrentDriver(this.getCurrentDriver());
         return chatForm;
+    }
+
+    public RightPanelWindow getAgentRightPanel(){
+        agentRightPanelWindow.setCurrentDriver(this.getCurrentDriver());
+        return agentRightPanelWindow;
     }
 
     public ChatPendingToLiveForm getChatPendingToLiveForm() {
@@ -202,7 +248,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public IncomingTransferWindow getIncomingTransferWindow() {
-        if (transferWaitingButtons.size() != 0){
+        if (transferWaitingButtons.size() > 0){
             transferWaitingButtons.get(getCollapsedTransfers().size() - 1).click();
         }
         incomingTransferWindow.setCurrentDriver(this.getCurrentDriver());
@@ -245,6 +291,11 @@ public class AgentHomePage extends AgentAbstractPage {
         return chatBody;
     }
 
+    public SupervisorAndTicketsHeader getSupervisorAndTicketsHeader(){
+        supervisorAndTicketsHeader.setCurrentDriver(this.getCurrentDriver());
+        return supervisorAndTicketsHeader;
+    }
+
     public HSMForm getHSMForm() {
         hsmForm.setCurrentDriver(this.getCurrentDriver());
         return hsmForm;
@@ -258,6 +309,22 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public String isConnectionErrorShown(){
         return getTextFromElem(this.getCurrentDriver(), connectionErrorImage, 15, "Connection error");
+    }
+
+    public void hoverBellNotificationIcon(){
+        hoverElem(this.getCurrentDriver(), bellNotificationIcon, 5, "Bell icon");
+    }
+
+    public String getNotificationCount(){
+        return getTextFromElem(this.getCurrentDriver(), bellNotificationsCount, 15, "Bell notification icon");
+    }
+
+    public String getNotificationText(){
+        return getTextFromElem(this.getCurrentDriver(), bellNotificationItem, 15, "Bell notification latest item");
+    }
+
+    public String getNotificationTime(){
+        return getTextFromElem(this.getCurrentDriver(), bellNotificationTime, 15, "Bell notification time");
     }
 
     public void endChat() {
@@ -278,6 +345,10 @@ public class AgentHomePage extends AgentAbstractPage {
         } else {
             Assert.fail("'Close chat' button is not shown or clickable.");
         }
+    }
+
+    public String getBulkMessageToolTipText() {
+        return getTextFromElem(this.getCurrentDriver(), flaggedCloseChatToolTip, 4, "Tool Tip for Bulk chat");
     }
 
     public void clickAgentAssistantButton(){
@@ -364,8 +435,37 @@ public class AgentHomePage extends AgentAbstractPage {
         return isElementShown(this.getCurrentDriver(), dialogElement, 10);
     }
 
+    public String isMultipleBulkMessagesTextShown(){
+        return getTextFromElem(this.getCurrentDriver(), bulkChatMessage, 10, "Bulk chat error message");
+    }
+
+    public String bulkMessagesTabSwitchNotification(){
+        return getTextFromElem(this.getCurrentDriver(), bulkChatTabSwitchMessage, 10, "Bulk chat tab switch message");
+    }
+
+    public String bulkChatMiddlePaneMessage(){
+        return getTextFromElem(this.getCurrentDriver(), middlePaneBulkChatMessage, 10, "Bulk chat middle pane message");
+    }
+
+    public String bulkChatMiddlePaneHeaderMessage(){
+        return getTextFromElem(this.getCurrentDriver(), middlePaneBulkMessageHeader, 10, "Bulk chat middle pane header");
+    }
+
+
     public boolean isDisappearingDialogShown(){
         return isElementRemoved(this.getCurrentDriver(), dialogElement, 3);
     }
 
+    public void clickCrossButtonWarningDialog(){
+        clickElem(this.getCurrentDriver(), crossButtonWarningDialog, 1, "Cross Button");
+    }
+
+    public void clickDontShowMessageCheckbox(){
+        clickElem(this.getCurrentDriver(), notShowDialogCheckbox, 1, "Don't show warning checkbox");
+    }
+
+    public String getNoResultsFoundMessage() {
+        return getTextFromElem(this.getCurrentDriver(), this.noChatsMessage, 8,
+                "No results found text").replace("\n", " ");
+    }
 }

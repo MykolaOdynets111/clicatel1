@@ -1,7 +1,7 @@
-@no_widget
-@start_orca_server
-@Regression
 @orca_api
+@no_widget
+@Regression
+@start_orca_server
 Feature: Dashboard: Settings: Auto Responder
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1915")
@@ -16,6 +16,7 @@ Feature: Dashboard: Settings: Auto Responder
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1822")
   @remove_dep
   @support_hours
+  @skip
   Scenario: CD :: Dashboard :: Configure Settings :: Auto Responder :: Verify that user should receive "out of support hours" autoresponder message when user try to reach out of specific support hours per department time
 
     Given I login as agent of Standard Billing
@@ -32,3 +33,16 @@ Feature: Dashboard: Settings: Auto Responder
     And I select Touch in left menu and Agent Desk in submenu
     And Send to agent message by ORCA to Auto_Department department
     Then Verify Orca returns Out of Support Hours message autoresponder during 40 seconds for agent
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2400")
+  Scenario: CD :: Dashboard :: Auto-responder :: Connecting Agent message with Agent name for Social Channels
+
+    Given I login as Agent of Standard Billing
+    And I select Touch in left menu and Dashboard in submenu
+    When Navigate to Auto Responders page
+    And Wait for auto responders page to load
+    Then Set message: hello ${agentName} into: Connecting Agent message (Social Channels) field and verify it's updated
+#   clean up
+    When Click "Reset to default" button for Connecting Agent message (Social Channels) auto responder
+    Then The Connecting Agent message (Social Channels) message was reset
+
