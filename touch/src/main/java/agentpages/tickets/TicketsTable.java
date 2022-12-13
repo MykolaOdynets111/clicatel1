@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(css = ".chats-list")
+@FindBy(id = ".chats-list-wrapper.chats-list-extended-view")
 public class TicketsTable extends AbstractUIElement {
 
     @FindBy(css=".cl-table-row")
@@ -28,9 +28,6 @@ public class TicketsTable extends AbstractUIElement {
 
     @FindBy(xpath = "//a[text() = 'Open']")
     private WebElement openTicketButton;
-
-    @FindBy(css = "[data-testid=roster-scroll-container]")
-    private WebElement scrolArea;
 
     @FindBy(xpath = "//button[text() = 'Route to Scheduler']")
     private WebElement routeToSchedulerButton;
@@ -103,12 +100,12 @@ public class TicketsTable extends AbstractUIElement {
     }
 
     public TicketsTable scrollTicketsToTheButtom(){
-        wheelScroll(this.getCurrentDriver(), scrolArea, 2000, 0,0);
+        wheelScroll(this.getCurrentDriver(), this.getWrappedElement(), 2000, 0,0);
         return this;
     }
 
     public void scrollTicketsToTheTop(){
-        wheelScroll(this.getCurrentDriver(), scrolArea, -2000, 0,0);
+        wheelScroll(this.getCurrentDriver(), this.getWrappedElement(), -2000, 0,0);
     }
 
     public void waitForMoreTicketsAreLoading(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
