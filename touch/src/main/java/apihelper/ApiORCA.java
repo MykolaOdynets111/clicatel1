@@ -115,7 +115,7 @@ public class ApiORCA extends ApiHelper{
                         "  },\n" +
                         "  \"transportType\": \"ORCA\",\n" +
                         "  \"endUserId\": \"" + createNewUser(orcaEvent, channelId) + "\",\n" +
-                        "  \"assignedToAgentId\": \"" + ApiHelper.getAgentId(Tenants.getTenantUnderTestOrgName(), agent) + "\",\n" +
+                        "  \"assignedToAgentId\": \"" + ApiHelperAgent.getAgentId(Tenants.getTenantUnderTestOrgName(), agent) + "\",\n" +
                         "  \"initialMessage\": \"" + orcaEvent.getContent().getEvent().getText() + "\",\n" +
                         "  \"createdTime\": \"" + DateTimeHelper.getDateTimeWithHoursShift(time) + "\"\n" +
                         "}")

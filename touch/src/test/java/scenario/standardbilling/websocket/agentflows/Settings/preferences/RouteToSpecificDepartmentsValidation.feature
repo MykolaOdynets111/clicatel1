@@ -18,3 +18,24 @@ Feature: Dashboard: Settings: Preferences: Route to Specific Departments
     And I select Touch in left menu and Supervisor Desk in submenu
     And Send Hi message by ORCA to Auto_Department department
     Then Agent has new conversation request from orca user
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2094")
+  Scenario: CD :: Dashboard :: Settings :: Preferences :: Verify that chat is assigned randomly between agents if 'Random chat distribution' option is selected
+
+    Given Setup ORCA Whatsapp integration for Standard Billing tenant
+    And routingType tenant feature is set to RANDOM for Standard Billing
+
+    When I login as agent of Standard Billing
+    Then Agent changes status to: Unavailable
+    And Send connect to Support message by ORCA
+    When I login as second agent of Standard Billing
+    Then Second agent has new conversation request
+
+    When Second agent changes status to: Unavailable
+    When Agent changes status to: Available
+    When Send 1 messages Hi by ORCA
+    Then Agent has new conversation request
+
+
+
+

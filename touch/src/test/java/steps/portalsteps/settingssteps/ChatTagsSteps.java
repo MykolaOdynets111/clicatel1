@@ -1,6 +1,6 @@
 package steps.portalsteps.settingssteps;
 
-import apihelper.APITagsHelper;
+import apihelper.APIHelperTags;
 import datamanager.ComparatorProvider;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -69,7 +69,7 @@ public class ChatTagsSteps {
                 .clickSaveButton();
         assertThat(name)
                 .as(format("Tag %s should be created!", name))
-                .isIn(APITagsHelper.getAllTagsTitle());
+                .isIn(APIHelperTags.getAllTagsTitle());
     }
 
     @When("^Verify (.*) column data is updated for tag (.*)$")
@@ -97,14 +97,14 @@ public class ChatTagsSteps {
                 .clickSaveButton();
 
         assertThat(newTagName).as(format("%s tag was renamed", tag))
-                .isIn(APITagsHelper.getAllTagsTitle());
+                .isIn(APIHelperTags.getAllTagsTitle());
         assertThat(tag).as(format("%s tag was renamed", newTagName))
-                .isNotIn(APITagsHelper.getAllTagsTitle());
+                .isNotIn(APIHelperTags.getAllTagsTitle());
     }
 
     @When("^Set (.*) for (.*) tag status$")
     public void changeTagStatus(String status, String tagName) {
-        APITagsHelper.setTagsStatus(tagName, status);
+        APIHelperTags.setTagsStatus(tagName, status);
     }
 
     @NotNull

@@ -1,6 +1,5 @@
 package steps.agentsteps;
 
-import agentpages.uielements.FilterMenu;
 import agentpages.uielements.Profile;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperSupportHours;
@@ -10,8 +9,6 @@ import datamanager.jacksonschemas.TenantChatPreferences;
 import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
-import datamanager.jacksonschemas.supportHours.GeneralSupportHoursItem;
-import datamanager.jacksonschemas.supportHours.SupportHoursMapping;
 import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
@@ -32,7 +29,10 @@ import steps.dotcontrol.DotControlSteps;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -44,20 +44,20 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     private static String initialNotificationCount;
 
     @When("Save clientID value for (.*) user")
-    public void saveClientIDValues(String userFrom){
+    public void saveClientIDValues(String userFrom) {
         saveClientIDValue(userFrom);
     }
 
 
     @Given("^(.*) tenant feature is set to (.*) for (.*)$")
-    public void setFeatureStatus(String parameter, String value, String tenantOrgName){
+    public void setFeatureStatus(String parameter, String value, String tenantOrgName) {
         TenantChatPreferences tenantChatPreferences = new TenantChatPreferences();
         tenantChatPreferences.setValueForChatPreferencesParameter(parameter, value);
         ApiHelper.updateChatPreferencesParameter(tenantChatPreferences);
     }
 
     @Given("Agent creates tenant extension with label and name$")
-    public void createExtensionForTenant(List<Map<String, String>> datatable){
+    public void createExtensionForTenant(List<Map<String, String>> datatable) {
         ObjectMapper mapper = new ObjectMapper();
         List<String> listChatExtension = new ArrayList<>();
         for (int i = 0; i < datatable.size(); i++) {
@@ -73,8 +73,8 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Then("^On backand (.*) tenant feature status is set to (.*) for (.*)$")
-    public void isFeatureStatusSet(String feature, boolean status, String tenantOrgName){
-        Assert.assertEquals(ApiHelper.getFeatureStatus(tenantOrgName, feature),status,
+    public void isFeatureStatusSet(String feature, boolean status, String tenantOrgName) {
+        Assert.assertEquals(ApiHelper.getFeatureStatus(tenantOrgName, feature), status,
                 feature + " feature is not expected");
     }
 
@@ -107,7 +107,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @And("^(.*) fill the customer contact number$")
     public void sendWhatsApp(String agent) {
         getAgentHomePage(agent).getHSMForm().setWAPhoneNumber(ORCASteps.orcaMessageCallBody.get().getSourceId());
-     }
+    }
 
     @And("^(.*) fill the customer contact number (.*)$")
     public void sendWhatsApp(String agent, String contactNumber) {
@@ -115,13 +115,13 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Then("^(.*) verify customer contact number (.*) is filled$")
-    public void checkContactNumber(String agent, String phoneNumber){
+    public void checkContactNumber(String agent, String phoneNumber) {
         Assert.assertTrue(getAgentHomePage(agent).getHSMForm().getContactNum().equalsIgnoreCase(phoneNumber), "False : waPhone Field is empty");
     }
 
     @Then("^Verify (.*) has (.*) conversation requests from (.*) integration$")
     public void verifyConversationRequest(String agent, int numberOfChats, String integration) {
-        if(getNumberOfActiveChats(agent, integration) < numberOfChats){
+        if (getNumberOfActiveChats(agent, integration) < numberOfChats) {
             waitSomeTime(10);
         }
 
@@ -131,7 +131,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Then("^(.*) button is (.+) on Chat header$")
-    public void isButtonEnabled(String button, String state){
+    public void isButtonEnabled(String button, String state) {
         if (state.equalsIgnoreCase("disabled"))
             Assert.assertTrue(getAgentHomePage("main").getChatHeader().isButtonDisabled(button));
         else if (state.equalsIgnoreCase("enabled"))
@@ -139,7 +139,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Then("^New info is shown in left menu with chats$")
-    public void checkUpdatingUserInfoInLeftMenu(){
+    public void checkUpdatingUserInfoInLeftMenu() {
         SoftAssert soft = new SoftAssert();
         soft.assertEquals(getLeftMenu("main").getActiveChatUserName(), userPersonalInfoForUpdating.getFullName().trim(),
                 "Full user name is not updated in left menu with chats after updating User Personal info \n");
@@ -147,14 +147,15 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "Location is not updated in left menu with chats after updating User Personal info \n");
         soft.assertAll();
     }
+
     @Then("^(.*) button hidden from the Chat header$")
-    public void checkIfButtonHidden(String button){
-            Assert.assertTrue( getAgentHomePage("main").getChatHeader().isButtonDisabled(button),
-                    "'" + button + "' button is displayed");
+    public void checkIfButtonHidden(String button) {
+        Assert.assertTrue(getAgentHomePage("main").getChatHeader().isButtonDisabled(button),
+                "'" + button + "' button is displayed");
     }
 
     @Then("Message that it is overnight ticket is shown for (.*)")
-    public void verifyMessageThatThisIsOvernightTicket(String agent){
+    public void verifyMessageThatThisIsOvernightTicket(String agent) {
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertEquals(getAgentHomePage(agent).getChatForm().getOvernightTicketMessage(), "This is an unattended chat that has been assigned to you.",
                 "Message that this is Overnight ticket is not shown");
@@ -164,22 +165,22 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Then("^Conversation area contains (.*) to user message$")
-    public void verifyOutOfSupportMessageShownOnChatdesk(String message){
+    public void verifyOutOfSupportMessageShownOnChatdesk(String message) {
         String userMessage = message;
-        if(message.contains("out_of_support_hours")) {
+        if (message.contains("out_of_support_hours")) {
             userMessage = ApiHelper.getAutoResponderMessageText(message);
         }
         Assert.assertTrue(getAgentHomePage("main agent").getChatBody().isToUserMessageShown(userMessage),
-                "Expected to user message '"+userMessage+"' should be shown in chatdesk");
+                "Expected to user message '" + userMessage + "' should be shown in chatdesk");
     }
 
     @Then("^(.*) select cross button wait and stay dialog$")
-    public void selectWaitAndStayCrossButton(String agent){
+    public void selectWaitAndStayCrossButton(String agent) {
         getAgentHomePage(agent).clickCrossButtonWarningDialog();
     }
 
     @Then("^(.*) select Don't show this message again checkbox$")
-    public void selectDontShowWarningCheckbox(String agent){
+    public void selectDontShowWarningCheckbox(String agent) {
         getAgentHomePage(agent).clickDontShowMessageCheckbox();
     }
 
@@ -199,25 +200,25 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @When("^(.*) changes status to: (.*)$")
-    public void changeAgentStatus(String agent, String newStatus){
-            getAgentHomePage(agent).getPageHeader().clickIcon();
-            getAgentHomePage(agent).getPageHeader().selectStatus(newStatus);
+    public void changeAgentStatus(String agent, String newStatus) {
+        getAgentHomePage(agent).getPageHeader().clickIcon();
+        getAgentHomePage(agent).getPageHeader().selectStatus(newStatus);
     }
 
     @Then("^(.*) checks initial bell notification count$")
-    public void getInitialBellNotificationCount(String agent){
+    public void getInitialBellNotificationCount(String agent) {
         initialNotificationCount = getAgentHomePage(agent).getNotificationCount();
     }
 
     @Then("^(.*) receive increase in the count of the bell icon notification$")
-    public void verifyIncreasedBellNotificationCount(String agent){
+    public void verifyIncreasedBellNotificationCount(String agent) {
         String expectedCount = String.valueOf((Integer.parseInt(initialNotificationCount) + 1));
         Assert.assertEquals(getAgentHomePage(agent).getNotificationCount(), expectedCount,
                 "Bell Notification count has not increased");
     }
 
     @Then("^(.*) should see notifications (.*) at time (.*) ago in the notification frame$")
-    public void verifyLatestBellNotification(String agent, String expectedNotificationText, String expectedTime){
+    public void verifyLatestBellNotification(String agent, String expectedNotificationText, String expectedTime) {
         getAgentHomePage(agent).hoverBellNotificationIcon();
         softAssert.assertEquals(getAgentHomePage(agent).getNotificationText(), expectedNotificationText,
                 "Latest bell Notification text is not correct");
@@ -232,25 +233,25 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @When("^(.*) refreshes the page$")
-    public void refreshThePage(String agent){
+    public void refreshThePage(String agent) {
         DriverFactory.getDriverForAgent(agent).navigate().refresh();
     }
 
     @When("^Agent limit reached popup is show for (.*)$")
-    public void verifyAgentLimitPopup(String ordinalAgentNumber){
+    public void verifyAgentLimitPopup(String ordinalAgentNumber) {
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentLimitReachedPopupShown(12),
                 "'Agent limit reached' pop up is not shown.");
     }
 
     @Given("^Set agent support hours (.*)$")
-    public void setSupportHoursWithShift(String shiftStrategy){
+    public void setSupportHoursWithShift(String shiftStrategy) {
         Response resp = null;
-        switch (shiftStrategy){
+        switch (shiftStrategy) {
             case "with day shift":
                 LocalDateTime currentTimeWithADayShift = LocalDateTime.now().minusDays(1);
 
                 resp = ApiHelperSupportHours.setSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(),
-                        currentTimeWithADayShift.getDayOfWeek().toString(),"00:00", "23:59");
+                        currentTimeWithADayShift.getDayOfWeek().toString(), "00:00", "23:59");
                 break;
             case "for all week":
                 resp = ApiHelperSupportHours.setSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
@@ -259,17 +260,17 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         }
         Assert.assertEquals(resp.statusCode(), 200,
                 "Changing support hours was not successful\n" +
-                "resp body: " + resp.getBody().asString() + "\n");
+                        "resp body: " + resp.getBody().asString() + "\n");
     }
 
     @Then("^Tab with user info has \"(.*)\" header$")
-    public void verifyTabHeader(String headerName){
+    public void verifyTabHeader(String headerName) {
         Assert.assertEquals(getAgentHomeForMainAgent().getSelectedTabHeader(), headerName,
                 "Incorrect header of customer selected tab, should be " + headerName);
     }
 
     @Then("Correct (.*) client details are shown")
-    public void verifyClientDetails(String clientFrom){
+    public void verifyClientDetails(String clientFrom) {
         UserPersonalInfo userPersonalInfoFromChatdesk = getAgentHomePage("main")
                 .getProfile().getActualPersonalInfo();
 
@@ -278,27 +279,27 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Then("Correct dotcontrol client details from Init context are shown")
-    public void verifyInitContextClientDetails(){
+    public void verifyInitContextClientDetails() {
         UserPersonalInfo userPersonalInfoFromChatdesk = getUserProfileContainer("main").getActualPersonalInfo();
 
         UserPersonalInfo expectedResult = getUserPersonalInfo("dotcontrol");
         InitContext initContext = DotControlSteps.getInitContext();
         expectedResult.setFullName(initContext.getFullName())
-                        .setEmail(initContext.getEmail())
-                        .setPhone(initContext.getPhone().replace(" ", ""))
-        .setChannelUsername("");
+                .setEmail(initContext.getEmail())
+                .setPhone(initContext.getPhone().replace(" ", ""))
+                .setChannelUsername("");
 
         Assert.assertEquals(userPersonalInfoFromChatdesk, expectedResult,
                 "User info is not as in init context \n");
     }
 
     @When("^Click (?:'Edit'|'Save') button in Profile$")
-    public void clickEditCustomerView(){
+    public void clickEditCustomerView() {
         getAgentHomePage("main").getProfile().clickSaveEditButton();
     }
 
     @Then("^Wait for (.d*) seconds for Phone Number to be (.*)$")
-    public void checkPhoneNumberFieldUpdate(int waitFor, String requiredState) throws InterruptedException{
+    public void checkPhoneNumberFieldUpdate(int waitFor, String requiredState) throws InterruptedException {
         Profile profile = new Profile();
         profile.setCurrentDriver(DriverFactory.getDriverForAgent("agent"));
 
@@ -306,29 +307,29 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         long endTime = System.currentTimeMillis() + waitTimeInMillis;
 
         while (!profile.isPhoneNumberFieldUpdated(requiredState)
-                    && System.currentTimeMillis() < endTime) {
+                && System.currentTimeMillis() < endTime) {
             Thread.sleep(200);
         }
     }
 
     @When("^Wait for (.d*) seconds for Phone Number update$")
-    public void waitSomeTimeForBackendUpdatePhone(int waitFor){
+    public void waitSomeTimeForBackendUpdatePhone(int waitFor) {
         waitSomeTime(waitFor);
     }
 
     @And("^Wait for (\\d*) second$")
-    public void waitSomeTime(int waitFor){
+    public void waitSomeTime(int waitFor) {
         int waitTimeInMillis = waitFor * 1000;
         sleepFor(waitTimeInMillis);
     }
 
     @When("Fill in the form with new (.*) user profile info")
-    public void updateUserInfo(String customerFrom){
+    public void updateUserInfo(String customerFrom) {
         UserPersonalInfo currentCustomerInfo = getUserPersonalInfo(customerFrom);
         userPersonalInfoForUpdating = currentCustomerInfo.setLocation("Lviv")
-                            .setEmail("udated_" + faker.lorem().word()+"@gmail.com")
-                            .setPhone(faker.numerify("38093#######")); //"+380931576633");
-        if(!(customerFrom.contains("fb")||customerFrom.contains("twitter"))) {
+                .setEmail("udated_" + faker.lorem().word() + "@gmail.com")
+                .setPhone(faker.numerify("38093#######")); //"+380931576633");
+        if (!(customerFrom.contains("fb") || customerFrom.contains("twitter"))) {
             userPersonalInfoForUpdating.setFullName("AQA Run");
             userPersonalInfoForUpdating.setChannelUsername(userPersonalInfoForUpdating.getFullName());
 
@@ -337,12 +338,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @When("^(.*) see (.*) phone number added into User profile$")
-    public void updatePhoneNumberUserProfile(String agent, String isPhoneNumberRequired){
+    public void updatePhoneNumberUserProfile(String agent, String isPhoneNumberRequired) {
         Assert.assertTrue(isRequiredPhoneNumberDisplayed(agent, isPhoneNumberRequired));
     }
 
     @Then("^(.*) button (.*) displayed in User profile$")
-    public void checkUserProfilePhoneButtonsVisibility(String buttonName, String isOrNotDisplayed){
+    public void checkUserProfilePhoneButtonsVisibility(String buttonName, String isOrNotDisplayed) {
         Profile profile = getAgentHomePage("main").getProfile();
         if (isOrNotDisplayed.equalsIgnoreCase("not"))
             Assert.assertFalse(profile.isUserSMSButtonsDisplayed(buttonName), "'" + buttonName + "' button is not displayed");
@@ -351,7 +352,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Then("^'Verify' and 'Re-send OTP' buttons (.*) displayed in User profile$")
-    public void checkUserProfilePhoneVerifyAndReSendButtonsVisibility(String isOrNotDisplayed){
+    public void checkUserProfilePhoneVerifyAndReSendButtonsVisibility(String isOrNotDisplayed) {
         Profile profile = getAgentHomePage("main").getProfile();
         SoftAssert softAssert = new SoftAssert();
         if (isOrNotDisplayed.contains("not")) {
@@ -360,8 +361,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             softAssert.assertFalse(profile.isUserSMSButtonsDisplayed("Re-send OTP"),
                     "'Re-send OTP' button is not displayed");
             softAssert.assertAll();
-        }
-        else {
+        } else {
             softAssert.assertTrue(profile.isUserSMSButtonsDisplayed("Verify"));
             softAssert.assertTrue(profile.isUserSMSButtonsDisplayed("Re-send OTP"));
             softAssert.assertAll();
@@ -369,7 +369,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @When("^(.*) phone number for (.*) user$")
-    public void changePhoneNumberUserProfile(String changeOrDelete, String customerFrom){
+    public void changePhoneNumberUserProfile(String changeOrDelete, String customerFrom) {
         String phoneNumber = " "; //in case we need to delete phone number
         UserPersonalInfo currentCustomerInfo = getUserPersonalInfo(customerFrom);
         if (changeOrDelete.equalsIgnoreCase("change"))
@@ -382,7 +382,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @When("Agent click on '(.*)' button in User profile")
-    public void clickPhoneActionsButtonsUserProfile(String buttonName){
+    public void clickPhoneActionsButtonsUserProfile(String buttonName) {
         getAgentHomeForMainAgent().getProfile().clickPhoneNumberVerificationButton(buttonName);
     }
 
@@ -397,28 +397,27 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Then("User's profile phone number (.*) in 'Verify phone' input field")
-    public void phoneNumberForVerifyCheck(String isRequiredToDisplay){
+    public void phoneNumberForVerifyCheck(String isRequiredToDisplay) {
         String phoneNumberInUserProfile = getAgentHomeForMainAgent().getProfile()
                 .getPhoneNumber().replaceAll("\\s+", "");
         String phoneNumberInVerifyPopUp = getAgentHomeForMainAgent().getVerifyPhoneNumberWindow()
                 .getEnteredPhoneNumber().replaceAll("[\\s-.]", "");
-        if (isRequiredToDisplay.contains("not")){
+        if (isRequiredToDisplay.contains("not")) {
             Assert.assertEquals(phoneNumberInVerifyPopUp, "",
                     "Some phone number displayed in the field");
-        }
-        else{
+        } else {
             Assert.assertEquals(phoneNumberInUserProfile, phoneNumberInVerifyPopUp,
                     "Phone number in Verify phone window is different from displayed in Customer Profile");
         }
     }
 
     @When("Agent click on (.*) button on 'Verify phone' window")
-    public void closeVerifyPhonePopUp(String buttonName){
+    public void closeVerifyPhonePopUp(String buttonName) {
         getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().sendOrCancelClick(buttonName);
     }
 
     @When("Agent send OTP message with API")
-    public void sendOTPWithAPI(){
+    public void sendOTPWithAPI() {
         UserInfo userInfo = ApiHelper.getUserProfile("webchat", getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
         userInfo.setOtpSent(true);
         ApiHelper.updateUserProfile(userInfo);
@@ -435,17 +434,17 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Then("SMS client-profile added into DB")
-    public void checkSMSProfileCreating(){
+    public void checkSMSProfileCreating() {
         String phone = getAgentHomeForMainAgent().getProfile().getPhoneNumber().replaceAll("\\+", "").replaceAll(" ", "");
         UserInfo userInfo = ApiHelper.getUserProfile("webchat", getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
-        SoftAssert soft =new SoftAssert();
+        SoftAssert soft = new SoftAssert();
         soft.assertTrue(!userInfo.getSms().getIntegrationId().isEmpty(), "Sms client integration was not added");
         soft.assertEquals(userInfo.getSms().getPhoneNumber(), phone, "Incorrect phone is set into Sms integration");
         soft.assertAll();
     }
 
     @Then("Chat separator with OTP code and 'I have just sent...' message with user phone number are displayed")
-    public void chatSeparatorCheck(){
+    public void chatSeparatorCheck() {
         String phone = getAgentHomeForMainAgent().getProfile().getPhoneNumber().replaceAll(" ", "");
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(getAgentHomeForMainAgent().getChatBody().isOTPDividerDisplayed(), "No OTP divider displayed");
@@ -455,12 +454,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Then("New OTP code is different from the previous one")
-    public void checkOTPCodes(){
+    public void checkOTPCodes() {
         Assert.assertTrue(getAgentHomeForMainAgent().getChatBody().isNewOTPCodeDifferent(), "Codes are equal");
     }
 
     @When("^Agent switches to opened (?:Portal|ChatDesk) page$")
-    public void switchBetweenPortalAndChatDesk(){
+    public void switchBetweenPortalAndChatDesk() {
         String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
 
         if (DriverFactory.getDriverForAgent("main").getWindowHandles().size() > 1) {
@@ -473,47 +472,47 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Then("^(.*) checks the link (.*) is opened in the new tab$")
-    public void checkLinkIsOpenedInNewTab(String agent, String expectedURL){
+    public void checkLinkIsOpenedInNewTab(String agent, String expectedURL) {
         String currentURL = DriverFactory.getDriverForAgent("main").getCurrentUrl();
         Assert.assertTrue(currentURL.equalsIgnoreCase(expectedURL), "The URL is not as expected");
     }
 
     @When("^Agent refresh current page$")
-    public void refreshCurrentPage(){
+    public void refreshCurrentPage() {
         DriverFactory.getDriverForAgent("main").navigate().refresh();
     }
 
     @Then("^(.*) customer info is updated on backend$")
-    public void verifyCustomerInfoChangesOnBackend(String customerFrom){
+    public void verifyCustomerInfoChangesOnBackend(String customerFrom) {
         Assert.assertEquals(getUserPersonalInfo(customerFrom), userPersonalInfoForUpdating,
                 "User Personal info is not updated on backend after making changes on chatdesk. \n");
     }
 
     @Then("^Customer name is updated in active chat header$")
-    public void verifyCustomerNameUpdated(){
+    public void verifyCustomerNameUpdated() {
         Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().getChatHeaderText().contains(userPersonalInfoForUpdating.getFullName().trim()),
                 "Updated customer name is not shown in chat header");
     }
 
     @Then("^Tenant photo is shown on chatdesk$")
-    public void verifyTenantImageIsShownOnChatdesk(){
+    public void verifyTenantImageIsShownOnChatdesk() {
         Assert.assertTrue(getAgentHomePage("main").getPageHeader().isTenantImageShown(),
                 "Tenant image is not shown on chatdesk");
     }
 
-    private UserPersonalInfo getUserPersonalInfo(String clientFrom){
+    private UserPersonalInfo getUserPersonalInfo(String clientFrom) {
         String clientId;
         String integrationType;
-        switch (clientFrom){
+        switch (clientFrom) {
             case "fb dm":
                 Map chatInfo = (Map) ApiHelper.getActiveChatsByAgent("main").jsonPath().getList("content")
-                                        .stream()
-                                        .filter(e -> ((Map)
-                                                            ((Map) e).get("client")
-                                                     ).get("type")
-                                                .equals("FACEBOOK"))
-                                        .findFirst()
-                                        .orElseThrow(() -> new AssertionError("Cannot get active FACEBOOK type chat"));
+                        .stream()
+                        .filter(e -> ((Map)
+                                ((Map) e).get("client")
+                        ).get("type")
+                                .equals("FACEBOOK"))
+                        .findFirst()
+                        .orElseThrow(() -> new AssertionError("Cannot get active FACEBOOK type chat"));
                 clientId = (String) chatInfo.get("clientId");
                 integrationType = "FACEBOOK";
                 break;
@@ -530,11 +529,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 integrationType = "TOUCH";
                 break;
         }
-        return  ApiHelper.getUserPersonalInfo(Tenants.getTenantUnderTestOrgName(),
+        return ApiHelper.getUserPersonalInfo(Tenants.getTenantUnderTestOrgName(),
                 clientId, integrationType);
     }
 
-    public boolean isRequiredPhoneNumberDisplayed(String agent, String isPhoneNumberRequired){
+    public boolean isRequiredPhoneNumberDisplayed(String agent, String isPhoneNumberRequired) {
         String phone = getAgentHomePage(agent).getProfile().getPhoneNumber();
         if (isPhoneNumberRequired.equalsIgnoreCase("no"))
             return phone.equalsIgnoreCase("");
@@ -551,7 +550,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @And("^Time stamp displayed in 24 hours format$")
     public void timeStampDisplayedInHoursFormat() {
         Map<String, String> sessionDetails = DBConnector.getSessionDetailsByClientID(ConfigManager.getEnv()
-                ,getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+                , getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
         String startedDate = sessionDetails.get("startedDate");
         int numberOfMillis = startedDate.split("\\.")[1].length();
         String dateFormat = "yyyy-MM-dd HH:mm:ss." + StringUtils.repeat("S", numberOfMillis);
@@ -566,18 +565,18 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void headerInChatBoxDisplayedCustomerName() {
         Assert.assertEquals(getAgentHomeForMainAgent().getChatHeader().getTextHeader(),
                 getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()),
-            "Header in chat header as not expected( do not contain \"chatting to \" or 'customer name'");
-}
+                "Header in chat header as not expected( do not contain \"chatting to \" or 'customer name'");
+    }
 
     @When("^(.*) click on 'headphones' icon and see (\\d+) available agents$")
-    public void firstAgentClickOnHeadphonesIconAndSeeAvailableAgents(String agent,int availableAgent) {
+    public void firstAgentClickOnHeadphonesIconAndSeeAvailableAgents(String agent, int availableAgent) {
         getAgentHomePage(agent).getPageHeader().clickHeadPhonesButton();
         Assert.assertTrue(
                 getAgentHomePage(agent).getPageHeader().isExpectedNumbersShown(availableAgent, 8),
-                "Quantity of available agents not as expected ("+ availableAgent+" expected)");
-        if (availableAgent==1){
+                "Quantity of available agents not as expected (" + availableAgent + " expected)");
+        if (availableAgent == 1) {
             getAgentHomePage(agent).getPageHeader().clickIcon();
-            String agentName =  getAgentHomePage(agent).getPageHeader().getAgentName();
+            String agentName = getAgentHomePage(agent).getPageHeader().getAgentName();
             Assert.assertFalse(
                     getAgentHomePage(agent).getPageHeader().getAvailableAgents().contains(agentName),
                     "Unavailable agent in list of available agents");
@@ -587,7 +586,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @And("^(.*) get \"Cannot close chat\" notification modal open$")
     public void notifyCannotCloseChat(String agent) {
         String ActualClosedChatWindowHeader = getAgentHomePage(agent).getC2pMoveToPendingMessage();
-        Assert.assertEquals(ActualClosedChatWindowHeader,"Sorry, this chat can't be closed as it has 1 or more active payment(s). " +
+        Assert.assertEquals(ActualClosedChatWindowHeader, "Sorry, this chat can't be closed as it has 1 or more active payment(s). " +
                 "Would you like to move it to the pending tab where it will close automatically?");
     }
 
@@ -655,7 +654,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @When("^(.*) hover over \"Bulk chat\" button and see (.*) message$")
     public void bulkChatToolTipMessage(String agent, String toolTipMessage) {
         getLeftMenu(agent).hoverBulkChatButton();
-        Assert.assertEquals(getAgentHomePage(agent).getBulkMessageToolTipText(),toolTipMessage,"Bulk chat hover message is wrong");
+        Assert.assertEquals(getAgentHomePage(agent).getBulkMessageToolTipText(), toolTipMessage, "Bulk chat hover message is wrong");
     }
 
     private static int getNumberOfActiveChats(String agent, String integration) {
