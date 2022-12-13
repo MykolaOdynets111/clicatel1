@@ -231,18 +231,22 @@ public class ChatBody extends AbstractUIElement {
 
     public boolean isToUserMessageShown(String userMessage) {
         for (int i = toUserMessages.size() - 1; i >= 0; i--) {
-            wheelScrollUpToElement(this.getCurrentDriver(),
-                    this.getCurrentDriver().findElement(By.cssSelector(scrollElement)),
-                    toUserMessages.get(i), 1);
-
             if (toUserMessages.get(i).getText().trim().contains(userMessage)) {
-                wheelScroll(this.getCurrentDriver(),
-                        this.getCurrentDriver().findElement(By.cssSelector(scrollElement)),
-                        2000, 0, 0);
                 return true;
             }
         }
         return false;
+    }
+
+    public boolean isToUserMessageShownWithWait(String userMessage, int seconds) {
+        for(int i = seconds; i>0; i--){
+            if (!isToUserMessageShown(userMessage)){
+                waitFor(1000);
+            }else {
+                return true;
+            }
+        }
+        return isToUserMessageShown(userMessage);
     }
 
     public List<String> getAllMessages() {

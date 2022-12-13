@@ -173,7 +173,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @Then("^Supervisor can see (.*) ticket with (.*) message from agent$")
     public void verifyTicketMessagePresent(String channel, String message) {
-        Assert.assertTrue(getSupervisorDeskPage().getTicketChatBody().isToUserMessageShown(message), "Messages is not the same");
+        Assert.assertTrue(getSupervisorDeskPage().getTicketChatBody().isToUserMessageShownWithWait(message,8), "Messages is not the same");
     }
 
     @When("^Verify that correct messages and timestamps are shown on Chat View$")

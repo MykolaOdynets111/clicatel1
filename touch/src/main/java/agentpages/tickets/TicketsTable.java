@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(id = ".chats-list-wrapper.chats-list-extended-view")
+@FindBy(css = ".chats-list-wrapper.chats-list-extended-view")
 public class TicketsTable extends AbstractUIElement {
 
     @FindBy(css=".cl-table-row")
@@ -26,7 +26,7 @@ public class TicketsTable extends AbstractUIElement {
     @FindBy(xpath = "//button[@name = 'Close Ticket']")
     private WebElement closeTicket;
 
-    @FindBy(xpath = "//a[text() = 'Open']")
+    @FindBy(xpath = ".//a[text() = 'Open']")
     private WebElement openTicketButton;
 
     @FindBy(xpath = "//button[text() = 'Route to Scheduler']")
@@ -64,13 +64,14 @@ public class TicketsTable extends AbstractUIElement {
         getTicketByUserName(userName).clickElem(this.getCurrentDriver(), acceptTicketButton, 5, "Accept ticket button");
     }
 
-    public String closeButtonStatus(){
-        return getAttributeFromElem(this.getCurrentDriver(), closeTicket, 5, "Close ticket button", "disabled");
+    public boolean closeButtonStatus(){
+        return Boolean.parseBoolean(getAttributeFromElem(this.getCurrentDriver(), closeTicket, 5, "Close ticket button", "disabled"));
     }
 
     public void clickAssignOpenTicketButton(String userName){
         getTicketByUserName(userName)
-                .clickElem(this.getCurrentDriver(), openTicketButton, 5, "Open ticket button");
+                .moveToElemAndClick(this.getCurrentDriver(), openTicketButton);
+//                .clickElem(this.getCurrentDriver(), openTicketButton, 5, "Open ticket button");
     }
 
     public List<String> getUsersNames(){
