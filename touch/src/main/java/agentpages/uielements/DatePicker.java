@@ -8,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Locale;
 
 @FindAll({
         @FindBy(css = ".search-filter-bar-agent__filters"),
@@ -32,7 +32,7 @@ public class DatePicker extends AgentAbstractPage {
         super(agent);
     }
 
-    public boolean checkBackButtonVisibilityThreeMonthsBack(String filterType, Long day) {
+    public DatePicker openDatePicker(String filterType){
         switch (filterType) {
             case "start date":
                 clickElem(this.getCurrentDriver(), startDateInput, 5, "Start date element");
@@ -43,43 +43,48 @@ public class DatePicker extends AgentAbstractPage {
             default:
                 throw new AssertionError("Incorrect filter type was provided: " + filterType);
         }
-
-        LocalDate startDate = LocalDate.now().minusDays(day);
-        int month = startDate.getDayOfMonth();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(getPattern(month));
-        String expectedDate = startDate.format(formatter);
-
-        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
-        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
-
-        List<WebElement> date = calendarDatePicker.stream().filter(e -> e.getAttribute("aria-label").contains(expectedDate)).collect(Collectors.toList());
-
-        if (date.size() == 0) {
-            clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
-            date = calendarDatePicker.stream().filter(e -> e.getAttribute("aria-label").contains(expectedDate)).collect(Collectors.toList());
-        }
-
-        switch (filterType) {
-            case "start date":
-                if (date.get(0).getAttribute("aria-disabled").equalsIgnoreCase("true")) {
-                    return true;
-                }
-                break;
-            case "end date":
-                if (date.get(0).getAttribute("aria-disabled").equalsIgnoreCase("false")) {
-                    return true;
-                }
-                break;
-        }
-
-        return false;
+        return this;
     }
 
-    public static String getPattern(int month) {
-        String first = "MMMM d";
-        String last = ", yyyy";
-        String pos = (month == 1 || month == 21 || month == 31) ? "'st'" : (month == 2 || month == 22) ? "'nd'" : (month == 3 || month == 23) ? "'rd'" : "'th'";
+    public boolean verifyExpectedDateIsDisabled(int days) {
 
-        return first + pos + last;
+        String expectedDate = getExpectedDayForVerification(days);
+
+        return isDateSelectable(expectedDate);
+    }
+
+    public boolean isBackButtonShown(){
+        return isElementShown(this.getCurrentDriver(), backButton, 2);
+    }
+
+    private boolean isDateSelectable(String expectedDate){
+        WebElement expectedDateElement = clickBackButtonTillExpectedDate(expectedDate);
+        return Boolean.valueOf(expectedDateElement.getAttribute("aria-disabled")) ? false : true;
+    }
+
+    private String getExpectedDayForVerification(int days){
+        LocalDate startDate = LocalDate.now().minusDays(days);
+        int dayOfMonth = startDate.getDayOfMonth();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(getPattern(dayOfMonth), Locale.US);
+        return startDate.format(formatter);
+    }
+
+    private WebElement clickBackButtonTillExpectedDate(String expectedDate){
+        for (int i = 4; i>0; i--){
+            if (calendarDatePicker.stream().anyMatch(e -> e.getAttribute("aria-label").contains(expectedDate))) {
+                break;
+            }
+            clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
+        }
+        return calendarDatePicker.stream().filter(e -> e.getAttribute("aria-label").contains(expectedDate)).findFirst()
+                .orElseThrow(() -> new AssertionError("Expected Date: " +expectedDate+ " was not reached"));
+    }
+
+    private static String getPattern(int day) {
+        String month = "MMMM";
+        String last = ", yyyy";
+        String dayWithEnding = (day == 1 || day == 21 || day == 31) ? " d'st'" : (day == 2 || day == 22) ? " d'nd'" : (day == 3 || day == 23) ? " d'rd'" : " d'th'";
+
+        return month + dayWithEnding + last;
     }
 }
