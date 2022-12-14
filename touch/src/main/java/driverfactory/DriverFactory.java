@@ -19,12 +19,7 @@ public class DriverFactory {
     private static final ThreadLocal<WebDriver> portalDriver = new ThreadLocal<>();
     private static final ThreadLocal<WebDriver> secondAgentDriver = new ThreadLocal<>();
 
-    private static String WINDOWS_SERVER_REMOTE_EXTERNAL_URL = "http://35.164.148.100:4441/wd/hub";
-    private static String WINDOWS_SERVER_REMOTE_URL = "http://172.31.29.139:4441/wd/hub";
     private static String LINUX_SELENIUM_DOCKERS_URL = "http://selenium.clickatelllabs.com:4444/wd/hub";
-    private static String LINUX_SELENIUM_DOCKERS_URL_FB = "http://selenium.clickatelllabs.com:5900/wd/hub";
-    private static String LINUX_SELENIUM_DOCKERS_URL_WITH_MONITOR = "http://selenium.clickatelllabs.com:4445/wd/hub";
-
 
     public static boolean isAgentDriverExists(){
         return agentDriver.get() != null;

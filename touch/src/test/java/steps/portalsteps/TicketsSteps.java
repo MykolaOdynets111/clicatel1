@@ -131,7 +131,7 @@ public class TicketsSteps extends AbstractAgentSteps {
 
     @When("^(.*) checks closed ticket is disabled$")
     public void checkCloseButtonStatus(String agent) {
-        Assert.assertTrue(Boolean.parseBoolean(getTicketsTable(agent).closeButtonStatus()), "Close ticket button is enabled");
+        Assert.assertTrue(getTicketsTable(agent).closeButtonStatus(), "Close ticket button is enabled");
     }
 
     @When("^Supervisor clicks on first ticket$")

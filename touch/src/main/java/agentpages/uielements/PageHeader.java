@@ -18,12 +18,6 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = ".cl-profile-info__icon-with-status")
     private WebElement icon;
 
-    @FindBy(css = ".cl-profile-info__agent-name")
-    private WebElement profileInitials;
-
-    @FindBy(css = ".cl-profile-info__email")
-    private WebElement profileEmail;
-
     @FindBy(css = "[data-testid=logout-button]")
     private WebElement logOutButton;
 
@@ -90,14 +84,6 @@ public class PageHeader extends AbstractUIElement {
 
     public String getAgentName() {
         return agentName.getText();
-    }
-
-    public String getAgentInitials() {
-        return profileInitials.getText();
-    }
-
-    public String getAgentEmail() {
-        return profileEmail.getText();
     }
 
     public void clickProfileSettingsButton() {

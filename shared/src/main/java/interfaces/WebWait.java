@@ -175,10 +175,7 @@ public interface WebWait {
             try {
                 return !webElement.isDisplayed();
             }
-            catch (NoSuchElementException e ) {
-                return true;
-            }
-            catch (StaleElementReferenceException f) {
+            catch (NoSuchElementException | StaleElementReferenceException e ) {
                 return true;
             }
         };

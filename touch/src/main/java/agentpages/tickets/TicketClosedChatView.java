@@ -14,7 +14,7 @@ public class TicketClosedChatView extends AbstractUIElement {
     private WebElement closeTicket;
 
     public void clickOnMessageCustomerOrStartChatButton(){
-        clickElem(this.getCurrentDriver(), messageCustomerOrStartChatButton, 3, "Message Customer");
+        clickElem(this.getCurrentDriver(), messageCustomerOrStartChatButton, 8, "Message Customer");
     }
 
     public void clickOnCloseTicketButton(){
