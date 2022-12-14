@@ -256,6 +256,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 
+    @Then("^Agent select my closed chats checkbox in container and click \"Apply filters\" button$")
+    public void filterUsingMyClosedChatsCheckbox() {
+        getSupervisorAndTicketsHeader("main").clickMyClosedChatsCheckbox().clickApplyFilterButton();
+        getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
+    }
+
     @And("^Agent filter by \"(.*)\" channel and \"(.*)\" sentiment$")
     public void selectChanelAndSentimentFilter(String name, String sentiment) {
         getSupervisorAndTicketsHeader("main").selectChanel(name).selectSentiment(sentiment).clickApplyFilterButton();
@@ -271,6 +277,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
             userName = chatName;
         }
         getSupervisorAndTicketsHeader("main").setSearchInput(userName).clickApplyFilterButton();
+        getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
+    }
+
+    @And("^Agent clears search field and filters on Supervisor desk$")
+    public void clearSearchFieldAndFilter() {
+        getSupervisorAndTicketsHeader("main").clearSearchFieldBox().clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 

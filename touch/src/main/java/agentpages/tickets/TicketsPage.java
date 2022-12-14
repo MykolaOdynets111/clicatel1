@@ -1,6 +1,8 @@
 package agentpages.tickets;
 
+import agentpages.survey.uielements.SurveyForm;
 import driverfactory.DriverFactory;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,6 +11,8 @@ import portalpages.PortalAbstractPage;
 public class TicketsPage extends PortalAbstractPage {
 
     private TicketsTable ticketsTable;
+
+    private TicketRow ticketRow;
     private TicketClosedChatView supervisorTicketChatView;
     private MessageCustomerWindow messageCustomerWindow;
 
@@ -29,6 +33,9 @@ public class TicketsPage extends PortalAbstractPage {
     @FindBy(css = ".toast-content-message")
     private WebElement ticketAssignedToastMessageContent;
 
+    @FindBy(css = "#app-tickets")
+    private WebElement ticketsMiddlePane;
+
     public TicketsPage(WebDriver driver) {
         super(driver);
     }
@@ -41,6 +48,11 @@ public class TicketsPage extends PortalAbstractPage {
     public TicketsTable getTicketsTable(){
         ticketsTable.setCurrentDriver(this.getCurrentDriver());
         return ticketsTable;
+    }
+
+    public TicketRow getTicketRow(){
+        waitFor(3000);
+        return new TicketRow(ticketsMiddlePane).setCurrentDriver(this.getCurrentDriver());
     }
 
     public TicketClosedChatView getSupervisorTicketClosedChatView(){

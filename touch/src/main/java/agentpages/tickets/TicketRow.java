@@ -39,9 +39,6 @@ public class TicketRow extends AbstractWidget {
     @FindBy(css = ".cl-table-cell--endedDate")
     private WebElement endDate;
 
-    @FindBy(css = ".cl-user-details-cell__top-section svg")
-    private WebElement channelIcon;
-
     private String scrollAreaCss = "[data-testid='chatslist-scroll-container'] [class='iScrollVerticalScrollbar iScrollLoneScrollbar']";
 
     @FindBy(css = ".cl-table-cell--channelType svg")
@@ -77,9 +74,23 @@ public class TicketRow extends AbstractWidget {
         return getTextFromElem(this.getCurrentDriver(), currentAgent, 5, "Current agent");
     }
 
+    public String getCurrentChannel(){
+        return getAttributeFromElem(this.getCurrentDriver(), channelImg, 5, "Current channel", "name");
+    }
+
     public LocalDateTime getOpenDate(){
         String stringDate = getTextFromElem(this.getCurrentDriver(), startDate, 5, "Date cell").trim();
         return parseDate(stringDate);
+    }
+
+    public String getOpenDateText(){
+        String stringDate = getTextFromElem(this.getCurrentDriver(), startDate, 5, "Start Date cell").trim();
+        return stringDate;
+    }
+
+    public String getEndDateText(){
+        String stringDate = getTextFromElem(this.getCurrentDriver(), endDate, 5, "End Date cell").trim();
+        return stringDate;
     }
 
     public LocalDateTime getEndDate(){

@@ -37,8 +37,17 @@ public class SupervisorAndTicketsPart extends AbstractUIElement {
     }
 
     public void selectFilter(String type) {
-        filters.stream().filter(a -> a.getText().trim().equalsIgnoreCase(type)).findFirst()
-                .orElseThrow(() -> new AssertionError("Cannot find " + type + " conversation type filter")).click();
+        waitForElementsToBeVisible(this.getCurrentDriver(), filters, 10);
+        if (filters.stream().filter(a -> a.getText().trim().equalsIgnoreCase(type)).collect(Collectors.toList()).size() > 0) {
+            filters.stream().filter(a -> a.getText().trim().equalsIgnoreCase(type)).findFirst()
+                    .orElseThrow(() -> new AssertionError("Cannot find " + type + " conversation type filter")).click();
+        } else {
+            getCurrentDriver().navigate().refresh();
+
+            waitForElementsToBeVisible(this.getCurrentDriver(), filters, 10);
+            filters.stream().filter(a -> a.getText().trim().equalsIgnoreCase(type)).findFirst()
+                    .orElseThrow(() -> new AssertionError("Cannot find " + type + " conversation type filter")).click();
+        }
     }
 
     private WebElement getFilter(String agentName) {
