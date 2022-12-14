@@ -153,4 +153,16 @@ public class TicketsTable extends AbstractUIElement {
         supervisorDeskTicketRow.clickOnUserName();
         supervisorDeskTicketRow.acceptTicket();
     }
+
+    public boolean assignManuallyButtonTopPanelVisibility(String userName){
+        return getTicketByUserName(userName)
+                .isElementRemoved(this.getCurrentDriver(), assignTicketButton, 5);
+    }
+
+    public boolean assignManuallyButtonFirstRowHoverVisibility() {
+        TicketRow supervisorDeskTicketRow = new TicketRow(tickets.get(0))
+                .setCurrentDriver(this.getCurrentDriver());
+        supervisorDeskTicketRow.hoverOnUserName();
+        return supervisorDeskTicketRow.assignManualButtonVisibility();
+    }
 }

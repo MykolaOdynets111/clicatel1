@@ -20,9 +20,16 @@ public class SupervisorAndTicketsPart extends AbstractUIElement {
     @FindBy(xpath="//div[@class='chats-list live-chats-list']")
     private  WebElement liveChatsInfo;
 
+    private final String closedTicketsCountCSS = "[href='/supervisor/tickets/%s/'] .cl-chats-group-item__count";
 
     public String getFilterByDefaultName(){
         return getTextFromElem(this.getCurrentDriver(), defaultFilter,5,"Default filter").trim();
+    }
+
+    public int getTicketsCount(String filterType){
+        String locator = String.format(closedTicketsCountCSS, filterType);
+        WebElement element = waitForElementToBePresentByCss(this.getCurrentDriver(), locator, 10);
+        return Integer.parseInt(getTextFromElem(this.getCurrentDriver(), element,5,"Default filter").trim());
     }
 
     public List<String> getFilterNames(){
