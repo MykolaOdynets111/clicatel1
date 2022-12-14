@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
-public class APITagsHelper extends ApiHelper {
+public class APIHelperTags extends ApiHelper {
 
     public static List<String> getTagsForCRMTicket(String chatId) {
         return RestAssured.given().header("Authorization", getAccessToken(Tenants.getTenantUnderTestOrgName(), "main"))

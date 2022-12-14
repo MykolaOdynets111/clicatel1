@@ -3,10 +3,10 @@ package driverfactory;
 import apihelper.ApiHelper;
 import apihelper.Endpoints;
 import drivermanager.ConfigManager;
-import socialaccounts.FacebookPages;
-import socialaccounts.TwitterPages;
 import io.restassured.path.json.exception.JsonPathException;
 import org.testng.Assert;
+import socialaccounts.FacebookPages;
+import socialaccounts.TwitterPages;
 
 public class URLs {
 
@@ -28,15 +28,9 @@ public class URLs {
 
     private static String BASE_TIE_URL = "https://%s-tie.clickatelllabs.com/tenants/";
 
-    private static String BASE_TIE_PROD_URL = "http://tie.clickatelllabs.com/tenants/";
-
-    private static String FACEBOOK_URL = "https://www.facebook.com/%s/";
-
     private static String BASE_TOUCH_API_URL = "https://%s-chatdesk-platform-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/";
 
     private static String BASE_TOUCH_API_INTEGRATION_URL = "https://%s-touch.clickatelllabs.com/";
-
-    private static String BASE_TOUCH_API_INTEGRATION_URLUpdate = "https://%s-chatdesk-portal-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/";
 
     private static String BASE_INTERNAL_API_URL = "https://%s-touch.clickatelllabs.com/internal/";
 
