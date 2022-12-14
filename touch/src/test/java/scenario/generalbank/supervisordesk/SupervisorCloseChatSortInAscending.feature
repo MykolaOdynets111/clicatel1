@@ -19,6 +19,5 @@ Feature: Supervisor desk
     And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Closed" left menu option
-    Then Admin checks value of start date filter is empty for 0 year 0 month and 91 days ago
-    And Admin checks back button is not visible in calendar for start date filter 91 days ago in supervisor
-    Then Admin checks back button is visible in calendar for end date filter 90 days ago in supervisor
+    And Admin cannot select start date more than 90 days ago in supervisor
+    And Admin cannot select end date more than 90 days ago in supervisor

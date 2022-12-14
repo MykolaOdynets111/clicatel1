@@ -173,7 +173,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @Then("^Supervisor can see (.*) ticket with (.*) message from agent$")
     public void verifyTicketMessagePresent(String channel, String message) {
-        Assert.assertTrue(getSupervisorDeskPage().getTicketChatBody().isToUserMessageShown(message), "Messages is not the same");
+        Assert.assertTrue(getSupervisorDeskPage().getTicketChatBody().isToUserMessageShownWithWait(message,8), "Messages is not the same");
     }
 
     @When("^Verify that correct messages and timestamps are shown on Chat View$")
@@ -347,17 +347,20 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertTrue(getSupervisorAndTicketsHeader("main").checkStartDateFilterIsEmpty().isEmpty(), "Start date filter is not empty");
     }
 
-    @And("^(.*) checks back button is (.*) in calendar for (.*) filter (.*) days ago in supervisor$")
-    public void backButtonDisability(String agent, String visibility, String filterType, Long day) {
-        Assert.assertTrue(new DatePicker(agent).checkBackButtonVisibilityThreeMonthsBack(filterType, day));
-    }
-
     @Then("^Verify first closed chat date are fitted by filter$")
     public void verifyFirstClosedChatDateAreFittedByFilter() {
         LocalDate startDate = getSupervisorAndTicketsHeader("main").getStartDateFilterValue();
         LocalDate endDate = getSupervisorAndTicketsHeader("main").getEndDateFilterValue();
         LocalDateTime firstClosedChatDate = getSupervisorDeskPage().getSupervisorClosedChatsTable().getFirstClosedChatDate();
         verifyDateTimeIsInRangeOfTwoDates(firstClosedChatDate, startDate, endDate);
+    }
+
+    @Then("^The oldest visible chat is not more than (.*) days old$")
+    public void verifyDateForOldestChat(int days){
+        LocalDateTime expectedDate = LocalDateTime.now().minusDays(days);
+        LocalDateTime firstClosedChatDate = getSupervisorDeskPage().getSupervisorClosedChatsTable().getFirstClosedChatDate();
+        Assert.assertTrue(firstClosedChatDate.isAfter(expectedDate), "Latest chat has date:" + firstClosedChatDate
+                + " which is older than: " + expectedDate);
     }
 
     @And("Agent can see whatsapp profile name")
