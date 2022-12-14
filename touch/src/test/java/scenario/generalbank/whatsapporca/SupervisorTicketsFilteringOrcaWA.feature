@@ -51,7 +51,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Agent search chat orca on Supervisor desk
     Then Agent see tickets from orca on Assigned filter page
     When Agent closed ticket for orca
-    And Wait for 2 second
+    And Agent select Closed filter on Left Panel
     Then Verify ticket is present for orca for 2 seconds
     When Admin filter by 0 year 0 month and 1 days ago start date and 0 year 0 month and 0 days ago end date
     Then Verify ticket is present for orca for 2 seconds

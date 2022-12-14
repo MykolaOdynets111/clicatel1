@@ -11,6 +11,7 @@ import io.cucumber.java.en.When;
 import org.openqa.selenium.TimeoutException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import steps.agentsteps.AbstractAgentSteps;
 import steps.dotcontrol.DotControlSteps;
 
 import java.time.LocalDate;
@@ -23,9 +24,11 @@ import java.util.stream.Collectors;
 
 import static steps.agentsteps.AbstractAgentSteps.*;
 
-public class TicketsSteps extends AbstractPortalSteps{
+public class TicketsSteps extends AbstractAgentSteps {
 
     private List<String> shownUsers = new ArrayList<>();
+
+    private static int initialTicketsCount;
 
     private TicketsTable getTicketsTable(String agent){
         return getTicketsPage(agent).getTicketsTable();
@@ -60,6 +63,24 @@ public class TicketsSteps extends AbstractPortalSteps{
     @When("^Click 'Assign manually' button for (.*)$")
     public void clickAssignManually(String chanel) {
         getTicketsTable("main").clickAssignManuallyButton(getUserName(chanel));
+    }
+
+    @Then("^Assign button is not displayed in the closed ticket tab for (.*)$")
+    public void assignManuallyTopPanelButtonNotVisible(String chanel) {
+        Assert.assertTrue(getTicketsTable("main").assignManuallyButtonTopPanelVisibility(getUserName(chanel)),
+                "Assign button is visible");
+    }
+
+    @Then("^Hover to one of the ticket And Assign button is not displayed$")
+    public void assignManuallyButtonRowNotVisible() {
+        Assert.assertTrue(getTicketsTable("main").assignManuallyButtonFirstRowHoverVisibility(),
+                "Assign button is visible");
+    }
+
+    @Then("^Select all checkbox is not displayed in the closed ticket tab$")
+    public void verifySelectAllCheckboxNotShown() {
+        Assert.assertTrue(getSupervisorAndTicketsHeader("main").isSelectAllCheckboxNotShown(),
+                "'Select All checkbox' is shown.");
     }
 
     @When("^(.*) closed ticket for (.*)$")
@@ -247,5 +268,17 @@ public class TicketsSteps extends AbstractPortalSteps{
     @Then("^(.*) sees toast message with (.*) text")
     public void verifyToastMessage(String agent, String toastMessageText) {
         Assert.assertEquals(getTicketsPage(agent).getToastMessageText(),toastMessageText,"Toast message is wrong");
+    }
+
+    @Then("^(.*) checks initial ticket count is displayed in the (.*) ticket tab$")
+    public void getInitialTicketsCount(String agent, String ticketType) {
+        initialTicketsCount = getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(ticketType);
+    }
+
+    @Then("^(.*) checks final ticket count value in the (.*) ticket tab$")
+    public void verifyFinalTicketsCount(String agent, String ticketType) {
+        int finalTicketsCount = getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(ticketType);
+        Assert.assertTrue(finalTicketsCount== (initialTicketsCount + 1),
+                "Final ticket count is incorrect");
     }
 }

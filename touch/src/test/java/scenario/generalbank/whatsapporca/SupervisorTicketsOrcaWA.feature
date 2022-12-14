@@ -137,3 +137,63 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And I assign chat on second agent for Agent dropdown
     Then Second Agent receive increase in the count of the bell icon notification
     And Second Agent should see notifications GBD Main has assigned you 1 ticket. at time minutes ago in the notification frame
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-6079")
+  Scenario: CD:: Supervisor Desk:: Tickets:: Supervisor_Desk-Tickets-Closed:: Verify if Supervisor cannot assign closed ticket
+    Given Setup ORCA Whatsapp integration for General Bank Demo tenant
+    And Update survey management chanel whatsapp settings by ip for Standard Billing
+      | ratingEnabled | false        |
+    And Send to agent message by ORCA
+    When I select Touch in left menu and Supervisor Desk in submenu
+    And Agent select "Tickets" left menu option
+    And Agent search chat orca on Supervisor desk
+    Then Agent see tickets from orca on Assigned filter page
+    When Agent closed ticket for orca
+    And Agent select Closed filter on Left Panel
+    Then Assign button is not displayed in the closed ticket tab for orca
+    And Hover to one of the ticket And Assign button is not displayed
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-6077")
+  Scenario: CD:: Supervisor Desk:: Tickets:: Supervisor_Desk-Tickets-Closed:: Verify if "select all" button is not displayed in the closed ticket tab
+    Given Setup ORCA Whatsapp integration for General Bank Demo tenant
+    When I select Touch in left menu and Supervisor Desk in submenu
+    And Agent select "Tickets" left menu option
+    And Agent select Closed filter on Left Panel
+    Then Select all checkbox is not displayed in the closed ticket tab
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-6075")
+  Scenario: CD:: Supervisor Desk:: Tickets:: Supervisor_Desk-Tickets-Closed:: Verify if the ticket count is displayed in the closed ticket tab
+    Given Setup ORCA Whatsapp integration for General Bank Demo tenant
+    And Update survey management chanel whatsapp settings by ip for Standard Billing
+      | ratingEnabled | false        |
+    When I select Touch in left menu and Supervisor Desk in submenu
+    And Agent select "Tickets" left menu option
+    And Wait for 2 second
+    And Agent checks initial ticket count is displayed in the closed ticket tab
+    #Had to put some waits to handle slowness in Tickets screen
+    And Send to agent message by ORCA
+    And Agent search chat orca on Supervisor desk
+    And Agent see tickets from orca on Unassigned filter page
+    And Agent closed ticket for orca
+    And Agent select Closed filter on Left Panel
+    And Wait for 3 second
+    Then Agent checks final ticket count value in the closed ticket tab
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-6071")
+  Scenario: CD:: Supervisor Desk:: Tickets:: Supervisor_Desk-Tickets-Closed:: Verify if agent name is not displayed in the chat window if chats were closed before they were assigned
+    Given Setup ORCA Whatsapp integration for General Bank Demo tenant
+    And Update survey management chanel whatsapp settings by ip for Standard Billing
+      | ratingEnabled | false        |
+    When I select Touch in left menu and Supervisor Desk in submenu
+    And Agent select "Tickets" left menu option
+    And Wait for 2 second
+    #Had to put some waits to handle slowness in Tickets screen
+    And Send to agent message by ORCA
+    And Agent search chat orca on Supervisor desk
+    And Agent see tickets from orca on Unassigned filter page
+    And Send //end message by ORCA
+    And Agent select Closed filter on Left Panel
+    And Wait for 3 second
+    And Supervisor clicks on first ticket
+    Then Agent checks visual indicator with text User initiated a new chat: This ticket was automatically closed on is shown during 2 seconds
+    And Supervisor Desk Live chat container header display "No current Agent" instead of agent name

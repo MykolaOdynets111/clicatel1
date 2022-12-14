@@ -53,6 +53,9 @@ public class TicketRow extends AbstractWidget {
     @FindBy(xpath = ".//a[contains(text(), 'Open')]")
     private WebElement acceptButton;
 
+    @FindBy(xpath = ".//button[contains(text(), 'Assign')]")
+    private WebElement assignButton;
+
     public TicketRow(WebElement element) {
         super(element);
     }
@@ -105,6 +108,10 @@ public class TicketRow extends AbstractWidget {
         clickElem(this.getCurrentDriver(), userName, 5, "User Name");
     }
 
+    public void hoverOnUserName(){
+        hoverElem(this.getCurrentDriver(), userName, 5, "User Name");
+    }
+
     public String getLocation(){
         return  getTextFromElem(this.getCurrentDriver(), location, 2, "Location");
     }
@@ -128,5 +135,9 @@ public class TicketRow extends AbstractWidget {
 
     public void acceptTicket(){
         clickElem(this.getCurrentDriver(),acceptButton, 5, "Accept Button");
+    }
+
+    public boolean assignManualButtonVisibility(){
+        return isElementRemoved(this.getCurrentDriver(), assignButton, 5);
     }
 }
