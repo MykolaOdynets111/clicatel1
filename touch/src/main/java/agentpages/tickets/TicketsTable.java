@@ -132,6 +132,22 @@ public class TicketsTable extends AbstractUIElement {
                 .map(e -> new TicketRow(e).setCurrentDriver(this.getCurrentDriver()).isValidChannelImg(channelName)).findFirst().get();
     }
 
+    public boolean verifyCurrentChanelOfTheTickets(String channelName) {
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), tickets, 7);
+        return tickets.stream().anyMatch(e ->
+                new TicketRow(e)
+                        .setCurrentDriver(this.getCurrentDriver())
+                        .getCurrentChannel().equals(channelName));
+    }
+
+    public boolean verifyCurrentDatesOfTheTickets(String dateType, String expectedDateText) {
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), tickets, 7);
+        return tickets.stream().anyMatch(e ->
+                new TicketRow(e)
+                        .setCurrentDriver(this.getCurrentDriver())
+                        .getDateByName(dateType).contains(expectedDateText));
+    }
+
     public boolean isTicketPresent(String userName) {
         waitForFirstElementToBeVisible(this.getCurrentDriver(), tickets, 7);
         return tickets.stream().anyMatch(e ->

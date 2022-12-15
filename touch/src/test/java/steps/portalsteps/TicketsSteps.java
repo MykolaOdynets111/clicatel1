@@ -1,5 +1,6 @@
 package steps.portalsteps;
 
+import agentpages.tickets.TicketRow;
 import agentpages.tickets.TicketsTable;
 import apihelper.ApiHelper;
 import dbmanager.DBConnector;
@@ -55,6 +56,12 @@ public class TicketsSteps extends AbstractAgentSteps {
         getTicketsPage("main").getSupervisorTicketClosedChatView().clickOnMessageCustomerOrStartChatButton();
     }
 
+    @When("^(.*) checks chat view for closed chat is displayed$")
+    public void verifyClosedChatView(String chanel) {
+        Assert.assertTrue(getTicketsPage("main").getSupervisorTicketClosedChatView().isDisplayed(),
+                "Chat view is not visible");
+    }
+
     @When("^Click 'Route to scheduler' button$")
     public void clickRouteToScheduler() {
         getTicketsTable("main").clickRouteToSchedulerButton();
@@ -95,10 +102,27 @@ public class TicketsSteps extends AbstractAgentSteps {
         }
     }
 
+    @When("^(.*) closes ticket manually$")
+    public void closeTicketManually(String agent) {
+        getTicketsPage("main").getSupervisorTicketClosedChatView().clickOnCloseTicketButton();
+
+        waitFor(1000);
+
+        if (getAgentHomePage(agent).getAgentFeedbackWindow().isAgentFeedbackWindowShown()) {
+            getAgentHomePage(agent).getAgentFeedbackWindow().waitForLoadingData().clickCloseButtonInCloseChatPopup();
+        }
+    }
+
     @When("^(.*) accept ticket for (.*)$")
     public void clickAcceptButtonFor(String chanel) {
         getTicketsTable("main")
                 .clickAcceptButton(getUserName(chanel));
+    }
+
+    @When("^Supervisor is able to view the columns in the tickets tab$")
+    public void checkTicketColumnsVisibility(List<String> expectedColumnNames) {
+        Assert.assertEquals(getTicketsPage("main").getTicketsColumnHeaders(), expectedColumnNames,
+                "Closed chat column is not visible");
     }
 
     @When("^(.*) checks closed ticket is disabled$")
@@ -117,10 +141,27 @@ public class TicketsSteps extends AbstractAgentSteps {
         getTicketsPage(agent).getTicketsQuickActionBar().clickAcceptButtonInHeader();
     }
 
+    @When("^(.*) inputs (.*) unassigned tickets for acceptance in custom bar$")
+    public void manualAcceptTicketsEntry(String agent, String numberOfTickets) {
+        getTicketsPage(agent).getTicketsQuickActionBar().inputNumberOfTicketsForAccept(numberOfTickets);
+    }
+
     @Then("^Verify that only \"(.*)\" tickets chats are shown$")
     public void verifyTicketsChatsChannelsFilter(String channelName) {
         Assert.assertTrue(getTicketsTable("main").verifyChanelOfTheTicketsIsPresent(channelName),
                 channelName + " channel name should be shown.");
+    }
+
+    @Then("^Verify that only \"(.*)\" channel tickets chats are shown$")
+    public void verifyTicketsChatsChannelsFilterUsingAttribute(String channelName) {
+        Assert.assertTrue(getTicketsTable("main").verifyCurrentChanelOfTheTickets(channelName),
+                channelName + " channel name is not shown.");
+    }
+
+    @Then("^Verify that only \"(.*)\" date tickets are shown in (.*) column$")
+    public void verifyTicketsChatsStartDatesFilter(String dateText, String columnType) {
+        Assert.assertTrue(getTicketsTable("main").verifyCurrentDatesOfTheTickets(columnType, dateText),
+                dateText + " open date is not shown.");
     }
 
     @Given("^Supervisor scroll Tickets page to the bottom$")
@@ -280,5 +321,12 @@ public class TicketsSteps extends AbstractAgentSteps {
         int finalTicketsCount = getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(ticketType);
         Assert.assertTrue(finalTicketsCount== (initialTicketsCount + 1),
                 "Final ticket count is incorrect");
+    }
+
+    @Then("^(.*) checks (.*) ticket count value in the (.*) ticket tab$")
+    public void verifyTicketsCount(String agent, int expectedTicketCount, String ticketType) {
+        int ticketsCount = getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(ticketType);
+        Assert.assertTrue(ticketsCount== expectedTicketCount,
+                "Ticket count is incorrect");
     }
 }

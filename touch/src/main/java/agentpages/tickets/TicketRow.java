@@ -39,9 +39,6 @@ public class TicketRow extends AbstractWidget {
     @FindBy(css = ".cl-table-cell--endedDate")
     private WebElement endDate;
 
-    @FindBy(css = ".cl-user-details-cell__top-section svg")
-    private WebElement channelIcon;
-
     private String scrollAreaCss = "[data-testid='chatslist-scroll-container'] [class='iScrollVerticalScrollbar iScrollLoneScrollbar']";
 
     @FindBy(css = ".cl-table-cell--channelType svg")
@@ -55,6 +52,9 @@ public class TicketRow extends AbstractWidget {
 
     @FindBy(xpath = ".//button[contains(text(), 'Assign')]")
     private WebElement assignButton;
+
+    @FindBy(css=".cl-table-row")
+    private List<WebElement> tickets;
 
     public TicketRow(WebElement element) {
         super(element);
@@ -77,9 +77,31 @@ public class TicketRow extends AbstractWidget {
         return getTextFromElem(this.getCurrentDriver(), currentAgent, 5, "Current agent");
     }
 
+    public String getCurrentChannel(){
+        return getAttributeFromElem(this.getCurrentDriver(), channelImg, 5, "Current channel", "name");
+    }
+
     public LocalDateTime getOpenDate(){
         String stringDate = getTextFromElem(this.getCurrentDriver(), startDate, 5, "Date cell").trim();
         return parseDate(stringDate);
+    }
+
+    public String getOpenDateText(){
+        return getTextFromElem(this.getCurrentDriver(), startDate, 5, "Start Date cell").trim();
+    }
+
+    public String getEndDateText(){
+        return getTextFromElem(this.getCurrentDriver(), endDate, 5, "End Date cell").trim();
+    }
+
+    public String getDateByName(String dateType) {
+        String dateText = null;
+        if (dateType.equalsIgnoreCase("start date")) {
+            dateText = getOpenDateText();
+        } else if (dateType.equalsIgnoreCase("end date")) {
+            dateText = getEndDateText();
+        }
+        return dateText;
     }
 
     public LocalDateTime getEndDate(){
