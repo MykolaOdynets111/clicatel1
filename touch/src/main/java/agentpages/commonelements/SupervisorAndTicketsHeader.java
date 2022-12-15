@@ -45,7 +45,7 @@ public class SupervisorAndTicketsHeader extends AbstractUIElement {
     @FindBy(css = ".cl-checkbox__label")
     private WebElement selectAllCheckBox;
 
-    @FindBy(css = "[aria-label='Clear text field']")
+    @FindBy(css = ".cl-form-control__clear-button button")
     private WebElement clearSearchField;
 
     @FindBy(css = "[for='show_only_my_closed_chats']")
