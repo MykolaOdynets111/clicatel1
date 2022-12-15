@@ -156,6 +156,11 @@ public class TicketsTable extends AbstractUIElement {
                         .getName().equals(userName));
     }
 
+    public int getTicketsCount() {
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), tickets, 7);
+        return tickets.size();
+    }
+
     public void openFirstTicket() {
         TicketRow supervisorDeskTicketRow = new TicketRow(tickets.get(0))
                 .setCurrentDriver(this.getCurrentDriver());

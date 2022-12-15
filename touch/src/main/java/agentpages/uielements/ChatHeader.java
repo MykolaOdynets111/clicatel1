@@ -245,4 +245,13 @@ public class ChatHeader extends AbstractUIElement {
     public boolean isCloseChatClickable() {
         return isElementEnabled(this.getCurrentDriver(), endChatButton,4);
     }
+
+    public boolean isTransferButtonDisplayed() {
+        return isElementShown(getCurrentDriver(), transferButton, 5);
+    }
+
+    public boolean isTransferButtonNotDisplayed() {
+        return isElementRemoved(getCurrentDriver(), transferButton, 5);
+    }
+
 }

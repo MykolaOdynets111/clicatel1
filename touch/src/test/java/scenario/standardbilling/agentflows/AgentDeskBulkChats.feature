@@ -181,3 +181,21 @@ Feature: Bulk chat left menu actions
     And Agent click the bulk message icon
     And Agent checks number of checked bulk checkboxes is 1
     Then Agent checks Bulk Messages section should get displayed on the right side with header Send Bulk Message
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-5795")
+  Scenario: CD:: Agent Desk:: Verify if Agent is able to select and send bulk message to all chats from different channel(SMS, ABC, WA) from live chat
+    When Send 1 messages chat to agent by ORCA
+    And Agent has new conversation request from orca user
+    And Setup ORCA sms integration for Standard Billing tenant
+    When Send 1 messages chat to agent by ORCA
+    And Setup ORCA abc integration for Standard Billing tenant
+    When Send 1 messages chat to agent by ORCA
+    And Agent click the bulk message icon
+    When Agent checks number of checked bulk checkboxes is 3
+    And Agent sees number of checked checkboxes is 3
+    And Agent clear input and type Bulk message, check send button gets enabled
+    When Agent send Hello this is bulk message message
+    Then Agent checks all chats from the previous tab should get deselected
+    And Agent click on new conversation request from orca
+    And Conversation area contains Hello this is bulk message to user message
+    And Agent checks left menu is having 3 chats with latest message Hello this is bulk message

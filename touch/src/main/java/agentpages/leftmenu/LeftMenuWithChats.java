@@ -76,6 +76,9 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = ".cl-chats-group-item__inner ")
     private List<WebElement> filterOptions;
 
+    @FindBy(css = ".cl-chat-item__body")
+    private List<WebElement> messagesLeftMenu;
+
     @FindAll({
             @FindBy(css = ".chats-list>.cl-empty-state"),
             @FindBy(css = ".cl-empty-state>div")
@@ -435,7 +438,18 @@ public class LeftMenuWithChats extends AbstractUIElement {
                 .findFirst().orElseThrow(() -> new NoSuchElementException("There is no value with name: " + name));
     }
 
+    public List<String> getLeftMenuMessageTexts(String messageText) {
+        return messagesLeftMenu.stream()
+                .filter(f -> f.getText().contains(messageText))
+                .map(e -> e.getText()).collect(Collectors.toList());
+    }
+
     private ChatInLeftMenu getChatInLeftMenu() {
         return new ChatInLeftMenu(activeChat).setCurrentDriver(this.getCurrentDriver());
     }
+
+    public int getTargetChatIndex(String userName) {
+        return (getAllFoundChatsUserNames().indexOf(userName) + 1);
+    }
+
 }
