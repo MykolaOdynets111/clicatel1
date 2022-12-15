@@ -119,9 +119,9 @@ public class TicketsSteps extends AbstractAgentSteps {
                 .clickAcceptButton(getUserName(chanel));
     }
 
-    @When("^Supervisor is able to view the \"(.*)\" column in the tickets tab$")
-    public void checkClosedColumnVisibility(String columnName) {
-        Assert.assertTrue(getTicketsPage("main").getTicketsColumnHeader(columnName).isDisplayed(),
+    @When("^Supervisor is able to view the columns in the tickets tab$")
+    public void checkTicketColumnsVisibility(List<String> expectedColumnNames) {
+        Assert.assertEquals(getTicketsPage("main").getTicketsColumnHeaders(), expectedColumnNames,
                 "Closed chat column is not visible");
     }
 

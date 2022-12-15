@@ -87,13 +87,11 @@ public class TicketRow extends AbstractWidget {
     }
 
     public String getOpenDateText(){
-        String stringDate = getTextFromElem(this.getCurrentDriver(), startDate, 5, "Start Date cell").trim();
-        return stringDate;
+        return getTextFromElem(this.getCurrentDriver(), startDate, 5, "Start Date cell").trim();
     }
 
     public String getEndDateText(){
-        String stringDate = getTextFromElem(this.getCurrentDriver(), endDate, 5, "End Date cell").trim();
-        return stringDate;
+        return getTextFromElem(this.getCurrentDriver(), endDate, 5, "End Date cell").trim();
     }
 
     public String getDateByName(String dateType) {
