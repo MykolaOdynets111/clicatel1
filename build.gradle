@@ -39,6 +39,7 @@ subprojects {
         compileOnly 'org.projectlombok:lombok:1.18.22'
         annotationProcessor 'org.projectlombok:lombok:1.18.22'
         api  group: 'org.jetbrains', name: 'annotations', version: '23.0.0'
+        implementation group: 'org.json', name: 'json', version: '20090211'
         //testImplementation("org.assertj:assertj-core:3.11.1")
     }
     

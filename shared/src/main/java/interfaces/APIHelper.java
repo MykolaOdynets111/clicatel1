@@ -1,5 +1,5 @@
 package interfaces;
 
 public interface APIHelper {
-    void get(String authorization, String endpoint);
+    void getProviders(String authorization, String endpoint);
 }
