@@ -8,6 +8,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class TicketsPage extends PortalAbstractPage {
 
     private TicketsTable ticketsTable;
@@ -33,8 +36,8 @@ public class TicketsPage extends PortalAbstractPage {
     @FindBy(css = ".toast-content-message")
     private WebElement ticketAssignedToastMessageContent;
 
-    @FindBy(css = "#app-tickets")
-    private WebElement ticketsMiddlePane;
+    @FindBy(css = "[role='columnheader']")
+    private List<WebElement> ticketColumnHeaders;
 
     public TicketsPage(WebDriver driver) {
         super(driver);
@@ -48,11 +51,6 @@ public class TicketsPage extends PortalAbstractPage {
     public TicketsTable getTicketsTable(){
         ticketsTable.setCurrentDriver(this.getCurrentDriver());
         return ticketsTable;
-    }
-
-    public TicketRow getTicketRow(){
-        waitFor(3000);
-        return new TicketRow(ticketsMiddlePane).setCurrentDriver(this.getCurrentDriver());
     }
 
     public TicketClosedChatView getSupervisorTicketClosedChatView(){
@@ -85,4 +83,11 @@ public class TicketsPage extends PortalAbstractPage {
     public String getToastMessageText() {
         return getTextFromElem(this.getCurrentDriver(), ticketAssignedToastMessageContent, 6, "Toast message");
     }
+
+    public WebElement getTicketsColumnHeader(String headerName){
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), ticketColumnHeaders, 7);
+        return ticketColumnHeaders.stream().filter(a -> a.getText().equalsIgnoreCase(headerName))
+                .findFirst().orElseThrow(() -> new AssertionError("Cannot find ticket column header with name " + headerName));
+    }
+
 }

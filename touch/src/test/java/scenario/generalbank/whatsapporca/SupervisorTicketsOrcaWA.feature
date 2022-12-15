@@ -229,4 +229,4 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     Given I select Touch in left menu and Supervisor Desk in submenu
     When Agent select "Tickets" left menu option
     And Agent select Closed filter on Left Panel
-    Then Supervisor is able to view the "Closed Date" column in the closed ticket tab
+    Then Supervisor is able to view the "Closed Date" column in the tickets tab

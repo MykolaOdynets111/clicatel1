@@ -53,6 +53,9 @@ public class TicketRow extends AbstractWidget {
     @FindBy(xpath = ".//button[contains(text(), 'Assign')]")
     private WebElement assignButton;
 
+    @FindBy(css=".cl-table-row")
+    private List<WebElement> tickets;
+
     public TicketRow(WebElement element) {
         super(element);
     }
@@ -91,6 +94,16 @@ public class TicketRow extends AbstractWidget {
     public String getEndDateText(){
         String stringDate = getTextFromElem(this.getCurrentDriver(), endDate, 5, "End Date cell").trim();
         return stringDate;
+    }
+
+    public String getDateByName(String dateType) {
+        String dateText = null;
+        if (dateType.equalsIgnoreCase("start date")) {
+            dateText = getOpenDateText();
+        } else if (dateType.equalsIgnoreCase("end date")) {
+            dateText = getEndDateText();
+        }
+        return dateText;
     }
 
     public LocalDateTime getEndDate(){

@@ -35,10 +35,6 @@ public class TicketsSteps extends AbstractAgentSteps {
         return getTicketsPage(agent).getTicketsTable();
     }
 
-    private TicketRow getTicketRow(String agent){
-        return getTicketsPage(agent).getTicketRow();
-    }
-
     @Then("^Message Customer Window is opened$")
     public void verifyMessageCustomerWindowIsOpened() {
         Assert.assertEquals(getTicketsPage("main").getMessageCustomerWindow().getHeader(), "Message Customer", "incorrect header Was shown for   Message Customer Window");
@@ -123,10 +119,10 @@ public class TicketsSteps extends AbstractAgentSteps {
                 .clickAcceptButton(getUserName(chanel));
     }
 
-    @When("^Supervisor is able to view the \"(.*)\" column in the closed ticket tab$")
+    @When("^Supervisor is able to view the \"(.*)\" column in the tickets tab$")
     public void checkClosedColumnVisibility(String columnName) {
-        Assert.assertTrue(getTicketRow("main")
-                .getEndDateText().equalsIgnoreCase(columnName), "Closed chat column is not visible");
+        Assert.assertTrue(getTicketsPage("main").getTicketsColumnHeader(columnName).isDisplayed(),
+                "Closed chat column is not visible");
     }
 
     @When("^(.*) checks closed ticket is disabled$")
@@ -164,7 +160,7 @@ public class TicketsSteps extends AbstractAgentSteps {
 
     @Then("^Verify that only \"(.*)\" date tickets are shown in (.*) column$")
     public void verifyTicketsChatsStartDatesFilter(String dateText, String columnType) {
-        Assert.assertTrue(getTicketsTable("main").verifyCurrentDatesOfTheTickets(dateText, columnType),
+        Assert.assertTrue(getTicketsTable("main").verifyCurrentDatesOfTheTickets(columnType, dateText),
                 dateText + " open date is not shown.");
     }
 

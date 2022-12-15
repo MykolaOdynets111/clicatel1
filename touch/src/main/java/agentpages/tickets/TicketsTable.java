@@ -140,21 +140,12 @@ public class TicketsTable extends AbstractUIElement {
                         .getCurrentChannel().equals(channelName));
     }
 
-    public boolean verifyCurrentDatesOfTheTickets(String expectedDateText, String columnType) {
-        boolean flag = false;
+    public boolean verifyCurrentDatesOfTheTickets(String dateType, String expectedDateText) {
         waitForFirstElementToBeVisible(this.getCurrentDriver(), tickets, 7);
-        if (columnType.equalsIgnoreCase("start date")) {
-            flag = tickets.stream().anyMatch(e ->
-                    new TicketRow(e)
-                            .setCurrentDriver(this.getCurrentDriver())
-                            .getOpenDateText().contains(expectedDateText));
-        } else if (columnType.equalsIgnoreCase("end date")) {
-            flag = tickets.stream().anyMatch(e ->
-                    new TicketRow(e)
-                            .setCurrentDriver(this.getCurrentDriver())
-                            .getEndDateText().contains(expectedDateText));
-        }
-        return flag;
+        return tickets.stream().anyMatch(e ->
+                new TicketRow(e)
+                        .setCurrentDriver(this.getCurrentDriver())
+                        .getDateByName(dateType).contains(expectedDateText));
     }
 
     public boolean isTicketPresent(String userName) {
