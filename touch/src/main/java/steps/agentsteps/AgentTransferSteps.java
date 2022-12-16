@@ -20,6 +20,8 @@ import steps.dotcontrol.DotControlSteps;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class AgentTransferSteps extends AbstractAgentSteps {
 
     private String secondAgentName;
@@ -97,11 +99,6 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getTransferChatWindow().openDropDownAgent();
     }
 
-    @When("^(.*) select an agent in 'Transfer to' drop down$")
-    public void selectAgentTransferToDropDown(String agent) {
-        getAgentHomePage(agent).getTransferChatWindow().selectDropDownAgent(agent);
-    }
-
     @Then("^Agent notes field is appeared$")
     public void verifyNotesFieldAppears(){
         Assert.assertTrue(getAgentHomePage("first").getTransferChatWindow().isNoteShown(),
@@ -129,11 +126,10 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         soft.assertAll();
     }
 
-    @When("^Complete 'Note' field$")
-    public void sentNotesTransferChatPopup() {
-        getAgentHomeForMainAgent().getTransferChatWindow().sentNote();
+    @When("^(.*) complete 'Note' field$")
+    public void sentNotesTransferChatPopup(String agent) {
+        getAgentHomePage(agent).getTransferChatWindow().sentNote();
     }
-
 
     @When("^Click on 'Transfer' button in pop-up$")
     public void clickOnTransferButtonInPopUp() {
@@ -150,10 +146,6 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     public void secondAgentHasNotSeeIncomingTransferPopUp(String agent) {
         Assert.assertTrue(getIncomingTransferWindow(agent).isTransferWindowHeaderNotShown(),
                 "Transfer chat header is shown for "+ agent + " agent");
-    }
-
-    private static IncomingTransferWindow getIncomingTransferWindow(String agent) {
-        return getAgentHomePage(agent).getIncomingTransferWindow();
     }
 
     @Then("^(.*) receives incoming transfer with \"(.*)\" header$")
@@ -273,18 +265,27 @@ public class AgentTransferSteps extends AbstractAgentSteps {
                         "Response: " + resp.getBody().asString());
     }
 
-    @Then("^(.*) should see 'no available agents' in a transfer pop-up agents dropdown$")
-    public void secondAgentShouldSeeNoAvailableAgentsInATransferPopUp(String agent) {
-        Assert.assertTrue(getAgentHomePage(agent).getTransferChatWindow().isNoAvailableAgentsDisplayed(),
-                "No available agents is not shown");
-    }
-
     @Then("^(.*) should not see (.*) in a transfer pop-up agents dropdown$")
     public void secondAgentShouldSeeNoAvailableAgentsInATransferPopUp(String agent, String missingAgent) {
         String missingAgentName = getAgentName(missingAgent);
         List<String> availableAgents = getAgentHomePage(agent).getTransferChatWindow().getAvailableAgentsFromDropdown();
         Assert.assertFalse(availableAgents.contains(missingAgentName),
                 String.format("Agent %s is displayed in a transfer pop-up agents dropdown", missingAgentName));
+    }
+
+    @When("^(.*) select an (.*) in 'Transfer to' drop down$")
+    public void selectAgentTransferToDropDown(String agent, String agentTransferTo) {
+        getAgentHomePage(agent).getTransferChatWindow().selectAgent(getAgentName(agentTransferTo));
+    }
+
+    @Then("^(.*) can see (.*) in a transfer pop-up agents dropdown$")
+    public void agentIsAvailableAgentsInATransferPopUp(String agent, String agentToTransferChat) {
+        String agentForTransferringChatTo = getAgentName(agentToTransferChat);
+        List<String> availableAgents = getAgentHomePage(agent).getTransferChatWindow().getOnlineAgentsFromDropdown();
+
+        assertThat(getAgentName(agentToTransferChat))
+                .as(String.format("Agent %s is displayed in a transfer pop-up agents dropdown", agentForTransferringChatTo))
+                .isIn(availableAgents);
     }
 
     @Then("^Close Transferring window for (.*)$")
@@ -295,5 +296,9 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     @Then("^(.*) can see 'Transferring chat...' message$")
     public void verifyChatTransferringMassage(String agent) {
         getLeftMenu(agent).verifyChatTransferringShown();
+    }
+
+    private static IncomingTransferWindow getIncomingTransferWindow(String agent) {
+        return getAgentHomePage(agent).getIncomingTransferWindow();
     }
 }

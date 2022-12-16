@@ -41,14 +41,13 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
     @Given("^Taf (.*) message text is updated for (.*) tenant$")
     public void updateTafMessageText(String autoResponderMessageId, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        AutoResponderMessage autoResponderMessageUpdates = ApiHelper.getAutoResponderMessage(autoResponderMessageId);;
+        AutoResponderMessage autoResponderMessageUpdates = ApiHelper.getAutoResponderMessage(autoResponderMessageId);
         updatedMessage.set(generateNewMessageText(autoResponderMessageId));
         autoResponderMessageUpdates.setText(updatedMessage.get());
         ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates);
-        AutoResponderMessage tafMessageBackend = ApiHelper.getAutoResponderMessage(autoResponderMessageId);;
+        AutoResponderMessage tafMessageBackend = ApiHelper.getAutoResponderMessage(autoResponderMessageId);
         Assert.assertEquals(tafMessageBackend.getText(), autoResponderMessageUpdates.getText(),
                 "Message text is not updated for tenant");
-
     }
 
     @When("^Changes user id$")

@@ -1,5 +1,6 @@
 package steps.agentsteps;
 
+import agentpages.AgentHomePage;
 import agentpages.uielements.DatePicker;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -56,11 +57,6 @@ public class AgentFilteringSteps extends AbstractAgentSteps {
                 "The date filter is not empty" + getAgentHomePage(agent).getLeftMenuWithChats().checkStartDateFilterEmpty());
     }
 
-    @And("^(.*) checks back button is (.*) in calendar for (.*) filter (.*) days ago$")
-    public void backButtonDisability(String agent, String visibility, String filterType, Long day) {
-        Assert.assertTrue(new DatePicker(agent).checkBackButtonVisibilityThreeMonthsBack(filterType, day));
-    }
-
     @When("^(.*) filter closed chats with (.*) channel, (.*) sentiment and flagged is (.*)$")
     public void setLiveChatsFilter(String agent, String channel, String sentiment, boolean flagged){
         getLeftMenu(agent).applyTicketsFilters(channel.trim(), sentiment.trim(), flagged);
@@ -71,5 +67,21 @@ public class AgentFilteringSteps extends AbstractAgentSteps {
         Assert.assertTrue( getLeftMenu(agent).verifyChanelOfTheChatsIsPresent(channelName),
                 channelName + " channel name should be shown.");
 
+    }
+
+    @Then("^(.*) sees Correct number of filtered chats shown as (.*)$")
+    public void verifyChatConsoleAgentsContainsChats(String agent, int filteredChatsCount) {
+        int filteredChatsFromChatDesk = new AgentHomePage(agent).getLeftMenuWithChats().getNewChatsCount();
+        Assert.assertTrue(filteredChatsFromChatDesk==filteredChatsCount,
+                "Filtered chats count is not correct");
+    }
+
+    @And("^(.*) cannot select (.*) more than (.*) days ago(?: | in supervisor)$")
+    public void backButtonDisability(String agent, String filterType, int day) {
+        DatePicker dp = new DatePicker(agent);
+        softAssert.assertTrue(dp.openDatePicker(filterType).verifyExpectedDateIsDisabled(day), day + " days back Date should be selectable for " + filterType);
+        softAssert.assertFalse(dp.verifyExpectedDateIsDisabled(day+1), day+1 + " days back Date should not be selectable for " + filterType);
+        softAssert.assertFalse(dp.isBackButtonShown(), "Back button should be hidden");
+        softAssert.assertAll();
     }
 }

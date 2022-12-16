@@ -104,7 +104,7 @@ public class DotControlSteps implements WebWait {
 
     @Given("^Create second .Control integration for (.*) tenant$")
     public void createSecondIntegration(String tenantOrgName){
-            createIntegration(tenantOrgName, "fbmsg");
+        createIntegration(tenantOrgName, "fbmsg");
     }
 
     @Then("^(.*) status code for multiple integration creation$")
@@ -138,9 +138,9 @@ public class DotControlSteps implements WebWait {
     public MessageRequest preparePayloadForMessageEndpoint(String message){
         if (messageCallBody.get()==null) createRequestMessage(apiToken.get(), message);
         else{
-                messageCallBody.get().setMessage(message);
-                messageCallBody.get().setMessageId(
-                        messageCallBody.get().getMessageId() + faker.number().randomNumber(7, false));
+            messageCallBody.get().setMessage(message);
+            messageCallBody.get().setMessageId(
+                    messageCallBody.get().getMessageId() + faker.number().randomNumber(7, false));
         }
         if (message.contains("invalid apiToken")) messageCallBody.get().setApiToken("invalid_token");
         if (message.contains("empty")) messageCallBody.get().setMessage("");
@@ -292,8 +292,8 @@ public class DotControlSteps implements WebWait {
     @Then("^Message should not be sent$")
     public void verifyMessageIsNotSent(){
         Assert.assertEquals(responseOnSentRequest.get().statusCode(), 400,
-        "Sending empty message does not return 400 status code\n" +
-        responseOnSentRequest.get().getBody().asString() + "\n");
+                "Sending empty message does not return 400 status code\n" +
+                        responseOnSentRequest.get().getBody().asString() + "\n");
     }
 
     @Then("^Error with not defined tenant is returned$")
@@ -311,12 +311,12 @@ public class DotControlSteps implements WebWait {
     @Then("Verify dot .Control returns response with correct text for initial (.*) user message")
     public void verifyDotControlResponse(String initialMessage){
         if(!(responseOnSentRequest.get().statusCode()==200)) {
-                Assert.fail("Sending message was not successful\n" +
-                        "Sent data in the request: " + messageCallBody.get().toString() + "\n\n" +
-                        "Status code " + responseOnSentRequest.get().statusCode()+
-                        "\nResponse Body: " + responseOnSentRequest.get().getBody().asString() + "\n\n" +
-                "HTTP Integration status: " + ApiHelper.getIntegration(Tenants.getTenantUnderTestOrgName(), "HTTP").toString());
-            }
+            Assert.fail("Sending message was not successful\n" +
+                    "Sent data in the request: " + messageCallBody.get().toString() + "\n\n" +
+                    "Status code " + responseOnSentRequest.get().statusCode()+
+                    "\nResponse Body: " + responseOnSentRequest.get().getBody().asString() + "\n\n" +
+                    "HTTP Integration status: " + ApiHelper.getIntegration(Tenants.getTenantUnderTestOrgName(), "HTTP").toString());
+        }
         String intent = ApiHelperTie.getListOfIntentsOnUserMessage(initialMessage).get(0).getIntent();
         String expectedMessage = ApiHelperTie.getExpectedMessageOnIntent(intent);
         try {
@@ -328,7 +328,7 @@ public class DotControlSteps implements WebWait {
             Assert.fail("Nullpointer exception was faced\n " +
                     "The request: " + messageCallBody.get().toString() + "\n" +
                     "clientId from request:" + messageCallBody.get().getClientId() + "\n" +
-            "Received clientId from .Control response" + DotControlServer.dotControlIncomingRequests.keySet());
+                    "Received clientId from .Control response" + DotControlServer.dotControlIncomingRequests.keySet());
         }
     }
 
@@ -408,19 +408,19 @@ public class DotControlSteps implements WebWait {
 
     @Then("^MessageId is not null$")
     public void checkMessageIdSavingInINITCall(){
-            String sessionId = DBConnector.getActiveSessionDetailsByClientProfileID(ConfigManager.getEnv(), clientId.get()).get("sessionId");
-            List<ChatHistoryItem> chatHistoryItemList = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionId);
-            String actualMessageId = null;
-            try {
-                actualMessageId = chatHistoryItemList.stream()
-                        .filter(e -> e.getClientId().equalsIgnoreCase(clientId.get()))
-                        .findFirst().get().getMessageId();
-            }catch(java.util.NoSuchElementException e){
-                Assert.fail("Not found message by clientId\n"
-                        +  chatHistoryItemList.stream().map(s -> s.toString()).collect(Collectors.joining("\n")));
-            }
+        String sessionId = DBConnector.getActiveSessionDetailsByClientProfileID(ConfigManager.getEnv(), clientId.get()).get("sessionId");
+        List<ChatHistoryItem> chatHistoryItemList = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionId);
+        String actualMessageId = null;
+        try {
+            actualMessageId = chatHistoryItemList.stream()
+                    .filter(e -> e.getClientId().equalsIgnoreCase(clientId.get()))
+                    .findFirst().get().getMessageId();
+        }catch(java.util.NoSuchElementException e){
+            Assert.fail("Not found message by clientId\n"
+                    +  chatHistoryItemList.stream().map(s -> s.toString()).collect(Collectors.joining("\n")));
+        }
 
-            Assert.assertFalse(actualMessageId.equalsIgnoreCase("null"),
+        Assert.assertFalse(actualMessageId.equalsIgnoreCase("null"),
                 "Message id is not auto generated");
     }
 
@@ -429,7 +429,7 @@ public class DotControlSteps implements WebWait {
         Response resp = ApiHelper.updateSessionCapacity(tenantOrgName, chats);
         Assert.assertEquals(resp.statusCode(), 200,
                 "Updating session capacity was not successful\n" +
-                "resp body: " + resp.getBody().asString());
+                        "resp body: " + resp.getBody().asString());
     }
 
     public static String getClient(){

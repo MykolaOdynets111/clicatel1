@@ -16,8 +16,4 @@ public class AgentPendingChatSteps extends AbstractAgentSteps {
         String userName=getUserName(integration);
         Assert.assertEquals(getAgentHomePage(agent).getPendingMessage(),"Your chat with "+userName+" has been moved to pending from live.","Incorrect pending message is shown");
     }
-
-
-
-
 }

@@ -71,7 +71,7 @@ public class TIEApiSteps {
         String url = String.format(Endpoints.TIE_INTENT_WITHOUT_SENTIMENT_URL, tenant, userMessage);
         when()
                 .get(url).
-        then()
+                then()
                 .statusCode(200)
                 .body("intents_result.intents", hasSize(greaterThan(0)));
     }
@@ -85,7 +85,7 @@ public class TIEApiSteps {
         String url = String.format(Endpoints.TIE_INTENT_WITHOUT_SENTIMENT_URL, tenant, userMessage);
         when()
                 .get(url).
-        then()
+                then()
                 .statusCode(200);
     }
 
@@ -108,7 +108,7 @@ public class TIEApiSteps {
         String url = String.format(Endpoints.TIE_INTENT_SPECIFYING_SENTIMENT_URL, tenant, intentText);
         when()
                 .get(url).
-        then()
+                then()
                 .statusCode(200)
                 .body("intents_result.intents", hasSize(greaterThan(0)));
     }
@@ -116,10 +116,10 @@ public class TIEApiSteps {
     @When("^I add to (.*) intent (.*) sample text for created tenant status code is 200$")
     public void addSampleTextForIntent(String intent, String sampleText){
         String url = String.format(Endpoints.TIE_ADDING_INTENT_SAMPLE_TEXT_TO_TRAINING,
-                        NEW_TENANT_NAMES.get(Thread.currentThread().getId()),intent,sampleText);
+                NEW_TENANT_NAMES.get(Thread.currentThread().getId()),intent,sampleText);
         when()
                 .get(url).
-        then()
+                then()
                 .statusCode(200);
     }
 
@@ -131,7 +131,7 @@ public class TIEApiSteps {
         String url = String.format(Endpoints.TIE_SENTIMENTS, tenant, userMessage);
         when()
                 .get(url).
-        then()
+                then()
                 .statusCode(200)
                 .body("text", equalTo(userMessage))
                 .body("sentiment_score", notNullValue());
@@ -147,9 +147,9 @@ public class TIEApiSteps {
         String[] targetArray = intents.toArray(new String[intents.size()]);
         given()
                 .urlEncodingEnabled(false).
-        when()
+                when()
                 .get(url).
-        then()
+                then()
                 .statusCode(200)
                 .body("data.size()", is(intents.size()))
                 .body("data.intent", hasItems(targetArray));
@@ -160,7 +160,7 @@ public class TIEApiSteps {
         String url = String.format(Endpoints.TIE_ANSWERS_LIST, tenant, intent);
         when()
                 .get(url).
-        then()
+                then()
                 .statusCode(400);
     }
 
@@ -169,7 +169,7 @@ public class TIEApiSteps {
         String url = String.format(Endpoints.TIE_ANSWER_BY_CATEGORY_URL, tenant, "all");
         when()
                 .get(url).
-        then()
+                then()
                 .statusCode(200);
     }
 
@@ -194,7 +194,7 @@ public class TIEApiSteps {
         waitFor(5000);
         Assert.assertTrue(resp.statusCode()==200, "" +
                 "Creating new intent was not successfull\n "
-        +resp.getBody().asString());
+                +resp.getBody().asString());
     }
 
 
@@ -218,8 +218,8 @@ public class TIEApiSteps {
                 creatingURL = String.format(creatingURL, tenantID, info.get(0));
                 break;
             case 2:
-               creatingURL = String.format(creatingURL, tenantID, info.get(0)) + "&answer="+info.get(1);
-               break;
+                creatingURL = String.format(creatingURL, tenantID, info.get(0)) + "&answer="+info.get(1);
+                break;
             case 3:
                 creatingURL = String.format(creatingURL, tenantID, info.get(0))+ "&answer="+info.get(1)+"&answer_url="+info.get(2);
                 break;
@@ -269,13 +269,13 @@ public class TIEApiSteps {
             String url = String.format(Endpoints.TIE_ANSWER_URL, tenantID, intent) + "&answer=" + newIntentInfo.get(0) + "";
             when().
                     post(url).
-            then().
+                    then().
                     statusCode(200);
         }else{
             String url = String.format(Endpoints.TIE_ANSWER_URL, tenantID, intent) + "&answer=" + newIntentInfo.get(0) + "&answer_url="+newIntentInfo.get(1)+"";
             when().
                     post(url).
-            then().
+                    then().
                     statusCode(200);
         }
     }
@@ -287,7 +287,7 @@ public class TIEApiSteps {
         String url = String.format(Endpoints.TIE_ANSWER_URL, tenantID, "notexisted_intent")+"&answer=newAnswer";
         when().
                 post(url).
-        then().
+                then().
                 statusCode(404);
     }
 
@@ -297,7 +297,7 @@ public class TIEApiSteps {
         String url = String.format(Endpoints.TIE_ANSWER_URL, tenantID, intent);
         when().
                 delete(url).
-        then().
+                then().
                 statusCode(200);
         waitFor(4000);
     }
@@ -308,7 +308,7 @@ public class TIEApiSteps {
         String url = String.format(Endpoints.TIE_ANSWER_URL, tenantID, intent);
         when().
                 get(url).
-        then().
+                then().
                 statusCode(404);
     }
     // ======================= tie trainings ======================== //
@@ -331,8 +331,8 @@ public class TIEApiSteps {
             String url = String.format(Endpoints.TIE_TRAININGS, existedTenants);
             resp = get(url);
         } else{
-                String url = String.format(Endpoints.TIE_TRAININGS, tenant);
-                resp = get(url);
+            String url = String.format(Endpoints.TIE_TRAININGS, tenant);
+            resp = get(url);
         }
 
         soft.assertEquals(resp.statusCode(), 200,
@@ -351,7 +351,7 @@ public class TIEApiSteps {
         String url = String.format(Endpoints.TIE_TRAININGS,"all");
         when()
                 .get(url).
-        then()
+                then()
                 .statusCode(200)
                 .body("train."+ tenant, equalTo("scheduled"));
     }
@@ -362,7 +362,7 @@ public class TIEApiSteps {
         String url = String.format(Endpoints.TIE_TRAININGS, tenant);
         when()
                 .get(url).
-        then()
+                then()
                 .statusCode(200)
                 .body("train." + tenant, equalTo("scheduled"));
     }
@@ -372,9 +372,9 @@ public class TIEApiSteps {
         String tenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         String url = String.format(Endpoints.TIE_TRAININGS, tenant);
         given().log().all().
-        when()
+                when()
                 .post(url).
-        then()
+                then()
                 .statusCode(200);
     }
 
@@ -383,9 +383,9 @@ public class TIEApiSteps {
         String newTenantName = createNewTenantName();
         NEW_TENANT_NAMES.put(Thread.currentThread().getId(), newTenantName);
         Response resp = given()
-                            .log().all()
-                            .body("tenant="+newTenantName+"")
-                            .put(URLs.getBaseTieURL());
+                .log().all()
+                .body("tenant="+newTenantName+"")
+                .put(URLs.getBaseTieURL());
         Assert.assertEquals(resp.statusCode(), 200,
                 "Status code is not 200 after creating "+newTenantName+" tenant\n"+resp.prettyPrint()+"");
 
@@ -426,9 +426,9 @@ public class TIEApiSteps {
         given()
                 .log().all()
                 .body("tenant="+NEW_TENANT_NAMES.get(Thread.currentThread().getId())+"").
-        when()
+                when()
                 .put(URLs.getBaseTieURL())
-        .then()
+                .then()
                 .statusCode(404);
     }
 
@@ -437,9 +437,9 @@ public class TIEApiSteps {
         String newTenantName = createNewTenantName();
         NEW_TENANT_NAMES.put(Thread.currentThread().getId(), newTenantName);
         Response resp = given()
-                            .log().all()
-                            .body("tenant="+newTenantName+"&source_tenant="+sourceTenant+"")
-                            .put(URLs.getBaseTieURL());
+                .log().all()
+                .body("tenant="+newTenantName+"&source_tenant="+sourceTenant+"")
+                .put(URLs.getBaseTieURL());
         Assert.assertEquals(resp.statusCode(), 200,
                 "Status code is not 200 after cloning "+sourceTenant+" tenant\n"+resp.prettyPrint()+"");
     }
@@ -473,7 +473,7 @@ public class TIEApiSteps {
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         when()
                 .get(String.format(Endpoints.TIE_CONFIG, newTenant)).
-        then()
+                then()
                 .statusCode(200)
                 .body("tenant", equalTo(newTenant));
     }
@@ -483,9 +483,9 @@ public class TIEApiSteps {
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         given().header("Content-Type", "application/json").log().all()
                 .body("{\""+field+"\":\""+value+"\"}").
-        when()
+                when()
                 .post(String.format(Endpoints.TIE_CONFIG, newTenant)).
-        then()
+                then()
                 .statusCode(200);
     }
 
@@ -495,8 +495,8 @@ public class TIEApiSteps {
         given().log().all()
                 .body("{\""+field+"\":\""+value+"\"}").
                 when()
-               .post(String.format(Endpoints.TIE_CONFIG, newTenant)).
-        then()
+                .post(String.format(Endpoints.TIE_CONFIG, newTenant)).
+                then()
                 .statusCode(404);
     }
 
@@ -531,10 +531,10 @@ public class TIEApiSteps {
     public void addTrainingSetForNewTenant(){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         Response resp =
-        given().header("Content-Type", "application/json").log().all()
-                .body("{\"category\":\"touch button\",\"text\":\"HO-HO-HO\",\"intent\":\"SANTA\",\"type\":\"AQA\", \"tags\":[\"AQA\"]}").
-        when()
-                .post(String.format(Endpoints.TIE_POST_TRAINSET, newTenant));
+                given().header("Content-Type", "application/json").log().all()
+                        .body("{\"category\":\"touch button\",\"text\":\"HO-HO-HO\",\"intent\":\"SANTA\",\"type\":\"AQA\", \"tags\":[\"AQA\"]}").
+                        when()
+                        .post(String.format(Endpoints.TIE_POST_TRAINSET, newTenant));
         SoftAssert soft = new SoftAssert();
         soft.assertEquals(resp.statusCode(), 200,
                 "Status code is not 200 after adding new trainset \n" + resp.getBody().asString());
@@ -548,7 +548,7 @@ public class TIEApiSteps {
         waitFor(1000);
         when()
                 .get(String.format(Endpoints.TIE_GET_TRAINSET, newTenant)).
-        then()
+                then()
                 .statusCode(200)
                 .body("intent_trainset.tenant[0]", equalTo(newTenant))
                 .body("intent_trainset.intent[0]", equalTo("SANTA"))
@@ -581,9 +581,9 @@ public class TIEApiSteps {
     public void checkTrainsetIsRemoved(){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         String url = String.format(Endpoints.TIE_GET_TRAINSET, newTenant);
-       when()
+        when()
                 .get(url).
-        then()
+                then()
                 .statusCode(200)
                 .body("intent_trainset", everyItem(isEmptyOrNullString()));
     }
@@ -606,23 +606,23 @@ public class TIEApiSteps {
         Response sourceTenantResp = get(String.format(Endpoints.TIE_CONFIG, sourceTenant));
         Response resp = get(String.format(Endpoints.TIE_CONFIG, NEW_TENANT_NAMES.get(Thread.currentThread().getId())));
         try{
-        JsonPath json = resp.getBody().jsonPath();
-        JsonPath jsonSource = sourceTenantResp.getBody().jsonPath();
-        if(json==null || jsonSource==null){
-            Assert.assertTrue(false, "JSON response after geting training config is missing.\n" +
-                    "Response for getting config of newly created tenant: "+resp.getBody().asString()+"\n"+
-                    "Response for getting config of source tenant: " +sourceTenantResp.getBody().asString()+"");
-        } else{
+            JsonPath json = resp.getBody().jsonPath();
+            JsonPath jsonSource = sourceTenantResp.getBody().jsonPath();
+            if(json==null || jsonSource==null){
+                Assert.assertTrue(false, "JSON response after geting training config is missing.\n" +
+                        "Response for getting config of newly created tenant: "+resp.getBody().asString()+"\n"+
+                        "Response for getting config of source tenant: " +sourceTenantResp.getBody().asString()+"");
+            } else{
                 Assert.assertTrue(json.get("stopwords_file").equals(jsonSource.get("stopwords_file"))&
-                    json.get("normalizer_features").equals(jsonSource.get("normalizer_features"))&
-                    json.get("fields").equals(jsonSource.get("fields"))&
-                    json.get("excluded_types").equals(jsonSource.get("excluded_types"))&
-                    json.get("separate_models").equals(jsonSource.get("separate_models"))&
-                    json.get("add_synonyms").equals(jsonSource.get("add_synonyms"))&
-                    json.get("trusted_types").equals(jsonSource.get("trusted_types"))&
-                    json.get("intent_confidence_threshold").equals(jsonSource.get("intent_confidence_threshold")),
-                "Config of source tenant was not applied to the new one.");
-        }
+                                json.get("normalizer_features").equals(jsonSource.get("normalizer_features"))&
+                                json.get("fields").equals(jsonSource.get("fields"))&
+                                json.get("excluded_types").equals(jsonSource.get("excluded_types"))&
+                                json.get("separate_models").equals(jsonSource.get("separate_models"))&
+                                json.get("add_synonyms").equals(jsonSource.get("add_synonyms"))&
+                                json.get("trusted_types").equals(jsonSource.get("trusted_types"))&
+                                json.get("intent_confidence_threshold").equals(jsonSource.get("intent_confidence_threshold")),
+                        "Config of source tenant was not applied to the new one.");
+            }
         } catch(JsonPathException e){
             Assert.assertTrue(false, "invalid JSON response. New Tetant: "+NEW_TENANT_NAMES.get(Thread.currentThread().getId())+"\n"
                     +sourceTenantResp.getBody().asString()+" original tenant tie response \n" +
@@ -636,7 +636,7 @@ public class TIEApiSteps {
         String url = String.format(Endpoints.TIE_DELETE_TENANT, NEW_TENANT_NAMES.get(Thread.currentThread().getId()));
         when()
                 .delete(url).
-        then()
+                then()
                 .statusCode(200);
     }
 
@@ -675,9 +675,9 @@ public class TIEApiSteps {
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         given()
                 .body("{\"NER_trainset\": ["+NER_DATA_SET.toString()+"]}").
-        when()
+                when()
                 .post(String.format(Endpoints.TIE_NER,newTenant)).
-        then()
+                then()
                 .statusCode(200);
     }
 
@@ -686,7 +686,7 @@ public class TIEApiSteps {
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         when()
                 .get(String.format(Endpoints.TIE_NER,newTenant)).
-        then()
+                then()
                 .statusCode(200)
                 .body("NER_trainset.text", hasItems(NER_DATA_SET.getText()));
     }
@@ -701,7 +701,7 @@ public class TIEApiSteps {
         String url = String.format(Endpoints.TIE_NER_DELETE, newTenant, id);
         when()
                 .delete(url).
-        then()
+                then()
                 .statusCode(200);
     }
 
@@ -710,7 +710,7 @@ public class TIEApiSteps {
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         when()
                 .get(String.format(Endpoints.TIE_NER,newTenant)).
-        then()
+                then()
                 .statusCode(200)
                 .body("NER_trainset.text", not(hasItems(NER_DATA_SET.getText())));
     }
@@ -800,7 +800,7 @@ public class TIEApiSteps {
         switch(dateFilter) {
             case "start_date":
                 Assert.assertTrue(itemsDateTimes.stream().allMatch(e -> e.isEqual(targetDateTime)|e.isAfter(targetDateTime)),
-                "Incorrect items are shown after applying the following filters: '"+dateFilter+"="+targetDate+"'");
+                        "Incorrect items are shown after applying the following filters: '"+dateFilter+"="+targetDate+"'");
                 break;
             case "end_date":
                 Assert.assertTrue(itemsDateTimes.stream().allMatch(e -> e.isEqual(targetDateTime)|e.isBefore(targetDateTime)),
@@ -913,15 +913,15 @@ public class TIEApiSteps {
         ApiHelperTie.deleteAllIntents();
         formDataForIntentCreationTest();
         Response resp = ApiHelperTie.createNewIntent(Tenants.getTenantUnderTestOrgName(),
-                                                            (String) mapForCreatedIntent.get("intent"),
-                                                            (String) mapForCreatedIntent.get("category"),
-                                                            (String) mapForCreatedIntent.get("answer"),
-                                                            (String) mapForCreatedIntent.get("type"));
+                (String) mapForCreatedIntent.get("intent"),
+                (String) mapForCreatedIntent.get("category"),
+                (String) mapForCreatedIntent.get("answer"),
+                (String) mapForCreatedIntent.get("type"));
         mapForCreatedIntent.put("intent_id", resp.getBody().jsonPath().get("id"));
         Assert.assertTrue(resp.statusCode() == 200,
                 "Creating new intent for '" + tenantOrgName + "' intent was not successful\n"+
-        "resp status code: " + resp.statusCode() + "\n" +
-        "resp body: " + resp.getBody().asString());
+                        "resp status code: " + resp.statusCode() + "\n" +
+                        "resp body: " + resp.getBody().asString());
     }
 
     private Map formDataForIntentCreationTest(){
@@ -929,7 +929,7 @@ public class TIEApiSteps {
         mapForCreatedIntent.put("raw_intent", book);
         mapForCreatedIntent.put("intent", book.toLowerCase());
         mapForCreatedIntent.put("answer", "With our goods you may always expect the high quality of paper and ink. " +
-                                            "For more info please schedule a call with out manager.");
+                "For more info please schedule a call with out manager.");
         mapForCreatedIntent.put("type", "faq");
         mapForCreatedIntent.put("category", "faq");
 
@@ -950,7 +950,7 @@ public class TIEApiSteps {
     public void addNewSamples(){
         SoftAssert soft = new SoftAssert();
         List<String> samples = Arrays.asList("How much costs '"+mapForCreatedIntent.get("intent")+"' book?",
-                                                "Do you provide any discounts if I but 500 of '"+mapForCreatedIntent.get("intent")+ "' books?'");
+                "Do you provide any discounts if I but 500 of '"+mapForCreatedIntent.get("intent")+ "' books?'");
         List<String> sampleIds = new ArrayList<>();
         mapForCreatedIntent.put("samples", samples);
         for (String sample : samples) {
@@ -959,8 +959,8 @@ public class TIEApiSteps {
             sampleIds.add(resp.getBody().jsonPath().get("id"));
             soft.assertTrue(resp.statusCode()==200,
                     "Adding '"+sample+"' sample for '" + mapForCreatedIntent.get("intent")+ "' was not successful\n" +
-            "status code: " + resp.statusCode() + "\n" +
-            "resp body: " + resp.statusCode());
+                            "status code: " + resp.statusCode() + "\n" +
+                            "resp body: " + resp.statusCode());
         }
         mapForCreatedIntent.put("sample_ids", sampleIds);
         soft.assertAll();
@@ -975,7 +975,7 @@ public class TIEApiSteps {
                 .collect(Collectors.toList());
         Assert.assertTrue( ((List) mapForCreatedIntent.get("samples")).stream().allMatch(e -> samplesOnIntent.toString().contains(e.toString())),
                 "Created samples are not returned \n" +
-        "mapForCreatedIntent: " +  mapForCreatedIntent.toString());
+                        "mapForCreatedIntent: " +  mapForCreatedIntent.toString());
     }
 
     @When("^Schedule new training$")
@@ -1002,7 +1002,7 @@ public class TIEApiSteps {
                             .anyMatch(e -> e.get("status").equals("finished"));
                 }catch (JsonPathException e){
                     Assert.fail("Unable to get trained models \n" + "resp: status code " + resp.statusCode() + "\n"
-                    + "resp body: " + resp.getBody().asString());
+                            + "resp body: " + resp.getBody().asString());
                 }
             } else{
                 break;
@@ -1023,11 +1023,11 @@ public class TIEApiSteps {
                 int incrementor = i;
                 respBody = ApiHelperTie.getModels().getBody();
                 createdModelName = respBody.jsonPath().getList("intent")
-                            .stream().map(e -> (Map) e).map(e -> (String) e.get("name"))
-                            .filter(e -> DateTimeHelper.convertLocalDateTimeToMillis(getModelDateTime(e), ZoneId.of("UTC"))
-                                    >
-                                    DateTimeHelper.convertLocalDateTimeToMillis(now.minusMinutes(3+incrementor), ZoneId.of("UTC")))
-                            .findFirst().orElse("");
+                        .stream().map(e -> (Map) e).map(e -> (String) e.get("name"))
+                        .filter(e -> DateTimeHelper.convertLocalDateTimeToMillis(getModelDateTime(e), ZoneId.of("UTC"))
+                                >
+                                DateTimeHelper.convertLocalDateTimeToMillis(now.minusMinutes(3+incrementor), ZoneId.of("UTC")))
+                        .findFirst().orElse("");
             }
         }
         if(createdModelName.equals("")){
@@ -1064,9 +1064,9 @@ public class TIEApiSteps {
                 waitFor(200);
                 resp =ApiHelperTie.getRespWithIntentsOnUserMessageWithAutorization(sample);
                 actualIntents = resp.jsonPath().getList("intents_result.intents", Intent.class).stream()
-                                    .sorted(Comparator.comparing(Intent::getConfidence).reversed())
-                                    .map(e -> e.getIntent())
-                                    .collect(Collectors.toList());
+                        .sorted(Comparator.comparing(Intent::getConfidence).reversed())
+                        .map(e -> e.getIntent())
+                        .collect(Collectors.toList());
                 result = actualIntents.contains(expectedIntent);
             }
 
@@ -1074,8 +1074,8 @@ public class TIEApiSteps {
 
         Assert.assertTrue(result,
                 "Expected '"+expectedIntent+"' intent is not returned on the sample '" + sample +"'\n" +
-        "Resp body: " + resp.getBody().asString() + "\n" +
-        "Published model: " + mapForCreatedIntent.get("model"));
+                        "Resp body: " + resp.getBody().asString() + "\n" +
+                        "Published model: " + mapForCreatedIntent.get("model"));
     }
 
 
@@ -1175,10 +1175,10 @@ public class TIEApiSteps {
 
     public static void clearCreatedIntentAndSample(){
         List<String> sampleIds = (List<String>) mapForCreatedIntent.get("sample_ids");
-            if(sampleIds!=null) {
-                for (String sampleId : sampleIds) {
-                    ApiHelperTie.deleteSample(sampleId);
-                }
+        if(sampleIds!=null) {
+            for (String sampleId : sampleIds) {
+                ApiHelperTie.deleteSample(sampleId);
+            }
         }
         ApiHelperTie.deleteAllIntents();
         mapForCreatedIntent.clear();
