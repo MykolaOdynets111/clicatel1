@@ -19,6 +19,8 @@ Feature: Bulk chat left menu actions
     And Agent has new conversation request from orca user
     And Agent click the bulk message icon
     Then Agent sees checkbox is disabled for the blocked chat
+    When Agent hover over any unsubscribed disabled closed chat
+    And Agent checks bulk chat Notification message should get displayed
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6286")
   Scenario: CD:: Agent Desk:: : Verify if Agent is able to select only maximum 15 chats while sending the bulk message
@@ -193,9 +195,31 @@ Feature: Bulk chat left menu actions
     And Agent click the bulk message icon
     When Agent checks number of checked bulk checkboxes is 3
     And Agent sees number of checked checkboxes is 3
-    And Agent clear input and type Bulk message, check send button gets enabled
     When Agent send Hello this is bulk message message
     Then Agent checks all chats from the previous tab should get deselected
     And Agent click on new conversation request from orca
     And Conversation area contains Hello this is bulk message to user message
     And Agent checks left menu is having 3 chats with latest message Hello this is bulk message
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-5792")
+  Scenario: CD :: Agent Desk :: Verify that if Supervisor is able to see the sent bulk message as a part of chat in the chat window
+    When Send 1 messages chat to agent by ORCA
+    And Agent has new conversation request from orca user
+    And Agent click the bulk message icon
+    When Agent checks number of checked bulk checkboxes is 1
+    And Agent sees number of checked checkboxes is 1
+    When Agent send Hello this is bulk message message
+    And Agent checks all chats from the previous tab should get deselected
+    And Agent click on new conversation request from orca
+    Then Conversation area contains Hello this is bulk message to user message
+    When I select Touch in left menu and Supervisor Desk in submenu
+    And Agent click On Live Supervisor Desk chat from ORCA channel
+    Then Supervisor can see orca live chat with Hello this is bulk message message from agent
+    When I select Touch in left menu and Agent Desk in submenu
+    And Agent click on new conversation request from orca
+    And Agent closes chat
+    When I select Touch in left menu and Supervisor Desk in submenu
+    And Agent select "Closed" left menu option
+    And Agent search chat orca on Supervisor desk
+    And Supervisor opens closed chat
+    Then Supervisor can see orca live chat with Hello this is bulk message message from agent

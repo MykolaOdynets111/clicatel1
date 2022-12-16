@@ -171,6 +171,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertTrue(getSupervisorDeskPage().openInboxChatBody(getUserName(channel)).isUserMessageShown(message), "Messages is not the same");
     }
 
+    @Then("^Supervisor can see (.*) live chat with (.*) message from agent$")
+    public void verifyLiveChatPresentFromAgent(String channel, String message) {
+        Assert.assertTrue(getSupervisorDeskPage().openInboxChatBody(getUserName(channel)).isToUserMessageShownWithWait(message, 5), "Messages is not the same");
+    }
+
     @Then("^Supervisor can see (.*) ticket with (.*) message from agent$")
     public void verifyTicketMessagePresent(String channel, String message) {
         Assert.assertTrue(getSupervisorDeskPage().getTicketChatBody().isToUserMessageShownWithWait(message,8), "Messages is not the same");
@@ -268,15 +273,15 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 
-    @And("^Agent search chat (.*) on Supervisor desk$")
-    public void filterByChatName(String chatName) {
+    @And("^(.*) search chat (.*) on Supervisor desk$")
+    public void filterByChatName(String agent, String chatName) {
         String userName = null;
         try {
             userName = getUserName(chatName);
         } catch (AssertionError e) {
             userName = chatName;
         }
-        getSupervisorAndTicketsHeader("main").setSearchInput(userName).clickApplyFilterButton();
+        getSupervisorAndTicketsHeader(agent).setSearchInput(userName).clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 

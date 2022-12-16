@@ -46,6 +46,9 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = ".cl-chat-item-bulk-message-checkbox label")
     private WebElement bulkPanelChat;
 
+    @FindBy(css = ".bulk-mode-popup-message")
+    private WebElement bulkChatPopUpMessage;
+
     @FindBy(css = ".cl-chat-item-bulk-message-checkbox label")
     private List<WebElement> bulkPanelChatItems;
 
@@ -144,6 +147,10 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     public boolean isBulkPanelEnabled(String isEnabled) {
         return getAttributeFromElem(this.getCurrentDriver(), bulkPanelChat, 5, "Bulk panel", "class").contains(isEnabled);
+    }
+
+    public void moveToFirstBulkPanelChat() {
+        moveToElement(this.getCurrentDriver(), bulkPanelChat);
     }
 
     public Boolean isNumberOfCheckedChats(int numberOfCheckedBulkChats ) {

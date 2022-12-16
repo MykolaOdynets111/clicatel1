@@ -117,6 +117,9 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = ".cl-agent-notifications-row-buttons-time")
     private WebElement bellNotificationTime;
 
+    @FindBy(css = ".bulk-mode-popup-message")
+    private WebElement bulkChatPopUpMessage;
+
     private DeleteCRMConfirmationPopup deleteCRMConfirmationPopup;
     private EditCRMTicketWindow editCRMTicketWindow;
     private CRMTicketContainer crmTicketContainer;
@@ -467,5 +470,10 @@ public class AgentHomePage extends AgentAbstractPage {
     public String getNoResultsFoundMessage() {
         return getTextFromElem(this.getCurrentDriver(), this.noChatsMessage, 8,
                 "No results found text").replace("\n", " ");
+    }
+
+    public boolean isBulkChatNotificationMessageShown() {
+        waitFor(2000);
+        return isElementShown(this.getCurrentDriver(), bulkChatPopUpMessage, 5);
     }
 }
