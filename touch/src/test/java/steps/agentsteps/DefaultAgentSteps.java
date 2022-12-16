@@ -229,7 +229,9 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("^Verify (.*) status: (.*) is displayed on the icon$")
     public void verifyStatusOnByIcon(String agent, String status) {
-        getAgentHomePage(agent).getPageHeader().verifyUserStatusOnIcon(status);
+        assertThat(getAgentHomePage(agent).getPageHeader().verifyUserStatusOnIcon(status))
+                .as(format("%s status is displayed!", status))
+                .isTrue();
     }
 
     @When("^(.*) refreshes the page$")
