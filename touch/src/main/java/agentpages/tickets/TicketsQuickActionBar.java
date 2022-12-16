@@ -1,22 +1,14 @@
 package agentpages.tickets;
 
 import abstractclasses.AbstractUIElement;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import portalpages.PortalAbstractPage;
 
 @FindBy(css = ".app-tickets-actions-bar")
 public class TicketsQuickActionBar extends AbstractUIElement {
 
     @FindBy(css = ".quick-accept-bar div")
     private WebElement questionInfoButton;
-
-    @FindBy(css = "[aria-label='Increment custom amount']")
-    private WebElement increaseButton;
-
-    @FindBy(css = "[aria-label='Decrement custom amount']")
-    private WebElement decreaseButton;
 
     @FindBy(xpath = "//button[text()='Accept']")
     private WebElement acceptButton;

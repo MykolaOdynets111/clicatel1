@@ -1,24 +1,14 @@
 package agentpages.tickets;
 
-import agentpages.survey.uielements.SurveyForm;
-import driverfactory.DriverFactory;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class TicketsPage extends PortalAbstractPage {
-
-    private TicketsTable ticketsTable;
-    private TicketClosedChatView supervisorTicketChatView;
-    private MessageCustomerWindow messageCustomerWindow;
-
-    private TicketsQuickActionBar ticketsQuickActionBar;
 
     @FindBy(css = ".app-tickets-actions-bar")
     private WebElement quickActionBar;
@@ -29,9 +19,6 @@ public class TicketsPage extends PortalAbstractPage {
     @FindBy(xpath = "//div[@class='tippy-content']/div")
     private WebElement flaggedCloseChatToolTip;
 
-    @FindBy(css = "[data-testid = 'bulk-messages-toggle']")
-    private WebElement bulkButton;
-
     @FindBy(css = ".toast-content-message")
     private WebElement ticketAssignedToastMessageContent;
 
@@ -41,6 +28,12 @@ public class TicketsPage extends PortalAbstractPage {
     public TicketsPage(WebDriver driver) {
         super(driver);
     }
+
+    private TicketsTable ticketsTable;
+    private TicketClosedChatView supervisorTicketChatView;
+    private MessageCustomerWindow messageCustomerWindow;
+
+    private TicketsQuickActionBar ticketsQuickActionBar;
 
     public TicketsQuickActionBar getTicketsQuickActionBar() {
         ticketsQuickActionBar.setCurrentDriver(this.getCurrentDriver());
