@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(css = ".chats-list")
+@FindBy(css = ".chats-list-wrapper.chats-list-extended-view")
 public class TicketsTable extends AbstractUIElement {
 
     @FindBy(css=".cl-table-row")
@@ -26,11 +26,8 @@ public class TicketsTable extends AbstractUIElement {
     @FindBy(xpath = "//button[@name = 'Close Ticket']")
     private WebElement closeTicket;
 
-    @FindBy(xpath = "//a[text() = 'Open']")
+    @FindBy(xpath = ".//a[text() = 'Open']")
     private WebElement openTicketButton;
-
-    @FindBy(css = "[data-testid=roster-scroll-container]")
-    private WebElement scrolArea;
 
     @FindBy(xpath = "//button[text() = 'Route to Scheduler']")
     private WebElement routeToSchedulerButton;
@@ -67,35 +64,26 @@ public class TicketsTable extends AbstractUIElement {
         getTicketByUserName(userName).clickElem(this.getCurrentDriver(), acceptTicketButton, 5, "Accept ticket button");
     }
 
-    public String closeButtonStatus(){
-        return getAttributeFromElem(this.getCurrentDriver(), closeTicket, 5, "Close ticket button", "disabled");
+    public boolean closeButtonStatus(){
+        return Boolean.parseBoolean(getAttributeFromElem(this.getCurrentDriver(), closeTicket, 5, "Close ticket button", "disabled"));
     }
 
     public void clickAssignOpenTicketButton(String userName){
-        getTicketByUserName(userName)
-                .clickElem(this.getCurrentDriver(), openTicketButton, 5, "Open ticket button");
+        getTicketByUserName(userName).moveToElemAndClick(this.getCurrentDriver(), openTicketButton);
     }
 
     public List<String> getUsersNames(){
-        List<String> list =  tickets.stream()
+        return tickets.stream()
                 .map(e -> new TicketRow(e).setCurrentDriver(this.getCurrentDriver()))
-                .map(e -> e.getName())
+                .map(TicketRow::getName)
                 .collect(Collectors.toList());
-        return list;
     }
 
     public List<LocalDateTime> getTicketsStartDates() {
         List<LocalDateTime> startDates = tickets.stream().map(e -> new TicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
-                .stream().map(a -> a.getOpenDate()).collect(Collectors.toList());
+                .stream().map(TicketRow::getOpenDate).collect(Collectors.toList());
         scrollTicketsToTheTop();
         return startDates;
-    }
-
-    public List<LocalDateTime> getTicketsEndDates(){
-        List<LocalDateTime> endDates = tickets.stream().map(e -> new TicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
-                .stream().map(a -> a.getEndDate()).collect(Collectors.toList());
-        scrollTicketsToTheTop();
-        return endDates;
     }
 
     public void clickRouteToSchedulerButton(){
@@ -103,12 +91,12 @@ public class TicketsTable extends AbstractUIElement {
     }
 
     public TicketsTable scrollTicketsToTheButtom(){
-        wheelScroll(this.getCurrentDriver(), scrolArea, 2000, 0,0);
+        wheelScroll(this.getCurrentDriver(), this.getWrappedElement(), 2000, 0,0);
         return this;
     }
 
     public void scrollTicketsToTheTop(){
-        wheelScroll(this.getCurrentDriver(), scrolArea, -2000, 0,0);
+        wheelScroll(this.getCurrentDriver(), this.getWrappedElement(), -2000, 0,0);
     }
 
     public void waitForMoreTicketsAreLoading(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
@@ -134,6 +122,22 @@ public class TicketsTable extends AbstractUIElement {
                 .map(e -> new TicketRow(e).setCurrentDriver(this.getCurrentDriver()).isValidChannelImg(channelName)).findFirst().get();
     }
 
+    public boolean verifyCurrentChanelOfTheTickets(String channelName) {
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), tickets, 7);
+        return tickets.stream().anyMatch(e ->
+                new TicketRow(e)
+                        .setCurrentDriver(this.getCurrentDriver())
+                        .getCurrentChannel().equals(channelName));
+    }
+
+    public boolean verifyCurrentDatesOfTheTickets(String dateType, String expectedDateText) {
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), tickets, 7);
+        return tickets.stream().anyMatch(e ->
+                new TicketRow(e)
+                        .setCurrentDriver(this.getCurrentDriver())
+                        .getDateByName(dateType).contains(expectedDateText));
+    }
+
     public boolean isTicketPresent(String userName) {
         waitForFirstElementToBeVisible(this.getCurrentDriver(), tickets, 7);
         return tickets.stream().anyMatch(e ->
@@ -149,10 +153,15 @@ public class TicketsTable extends AbstractUIElement {
         supervisorDeskTicketRow.openTicket(1);
     }
 
-    public void acceptFirstTicket() {
+    public boolean assignManuallyButtonTopPanelVisibility(String userName){
+        return getTicketByUserName(userName)
+                .isElementRemoved(this.getCurrentDriver(), assignTicketButton, 5);
+    }
+
+    public boolean assignManuallyButtonFirstRowHoverVisibility() {
         TicketRow supervisorDeskTicketRow = new TicketRow(tickets.get(0))
                 .setCurrentDriver(this.getCurrentDriver());
-        supervisorDeskTicketRow.clickOnUserName();
-        supervisorDeskTicketRow.acceptTicket();
+        supervisorDeskTicketRow.hoverOnUserName();
+        return supervisorDeskTicketRow.assignManualButtonVisibility();
     }
 }

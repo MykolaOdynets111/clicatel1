@@ -1,7 +1,6 @@
 package steps.portalsteps;
 
 import agentpages.uielements.ChatBody;
-import agentpages.uielements.DatePicker;
 import apihelper.ApiHelper;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.TenantChatPreferences;
@@ -24,6 +23,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static steps.agentsteps.AbstractAgentSteps.getSupervisorAndTicketsHeader;
 import static steps.agentsteps.AbstractAgentSteps.getTicketsPage;
@@ -173,7 +173,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @Then("^Supervisor can see (.*) ticket with (.*) message from agent$")
     public void verifyTicketMessagePresent(String channel, String message) {
-        Assert.assertTrue(getSupervisorDeskPage().getTicketChatBody().isToUserMessageShown(message), "Messages is not the same");
+        Assert.assertTrue(getSupervisorDeskPage().getTicketChatBody().isToUserMessageShownWithWait(message,8), "Messages is not the same");
     }
 
     @When("^Verify that correct messages and timestamps are shown on Chat View$")
@@ -256,6 +256,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 
+    @Then("^Agent select my closed chats checkbox in container and click \"Apply filters\" button$")
+    public void filterUsingMyClosedChatsCheckbox() {
+        getSupervisorAndTicketsHeader("main").clickMyClosedChatsCheckbox().clickApplyFilterButton();
+        getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
+    }
+
     @And("^Agent filter by \"(.*)\" channel and \"(.*)\" sentiment$")
     public void selectChanelAndSentimentFilter(String name, String sentiment) {
         getSupervisorAndTicketsHeader("main").selectChanel(name).selectSentiment(sentiment).clickApplyFilterButton();
@@ -271,6 +277,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
             userName = chatName;
         }
         getSupervisorAndTicketsHeader("main").setSearchInput(userName).clickApplyFilterButton();
+        getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
+    }
+
+    @And("^Agent clears search field and filters on Supervisor desk$")
+    public void clearSearchFieldAndFilter() {
+        getSupervisorAndTicketsHeader("main").clearSearchFieldBox().clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 
@@ -303,7 +315,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void supervisorDeskLiveChatFromTouchChannelIsUnflagged(String channel) {
         String userName = getUserName(channel);
         Assert.assertTrue(getSupervisorDeskPage().getSupervisorDeskLiveRow(userName).isFlagIconRemoved(),
-                String.format("Chat with user %s is flagged", userName));
+                format("Chat with user %s is flagged", userName));
     }
 
     @When("^Supervisor agent launch as agent$")
@@ -347,17 +359,20 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertTrue(getSupervisorAndTicketsHeader("main").checkStartDateFilterIsEmpty().isEmpty(), "Start date filter is not empty");
     }
 
-    @And("^(.*) checks back button is (.*) in calendar for (.*) filter (.*) days ago in supervisor$")
-    public void backButtonDisability(String agent, String visibility, String filterType, Long day) {
-        Assert.assertTrue(new DatePicker(agent).checkBackButtonVisibilityThreeMonthsBack(filterType, day));
-    }
-
     @Then("^Verify first closed chat date are fitted by filter$")
     public void verifyFirstClosedChatDateAreFittedByFilter() {
         LocalDate startDate = getSupervisorAndTicketsHeader("main").getStartDateFilterValue();
         LocalDate endDate = getSupervisorAndTicketsHeader("main").getEndDateFilterValue();
         LocalDateTime firstClosedChatDate = getSupervisorDeskPage().getSupervisorClosedChatsTable().getFirstClosedChatDate();
         verifyDateTimeIsInRangeOfTwoDates(firstClosedChatDate, startDate, endDate);
+    }
+
+    @Then("^The oldest visible chat is not more than (.*) days old$")
+    public void verifyDateForOldestChat(int days){
+        LocalDateTime expectedDate = LocalDateTime.now().minusDays(days);
+        LocalDateTime firstClosedChatDate = getSupervisorDeskPage().getSupervisorClosedChatsTable().getFirstClosedChatDate();
+        Assert.assertTrue(firstClosedChatDate.isAfter(expectedDate), "Latest chat has date:" + firstClosedChatDate
+                + " which is older than: " + expectedDate);
     }
 
     @And("Agent can see whatsapp profile name")
@@ -428,13 +443,23 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 "Sentiment dropdown has incorrect options");
     }
 
+    @When("^Verify if (.*) autoresponder message is shown")
+    public void verifyMessagePresent(String autoresponder) {
+        String actualMessage = ApiHelper.getAutoResponderMessageText(autoresponder);
+        List<String> chatMessages = getSupervisorDeskPage().getTicketChatBody().getAllMessages();
+
+        assertThat(actualMessage)
+                .as(format("Verify %s message is present", autoresponder))
+                .isIn(chatMessages);
+    }
+
     private void verifyDateTimeIsInRangeOfTwoDates(LocalDateTime dateTime, LocalDate startDate, LocalDate endDate) {
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(startDate.compareTo(dateTime.toLocalDate()) <= 0,
-                String.format("One of the chats was started before filtered value. Expected: after %s, Found: %s",
+                format("One of the chats was started before filtered value. Expected: after %s, Found: %s",
                         startDate, dateTime));
         softAssert.assertTrue(endDate.compareTo(dateTime.toLocalDate()) >= 0,
-                String.format("One of the chats was ended before filtered value. Expected: before %s, Found: %s",
+                format("One of the chats was ended before filtered value. Expected: before %s, Found: %s",
                         endDate, dateTime));
         softAssert.assertAll();
     }

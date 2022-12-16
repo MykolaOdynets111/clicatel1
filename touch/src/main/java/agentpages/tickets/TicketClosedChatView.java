@@ -10,8 +10,15 @@ public class TicketClosedChatView extends AbstractUIElement {
     @FindBy(xpath = ".//button[text()='Start Chat' or text()='Message Customer']")
     private WebElement messageCustomerOrStartChatButton;
 
+    @FindBy(xpath = "//button[@name = 'Close Ticket']")
+    private WebElement closeTicket;
+
     public void clickOnMessageCustomerOrStartChatButton(){
-        clickElem(this.getCurrentDriver(), messageCustomerOrStartChatButton, 3, "Message Customer");
+        clickElem(this.getCurrentDriver(), messageCustomerOrStartChatButton, 8, "Message Customer");
+    }
+
+    public void clickOnCloseTicketButton(){
+        clickElem(this.getCurrentDriver(), closeTicket, 3, "Close ticket");
     }
 
     public boolean isMessageCustomerButtonOrStartChatPresent(){

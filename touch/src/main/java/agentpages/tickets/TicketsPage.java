@@ -1,18 +1,14 @@
 package agentpages.tickets;
 
-import driverfactory.DriverFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class TicketsPage extends PortalAbstractPage {
-
-    private TicketsTable ticketsTable;
-    private TicketClosedChatView supervisorTicketChatView;
-    private MessageCustomerWindow messageCustomerWindow;
-
-    private TicketsQuickActionBar ticketsQuickActionBar;
 
     @FindBy(css = ".app-tickets-actions-bar")
     private WebElement quickActionBar;
@@ -23,32 +19,38 @@ public class TicketsPage extends PortalAbstractPage {
     @FindBy(xpath = "//div[@class='tippy-content']/div")
     private WebElement flaggedCloseChatToolTip;
 
-    @FindBy(css = "[data-testid = 'bulk-messages-toggle']")
-    private WebElement bulkButton;
-
     @FindBy(css = ".toast-content-message")
     private WebElement ticketAssignedToastMessageContent;
+
+    @FindBy(css = ".cl-table-header .cl-table-cell")
+    private List<WebElement> ticketColumnHeaders;
 
     public TicketsPage(WebDriver driver) {
         super(driver);
     }
 
-    public TicketsQuickActionBar getTicketsQuickActionBar(){
+    private TicketsTable ticketsTable;
+    private TicketClosedChatView supervisorTicketChatView;
+    private MessageCustomerWindow messageCustomerWindow;
+
+    private TicketsQuickActionBar ticketsQuickActionBar;
+
+    public TicketsQuickActionBar getTicketsQuickActionBar() {
         ticketsQuickActionBar.setCurrentDriver(this.getCurrentDriver());
         return ticketsQuickActionBar;
     }
 
-    public TicketsTable getTicketsTable(){
+    public TicketsTable getTicketsTable() {
         ticketsTable.setCurrentDriver(this.getCurrentDriver());
         return ticketsTable;
     }
 
-    public TicketClosedChatView getSupervisorTicketClosedChatView(){
+    public TicketClosedChatView getSupervisorTicketClosedChatView() {
         supervisorTicketChatView.setCurrentDriver(this.getCurrentDriver());
         return supervisorTicketChatView;
     }
 
-    public MessageCustomerWindow getMessageCustomerWindow(){
+    public MessageCustomerWindow getMessageCustomerWindow() {
         messageCustomerWindow.setCurrentDriver(this.getCurrentDriver());
         return messageCustomerWindow;
     }
@@ -62,6 +64,7 @@ public class TicketsPage extends PortalAbstractPage {
             return false;
         }
     }
+
     public void toastMessageVisibility() {
         waitUntilElementNotDisplayed(this.getCurrentDriver(), ticketAssignedToastMessage, 3);
     }
@@ -72,5 +75,10 @@ public class TicketsPage extends PortalAbstractPage {
 
     public String getToastMessageText() {
         return getTextFromElem(this.getCurrentDriver(), ticketAssignedToastMessageContent, 6, "Toast message");
+    }
+
+    public List<String> getTicketsColumnHeaders() {
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), ticketColumnHeaders, 7);
+        return ticketColumnHeaders.stream().map(a -> a.getText()).collect(Collectors.toList());
     }
 }

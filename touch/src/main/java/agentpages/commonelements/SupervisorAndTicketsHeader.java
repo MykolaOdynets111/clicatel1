@@ -42,6 +42,15 @@ public class SupervisorAndTicketsHeader extends AbstractUIElement {
     @FindBy(css="div[class^='cl-select__menu-list'] div[id^='react-select']")
     private List<WebElement> dropdownValues;
 
+    @FindBy(css = ".cl-checkbox__label")
+    private WebElement selectAllCheckBox;
+
+    @FindBy(css = "[aria-label='Clear text field']")
+    private WebElement clearSearchField;
+
+    @FindBy(css = "[for='show_only_my_closed_chats']")
+    private WebElement myClosedChatsCheckBox;
+
     public void clickApplyFilterButton(){
         scrollToElem(this.getCurrentDriver(), applyFiltersButton, "Apply Filters");
         clickElem(this.getCurrentDriver(), applyFiltersButton, 1, "Apply Filters");
@@ -52,8 +61,22 @@ public class SupervisorAndTicketsHeader extends AbstractUIElement {
         return this;
     }
 
+    public SupervisorAndTicketsHeader clearSearchFieldBox(){
+        clickElem(this.getCurrentDriver(), clearSearchField, 1, "Search field cross button");
+        return this;
+    }
+
     public SupervisorAndTicketsHeader clickFlaggedOnlyCheckbox(){
         clickElem(this.getCurrentDriver(), flaggedOnlyCheckbox, 1, "Flagged Only");
+        return this;
+    }
+
+    public boolean isSelectAllCheckboxNotShown(){
+        return isElementRemoved(this.getCurrentDriver(), selectAllCheckBox,10);
+    }
+
+    public SupervisorAndTicketsHeader clickMyClosedChatsCheckbox(){
+        clickElem(this.getCurrentDriver(), myClosedChatsCheckBox, 1, "My closed chats");
         return this;
     }
 

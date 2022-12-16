@@ -1,5 +1,6 @@
 package steps.portalsteps;
 
+import agentpages.tickets.TicketRow;
 import agentpages.tickets.TicketsTable;
 import apihelper.ApiHelper;
 import dbmanager.DBConnector;
@@ -8,9 +9,9 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.TimeoutException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import steps.agentsteps.AbstractAgentSteps;
 import steps.dotcontrol.DotControlSteps;
 
 import java.time.LocalDate;
@@ -21,11 +22,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static steps.agentsteps.AbstractAgentSteps.*;
-
-public class TicketsSteps extends AbstractPortalSteps{
+public class TicketsSteps extends AbstractAgentSteps {
 
     private List<String> shownUsers = new ArrayList<>();
+
+    private static int initialTicketsCount;
 
     private TicketsTable getTicketsTable(String agent){
         return getTicketsPage(agent).getTicketsTable();
@@ -52,6 +53,12 @@ public class TicketsSteps extends AbstractPortalSteps{
         getTicketsPage("main").getSupervisorTicketClosedChatView().clickOnMessageCustomerOrStartChatButton();
     }
 
+    @When("^(.*) checks chat view for closed chat is displayed$")
+    public void verifyClosedChatView(String chanel) {
+        Assert.assertTrue(getTicketsPage("main").getSupervisorTicketClosedChatView().isDisplayed(),
+                "Chat view is not visible");
+    }
+
     @When("^Click 'Route to scheduler' button$")
     public void clickRouteToScheduler() {
         getTicketsTable("main").clickRouteToSchedulerButton();
@@ -60,6 +67,24 @@ public class TicketsSteps extends AbstractPortalSteps{
     @When("^Click 'Assign manually' button for (.*)$")
     public void clickAssignManually(String chanel) {
         getTicketsTable("main").clickAssignManuallyButton(getUserName(chanel));
+    }
+
+    @Then("^Assign button is not displayed in the closed ticket tab for (.*)$")
+    public void assignManuallyTopPanelButtonNotVisible(String chanel) {
+        Assert.assertTrue(getTicketsTable("main").assignManuallyButtonTopPanelVisibility(getUserName(chanel)),
+                "Assign button is visible");
+    }
+
+    @Then("^Hover to one of the ticket And Assign button is not displayed$")
+    public void assignManuallyButtonRowNotVisible() {
+        Assert.assertTrue(getTicketsTable("main").assignManuallyButtonFirstRowHoverVisibility(),
+                "Assign button is visible");
+    }
+
+    @Then("^Select all checkbox is not displayed in the closed ticket tab$")
+    public void verifySelectAllCheckboxNotShown() {
+        Assert.assertTrue(getSupervisorAndTicketsHeader("main").isSelectAllCheckboxNotShown(),
+                "'Select All checkbox' is shown.");
     }
 
     @When("^(.*) closed ticket for (.*)$")
@@ -74,15 +99,32 @@ public class TicketsSteps extends AbstractPortalSteps{
         }
     }
 
+    @When("^(.*) closes ticket manually$")
+    public void closeTicketManually(String agent) {
+        getTicketsPage("main").getSupervisorTicketClosedChatView().clickOnCloseTicketButton();
+
+        waitFor(1000);
+
+        if (getAgentHomePage(agent).getAgentFeedbackWindow().isAgentFeedbackWindowShown()) {
+            getAgentHomePage(agent).getAgentFeedbackWindow().waitForLoadingData().clickCloseButtonInCloseChatPopup();
+        }
+    }
+
     @When("^(.*) accept ticket for (.*)$")
     public void clickAcceptButtonFor(String chanel) {
         getTicketsTable("main")
                 .clickAcceptButton(getUserName(chanel));
     }
 
+    @When("^Supervisor is able to view the columns in the tickets tab$")
+    public void checkTicketColumnsVisibility(List<String> expectedColumnNames) {
+        Assert.assertEquals(getTicketsPage("main").getTicketsColumnHeaders(), expectedColumnNames,
+                "Closed chat column is not visible");
+    }
+
     @When("^(.*) checks closed ticket is disabled$")
     public void checkCloseButtonStatus(String agent) {
-        Assert.assertTrue(Boolean.parseBoolean(getTicketsTable(agent).closeButtonStatus()), "Close ticket button is enabled");
+        Assert.assertTrue(getTicketsTable(agent).closeButtonStatus(), "Close ticket button is enabled");
     }
 
     @When("^Supervisor clicks on first ticket$")
@@ -96,10 +138,27 @@ public class TicketsSteps extends AbstractPortalSteps{
         getTicketsPage(agent).getTicketsQuickActionBar().clickAcceptButtonInHeader();
     }
 
+    @When("^(.*) inputs (.*) unassigned tickets for acceptance in custom bar$")
+    public void manualAcceptTicketsEntry(String agent, String numberOfTickets) {
+        getTicketsPage(agent).getTicketsQuickActionBar().inputNumberOfTicketsForAccept(numberOfTickets);
+    }
+
     @Then("^Verify that only \"(.*)\" tickets chats are shown$")
     public void verifyTicketsChatsChannelsFilter(String channelName) {
         Assert.assertTrue(getTicketsTable("main").verifyChanelOfTheTicketsIsPresent(channelName),
                 channelName + " channel name should be shown.");
+    }
+
+    @Then("^Verify that only \"(.*)\" channel tickets chats are shown$")
+    public void verifyTicketsChatsChannelsFilterUsingAttribute(String channelName) {
+        Assert.assertTrue(getTicketsTable("main").verifyCurrentChanelOfTheTickets(channelName),
+                channelName + " channel name is not shown.");
+    }
+
+    @Then("^Verify that only \"(.*)\" date tickets are shown in (.*) column$")
+    public void verifyTicketsChatsStartDatesFilter(String dateText, String columnType) {
+        Assert.assertTrue(getTicketsTable("main").verifyCurrentDatesOfTheTickets(columnType, dateText),
+                dateText + " open date is not shown.");
     }
 
     @Given("^Supervisor scroll Tickets page to the bottom$")
@@ -176,7 +235,7 @@ public class TicketsSteps extends AbstractPortalSteps{
     }
 
     @Then("^Verify ticket is present for (.*) for (.*) seconds$")
-    public void verifyTicketIsPresent(String chanel, int wait) {
+    public void verifyTicketIsPresentFor(String chanel, int wait) {
         boolean isTicketPresent = false;
 
         for (int i = 0; i < wait; i++) {
@@ -247,5 +306,24 @@ public class TicketsSteps extends AbstractPortalSteps{
     @Then("^(.*) sees toast message with (.*) text")
     public void verifyToastMessage(String agent, String toastMessageText) {
         Assert.assertEquals(getTicketsPage(agent).getToastMessageText(),toastMessageText,"Toast message is wrong");
+    }
+
+    @Then("^(.*) checks initial ticket count is displayed in the (.*) ticket tab$")
+    public void getInitialTicketsCount(String agent, String ticketType) {
+        initialTicketsCount = getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(ticketType);
+    }
+
+    @Then("^(.*) checks final ticket count value in the (.*) ticket tab$")
+    public void verifyFinalTicketsCount(String agent, String ticketType) {
+        int finalTicketsCount = getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(ticketType);
+        Assert.assertTrue(finalTicketsCount== (initialTicketsCount + 1),
+                "Final ticket count is incorrect");
+    }
+
+    @Then("^(.*) checks (.*) ticket count value in the (.*) ticket tab$")
+    public void verifyTicketsCount(String agent, int expectedTicketCount, String ticketType) {
+        int ticketsCount = getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(ticketType);
+        Assert.assertTrue(ticketsCount== expectedTicketCount,
+                "Ticket count is incorrect");
     }
 }

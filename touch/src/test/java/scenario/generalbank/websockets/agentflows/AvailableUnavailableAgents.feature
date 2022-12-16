@@ -17,10 +17,8 @@ Feature: Available/Unavailable agents
     When Agent fill the customer contact number +1 9055197655
     Then Agent verify customer contact number +1 905 519 7655 is filled
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2984")
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2875")
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2683")
-  Scenario: CD :: Agent Desk :: Verify that clicking on radio button near "Unavailable" - red dot is appears on agent profile picture
+  Scenario: CD :: Agent Desk :: Verify that if an agent can set his own status in chat desk
 
     Given I login as agent of General Bank Demo
     And Agent of General Bank Demo is logged in

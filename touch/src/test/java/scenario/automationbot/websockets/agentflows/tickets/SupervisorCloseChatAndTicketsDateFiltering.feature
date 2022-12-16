@@ -33,7 +33,8 @@ Feature: Supervisor desk
     And Login into portal as an admin of Automation Bot account
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Closed" left menu option
-    Then Admin checks back button is not visible in calendar for start date filter 91 days ago in supervisor
+    When Agent click on the arrow of Chat Ended
+    Then The oldest visible chat is not more than 90 days old
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-7810")
   Scenario: CD :: Verify the verbiage of message under unassigned tickets for the tenant
