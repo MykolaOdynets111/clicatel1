@@ -1,7 +1,6 @@
 package steps.portalsteps;
 
 import agentpages.uielements.ChatBody;
-import agentpages.uielements.DatePicker;
 import apihelper.ApiHelper;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.TenantChatPreferences;
@@ -24,6 +23,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static steps.agentsteps.AbstractAgentSteps.getSupervisorAndTicketsHeader;
 import static steps.agentsteps.AbstractAgentSteps.getTicketsPage;
@@ -315,7 +315,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void supervisorDeskLiveChatFromTouchChannelIsUnflagged(String channel) {
         String userName = getUserName(channel);
         Assert.assertTrue(getSupervisorDeskPage().getSupervisorDeskLiveRow(userName).isFlagIconRemoved(),
-                String.format("Chat with user %s is flagged", userName));
+                format("Chat with user %s is flagged", userName));
     }
 
     @When("^Supervisor agent launch as agent$")
@@ -443,13 +443,23 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 "Sentiment dropdown has incorrect options");
     }
 
+    @When("^Verify if (.*) autoresponder message is shown")
+    public void verifyMessagePresent(String autoresponder) {
+        String actualMessage = ApiHelper.getAutoResponderMessageText(autoresponder);
+        List<String> chatMessages = getSupervisorDeskPage().getTicketChatBody().getAllMessages();
+
+        assertThat(actualMessage)
+                .as(format("Verify %s message is present", autoresponder))
+                .isIn(chatMessages);
+    }
+
     private void verifyDateTimeIsInRangeOfTwoDates(LocalDateTime dateTime, LocalDate startDate, LocalDate endDate) {
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(startDate.compareTo(dateTime.toLocalDate()) <= 0,
-                String.format("One of the chats was started before filtered value. Expected: after %s, Found: %s",
+                format("One of the chats was started before filtered value. Expected: after %s, Found: %s",
                         startDate, dateTime));
         softAssert.assertTrue(endDate.compareTo(dateTime.toLocalDate()) >= 0,
-                String.format("One of the chats was ended before filtered value. Expected: before %s, Found: %s",
+                format("One of the chats was ended before filtered value. Expected: before %s, Found: %s",
                         endDate, dateTime));
         softAssert.assertAll();
     }
