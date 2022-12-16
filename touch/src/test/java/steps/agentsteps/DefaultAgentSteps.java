@@ -199,6 +199,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "Wrong no results found error message found");
     }
 
+    @Then("^(.*) checks bulk chat Notification message should get displayed$")
+    public void bulkChatNotificationMessageShown(String agent) {
+        Assert.assertTrue(getAgentHomePage(agent).isBulkChatNotificationMessageShown(),
+                "Bulk chat notification message not shown");
+    }
     @When("^(.*) changes status to: (.*)$")
     public void changeAgentStatus(String agent, String newStatus) {
         getAgentHomePage(agent).getPageHeader().clickIcon();

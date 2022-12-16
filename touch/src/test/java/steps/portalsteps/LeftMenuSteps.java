@@ -126,6 +126,16 @@ public class LeftMenuSteps extends AbstractAgentSteps {
         Assert.assertTrue(getLeftMenu(agent).isBulkPanelEnabled(disability));
     }
 
+    @Then("^(.*) hover over any unsubscribed (.*) closed chat$")
+    public void hoverOverUnSubscribedChat(String agent, String disability) {
+        if (getLeftMenu(agent).isBulkPanelEnabled(disability)) {
+            getLeftMenu(agent).moveToFirstBulkPanelChat();
+        }
+        else {
+            Assert.fail("No bulk panel is disabled");
+        }
+    }
+
     @Then("^(.*) sees number of checked checkboxes is (.*)")
     public void isBulkCheckboxChecked(String agent, int numberOfCheckedBulkChats) {
         Assert.assertTrue(getLeftMenu(agent).isNumberOfCheckedChats(numberOfCheckedBulkChats),

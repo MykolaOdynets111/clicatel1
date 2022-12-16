@@ -252,3 +252,27 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Message Customer Window is opened
     And Supervisor send Hi from Supervisor to agent trough Whatsapp chanel
     Then Supervisor can see orca ticket with Hi from Supervisor message from agent
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-6088")
+  Scenario: CD :: Agent Desk :: Verify the notification message to the second agent selecting the same ticket
+    Given Setup ORCA Whatsapp integration for General Bank Demo tenant
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Send new ticket message by ORCA
+    When Agent select "Tickets" left menu option
+    And Agent search chat orca on Supervisor desk
+    And Agent see tickets from orca on Unassigned filter page
+    And Select orca ticket checkbox
+    And Click 'Assign manually' button for orca
+    And 'Assign chat' window is opened
+    And I assign chat on First Department for Department dropdown
+    And I select Touch in left menu and Agent Desk in submenu
+    And Agent select "Tickets" left menu option
+    And Agent select Unassigned filter on Left Panel
+    And Agent search chat orca on Supervisor desk
+    And I login as second agent of General Bank Demo
+    And Second Agent select "Tickets" left menu option
+    And Second Agent select Unassigned filter on Left Panel
+    And Second Agent search chat orca on Supervisor desk
+    And Agent accepts 1 unassigned tickets
+    Then Agent checks ticket assigned toast message on the page appears and disappears
+    When Second Agent accepts 1 unassigned tickets
