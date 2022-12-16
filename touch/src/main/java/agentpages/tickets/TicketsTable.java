@@ -69,31 +69,21 @@ public class TicketsTable extends AbstractUIElement {
     }
 
     public void clickAssignOpenTicketButton(String userName){
-        getTicketByUserName(userName)
-                .moveToElemAndClick(this.getCurrentDriver(), openTicketButton);
-//                .clickElem(this.getCurrentDriver(), openTicketButton, 5, "Open ticket button");
+        getTicketByUserName(userName).moveToElemAndClick(this.getCurrentDriver(), openTicketButton);
     }
 
     public List<String> getUsersNames(){
-        List<String> list =  tickets.stream()
+        return tickets.stream()
                 .map(e -> new TicketRow(e).setCurrentDriver(this.getCurrentDriver()))
-                .map(e -> e.getName())
+                .map(TicketRow::getName)
                 .collect(Collectors.toList());
-        return list;
     }
 
     public List<LocalDateTime> getTicketsStartDates() {
         List<LocalDateTime> startDates = tickets.stream().map(e -> new TicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
-                .stream().map(a -> a.getOpenDate()).collect(Collectors.toList());
+                .stream().map(TicketRow::getOpenDate).collect(Collectors.toList());
         scrollTicketsToTheTop();
         return startDates;
-    }
-
-    public List<LocalDateTime> getTicketsEndDates(){
-        List<LocalDateTime> endDates = tickets.stream().map(e -> new TicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
-                .stream().map(a -> a.getEndDate()).collect(Collectors.toList());
-        scrollTicketsToTheTop();
-        return endDates;
     }
 
     public void clickRouteToSchedulerButton(){
@@ -166,13 +156,6 @@ public class TicketsTable extends AbstractUIElement {
                 .setCurrentDriver(this.getCurrentDriver());
         supervisorDeskTicketRow.clickOnUserName();
         supervisorDeskTicketRow.openTicket(1);
-    }
-
-    public void acceptFirstTicket() {
-        TicketRow supervisorDeskTicketRow = new TicketRow(tickets.get(0))
-                .setCurrentDriver(this.getCurrentDriver());
-        supervisorDeskTicketRow.clickOnUserName();
-        supervisorDeskTicketRow.acceptTicket();
     }
 
     public boolean assignManuallyButtonTopPanelVisibility(String userName){

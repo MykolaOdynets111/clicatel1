@@ -9,7 +9,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.TimeoutException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.agentsteps.AbstractAgentSteps;
@@ -22,8 +21,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static steps.agentsteps.AbstractAgentSteps.*;
 
 public class TicketsSteps extends AbstractAgentSteps {
 
@@ -238,7 +235,7 @@ public class TicketsSteps extends AbstractAgentSteps {
     }
 
     @Then("^Verify ticket is present for (.*) for (.*) seconds$")
-    public void verifyTicketIsPresent(String chanel, int wait) {
+    public void verifyTicketIsPresentFor(String chanel, int wait) {
         boolean isTicketPresent = false;
 
         for (int i = 0; i < wait; i++) {
