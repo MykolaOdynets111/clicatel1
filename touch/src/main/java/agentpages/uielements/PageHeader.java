@@ -44,10 +44,7 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = "img[data-testid = 'company-info-logo']")
     private WebElement tenantLogo;
 
-    @FindAll({
-            @FindBy(css = "[selenium-id=agents-list-wrapper]"),
-            @FindBy(css = "[data-testid=agents-list-wrapper]")
-    })
+    @FindBy(css = "[data-testid=agents-list-wrapper] svg")
     private WebElement headPhones;
     @FindAll({
             @FindBy(css = "[selenium-id=agents-list]"),
