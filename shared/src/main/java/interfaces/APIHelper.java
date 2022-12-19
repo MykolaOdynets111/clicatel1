@@ -1,5 +1,7 @@
 package interfaces;
 
+import io.restassured.response.Response;
+
 public interface APIHelper {
-    void getProviders(String authorization, String endpoint);
+    Response executeGetProviders(String authorization, String endpoint);
 }

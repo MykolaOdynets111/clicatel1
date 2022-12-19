@@ -15,12 +15,12 @@ public class Authentication {
         RequestSpecification request = RestAssured.given();
 
         //Create a body
-        Map<String, Object> Credentials = new HashMap<>();
-        Credentials.put("email", username);
-        Credentials.put("password", password);
+        Map<String, Object> credentials = new HashMap<>();
+        credentials.put("email", username);
+        credentials.put("password", password);
 
         //Request a body and header
-        request.body(Credentials);
+        request.body(credentials);
         request.header("Content-Type", "application/json");
         request.header("accept", "application/json");
 
