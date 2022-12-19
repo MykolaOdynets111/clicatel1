@@ -13,6 +13,10 @@ import static abstractclasses.IntegrationsAbstractSteps.getIntegrationsPage;
 
 public class IntegrationSteps extends AbstractUnitySteps {
 
+    RestHandler_ChatHub rh = new RestHandler_ChatHub();
+    Authentication a = new Authentication();
+    String auth;
+
     @And("I click on Zendesk Integrations Card")
     public void openIntegrationsCard() {
         getIntegrationsPage().clickOnZendeskSupport();
@@ -30,17 +34,14 @@ public class IntegrationSteps extends AbstractUnitySteps {
                 "Integrations is First Card");
     }
 
-    @And("User is able to execute GET provider API")
-    public void GETProviderAPI() {
-        RestHandler_ChatHub rh = new RestHandler_ChatHub();
-        rh.getProviders("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7XCJpZFwiOlwiMzFhZTQ1ODQ5MWVlNDhkNjhiNDVhMmVlNzMyNDlkNTJcIixcImlzQWRtaW5cIjpmYWxzZX0iLCJleHAiOjE2NzEzODMyODQsImlhdCI6MTY3MDE3MzY4NH0.XPNqaV0YyF30sKWhZJc_rRXXmOCBXMBqoxsuBROQvoU", "https://demo-chathub-config-manager.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/admin/providers");
-
-
+    @Given("User is able to get the auth token")
+    public String userIsAbleToGetTheAuthToken() {
+        auth = a.getAuthToken("https://dev-platform.clickatelllabs.com/auth/accounts", "chat2payqauser11+chathub@gmail.com", "Password#1");
+        return auth;
     }
 
-    @Given("User is able to get the auth token")
-    public void userIsAbleToGetTheAuthToken() {
-        Authentication auth = new Authentication();
-        auth.getAuthToken("https://dev-platform.clickatelllabs.com/auth/accounts", "chat2payqauser11+chathub@gmail.com", "Password#1");
+    @And("User is able to execute GET provider API")
+    public void GETProviderAPI() {
+        rh.getProviders(auth, "https://demo-chathub-config-manager.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/admin/providers");
     }
 }
