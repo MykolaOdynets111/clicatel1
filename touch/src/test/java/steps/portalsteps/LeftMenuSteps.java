@@ -38,7 +38,7 @@ public class LeftMenuSteps extends AbstractAgentSteps {
 
     @Given("^(.*) checks left menu is having (.*) chats with latest message (.*)$")
     public void verifyChatsCountLeftMenuWithMessageText(String agent, int expectedCount, String expectedMessageText){
-        Assert.assertEquals(getLeftMenu(agent).getLeftMenuMessageTexts(expectedMessageText).size(), expectedCount,
+        Assert.assertTrue(getLeftMenu(agent).getLeftMenuMessageTexts(expectedMessageText).size() == expectedCount,
                 "Chats doesn't contain expected text: " + expectedMessageText);
     }
 
