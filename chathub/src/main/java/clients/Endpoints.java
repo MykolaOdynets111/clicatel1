@@ -7,5 +7,6 @@ public class Endpoints {
 
     public static final String AUTH_ACCOUNTS = unityURl + "/auth/accounts";
     public static final String ADMIN_PROVIDERS = baseUrl + "/admin/providers";
+    public static final String PROVIDERS_STATE = baseUrl + "/api/providers/%s/state";
 
 }

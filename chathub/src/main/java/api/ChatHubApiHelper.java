@@ -11,8 +11,8 @@ import java.util.Map;
 public class ChatHubApiHelper extends MainApi {
 
 
-    public static ResponseBody getChatHubQuery(String endpoint) {
-       return getQuery(endpoint,getAuthToken());
+    public static ResponseBody getChatHubQuery(String endpoint, int responseCode) {
+       return getQuery(endpoint,getAuthToken(), responseCode);
     }
 
     public static ResponseBody postChatHubQuery(String endpoint, Object body) {

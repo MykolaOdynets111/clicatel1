@@ -52,6 +52,20 @@ public abstract class MainApi {
         }
     }
 
+    @NotNull
+    protected static ResponseBody getQuery(String endpoint, String authToken, int responseCode) {
+        Response response = get(endpoint, authToken);
+
+        if (response.getStatusCode() == responseCode) {
+            return Objects.requireNonNull(response.getBody());
+        } else {
+            fail("Couldn't get the value \n"
+                    + "Status code: " + response.statusCode() + "\n"
+                    + "Error message: " + response.getBody().asString());
+            return null;
+        }
+    }
+
     private static Response post(String endpoint, Object body, String authToken) {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
