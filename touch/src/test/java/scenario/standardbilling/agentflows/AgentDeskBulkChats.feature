@@ -19,8 +19,6 @@ Feature: Bulk chat left menu actions
     And Agent has new conversation request from orca user
     And Agent click the bulk message icon
     Then Agent sees checkbox is disabled for the blocked chat
-    When Agent hover over any unsubscribed disabled closed chat
-    And Agent checks bulk chat Notification message should get displayed
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6286")
   Scenario: CD:: Agent Desk:: : Verify if Agent is able to select only maximum 15 chats while sending the bulk message
