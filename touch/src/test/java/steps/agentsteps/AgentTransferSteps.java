@@ -303,13 +303,13 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     }
 
     @When("^(.*) checks \"transfer chat\" icon (.*) on the chat desk$")
-    public void cancelTransferChat(String agent, String transferButtonVisibility){
-        if(transferButtonVisibility.equalsIgnoreCase("appeared")) {
-            getAgentHomePage(agent).getChatHeader().isTransferButtonDisplayed();
-        }
-        else if (transferButtonVisibility.equalsIgnoreCase("disappeared")) {
-            getAgentHomePage(agent).getChatHeader().isTransferButtonNotDisplayed();
+    public void cancelTransferChat(String agent, String transferButtonVisibility) {
+        if (transferButtonVisibility.equalsIgnoreCase("appeared")) {
+            Assert.assertTrue(getAgentHomePage(agent).getChatHeader().isTransferButtonDisplayed()
+                    , "Transfer button is not displayed");
+        } else if (transferButtonVisibility.equalsIgnoreCase("disappeared")) {
+            Assert.assertTrue(getAgentHomePage(agent).getChatHeader().isTransferButtonNotDisplayed()
+                    , "Transfer button is displayed");
         }
     }
-
 }

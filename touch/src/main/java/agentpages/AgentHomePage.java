@@ -471,9 +471,4 @@ public class AgentHomePage extends AgentAbstractPage {
         return getTextFromElem(this.getCurrentDriver(), this.noChatsMessage, 8,
                 "No results found text").replace("\n", " ");
     }
-
-    public boolean isBulkChatNotificationMessageShown() {
-        waitFor(2000);
-        return isElementShown(this.getCurrentDriver(), bulkChatPopUpMessage, 5);
-    }
 }
