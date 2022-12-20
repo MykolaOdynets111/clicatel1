@@ -1,6 +1,5 @@
 package steps.portalsteps;
 
-import agentpages.supervisor.uielements.SupervisorClosedChatsTable;
 import agentpages.uielements.FilterMenu;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperSupportHours;
