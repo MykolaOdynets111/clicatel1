@@ -15,13 +15,10 @@ public class SupervisorDeskClosedRow extends AbstractWidget {
     @FindBy(css = ".cl-r-checkbox__icon-container")
     private WebElement checkbox;
 
-    @FindBy(xpath = ".//div[@class='Select-placeholder']")
-    private WebElement select;
-
     @FindBy(css = ".cl-agent-name")
     private WebElement currentAgent;
 
-    @FindBy(css = ".cl-r-chat-item-user-name")
+    @FindBy(css = ".cl-chat-item-user-name")
     private WebElement userName;
 
     @FindBy(css = ".cl-table-user-description__location")
@@ -59,11 +56,7 @@ public class SupervisorDeskClosedRow extends AbstractWidget {
     }
 
     public String getUserName(){
-        return userName.getText();//getTextFromElem(this.getCurrentDriver(), userName, 5, "User name");
-    }
-
-    public void clickOnUserName(){
-        clickElem(this.getCurrentDriver(), userName, 5, "User Name");
+        return userName.getText();
     }
 
     public String getLocation(){

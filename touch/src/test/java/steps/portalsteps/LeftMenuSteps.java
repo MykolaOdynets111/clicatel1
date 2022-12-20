@@ -1,5 +1,6 @@
 package steps.portalsteps;
 
+import agentpages.supervisor.uielements.SupervisorClosedChatsTable;
 import agentpages.uielements.FilterMenu;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperSupportHours;
@@ -14,6 +15,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
+import org.assertj.core.api.Assertions;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.agentsteps.AbstractAgentSteps;
@@ -29,35 +31,38 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class LeftMenuSteps extends AbstractAgentSteps {
 
     @Given("^(.*) has no active chats$")
-    public void closeActiveChats(String agent){
+    public void closeActiveChats(String agent) {
         ApiHelper.closeActiveChats(agent);
         getAgentHomePage(agent).getLeftMenuWithChats().waitForAllChatsToDisappear(4);
     }
 
     @Then("^(.*) has (?:new|old) (.*) (?:request|shown)(?: from (.*) user|)$")
     public void verifyIfAgentReceivesConversationRequest(String agent, String chatType, String integration) {
-        if(integration == null) {
-            if(ConfigManager.isWebWidget()) {integration = "touch";
-            }else {integration = "ORCA";}
+        if (integration == null) {
+            if (ConfigManager.isWebWidget()) {
+                integration = "touch";
+            } else {
+                integration = "ORCA";
+            }
         }
 
-        String userName=getUserName(integration);
+        String userName = getUserName(integration);
 
-        boolean isConversationShown = getLeftMenu(agent).isNewConversationIsShown(userName,30);
+        boolean isConversationShown = getLeftMenu(agent).isNewConversationIsShown(userName, 30);
 
         Map settingResults = new HashMap<String, Object>();
 
-        if(!isConversationShown){
+        if (!isConversationShown) {
             settingResults = verifyAndUpdateChatSettings(chatType);
-            isConversationShown = getLeftMenu(agent).isNewConversationIsShown(userName,30);
+            isConversationShown = getLeftMenu(agent).isNewConversationIsShown(userName, 30);
         }
 
         Assert.assertTrue(isConversationShown,
-                "There is no new conversation request on Agent Desk (Client ID: "+userName+")\n" +
+                "There is no new conversation request on Agent Desk (Client ID: " + userName + ")\n" +
 //                        "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n" +
-                        "sessionsCapacity: " + settingResults.get("sessionCapacityUpdate") + " and was: "+ settingResults.get("sessionCapacity") +" before updating \n" +
+                        "sessionsCapacity: " + settingResults.get("sessionCapacityUpdate") + " and was: " + settingResults.get("sessionCapacity") + " before updating \n" +
                         "Support hours: " + settingResults.get("supportHoursUpdated") + "\n" +
-                        "and was:" +settingResults.get("supportHours") +" before changing\n"
+                        "and was:" + settingResults.get("supportHours") + " before changing\n"
         );
     }
 
@@ -86,34 +91,37 @@ public class LeftMenuSteps extends AbstractAgentSteps {
                 Response resp = ApiHelperSupportHours.setSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
                 supportHoursUpdated = resp.getBody().as(GeneralSupportHoursItem.class).getAgentMapping();
                 results.put("supportHoursUpdated", supportHoursUpdated);
-            }else {results.put("supportHoursUpdated", "were not updated because \"All week\" was set");}
-        }else {results.put("supportHoursUpdated", "were not updated because it is ticket");}
+            } else {
+                results.put("supportHoursUpdated", "were not updated because \"All week\" was set");
+            }
+        } else {
+            results.put("supportHoursUpdated", "were not updated because it is ticket");
+        }
 
         return results;
     }
 
     @Then("^(.*) click the bulk message icon$")
-    public void bulkMessageButtonClick(String agent){
+    public void bulkMessageButtonClick(String agent) {
         getLeftMenu(agent).clickBulkButton();
     }
 
     @Then("^(.*) checks number of checked bulk checkboxes is (.*)$")
-    public void bulkMessageCheckboxesClickAndCheck(String agent, int checkedBulkChats){
+    public void bulkMessageCheckboxesClickAndCheck(String agent, int checkedBulkChats) {
         if (checkedBulkChats > 5) {
             Assert.assertTrue(getLeftMenu(agent).bulkPanelElementsClick(checkedBulkChats), "Required checked checkboxes count is incorrect");
-        }
-        else {
+        } else {
             Assert.assertTrue(getLeftMenu(agent).bulkPanelElementsClickWithoutScroll(checkedBulkChats), "Required checked checkboxes count is incorrect");
         }
     }
 
     @Then("^(.*) sees checkbox is (.*) for the blocked chat$")
-    public void isBulkButtonInPanelDisabled(String agent, String disability){
+    public void isBulkButtonInPanelDisabled(String agent, String disability) {
         Assert.assertTrue(getLeftMenu(agent).isBulkPanelEnabled(disability));
     }
 
     @Then("^(.*) sees number of checked checkboxes is (.*)")
-    public void isBulkCheckboxChecked(String agent, int numberOfCheckedBulkChats){
+    public void isBulkCheckboxChecked(String agent, int numberOfCheckedBulkChats) {
         Assert.assertTrue(getLeftMenu(agent).isNumberOfCheckedChats(numberOfCheckedBulkChats),
                 "Number of checked bulk chats count is not the same");
     }
@@ -121,118 +129,120 @@ public class LeftMenuSteps extends AbstractAgentSteps {
     @Then("^(.*) has new conversation request within (.*) seconds$")
     public void verifyIfAgentReceivesConversationRequest(String agent, int timeout) {
         Assert.assertTrue(getLeftMenu(agent).isNewWebWidgetRequestIsShown(timeout),
-                "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")\n" +
-                        "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
+                "There is no new conversation request on Agent Desk (Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + ")\n" +
+                        "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() + "\n");
     }
 
     @Then("(.*) sees 'overnight' icon in this chat")
-    public void verifyOvernightIconShown(String agent){
+    public void verifyOvernightIconShown(String agent) {
         Assert.assertTrue(getLeftMenu(agent).isOvernightTicketIconShown(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())),
-                "Overnight icon is not shown for overnight ticket. \n clientId: "+ getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+                "Overnight icon is not shown for overnight ticket. \n clientId: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
     }
 
     @Then("^Overnight ticket is removed from (.*) chatdesk$")
-    public void checkThatOvernightTicketIsRemoved(String agent){
+    public void checkThatOvernightTicketIsRemoved(String agent) {
         Assert.assertTrue(getLeftMenu(agent).isOvernightTicketIconRemoved(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())),
                 "Overnight ticket is still shown");
     }
 
     @Then("^(.*) select \"(.*)\" left menu option$")
-    public void selectFilterOption(String agent,String option){
+    public void selectFilterOption(String agent, String option) {
         getLeftMenu(agent).getLMHeader().selectChatsMenu(option);
-        getLeftMenu(agent).waitForConnectingDisappear(5,10);
+        getLeftMenu(agent).waitForConnectingDisappear(5, 10);
     }
 
     @Then("^(.*) checks current tab selected in left menu is (.*) tab")
-    public void checkCurrentSelectedTab(String agent,String currentTab){
+    public void checkCurrentSelectedTab(String agent, String currentTab) {
         Assert.assertTrue(getLeftMenu(agent).getCurrentSelectedTabText().equalsIgnoreCase(currentTab),
                 "Current tab selected is not correct");
     }
 
     @Then("^(.*) checks all chats from the previous tab should get deselected")
-    public void checksBulkChatsUnSelected(String agent){
+    public void checksBulkChatsUnSelected(String agent) {
         Assert.assertTrue(!getLeftMenu(agent).getBulkChatsButtonSelectedStatus().contains("active"),
                 "Bulk chats are still not deselected");
     }
 
     @Then("^(.*) checks customer should stay on the same tab and all selected items stay selected")
-    public void checksBulkChatsSelected(String agent){
+    public void checksBulkChatsSelected(String agent) {
         Assert.assertTrue(getLeftMenu(agent).getBulkChatsButtonSelectedStatus().contains("active"),
                 "Bulk chats are still not deselected");
     }
 
     @Then("^(.*) select Continue button$")
-    public void selectFilterOption(String agent){
+    public void selectFilterOption(String agent) {
         getLeftMenu(agent).clickContinueButton();
     }
 
     @Then("^(.*) select Wait and Stay button$")
-    public void selectWaitAndStayButton(String agent){
+    public void selectWaitAndStayButton(String agent) {
         getLeftMenu(agent).clickWaitAndStayButton();
     }
 
     @Then("^(.*) clicks close filter button$")
-    public void clickCloseFilterButton(String agent){
+    public void clickCloseFilterButton(String agent) {
         getLeftMenu(agent).clickCloseButton();
     }
 
     @Then("^(.*) opens filter menu$")
-    public void openFilterMenuAgentDesk(String agent){
+    public void openFilterMenuAgentDesk(String agent) {
         getLeftMenu(agent).openFilterMenu();
     }
 
     @When("^(.*) filter Live Chants with (.*) channel, (.*) sentiment and flagged is (.*)$")
-    public void setLiveChatsFilter(String agent, String channel, String sentiment, boolean flagged){
+    public void setLiveChatsFilter(String agent, String channel, String sentiment, boolean flagged) {
         getLeftMenu(agent).applyTicketsFilters(channel.trim(), sentiment.trim(), flagged);
     }
 
     @When("^(.*) click on filter button$")
-    public void setLiveChatsFilter(String agent){
+    public void setLiveChatsFilter(String agent) {
         getLeftMenu(agent).openFilterMenu();
     }
 
-    @Then ("^(.*) see channel, sentiment(?: and flagged|, flagged and dates) as filter options for (.*)$")
-    public void verifyFilterOptions(String agent, String chatType){
+    @Then("^(.*) see channel, sentiment(?: and flagged|, flagged and dates) as filter options for (.*)$")
+    public void verifyFilterOptions(String agent, String chatType) {
         FilterMenu filterMenu = getLeftMenu(agent).getFilterMenu();
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(filterMenu.expandChannels().getDropdownOptions(),  Arrays.asList("WhatsApp","SMS", "Apple Business Chat"),
+        softAssert.assertEquals(filterMenu.expandChannels().getDropdownOptions(), Arrays.asList("WhatsApp", "SMS", "Apple Business Chat"),
                 "Channel dropdown has incorrect options");
         filterMenu.expandChannels();
         softAssert.assertEquals(filterMenu.expandSentiment().getDropdownOptions(), Arrays.asList("Positive", "Neutral", "Negative"),
                 "Sentiment dropdown has incorrect options");
         filterMenu.expandSentiment();
-        if(!chatType.contains("live")){
-            softAssert.assertTrue(filterMenu.isStartDateIsPresent(),"Start day option should be present in " + chatType +" filters");
-            softAssert.assertTrue(filterMenu.isEndDateIsPresent(),"End day option should be present in " + chatType +" filters");
+        if (!chatType.contains("live")) {
+            softAssert.assertTrue(filterMenu.isStartDateIsPresent(), "Start day option should be present in " + chatType + " filters");
+            softAssert.assertTrue(filterMenu.isEndDateIsPresent(), "End day option should be present in " + chatType + " filters");
         }
         softAssert.assertAll();
     }
 
     @When("(.*) remove Chat Filter$")
-    public void removeFilter(String agent){
+    public void removeFilter(String agent) {
         getLeftMenu(agent).removeFilter();
     }
 
     @Then("^(.*) should not see from user chat in agent desk$")
-    public void verifyConversationRemovedFromChatDesk(String agent){
+    public void verifyConversationRemovedFromChatDesk(String agent) {
         // verifyChatRemovedFromChatDesk(String agent, String social) can be used instead of this
         String userName = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
         Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(20, userName),
-                "Conversation request is not removed from Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")"
+                "Conversation request is not removed from Agent Desk (Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + ")"
         );
     }
 
 
     @Then("^(.*) should not see from user chat in agent desk from (.*)$")
-    public void verifyChatRemovedFromChatDesk(String agent, String social){
+    public void verifyChatRemovedFromChatDesk(String agent, String social) {
         String userName = getUserName(social);
         Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(20, userName),
-                "Conversation request is not removed from Agent Desk (Client ID: "+userName+")");
+                "Conversation request is not removed from Agent Desk (Client ID: " + userName + ")");
     }
 
     @When("^(.*) click on (?:new|last opened) conversation request from (.*)$")
     public void acceptUserFromSocialConversation(String agent, String socialChannel) {
-        if(!ConfigManager.isWebWidget() && socialChannel.equalsIgnoreCase("touch")){socialChannel="orca";}
+        if (!ConfigManager.isWebWidget() && socialChannel.equalsIgnoreCase("touch")) {
+            socialChannel = "orca";
+        }
         getLeftMenu(agent).openChatByUserName(getUserName(socialChannel));
     }
 
@@ -242,15 +252,15 @@ public class LeftMenuSteps extends AbstractAgentSteps {
     }
 
     @And("^Empty image is not shown for chat with (.*) user$")
-    public void verifyEmptyImgNotShown(String customerFrom){
+    public void verifyEmptyImgNotShown(String customerFrom) {
         String user = "";
-        if(customerFrom.equalsIgnoreCase("facebook")) user = socialaccounts.FacebookUsers.getLoggedInUserName();
+        if (customerFrom.equalsIgnoreCase("facebook")) user = socialaccounts.FacebookUsers.getLoggedInUserName();
         Assert.assertTrue(getLeftMenu("main").isProfileIconNotShown(),
                 "Image is not updated in left menu with chats. \n");
     }
 
     @Then("^Message (.*) shown like last message in left menu with chat$")
-    public void verifyLastMessageInLeftMenu(String customerMsg){
+    public void verifyLastMessageInLeftMenu(String customerMsg) {
         Assert.assertEquals(getLeftMenu("main").getActiveChatLastMessage(), customerMsg,
                 "Last message in left menu with chat as not expected. \n");
     }
@@ -298,7 +308,6 @@ public class LeftMenuSteps extends AbstractAgentSteps {
     }
 
 
-
     @Then("(.*) tab is displayed first for (.*)")
     public void verifyThatChatsTabIsDisplayedFirst(String tabName, String agent) {
         Assert.assertTrue(getLeftMenu(agent)
@@ -332,14 +341,30 @@ public class LeftMenuSteps extends AbstractAgentSteps {
 
     @When("Verify {string} display as default")
     public void verifyDisplayDefault(String liveChats) {
-        Assert.assertEquals(getLeftMenu("main").getSupervisorAndTicketsPart().getFirstFilterName(),liveChats,"All chats text is not selected default");
+        Assert.assertEquals(getLeftMenu("main").getSupervisorAndTicketsPart().getFirstFilterName(), liveChats, "All chats text is not selected default");
     }
 
     @Then("Verify that live chats available are shown")
-    public void verifyThatLiveChatAvailableAreShown(){
+    public void verifyThatLiveChatAvailableAreShown() {
         Assert.assertTrue(getLeftMenu("main").getSupervisorAndTicketsPart().isLiveChatsInfoDisplayed(),
                 "Live chat not displayed ");
     }
 
+    @Then("^Verify closed chat is present for (.*)$")
+    public void verifyClosedChatIsPresent(String chanel) {
+        Assertions.assertThat(getSupervisorDeskPage().getClosedChatNames())
+                .as("Closed chat should be present!")
+                .contains(getUserName(chanel));
+    }
+
+    @Then("^Open closed chat (.*)$")
+    public void openClosedChat(String chanel) {
+        SupervisorClosedChatsTable closedChatsTable = getSupervisorDeskPage().getSupervisorClosedChatsTable();
+        String chatName = getUserName(chanel);
+
+        if (closedChatsTable.isClosedChatPresent(chatName)) {
+            closedChatsTable.openClosedChat(chatName);
+        }
+    }
 }
 
