@@ -45,7 +45,7 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transferring
     When Agent transfers chat
     Then Second agent receives incoming transfer with "Incoming Transfer" header
     When Second agent click "Accept transfer" button
-    And Chat from orca channel is absent in chats list
+    And Second Agent should not see from user chat in agent desk from orca
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1271")
   Scenario: CD :: Agent Desk :: Live Chat :: Profile :: Verify that Agent2 can view edited User profile without refresh
@@ -69,7 +69,7 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transferring
     When Second agent click "Accept transfer" button
     Then Second agent has new conversation request
 
-    And Chat from orca channel is absent in chats list
+    And Second Agent should not see from user chat in agent desk from orca
     When Second Agent click on new conversation request from orca
     Then Conversation area becomes active with connect to Support user's message in it for second agent
     And Second agent responds with hello to User
