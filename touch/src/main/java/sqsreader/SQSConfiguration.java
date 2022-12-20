@@ -14,7 +14,6 @@ import software.amazon.awssdk.services.sts.model.Credentials;
 public class SQSConfiguration {
 
     public static volatile int SERVER_INDEX = 0;
-
     public static final String DEFAULT_QUEUE_NAME = "dev-callback-handler-interact-chatdesk-";
 
     public static final String ROLE_ARN = "arn:aws:iam::215418463085:role/k8s-dev-callback-handler-interact-chatdesk-access-role";

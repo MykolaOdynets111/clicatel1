@@ -13,6 +13,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
+import static datetimeutils.DateTimeHelper.parseDate;
+
 
 public class TicketRow extends AbstractWidget {
 
@@ -76,7 +78,7 @@ public class TicketRow extends AbstractWidget {
 
     public LocalDateTime getOpenDate() {
         String stringDate = getTextFromElem(this.getCurrentDriver(), startDate, 5, "Date cell").trim();
-        return DateTimeHelper.parseDate(stringDate);
+        return parseDate(stringDate);
     }
 
     public String getOpenDateText() {
@@ -99,7 +101,7 @@ public class TicketRow extends AbstractWidget {
 
     public LocalDateTime getEndDate() {
         String stringDate = getTextFromElem(this.getCurrentDriver(), endDate, 5, "Date cell").trim();
-        return DateTimeHelper.parseDate(stringDate);
+        return parseDate(stringDate);
     }
 
     public void clickOnUserName() {

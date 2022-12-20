@@ -1,14 +1,13 @@
 package agentpages.supervisor.uielements;
 
 import abstractclasses.AbstractWidget;
-import datetimeutils.DateTimeHelper;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
+
+import static datetimeutils.DateTimeHelper.parseDate;
 
 public class SupervisorDeskClosedChatRow extends AbstractWidget {
 
@@ -46,7 +45,7 @@ public class SupervisorDeskClosedChatRow extends AbstractWidget {
         String stringDate = getTextFromElem(this.getCurrentDriver(),
                 date, 5, "Date cell").replace("\n", " ");
 
-        return DateTimeHelper.parseDate(stringDate);
+        return parseDate(stringDate);
     }
 
     public void clickOnChat() {
