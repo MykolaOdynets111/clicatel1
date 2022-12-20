@@ -18,7 +18,7 @@ import org.testng.annotations.Test;
                 Path.NEW_TENANT_STARTER + "02ResettingPassword.feature",
 
         },
-        glue ="steps")
+        glue = "steps")
 public class RunTouchGoStarter02 extends AbstractTestNGCucumberTests {
 
     @Override

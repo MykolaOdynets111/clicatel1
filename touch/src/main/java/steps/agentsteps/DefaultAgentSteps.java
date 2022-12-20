@@ -16,7 +16,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.response.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,10 +28,7 @@ import steps.dotcontrol.DotControlSteps;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -198,7 +194,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertEquals(getAgentHomePage(agent).getNoResultsFoundMessage(), errorMessage,
                 "Wrong no results found error message found");
     }
-
     @When("^(.*) changes status to: (.*)$")
     public void changeAgentStatus(String agent, String newStatus) {
         getAgentHomePage(agent).getPageHeader().clickIcon();
@@ -246,27 +241,23 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Given("^Set agent support hours (.*)$")
-    public void setSupportHoursWithShift(String shiftStrategy) {
-        Response resp = null;
-        switch (shiftStrategy) {
+    public void setSupportHoursWithShift(String shiftStrategy){
+        switch (shiftStrategy){
             case "with day shift":
                 LocalDateTime currentTimeWithADayShift = LocalDateTime.now().minusDays(1);
 
-                resp = ApiHelperSupportHours.setSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(),
-                        currentTimeWithADayShift.getDayOfWeek().toString(), "00:00", "23:59");
+                ApiHelperSupportHours.setSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(),
+                        currentTimeWithADayShift.getDayOfWeek().toString(),"00:00", "23:59");
                 break;
             case "for all week":
-                resp = ApiHelperSupportHours.setSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
+                ApiHelperSupportHours.setSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
                         "00:00", "23:59");
                 break;
         }
-        Assert.assertEquals(resp.statusCode(), 200,
-                "Changing support hours was not successful\n" +
-                        "resp body: " + resp.getBody().asString() + "\n");
     }
 
     @Then("^Tab with user info has \"(.*)\" header$")
-    public void verifyTabHeader(String headerName) {
+    public void verifyTabHeader(String headerName){
         Assert.assertEquals(getAgentHomeForMainAgent().getSelectedTabHeader(), headerName,
                 "Incorrect header of customer selected tab, should be " + headerName);
     }
@@ -664,4 +655,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 .jsonPath().getList("content.channel.type").stream()
                 .filter(ct -> ct.toString().equalsIgnoreCase(integration)).count();
     }
+
+    @Then("^(.*) checks as per sorting preference selected, the chat is at (.*) index of chats section for (.*) user$")
+    public void checkActiveChatIndex(String agent, int indexOfActiveChat, String integration){
+        Assert.assertEquals(getLeftMenu(agent).getTargetChatIndex(getUserName(integration)), indexOfActiveChat,
+                "Current selected chat is not on top");
+    }
+
 }

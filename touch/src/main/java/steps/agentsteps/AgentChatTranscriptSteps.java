@@ -15,7 +15,6 @@ import io.cucumber.java.en.Then;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.dotcontrol.DotControlSteps;
-
 import javax.mail.Message;
 import java.util.ArrayList;
 import java.util.List;

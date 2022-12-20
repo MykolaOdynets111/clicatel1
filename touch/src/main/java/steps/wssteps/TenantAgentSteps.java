@@ -1,12 +1,13 @@
 package steps.wssteps;
 
 import apihelper.ApiHelperTenantsWS;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import datamanager.Agents;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.tenantagentsws.Agent;
 import datamanager.jacksonschemas.tenantagentsws.Tenant;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.When;
 
 
 public class TenantAgentSteps {

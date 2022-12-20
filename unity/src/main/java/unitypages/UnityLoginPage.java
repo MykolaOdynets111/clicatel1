@@ -28,7 +28,6 @@ public class UnityLoginPage extends AgentAbstractPage {
         getCurrentDriver().get(UnityURLs.getUnityLoginForm());
     }
 
-
     public void loginToUnity(String email, String password){
 
         WebDriver driver = this.getCurrentDriver();

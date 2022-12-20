@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
         },
         monochrome = true,
         features ="src/test/java/scenario/standardbilling/departments",
-        glue ="steps")
+        glue = "steps")
 
 public class RunDepartmentsTest extends AbstractTestNGCucumberTests {
 

@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
         features = {
                 Path.NEW_TENANT_STARTER + "04DeletingAgentUsers.feature"
         },
-        glue ="steps")
+        glue = "steps")
 public class RunTouchGoStarter04 extends AbstractTestNGCucumberTests {
 
     @Override

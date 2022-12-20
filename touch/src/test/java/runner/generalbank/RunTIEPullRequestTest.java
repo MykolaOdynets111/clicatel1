@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
         },
         monochrome = true,
         features ="src/test/java/scenario/generalbank/tie/tie_pullrequest",
-        glue ="steps")
+        glue = "steps")
 public class RunTIEPullRequestTest extends AbstractTestNGCucumberTests {
 
     @Override

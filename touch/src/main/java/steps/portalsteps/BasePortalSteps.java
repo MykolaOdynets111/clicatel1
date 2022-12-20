@@ -22,6 +22,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
 import mc2api.ApiHelperPlatform;
 import mc2api.auth.PortalAuthToken;
 import mc2api.endpoints.EndpointsPlatform;
@@ -1452,7 +1453,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         soft.assertEquals(getPortalTouchPreferencesPage().getBusinessProfileWindow().getCompanyCountry(),tenantInfo.get("companyCountry"), "Company country was not changed");
         getPortalTouchPreferencesPage().getBusinessProfileWindow().setBusinessName("Automation Bot");
         getPortalTouchPreferencesPage().clickSaveButton();
-        Response resp = ApiHelperTenant.getTenantConfig(tenantOrgName);
+        ResponseBody resp = ApiHelperTenant.getTenantConfig(tenantOrgName);
         String country = resp.jsonPath().get("country").toString();
         soft.assertEquals(resp.jsonPath().get("orgName"),tenantOrgName, "Company name was not changed on backend");
         soft.assertEquals(resp.jsonPath().get("city").toString(),tenantInfo.get("companyCity"), "Company city was not changed on backend");

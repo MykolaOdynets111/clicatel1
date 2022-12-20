@@ -31,6 +31,9 @@ import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import sqsreader.SQSConfiguration;
 import sqsreader.SyncMessageReceiver;
+import steps.CamundaFlowsSteps;
+import steps.DefaultTouchUserSteps;
+import steps.ORCASteps;
 import steps.agentsteps.AbstractAgentSteps;
 import steps.dotcontrol.DotControlSteps;
 import steps.portalsteps.AbstractPortalSteps;
@@ -54,6 +57,8 @@ public class Hooks implements JSHelper {
 
     @Before
     public void beforeScenario(Scenario scenario){
+
+        System.out.println("Chat Desk before hooks");
 
         clearAllSessionData();
 
@@ -84,6 +89,8 @@ public class Hooks implements JSHelper {
 
     @After()
     public void afterScenario(Scenario scenario){
+
+        System.out.println("Chat Desk After hooks");
 
         if (scenario.getSourceTagNames().contains("@orca_api")){
             ORCASteps.cleanUPORCAData();

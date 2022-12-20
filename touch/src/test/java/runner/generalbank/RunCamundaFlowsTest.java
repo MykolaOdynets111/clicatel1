@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
         plugin={"pretty", "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"},
         monochrome = true,
         features ="src/test/java/scenario/camundaflows/",
-        glue ="steps")
+        glue = "steps")
 public class RunCamundaFlowsTest extends AbstractTestNGCucumberTests {
 
     @Override

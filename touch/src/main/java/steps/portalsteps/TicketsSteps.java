@@ -307,22 +307,46 @@ public class TicketsSteps extends AbstractAgentSteps {
         Assert.assertEquals(getTicketsPage(agent).getToastMessageText(),toastMessageText,"Toast message is wrong");
     }
 
-    @Then("^(.*) checks initial ticket count is displayed in the (.*) ticket tab$")
-    public void getInitialTicketsCount(String agent, String ticketType) {
-        initialTicketsCount = getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(ticketType);
+    @Then("^(.*) checks initial ticket count is displayed in the (.*) ticket tab on (.*)$")
+    public void getInitialTicketsCount(String agent, String ticketType, String platformType) {
+        initialTicketsCount = getTicketsCountLeftMenu(agent, ticketType, platformType);
     }
 
-    @Then("^(.*) checks final ticket count value in the (.*) ticket tab$")
-    public void verifyFinalTicketsCount(String agent, String ticketType) {
-        int finalTicketsCount = getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(ticketType);
-        Assert.assertTrue(finalTicketsCount== (initialTicketsCount + 1),
+    @Then("^(.*) checks final ticket count value in the (.*) ticket tab on (.*)$")
+    public void verifyFinalTicketsCount(String agent, String ticketType, String platformType) {
+        int finalTicketsCount = getTicketsCountLeftMenu(agent, ticketType, platformType);
+        Assert.assertEquals(finalTicketsCount, (initialTicketsCount + 1),
                 "Final ticket count is incorrect");
     }
 
-    @Then("^(.*) checks (.*) ticket count value in the (.*) ticket tab$")
-    public void verifyTicketsCount(String agent, int expectedTicketCount, String ticketType) {
-        int ticketsCount = getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(ticketType);
-        Assert.assertTrue(ticketsCount== expectedTicketCount,
+    @Then("^(.*) checks ticket count value in the (.*) ticket tab is (.*) on (.*)$")
+    public void verifyTicketsCount(String agent, String ticketType, int expectedTicketCount, String platformType) {
+        int ticketsCount = getTicketsCountLeftMenu(agent, ticketType, platformType);
+        Assert.assertEquals(ticketsCount, expectedTicketCount,
                 "Ticket count is incorrect");
     }
+
+    @Then("^(.*) checks ticket count value greater than 1 in (.*) ticket tab on (.*)$")
+    public void verifyTicketsCount(String agent, String ticketType, String platformType) {
+        int ticketsCount = getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(platformType, ticketType.toLowerCase());
+        Assert.assertTrue(ticketsCount > 1,
+                "Ticket count is incorrect in left tab");
+    }
+
+    @Then("^(.*) checks ticket count greater than 1 in tickets table$")
+    public void verifyTicketsCountGreaterThan1InTicketsTable(String agent) {
+        Assert.assertTrue(getTicketsTable(agent).getTicketsCount() > 1,
+                "Ticket count in middle pane is incorrect");
+    }
+
+    @Then("^(.*) checks ticket count value (.*) in tickets table$")
+    public void verifyTicketsCountEquals1InTicketsTable(String agent, int expectedTicketCount) {
+        Assert.assertEquals(getTicketsTable(agent).getTicketsCount(), expectedTicketCount,
+                "Ticket count in middle pane is incorrect");
+    }
+
+    public int getTicketsCountLeftMenu(String agent, String platformType, String ticketType) {
+        return getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(platformType, ticketType);
+    }
+
 }

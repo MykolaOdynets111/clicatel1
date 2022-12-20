@@ -27,7 +27,7 @@ import static runner.generalbank.Path.PATH;
                 DOTCONTROL + "DotControlInitCallWithLiveAgent.feature", // +
                 DOTCONTROL + "DotControlMessagingWithAgent.feature", // +
         },
-        glue ="steps")
+        glue = "steps")
 public class PullRequestTest extends AbstractTestNGCucumberTests {
 
     @Override

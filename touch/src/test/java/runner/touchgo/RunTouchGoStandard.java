@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
         },
         monochrome = true,
         features ="src/test/java/scenario/touchgo/newtenant/standardplan",
-        glue ="steps")
+        glue = "steps")
 public class RunTouchGoStandard extends AbstractTestNGCucumberTests {
 
     @Override

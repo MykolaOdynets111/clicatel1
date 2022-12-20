@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
         plugin={"pretty", "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"},
         monochrome = true,
         features ="src/test/java/scenario/generalbank/tieonethread",
-        glue ="steps")
+        glue = "steps")
 public class RunTIEOneThreadTest extends AbstractTestNGCucumberTests {
 
     @Override

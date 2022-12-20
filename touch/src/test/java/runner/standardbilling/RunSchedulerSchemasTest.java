@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
         },
         monochrome = true,
         features ="src/test/java/scenario/standardbilling/schedulerschemas",
-        glue ="steps")
+        glue = "steps")
 
 public class RunSchedulerSchemasTest extends AbstractTestNGCucumberTests {
 

@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
         features = {
                 Path.CLOSE_ACCOUNT + "01NotValidClosingAccount.feature",
                 },
-        glue ="steps")
+        glue = "steps")
 public class RunTouchGoCloseAccount01 extends AbstractTestNGCucumberTests {
 
     @Override

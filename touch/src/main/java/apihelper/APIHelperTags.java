@@ -46,7 +46,7 @@ public class APIHelperTags extends ApiHelper {
     }
 
     private static List<Tag> getAllTags() {
-        return getQuery(Tenants.getTenantUnderTestOrgName(), Endpoints.TAGS_FOR_CRM_TICKET, "main")
-                .getBody().jsonPath().getList("", Tag.class);
+        return getQuery(Tenants.getTenantUnderTestOrgName(), Endpoints.TAGS_FOR_CRM_TICKET)
+                .jsonPath().getList("", Tag.class);
     }
 }

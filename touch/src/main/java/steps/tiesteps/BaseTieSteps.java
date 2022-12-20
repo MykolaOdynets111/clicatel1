@@ -2,11 +2,11 @@ package steps.tiesteps;
 
 import apihelper.ApiHelperTie;
 import apihelper.Endpoints;
-import datamanager.Tenants;
-import driverfactory.URLs;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import datamanager.Tenants;
+import driverfactory.URLs;
 import io.restassured.RestAssured;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;

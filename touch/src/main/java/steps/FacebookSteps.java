@@ -2,17 +2,17 @@ package steps;
 
 import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import datamanager.Tenants;
 import driverfactory.DriverFactory;
 import driverfactory.URLs;
 import facebook.FBHomePage;
 import facebook.FBLoginPage;
 import facebook.FBTenantPage;
-import facebook.FBYourPostPage;
 import facebook.uielements.MessengerWindow;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
+import facebook.FBYourPostPage;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 

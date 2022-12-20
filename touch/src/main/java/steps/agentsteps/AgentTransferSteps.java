@@ -301,4 +301,15 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     private static IncomingTransferWindow getIncomingTransferWindow(String agent) {
         return getAgentHomePage(agent).getIncomingTransferWindow();
     }
+
+    @When("^(.*) checks \"transfer chat\" icon (.*) on the chat desk$")
+    public void cancelTransferChat(String agent, String transferButtonVisibility) {
+        if (transferButtonVisibility.equalsIgnoreCase("appeared")) {
+            Assert.assertTrue(getAgentHomePage(agent).getChatHeader().isTransferButtonDisplayed()
+                    , "Transfer button is not displayed");
+        } else if (transferButtonVisibility.equalsIgnoreCase("disappeared")) {
+            Assert.assertTrue(getAgentHomePage(agent).getChatHeader().isTransferButtonNotDisplayed()
+                    , "Transfer button is displayed");
+        }
+    }
 }

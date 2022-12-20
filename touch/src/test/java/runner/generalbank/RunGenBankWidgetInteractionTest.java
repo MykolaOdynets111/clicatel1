@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
         plugin={"pretty", "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"},
         monochrome = true,
         features ="src/test/java/scenario/generalbank/touch/botflows/widgetinteraction",
-        glue ="steps")
+        glue = "steps")
 public class RunGenBankWidgetInteractionTest extends AbstractTestNGCucumberTests {
 
     @Override

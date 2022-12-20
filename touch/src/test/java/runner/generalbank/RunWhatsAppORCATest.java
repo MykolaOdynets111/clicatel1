@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
         monochrome = true,
         features = "touch/src/test/java/scenario/generalbank/whatsapporca",
         tags = "@Regression",
-        glue ="steps")
+        glue = "steps")
 public class RunWhatsAppORCATest extends AbstractTestNGCucumberTests {
 
     @Override

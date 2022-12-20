@@ -23,7 +23,7 @@ import org.testng.annotations.Test;
                 Path.FB_TESTS + "RedirectToAgentNegativeDMMessage.feature",
                 Path.FB_TESTS + "SendingEditedSuggestionToFacebook.feature"
         },
-        glue ="steps")
+        glue = "steps")
 public class RunFacebookAgentGenBankTest extends AbstractTestNGCucumberTests {
 
     @Override

@@ -1,4 +1,4 @@
-package pojoClasses.Providers;
+package datamodelsclasses.Providers;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetProviders {
+public class GetProvider {
 
     @JsonProperty("id")
     private String id;

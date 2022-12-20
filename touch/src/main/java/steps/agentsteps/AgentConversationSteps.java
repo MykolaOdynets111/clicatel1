@@ -44,8 +44,6 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     private LocationWindow locationWindow ;
     private C2pSendForm c2pSendForm;
 
-    private Extensions extensions;
-
     public static String getSelectedEmoji() {
         return selectedEmoji;
     }
@@ -86,7 +84,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     }
 
     private boolean isTimeStampValid(String inputString) {
-        SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+        SimpleDateFormat format = new java.text.SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
         try {
             format.parse(inputString);
             return true;
@@ -650,14 +648,11 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         soft.assertTrue(resultUnsatisfied, "Unsatisfied. Sentiments in agent feedback window as not expected. \n");
         soft.assertAll();
     }
-
-
     @Then("^(.*) sees \"(.*)\" tip in conversation area$")
     public void verifyTipIfNoSelectedChat(String agent, String note){
         Assert.assertEquals(getAgentHomePage(agent).getTipIfNoChatSelected(), note,
                 "Tip note if no chat selected is not as expected");
     }
-
     @Then("^(.*) sees \"(.*)\" tip in context area$")
     public void verifyTipIfNoSelectedChatInContextArea(String agent, String note){
         Assert.assertEquals(getAgentHomePage(agent).getTipIfNoChatSelectedFromContextArea(), note,

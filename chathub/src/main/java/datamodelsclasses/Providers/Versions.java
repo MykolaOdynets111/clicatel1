@@ -1,4 +1,4 @@
-package pojoClasses.Providers;
+package datamodelsclasses.Providers;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

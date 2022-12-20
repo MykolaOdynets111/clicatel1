@@ -22,7 +22,7 @@ public class ApiHelperAgent extends ApiHelper {
     }
 
     private static List<Agent> getAgentsForTenant(String tenantOrgName) {
-        return getQuery(tenantOrgName, Endpoints.AGENT_INFO, "main")
-                .getBody().jsonPath().getList("", Agent.class);
+        return getTouchQuery(tenantOrgName, Endpoints.AGENT_INFO)
+                .jsonPath().getList("", Agent.class);
     }
 }
