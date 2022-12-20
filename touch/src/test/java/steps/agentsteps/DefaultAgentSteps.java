@@ -198,12 +198,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertEquals(getAgentHomePage(agent).getNoResultsFoundMessage(), errorMessage,
                 "Wrong no results found error message found");
     }
-
-    @Then("^(.*) checks bulk chat Notification message should get displayed$")
-    public void bulkChatNotificationMessageShown(String agent) {
-        Assert.assertTrue(getAgentHomePage(agent).isBulkChatNotificationMessageShown(),
-                "Bulk chat notification message not shown");
-    }
     @When("^(.*) changes status to: (.*)$")
     public void changeAgentStatus(String agent, String newStatus) {
         getAgentHomePage(agent).getPageHeader().clickIcon();
@@ -672,7 +666,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("^(.*) checks as per sorting preference selected, the chat is at (.*) index of chats section for (.*) user$")
     public void checkActiveChatIndex(String agent, int indexOfActiveChat, String integration){
-        Assert.assertTrue(getLeftMenu(agent).getTargetChatIndex(getUserName(integration))==indexOfActiveChat,
+        Assert.assertEquals(getLeftMenu(agent).getTargetChatIndex(getUserName(integration)), indexOfActiveChat,
                 "Current selected chat is not on top");
     }
 
