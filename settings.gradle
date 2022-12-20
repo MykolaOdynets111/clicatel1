@@ -2,5 +2,5 @@ rootProject.name = 'mc2-touch-tests'
 include ':mc2'
 include ':touch'
 include ':shared'
-
+include 'chat2pay'
 
