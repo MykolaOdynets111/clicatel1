@@ -198,7 +198,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertEquals(getAgentHomePage(agent).getNoResultsFoundMessage(), errorMessage,
                 "Wrong no results found error message found");
     }
-
     @When("^(.*) changes status to: (.*)$")
     public void changeAgentStatus(String agent, String newStatus) {
         getAgentHomePage(agent).getPageHeader().clickIcon();
@@ -664,4 +663,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 .jsonPath().getList("content.channel.type").stream()
                 .filter(ct -> ct.toString().equalsIgnoreCase(integration)).count();
     }
+
+    @Then("^(.*) checks as per sorting preference selected, the chat is at (.*) index of chats section for (.*) user$")
+    public void checkActiveChatIndex(String agent, int indexOfActiveChat, String integration){
+        Assert.assertEquals(getLeftMenu(agent).getTargetChatIndex(getUserName(integration)), indexOfActiveChat,
+                "Current selected chat is not on top");
+    }
+
 }

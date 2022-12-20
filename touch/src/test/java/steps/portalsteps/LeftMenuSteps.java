@@ -36,6 +36,12 @@ public class LeftMenuSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getLeftMenuWithChats().waitForAllChatsToDisappear(4);
     }
 
+    @Given("^(.*) checks left menu is having (.*) chats with latest message (.*)$")
+    public void verifyChatsCountLeftMenuWithMessageText(String agent, int expectedCount, String expectedMessageText){
+        Assert.assertTrue(getLeftMenu(agent).getLeftMenuMessageTexts(expectedMessageText).size() == expectedCount,
+                "Chats doesn't contain expected text: " + expectedMessageText);
+    }
+
     @Then("^(.*) has (?:new|old) (.*) (?:request|shown)(?: from (.*) user|)$")
     public void verifyIfAgentReceivesConversationRequest(String agent, String chatType, String integration) {
         if (integration == null) {

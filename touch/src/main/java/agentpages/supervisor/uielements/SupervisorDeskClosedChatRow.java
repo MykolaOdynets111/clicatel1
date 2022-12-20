@@ -6,8 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
+
+import static datetimeutils.DateTimeHelper.parseDate;
 
 public class SupervisorDeskClosedChatRow extends AbstractWidget {
 
@@ -44,13 +44,8 @@ public class SupervisorDeskClosedChatRow extends AbstractWidget {
                 findElemByCSS(this.getCurrentDriver(), scrollAreaCss), date, 3);
         String stringDate = getTextFromElem(this.getCurrentDriver(),
                 date, 5, "Date cell").replace("\n", " ");
-        if (stringDate.contains("am")) {
-            stringDate = stringDate.replace("am","AM");
-        } else {
-            stringDate = stringDate.replace("pm","PM");
-        }
-        DateTimeFormatter formater = DateTimeFormatter.ofPattern("dd MMM. yyyy 'at' h:mm a", Locale.US);
-        return LocalDateTime.parse(stringDate, formater);
+
+        return parseDate(stringDate);
     }
 
     public void clickOnChat() {

@@ -2,6 +2,7 @@ package agentpages.tickets;
 
 
 import abstractclasses.AbstractWidget;
+import datetimeutils.DateTimeHelper;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,6 +12,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+
+import static datetimeutils.DateTimeHelper.parseDate;
 
 
 public class TicketRow extends AbstractWidget {
@@ -99,23 +102,6 @@ public class TicketRow extends AbstractWidget {
     public LocalDateTime getEndDate() {
         String stringDate = getTextFromElem(this.getCurrentDriver(), endDate, 5, "Date cell").trim();
         return parseDate(stringDate);
-    }
-
-    private LocalDateTime parseDate(String stringDate) {
-
-        if (stringDate.contains("Yesterday")) {
-            return LocalDateTime.now().minusDays(1);
-        } else if (stringDate.contains("Today")) {
-            return LocalDateTime.now();
-        }
-
-        if (stringDate.contains("am")) {
-            stringDate = stringDate.replace("am", "AM");
-        } else {
-            stringDate = stringDate.replace("pm", "PM");
-        }
-        DateTimeFormatter formater = DateTimeFormatter.ofPattern("dd MMM. yyyy 'at' h:mm a", Locale.US);
-        return LocalDateTime.parse(stringDate, formater);
     }
 
     public void clickOnUserName() {

@@ -96,7 +96,6 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Agent select "Tickets" left menu option
     And Agent select Assigned filter on Left Panel
     And Agent search chat orca on Supervisor desk
-    And Agent see tickets from orca on Assigned filter page
     And Supervisor clicks on first ticket
     And Agent send closing ticket manually message
     And Agent closes ticket manually
@@ -104,4 +103,10 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     Then Agent see tickets from orca on Closed filter page
     When Agent select my closed chats checkbox in container and click "Apply filters" button
     Then Agent see tickets from orca on Closed filter page
-    And Agent checks 1 ticket count value in the Closed ticket tab
+    And Agent checks ticket count value in the Closed ticket tab is 1 on agent
+    And Agent checks ticket count value 1 in tickets table
+    #deselecting the checkbox
+    When Agent clears search field and filters on Supervisor desk
+    And Agent select my closed chats checkbox in container and click "Apply filters" button
+    Then Agent checks ticket count value greater than 1 in Closed ticket tab on agent
+    And Agent checks ticket count greater than 1 in tickets table
