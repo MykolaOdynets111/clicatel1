@@ -1,9 +1,6 @@
 package agentpages.supervisor;
 
-import agentpages.supervisor.uielements.SupervisorAvailableAsAgentDialog;
-import agentpages.supervisor.uielements.SupervisorClosedChatsTable;
-import agentpages.supervisor.uielements.SupervisorDeskLiveRow;
-import agentpages.supervisor.uielements.SupervisorOpenedClosedChatsList;
+import agentpages.supervisor.uielements.*;
 import agentpages.uielements.ChatBody;
 import agentpages.uielements.ChatHeader;
 import agentpages.uielements.Profile;
@@ -24,7 +21,7 @@ import java.util.stream.Collectors;
 public class SupervisorDeskPage extends PortalAbstractPage {
 
     @FindBy(css = ".cl-chat-item")
-    private List<WebElement> chatsLive;
+    private List<WebElement> chatsList;
 
     @FindBy (css = ".ReactModal__Content.ReactModal__Content--after-open.cl-modal")
     private WebElement assignWindowsDialog;
@@ -73,9 +70,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     })
     private WebElement chatTransferAlert;
 
-    @FindBy(css = ".toast-content-message")
-    private WebElement agentAssignTicketMessage;
-
     private AssignChatWindow assignChatWindow;
     private ChatBody chatBody;
     private SupervisorClosedChatsTable supervisorClosedChatsTable;
@@ -114,44 +108,38 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return supervisorClosedChatsTable;
     }
 
-    public SupervisorOpenedClosedChatsList getSupervisorOpenedClosedChatsList(){
-        supervisorOpenedClosedChatsList.setCurrentDriver(this.getCurrentDriver());
-        return supervisorOpenedClosedChatsList;
-    }
-
     public SupervisorAvailableAsAgentDialog getSupervisorAvailableAsAgentDialog() {
         supervisorAvailableAsAgentDialog.setCurrentDriver(this.getCurrentDriver());
         return supervisorAvailableAsAgentDialog;
-    }
-
-    public String isAgentAssignMessageShown(){
-        return getTextFromElem(this.getCurrentDriver(), agentAssignTicketMessage, 15, "Toast message");
     }
 
     public boolean isLiveChatShownInSD(String userName, int wait) {
         return isElementShownByXpath(this.getCurrentDriver(), String.format(chatName, userName), wait);
     }
 
-    public SupervisorDeskLiveRow getSupervisorDeskLiveRow(String userName){
-        waitForFirstElementToBeVisible(this.getCurrentDriver(), chatsLive, 7);
+    public SupervisorDeskLiveRow getSupervisorDeskLiveRow(String chatName){
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), chatsList, 7);
         waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), "//h2[text() ='Loading...']", 6);
         return getLiveChatRows()
-                 .stream().filter(a -> a.getUserName().toLowerCase().contains(userName.toLowerCase()))
-                .findFirst().orElseThrow(() -> new AssertionError("Cannot find chat with user " + userName));
+                 .stream().filter(a -> a.getUserName().toLowerCase().contains(chatName.toLowerCase()))
+                .findFirst().orElseThrow(() -> new AssertionError("Cannot find chat with user " + chatName));
     }
 
     public boolean verifyChanelFilter(){
         Set<String> channels = getLiveChatRows()
-                .stream().map(a -> a.getIconName()).collect(Collectors.toSet());
+                .stream().map(SupervisorDeskLiveRow::getIconName)
+                .collect(Collectors.toSet());
         return channels.size() == 1;
     }
 
-    public List<String> getChatsNames(){
-        return getLiveChatRows().stream().map(SupervisorDeskLiveRow::getUserName).collect(Collectors.toList());
+    public List<String> getClosedChatNames(){
+        return getClosedChatRows().stream()
+                .map(SupervisorDeskClosedRow::getUserName)
+                .collect(Collectors.toList());
     }
 
     public boolean verifyChanelOfTheChatIsPresent(String channelName){
-        waitForFirstElementToBeVisible(this.getCurrentDriver(), chatsLive, 7);
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), chatsList, 7);
         return getLiveChatRows().get(0).getIconName().equalsIgnoreCase(channelName);
     }
 
@@ -219,8 +207,14 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     @NotNull
     private List<SupervisorDeskLiveRow> getLiveChatRows() {
-        return chatsLive.stream()
+        return chatsList.stream()
                 .map(e -> new SupervisorDeskLiveRow(e).setCurrentDriver(this.getCurrentDriver()))
+                .collect(Collectors.toList());
+    }
+
+    private List<SupervisorDeskClosedRow> getClosedChatRows() {
+        return chatsList.stream()
+                .map(e -> new SupervisorDeskClosedRow(e).setCurrentDriver(this.getCurrentDriver()))
                 .collect(Collectors.toList());
     }
 }

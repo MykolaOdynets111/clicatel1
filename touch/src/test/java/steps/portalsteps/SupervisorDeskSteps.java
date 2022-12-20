@@ -223,22 +223,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 .isTrue();
     }
 
-    @And("^Chat from (.*) channel is absent in chats list$")
-    public void verifyChatIsAbsent(String channel) {
-        assertThat(getSupervisorDeskPage().getChatsNames())
-                .as("Chat should not be present!")
-                .doesNotContain(channel);
-    }
-
-    @Then("^Verify closed chat is present for (.*)$")
-    public void verifyClosedChatIsPresent(String chanel) {
-        boolean isClosedChatPresent = getSupervisorDeskPage()
-                .getSupervisorClosedChatsTable()
-                .isClosedChatPresent(getUserName(chanel));
-
-        Assert.assertTrue(isClosedChatPresent, "Closed chat should be present");
-    }
-
     @When("^Agent click on the arrow of Chat Ended$")
     public void clickOnTheArrowOfChatEnded() {
         getSupervisorDeskPage().getSupervisorClosedChatsTable().clickAscendingArrowOfChatEndedColumn();
