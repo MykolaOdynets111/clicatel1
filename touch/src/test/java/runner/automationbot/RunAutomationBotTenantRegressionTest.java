@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
         monochrome = true,
         features = "touch/src/test/java/scenario/automationbot",
         tags = "@Regression",
-        glue ="steps")
+        glue = "steps")
 public class RunAutomationBotTenantRegressionTest extends AbstractTestNGCucumberTests {
 
     @Override

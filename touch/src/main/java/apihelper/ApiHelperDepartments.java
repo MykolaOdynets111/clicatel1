@@ -12,7 +12,7 @@ import java.util.List;
 public class ApiHelperDepartments extends ApiHelper {
 
     public static List<Department> getDepartments(String tenantOrgName) {
-        return getQueryFor(tenantOrgName, Endpoints.DEPARTMENTS)
+        return getTouchQuery(tenantOrgName, Endpoints.DEPARTMENTS)
                 .jsonPath().getList("", Department.class);
     }
 

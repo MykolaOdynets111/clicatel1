@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
         },
         monochrome = true,
         features ="src/test/java/scenario/standardbilling/endstopfeatures",
-        glue ="steps")
+        glue = "steps")
 
 public class RunEndStopTest extends AbstractTestNGCucumberTests {
 

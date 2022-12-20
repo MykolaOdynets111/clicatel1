@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
         },
         monochrome = true,
         features ="src/test/java/scenario/touchgo/defaultpref/",
-        glue ="steps")
+        glue = "steps")
 public class RunDefaultTenantPreferences extends AbstractTestNGCucumberTests {
 
     @Override

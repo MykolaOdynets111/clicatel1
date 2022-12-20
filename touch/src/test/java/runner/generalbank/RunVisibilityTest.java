@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
         },
         monochrome = true,
         features ="src/test/java/scenario/generalbank/widgetvisibility",
-        glue ="steps")
+        glue = "steps")
 public class RunVisibilityTest extends AbstractTestNGCucumberTests {
 
     @Override

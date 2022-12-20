@@ -30,7 +30,7 @@ import static runner.automation.Path.DOTCONTROL;
                 DOTCONTROL + "DotControlEditedSuggestionSending.feature",
                 DOTCONTROL + "DotControlWithContext.feature"
         },
-        glue ="steps")
+        glue = "steps")
 public class PullRequestTest extends AbstractTestNGCucumberTests {
 
         @Override

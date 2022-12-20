@@ -29,7 +29,7 @@ import static runner.automationbot.Path.PATH;
                 PATH + "TransferOvernigthTicket.feature",
                 DOTCONTROL + "DotControlInitCallInvalidAgent.feature"
         },
-        glue ="steps")
+        glue = "steps")
 public class PullRequestTest extends AbstractTestNGCucumberTests {
 
         @Override

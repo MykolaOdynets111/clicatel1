@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
         },
         monochrome = true,
         features ="src/test/java/scenario/standardbilling/satisfactionsurvey",
-        glue ="steps")
+        glue = "steps")
 
 public class RunSurveyTest extends AbstractTestNGCucumberTests {
 

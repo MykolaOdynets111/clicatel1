@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
         },
         monochrome = true,
         features ="src/test/java/scenario/generalbank/acceptance",
-        glue ="steps")
+        glue = "steps")
 public class RunAcceptanceTest extends AbstractTestNGCucumberTests {
 
     @Override

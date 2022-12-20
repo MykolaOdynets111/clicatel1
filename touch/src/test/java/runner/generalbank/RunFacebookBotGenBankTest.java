@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
                 Path.FB_TESTS + "BotAnswerOnPost.feature",
                 Path.FB_TESTS + "BotAnswersDMFacebook.feature",
         },
-        glue ="steps")
+        glue = "steps")
 public class RunFacebookBotGenBankTest extends AbstractTestNGCucumberTests {
 
     @Override

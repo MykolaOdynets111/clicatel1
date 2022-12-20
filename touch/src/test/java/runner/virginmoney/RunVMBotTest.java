@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
         },
         monochrome = true,
         features ="src/test/java/scenario/virginmoney/touch/botflows",
-        glue ="steps")
+        glue = "steps")
 public class RunVMBotTest extends AbstractTestNGCucumberTests {
 
     @Override
