@@ -310,19 +310,19 @@ public class TicketsSteps extends AbstractAgentSteps {
 
     @Then("^(.*) checks initial ticket count is displayed in the (.*) ticket tab on (.*)$")
     public void getInitialTicketsCount(String agent, String ticketType, String platformType) {
-        initialTicketsCount = getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(platformType, ticketType);
+        initialTicketsCount = getTicketsCountLeftMenu(agent, ticketType, platformType);
     }
 
     @Then("^(.*) checks final ticket count value in the (.*) ticket tab on (.*)$")
     public void verifyFinalTicketsCount(String agent, String ticketType, String platformType) {
-        int finalTicketsCount = getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(platformType, ticketType);
+        int finalTicketsCount = getTicketsCountLeftMenu(agent, ticketType, platformType);
         Assert.assertTrue(finalTicketsCount== (initialTicketsCount + 1),
                 "Final ticket count is incorrect");
     }
 
     @Then("^(.*) checks ticket count value in the (.*) ticket tab is (.*) on (.*)$")
     public void verifyTicketsCount(String agent, String ticketType, int expectedTicketCount, String platformType) {
-        int ticketsCount = getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(platformType, ticketType);
+        int ticketsCount = getTicketsCountLeftMenu(agent, ticketType, platformType);
         Assert.assertTrue(ticketsCount == expectedTicketCount,
                 "Ticket count is incorrect");
     }
@@ -345,4 +345,9 @@ public class TicketsSteps extends AbstractAgentSteps {
         Assert.assertTrue(getTicketsTable(agent).getTicketsCount() == expectedTicketCount,
                 "Ticket count in middle pane is incorrect");
     }
+
+    public int getTicketsCountLeftMenu(String agent, String platformType, String ticketType) {
+        return getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(platformType, ticketType);
+    }
+
 }
