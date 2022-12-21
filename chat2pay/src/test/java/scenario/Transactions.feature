@@ -10,7 +10,8 @@ Feature: Transaction execution
     And User gets paymentGatewaySettingsId for widget
     And User gets application Id for widget
     And User gets activation key for widget
-    Then User can get a payment link
+    Then User can get a correct payment link
+
 
 
 

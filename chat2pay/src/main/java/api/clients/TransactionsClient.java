@@ -11,6 +11,7 @@ import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.testng.Assert;
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +60,8 @@ public class TransactionsClient extends BasedAPIClient {
         RequestSpecification requestSpecification = createGETRequestSpecification(testData.get("auth"));
         Response response = RestAssured.given().spec(requestSpecification).get(c2pUrl + "/v2/widget/" +
                 testData.get("widgetId") + "/payment-gateway-settings");
-        String paymentGatewaySettingsId = response.jsonPath().getString("paymentGatewaySettingsId");
+        String paymentGatewaySettingsId = response.jsonPath().getString("paymentGatewaySettingsId")
+                .replace("[", "").replace("]", "");
         testData.put("paymentGatewaySettingsId", paymentGatewaySettingsId);
     }
 
@@ -67,7 +69,9 @@ public class TransactionsClient extends BasedAPIClient {
         RequestSpecification requestSpecification = createGETRequestSpecification(testData.get("auth"));
         Response response = RestAssured.given().spec(requestSpecification).get(c2pUrl + "/v2/widget/" +
                 testData.get("widgetId") + "/integration");
-        String applicationID = response.jsonPath().getString("integrator.applicationUuid");
+        String applicationID = response.jsonPath().getString("integrator.applicationUuid")
+                .replace("[", "").replace("]", "");
+        ;
         testData.put("applicationID", applicationID);
     }
 
@@ -85,7 +89,9 @@ public class TransactionsClient extends BasedAPIClient {
         requestSpecification.headers("Authorization", testData.get("activationKey"));
         Response response = RestAssured.given().spec(requestSpecification).post(c2pUrl + "/api/v2/chat-2-pay");
         testData.put("paymentLink", response.jsonPath().getString("paymentLink"));
-        System.out.println(response.jsonPath().getString("paymentLink"));
+        Assert.assertEquals(response.statusCode(), 200,
+                "Creating payment link via API was not successful\n"
+                        + response.statusCode() + "\n" + "rest body: " + response.getBody().asString());
     }
 
 
@@ -137,7 +143,7 @@ public class TransactionsClient extends BasedAPIClient {
                 .paymentGatewaySettingsId(testData.get("paymentGatewaySettingsId"))
                 .returnPaymentLink(true)
                 .paymentReviewAutoReversal(false)
-                .applicationId(testData.get("applicationId"))
+                .applicationId(testData.get("applicationID"))
                 .transactionType("authorization")
                 .build();
         return objectMapper.writeValueAsString(body);

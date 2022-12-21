@@ -39,7 +39,7 @@ public class APISteps {
         TransactionsClient.getActivationKey();
     }
 
-    @Then("User can get a payment link")
+    @Then("User can get a correct payment link")
     public void userCanGetAPaymentLink() throws JsonProcessingException {
         TransactionsClient.userCanGetAPaymentLink();
     }
