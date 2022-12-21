@@ -27,7 +27,7 @@ public class BasedAPIClient {
         c2pUrl = getProperty("c2p.base.url");
         accountsEndpoint = getProperty("unity.accounts");
         signInEndpoint = getProperty("unity.signin");
-        widgetsEndpoint = getProperty("c2p.widgets");
+        widgetsEndpoint = getProperty("c2p.widgets") ;
         eMail =getProperty("email");
         password =getProperty("password");
     }

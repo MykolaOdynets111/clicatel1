@@ -23,10 +23,15 @@ import static io.restassured.http.ContentType.JSON;
 
 public class TransactionsClient extends BasedAPIClient {
 
+    private static final String PAYMENT_LINK = "paymentLink";
+    private static final String WIDGET_ID = "widgetId";
+    private static final String TOKEN = "token";
+    private static final String PAYMENT_GATEWAY_SETTINGS_ID = "paymentGatewaySettingsId";
+
+
     private static ObjectMapper objectMapper = new ObjectMapper();
 
     private static Map<String, String> testData = new HashMap<>();
-
 
     public static void fetchTokenAndAccountIDPOST() throws JsonProcessingException {
         String body = createCredentialsBody();
@@ -34,51 +39,50 @@ public class TransactionsClient extends BasedAPIClient {
         Response response = RestAssured.given().spec(requestSpecification).post(baseUrl + accountsEndpoint);
         AccountsResponse accountsResponse = objectMapper.readValue(response.getBody().asString(), AccountsResponse.class);
         testData.put("id", accountsResponse.getAccounts().get(0).getId());
-        testData.put("token", accountsResponse.getToken());
+        testData.put(TOKEN, accountsResponse.getToken());
     }
 
     public static void logInToUnity() throws JsonProcessingException {
         String body = createLogInBody();
         RequestSpecification requestSpecification = createPOSTRequestSpecification(body);
         Response response = RestAssured.given().spec(requestSpecification).post(baseUrl + signInEndpoint);
-        testData.put("auth", response.jsonPath().getString("token"));
+        testData.put("auth", response.jsonPath().getString(TOKEN));
     }
 
     public static void getWidgetId(String widgetName) {
         RequestSpecification requestSpecification = createGETRequestSpecification(testData.get("auth"));
-        Response response = RestAssured.given().spec(requestSpecification).get(c2pUrl + widgetsEndpoint);
+        Response response = RestAssured.given().spec(requestSpecification).get(c2pUrl + widgetsEndpoint + "all?detailed=false&page=0&size=20");
         List<Map<String, String>> widgets = response.getBody().jsonPath().getList("content");
-        String widgetId = null;
+        String newWidgetId = null;
         Optional<Map<String, String>> widget = widgets.stream().filter(w -> w.get("name").equals(widgetName)).findFirst();
         if (widget.isPresent()) {
-            widgetId = widget.get().get("id");
+            newWidgetId = widget.get().get("id");
         }
-        testData.put("widgetId", widgetId);
+        testData.put(WIDGET_ID, newWidgetId);
     }
 
     public static void getPaymentGatewaySettingsId() {
         RequestSpecification requestSpecification = createGETRequestSpecification(testData.get("auth"));
-        Response response = RestAssured.given().spec(requestSpecification).get(c2pUrl + "/v2/widget/" +
-                testData.get("widgetId") + "/payment-gateway-settings");
-        String paymentGatewaySettingsId = response.jsonPath().getString("paymentGatewaySettingsId")
+        Response response = RestAssured.given().spec(requestSpecification).get(c2pUrl + widgetsEndpoint +
+                testData.get(WIDGET_ID) + "/payment-gateway-settings");
+        String paymentGatewaySettingsId = response.jsonPath().getString(PAYMENT_GATEWAY_SETTINGS_ID)
                 .replace("[", "").replace("]", "");
-        testData.put("paymentGatewaySettingsId", paymentGatewaySettingsId);
+        testData.put(PAYMENT_GATEWAY_SETTINGS_ID, paymentGatewaySettingsId);
     }
 
     public static void getApplicationId() {
         RequestSpecification requestSpecification = createGETRequestSpecification(testData.get("auth"));
-        Response response = RestAssured.given().spec(requestSpecification).get(c2pUrl + "/v2/widget/" +
-                testData.get("widgetId") + "/integration");
+        Response response = RestAssured.given().spec(requestSpecification).get(c2pUrl + widgetsEndpoint +
+                testData.get(WIDGET_ID) + "/integration");
         String applicationID = response.jsonPath().getString("integrator.applicationUuid")
                 .replace("[", "").replace("]", "");
-        ;
         testData.put("applicationID", applicationID);
     }
 
     public static void getActivationKey() {
         RequestSpecification requestSpecification = createGETRequestSpecification(testData.get("auth"));
         Response response = RestAssured.given().spec(requestSpecification).get(c2pUrl + "/v2/widget/" +
-                testData.get("widgetId") + "/api-keys");
+                testData.get(WIDGET_ID) + "/api-keys");
         String activationKey = response.jsonPath().getString("apiKey").replace("[", "").replace("]", "");
         testData.put("activationKey", activationKey);
     }
@@ -88,7 +92,11 @@ public class TransactionsClient extends BasedAPIClient {
         RequestSpecification requestSpecification = createPOSTRequestSpecification(body);
         requestSpecification.headers("Authorization", testData.get("activationKey"));
         Response response = RestAssured.given().spec(requestSpecification).post(c2pUrl + "/api/v2/chat-2-pay");
-        testData.put("paymentLink", response.jsonPath().getString("paymentLink"));
+        testData.put(PAYMENT_LINK, response.jsonPath().getString(PAYMENT_LINK));
+    }
+
+    public static void checkWorkingPaymentLink() {
+        Response response = RestAssured.given().get(testData.get(PAYMENT_LINK));
         Assert.assertEquals(response.statusCode(), 200,
                 "Creating payment link via API was not successful\n"
                         + response.statusCode() + "\n" + "rest body: " + response.getBody().asString());
@@ -97,7 +105,7 @@ public class TransactionsClient extends BasedAPIClient {
 
     private static String createLogInBody() throws JsonProcessingException {
         AuthBody body = AuthBody.builder()
-                .token(testData.get("token"))
+                .token(testData.get(TOKEN))
                 .accountId(testData.get("id"))
                 .build();
         return objectMapper.writeValueAsString(body);
@@ -140,7 +148,7 @@ public class TransactionsClient extends BasedAPIClient {
                 .totalAmount(100.0)
                 .timestamp("2021-04-27T17:35:58.000+0000")
                 .additionalData(additionalData)
-                .paymentGatewaySettingsId(testData.get("paymentGatewaySettingsId"))
+                .paymentGatewaySettingsId(testData.get(PAYMENT_GATEWAY_SETTINGS_ID))
                 .returnPaymentLink(true)
                 .paymentReviewAutoReversal(false)
                 .applicationId(testData.get("applicationID"))

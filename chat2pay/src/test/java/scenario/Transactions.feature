@@ -11,6 +11,9 @@ Feature: Transaction execution
     And User gets application Id for widget
     And User gets activation key for widget
     Then User can get a correct payment link
+    Then The payment link is working
+
+
 
 
 
