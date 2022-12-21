@@ -1,17 +1,16 @@
 package steps;
 
 import clients.Endpoints;
-import datamodelsclasses.Providers.ProviderState;
+import datamodelsclasses.providers.ProviderState;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.testng.Assert;
-import datamodelsclasses.Providers.GetProvider;
-import org.testng.asserts.SoftAssert;
+import datamodelsclasses.providers.GetProvider;
 import steps.unitysteps.AbstractUnitySteps;
 import api.ChatHubApiHelper;
+import validators.Validator;
 
-import java.util.List;
 import java.util.Map;
 
 import static abstractclasses.IntegrationsAbstractSteps.getIntegrationsPage;
@@ -46,24 +45,18 @@ public class IntegrationSteps extends AbstractUnitySteps {
     }
 
     @Given("User is able to GET providers state in API response")
-    public void GETProviderStateAPI(List<Map<String, String>> datatable) {
-        SoftAssert softAssert = new SoftAssert();
-        for (int i = 0; i < datatable.size(); i++) {
-            String providerId = datatable.get(i).get("i.ProviderID");
-            String url = format(Endpoints.PROVIDERS_STATE, providerId);
+    public void GETProviderStateAPI(Map<String, String> dataMap) {
 
-            int responseCode = Integer.parseInt(datatable.get(i).get("o.resposecode"));
-            if (responseCode == 200) {
-                ProviderState getProvider = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(ProviderState.class);
-                softAssert.assertEquals(getProvider.getId(), datatable.get(i).get("o.providerid"));
-                softAssert.assertEquals(getProvider.getName(), datatable.get(i).get("o.providername"));
-                softAssert.assertEquals(getProvider.getIsActive(), datatable.get(i).get("o.status"));
-                softAssert.assertAll();
-            } else {
-                String errorMessageText = datatable.get(i).get("o.errordescription");
-                Assert.assertTrue(ChatHubApiHelper.getChatHubQuery(url, responseCode).asString().contains(errorMessageText),
-                        "Error message is incorrect or not displayed");
-            }
+        String url = format(Endpoints.PROVIDERS_STATE, dataMap.get("providerID"));
+
+        int responseCode = Integer.parseInt(dataMap.get("responseCode"));
+        if (responseCode == 200) {
+            ProviderState expectedProviderState = new ProviderState(dataMap);
+            ProviderState getProvider = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(ProviderState.class);
+            Assert.assertEquals(expectedProviderState, getProvider, "Providers response is not as expected");
+        } else {
+            Validator.validatedErrorResponse(url, dataMap);
         }
+
     }
 }

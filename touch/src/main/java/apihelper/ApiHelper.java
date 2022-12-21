@@ -702,14 +702,12 @@ public class ApiHelper extends MainApi implements VerificationHelper {
 
     @NotNull
     protected static ResponseBody postTouchQuery(String tenantOrgName, String endpoint, Object body, String agent) {
-        endpoint = format(endpoint, getTenant(tenantOrgName).get("id"));
-        return postQuery(endpoint, body, getAccessToken(tenantOrgName, agent));
+        return postQuery(endpoint, body, getAccessToken(tenantOrgName, agent), 200);
     }
 
     @NotNull
     protected static ResponseBody getTouchQuery(String tenantOrgName, String endpoint) {
-        endpoint = format(endpoint, getTenant(tenantOrgName).get("id"));
-        return  getQuery(endpoint, getAccessToken(tenantOrgName, "main"));
+        return  getQuery(endpoint, getAccessToken(tenantOrgName, "main"), 200);
     }
 
     protected static Map<String, String> getTenant(String tenantOrgName) {
