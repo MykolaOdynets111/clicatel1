@@ -1,15 +1,20 @@
 package steps;
 
 import clients.Endpoints;
+import datamodelsclasses.providers.ProviderState;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.testng.Assert;
-import datamodelsclasses.Providers.GetProvider;
+import datamodelsclasses.providers.GetProvider;
 import steps.unitysteps.AbstractUnitySteps;
 import api.ChatHubApiHelper;
+import validators.Validator;
+
+import java.util.Map;
 
 import static abstractclasses.IntegrationsAbstractSteps.getIntegrationsPage;
+import static java.lang.String.format;
 
 public class IntegrationSteps extends AbstractUnitySteps {
 
@@ -30,13 +35,28 @@ public class IntegrationSteps extends AbstractUnitySteps {
                 "Integrations is First Card");
     }
 
-    @Given("User is able to GET providers in API response")
-    public void GETProviderAPI() {
-        GetProvider getProvider = ChatHubApiHelper.getChatHubQuery(Endpoints.ADMIN_PROVIDERS)
+    @Given("User is able to GET providers API response")
+    public void GETProviderAPI(int responseCode) {
+        GetProvider getProvider = ChatHubApiHelper.getChatHubQuery(Endpoints.ADMIN_PROVIDERS, responseCode)
                 .jsonPath().getList("", GetProvider.class).get(0);
 
-        //Move it to step definiation
-        Assert.assertNotNull(getProvider.getId());
+        Assert.assertEquals(getProvider.getId(), "");
         Assert.assertEquals(getProvider.getName(), "Zendesk Support");
+    }
+
+    @Given("User is able to GET providers state in API response")
+    public void GETProviderStateAPI(Map<String, String> dataMap) {
+
+        String url = format(Endpoints.PROVIDERS_STATE, dataMap.get("providerID"));
+
+        int responseCode = Integer.parseInt(dataMap.get("responseCode"));
+        if (responseCode == 200) {
+            ProviderState expectedProviderState = new ProviderState(dataMap);
+            ProviderState getProvider = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(ProviderState.class);
+            Assert.assertEquals(expectedProviderState, getProvider, "Providers response is not as expected");
+        } else {
+            Validator.validatedErrorResponse(url, dataMap);
+        }
+
     }
 }

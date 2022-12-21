@@ -6,50 +6,39 @@ import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
-import static org.junit.Assert.fail;
+import static org.testng.Assert.fail;
 
 public abstract class MainApi {
 
     @NotNull
-    protected static ResponseBody postQuery(String endpoint, Object body, String authToken) {
+    protected static ResponseBody postQuery(String endpoint, Object body, String authToken, int responseCode) {
         Response response = post(endpoint, body, authToken);
 
-        if (response.getStatusCode() != 200) {
-            fail("Couldn't post the value \n"
-                    + "Status code: " + response.statusCode() + "\n"
-                    + "Error message: " + response.getBody().asString());
-            return null;
-        } else {
-            return Objects.requireNonNull(response.getBody());
-        }
+        return  validate(response, responseCode);
     }
 
     @NotNull
-    protected static ResponseBody postQueryWithoutAuth(String endpoint, Object body) {
+    protected static ResponseBody postQueryWithoutAuth(String endpoint, Object body, int responseCode) {
         Response response = postWithoutAuth(endpoint, body);
 
-        if (response.getStatusCode() != 200) {
-            fail("Couldn't post the value \n"
-                    + "Status code: " + response.statusCode() + "\n"
-                    + "Error message: " + response.getBody().asString());
-            return null;
-        } else {
-            return Objects.requireNonNull(response.getBody());
-        }
+        return  validate(response, responseCode);
     }
 
     @NotNull
-    protected static ResponseBody getQuery(String endpoint, String authToken) {
+    protected static ResponseBody getQuery(String endpoint, String authToken, int responseCode) {
+
         Response response = get(endpoint, authToken);
 
-        if (response.getStatusCode() != 200) {
+        return validate(response, responseCode);
+    }
+
+    private static ResponseBody validate(Response response, int responseCode){
+        if (response.getStatusCode() != responseCode) {
             fail("Couldn't get the value \n"
                     + "Status code: " + response.statusCode() + "\n"
                     + "Error message: " + response.getBody().asString());
-            return null;
-        } else {
-            return Objects.requireNonNull(response.getBody());
         }
+        return Objects.requireNonNull(response.getBody());
     }
 
     private static Response post(String endpoint, Object body, String authToken) {

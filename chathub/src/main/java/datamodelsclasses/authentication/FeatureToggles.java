@@ -1,4 +1,4 @@
-package datamodelsclasses.Authentication;
+package datamodelsclasses.authentication;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
