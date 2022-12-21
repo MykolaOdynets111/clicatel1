@@ -3,4 +3,6 @@ include ':mc2'
 include ':touch'
 include ':shared'
 include 'chat2pay'
+include 'chathub'
+include 'unity'
 

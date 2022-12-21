@@ -20,14 +20,14 @@ public class SupervisorAndTicketsPart extends AbstractUIElement {
     @FindBy(xpath="//div[@class='chats-list live-chats-list']")
     private  WebElement liveChatsInfo;
 
-    private final String closedTicketsCountCSS = "[href='/supervisor/tickets/%s/'] .cl-chats-group-item__count";
+    private final String ticketsCountCSS = "[href='/%s/tickets/%s/'] .cl-chats-group-item__count";
 
     public String getFilterByDefaultName(){
         return getTextFromElem(this.getCurrentDriver(), defaultFilter,5,"Default filter").trim();
     }
 
-    public int getTicketsCount(String filterType){
-        String locator = String.format(closedTicketsCountCSS, filterType);
+    public int getTicketsCount(String platformType, String filterType){
+        String locator = String.format(ticketsCountCSS, platformType, filterType);
         WebElement element = waitForElementToBePresentByCss(this.getCurrentDriver(), locator, 10);
         return Integer.parseInt(getTextFromElem(this.getCurrentDriver(), element,5,"Default filter").trim());
     }
@@ -37,8 +37,17 @@ public class SupervisorAndTicketsPart extends AbstractUIElement {
     }
 
     public void selectFilter(String type) {
-        filters.stream().filter(a -> a.getText().trim().equalsIgnoreCase(type)).findFirst()
-                .orElseThrow(() -> new AssertionError("Cannot find " + type + " conversation type filter")).click();
+        waitForElementsToBeVisible(this.getCurrentDriver(), filters, 10);
+        if (filters.stream().filter(a -> a.getText().trim().equalsIgnoreCase(type)).collect(Collectors.toList()).size() > 0) {
+            filters.stream().filter(a -> a.getText().trim().equalsIgnoreCase(type)).findFirst()
+                    .orElseThrow(() -> new AssertionError("Cannot find " + type + " conversation type filter")).click();
+        } else {
+            getCurrentDriver().navigate().refresh();
+
+            waitForElementsToBeVisible(this.getCurrentDriver(), filters, 10);
+            filters.stream().filter(a -> a.getText().trim().equalsIgnoreCase(type)).findFirst()
+                    .orElseThrow(() -> new AssertionError("Cannot find " + type + " conversation type filter")).click();
+        }
     }
 
     private WebElement getFilter(String agentName) {

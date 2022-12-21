@@ -2,14 +2,15 @@ package apihelper;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
 
 import static java.lang.String.format;
 import static org.junit.Assert.fail;
 
 public class ApiHelperTenant extends ApiHelper {
 
-    public static Response getTenantConfig(String tenantOrgName) {
-        return getQuery(tenantOrgName, Endpoints.TENANT_CURRENT, "main");
+    public static ResponseBody getTenantConfig(String tenantOrgName) {
+        return getTouchQuery(tenantOrgName, Endpoints.TENANT_CURRENT);
     }
 
     public static void deleteTenantLogo(String tenantOrgName) {

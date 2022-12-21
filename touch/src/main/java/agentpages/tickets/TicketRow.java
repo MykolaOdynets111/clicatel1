@@ -2,6 +2,7 @@ package agentpages.tickets;
 
 
 import abstractclasses.AbstractWidget;
+import datetimeutils.DateTimeHelper;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,6 +12,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+
+import static datetimeutils.DateTimeHelper.parseDate;
 
 
 public class TicketRow extends AbstractWidget {
@@ -39,19 +42,11 @@ public class TicketRow extends AbstractWidget {
     @FindBy(css = ".cl-table-cell--endedDate")
     private WebElement endDate;
 
-    @FindBy(css = ".cl-user-details-cell__top-section svg")
-    private WebElement channelIcon;
-
-    private String scrollAreaCss = "[data-testid='chatslist-scroll-container'] [class='iScrollVerticalScrollbar iScrollLoneScrollbar']";
-
     @FindBy(css = ".cl-table-cell--channelType svg")
     private WebElement channelImg;
 
     @FindBy(xpath = ".//a[contains(text(), 'Open')]")
     private List<WebElement> openBtns;
-
-    @FindBy(xpath = ".//a[contains(text(), 'Open')]")
-    private WebElement acceptButton;
 
     @FindBy(xpath = ".//button[contains(text(), 'Assign')]")
     private WebElement assignButton;
@@ -60,84 +55,85 @@ public class TicketRow extends AbstractWidget {
         super(element);
     }
 
-    public TicketRow setCurrentDriver(WebDriver currentDriver){
+    public TicketRow setCurrentDriver(WebDriver currentDriver) {
         this.currentDriver = currentDriver;
         return this;
     }
 
-    public void selectCheckbox(){
-       clickElem(this.getCurrentDriver(), checkbox,0, "Ticket checkbox");
+    public void selectCheckbox() {
+        clickElem(this.getCurrentDriver(), checkbox, 0, "Ticket checkbox");
     }
 
-    public String getName(){
-        return  userName.getText();
+    public String getName() {
+        return userName.getText();
     }
 
-    public String getCurrentAgent(){
+    public String getCurrentAgent() {
         return getTextFromElem(this.getCurrentDriver(), currentAgent, 5, "Current agent");
     }
 
-    public LocalDateTime getOpenDate(){
+    public String getCurrentChannel() {
+        return getAttributeFromElem(this.getCurrentDriver(), channelImg, 5, "Current channel", "name");
+    }
+
+    public LocalDateTime getOpenDate() {
         String stringDate = getTextFromElem(this.getCurrentDriver(), startDate, 5, "Date cell").trim();
         return parseDate(stringDate);
     }
 
-    public LocalDateTime getEndDate(){
+    public String getOpenDateText() {
+        return getTextFromElem(this.getCurrentDriver(), startDate, 5, "Start Date cell").trim();
+    }
+
+    public String getEndDateText() {
+        return getTextFromElem(this.getCurrentDriver(), endDate, 5, "End Date cell").trim();
+    }
+
+    public String getDateByName(String dateType) {
+        String dateText = null;
+        if (dateType.equalsIgnoreCase("start date")) {
+            dateText = getOpenDateText();
+        } else if (dateType.equalsIgnoreCase("end date")) {
+            dateText = getEndDateText();
+        }
+        return dateText;
+    }
+
+    public LocalDateTime getEndDate() {
         String stringDate = getTextFromElem(this.getCurrentDriver(), endDate, 5, "Date cell").trim();
         return parseDate(stringDate);
     }
 
-    private LocalDateTime parseDate(String stringDate){
-
-        if(stringDate.contains("Yesterday")){
-            return LocalDateTime.now().minusDays(1);
-        } else if(stringDate.contains("Today")) {
-            return LocalDateTime.now();
-        }
-
-        if (stringDate.contains("am")) {
-            stringDate = stringDate.replace("am","AM");
-        } else {
-            stringDate = stringDate.replace("pm","PM");
-        }
-        DateTimeFormatter formater = DateTimeFormatter.ofPattern("dd MMM. yyyy 'at' h:mm a", Locale.US);
-        return LocalDateTime.parse(stringDate, formater);
-    }
-
-    public void clickOnUserName(){
+    public void clickOnUserName() {
         clickElem(this.getCurrentDriver(), userName, 5, "User Name");
     }
 
-    public void hoverOnUserName(){
+    public void hoverOnUserName() {
         hoverElem(this.getCurrentDriver(), userName, 5, "User Name");
     }
 
-    public String getLocation(){
-        return  getTextFromElem(this.getCurrentDriver(), location, 2, "Location");
+    public String getLocation() {
+        return getTextFromElem(this.getCurrentDriver(), location, 2, "Location");
     }
 
-    public String getStatus(){
-        return  getTextFromElem(this.getCurrentDriver(), status, 2, "Status");
+    public String getStatus() {
+        return getTextFromElem(this.getCurrentDriver(), status, 2, "Status");
     }
 
-    public String getPhone(){
-        return  getTextFromElem(this.getCurrentDriver(), phone, 2, "Phone");
+    public String getPhone() {
+        return getTextFromElem(this.getCurrentDriver(), phone, 2, "Phone");
     }
 
     public boolean isValidChannelImg(String channelPictureName) {
-        File image = new File(System.getProperty("user.dir")+"/src/test/resources/adaptericons/"+channelPictureName+".png");
+        File image = new File(System.getProperty("user.dir") + "/src/test/resources/adaptericons/" + channelPictureName + ".png");
         return isWebElementEqualsImage(this.getCurrentDriver(), channelImg, image);
     }
 
-    public void openTicket(int ticketNum){
-        clickElem(this.getCurrentDriver(),openBtns.get(ticketNum-1), 5, "openTicketBtn");
+    public void openTicket(int ticketNum) {
+        clickElem(this.getCurrentDriver(), openBtns.get(ticketNum - 1), 5, "openTicketBtn");
     }
 
-    public void acceptTicket(){
-        clickElem(this.getCurrentDriver(),acceptButton, 5, "Accept Button");
-    }
-
-    public boolean assignManualButtonVisibility(){
+    public boolean assignManualButtonVisibility() {
         return isElementRemoved(this.getCurrentDriver(), assignButton, 5);
     }
 }

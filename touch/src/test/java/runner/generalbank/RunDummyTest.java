@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
         plugin={"pretty", "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"},
         monochrome = true,
         features = "touch/src/test/java/scenario/generalbank/DummyTestForBuildOnGitlab.feature",
-        glue ="steps")
+        glue = "steps")
 public class RunDummyTest extends AbstractTestNGCucumberTests {
 
     @Override

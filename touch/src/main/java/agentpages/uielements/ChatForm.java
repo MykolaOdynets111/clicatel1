@@ -138,7 +138,7 @@ public class ChatForm extends AbstractUIElement {
 
     public ChatForm clickSendButton() {
         clickElem(this.getCurrentDriver(), submitMessageButton, 2, "Send Message");
-    return this;
+        return this;
     }
 
     public boolean isSendButtonEnabled() {

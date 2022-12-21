@@ -117,6 +117,9 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = ".cl-agent-notifications-row-buttons-time")
     private WebElement bellNotificationTime;
 
+    @FindBy(css = ".bulk-mode-popup-message")
+    private WebElement bulkChatPopUpMessage;
+
     private DeleteCRMConfirmationPopup deleteCRMConfirmationPopup;
     private EditCRMTicketWindow editCRMTicketWindow;
     private CRMTicketContainer crmTicketContainer;

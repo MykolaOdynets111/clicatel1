@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
         },
         monochrome = true,
         features ="src/test/java/scenario/generalbank/twitter",
-        glue ="steps")
+        glue = "steps")
 public class RunTwitterGenBankTest extends AbstractTestNGCucumberTests {
 
     @Override

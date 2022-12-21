@@ -20,6 +20,11 @@ public abstract class AgentAbstractPage implements WebActions, ActionsHelper, JS
         HtmlElementLoader.populatePageObject(this, currentDriver);
     }
 
+    public AgentAbstractPage() {
+        currentDriver = DriverFactory.getTouchDriverInstance();
+        HtmlElementLoader.populatePageObject(this, currentDriver);
+    }
+
     public boolean waitForLoadingInLeftMenuToDisappear(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
         try{
             try {

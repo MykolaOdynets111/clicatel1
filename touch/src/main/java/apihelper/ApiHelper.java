@@ -1,5 +1,6 @@
 package apihelper;
 
+import api.MainApi;
 import datamanager.*;
 import datamanager.jacksonschemas.*;
 import datamanager.jacksonschemas.chathistory.ChatHistory;
@@ -27,7 +28,7 @@ import static apihelper.ApiHelperAgent.getAgentId;
 import static java.lang.String.format;
 import static org.junit.Assert.fail;
 
-public class ApiHelper implements VerificationHelper {
+public class ApiHelper extends MainApi implements VerificationHelper {
 
     private static List<HashMap> tenantsInfo = null;
     public static ThreadLocal<String> clientProfileId = new ThreadLocal<>();
@@ -155,7 +156,7 @@ public class ApiHelper implements VerificationHelper {
         String tenantOrgName = Tenants.getTenantUnderTestOrgName();
         String endpoint = Endpoints.INTERNAL_AUTORESPONDER_CONTROLLER;
 
-        return Objects.requireNonNull(getQueryFor(tenantOrgName, endpoint))
+        return getTouchQuery(tenantOrgName, endpoint)
                 .jsonPath().getList("", AutoResponderMessage.class);
     }
 
@@ -576,7 +577,7 @@ public class ApiHelper implements VerificationHelper {
                         "  \"pageType\": \"AGENT_VIEW\"\n" +
                         "}";
 
-        return getPostQueryFor(Tenants.getTenantUnderTestOrgName(),
+        return postTouchQuery(Tenants.getTenantUnderTestOrgName(),
                 format(Endpoints.ACTIVE_CHATS_BY_AGENT, ConfigManager.getEnv()),body,agent);
     }
 
@@ -700,48 +701,15 @@ public class ApiHelper implements VerificationHelper {
     }
 
     @NotNull
-    protected static ResponseBody getPostQueryFor(String tenantOrgName, String endpoint, Object body, String agent) {
-        Response response = postQuery(tenantOrgName, endpoint, body, agent);
-
-        if (response.getStatusCode() != 200) {
-            fail("Couldn't post the value \n"
-                    + "Status code: " + response.statusCode() + "\n"
-                    + "TenantOrgName: " + tenantOrgName + "\n"
-                    + "Error message: " + response.getBody().asString());
-            return null;
-        } else {
-            return Objects.requireNonNull(response.getBody());
-        }
+    protected static ResponseBody postTouchQuery(String tenantOrgName, String endpoint, Object body, String agent) {
+        endpoint = format(endpoint, getTenant(tenantOrgName).get("id"));
+        return postQuery(endpoint, body, getAccessToken(tenantOrgName, agent));
     }
 
     @NotNull
-    protected static ResponseBody getQueryFor(String tenantOrgName, String endpoint) {
-        Response response = getQuery(tenantOrgName, endpoint, "main");
-
-        if (response.getStatusCode() != 200) {
-            fail("Couldn't get the value \n"
-                    + "Status code: " + response.statusCode() + "\n"
-                    + "TenantOrgName: " + tenantOrgName + "\n"
-                    + "Error message: " + response.getBody().asString());
-            return null;
-        } else {
-            return Objects.requireNonNull(response.getBody());
-        }
-    }
-
-    protected static Response postQuery(String tenantOrgName, String endpoint, Object body, String agent) {
-        return RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .header("Authorization", getAccessToken(tenantOrgName, agent))
-                .body(body)
-                .post(format(endpoint, getTenant(tenantOrgName).get("id")));
-    }
-
-    protected static Response getQuery(String tenantOrgName, String endpoint, String agent) {
-        return RestAssured.given().log().all()
-                .accept(ContentType.JSON)
-                .header("Authorization", getAccessToken(tenantOrgName, agent))
-                .get(format(endpoint, tenantOrgName));
+    protected static ResponseBody getTouchQuery(String tenantOrgName, String endpoint) {
+        endpoint = format(endpoint, getTenant(tenantOrgName).get("id"));
+        return  getQuery(endpoint, getAccessToken(tenantOrgName, "main"));
     }
 
     protected static Map<String, String> getTenant(String tenantOrgName) {

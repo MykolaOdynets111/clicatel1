@@ -26,4 +26,4 @@ Feature: Dashboard :: Settings :: Preferences
     When Agent click on new conversation request from touch
     And Agent click "End chat" button
     Then End chat popup is not shown for Agent
-    And Chat from orca channel is absent in chats list
+    And Agent should not see from user chat in agent desk from orca

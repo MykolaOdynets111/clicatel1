@@ -13,7 +13,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 public interface WebActions extends WebWait {
 
@@ -36,6 +39,14 @@ public interface WebActions extends WebWait {
             waitForElementToBeClickableByXpath(driver, xpath, wait).click();
         } catch (TimeoutException | NoSuchElementException e) {
             Assert.fail("Cannot click '" + elemName + "' because button is not clickable.");
+        }
+    }
+
+    default void switchToFrameByXpath(WebDriver driver, WebElement element, int wait, String elemName) {
+        try {
+            waitForFrameToBeAvailableAndSwitchToIt(driver, element, wait);
+        } catch (TimeoutException | NoSuchElementException e) {
+            Assert.fail("Cannot switch to '" + elemName + "' because element is not available.");
         }
     }
 

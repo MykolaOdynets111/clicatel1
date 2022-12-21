@@ -18,7 +18,7 @@ import static runner.dotcontrol.Path.PATH;
                 PATH + "DotControlInvalidInitCall.feature",
                 PATH + "DotControlMessaging.feature"
         },
-        glue ="steps")
+        glue = "steps")
 public class PullRequestTest extends AbstractTestNGCucumberTests {
 
     @Override

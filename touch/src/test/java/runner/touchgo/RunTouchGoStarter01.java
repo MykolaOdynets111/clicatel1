@@ -14,7 +14,7 @@ import org.testng.annotations.Test;
                 Path.NEW_TENANT_STARTER + "01ProvidingBilingDetailsForNewAccount.feature",
                 Path.NEW_TENANT_STARTER + "01CreateNewAgent.feature"
                 },
-        glue ="steps")
+        glue = "steps")
 public class RunTouchGoStarter01 extends AbstractTestNGCucumberTests {
 
     @Override

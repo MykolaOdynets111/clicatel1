@@ -71,5 +71,4 @@ public class Event {
 //        this.setSize(FileUtils.sizeOf(file));
         this.setRef(file.getAbsolutePath());
     }
-
 }

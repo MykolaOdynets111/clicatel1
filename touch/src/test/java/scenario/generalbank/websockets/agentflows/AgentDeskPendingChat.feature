@@ -17,12 +17,11 @@ Feature: Pending chats :: Chatdesk
     And Agent click on new conversation request from orca
     And Agent click 'Flag chat' button
     And Agent sees 'flag' icon in this chat
-    And Agent checks visual indicator with text This chat has been flagged by GBD Main is shown during 2 seconds
+    And Agent view the visual indicator "This chat has been flagged by " agent name and timestamp in the conversation area
     And Agent click 'Pending On' chat button
-    Then Agent click on new conversation request from orca
-    And Agent checks visual indicator with text This chat has been marked as live chat by GBD Main is shown during 2 seconds
+    Then Agent view the visual indicator "This chat has been marked as live chat by " agent name and timestamp in the conversation area
     And Agent click 'Unflag chat' button
-    And Agent checks visual indicator with text This chat has been un-flagged by GBD Main is shown during 2 seconds
+    Then Agent view the visual indicator "This chat has been un-flagged by " agent name and timestamp in the conversation area
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2028")
   Scenario: CD :: Agent Desk :: Pending Chat :: Verify if flagged pending chat can become a flagged live chat when a pending chat becomes a live chat after User message

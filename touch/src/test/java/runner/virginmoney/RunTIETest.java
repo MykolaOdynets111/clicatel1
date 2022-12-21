@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
         },
         monochrome = true,
         features ="src/test/java/scenario/virginmoney/tie",
-        glue ="steps")
+        glue = "steps")
 public class RunTIETest extends AbstractTestNGCucumberTests {
 
     @Override

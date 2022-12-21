@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
         monochrome = true,
         features = {
                 Path.CLOSE_ACCOUNT + "02ClosingAccount.feature"},
-        glue ="steps")
+        glue = "steps")
 public class RunTouchGoCloseAccount02 extends AbstractTestNGCucumberTests {
 
 
