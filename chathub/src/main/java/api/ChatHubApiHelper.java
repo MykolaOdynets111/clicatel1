@@ -26,8 +26,9 @@ public class ChatHubApiHelper extends MainApi {
         credentials.put("email", Credentials.DEMO_CHAT_2_PAY_USER.getUsername());
         credentials.put("password", Credentials.DEMO_CHAT_2_PAY_USER.getPassword());
         //Get Token and ID
-        String token = postQueryWithoutAuth(Endpoints.AUTH_ACCOUNTS, credentials,200).as(GetAuthToken.class).getToken();
-        String accountId = postQueryWithoutAuth(Endpoints.AUTH_ACCOUNTS, credentials,200).as(GetAuthToken.class).accounts.get(0).id;
+        GetAuthToken response = postQueryWithoutAuth(Endpoints.AUTH_ACCOUNTS, credentials,200).as(GetAuthToken.class);
+        String token = response.getToken();
+        String accountId = response.accounts.get(0).id;
         Map<String, Object> body = new HashMap<>();
         body.put("token", token);
         body.put("accountId", accountId);

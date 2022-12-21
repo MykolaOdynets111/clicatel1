@@ -1,4 +1,4 @@
-package datamodelsclasses.validatebjects;
+package api.validatebjects;
 
 import lombok.Getter;
 

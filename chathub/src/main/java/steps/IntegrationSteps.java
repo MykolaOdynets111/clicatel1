@@ -1,21 +1,23 @@
 package steps;
 
+import api.MainApi;
 import clients.Endpoints;
 import datamodelsclasses.providers.ProviderState;
+import datamodelsclasses.validator.Validator;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.testng.Assert;
 import datamodelsclasses.providers.GetProvider;
 import api.ChatHubApiHelper;
-import validators.Validator;
+
 
 import java.util.Map;
 
 import static abstractclasses.IntegrationsAbstractSteps.getIntegrationsPage;
 import static java.lang.String.format;
 
-public class IntegrationSteps  {
+public class IntegrationSteps  extends MainApi {
 
     @And("I click on Zendesk Integrations Card")
     public void openIntegrationsCard() {
@@ -54,6 +56,7 @@ public class IntegrationSteps  {
             ProviderState getProvider = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(ProviderState.class);
             Assert.assertEquals(expectedProviderState, getProvider, "Providers response is not as expected");
         } else {
+
             Validator.validatedErrorResponse(url, dataMap);
         }
 
