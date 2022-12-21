@@ -30,19 +30,19 @@ public class TransactionsHelper extends BasedAPIHelper {
     private static Map<String, String> testData = new HashMap<>();
 
     public static void fetchTokenAndAccountIDPOST() throws JsonProcessingException {
-        ResponseBody responseBody = postQueryWithoutAuth(baseUrl + accountsEndpoint, createCredentialsBody());
+        ResponseBody responseBody = postQueryWithoutAuth(baseUrl + accountsEndpoint, createCredentialsBody(), 200);
         AccountsResponse accountsResponse = objectMapper.readValue(responseBody.asString(), AccountsResponse.class);
         testData.put("id", accountsResponse.getAccounts().get(0).getId());
         testData.put(TOKEN, accountsResponse.getToken());
     }
 
     public static void logInToUnity() throws JsonProcessingException {
-        ResponseBody responseBody = postQueryWithoutAuth(baseUrl + signInEndpoint, createLogInBody());
+        ResponseBody responseBody = postQueryWithoutAuth(baseUrl + signInEndpoint, createLogInBody(), 200);
         testData.put("auth", responseBody.jsonPath().getString(TOKEN));
     }
 
     public static void getWidgetId(String widgetName) {
-        ResponseBody responseBody = getQuery(c2pUrl + widgetsEndpoint + "all?detailed=false&page=0&size=20", testData.get("auth"));
+        ResponseBody responseBody = getQuery(c2pUrl + widgetsEndpoint + "all?detailed=false&page=0&size=20", testData.get("auth"), 200);
         List<Map<String, String>> widgets = responseBody.jsonPath().getList("content");
         String newWidgetId = null;
         Optional<Map<String, String>> widget = widgets.stream().filter(w -> w.get("name").equals(widgetName)).findFirst();
@@ -54,7 +54,7 @@ public class TransactionsHelper extends BasedAPIHelper {
 
     public static void getPaymentGatewaySettingsId() {
         ResponseBody responseBody = getQuery(c2pUrl + widgetsEndpoint +
-                testData.get(WIDGET_ID) + "/payment-gateway-settings", testData.get("auth"));
+                testData.get(WIDGET_ID) + "/payment-gateway-settings", testData.get("auth"), 200);
         String paymentGatewaySettingsId = responseBody.jsonPath().getString(PAYMENT_GATEWAY_SETTINGS_ID)
                 .replace("[", "").replace("]", "");
         testData.put(PAYMENT_GATEWAY_SETTINGS_ID, paymentGatewaySettingsId);
@@ -62,7 +62,7 @@ public class TransactionsHelper extends BasedAPIHelper {
 
     public static void getApplicationId() {
         ResponseBody responseBody = getQuery(c2pUrl + widgetsEndpoint +
-                testData.get(WIDGET_ID) + "/integration", testData.get("auth"));
+                testData.get(WIDGET_ID) + "/integration", testData.get("auth"), 200);
 
         String applicationID = responseBody.jsonPath().getString("integrator.applicationUuid")
                 .replace("[", "").replace("]", "");
@@ -71,13 +71,13 @@ public class TransactionsHelper extends BasedAPIHelper {
 
     public static void getActivationKey() {
         ResponseBody responseBody = getQuery(c2pUrl + "/v2/widget/" +
-                testData.get(WIDGET_ID) + "/api-keys", testData.get("auth"));
+                testData.get(WIDGET_ID) + "/api-keys", testData.get("auth"), 200);
         String activationKey = responseBody.jsonPath().getString("apiKey").replace("[", "").replace("]", "");
         testData.put("activationKey", activationKey);
     }
 
     public static void userCanGetAPaymentLink() throws JsonProcessingException {
-        ResponseBody responseBody = postQuery(c2pUrl + "/api/v2/chat-2-pay", createPaymentBody(), testData.get("activationKey"));
+        ResponseBody responseBody = postQuery(c2pUrl + "/api/v2/chat-2-pay", createPaymentBody(), testData.get("activationKey"), 201);
         testData.put(PAYMENT_LINK, responseBody.jsonPath().getString(PAYMENT_LINK));
     }
 
