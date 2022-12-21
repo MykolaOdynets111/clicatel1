@@ -1,4 +1,4 @@
-package api.steps;
+package steps;
 
 import api.clients.TransactionsHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -6,15 +6,17 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.util.Map;
+
 public class APISteps {
 
 
-    @Given("User fetch token and accountID for an existed account")
+    @Given("^User fetch token and accountID for an existed account$")
     public void fetchTokenAndAccountIDPOST() throws JsonProcessingException {
         TransactionsHelper.fetchTokenAndAccountIDPOST();
     }
 
-    @When("User is logged in to unity")
+    @When("^User is logged in to unity$")
     public void logInToUnity() throws JsonProcessingException {
         TransactionsHelper.logInToUnity();
     }
@@ -39,14 +41,24 @@ public class APISteps {
         TransactionsHelper.getActivationKey();
     }
 
-    @Then("^User can get a correct payment link$")
-    public void userCanGetAPaymentLink() throws JsonProcessingException {
+    @When("^User sets data in the payment body$")
+    public void setPaymentBody(Map<String, String> dataMap) throws JsonProcessingException {
+        TransactionsHelper.setPaymentBody(dataMap);
+    }
+
+    @Then("^User gets a correct payment link$")
+    public void userCanGetAPaymentLink() {
         TransactionsHelper.userCanGetAPaymentLink();
     }
 
-    @Then("^The payment link is working$")
-    public void checkWorkingPaymentLink() {
-        TransactionsHelper.checkWorkingPaymentLink();
+    @Then("^User gets an error for payment link creation$")
+    public void userCanNotGetAPaymentLink() {
+        TransactionsHelper.userCanNotGetAPaymentLink();
+    }
+
+    @Then("^The payment has (.*) status code$")
+    public void checkWorkingPaymentLink(int statusCode) {
+        TransactionsHelper.checkWorkingPaymentLink(statusCode);
     }
 
 }

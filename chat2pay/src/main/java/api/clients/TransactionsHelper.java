@@ -7,10 +7,7 @@ import api.models.request.PaymentBody;
 import api.models.response.AccountsResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
-import org.testng.Assert;
 
 import java.util.HashMap;
 import java.util.List;
@@ -76,16 +73,41 @@ public class TransactionsHelper extends BasedAPIHelper {
         testData.put("activationKey", activationKey);
     }
 
-    public static void userCanGetAPaymentLink() throws JsonProcessingException {
-        ResponseBody responseBody = postQuery(c2pUrl + "/api/v2/chat-2-pay", createPaymentBody(), testData.get("activationKey"), 201);
+    public static void userCanGetAPaymentLink() {
+        ResponseBody responseBody = postQuery(c2pUrl + "/api/v2/chat-2-pay", testData.get("paymentBody"), testData.get("activationKey"), 201);
         testData.put(PAYMENT_LINK, responseBody.jsonPath().getString(PAYMENT_LINK));
     }
 
-    public static void checkWorkingPaymentLink() {
-        Response response = RestAssured.given().get(testData.get(PAYMENT_LINK));
-        Assert.assertEquals(response.statusCode(), 200,
-                "Creating payment link via API was not successful\n"
-                        + response.statusCode() + "\n" + "rest body: " + response.getBody().asString());
+    public static void userCanNotGetAPaymentLink() {
+        ResponseBody responseBody = postQuery(c2pUrl + "/api/v2/chat-2-pay", testData.get("paymentBody"), testData.get("activationKey"), 400);
+        testData.put(PAYMENT_LINK, responseBody.jsonPath().getString(PAYMENT_LINK));
+    }
+
+    public static void checkWorkingPaymentLink(int statusCode) {
+        getQuery(testData.get(PAYMENT_LINK), testData.get("auth"), statusCode);
+    }
+
+    public static void setPaymentBody(Map<String, String> dataMap) throws JsonProcessingException {
+        AdditionalData additionalData = AdditionalData.builder()
+                .departmentId(dataMap.get("departmentId"))
+                .departmentName(dataMap.get("departmentName")).build();
+        PaymentBody body = PaymentBody.builder()
+                .channel(dataMap.get("channel"))
+                .to(dataMap.get("to"))
+                .currency(dataMap.get("currency"))
+                .orderNumber(dataMap.get("orderNumber"))
+                .subTotalAmount(dataMap.get("subTotalAmount"))
+                .taxAmount(dataMap.get("taxAmount"))
+                .totalAmount(dataMap.get("totalAmount"))
+                .timestamp(dataMap.get("timestamp"))
+                .additionalData(additionalData)
+                .paymentGatewaySettingsId(testData.get(PAYMENT_GATEWAY_SETTINGS_ID))
+                .returnPaymentLink(dataMap.get("returnPaymentLink"))
+                .paymentReviewAutoReversal(dataMap.get("paymentReviewAutoReversal"))
+                .applicationId(testData.get("applicationID"))
+                .transactionType(dataMap.get("transactionType"))
+                .build();
+        testData.put("paymentBody", objectMapper.writeValueAsString(body));
     }
 
     private static String createLogInBody() throws JsonProcessingException {
@@ -104,26 +126,4 @@ public class TransactionsHelper extends BasedAPIHelper {
         return objectMapper.writeValueAsString(body);
     }
 
-    private static String createPaymentBody() throws JsonProcessingException {
-        AdditionalData additionalData = AdditionalData.builder()
-                .departmentId("567")
-                .departmentName("Sales").build();
-        PaymentBody body = PaymentBody.builder()
-                .channel("sms")
-                .to("447938556403")
-                .currency("ZAR")
-                .orderNumber("001")
-                .subTotalAmount(100)
-                .taxAmount(0.0)
-                .totalAmount(100.0)
-                .timestamp("2021-04-27T17:35:58.000+0000")
-                .additionalData(additionalData)
-                .paymentGatewaySettingsId(testData.get(PAYMENT_GATEWAY_SETTINGS_ID))
-                .returnPaymentLink(true)
-                .paymentReviewAutoReversal(false)
-                .applicationId(testData.get("applicationID"))
-                .transactionType("authorization")
-                .build();
-        return objectMapper.writeValueAsString(body);
-    }
 }

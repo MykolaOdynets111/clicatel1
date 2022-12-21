@@ -42,13 +42,13 @@ public class PaymentBody {
     private String orderNumber;
 
     @JsonProperty("subTotalAmount")
-    private int subTotalAmount;
+    private String subTotalAmount;
 
     @JsonProperty("taxAmount")
-    private double taxAmount;
+    private String taxAmount;
 
     @JsonProperty("totalAmount")
-    private double totalAmount;
+    private String totalAmount;
 
     @JsonProperty("timestamp")
     private String timestamp;
@@ -60,10 +60,10 @@ public class PaymentBody {
     private String paymentGatewaySettingsId;
 
     @JsonProperty("returnPaymentLink")
-    private boolean returnPaymentLink;
+    private String returnPaymentLink;
 
     @JsonProperty("paymentReviewAutoReversal")
-    private boolean paymentReviewAutoReversal;
+    private String paymentReviewAutoReversal;
 
     @JsonProperty("applicationId")
     private String applicationId;
