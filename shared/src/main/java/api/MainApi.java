@@ -14,7 +14,7 @@ public abstract class MainApi {
     protected static ResponseBody postQuery(String endpoint, Object body, String authToken) {
         Response response = post(endpoint, body, authToken);
 
-        if (response.getStatusCode() != 200) {
+        if ((response.getStatusCode() != 200) && (response.getStatusCode() != 201)) {
             fail("Couldn't post the value \n"
                     + "Status code: " + response.statusCode() + "\n"
                     + "Error message: " + response.getBody().asString());

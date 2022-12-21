@@ -8,9 +8,8 @@ import api.models.response.AccountsResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
-import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
+import io.restassured.response.ResponseBody;
 import org.testng.Assert;
 
 import java.util.HashMap;
@@ -18,10 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static io.restassured.filter.log.LogDetail.ALL;
-import static io.restassured.http.ContentType.JSON;
-
-public class TransactionsClient extends BasedAPIClient {
+public class TransactionsHelper extends BasedAPIHelper {
 
     private static final String PAYMENT_LINK = "paymentLink";
     private static final String WIDGET_ID = "widgetId";
@@ -34,25 +30,20 @@ public class TransactionsClient extends BasedAPIClient {
     private static Map<String, String> testData = new HashMap<>();
 
     public static void fetchTokenAndAccountIDPOST() throws JsonProcessingException {
-        String body = createCredentialsBody();
-        RequestSpecification requestSpecification = createPOSTRequestSpecification(body);
-        Response response = RestAssured.given().spec(requestSpecification).post(baseUrl + accountsEndpoint);
-        AccountsResponse accountsResponse = objectMapper.readValue(response.getBody().asString(), AccountsResponse.class);
+        ResponseBody responseBody = postQueryWithoutAuth(baseUrl + accountsEndpoint, createCredentialsBody());
+        AccountsResponse accountsResponse = objectMapper.readValue(responseBody.asString(), AccountsResponse.class);
         testData.put("id", accountsResponse.getAccounts().get(0).getId());
         testData.put(TOKEN, accountsResponse.getToken());
     }
 
     public static void logInToUnity() throws JsonProcessingException {
-        String body = createLogInBody();
-        RequestSpecification requestSpecification = createPOSTRequestSpecification(body);
-        Response response = RestAssured.given().spec(requestSpecification).post(baseUrl + signInEndpoint);
-        testData.put("auth", response.jsonPath().getString(TOKEN));
+        ResponseBody responseBody = postQueryWithoutAuth(baseUrl + signInEndpoint, createLogInBody());
+        testData.put("auth", responseBody.jsonPath().getString(TOKEN));
     }
 
     public static void getWidgetId(String widgetName) {
-        RequestSpecification requestSpecification = createGETRequestSpecification(testData.get("auth"));
-        Response response = RestAssured.given().spec(requestSpecification).get(c2pUrl + widgetsEndpoint + "all?detailed=false&page=0&size=20");
-        List<Map<String, String>> widgets = response.getBody().jsonPath().getList("content");
+        ResponseBody responseBody = getQuery(c2pUrl + widgetsEndpoint + "all?detailed=false&page=0&size=20", testData.get("auth"));
+        List<Map<String, String>> widgets = responseBody.jsonPath().getList("content");
         String newWidgetId = null;
         Optional<Map<String, String>> widget = widgets.stream().filter(w -> w.get("name").equals(widgetName)).findFirst();
         if (widget.isPresent()) {
@@ -62,37 +53,32 @@ public class TransactionsClient extends BasedAPIClient {
     }
 
     public static void getPaymentGatewaySettingsId() {
-        RequestSpecification requestSpecification = createGETRequestSpecification(testData.get("auth"));
-        Response response = RestAssured.given().spec(requestSpecification).get(c2pUrl + widgetsEndpoint +
-                testData.get(WIDGET_ID) + "/payment-gateway-settings");
-        String paymentGatewaySettingsId = response.jsonPath().getString(PAYMENT_GATEWAY_SETTINGS_ID)
+        ResponseBody responseBody = getQuery(c2pUrl + widgetsEndpoint +
+                testData.get(WIDGET_ID) + "/payment-gateway-settings", testData.get("auth"));
+        String paymentGatewaySettingsId = responseBody.jsonPath().getString(PAYMENT_GATEWAY_SETTINGS_ID)
                 .replace("[", "").replace("]", "");
         testData.put(PAYMENT_GATEWAY_SETTINGS_ID, paymentGatewaySettingsId);
     }
 
     public static void getApplicationId() {
-        RequestSpecification requestSpecification = createGETRequestSpecification(testData.get("auth"));
-        Response response = RestAssured.given().spec(requestSpecification).get(c2pUrl + widgetsEndpoint +
-                testData.get(WIDGET_ID) + "/integration");
-        String applicationID = response.jsonPath().getString("integrator.applicationUuid")
+        ResponseBody responseBody = getQuery(c2pUrl + widgetsEndpoint +
+                testData.get(WIDGET_ID) + "/integration", testData.get("auth"));
+
+        String applicationID = responseBody.jsonPath().getString("integrator.applicationUuid")
                 .replace("[", "").replace("]", "");
         testData.put("applicationID", applicationID);
     }
 
     public static void getActivationKey() {
-        RequestSpecification requestSpecification = createGETRequestSpecification(testData.get("auth"));
-        Response response = RestAssured.given().spec(requestSpecification).get(c2pUrl + "/v2/widget/" +
-                testData.get(WIDGET_ID) + "/api-keys");
-        String activationKey = response.jsonPath().getString("apiKey").replace("[", "").replace("]", "");
+        ResponseBody responseBody = getQuery(c2pUrl + "/v2/widget/" +
+                testData.get(WIDGET_ID) + "/api-keys", testData.get("auth"));
+        String activationKey = responseBody.jsonPath().getString("apiKey").replace("[", "").replace("]", "");
         testData.put("activationKey", activationKey);
     }
 
     public static void userCanGetAPaymentLink() throws JsonProcessingException {
-        String body = createPaymentBody();
-        RequestSpecification requestSpecification = createPOSTRequestSpecification(body);
-        requestSpecification.headers("Authorization", testData.get("activationKey"));
-        Response response = RestAssured.given().spec(requestSpecification).post(c2pUrl + "/api/v2/chat-2-pay");
-        testData.put(PAYMENT_LINK, response.jsonPath().getString(PAYMENT_LINK));
+        ResponseBody responseBody = postQuery(c2pUrl + "/api/v2/chat-2-pay", createPaymentBody(), testData.get("activationKey"));
+        testData.put(PAYMENT_LINK, responseBody.jsonPath().getString(PAYMENT_LINK));
     }
 
     public static void checkWorkingPaymentLink() {
@@ -101,7 +87,6 @@ public class TransactionsClient extends BasedAPIClient {
                 "Creating payment link via API was not successful\n"
                         + response.statusCode() + "\n" + "rest body: " + response.getBody().asString());
     }
-
 
     private static String createLogInBody() throws JsonProcessingException {
         AuthBody body = AuthBody.builder()
@@ -117,21 +102,6 @@ public class TransactionsClient extends BasedAPIClient {
                 .password(password)
                 .build();
         return objectMapper.writeValueAsString(body);
-    }
-
-    private static RequestSpecification createPOSTRequestSpecification(String body) {
-        return new RequestSpecBuilder()
-                .setUrlEncodingEnabled(false)
-                .setBody(body)
-                .setContentType(JSON)
-                .log(ALL)
-                .build();
-    }
-
-    private static RequestSpecification createGETRequestSpecification(String authKey) {
-        return new RequestSpecBuilder()
-                .addHeader("Authorization", authKey)
-                .build();
     }
 
     private static String createPaymentBody() throws JsonProcessingException {

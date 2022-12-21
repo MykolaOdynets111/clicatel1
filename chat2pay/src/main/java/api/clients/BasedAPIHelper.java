@@ -1,6 +1,6 @@
 package api.clients;
 
-import io.restassured.response.Response;
+import api.MainApi;
 import lombok.Getter;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -8,10 +8,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import static utils.PropertiesReader.getProperty;
 
 @Getter
-public class BasedAPIClient {
+public class BasedAPIHelper extends MainApi {
 
-    public static AtomicReference<BasedAPIClient> basedAPIClient = new AtomicReference<>(new BasedAPIClient());
-    private Response response;
+    public static AtomicReference<BasedAPIHelper> basedAPIClient = new AtomicReference<>(new BasedAPIHelper());
     protected static String baseUrl;
     protected static String c2pUrl;
     protected static String accountsEndpoint;
