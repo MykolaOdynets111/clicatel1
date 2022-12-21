@@ -14,8 +14,8 @@ public class ProviderState{
     public String isActive;
 
     public ProviderState(Map<String,String> parameters) {
-        this.id = parameters.get("providerID");
-        this.name = parameters.get("providerName");
-        this.isActive = parameters.get("status");
+        this.id = parameters.get("i.o.providerID");
+        this.name = parameters.get("o.providerName");
+        this.isActive = parameters.get("o.status");
     }
 }

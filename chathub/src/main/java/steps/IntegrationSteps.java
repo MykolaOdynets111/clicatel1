@@ -7,7 +7,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.testng.Assert;
 import datamodelsclasses.providers.GetProvider;
-import steps.unitysteps.AbstractUnitySteps;
 import api.ChatHubApiHelper;
 import validators.Validator;
 
@@ -16,7 +15,7 @@ import java.util.Map;
 import static abstractclasses.IntegrationsAbstractSteps.getIntegrationsPage;
 import static java.lang.String.format;
 
-public class IntegrationSteps extends AbstractUnitySteps {
+public class IntegrationSteps  {
 
     @And("I click on Zendesk Integrations Card")
     public void openIntegrationsCard() {
@@ -47,9 +46,9 @@ public class IntegrationSteps extends AbstractUnitySteps {
     @Given("User is able to GET providers state in API response")
     public void GETProviderStateAPI(Map<String, String> dataMap) {
 
-        String url = format(Endpoints.PROVIDERS_STATE, dataMap.get("providerID"));
+        String url = format(Endpoints.PROVIDERS_STATE, dataMap.get("i.o.providerID"));
 
-        int responseCode = Integer.parseInt(dataMap.get("responseCode"));
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
         if (responseCode == 200) {
             ProviderState expectedProviderState = new ProviderState(dataMap);
             ProviderState getProvider = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(ProviderState.class);

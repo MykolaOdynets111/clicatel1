@@ -10,7 +10,7 @@ public class ErrorValidatorObject extends ValidatorObject{
     String errorMessage;
 
     public ErrorValidatorObject(Map<String, String> data) {
-        super(data.get("responseCode"));
-        this.errorMessage = data.get("errorMessage");
+        super(Integer.parseInt(data.get("o.responseCode")));
+        this.errorMessage = data.get("o.errorMessage");
     }
 }
