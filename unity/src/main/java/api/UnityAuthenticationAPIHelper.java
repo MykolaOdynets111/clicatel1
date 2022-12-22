@@ -1,6 +1,5 @@
 package api;
 
-import apihelper.Endpoints;
 import datamanager.UnityClients;
 import datamodelclasses.authentication.AuthTokenBody;
 import datamodelclasses.jwt.UnityJWT;
@@ -9,7 +8,7 @@ import driverfactory.UnityURLs;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UnityAuthenticateApi extends MainApi {
+public class UnityAuthenticationAPIHelper extends MainApi {
     public static String getAuthToken() {
         //Create a body
         Map<String, Object> credentials = new HashMap<>();

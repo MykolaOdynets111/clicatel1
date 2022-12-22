@@ -2,7 +2,7 @@ package api;
 
 import io.restassured.response.ResponseBody;
 
-import static api.UnityAuthenticateApi.getAuthToken;
+import static api.UnityAuthenticationAPIHelper.getAuthToken;
 
 public class ChatHubApiHelper extends MainApi {
     public static ResponseBody getChatHubQuery(String endpoint, int responseCode) {
