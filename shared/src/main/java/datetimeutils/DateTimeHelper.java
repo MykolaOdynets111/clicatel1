@@ -25,12 +25,16 @@ public class DateTimeHelper {
         return LocalDateTime.now(ZoneOffset.UTC).minusHours(hours).format(formatter);
     }
 
-    public static final DateTimeFormatter getDD_MM_YYYY_With_Time_Formatter() {
+    public static final DateTimeFormatter getYYYY_MM_DD_With_Time_Formatter() {
         return DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' h:mm a", Locale.US);
     }
 
+    public static final DateTimeFormatter getDD_MMM_YYYY_With_Time_Formatter() {
+        return DateTimeFormatter.ofPattern("dd MMM. yyyy 'at' h:mm a", Locale.US);
+    }
+
     public static final LocalDateTime parseDate(String stringDate) {
-        DateTimeFormatter formatter = getDD_MM_YYYY_With_Time_Formatter();
+        DateTimeFormatter formatter;
 
         if (stringDate.contains("am")) {
             stringDate = stringDate.replace("am", "AM");
@@ -39,9 +43,14 @@ public class DateTimeHelper {
         }
 
         if (stringDate.contains("Yesterday")) {
+            formatter = getYYYY_MM_DD_With_Time_Formatter();
             stringDate = stringDate.replace("Yesterday", LocalDate.now().minus(Period.ofDays(1)).toString());
         } else if (stringDate.contains("Today")) {
+            formatter = getYYYY_MM_DD_With_Time_Formatter();
+
             stringDate = stringDate.replace("Today", LocalDate.now().toString());
+        } else {
+            formatter = getDD_MMM_YYYY_With_Time_Formatter();
         }
         return LocalDateTime.parse(stringDate, formatter);
     }
