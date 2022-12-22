@@ -252,6 +252,8 @@ public class LeftMenuSteps extends AbstractAgentSteps {
         getLeftMenu(agent).openChatByUserName(getUserName(socialChannel));
     }
 
+    //Don't use this method - id doesn't work
+    //Use acceptUserFromSocialConversation() instead
     @When("^(.*) click on new conversation$")
     public void acceptUserConversation(String ordinalAgentNumber) {
         getLeftMenu(ordinalAgentNumber).openNewConversationRequestByAgent();
