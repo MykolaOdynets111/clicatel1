@@ -1,4 +1,4 @@
-package datamodelsclasses.authentication;
+package datamodelclasses.authentication;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -10,5 +10,5 @@ import lombok.*;
 @AllArgsConstructor
 public class FeatureToggles {
     @JsonProperty("milliseconds_sms_status_timestamp")
-    public String milliseconds_sms_status_timestamp;
+    private String milliseconds_sms_status_timestamp;
 }
