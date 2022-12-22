@@ -18,3 +18,11 @@ Feature: Agent Details Info Pop Up Actions
     Then Agent checks agent details contain name GBD Main and email touchdemotenant2@gmail.com
     When Admin clicks "Profile Settings" button
     Then Agent views GBD agent first name, Main last name and touchdemotenant2@gmail.com email in Profile Settings
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2986")
+  Scenario: CD :: Agent Desk :: Verify that the agent's profile is NOT editable from chat desk
+
+    Given I login as agent of General Bank Demo
+    When I click icon with GBD initials
+    And Admin clicks "Profile Settings" button
+    Then Agent verifies that personal data is not editable
