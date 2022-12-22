@@ -9,12 +9,12 @@ import java.util.Map;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class ProviderState{
-    public String id;
-    public String name;
-    public String isActive;
+    private String id;
+    private String name;
+    private String isActive;
 
     public ProviderState(Map<String,String> parameters) {
-        this.id = parameters.get("i.o.providerID");
+        this.id = parameters.get("o.providerID");
         this.name = parameters.get("o.providerName");
         this.isActive = parameters.get("o.status");
     }

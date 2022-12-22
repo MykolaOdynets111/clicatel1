@@ -13,14 +13,21 @@ public enum UnityClients {
 
     // =======  Unity Clients used by CHAT HUB ======== //
 
-    QA_CH_USER_ONE("chathubabc123@gmail.com", "Password#1","QA_CH_USER_ONE",  QA);
+    QA_CH_USER_ONE("chathubabc123@gmail.com", "Password#1","QA_CH_USER_ONE",  QA),
 
+    DEMO_CHAT_2_PAY_USER("chat2payqauser11+chathub@gmail.com", "Password#1");
 
+    String username;
+    String password;
     String email;
     String userPass;
     String clientName;
     Environment env;
 
+    UnityClients(String username, String password){
+        this.username= username;
+        this.password = password;
+    }
     UnityClients(String email, String userPass, String clientName, Environment env) {
         this.email = email;
         this.userPass = userPass;
@@ -28,6 +35,13 @@ public enum UnityClients {
         this.env = env;
     }
 
+    public String getUnityUserName() {
+        return this.username;
+    }
+
+    public String getUnityPassword() {
+        return this.password;
+    }
 
     public String getUnityClientPass() {
 

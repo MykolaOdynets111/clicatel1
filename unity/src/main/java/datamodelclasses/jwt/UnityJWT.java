@@ -1,4 +1,4 @@
-package datamodelsclasses.jwt;
+package datamodelclasses.jwt;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetJWT {
+public class UnityJWT {
     @JsonProperty("token")
-    public String token;
+    private String token;
 }
