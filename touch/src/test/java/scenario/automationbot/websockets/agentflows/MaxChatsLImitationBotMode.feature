@@ -34,7 +34,7 @@ Feature: Max chat functionality for Bot mode tenant
     And Agent click on new conversation
     Then Agent closes chat
 
-    When Agent changes status to: Available
-    And Send 2 messages chat to agent by ORCA
+    When Send 2 messages chat to agent by ORCA
+    And Agent changes status to: Available
     Then Verify agent has 2 conversation requests from Whatsapp integration
 
