@@ -28,7 +28,10 @@ import steps.dotcontrol.DotControlSteps;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -650,16 +653,15 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertEquals(getAgentHomePage(agent).getBulkMessageToolTipText(), toolTipMessage, "Bulk chat hover message is wrong");
     }
 
-    private static int getNumberOfActiveChats(String agent, String integration) {
-        return (int) ApiHelper.getActiveChatsByAgent(agent)
-                .jsonPath().getList("content.channel.type").stream()
-                .filter(ct -> ct.toString().equalsIgnoreCase(integration)).count();
-    }
-
     @Then("^(.*) checks as per sorting preference selected, the chat is at (.*) index of chats section for (.*) user$")
     public void checkActiveChatIndex(String agent, int indexOfActiveChat, String integration){
         Assert.assertEquals(getLeftMenu(agent).getTargetChatIndex(getUserName(integration)), indexOfActiveChat,
                 "Current selected chat is not on top");
     }
 
+    private static int getNumberOfActiveChats(String agent, String integration) {
+        return (int) ApiHelper.getActiveChatsByAgent(agent)
+                .jsonPath().getList("content.channel.type").stream()
+                .filter(ct -> ct.toString().equalsIgnoreCase(integration)).count();
+    }
 }
