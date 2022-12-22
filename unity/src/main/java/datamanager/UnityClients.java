@@ -1,12 +1,13 @@
 package datamanager;
 
 import drivermanager.Environment;
+import lombok.*;
 
 import static drivermanager.Environment.*;
-
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public enum UnityClients {
-
-
     // =======  Unity Clients used by CHAT 2 PAY ======== //
 
     QA_C2P_USER_ONE("chat2payqauser11+echo1@gmail.com", "Password#1","QA_C2P_USER_0NE",  QA),
@@ -34,15 +35,6 @@ public enum UnityClients {
         this.clientName = clientName;
         this.env = env;
     }
-
-    public String getUnityUserName() {
-        return this.username;
-    }
-
-    public String getUnityPassword() {
-        return this.password;
-    }
-
     public String getUnityClientPass() {
 
         return this.userPass;

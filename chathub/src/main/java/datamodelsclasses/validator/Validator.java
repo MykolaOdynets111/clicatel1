@@ -1,7 +1,7 @@
 package datamodelsclasses.validator;
 
 import api.ChatHubApiHelper;
-import api.validatebjects.ErrorValidatorObject;
+import datamodelclasses.validateobjects.ErrorValidatorObject;
 import org.testng.Assert;
 
 import java.util.Map;
