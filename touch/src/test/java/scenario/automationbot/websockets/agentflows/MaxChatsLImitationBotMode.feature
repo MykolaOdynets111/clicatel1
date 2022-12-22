@@ -31,7 +31,7 @@ Feature: Max chat functionality for Bot mode tenant
     Then Verify agent has 2 conversation requests from Whatsapp integration
 
     When Agent changes status to: Unavailable
-    And Agent click on new conversation
+    And Agent click on new conversation request from orca
     Then Agent closes chat
 
     When Send 2 messages chat to agent by ORCA
