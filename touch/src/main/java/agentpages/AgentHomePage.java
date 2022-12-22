@@ -93,10 +93,10 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//button[@data-testid = 'transfer-notification']")
     private List<WebElement> transferWaitingButtons;
 
-    @FindBy(css =".cl-c2p-close-modal-note")
+    @FindBy(css = ".cl-c2p-close-modal-note")
     private WebElement c2pMoveToPendingMessage;
 
-    @FindBy(xpath ="//button[text()='Move to Pending']")
+    @FindBy(xpath = "//button[text()='Move to Pending']")
     private WebElement moveToPendingButton;
 
     @FindBy(css = "[role=dialog]")
@@ -116,9 +116,6 @@ public class AgentHomePage extends AgentAbstractPage {
 
     @FindBy(css = ".cl-agent-notifications-row-buttons-time")
     private WebElement bellNotificationTime;
-
-    @FindBy(css = ".bulk-mode-popup-message")
-    private WebElement bulkChatPopUpMessage;
 
     private DeleteCRMConfirmationPopup deleteCRMConfirmationPopup;
     private EditCRMTicketWindow editCRMTicketWindow;
@@ -162,7 +159,7 @@ public class AgentHomePage extends AgentAbstractPage {
         return chatForm;
     }
 
-    public RightPanelWindow getAgentRightPanel(){
+    public RightPanelWindow getAgentRightPanel() {
         agentRightPanelWindow.setCurrentDriver(this.getCurrentDriver());
         return agentRightPanelWindow;
     }
@@ -172,38 +169,38 @@ public class AgentHomePage extends AgentAbstractPage {
         return chatPendingToLiveForm;
     }
 
-    public Extensions getExtensionsForm(){
+    public Extensions getExtensionsForm() {
         extensions.setCurrentDriver(this.getCurrentDriver());
         return extensions;
     }
 
-    public AttachmentWindow openAttachmentWindow(){
+    public AttachmentWindow openAttachmentWindow() {
         getChatForm().openAttachmentForm();
         attachmentWindow.setCurrentDriver(this.getCurrentDriver());
         return attachmentWindow;
     }
 
-    public LocationWindow openLocationWindow(){
+    public LocationWindow openLocationWindow() {
         getChatForm().openLocationForm();
         locationWindow.setCurrentDriver(this.getCurrentDriver());
         return locationWindow;
     }
 
-    public C2pSendForm openc2pSendForm(){
+    public C2pSendForm openc2pSendForm() {
         getChatForm().openExtensionsForm();
         getExtensionsForm().openC2pForm();
         c2pSendForm.setCurrentDriver(this.getCurrentDriver());
         return c2pSendForm;
     }
 
-    public C2pSendForm openc2pSendForm(String text){
+    public C2pSendForm openc2pSendForm(String text) {
         getChatForm().openExtensionsForm();
         getExtensionsForm().openC2pFormWithText(text);
         c2pSendForm.setCurrentDriver(this.getCurrentDriver());
         return c2pSendForm;
     }
 
-    public DeleteCRMConfirmationPopup getDeleteCRMConfirmationPopup(){
+    public DeleteCRMConfirmationPopup getDeleteCRMConfirmationPopup() {
         deleteCRMConfirmationPopup.setCurrentDriver(this.getCurrentDriver());
         return deleteCRMConfirmationPopup;
     }
@@ -214,7 +211,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public CRMTicketContainer getCrmTicketContainer() {
-        if(!agentNotesButton.getAttribute("class").contains("selected")){
+        if (!agentNotesButton.getAttribute("class").contains("selected")) {
             agentNotesButton.click();
         }
         crmTicketContainer.setCurrentDriver(this.getCurrentDriver());
@@ -228,7 +225,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public ChatHistoryContainer getChatHistoryContainer() {
-        if(!agentHistoryButton.getAttribute("class").contains("selected")) {
+        if (!agentHistoryButton.getAttribute("class").contains("selected")) {
             agentHistoryButton.click();
         }
         chatHistoryContainer.setCurrentDriver(this.getCurrentDriver());
@@ -251,7 +248,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public IncomingTransferWindow getIncomingTransferWindow() {
-        if (transferWaitingButtons.size() > 0){
+        if (transferWaitingButtons.size() > 0) {
             transferWaitingButtons.get(getCollapsedTransfers().size() - 1).click();
         }
         incomingTransferWindow.setCurrentDriver(this.getCurrentDriver());
@@ -294,7 +291,7 @@ public class AgentHomePage extends AgentAbstractPage {
         return chatBody;
     }
 
-    public SupervisorAndTicketsHeader getSupervisorAndTicketsHeader(){
+    public SupervisorAndTicketsHeader getSupervisorAndTicketsHeader() {
         supervisorAndTicketsHeader.setCurrentDriver(this.getCurrentDriver());
         return supervisorAndTicketsHeader;
     }
@@ -305,28 +302,30 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public boolean isAgentSuccessfullyLoggedIn() {
-        if (isElementShown(this.getCurrentDriver(), conversationAreaContainer,50)) {
+        if (isElementShown(this.getCurrentDriver(), conversationAreaContainer, 50)) {
             return waitForLoadingInLeftMenuToDisappear(10, 20);
-        } else { return false;}
+        } else {
+            return false;
+        }
     }
 
-    public String isConnectionErrorShown(){
+    public String isConnectionErrorShown() {
         return getTextFromElem(this.getCurrentDriver(), connectionErrorImage, 15, "Connection error");
     }
 
-    public void hoverBellNotificationIcon(){
+    public void hoverBellNotificationIcon() {
         hoverElem(this.getCurrentDriver(), bellNotificationIcon, 5, "Bell icon");
     }
 
-    public String getNotificationCount(){
+    public String getNotificationCount() {
         return getTextFromElem(this.getCurrentDriver(), bellNotificationsCount, 15, "Bell notification icon");
     }
 
-    public String getNotificationText(){
+    public String getNotificationText() {
         return getTextFromElem(this.getCurrentDriver(), bellNotificationItem, 15, "Bell notification latest item");
     }
 
-    public String getNotificationTime(){
+    public String getNotificationTime() {
         return getTextFromElem(this.getCurrentDriver(), bellNotificationTime, 15, "Bell notification time");
     }
 
@@ -354,116 +353,110 @@ public class AgentHomePage extends AgentAbstractPage {
         return getTextFromElem(this.getCurrentDriver(), flaggedCloseChatToolTip, 4, "Tool Tip for Bulk chat");
     }
 
-    public void clickAgentAssistantButton(){
-        clickElem(this.getCurrentDriver(), agentAssistantButton,3,"Agent Assistant Button" );
+    public void clickAgentAssistantButton() {
+        clickElem(this.getCurrentDriver(), agentAssistantButton, 3, "Agent Assistant Button");
     }
 
-    public boolean isProfanityPopupShown(){
-        return isElementShown(this.getCurrentDriver(), profanityPopup,10);
+    public boolean isProfanityPopupShown() {
+        return isElementShown(this.getCurrentDriver(), profanityPopup, 10);
     }
 
-    public boolean isProfanityPopupNotShown(){
-        return isElementRemoved(this.getCurrentDriver(), profanityPopup,10);
+    public boolean isProfanityPopupNotShown() {
+        return isElementRemoved(this.getCurrentDriver(), profanityPopup, 10);
     }
 
-    public void clickAcceptProfanityPopupButton(){
+    public void clickAcceptProfanityPopupButton() {
         acceptProfanityPopupButton.click();
-        for(int i = 0; i<10;i++){
-            if (!isElementShown(this.getCurrentDriver(), profanityPopup, 1)){
+        for (int i = 0; i < 10; i++) {
+            if (!isElementShown(this.getCurrentDriver(), profanityPopup, 1)) {
                 break;
             }
         }
     }
 
-    public boolean isAgentLimitReachedPopupShown(int wait){
-        return isElementShown(this.getCurrentDriver(), agentLimitReachedPopup,wait);
+    public boolean isAgentLimitReachedPopupShown(int wait) {
+        return isElementShown(this.getCurrentDriver(), agentLimitReachedPopup, wait);
     }
 
-    public void isPinErrorMassageShown(String Agent){
-        try{
+    public void isPinErrorMassageShown(String Agent) {
+        try {
             waitForElementToBeVisible(this.getCurrentDriver(), pinErrorMessage, 10);
-        }
-        catch (TimeoutException e){
+        } catch (TimeoutException e) {
             Assert.fail("There is no Error message for pin chat");
         }
         waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), pinErrorMessageXpath, 10);
     }
 
-    public String getPendingMessage(){
-        return getTextFromElem(this.getCurrentDriver(), pendingAlertMessage,2,"Pending message");
+    public String getPendingMessage() {
+        return getTextFromElem(this.getCurrentDriver(), pendingAlertMessage, 2, "Pending message");
     }
 
     public String getUserProfileButtonColor() {
         return Color.fromString(userProfileButton.getCssValue("background-color")).asHex();
     }
 
-    public String getSelectedTabHeader(){
+    public String getSelectedTabHeader() {
         return selectedTab.getText();
     }
 
-    public String getTipIfNoChatSelected(){
+    public String getTipIfNoChatSelected() {
         return getTextFromElem(this.getCurrentDriver(), tipNoteInConversationArea, 5, "Tips in conversation area if no chat selected");
     }
 
 
-    public String getTipIfNoChatSelectedFromContextArea(){
+    public String getTipIfNoChatSelectedFromContextArea() {
         return getTextFromElem(this.getCurrentDriver(), tipNoteInRightArea, 5, "Tips in context area if no chat selected");
     }
 
-    public List<WebElement> getCollapsedTransfers(){
+    public List<WebElement> getCollapsedTransfers() {
         waitForElementsToBeVisible(this.getCurrentDriver(), transferWaitingButtons, 6);
         return transferWaitingButtons;
     }
 
-    public String getC2pMoveToPendingMessage(){
-        return getTextFromElem(this.getCurrentDriver(),c2pMoveToPendingMessage, 2, "c2p Move To Pending Message").trim();
+    public String getC2pMoveToPendingMessage() {
+        return getTextFromElem(this.getCurrentDriver(), c2pMoveToPendingMessage, 2, "c2p Move To Pending Message").trim();
     }
 
-    public void clickMoveToPendingButton(){
+    public void clickMoveToPendingButton() {
         clickElem(this.getCurrentDriver(), moveToPendingButton, 1, "Move To Pending Button");
     }
 
-    public void waitForModalWindowToDisappear(){
+    public void waitForModalWindowToDisappear() {
         waitForElementToBeInVisibleByCss(this.getCurrentDriver(), modalWindow, 6);
     }
 
-    public void waitForAgentPageToBeLoaded() throws TimeoutException{
+    public void waitForAgentPageToBeLoaded() throws TimeoutException {
         try {
             waitForElementToBeVisible(this.getCurrentDriver(), profile, 5);
         } catch (TimeoutException e) {
         }
     }
 
-    public boolean isDialogShown(){
+    public boolean isDialogShown() {
         return isElementShown(this.getCurrentDriver(), dialogElement, 10);
     }
 
-    public String isMultipleBulkMessagesTextShown(){
+    public String isMultipleBulkMessagesTextShown() {
         return getTextFromElem(this.getCurrentDriver(), bulkChatMessage, 10, "Bulk chat error message");
     }
 
-    public String bulkMessagesTabSwitchNotification(){
+    public String bulkMessagesTabSwitchNotification() {
         return getTextFromElem(this.getCurrentDriver(), bulkChatTabSwitchMessage, 10, "Bulk chat tab switch message");
     }
 
-    public String bulkChatMiddlePaneMessage(){
+    public String bulkChatMiddlePaneMessage() {
         return getTextFromElem(this.getCurrentDriver(), middlePaneBulkChatMessage, 10, "Bulk chat middle pane message");
     }
 
-    public String bulkChatMiddlePaneHeaderMessage(){
+    public String bulkChatMiddlePaneHeaderMessage() {
         return getTextFromElem(this.getCurrentDriver(), middlePaneBulkMessageHeader, 10, "Bulk chat middle pane header");
     }
 
-
-    public boolean isDisappearingDialogShown(){
-        return isElementRemoved(this.getCurrentDriver(), dialogElement, 3);
-    }
-
-    public void clickCrossButtonWarningDialog(){
+    public void clickCrossButtonWarningDialog() {
         clickElem(this.getCurrentDriver(), crossButtonWarningDialog, 1, "Cross Button");
     }
 
-    public void clickDontShowMessageCheckbox(){
+    public void clickDontShowMessageCheckbox() {
         clickElem(this.getCurrentDriver(), notShowDialogCheckbox, 1, "Don't show warning checkbox");
     }
 
