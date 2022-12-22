@@ -31,7 +31,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class LeftMenuSteps extends AbstractAgentSteps {
 
     @Given("^(.*) has no active chats$")
-    public void closeActiveChats(String agent){
+    public void closeActiveChats(String agent) {
         ApiHelper.closeActiveChats(agent);
         getAgentHomePage(agent).getLeftMenuWithChats().waitForAllChatsToDisappear(4);
     }
@@ -312,7 +312,6 @@ public class LeftMenuSteps extends AbstractAgentSteps {
     public void agentTypesACustomerNameOnTheSearchField(String agent, String userName) {
         getLeftMenu(agent).inputUserNameIntoSearch(userName);
     }
-
 
     @Then("(.*) tab is displayed first for (.*)")
     public void verifyThatChatsTabIsDisplayedFirst(String tabName, String agent) {
