@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -37,6 +38,6 @@ public class Account {
     private String changedStateReason;
 
     @JsonProperty("featureToggles")
-    public List<FeatureToggles> featureToggles = Arrays.asList(new FeatureToggles());
+    public List<FeatureToggles> featureToggles = Collections.singletonList(new FeatureToggles());
 
 }

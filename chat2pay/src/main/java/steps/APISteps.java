@@ -1,18 +1,17 @@
 package steps;
 
+import api.clients.Chat2PayApiHelper;
 import api.clients.TransactionsHelper;
 import api.models.request.PaymentBody;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.json.JSONException;
 
 import java.util.Map;
 
 public class APISteps {
 
     public static final ThreadLocal<PaymentBody> paymentBody = new ThreadLocal<>();
-    public static final ThreadLocal<String> token = new ThreadLocal<>();
     public static final ThreadLocal<String> widgetId = new ThreadLocal<>();
     public static final ThreadLocal<String> paymentGatewaySettingsId = new ThreadLocal<>();
     public static final ThreadLocal<String> applicationID = new ThreadLocal<>();
@@ -22,27 +21,27 @@ public class APISteps {
 
     @Given("^User is logged in to unity$")
     public void logInToUnity() {
-        token.set(TransactionsHelper.logInToUnity());
+        Chat2PayApiHelper.logInToUnity();
     }
 
     @When("^User gets widgetId for (.*) form$")
     public void getWidgetId(String widgetName) {
-        widgetId.set(TransactionsHelper.getWidgetId(widgetName, token.get()));
+        widgetId.set(TransactionsHelper.getWidgetId(widgetName));
     }
 
     @When("^User gets paymentGatewaySettingsId for widget$")
     public void getPaymentGatewaySettingsId() {
-        paymentGatewaySettingsId.set(TransactionsHelper.getPaymentGatewaySettingsId(token.get(), widgetId.get()));
+        paymentGatewaySettingsId.set(TransactionsHelper.getPaymentGatewaySettingsId(widgetId.get()));
     }
 
     @When("^User gets application Id for widget$")
     public void getApplicationId() {
-        applicationID.set(TransactionsHelper.getApplicationId(token.get(), widgetId.get()));
+        applicationID.set(TransactionsHelper.getApplicationId(widgetId.get()));
     }
 
     @When("^User gets activation key for widget$")
     public void getActivationKey() {
-        activationKey.set(TransactionsHelper.getActivationKey(token.get(), widgetId.get()));
+        activationKey.set(TransactionsHelper.getActivationKey(widgetId.get()));
     }
 
     @When("^User sets data in the payment body$")
@@ -61,8 +60,8 @@ public class APISteps {
     }
 
     @Then("^The payment has (.*) status code$")
-    public void checkWorkingPaymentLink(int statusCode) {
-        TransactionsHelper.checkWorkingPaymentLink(statusCode, token.get(), paymentLink.get());
+    public void checkWorkingPaymentLink() {
+        TransactionsHelper.checkWorkingPaymentLink(paymentLink.get());
     }
 
 }
