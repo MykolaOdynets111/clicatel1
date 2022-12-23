@@ -1,5 +1,6 @@
 package steps.agentsteps;
 
+import agentpages.uielements.PageHeader;
 import agentpages.uielements.Profile;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperSupportHours;
@@ -76,7 +77,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @And("^(.*) click Whatsapp message icon button on the top bar$")
     public void clickWhatsappIcon(String agent) {
-        getPageHeader(agent).clickOnWhatsapp();
+        getHeader(agent).clickOnWhatsapp();
     }
 
     @And("^(.*) select \"(.*)\" in Chanel Template$")
@@ -194,10 +195,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertEquals(getAgentHomePage(agent).getNoResultsFoundMessage(), errorMessage,
                 "Wrong no results found error message found");
     }
+
     @When("^(.*) changes status to: (.*)$")
     public void changeAgentStatus(String agent, String newStatus) {
-        getAgentHomePage(agent).getPageHeader().clickIcon();
-        getAgentHomePage(agent).getPageHeader().selectStatus(newStatus);
+        getHeader(agent).clickIcon();
+        getHeader(agent).selectStatus(newStatus);
     }
 
     @Then("^(.*) checks initial bell notification count$")
@@ -224,7 +226,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("^Verify (.*) status: (.*) is displayed on the icon$")
     public void verifyStatusOnByIcon(String agent, String status) {
-        assertThat(getAgentHomePage(agent).getPageHeader().verifyUserStatusOnIcon(status))
+        assertThat(getHeader(agent).verifyUserStatusOnIcon(status))
                 .as(format("%s status is displayed!", status))
                 .isTrue();
     }
@@ -241,13 +243,13 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Given("^Set agent support hours (.*)$")
-    public void setSupportHoursWithShift(String shiftStrategy){
-        switch (shiftStrategy){
+    public void setSupportHoursWithShift(String shiftStrategy) {
+        switch (shiftStrategy) {
             case "with day shift":
                 LocalDateTime currentTimeWithADayShift = LocalDateTime.now().minusDays(1);
 
                 ApiHelperSupportHours.setSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(),
-                        currentTimeWithADayShift.getDayOfWeek().toString(),"00:00", "23:59");
+                        currentTimeWithADayShift.getDayOfWeek().toString(), "00:00", "23:59");
                 break;
             case "for all week":
                 ApiHelperSupportHours.setSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
@@ -257,7 +259,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Then("^Tab with user info has \"(.*)\" header$")
-    public void verifyTabHeader(String headerName){
+    public void verifyTabHeader(String headerName) {
         Assert.assertEquals(getAgentHomeForMainAgent().getSelectedTabHeader(), headerName,
                 "Incorrect header of customer selected tab, should be " + headerName);
     }
@@ -489,7 +491,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("^Tenant photo is shown on chatdesk$")
     public void verifyTenantImageIsShownOnChatdesk() {
-        Assert.assertTrue(getAgentHomePage("main").getPageHeader().isTenantImageShown(),
+        Assert.assertTrue(getHeader("main").isTenantImageShown(),
                 "Tenant image is not shown on chatdesk");
     }
 
@@ -563,15 +565,15 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("^(.*) click on 'headphones' icon and see (\\d+) available agents$")
     public void firstAgentClickOnHeadphonesIconAndSeeAvailableAgents(String agent, int availableAgent) {
-        getAgentHomePage(agent).getPageHeader().clickHeadPhonesButton();
+        getHeader(agent).clickHeadPhonesButton();
         Assert.assertTrue(
-                getAgentHomePage(agent).getPageHeader().isExpectedNumbersShown(availableAgent, 8),
+                getHeader(agent).isExpectedNumbersShown(availableAgent, 8),
                 "Quantity of available agents not as expected (" + availableAgent + " expected)");
         if (availableAgent == 1) {
-            getAgentHomePage(agent).getPageHeader().clickIcon();
-            String agentName = getAgentHomePage(agent).getPageHeader().getAgentName();
+            getHeader(agent).clickIcon();
+            String agentName = getHeader(agent).getAgentName();
             Assert.assertFalse(
-                    getAgentHomePage(agent).getPageHeader().getAvailableAgents().contains(agentName),
+                    getHeader(agent).getAvailableAgents().contains(agentName),
                     "Unavailable agent in list of available agents");
         }
     }
@@ -610,7 +612,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Given("^(.*) is logged out from the Agent Desk$")
     public void logOutAgentDesk(String agent) {
-        getAgentHomePage(agent).getPageHeader().logOut();
+        getHeader(agent).logOut();
 
         Assert.assertTrue(getAgentHomePage(agent).isDialogShown(),
                 "Log out from agent desk not successful");
@@ -650,16 +652,34 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertEquals(getAgentHomePage(agent).getBulkMessageToolTipText(), toolTipMessage, "Bulk chat hover message is wrong");
     }
 
+    @Then("^(.*) checks as per sorting preference selected, the chat is at (.*) index of chats section for (.*) user$")
+    public void checkActiveChatIndex(String agent, int indexOfActiveChat, String integration) {
+        Assert.assertEquals(getLeftMenu(agent).getTargetChatIndex(getUserName(integration)), indexOfActiveChat,
+                "Current selected chat is not on top");
+    }
+
+    @When("^(.*) checks agent name initials are (.*)$")
+    public void checkAgentNameInitials(String agent, String expectedAgentInitials) {
+        Assert.assertTrue(getHeader(agent).getAgentInitials().equalsIgnoreCase(expectedAgentInitials),
+                "Agent initials are incorrect");
+    }
+
+    @When("^(.*) checks agent details contain name (.*) and email (.*)$")
+    public void checkAgentInfo(String agent, String expectedAgentName, String expectedAgentEmail) {
+        softAssert.assertTrue(getHeader(agent).getAgentName().equalsIgnoreCase(expectedAgentName),
+                "Agent Name is incorrect");
+        softAssert.assertTrue(getHeader(agent).getAgentEmail().equalsIgnoreCase(expectedAgentEmail),
+                "Agent Email is incorrect");
+        softAssert.assertAll();
+    }
+
+    private static PageHeader getHeader(String agent) {
+        return getAgentHomePage(agent).getPageHeader();
+    }
+
     private static int getNumberOfActiveChats(String agent, String integration) {
         return (int) ApiHelper.getActiveChatsByAgent(agent)
                 .jsonPath().getList("content.channel.type").stream()
                 .filter(ct -> ct.toString().equalsIgnoreCase(integration)).count();
     }
-
-    @Then("^(.*) checks as per sorting preference selected, the chat is at (.*) index of chats section for (.*) user$")
-    public void checkActiveChatIndex(String agent, int indexOfActiveChat, String integration){
-        Assert.assertEquals(getLeftMenu(agent).getTargetChatIndex(getUserName(integration)), indexOfActiveChat,
-                "Current selected chat is not on top");
-    }
-
 }

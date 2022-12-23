@@ -1,4 +1,4 @@
-package datamodelsclasses.authentication;
+package datamodelclasses.authentication;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -13,20 +13,20 @@ import java.util.List;
 @AllArgsConstructor
 public class Accounts {
     @JsonProperty("id")
-    public String id;
+    private String id;
 
     @JsonProperty("name")
-    public String name;
+    private String name;
 
     @JsonProperty("active")
-    public boolean active;
+    private boolean active;
 
     @JsonProperty("accountState")
-    public String accountState;
+    private String accountState;
 
     @JsonProperty("changedStateReason")
-    public Object changedStateReason;
+    private Object changedStateReason;
 
     @JsonProperty("featureToggles")
-    public List<FeatureToggles> featureToggles = Arrays.asList(new FeatureToggles());
+    private List<FeatureToggles> featureToggles = Arrays.asList(new FeatureToggles());
 }
