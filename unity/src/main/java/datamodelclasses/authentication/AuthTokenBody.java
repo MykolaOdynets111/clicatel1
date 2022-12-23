@@ -1,6 +1,7 @@
-package datamodelsclasses.authentication;
+package datamodelclasses.authentication;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import datamodelclasses.authentication.Accounts;
 import lombok.*;
 import java.util.Arrays;
 import java.util.List;
@@ -12,9 +13,9 @@ import java.util.List;
 @AllArgsConstructor
 
 
-public class GetAuthToken {
+public class AuthTokenBody {
     @JsonProperty("token")
-    public String token;
+    private String token;
     @JsonProperty("accounts")
-    public List<Accounts> accounts = Arrays.asList(new Accounts());
+    private List<Accounts> accounts = Arrays.asList(new Accounts());
 }
