@@ -23,7 +23,6 @@ import java.util.ArrayList;
         "empty"
 })
 
-
 @Data
 public class Content {
 
