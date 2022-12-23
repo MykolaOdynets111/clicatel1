@@ -4,8 +4,7 @@ Feature: Transaction execution
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4317")
   Scenario Outline: chat2pay-service :: POST /chat-2-pay :: User can get a payment link
-    Given User fetch token and accountID for an existed account
-    When User is logged in to unity
+    Given User is logged in to unity
     And User gets widgetId for UC form
     And User gets paymentGatewaySettingsId for widget
     And User gets application Id for widget
@@ -35,8 +34,7 @@ Feature: Transaction execution
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4317")
   Scenario Outline: chat2pay-service :: POST /chat-2-pay :: the error description should be saved when transaction fails on the Recipient page
-    Given User fetch token and accountID for an existed account
-    When User is logged in to unity
+    Given User is logged in to unity
     And User gets widgetId for UC form
     And User gets paymentGatewaySettingsId for widget
     And User gets application Id for widget

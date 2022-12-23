@@ -22,4 +22,9 @@ public class AuthBody {
     @JsonProperty("accountId")
     private String accountId;
 
+    public AuthBody( String token, String accountId  ){
+        this.token = token;
+        this.accountId = accountId;
+    }
+
 }
