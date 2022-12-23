@@ -91,3 +91,17 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transferring
     Then Transfer chat pop up appears for Agent
     When Agent open 'Transfer to' drop down
     Then Agent can see second agent in a transfer pop-up agents dropdown
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1488")
+  Scenario: CD :: Agent Desk :: Live Chat :: Transfer chat :: Verify if agent is able to transfer chats when (s)he has at least one flagged chat
+
+    When Agent click 'Flag chat' button
+    Then Agent sees 'flag' icon in this chat
+    And Send 1 messages chat to agent by ORCA
+
+    And I login as second agent of General Bank Demo
+    When Agent click on new conversation request from orca
+    And Agent transfers chat
+    Then Second agent receives incoming transfer with "Incoming Transfer" header
+    When Second agent click "Accept transfer" button
+    Then Chat from orca channel is present for Second Agent
