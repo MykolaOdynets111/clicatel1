@@ -12,11 +12,15 @@ public enum UnityClients {
 
     QA_C2P_USER_ONE("chat2payqauser11+echo1@gmail.com", "Password#1","QA_C2P_USER_0NE",  QA),
 
+    DEV_CHAT_2_PAY_USER("testuserc2p+001@gmail.com", "Password#1"),
+
     // =======  Unity Clients used by CHAT HUB ======== //
 
     QA_CH_USER_ONE("chathubabc123@gmail.com", "Password#1","QA_CH_USER_ONE",  QA),
 
     DEMO_CHAT_2_PAY_USER("chat2payqauser11+chathub@gmail.com", "Password#1");
+
+
 
     String username;
     String password;
