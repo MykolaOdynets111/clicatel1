@@ -59,7 +59,7 @@ public class APISteps {
         TransactionsHelper.userCanNotGetAPaymentLink(paymentBody.get(), activationKey.get());
     }
 
-    @Then("^The payment has (.*) status code$")
+    @Then("^The payment has success status code$")
     public void checkWorkingPaymentLink() {
         TransactionsHelper.checkWorkingPaymentLink(paymentLink.get());
     }

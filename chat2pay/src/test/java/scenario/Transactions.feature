@@ -25,11 +25,11 @@ Feature: Transaction execution
       | transactionType           | <transactionType>           |
 
     Then User gets a correct payment link
-    Then The payment has <statusCode> status code
+    Then The payment has success status code
 
     Examples:
-      | channel | to           | currency | orderNumber | subTotalAmount | taxAmount | totalAmount | timestamp                    | departmentId | departmentName | returnPaymentLink | paymentReviewAutoReversal | transactionType | statusCode |
-      | sms     | 447938556403 | ZAR      | 001         | 100            | 0.0       | 100.0       | 2021-04-27T17:35:58.000+0000 | 567          | Sales          | true              | false                     | authorization   | 200        |
+      | channel | to           | currency | orderNumber | subTotalAmount | taxAmount | totalAmount | timestamp                    | departmentId | departmentName | returnPaymentLink | paymentReviewAutoReversal | transactionType |  |
+      | sms     | 447938556403 | ZAR      | 001         | 100            | 0.0       | 100.0       | 2021-04-27T17:35:58.000+0000 | 567          | Sales          | true              | false                     | authorization   |  |
 
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4317")
