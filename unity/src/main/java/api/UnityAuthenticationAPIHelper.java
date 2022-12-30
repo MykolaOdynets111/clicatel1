@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UnityAuthenticationAPIHelper extends MainApi {
-    public static String getAuthToken() {
+    public static String getAuthToken(UnityClients unityClient) {
         //Create a body
         Map<String, Object> credentials = new HashMap<>();
-        credentials.put("email", UnityClients.DEMO_CHAT_2_PAY_USER.getUsername());
-        credentials.put("password", UnityClients.DEMO_CHAT_2_PAY_USER.getPassword());
+        credentials.put("email", unityClient.getUsername());
+        credentials.put("password", unityClient.getPassword());
         //Get Token and ID
         AuthTokenBody authTokenBody = postQueryWithoutAuth(UnityURLs.AUTH_ACCOUNTS, credentials,200).as(AuthTokenBody.class);
         Map<String, Object> body = new HashMap<>();
