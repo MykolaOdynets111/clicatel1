@@ -1,22 +1,23 @@
 package steps;
 
+import api.MainApi;
 import clients.Endpoints;
 import datamodelsclasses.providers.ProviderState;
+import datamodelsclasses.validator.Validator;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.testng.Assert;
-import datamodelsclasses.providers.GetProvider;
-import steps.unitysteps.AbstractUnitySteps;
+import datamodelsclasses.providers.AllProviders;
 import api.ChatHubApiHelper;
-import validators.Validator;
+
 
 import java.util.Map;
 
 import static abstractclasses.IntegrationsAbstractSteps.getIntegrationsPage;
 import static java.lang.String.format;
 
-public class IntegrationSteps extends AbstractUnitySteps {
+public class IntegrationSteps  extends MainApi {
 
     @And("I click on Zendesk Integrations Card")
     public void openIntegrationsCard() {
@@ -37,19 +38,19 @@ public class IntegrationSteps extends AbstractUnitySteps {
 
     @Given("User is able to GET providers API response")
     public void GETProviderAPI(int responseCode) {
-        GetProvider getProvider = ChatHubApiHelper.getChatHubQuery(Endpoints.ADMIN_PROVIDERS, responseCode)
-                .jsonPath().getList("", GetProvider.class).get(0);
+        AllProviders allProviders = ChatHubApiHelper.getChatHubQuery(Endpoints.ADMIN_PROVIDERS, responseCode)
+                .jsonPath().getList("", AllProviders.class).get(0);
 
-        Assert.assertEquals(getProvider.getId(), "");
-        Assert.assertEquals(getProvider.getName(), "Zendesk Support");
+        Assert.assertEquals(allProviders.getId(), "");
+        Assert.assertEquals(allProviders.getName(), "Zendesk Support");
     }
 
     @Given("User is able to GET providers state in API response")
     public void GETProviderStateAPI(Map<String, String> dataMap) {
 
-        String url = format(Endpoints.PROVIDERS_STATE, dataMap.get("providerID"));
+        String url = format(Endpoints.PROVIDERS_STATE, dataMap.get("i.providerID"));
 
-        int responseCode = Integer.parseInt(dataMap.get("responseCode"));
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
         if (responseCode == 200) {
             ProviderState expectedProviderState = new ProviderState(dataMap);
             ProviderState getProvider = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(ProviderState.class);

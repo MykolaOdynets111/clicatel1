@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetProvider {
+public class AllProviders {
 
     @JsonProperty("id")
     private String id;
