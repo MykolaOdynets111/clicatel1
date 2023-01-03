@@ -38,7 +38,6 @@ Feature: Supervisor desk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-7810")
   Scenario: CD :: Verify the verbiage of message under unassigned tickets for the tenant
-
     Given I login as second agent of Standard Billing
     When Second Agent select "Tickets" left menu option
     Then Verify  unassigned tickets section is empty
