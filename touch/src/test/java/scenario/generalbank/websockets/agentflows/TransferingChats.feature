@@ -105,3 +105,6 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transferring
     Then Second agent receives incoming transfer with "Incoming Transfer" header
     When Second agent click "Accept transfer" button
     Then Chat from orca channel is present for Second Agent
+#    clean up
+    When Agent opens first chat from the list
+    Then Agent click 'Unflag chat' button
