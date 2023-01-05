@@ -19,15 +19,15 @@ public class AgentFilteringSteps extends AbstractAgentSteps {
     @Then("^Verify filtered tickets dates are fitted by filter for (.*)$")
     public void verifyTicketsDatesAreFittedByFilter(String agent) {
         List<String> foundUserNamesTicketsChats = getAgentHomePage(agent).getLeftMenuWithChats().getAllFoundChatsUserNames();
-        for(String userName : foundUserNamesTicketsChats) {
+        for (String userName : foundUserNamesTicketsChats) {
             getAgentHomePage(agent).getLeftMenuWithChats().openChatByUserName(userName);
             LocalDateTime currentTicketChatDateTime = getAgentHomePage(agent).getChatHeader().getDateTime();
             verifyDateTimeIsInRangeOfTwoDates(currentTicketChatDateTime, this.startDate.get(), this.endDate.get());
         }
     }
 
-    @Then("^(.*) selects random chat in (.*) chat list$")
-    public void selectsRandomChatFromList(String agent, String chatType) {
+    @Then("^(.*) opens first chat from the list$")
+    public void openFirstChat(String agent) {
         getAgentHomePage(agent).getLeftMenuWithChats().openFirstChat();
     }
 
@@ -58,13 +58,13 @@ public class AgentFilteringSteps extends AbstractAgentSteps {
     }
 
     @When("^(.*) filter closed chats with (.*) channel, (.*) sentiment and flagged is (.*)$")
-    public void setLiveChatsFilter(String agent, String channel, String sentiment, boolean flagged){
+    public void setLiveChatsFilter(String agent, String channel, String sentiment, boolean flagged) {
         getLeftMenu(agent).applyTicketsFilters(channel.trim(), sentiment.trim(), flagged);
     }
 
     @Then("^(.*) see only (.*) chats in left menu$")
     public void agentSeeOnlyAppleBusinessChatChatsInLeftMenu(String agent, String channelName) {
-        Assert.assertTrue( getLeftMenu(agent).verifyChanelOfTheChatsIsPresent(channelName),
+        Assert.assertTrue(getLeftMenu(agent).verifyChanelOfTheChatsIsPresent(channelName),
                 channelName + " channel name should be shown.");
 
     }
@@ -72,7 +72,7 @@ public class AgentFilteringSteps extends AbstractAgentSteps {
     @Then("^(.*) sees Correct number of filtered chats shown as (.*)$")
     public void verifyChatConsoleAgentsContainsChats(String agent, int filteredChatsCount) {
         int filteredChatsFromChatDesk = new AgentHomePage(agent).getLeftMenuWithChats().getNewChatsCount();
-        Assert.assertTrue(filteredChatsFromChatDesk==filteredChatsCount,
+        Assert.assertTrue(filteredChatsFromChatDesk == filteredChatsCount,
                 "Filtered chats count is not correct");
     }
 
@@ -80,7 +80,7 @@ public class AgentFilteringSteps extends AbstractAgentSteps {
     public void backButtonDisability(String agent, String filterType, int day) {
         DatePicker dp = new DatePicker(agent);
         softAssert.assertTrue(dp.openDatePicker(filterType).verifyExpectedDateIsDisabled(day), day + " days back Date should be selectable for " + filterType);
-        softAssert.assertFalse(dp.verifyExpectedDateIsDisabled(day+1), day+1 + " days back Date should not be selectable for " + filterType);
+        softAssert.assertFalse(dp.verifyExpectedDateIsDisabled(day + 1), day + 1 + " days back Date should not be selectable for " + filterType);
         softAssert.assertFalse(dp.isBackButtonShown(), "Back button should be hidden");
         softAssert.assertAll();
     }

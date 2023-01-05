@@ -37,8 +37,9 @@ public class LeftMenuSteps extends AbstractAgentSteps {
     }
 
     @Given("^(.*) checks left menu is having (.*) chats with latest message (.*)$")
-    public void verifyChatsCountLeftMenuWithMessageText(String agent, int expectedCount, String expectedMessageText){
-        Assert.assertTrue(getLeftMenu(agent).getLeftMenuMessageTexts(expectedMessageText).size() == expectedCount,
+    public void verifyChatsCountLeftMenuWithMessageText(String agent, int expectedCount, String expectedMessageText) {
+        Assert.assertEquals(expectedCount,
+                getLeftMenu(agent).getLeftMenuMessageTexts(expectedMessageText).size(),
                 "Chats doesn't contain expected text: " + expectedMessageText);
     }
 
@@ -317,9 +318,8 @@ public class LeftMenuSteps extends AbstractAgentSteps {
 
     @Then("(.*) tab is displayed first for (.*)")
     public void verifyThatChatsTabIsDisplayedFirst(String tabName, String agent) {
-        Assert.assertTrue(getLeftMenu(agent)
-                .getLMHeader().getFirstElementName().equals(
-                        tabName), tabName + " should be on of first place");
+        Assert.assertEquals(tabName, getLeftMenu(agent)
+                .getLMHeader().getFirstElementName(), tabName + " should be on of first place");
     }
 
     @Then("^Filter \"(.*)\" is selected by default$")
