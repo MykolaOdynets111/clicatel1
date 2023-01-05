@@ -27,7 +27,9 @@ public class TicketsSteps extends AbstractAgentSteps {
 
     private static int initialTicketsCount;
 
-    private TicketsTable getTicketsTable(String agent){
+    private static int initialTicketsCountTicketsTable;
+
+    private TicketsTable getTicketsTable(String agent) {
         return getTicketsPage(agent).getTicketsTable();
     }
 
@@ -68,6 +70,12 @@ public class TicketsSteps extends AbstractAgentSteps {
         getTicketsTable("main").clickAssignManuallyButton(getUserName(chanel));
     }
 
+    @When("^Check checkbox status for ticket rows for (.*) channel is (.*)$")
+    public void checkTicketsCheckboxStatus(String channel, boolean expectedCheckboxStatus) {
+        Assert.assertTrue(getTicketsTable("main").getCheckboxStatus() == expectedCheckboxStatus,
+                "Checkbox status is not correct");
+    }
+
     @Then("^Assign button is not displayed in the closed ticket tab for (.*)$")
     public void assignManuallyTopPanelButtonNotVisible(String chanel) {
         Assert.assertTrue(getTicketsTable("main").assignManuallyButtonTopPanelVisibility(getUserName(chanel)),
@@ -90,12 +98,21 @@ public class TicketsSteps extends AbstractAgentSteps {
     public void clickCloseButtonFor(String agent, String chanel) {
         getTicketsTable("main")
                 .selectTicketCheckbox(getUserName(chanel))
+                .getTicketByUserName(getUserName(chanel))
                 .clickCloseButton(getUserName(chanel));
         waitFor(1000);
 
         if (getAgentHomePage(agent).getAgentFeedbackWindow().isAgentFeedbackWindowShown()) {
             getAgentHomePage(agent).getAgentFeedbackWindow().waitForLoadingData().clickCloseButtonInCloseChatPopup();
         }
+    }
+
+    @When("^(.*) clicks closed ticket button for (.*)$")
+    public void clickCloseButton(String agent, String chanel) {
+        getTicketsTable(agent)
+                .selectTicketCheckbox(getUserName(chanel))
+                .getTicketByUserName(getUserName(chanel))
+                .clickCloseButton(getUserName(chanel));
     }
 
     @When("^(.*) closes ticket manually$")
@@ -124,6 +141,12 @@ public class TicketsSteps extends AbstractAgentSteps {
     @When("^(.*) checks closed ticket is disabled$")
     public void checkCloseButtonStatus(String agent) {
         Assert.assertTrue(getTicketsTable(agent).closeButtonStatus(), "Close ticket button is enabled");
+    }
+
+    @When("^(.*) checks closed ticket button in quick action bar is disabled$")
+    public void checkCloseButtonStatusQuickActionBar(String agent) {
+        Assert.assertTrue(getTicketsPage(agent).getTicketsQuickActionBar().closeButtonStatusQuickAction(),
+                "Close ticket button in quick action bar is enabled");
     }
 
     @When("^Supervisor clicks on first ticket$")
@@ -163,12 +186,12 @@ public class TicketsSteps extends AbstractAgentSteps {
     @Given("^Supervisor scroll Tickets page to the bottom$")
     public void scrollTicketsDown() {
         getTicketsTable("main").scrollTicketsToTheButtom()
-                .waitForMoreTicketsAreLoading(2,5);
+                .waitForMoreTicketsAreLoading(2, 5);
     }
 
     @Then("^(.*) is the current agent of (.*) ticket$")
     public void verifyCurrentAgentOfTicket(String agentName, String chanelName) {
-        Assert.assertEquals(getTicketsTable("main").getTicketByUserName(getUserName(chanelName)).getCurrentAgent().substring(3),agentName,
+        Assert.assertEquals(getTicketsTable("main").getTicketByUserName(getUserName(chanelName)).getCurrentAgent().substring(3), agentName,
                 "The current agent of the ticket is not as expected");
     }
 
@@ -219,14 +242,6 @@ public class TicketsSteps extends AbstractAgentSteps {
         soft.assertAll();
     }
 
-    private boolean areNewChatsLoaded(int previousChats, int wait){
-        for(int i = 0; i< wait*2; i++){
-            if(getTicketsTable("main").getUsersNames().size() > previousChats) return true;
-            else waitFor(500);
-        }
-        return false;
-    }
-
     @Then("^Tickets are sorted in (.*) order$")
     public void verifyTicketsSorting(String order) {
         List<LocalDateTime> listOfDates = getTicketsTable("main").getTicketsStartDates();
@@ -262,29 +277,6 @@ public class TicketsSteps extends AbstractAgentSteps {
         getTicketsTable("main").clickAscendingArrowOfEndDateColumn();
     }
 
-    private void verifyDateTimeIsInRangeOfTwoDates(LocalDateTime dateTime, LocalDate startDate, LocalDate endDate) {
-        SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(startDate.compareTo(dateTime.toLocalDate()) <= 0,
-                String.format("One of the chats was started before filtered value. Expected: after %s, Found: %s",
-                        startDate, dateTime));
-        softAssert.assertTrue(endDate.compareTo(dateTime.toLocalDate()) >= 0,
-                String.format("One of the chats was ended before filtered value. Expected: before %s, Found: %s",
-                        endDate, dateTime));
-        softAssert.assertAll();
-    }
-
-    private boolean isDateSorted(String order, List<LocalDateTime> listOfDates) {
-        boolean sortedStatus;
-        if (order.contains("desc")) {
-            sortedStatus = listOfDates.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList()).equals(listOfDates);
-        } else if (order.contains("asc")) {
-            sortedStatus = listOfDates.stream().sorted().collect(Collectors.toList()).equals(listOfDates);
-        } else {
-            throw new AssertionError("Incorrect order type was provided");
-        }
-        return sortedStatus;
-    }
-
     @Then("^(.*) checks quick & custom assign options on the page are (.*)$")
     public void verifyQuickActionsBarTicket(String agent, String quickBarVisibility) {
         Assert.assertTrue(getTicketsPage(agent).quickActionBarVisibility(quickBarVisibility),
@@ -299,12 +291,18 @@ public class TicketsSteps extends AbstractAgentSteps {
     @Then("^(.*) hover over question info button and see (.*) message$")
     public void quickActionToolTipMessage(String agent, String toolTipMessage) {
         getTicketsPage(agent).getTicketsQuickActionBar().hoverQuickActionBar();
-        Assert.assertEquals(getTicketsPage(agent).getQuickActionToolTipText(),toolTipMessage,"Quick Action hover message is wrong");
+        Assert.assertEquals(getTicketsPage(agent).getQuickActionToolTipText(), toolTipMessage, "Quick Action hover message is wrong");
     }
 
     @Then("^(.*) sees toast message with (.*) text")
     public void verifyToastMessage(String agent, String toastMessageText) {
-        Assert.assertEquals(getTicketsPage(agent).getToastMessageText(),toastMessageText,"Toast message is wrong");
+        Assert.assertEquals(getTicketsPage(agent).getToastMessageText(), toastMessageText, "Toast message is wrong");
+    }
+
+    @Then("^(.*) sees closed ticket toast message for (.*) channel")
+    public void verifyClosedTicketToastMessage(String agent, String channel) {
+        Assert.assertEquals(getTicketsPage(agent).getToastMessageText(),
+                "Ticket with " + getUserName(channel) + " has been closed.", "Toast message is wrong");
     }
 
     @Then("^(.*) checks initial ticket count is displayed in the (.*) ticket tab on (.*)$")
@@ -339,6 +337,24 @@ public class TicketsSteps extends AbstractAgentSteps {
                 "Ticket count in middle pane is incorrect");
     }
 
+    @Then("^(.*) checks initial ticket count in the ticket table$")
+    public int getInitialTicketsCountTicketsTable(String agent) {
+        return initialTicketsCountTicketsTable = getTicketsTable(agent).getTicketsCount();
+    }
+
+    @Then("^(.*) checks final ticket count value in the tickets table is (.*) than initial ticket count$")
+    public void verifyFinalTicketsCountTicketsTable(String agent, String finalTicketsCountParameter) {
+        waitFor(1500);
+        int finalTicketsCount = getTicketsTable(agent).getTicketsCount();
+        if (finalTicketsCountParameter.equalsIgnoreCase("less")) {
+            Assert.assertTrue(finalTicketsCount < initialTicketsCountTicketsTable,
+                    "Final ticket count is incorrect");
+        } else if (finalTicketsCountParameter.equalsIgnoreCase("more")) {
+            Assert.assertTrue(finalTicketsCount > initialTicketsCountTicketsTable,
+                    "Final ticket count is incorrect");
+        }
+    }
+
     @Then("^(.*) checks ticket count value (.*) in tickets table$")
     public void verifyTicketsCountEquals1InTicketsTable(String agent, int expectedTicketCount) {
         Assert.assertEquals(getTicketsTable(agent).getTicketsCount(), expectedTicketCount,
@@ -349,4 +365,34 @@ public class TicketsSteps extends AbstractAgentSteps {
         return getLeftMenu(agent).getSupervisorAndTicketsPart().getTicketsCount(platformType, ticketType);
     }
 
+    private boolean areNewChatsLoaded(int previousChats, int wait) {
+        for (int i = 0; i < wait * 2; i++) {
+            if (getTicketsTable("main").getUsersNames().size() > previousChats) return true;
+            else waitFor(500);
+        }
+        return false;
+    }
+
+    private void verifyDateTimeIsInRangeOfTwoDates(LocalDateTime dateTime, LocalDate startDate, LocalDate endDate) {
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(startDate.compareTo(dateTime.toLocalDate()) <= 0,
+                String.format("One of the chats was started before filtered value. Expected: after %s, Found: %s",
+                        startDate, dateTime));
+        softAssert.assertTrue(endDate.compareTo(dateTime.toLocalDate()) >= 0,
+                String.format("One of the chats was ended before filtered value. Expected: before %s, Found: %s",
+                        endDate, dateTime));
+        softAssert.assertAll();
+    }
+
+    private boolean isDateSorted(String order, List<LocalDateTime> listOfDates) {
+        boolean sortedStatus;
+        if (order.contains("desc")) {
+            sortedStatus = listOfDates.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList()).equals(listOfDates);
+        } else if (order.contains("asc")) {
+            sortedStatus = listOfDates.stream().sorted().collect(Collectors.toList()).equals(listOfDates);
+        } else {
+            throw new AssertionError("Incorrect order type was provided");
+        }
+        return sortedStatus;
+    }
 }
