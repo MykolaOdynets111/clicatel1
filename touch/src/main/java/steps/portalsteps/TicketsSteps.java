@@ -138,9 +138,19 @@ public class TicketsSteps extends AbstractAgentSteps {
                 "Closed chat column is not visible");
     }
 
-    @When("^(.*) checks closed ticket is disabled$")
-    public void checkCloseButtonStatus(String agent) {
-        Assert.assertTrue(getTicketsTable(agent).closeButtonStatus(), "Close ticket button is enabled");
+    @When("^(.*) checks closed ticket is (.*)")
+    public void checkCloseButtonStatus(String agent, String buttonStatus) {
+        if (buttonStatus.equalsIgnoreCase("disabled")) {
+            Assert.assertTrue(getTicketsTable(agent).closeButtonStatus(), "Close ticket button is enabled");
+        } else if (buttonStatus.equalsIgnoreCase("enabled")) {
+            Assert.assertFalse(getTicketsTable(agent).closeButtonStatus(), "Close ticket button is disabled");
+        }
+    }
+
+    @Then("^(.*) hover to the close ticket button and see (.*) message$")
+    public void hoverCloseTicketButton(String agent, String toolTipMessage) {
+        getTicketsPage("main").getSupervisorTicketClosedChatView().hoverCloseTicket();
+        Assert.assertEquals(getTicketsPage(agent).getToolTipText(), toolTipMessage, "Closed ticket tool tip message is wrong");
     }
 
     @When("^(.*) checks closed ticket button in quick action bar is disabled$")
@@ -291,7 +301,7 @@ public class TicketsSteps extends AbstractAgentSteps {
     @Then("^(.*) hover over question info button and see (.*) message$")
     public void quickActionToolTipMessage(String agent, String toolTipMessage) {
         getTicketsPage(agent).getTicketsQuickActionBar().hoverQuickActionBar();
-        Assert.assertEquals(getTicketsPage(agent).getQuickActionToolTipText(), toolTipMessage, "Quick Action hover message is wrong");
+        Assert.assertEquals(getTicketsPage(agent).getToolTipText(), toolTipMessage, "Quick Action hover message is wrong");
     }
 
     @Then("^(.*) sees toast message with (.*) text")

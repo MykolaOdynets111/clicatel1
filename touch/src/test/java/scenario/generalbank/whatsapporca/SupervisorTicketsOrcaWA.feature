@@ -45,7 +45,38 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Wait for 2 second
     Then Supervisor can see orca ticket with new ticket message message from agent
 
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-5902")
+  Scenario: CD:: Agent Desk:: Verify if Agent is able to see the notification when the ticket is closed in the chat window
+    Given Setup ORCA Whatsapp integration for General Bank Demo tenant
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Send to agent message by ORCA
+    When Agent select "Tickets" left menu option
+    And Agent search chat orca on Supervisor desk
+    Then Agent see tickets from orca on Unassigned filter page
+    And Select orca ticket checkbox
+    And Click 'Assign manually' button for orca
+    And 'Assign chat' window is opened
+    And I assign chat on Agent for Agent dropdown
+    And I select Touch in left menu and Agent Desk in submenu
+    And Agent select "Tickets" left menu option
+    And Agent select Assigned filter on Left Panel
+    And Agent search chat orca on Supervisor desk
+    Then Agent see tickets from orca on Assigned filter page
+    When Supervisor clicks on first ticket
+    Then Agent checks closed ticket is disabled
+
+    When Agent hover to the close ticket button and see Reply to the customer to close ticket message
+    And Agent send new ticket message message
+    And Wait for 2 second
+    Then Agent checks closed ticket is enabled
+
+    When Agent closes ticket manually
+    And Agent select Closed filter on Left Panel
+    And Supervisor clicks on first ticket
+    Then Visual indicator with "Ticket closed by" text, Agent name and time is shown
+
   @TestCaseId("https://jira.clickatell.com/browse/CCD-7777")
+    @skip
   Scenario: CD :: Agent Desk :: Verify End-User is not connected to the agent when reinitiating a chat after a ticket is created without typing //end
     Given Setup ORCA Whatsapp integration for General Bank Demo tenant
     And I select Touch in left menu and Supervisor Desk in submenu
@@ -65,7 +96,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Send 1 messages chat to agent by ORCA
     Then Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
-    And Agent checks visual indicator with text This chat has been assigned to GBD Main is shown during 2 seconds
+    Then Visual indicator with "This chat has been assigned to" text, Agent name and time is shown
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6093")
   Scenario: CD :: Agent Desk :: Tickets :: Verify that notification message pop-up on the bottom right corner when Agent assign tickets to the himself

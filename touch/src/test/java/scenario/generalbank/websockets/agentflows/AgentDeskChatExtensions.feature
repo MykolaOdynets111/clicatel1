@@ -111,5 +111,5 @@ Feature: Agent Date Time Picker Extension
     And Agent click 'Pending On' chat button
     And Agent select "Pending" left menu option
     And Agent click on new conversation request from orca
-    And Agent checks visual indicator with text This chat has been marked as Pending by GBD Main is shown during 2 seconds
-    Then Agent can't see c2p extension icon
+    Then Visual indicator with "This chat has been marked as Pending by" text, Agent name and time is shown
+    And Agent can't see c2p extension icon
