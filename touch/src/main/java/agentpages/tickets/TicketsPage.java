@@ -17,7 +17,7 @@ public class TicketsPage extends PortalAbstractPage {
     private WebElement ticketAssignedToastMessage;
 
     @FindBy(xpath = "//div[@class='tippy-content']/div")
-    private WebElement flaggedCloseChatToolTip;
+    private WebElement toolTip;
 
     @FindBy(css = ".toast-content-message")
     private WebElement ticketAssignedToastMessageContent;
@@ -30,7 +30,7 @@ public class TicketsPage extends PortalAbstractPage {
     }
 
     private TicketsTable ticketsTable;
-    private TicketClosedChatView supervisorTicketChatView;
+    private TicketChatView supervisorTicketChatView;
     private MessageCustomerWindow messageCustomerWindow;
 
     private TicketsQuickActionBar ticketsQuickActionBar;
@@ -45,7 +45,7 @@ public class TicketsPage extends PortalAbstractPage {
         return ticketsTable;
     }
 
-    public TicketClosedChatView getSupervisorTicketClosedChatView() {
+    public TicketChatView getSupervisorTicketClosedChatView() {
         supervisorTicketChatView.setCurrentDriver(this.getCurrentDriver());
         return supervisorTicketChatView;
     }
@@ -69,8 +69,8 @@ public class TicketsPage extends PortalAbstractPage {
         waitUntilElementNotDisplayed(this.getCurrentDriver(), ticketAssignedToastMessage, 3);
     }
 
-    public String getQuickActionToolTipText() {
-        return getTextFromElem(this.getCurrentDriver(), flaggedCloseChatToolTip, 4, "Tool Tip for Quick Action bar");
+    public String getToolTipText() {
+        return getTextFromElem(this.getCurrentDriver(), toolTip, 4, "Tool Tip");
     }
 
     public String getToastMessageText() {

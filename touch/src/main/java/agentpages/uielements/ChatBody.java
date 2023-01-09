@@ -36,9 +36,6 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = ".spinner")
     private WebElement spinner;
 
-    @FindBy(css = ".channel-separator div")
-    private WebElement visualIndicator;
-
     @FindBy(xpath = ".//li[contains(@class, 'from')]/div[contains(@class, 'avatar')]")
     private WebElement userProfileIcon;
 
@@ -86,23 +83,8 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = "[selenium-id='chat-message-content-opted-out'] p")
     private WebElement stopCardText;
 
-    @FindBy(css ="div[title='AGENT_RECEIVE_CHAT']")
-    private WebElement agentReceiveIndicator;
-
-    @FindBy(css = "div[title='FLAG_CHAT']")
-    private WebElement agentFlagIndicator;
-
-    @FindBy(css = "div[title='UNFLAG_CHAT']")
-    private WebElement agentUnflagIndicator;
-
-    @FindBy(css = "div[title='CLOSE_CHAT']")
-    private WebElement agentCloseChatIndicator;
-
-    @FindBy(css = "div[title='INVITE_AGENT']")
-    private WebElement transferIndicator;
-
-    @FindBy(css = "div[title='AGENT_REJECT_CHAT']")
-    private WebElement rejectTransferIndicator;
+    @FindBy(css = ".channel-separator-title")
+    private WebElement visualIndicator;
     @FindAll({
             @FindBy(css = "[selenium-id='map-chat-message-content-LocationMessage']"),
             @FindBy(css = "[data-testid='map-chat-message-content-LocationMessage']")
@@ -360,22 +342,8 @@ public class ChatBody extends AbstractUIElement {
         return getTextFromElem(this.getCurrentDriver(), stopCardText, 1, "Stop Card text").trim();
     }
 
-    public String getIndicatorsText(String indicator) {
-        switch (indicator) {
-            case "AGENT_RECEIVE_CHAT":
-                return getTextFromElem(this.getCurrentDriver(), agentReceiveIndicator, 1, indicator);
-            case "FLAG_CHAT":
-                return getTextFromElem(this.getCurrentDriver(), agentFlagIndicator, 1, indicator);
-            case "UNFLAG_CHAT":
-                return getTextFromElem(this.getCurrentDriver(), agentUnflagIndicator, 1, indicator);
-            case "CLOSE_CHAT":
-                return getTextFromElem(this.getCurrentDriver(), agentCloseChatIndicator, 1, indicator);
-            case "INVITE_AGENT":
-                return  getTextFromElem(this.getCurrentDriver(), transferIndicator, 1, indicator);
-            case "AGENT_REJECT_CHAT":
-                return  getTextFromElem(this.getCurrentDriver(), rejectTransferIndicator, 1, indicator);
-        }
-        return "Incorrect indicator was provided in steps";
+    public String getIndicatorsText() {
+        return  getTextFromElem(this.getCurrentDriver(), visualIndicator, 1, "Visual Indicator");
     }
 
     public void clickCancelPaymentButton(){

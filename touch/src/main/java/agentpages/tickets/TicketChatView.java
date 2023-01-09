@@ -5,7 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 @FindBy(css = ".chat-view")
-public class TicketClosedChatView extends AbstractUIElement {
+public class TicketChatView extends AbstractUIElement {
 
     @FindBy(xpath = ".//button[text()='Start Chat' or text()='Message Customer']")
     private WebElement messageCustomerOrStartChatButton;
@@ -25,4 +25,8 @@ public class TicketClosedChatView extends AbstractUIElement {
         return isElementShown(this.getCurrentDriver(), messageCustomerOrStartChatButton, 3);
     }
 
+    public void hoverCloseTicket() {
+        waitForElementToBeVisible(this.getCurrentDriver(), closeTicket, 5);
+        moveToElement(this.getCurrentDriver(), closeTicket);
+    }
 }
