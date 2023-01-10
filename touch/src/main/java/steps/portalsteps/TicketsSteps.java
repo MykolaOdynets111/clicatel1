@@ -1,5 +1,7 @@
 package steps.portalsteps;
 
+import agentpages.tickets.MessageCustomerWindow;
+import agentpages.tickets.TicketChatView;
 import agentpages.tickets.TicketsTable;
 import apihelper.ApiHelper;
 import dbmanager.DBConnector;
@@ -33,9 +35,17 @@ public class TicketsSteps extends AbstractAgentSteps {
         return getTicketsPage(agent).getTicketsTable();
     }
 
+    private TicketChatView getTicketsClosedChatView() {
+        return getTicketsPage("main").getSupervisorTicketClosedChatView();
+    }
+
+    private MessageCustomerWindow getTicketsMessageCustomerWindow() {
+        return getTicketsPage("main").getMessageCustomerWindow();
+    }
+
     @Then("^Message Customer Window is opened$")
     public void verifyMessageCustomerWindowIsOpened() {
-        Assert.assertEquals(getTicketsPage("main").getMessageCustomerWindow().getHeader(), "Message Customer", "incorrect header Was shown for   Message Customer Window");
+        Assert.assertEquals(getTicketsMessageCustomerWindow().getHeader(), "Message Customer", "incorrect header Was shown for   Message Customer Window");
     }
 
     @Then("^Select (.*) ticket checkbox$")
@@ -51,12 +61,12 @@ public class TicketsSteps extends AbstractAgentSteps {
     @When("^Click on Message Customer button for (.*)$")
     public void clickOnMessageCustomer(String chanel) {
         getTicketsTable("main").clickAssignOpenTicketButton(getUserName(chanel));
-        getTicketsPage("main").getSupervisorTicketClosedChatView().clickOnMessageCustomerOrStartChatButton();
+        getTicketsClosedChatView().clickOnMessageCustomerOrStartChatButton();
     }
 
     @When("^(.*) checks chat view for closed chat is displayed$")
-    public void verifyClosedChatView(String chanel) {
-        Assert.assertTrue(getTicketsPage("main").getSupervisorTicketClosedChatView().isDisplayed(),
+    public void verifyClosedChatView() {
+        Assert.assertTrue(getTicketsClosedChatView().isDisplayed(),
                 "Chat view is not visible");
     }
 
@@ -96,10 +106,8 @@ public class TicketsSteps extends AbstractAgentSteps {
 
     @When("^(.*) closed ticket for (.*)$")
     public void clickCloseButtonFor(String agent, String chanel) {
-        getTicketsTable("main")
-                .selectTicketCheckbox(getUserName(chanel))
-                .getTicketByUserName(getUserName(chanel))
-                .clickCloseButton(getUserName(chanel));
+        clickCloseButton(agent, chanel);
+
         waitFor(1000);
 
         if (getAgentHomePage(agent).getAgentFeedbackWindow().isAgentFeedbackWindowShown()) {
@@ -112,12 +120,12 @@ public class TicketsSteps extends AbstractAgentSteps {
         getTicketsTable(agent)
                 .selectTicketCheckbox(getUserName(chanel))
                 .getTicketByUserName(getUserName(chanel))
-                .clickCloseButton(getUserName(chanel));
+                .clickCloseButton();
     }
 
     @When("^(.*) closes ticket manually$")
     public void closeTicketManually(String agent) {
-        getTicketsPage("main").getSupervisorTicketClosedChatView().clickOnCloseTicketButton();
+        getTicketsClosedChatView().clickOnCloseTicketButton();
 
         waitFor(1000);
 
@@ -149,7 +157,7 @@ public class TicketsSteps extends AbstractAgentSteps {
 
     @Then("^(.*) hover to the close ticket button and see (.*) message$")
     public void hoverCloseTicketButton(String agent, String toolTipMessage) {
-        getTicketsPage("main").getSupervisorTicketClosedChatView().hoverCloseTicket();
+        getTicketsClosedChatView().hoverCloseTicket();
         Assert.assertEquals(getTicketsPage(agent).getToolTipText(), toolTipMessage, "Closed ticket tool tip message is wrong");
     }
 
@@ -201,7 +209,7 @@ public class TicketsSteps extends AbstractAgentSteps {
 
     @Then("^(.*) is the current agent of (.*) ticket$")
     public void verifyCurrentAgentOfTicket(String agentName, String chanelName) {
-        Assert.assertTrue(getTicketsTable("main").getTicketByUserName(getUserName(chanelName)).getCurrentAgent().contains(agentName),
+        Assert.assertTrue(getTicketsTable(agentName).getTicketByUserName(getUserName(chanelName)).getCurrentAgent().contains(agentName),
                 "The current agent of the ticket is not as expected");
     }
 

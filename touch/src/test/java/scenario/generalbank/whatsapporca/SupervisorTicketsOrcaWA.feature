@@ -22,8 +22,8 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Agent select Closed filter on Left Panel
     Then Verify ticket is present for orca for 2 seconds
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-7779")
-  Scenario: CD:: Agent Desk:: Tickets:: Agent_Desk-Tickets-Assigned:: Verify when Agent send message to Assigned ticket an error is not displayed as "Client already has a active conservation with Agent" when there is no active conversation
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-5850")
+  Scenario: CD :: Agent Desk :: Tickets :: Assigned Tickets :: Verify that Agent can send standard message to the customer
     Given Setup ORCA Whatsapp integration for General Bank Demo tenant
     And I select Touch in left menu and Supervisor Desk in submenu
     And Send to agent message by ORCA

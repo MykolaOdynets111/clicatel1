@@ -75,7 +75,7 @@ public class TicketRow extends AbstractWidget {
     }
 
     public boolean getCheckboxStatus() {
-        return Boolean.parseBoolean(getAttributeFromElem(this.getCurrentDriver(), checkboxStatusString, checkboxStatus, 8,
+        return Boolean.parseBoolean(getAttributeFromElem(this.getCurrentDriver(), checkboxStatusString, 8,
                 "Checkbox ticket row", "aria-checked"));
     }
 
@@ -156,7 +156,7 @@ public class TicketRow extends AbstractWidget {
         return isElementRemoved(this.getCurrentDriver(), assignButton, 5);
     }
 
-    public void clickCloseButton(String userName){
+    public void clickCloseButton(){
         clickElem(this.getCurrentDriver(), closeTicketButton, 5, "Close ticket button");
     }
 }
