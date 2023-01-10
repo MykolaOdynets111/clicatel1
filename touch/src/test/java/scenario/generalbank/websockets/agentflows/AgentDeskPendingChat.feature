@@ -17,11 +17,11 @@ Feature: Pending chats :: Chatdesk
     And Agent click on new conversation request from orca
     And Agent click 'Flag chat' button
     And Agent sees 'flag' icon in this chat
-    And Agent view the visual indicator "This chat has been flagged by " agent name and timestamp in the conversation area
+    Then Visual indicator with "This chat has been flagged by" text, Agent name and time is shown
     And Agent click 'Pending On' chat button
-    Then Agent view the visual indicator "This chat has been marked as live chat by " agent name and timestamp in the conversation area
+    Then Visual indicator with "This chat has been marked as live chat by" text, Agent name and time is shown
     And Agent click 'Unflag chat' button
-    Then Agent view the visual indicator "This chat has been un-flagged by " agent name and timestamp in the conversation area
+    Then Visual indicator with "This chat has been un-flagged by" text, Agent name and time is shown
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2028")
   Scenario: CD :: Agent Desk :: Pending Chat :: Verify if flagged pending chat can become a flagged live chat when a pending chat becomes a live chat after User message
@@ -29,13 +29,15 @@ Feature: Pending chats :: Chatdesk
     And Agent click on new conversation request from orca
     And Agent click 'Flag chat' button
     And Agent sees 'flag' icon in this chat
-    And Agent checks visual indicator with text This chat has been flagged by GBD Main is shown during 2 seconds
-    And Send send me to live section message by ORCA
+    Then Visual indicator with "This chat has been flagged by" text, Agent name and time is shown
+
+    When Send send me to live section message by ORCA
     And Agent gets pending to live chat dialog with header Chat moved to live
     And Agent clicks on go to chat button
-    And Agent checks visual indicator with text The user has responded, the chat has now been marked as live chat is shown during 2 seconds
-    And Agent click 'Unflag chat' button
-    And Agent checks visual indicator with text This chat has been un-flagged by GBD Main is shown during 2 seconds
+    Then Agent checks visual indicator with text The user has responded, the chat has now been marked as live chat is shown during 2 seconds
+
+    When Agent click 'Unflag chat' button
+    Then Visual indicator with "This chat has been un-flagged by" text, Agent name and time is shown
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2023")
   Scenario: CD :: Agent Desk :: Pending Chat :: Verify if Agent can filter flagged chat on the Pending tab
@@ -43,12 +45,13 @@ Feature: Pending chats :: Chatdesk
     And Agent click on new conversation request from orca
     And Agent click 'Flag chat' button
     And Agent sees 'flag' icon in this chat
-    And Agent checks visual indicator with text This chat has been flagged by GBD Main is shown during 2 seconds
+    And Visual indicator with "This chat has been flagged by" text, Agent name and time is shown
     And Agent filter closed chats with no channel, no sentiment and flagged is true
     Then Agent sees 'flag' icon in this chat
     And Agent has new conversation request
     And Agent click on new conversation request from orca
     Then Agent click 'Pending On' chat button
+    And Wait for 2 second
     And Agent click on new conversation request from orca
     And Agent click 'Unflag chat' button
 
@@ -58,7 +61,7 @@ Feature: Pending chats :: Chatdesk
     And Agent click on new conversation request from orca
     And Agent click 'Flag chat' button
     And Agent sees 'flag' icon in this chat
-    And Agent checks visual indicator with text This chat has been flagged by GBD Main is shown during 2 seconds
+    And Visual indicator with "This chat has been flagged by" text, Agent name and time is shown
     Then Agent hover over "Exit chat" button and see You do not have the ability to close the chat when it has been flagged message
     When Agent click 'Unflag chat' button
     And Agent click 'Pending On' chat button
@@ -71,7 +74,7 @@ Feature: Pending chats :: Chatdesk
     And Agent click on new conversation request from orca
     And Agent click 'Flag chat' button
     And Agent sees 'flag' icon in this chat
-    And Agent checks visual indicator with text This chat has been flagged by GBD Main is shown during 2 seconds
+    And Visual indicator with "This chat has been flagged by" text, Agent name and time is shown
     And Wait for 2 second
     Then Agent checks "transfer chat" icon disappeared on the chat desk
     When Agent click 'Unflag chat' button
@@ -87,7 +90,7 @@ Feature: Pending chats :: Chatdesk
     And Agent click on new conversation request from orca
     And Agent click 'Flag chat' button
     And Agent sees 'flag' icon in this chat
-    And Agent checks visual indicator with text This chat has been flagged by GBD Main is shown during 2 seconds
+    And Visual indicator with "This chat has been flagged by" text, Agent name and time is shown
     And Send send me to live section message by ORCA
     And Agent gets pending to live chat dialog with header Chat moved to live
     And Agent clicks on go to chat button
@@ -110,9 +113,10 @@ Feature: Pending chats :: Chatdesk
     And Agent click on new conversation request from orca
     And Agent click 'Flag chat' button
     And Agent sees 'flag' icon in this chat
-    And Agent checks visual indicator with text This chat has been flagged by GBD Main is shown during 2 seconds
+    And Visual indicator with "This chat has been flagged by" text, Agent name and time is shown
     And Agent click 'Unflag chat' button
-    Then Agent checks visual indicator with text This chat has been un-flagged by GBD Main is shown during 2 seconds
+    And Visual indicator with "This chat has been un-flagged by" text, Agent name and time is shown
     When Agent click 'Pending On' chat button
+    And Wait for 2 second
     Then Agent click on new conversation request from orca
-    And Agent checks visual indicator with text This chat has been marked as live chat by GBD Main is shown during 2 seconds
+    And Visual indicator with "This chat has been marked as live chat by" text, Agent name and time is shown
