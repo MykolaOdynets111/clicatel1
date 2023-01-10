@@ -1,4 +1,4 @@
-package api.models.response;
+package api.models.response.paymentgatewaysettingsresponse;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

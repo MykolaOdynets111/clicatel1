@@ -56,15 +56,6 @@ Feature: Transaction execution
 
     Then User gets an error for payment link creation
 
-
     Examples:
       | channel | to           | currency | orderNumber | subTotalAmount | taxAmount | totalAmount | timestamp                    | departmentId | departmentName | returnPaymentLink | paymentReviewAutoReversal | transactionType |  |
       | sms     | 447938556403 | ZAR      | 001         | 100            | 0.0       | 4004.0      | 2021-04-27T17:35:58.000+0000 | 567          | Sales          | true              | false                     | authorization   |  |
-
-
-
-
-
-
-
-

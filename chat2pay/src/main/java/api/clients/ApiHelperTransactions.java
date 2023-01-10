@@ -1,11 +1,17 @@
 package api.clients;
 
 import api.models.request.PaymentBody;
-import api.models.response.*;
+import api.models.response.ApiKeysResponse;
+import api.models.response.Content;
+import api.models.response.IntegrationResponse;
+import api.models.response.paymentgatewaysettingsresponse.PaymentGatewaySettingsResponse;
+import api.models.response.paymentgatewaysettingsresponse.PaymentLinkResponse;
+import api.models.response.widget.Widget;
+import io.restassured.response.Response;
+
 import java.util.List;
 
-public class TransactionsHelper extends Chat2PayApiHelper {
-
+public class ApiHelperTransactions extends ApiHelperChat2Pay {
 
     public static String getWidgetId(String widgetName) {
         List<Widget> widgets = getChat2PayQuery(Endpoints.EXISTED_WIDGETS_ENDPOINT)
@@ -16,7 +22,7 @@ public class TransactionsHelper extends Chat2PayApiHelper {
                 .getId();
     }
 
-    public static String getPaymentGatewaySettingsId( String widgetId) {
+    public static String getPaymentGatewaySettingsId(String widgetId) {
         return getChat2PayQuery(String.format(Endpoints.PAYMENTS_GATEWAY_ENDPOINT, widgetId))
                 .jsonPath()
                 .getList("", PaymentGatewaySettingsResponse.class)
@@ -50,10 +56,11 @@ public class TransactionsHelper extends Chat2PayApiHelper {
         postQuery(Endpoints.CHAT_TO_PAY_ENDPOINT, paymentBody, activationKey, 400);
     }
 
-    public static void checkWorkingPaymentLink( String paymentLink) {
-        getChat2PayQuery(paymentLink);
+    public static Response getC2PConfigurationResponse(String authToken) {
+        return getQuery(Endpoints.CHAT_TO_PAY_CONFIGURATION_ENDPOINT, authToken);
     }
 
-
-
+    public static void checkWorkingPaymentLink(String paymentLink) {
+        getChat2PayQuery(paymentLink);
+    }
 }

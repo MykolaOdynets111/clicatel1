@@ -1,5 +1,6 @@
-package api.models.response;
+package api.models.response.widget;
 
+import api.models.response.Account;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

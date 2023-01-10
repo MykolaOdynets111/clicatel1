@@ -1,4 +1,4 @@
-package api.models.response.integrationresponse;
+package api.models.response.integration;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

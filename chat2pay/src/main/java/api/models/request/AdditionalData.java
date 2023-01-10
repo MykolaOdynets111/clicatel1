@@ -19,6 +19,4 @@ public class AdditionalData {
 
     @JsonProperty("departmentName")
     private String departmentName;
-
-
 }

@@ -88,7 +88,5 @@ public class PaymentBody {
         this.paymentReviewAutoReversal = (parameters.get("paymentReviewAutoReversal"));
         this.applicationId = (applicationID);
         this.transactionType = (parameters.get("transactionType"));
-
     }
-
 }
