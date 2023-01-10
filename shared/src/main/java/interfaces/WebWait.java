@@ -131,6 +131,12 @@ public interface WebWait {
 
     // ================================== Elements to be Present  ======================================== //
 
+    default WebElement waitForElementsToBePresent(WebDriver driver, WebElement element, int wait){
+        return initWait(driver, wait)
+                .ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.visibilityOf(element));
+    }
 
     default List<WebElement> waitForElementsToBePresentByXpath(WebDriver driver, String xpath, int wait){
         return initWait(driver, wait).ignoring(NoSuchElementException.class)

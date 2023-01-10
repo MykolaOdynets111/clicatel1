@@ -41,7 +41,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     private static String selectedEmoji;
     private static final ThreadLocal<List<String>> messagesFromChatBody = new ThreadLocal<List<String>>();
     public static ThreadLocal<String> locationURL = new ThreadLocal<String>();
-    private LocationWindow locationWindow ;
+    private LocationWindow locationWindow;
     private C2pSendForm c2pSendForm;
 
     public static String getSelectedEmoji() {
@@ -52,14 +52,13 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         return messagesFromChatBody;
     }
 
-    public static String getLocationURL(){
+    public static String getLocationURL() {
         return locationURL.get();
     }
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) user's message$")
     public void verifyUserMessageOnAgentDesk(String userMessage) {
-        if (userMessage.contains("personal info"))
-        {
+        if (userMessage.contains("personal info")) {
             userMessage = "Submitted data:\n" +
                     "" + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + "\n" +
                     "health@test.com";
@@ -93,32 +92,32 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         }
     }
 
-    @Then ("^Visual indicator (.*) with \"(.*)\" text, (.*) name and time is shown$")
-    public void verifyVisualIndicators(String indicator, String message, String agent){
-        String  generatedMessage = message + " " + getAgentName(agent);
-        validateIndicators(indicator, generatedMessage, agent);
+    @Then("^Visual indicator with \"(.*)\" text, (.*) name and time is shown$")
+    public void verifyVisualIndicators(String message, String agent) {
+        String generatedMessage = message + " " + getAgentName(agent);
+        validateIndicators(generatedMessage, agent);
     }
 
-    @Then ("^Transfer indicator (.*) with \"(.*)\" text, (.*) name \" to \" (.*) name and time is shown$")
-    public void verifyTransferIndicators(String indicator, String message, String firstAgent, String secondAgent){
+    @Then("^Transfer indicator with \"(.*)\" text, (.*) name \" to \" (.*) name and time is shown$")
+    public void verifyTransferIndicators(String message, String firstAgent, String secondAgent) {
         String generatedMessage = message + " " + getAgentName(firstAgent) + " to " + getAgentName(secondAgent);
-        validateIndicators(indicator, generatedMessage, secondAgent);
+        validateIndicators(generatedMessage, secondAgent);
     }
 
-    @Then ("^Transfer reject indicator (.*) with First agent name and \"(.*)\" text")
-    public void verifyRejectedIndicator(String indicator, String message) {
+    @Then("^Transfer reject indicator with First agent name and \"(.*)\" text")
+    public void verifyRejectedIndicator(String message) {
         String generatedMessage = getAgentName("First agent") + " " + message;
-        String indicatorFromUI = getChatBody("Second agent").getIndicatorsText(indicator);
-        Assert.assertEquals(indicatorFromUI, generatedMessage.trim(), indicator + " has incorrect text");
+        String indicatorFromUI = getChatBody("Second agent").getIndicatorsText();
+        Assert.assertEquals(indicatorFromUI, generatedMessage.trim(), "Indicator has incorrect text");
     }
 
-    private void validateIndicators(String indicator, String generatedMessage, String agent){
-        String indicatorFromUI = getChatBody(agent).getIndicatorsText(indicator);
-        String time = indicatorFromUI.substring(indicatorFromUI.length()-8);
-        String massageWithNameUI = indicatorFromUI.substring(0, indicatorFromUI.length()-8).trim();
+    private void validateIndicators(String generatedMessage, String agent) {
+        String indicatorFromUI = getChatBody(agent).getIndicatorsText();
+        String time = indicatorFromUI.substring(indicatorFromUI.length() - 8);
+        String massageWithNameUI = indicatorFromUI.substring(0, indicatorFromUI.length() - 20).trim();
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(massageWithNameUI, generatedMessage.trim(), indicator + " has incorrect text");
-        softAssert.assertTrue(time.matches("^([0-1]?[0-9]|[2][0-3]):([0-5][0-9])(:[0-5][0-9])?$"), indicator + " time is not shown");
+        softAssert.assertEquals(massageWithNameUI, generatedMessage.trim(), "Indicator has incorrect text");
+        softAssert.assertTrue(time.matches("^([0-1]?[0-9]|[2][0-3]):([0-5][0-9])(:[0-5][0-9])?$"), "Indicator time is not shown");
         softAssert.assertAll();
     }
 
@@ -139,9 +138,9 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @Then("^Agent attach (.*) file type$")
     public void attachFile(String fileName) {
-        File pathToFile = new File(System.getProperty("user.dir")+"/src/test/resources/mediasupport/" + fileName + "." + fileName);
+        File pathToFile = new File(System.getProperty("user.dir") + "/src/test/resources/mediasupport/" + fileName + "." + fileName);
         String newName = new Faker().letterify(fileName + "?????") + "." + fileName;
-        File renamed =  new File(System.getProperty("user.dir")+"/src/test/resources/mediasupport/renamed/" +  newName);
+        File renamed = new File(System.getProperty("user.dir") + "/src/test/resources/mediasupport/renamed/" + newName);
         try {
             Files.copy(pathToFile, renamed);
         } catch (IOException e) {
@@ -154,14 +153,14 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     }
 
     @When("^Agent send attached file$")
-    public void agentSendAttachment(){
+    public void agentSendAttachment() {
         getChatAttachmentForm("agent").clickSendButton();
     }
 
-    @Then ("^Attachment message (?:from (.*) is|is) shown for Agent$")
-    public void verifyAttachmentPresent(String channel){
+    @Then("^Attachment message (?:from (.*) is|is) shown for Agent$")
+    public void verifyAttachmentPresent(String channel) {
         String nameOfFile = DefaultTouchUserSteps.mediaFileName.get();
-        if(!(channel == null)){
+        if (!(channel == null)) {
             nameOfFile = DotControlSteps.mediaFileName.get();
         }
         SoftAssert soft = new SoftAssert();
@@ -172,38 +171,38 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     }
 
     @When("^(.*) download the file$")
-    public void downloadTheFile(String agent){
+    public void downloadTheFile(String agent) {
         getChatBody(agent).getAttachmentFile().clickDownloadLink();
     }
 
     @Then("^File is not changed after uploading and downloading$")
-    public void verifyFilesEquality(){
-        File fileForUpload = new File(System.getProperty("user.dir")+"/src/test/resources/mediasupport/renamed/" + DefaultTouchUserSteps.mediaFileName.get());
+    public void verifyFilesEquality() {
+        File fileForUpload = new File(System.getProperty("user.dir") + "/src/test/resources/mediasupport/renamed/" + DefaultTouchUserSteps.mediaFileName.get());
 //        String sharedFolder = File.separator + File.separator+ "172.31.76.251"+File.separator + "Share" + File.separator
 //                + "chrome" + File.separator;
         //String sharedFolder = "\\\\172.31.76.251\\Share\\chrome\\";
-        String sharedFolder = System.getProperty("user.home")+ "/Downloads/";
-        File downloadedFile = new File( sharedFolder +  DefaultTouchUserSteps.mediaFileName.get());
+        String sharedFolder = System.getProperty("user.home") + "/Downloads/";
+        File downloadedFile = new File(sharedFolder + DefaultTouchUserSteps.mediaFileName.get());
         List<String> allFiles = new ArrayList<>();
-        for (int i=0; i < 10; i++){
+        for (int i = 0; i < 10; i++) {
             try (Stream<Path> walk = java.nio.file.Files.walk(Paths.get(sharedFolder))) {
                 allFiles = walk.filter(java.nio.file.Files::isRegularFile)
                         .map(x -> x.toString()).collect(Collectors.toList());
-                if (allFiles.contains(downloadedFile.getPath())){
+                if (allFiles.contains(downloadedFile.getPath())) {
                     break;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if (i== 9){
-                Assert.fail("File " + downloadedFile.getPath() + " was not downloaded to the shared folder\n"+
+            if (i == 9) {
+                Assert.fail("File " + downloadedFile.getPath() + " was not downloaded to the shared folder\n" +
                         "the following files are found only: " + allFiles);
             }
             waitFor(2000);
         }
         boolean fileEquality = false;
         try {
-            fileEquality =  FileUtils.contentEquals(fileForUpload, downloadedFile);
+            fileEquality = FileUtils.contentEquals(fileForUpload, downloadedFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -212,7 +211,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @Then("(.*) is able to see the File is downloaded after downloading$")
     public boolean isFileDownloaded(String userType) {
-        String downloadPath = System.getProperty("user.home")+ "/Downloads/";
+        String downloadPath = System.getProperty("user.home") + "/Downloads/";
         String fileName = DefaultTouchUserSteps.mediaFileName.get();
         File dir = new File(downloadPath);
         File[] dirContents = dir.listFiles();
@@ -228,7 +227,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     }
 
     @Then("^Agent can play (.*) file$")
-    public void verifyIsFilePlaying(String fileType){
+    public void verifyIsFilePlaying(String fileType) {
         ChatAttachment agentDeskChatAttachment = getChatBody("agent").getAttachmentFile().clickPlayPauseButton(fileType);
         Assert.assertTrue(agentDeskChatAttachment.verifyIsFilePlaying(), "Media content is not playing");
     }
@@ -243,8 +242,8 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     public void verifyUserMessageOnAgentDeskFromTwitter(String userMessage) {
         if (userMessage.contains("agent") || userMessage.contains("support")) {
             userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
-        } else if (! userMessage.equalsIgnoreCase("//end") ||
-                ! userMessage.equalsIgnoreCase("//stop")){
+        } else if (!userMessage.equalsIgnoreCase("//end") ||
+                !userMessage.equalsIgnoreCase("//stop")) {
             userMessage = FacebookSteps.getCurrentUserMessageText();
         }
         Assert.assertTrue(getChatBody("main").isUserMessageShown(userMessage),
@@ -282,12 +281,12 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     }
 
     @And("Collect (.*) chat messages")
-    public void collectMassages(String agent){
+    public void collectMassages(String agent) {
         messagesFromChatBody.set(getChatBody(agent).getAllMessages());
     }
 
     @And("^(.*) clicks the link message (.*)$")
-    public void clickOnLinkMessage(String agent, String text){
+    public void clickOnLinkMessage(String agent, String text) {
         getChatBody(agent).clickLatestLinkMessage(text);
     }
 
@@ -334,15 +333,15 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     }
 
     @When("^(.*) sees (.*) Location from User$")
-    public void verifyLocationFromUser(String agent, String location){
+    public void verifyLocationFromUser(String agent, String location) {
         waitFor(2000);// URL needs time for full creation
-                Assert.assertTrue(getAgentHomePage(agent).getChatBody().getLocationURLFromUser().contains(location),
-                        agent+ " didn't get Lviv location");
+        Assert.assertTrue(getAgentHomePage(agent).getChatBody().getLocationURLFromUser().contains(location),
+                agent + " didn't get Lviv location");
         locationURL.set(getAgentHomePage(agent).getChatBody().getLocationURLFromAgent());
     }
 
     @Then("^(.*) can see message with HSM label in Conversation area$")
-    public void isHSMPresentInChatBody(String agent){
+    public void isHSMPresentInChatBody(String agent) {
         Assert.assertTrue(getAgentHomePage(agent).getChatBody().isHSMShownForAgent(),
                 "HSM message is not present in Conversation area");
     }
@@ -538,7 +537,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @When("^(.*) hover over \"Exit chat\" button and see (.*) message$")
     public void closeChatAndCheckErrorMessage(String agent, String errorMessage) {
         getAgentHomeForMainAgent().hoverCloseChatIfVisible();
-        Assert.assertEquals(getAgentHomePage(agent).getChatHeader().getFlaggedMessageText(),errorMessage,"Error message is wrong");
+        Assert.assertEquals(getAgentHomePage(agent).getChatHeader().getFlaggedMessageText(), errorMessage, "Error message is wrong");
     }
 
     @Then("^All session attributes are closed in DB$")
@@ -565,11 +564,11 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         soft.assertAll();
     }
 
-    private boolean waitForSessionToBeClosed(int wait){
+    private boolean waitForSessionToBeClosed(int wait) {
         Map<String, String> sessionDetails;
-        for(int i=0; i<wait; i++){
+        for (int i = 0; i < wait; i++) {
             sessionDetails = DBConnector.getSessionDetailsByClientID(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
-            if(sessionDetails.get("state").equals("TERMINATED") & sessionDetails.get("endedDate") != null) return true;
+            if (sessionDetails.get("state").equals("TERMINATED") & sessionDetails.get("endedDate") != null) return true;
             else waitFor(1000);
         }
         return false;
@@ -593,6 +592,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         Assert.assertEquals(getSuggestedGroup("main").getSuggestionsNotAvailableMessage(), expectedMessage,
                 "Error message that Agent Assist feature is not available is not as expected");
     }
+
     @Then("^(?:End chat|Agent Feedback) popup is not shown for (.*)$")
     public void verifyFeedbackPopupNotOpened(String agent) {
         AgentFeedbackWindow feedbackWindow = getAgentHomePage(agent).getAgentFeedbackWindow();
@@ -601,6 +601,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
                 .as("Agent Feedback popup should not be opened")
                 .isFalse();
     }
+
     @Then("^Correct sentiment on (.*) user's message is stored in DB$")
     public void verifyCorrectSentimentStoredInDb(String userMessage) {
         String expectedSentiment = ApiHelperTie.getTIESentimentOnMessage(userMessage);
@@ -625,7 +626,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @Then("^(.*) can see valid sentiments \\(Neutral sentiment by default, There are 3 icons for sentiments\\)$")
     public void validSentimentsAreShown(String agent) {
-        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
+        File image = new File(System.getProperty("user.dir") + "/touch/src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
         Assert.assertTrue(getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments(image), "Sentiments in agent feedback window as not expected. (Neutral sentiment by default, There are 3 icons for sentiments) \n");
     }
 
@@ -634,13 +635,13 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         boolean result = false;
         boolean resultHappy = false;
         boolean resultUnsatisfied = false;
-        File imageNeutral = new File(System.getProperty("user.dir")+"/touch/src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
+        File imageNeutral = new File(System.getProperty("user.dir") + "/touch/src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
         result = getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments(imageNeutral);
         getAgentHomePage(agent).getAgentFeedbackWindow().setSentimentHappy();
-        File imageHappy = new File(System.getProperty("user.dir")+"/touch/src/test/resources/sentimenticons/sentimentsConcludeWindowHappy.png");
+        File imageHappy = new File(System.getProperty("user.dir") + "/touch/src/test/resources/sentimenticons/sentimentsConcludeWindowHappy.png");
         resultHappy = getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments(imageHappy);
         getAgentHomePage(agent).getAgentFeedbackWindow().setSentimentUnsatisfied();
-        File imageUnsatisfied = new File(System.getProperty("user.dir")+"/touch/src/test/resources/sentimenticons/sentimentsConcludeWindowUnsatisfied.png");
+        File imageUnsatisfied = new File(System.getProperty("user.dir") + "/touch/src/test/resources/sentimenticons/sentimentsConcludeWindowUnsatisfied.png");
         resultUnsatisfied = getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments(imageUnsatisfied);
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(result, "Neutral. Sentiments in agent feedback window as not expected. \n");
@@ -648,24 +649,27 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         soft.assertTrue(resultUnsatisfied, "Unsatisfied. Sentiments in agent feedback window as not expected. \n");
         soft.assertAll();
     }
+
     @Then("^(.*) sees \"(.*)\" tip in conversation area$")
-    public void verifyTipIfNoSelectedChat(String agent, String note){
+    public void verifyTipIfNoSelectedChat(String agent, String note) {
         Assert.assertEquals(getAgentHomePage(agent).getTipIfNoChatSelected(), note,
                 "Tip note if no chat selected is not as expected");
     }
+
     @Then("^(.*) sees \"(.*)\" tip in context area$")
-    public void verifyTipIfNoSelectedChatInContextArea(String agent, String note){
+    public void verifyTipIfNoSelectedChatInContextArea(String agent, String note) {
         Assert.assertEquals(getAgentHomePage(agent).getTipIfNoChatSelectedFromContextArea(), note,
                 "Tip note in context area if no chat selected is not as expected");
     }
 
     @Then("^(.*) sees \"(.*)\" placeholder in input field$")
-    public void verifyInputFieldPlaceholder(String agent, String placeholder){
+    public void verifyInputFieldPlaceholder(String agent, String placeholder) {
         Assert.assertEquals(getAgentHomePage(agent).getChatForm().getPlaceholderFromInputLocator(), placeholder,
                 "Placeholder in input field in opened chat is not as expected");
     }
+
     @Then("^Messages is correctly displayed and has correct color$")
-    public void verifyMessages(){
+    public void verifyMessages() {
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(getChatBody("main agent").verifyAgentMessageColours(),
                 "Agent messages' color is not as expected");
@@ -677,9 +681,9 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @Then("^(.*) user initials is shown$")
     public void verifyDefaultUserImage(String integration) {
         String userName = getUserName(integration);
-        String initials = userName.substring(0,1);
-        if(userName.contains(" ")){
-            initials += userName.split(" ")[1].substring(0,1);
+        String initials = userName.substring(0, 1);
+        if (userName.contains(" ")) {
+            initials += userName.split(" ")[1].substring(0, 1);
         }
         Assert.assertEquals(getChatBody("main agent").isValidDefaultUserProfileIcon(), initials.toUpperCase(),
                 "Incorrect default user picture shown");
@@ -693,7 +697,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @When("^(.*) open chat location form$")
     public void openLocationToUserAndSetSomeText(String agent) {
-        locationWindow =  getAgentHomePage(agent).openLocationWindow();
+        locationWindow = getAgentHomePage(agent).openLocationWindow();
     }
 
     @And("^Agent search for (.*) Location$")
@@ -714,7 +718,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @And("^Agent click on (.*) Location$")
     public void agentClickOnLocation(String locationName) {
         locationWindow.selectLocation(locationName);
-        Assert.assertEquals(locationWindow.getTextFromSearch(),locationName, "Location did not match");
+        Assert.assertEquals(locationWindow.getTextFromSearch(), locationName, "Location did not match");
     }
 
     @And("^Agent checks Location list size as (.*)$")
@@ -733,20 +737,20 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     }
 
     @When("^(.*) open c2p form$")
-    public void agentOpenC2PForm(String agent){
+    public void agentOpenC2PForm(String agent) {
         c2pSendForm = getAgentHomePage(agent).openc2pSendForm();
     }
 
     @When("^(.*) open and select extension with name$")
-    public void agentOpenC2PFormWithExtensionName(String agent, List<String> datatable){
-        for(String a : datatable) {
+    public void agentOpenC2PFormWithExtensionName(String agent, List<String> datatable) {
+        for (String a : datatable) {
             c2pSendForm = getAgentHomePage(agent).openc2pSendForm(a);
             waitFor(1000);
         }
     }
 
     @When("^(.*) click start chat button$")
-    public void agentClickStartChatButton(String agent){
+    public void agentClickStartChatButton(String agent) {
         getAgentHomePage(agent).getChatForm().openHSMForm();
     }
 
@@ -778,38 +782,38 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     }
 
     @Then("^(.*) get (.*) update is sent to agent desk by C2P$")
-    public void verifyPaymentC2pText(String agent, String paymentText){
+    public void verifyPaymentC2pText(String agent, String paymentText) {
         Assert.assertTrue(getAgentHomePage(agent).getChatBody().getC2pPaymentCardsText().contains(paymentText), "Expire card didn't come from c2p");
     }
 
     @Then("^(.*) sees C2P link with (.*) number in chat body$")
-    public void verifyExpirationC2p(String agent, String number){
-        Assert.assertTrue(getAgentHomePage(agent).getChatBody().getC2pCardsText().contains(number), "C2P link with number: "+ number +"is not shown in chat body");
+    public void verifyExpirationC2p(String agent, String number) {
+        Assert.assertTrue(getAgentHomePage(agent).getChatBody().getC2pCardsText().contains(number), "C2P link with number: " + number + "is not shown in chat body");
     }
 
     @Then("^(.*) sees extension link with (.*) name in chat body$")
-    public void verifyDatePickerChatBody(String agent, String name){
-        Assert.assertTrue(getAgentHomePage(agent).getChatBody().getExtensionCardText().contains(name), "Date Picker with name: "+ name +"is not shown in chat body");
+    public void verifyDatePickerChatBody(String agent, String name) {
+        Assert.assertTrue(getAgentHomePage(agent).getChatBody().getExtensionCardText().contains(name), "Date Picker with name: " + name + "is not shown in chat body");
     }
 
     @Then("^(.*) checks extensions in Frequently Used tab should be available in All Extension tab as well$")
-    public void verifyExtensionsFrequentExtTabAllExtTab(String agent){
+    public void verifyExtensionsFrequentExtTabAllExtTab(String agent) {
         getAgentHomePage(agent).getChatForm().openExtensionsForm();
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(getAgentHomePage(agent).getExtensionsForm().isFreqUsedTabsExtsExistInAllExtsTab(), "Frequently used extension is not there in all extensions" );
-        softAssert.assertTrue(getAgentHomePage(agent).getExtensionsForm().frequentExtListSizeAllExtensionListSizeComparison(), "Frequently used extension size is more than all extensions" );
+        softAssert.assertTrue(getAgentHomePage(agent).getExtensionsForm().isFreqUsedTabsExtsExistInAllExtsTab(), "Frequently used extension is not there in all extensions");
+        softAssert.assertTrue(getAgentHomePage(agent).getExtensionsForm().frequentExtListSizeAllExtensionListSizeComparison(), "Frequently used extension size is more than all extensions");
         softAssert.assertAll();
     }
 
     @Then("^(.*) checks extensions in Frequently Used tab should be less than 10$")
-    public void verifyFrequentExtensionTabWithLessThan10Extensions(String agent){
+    public void verifyFrequentExtensionTabWithLessThan10Extensions(String agent) {
         getAgentHomePage(agent).getChatForm().openExtensionsForm();
         Assert.assertTrue(getAgentHomePage(agent).getExtensionsForm().frequentExtListSize() < 10, "Frequently used extension is not less than 10");
     }
 
     @Then("^(.*) checks visual indicator with text (.*) is shown during (.*) seconds$")
-    public void verifyVisualIndicatorText(String agent, String visualIndicatorText, int wait){
+    public void verifyVisualIndicatorText(String agent, String visualIndicatorText, int wait) {
         Assert.assertTrue(getChatBody(agent).isVisualIndicatorTextShown(wait, visualIndicatorText),
-                String.format("Visual Indicator Text '%s' is incorrect",visualIndicatorText));
+                String.format("Visual Indicator Text '%s' is incorrect", visualIndicatorText));
     }
 }

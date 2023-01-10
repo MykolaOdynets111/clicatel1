@@ -17,9 +17,6 @@ public class TicketsTable extends AbstractUIElement {
     @FindBy(xpath = "//button[text() = 'Assign']")
     private WebElement assignTicketButton;
 
-    @FindBy(xpath = "//button[text() = 'Close']")
-    private WebElement closeTicketButton;
-
     @FindBy(xpath = "//button[text() = 'Accept']")
     private WebElement acceptTicketButton;
 
@@ -51,13 +48,15 @@ public class TicketsTable extends AbstractUIElement {
         return this;
     }
 
+    public boolean getCheckboxStatus(){
+        TicketRow supervisorDeskTicketRow = new TicketRow(tickets.get(0))
+                .setCurrentDriver(this.getCurrentDriver());
+        return supervisorDeskTicketRow.getCheckboxStatus();
+    }
+
     public void clickAssignManuallyButton(String userName){
         getTicketByUserName(userName)
                 .clickElem(this.getCurrentDriver(), assignTicketButton, 5, "Assign ticket button");
-    }
-
-    public void clickCloseButton(String userName){
-        getTicketByUserName(userName).clickElem(this.getCurrentDriver(), closeTicketButton, 5, "Close ticket button");
     }
 
     public void clickAcceptButton(String userName){

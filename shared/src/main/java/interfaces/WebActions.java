@@ -109,6 +109,17 @@ public interface WebActions extends WebWait {
         }
     }
 
+    default String getAttributeFromElem(WebDriver driver, String elementCSS, WebElement element, int wait,
+                                        String elemName, String attribute) {
+        try {
+            waitForElementToBePresentByCss(driver, elementCSS, wait);
+            return element.getAttribute(attribute);
+        } catch (TimeoutException | NoSuchElementException e) {
+            Assert.fail("Cannot get '" + attribute + "' attribute from  '" + elemName + "' because element is not visible.");
+            return "no text elem";
+        }
+    }
+
     default void clickOnElementFromListByText(WebDriver driver, List<WebElement> elements, int wait, String text) {
         waitForElementsToBeClickable(driver, elements, wait)
                 .stream().filter(e -> e.getText().toUpperCase().equals(text.toUpperCase()))

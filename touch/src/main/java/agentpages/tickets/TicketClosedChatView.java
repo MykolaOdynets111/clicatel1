@@ -25,4 +25,8 @@ public class TicketClosedChatView extends AbstractUIElement {
         return isElementShown(this.getCurrentDriver(), messageCustomerOrStartChatButton, 3);
     }
 
+    public void hoverCloseTicket() {
+        waitForElementToBeVisible(this.getCurrentDriver(), closeTicket, 5);
+        moveToElement(this.getCurrentDriver(), closeTicket);
+    }
 }
