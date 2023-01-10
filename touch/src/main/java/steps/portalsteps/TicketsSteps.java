@@ -106,10 +106,8 @@ public class TicketsSteps extends AbstractAgentSteps {
 
     @When("^(.*) closed ticket for (.*)$")
     public void clickCloseButtonFor(String agent, String chanel) {
-        getTicketsTable(agent)
-                .selectTicketCheckbox(getUserName(chanel))
-                .getTicketByUserName(getUserName(chanel))
-                .clickCloseButton();
+        clickCloseButton(agent, chanel);
+
         waitFor(1000);
 
         if (getAgentHomePage(agent).getAgentFeedbackWindow().isAgentFeedbackWindowShown()) {
@@ -118,7 +116,7 @@ public class TicketsSteps extends AbstractAgentSteps {
     }
 
     @When("^(.*) clicks closed ticket button for (.*)$")
-    public void clickCloseButtonWithoutFeedbackWindowHandling(String agent, String chanel) {
+    public void clickCloseButton(String agent, String chanel) {
         getTicketsTable(agent)
                 .selectTicketCheckbox(getUserName(chanel))
                 .getTicketByUserName(getUserName(chanel))
