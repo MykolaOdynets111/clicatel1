@@ -149,7 +149,7 @@ public class TicketRow extends AbstractWidget {
         return isElementRemoved(this.getCurrentDriver(), assignButton, 5);
     }
 
-    public void clickCloseButton(String userName){
+    public void clickCloseButton(){
         clickElem(this.getCurrentDriver(), closeTicketButton, 5, "Close ticket button");
     }
 }
