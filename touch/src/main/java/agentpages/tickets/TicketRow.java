@@ -53,6 +53,9 @@ public class TicketRow extends AbstractWidget {
     @FindBy(xpath = ".//a[contains(text(), 'Open')]")
     private List<WebElement> openBtns;
 
+    @FindBy(xpath = ".//button[contains(text(), 'Accept')]")
+    private List<WebElement> acceptBtns;
+
     @FindBy(xpath = ".//button[contains(text(), 'Assign')]")
     private WebElement assignButton;
 
@@ -143,6 +146,10 @@ public class TicketRow extends AbstractWidget {
 
     public void openTicket(int ticketNum) {
         clickElem(this.getCurrentDriver(), openBtns.get(ticketNum - 1), 5, "openTicketBtn");
+    }
+
+    public void acceptTicket(int ticketNum) {
+        clickElem(this.getCurrentDriver(), acceptBtns.get(ticketNum - 1), 5, "Accept Ticket Btn");
     }
 
     public boolean assignManualButtonVisibility() {
