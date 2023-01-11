@@ -30,46 +30,49 @@ import java.util.Map;
 public class PaymentBody {
 
     @JsonProperty("channel")
-    private String channel;
+    private String channel ="sms";
 
     @JsonProperty("to")
-    private String to;
+    private String to = "447938556403";
 
     @JsonProperty("currency")
-    private String currency;
+    private String currency = "ZAR";
 
     @JsonProperty("orderNumber")
-    private String orderNumber;
+    private String orderNumber = "001";
 
     @JsonProperty("subTotalAmount")
-    private String subTotalAmount;
+    private String subTotalAmount = "100";
 
     @JsonProperty("taxAmount")
-    private String taxAmount;
+    private String taxAmount = "0.0";
 
     @JsonProperty("totalAmount")
-    private String totalAmount;
+    private String totalAmount = "100.0";
 
     @JsonProperty("timestamp")
-    private String timestamp;
+    private String timestamp = "2021-04-27T17:35:58.000+0000";
 
     @JsonProperty("additionalData")
-    private AdditionalData additionalData;
+    private AdditionalData additionalData =
+            (AdditionalData.builder()
+                    .departmentId("567")
+                    .departmentName("Sales").build());
 
     @JsonProperty("paymentGatewaySettingsId")
     private String paymentGatewaySettingsId;
 
     @JsonProperty("returnPaymentLink")
-    private String returnPaymentLink;
+    private String returnPaymentLink = "true";
 
     @JsonProperty("paymentReviewAutoReversal")
-    private String paymentReviewAutoReversal;
+    private String paymentReviewAutoReversal = "false";
 
     @JsonProperty("applicationId")
     private String applicationId;
 
     @JsonProperty("transactionType")
-    private String transactionType;
+    private String transactionType = "authorization";
 
     public PaymentBody(Map<String, String> parameters, String paymentGatewaySettingsId, String applicationID) {
         this.channel = (parameters.get("channel"));
@@ -89,6 +92,11 @@ public class PaymentBody {
         this.applicationId = (applicationID);
         this.transactionType = (parameters.get("transactionType"));
 
+    }
+
+    public PaymentBody( String paymentGatewaySettingsId, String applicationID) {
+        this.paymentGatewaySettingsId = (paymentGatewaySettingsId);
+        this.applicationId = (applicationID);
     }
 
 }

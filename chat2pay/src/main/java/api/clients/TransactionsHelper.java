@@ -2,6 +2,8 @@ package api.clients;
 
 import api.models.request.PaymentBody;
 import api.models.response.*;
+import io.restassured.response.Response;
+
 import java.util.List;
 
 public class TransactionsHelper extends Chat2PayApiHelper {
@@ -16,44 +18,35 @@ public class TransactionsHelper extends Chat2PayApiHelper {
                 .getId();
     }
 
-    public static String getPaymentGatewaySettingsId( String widgetId) {
+    public static List<PaymentGatewaySettingsResponse> getPaymentGatewaySettingsResponse(String widgetId) {
         return getChat2PayQuery(String.format(Endpoints.PAYMENTS_GATEWAY_ENDPOINT, widgetId))
                 .jsonPath()
-                .getList("", PaymentGatewaySettingsResponse.class)
-                .get(0)
-                .getPaymentGatewaySettingsId();
+                .getList("", PaymentGatewaySettingsResponse.class);
     }
 
-    public static String getApplicationId(String widgetId) {
+    public static List<IntegrationResponse> getIntegrationResponse(String widgetId) {
         return getChat2PayQuery(String.format(Endpoints.WIDGET_INTEGRATION_ENDPOINT, widgetId))
                 .jsonPath()
-                .getList("", IntegrationResponse.class)
-                .get(0)
-                .getIntegrator().getApplicationUuid();
+                .getList("", IntegrationResponse.class);
     }
 
-    public static String getActivationKey(String widgetId) {
+    public static List<ApiKeysResponse> getActivationKey(String widgetId) {
         return getChat2PayQuery(String.format(Endpoints.WIDGET_API_KEYS_ENDPOINT, widgetId))
                 .jsonPath()
-                .getList("", ApiKeysResponse.class)
-                .get(0)
-                .getApiKey();
+                .getList("", ApiKeysResponse.class);
     }
 
-    public static String userCanGetAPaymentLink(PaymentBody paymentBody, String activationKey) {
-        return postQuery(Endpoints.CHAT_TO_PAY_ENDPOINT, paymentBody, activationKey, 201)
-                .as(PaymentLinkResponse.class)
-                .getPaymentLink();
+    public static Response userGetAPaymentLinkResponse(PaymentBody paymentBody, String activationKey) {
+        return postQuery(Endpoints.CHAT_TO_PAY_ENDPOINT, paymentBody, activationKey);
     }
 
-    public static void userCanNotGetAPaymentLink(PaymentBody paymentBody, String activationKey) {
-        postQuery(Endpoints.CHAT_TO_PAY_ENDPOINT, paymentBody, activationKey, 400);
-    }
-
-    public static void checkWorkingPaymentLink( String paymentLink) {
+    public static void checkWorkingPaymentLink(String paymentLink) {
         getChat2PayQuery(paymentLink);
     }
 
+    public static Response cancelPaymentLink(String paymentLinkRef, String activationKey) {
+        return postQuery(Endpoints.CANCEL_PAYMENT_LINK_ENDPOINT + paymentLinkRef, "", activationKey);
+    }
 
 
 }
