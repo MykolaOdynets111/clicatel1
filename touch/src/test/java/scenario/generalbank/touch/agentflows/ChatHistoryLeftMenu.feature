@@ -8,7 +8,7 @@ Feature: Agent should be able to see chat history in left menu
     And I login as agent of General Bank Demo
     When Agent select "Closed" left menu option
     And Agent filter closed chats with WhatsApp channel, no sentiment and flagged is false
-    When Agent selects random chat in closed chat list
+    When Agent opens first chat from the list
     #Then Valid image for whatsapp integration are shown in left menu with chat
     Then Agent sees correct chat history
 

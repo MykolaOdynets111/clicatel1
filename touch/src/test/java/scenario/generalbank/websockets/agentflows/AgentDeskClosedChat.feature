@@ -10,15 +10,15 @@ Feature: Closed chats :: Chatdesk
     When Send Hello message by ORCA
     And Agent has new conversation request
     And Agent click on new conversation request from orca
-    Then Agent checks visual indicator with text This chat has been assigned to GBD Main is shown during 2 seconds
+    Then Visual indicator with "This chat has been assigned to" text, Agent name and time is shown
     When Agent click 'Flag chat' button
-    Then Agent checks visual indicator with text This chat has been flagged by GBD Main is shown during 2 seconds
+    Then Visual indicator with "This chat has been flagged by" text, Agent name and time is shown
     When Agent click 'Unflag chat' button
-    Then Agent checks visual indicator with text This chat has been un-flagged by GBD Main is shown during 2 seconds
+    Then Visual indicator with "This chat has been un-flagged by" text, Agent name and time is shown
     When Agent closes chat
     And Agent select "Closed" left menu option
     And Agent searches and selects chat from orca in chat history list
-    Then Agent checks visual indicator with text Chat closed by GBD Main is shown during 2 seconds
+    Then Visual indicator with "Chat closed by" text, Agent name and time is shown
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1517")
   Scenario: CD :: Agent Desk :: Closed Chat :: Notes :: Verify that an agent can add notes to closed chats

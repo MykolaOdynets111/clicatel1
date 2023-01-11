@@ -17,12 +17,6 @@ public class TicketsTable extends AbstractUIElement {
     @FindBy(xpath = "//button[text() = 'Assign']")
     private WebElement assignTicketButton;
 
-    @FindBy(xpath = "//button[text() = 'Close']")
-    private WebElement closeTicketButton;
-
-    @FindBy(xpath = "//button[text() = 'Accept']")
-    private WebElement acceptTicketButton;
-
     @FindBy(xpath = "//button[@name = 'Close Ticket']")
     private WebElement closeTicket;
 
@@ -51,17 +45,15 @@ public class TicketsTable extends AbstractUIElement {
         return this;
     }
 
+    public boolean getCheckboxStatus(){
+        TicketRow supervisorDeskTicketRow = new TicketRow(tickets.get(0))
+                .setCurrentDriver(this.getCurrentDriver());
+        return supervisorDeskTicketRow.getCheckboxStatus();
+    }
+
     public void clickAssignManuallyButton(String userName){
         getTicketByUserName(userName)
                 .clickElem(this.getCurrentDriver(), assignTicketButton, 5, "Assign ticket button");
-    }
-
-    public void clickCloseButton(String userName){
-        getTicketByUserName(userName).clickElem(this.getCurrentDriver(), closeTicketButton, 5, "Close ticket button");
-    }
-
-    public void clickAcceptButton(String userName){
-        getTicketByUserName(userName).clickElem(this.getCurrentDriver(), acceptTicketButton, 5, "Accept ticket button");
     }
 
     public boolean closeButtonStatus(){
@@ -156,6 +148,13 @@ public class TicketsTable extends AbstractUIElement {
                 .setCurrentDriver(this.getCurrentDriver());
         supervisorDeskTicketRow.clickOnUserName();
         supervisorDeskTicketRow.openTicket(1);
+    }
+
+    public void acceptFirstTicket() {
+        TicketRow supervisorDeskTicketRow = new TicketRow(tickets.get(0))
+                .setCurrentDriver(this.getCurrentDriver());
+        supervisorDeskTicketRow.clickOnUserName();
+        supervisorDeskTicketRow.acceptTicket(1);
     }
 
     public boolean assignManuallyButtonTopPanelVisibility(String userName){
