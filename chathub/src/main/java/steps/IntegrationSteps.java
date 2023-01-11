@@ -37,17 +37,24 @@ public class IntegrationSteps  extends MainApi {
     }
 
     @Given("User is able to GET providers API response")
-    public void GETProviderAPI(int responseCode) {
-        AllProviders allProviders = ChatHubApiHelper.getChatHubQuery(Endpoints.ADMIN_PROVIDERS, responseCode)
+    public void GETProviderAPI(Map<String, String> dataMap) {
+        String url = format(Endpoints.PROVIDERS, dataMap);
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+        if (responseCode == 200) {
+            AllProviders expectedProvider = new AllProviders(dataMap);
+            AllProviders getProviders = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(AllProviders.class);
+            Assert.assertEquals(expectedProvider, getProviders, "Providers response is not as expected");
+        }
+
+/*        AllProviders allProviders = ChatHubApiHelper.getChatHubQuery(Endpoints.ADMIN_PROVIDERS, responseCode)
                 .jsonPath().getList("", AllProviders.class).get(0);
 
         Assert.assertEquals(allProviders.getId(), "");
-        Assert.assertEquals(allProviders.getName(), "Zendesk Support");
+        Assert.assertEquals(allProviders.getName(), "Zendesk Support");*/
     }
 
     @Given("User is able to GET providers state in API response")
     public void GETProviderStateAPI(Map<String, String> dataMap) {
-
         String url = format(Endpoints.PROVIDERS_STATE, dataMap.get("i.providerID"));
 
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
@@ -58,6 +65,5 @@ public class IntegrationSteps  extends MainApi {
         } else {
             Validator.validatedErrorResponse(url, dataMap);
         }
-
     }
 }
