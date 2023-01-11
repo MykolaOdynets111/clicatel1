@@ -11,13 +11,11 @@ import io.cucumber.java.en.Then;
 import org.testng.Assert;
 import datamodelsclasses.providers.AllProviders;
 import api.ChatHubApiHelper;
+import urlproxymanager.ProxyManager;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import static abstractclasses.IntegrationsAbstractSteps.getIntegrationsPage;
 import static java.lang.String.format;
@@ -65,6 +63,7 @@ public class IntegrationSteps extends MainApi {
     @Given("User is able to activate configuration for a provider")
     public void userIsAbleToActivateConfigurationForAProvider(Map<String, String> dataMap) throws IOException {
         String url = format(Endpoints.ACTIVATE_CONFIGURATION);
+        ProxyManager proxy = new ProxyManager();
         Map<String, String> body = new LinkedHashMap<>();
         body.put("name", dataMap.get("i.name"));
         body.put("clientSecret", dataMap.get("i.clientSecret"));
@@ -81,16 +80,10 @@ public class IntegrationSteps extends MainApi {
             Assert.assertNotNull(postActiveConfiguration.getCreatedDate(), "CurrentDate is Empty");
             Assert.assertNotNull(postActiveConfiguration.getModifiedDate(), "Modfied Date is empty");
 
-            //Check if the URL is working
-            URL link = new URL("https://dev-mc2-authentication-front-end-service.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/authorize/request/a6bad634-8d45-4165-a2a0-13e288ce8564");
-            String proxy = "proxy.mydomain.com";
-            String port = "8080";
-            Properties sys = System.getProperties();
-            sys.setProperty("http.proxyHost", proxy);
-            sys.setProperty("http.proxyPort", port);
-            HttpURLConnection connection = (HttpURLConnection) link.openConnection();
-            int code = connection.getResponseCode();
-
+            //Check the authorization link
+ /*           String printLink = postActiveConfiguration.authenticationLink;
+            System.out.println(printLink);*/
+            int code = proxy.addProxy("https://dev-mc2-authentication-front-end-service.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/authorize/request/a6bad634-8d45-4165-a2a0-13e288ce8564");
             Assert.assertEquals(Integer.parseInt(dataMap.get("o.authenticationLink")), code);
             Assert.assertEquals(dataMap.get("o.timeToExpire"), postActiveConfiguration.getTimeToExpire());
         } else {
