@@ -11,7 +11,7 @@ import io.cucumber.java.en.Then;
 import org.testng.Assert;
 import datamodelsclasses.providers.AllProviders;
 import api.ChatHubApiHelper;
-import urlproxymanager.ProxyManager;
+import urlproxymanager.Proxymanager;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -63,7 +63,7 @@ public class IntegrationSteps extends MainApi {
     @Given("User is able to activate configuration for a provider")
     public void userIsAbleToActivateConfigurationForAProvider(Map<String, String> dataMap) throws IOException {
         String url = format(Endpoints.ACTIVATE_CONFIGURATION);
-        ProxyManager proxy = new ProxyManager();
+        Proxymanager proxy = new Proxymanager();
         Map<String, String> body = new LinkedHashMap<>();
         body.put("name", dataMap.get("i.name"));
         body.put("clientSecret", dataMap.get("i.clientSecret"));
