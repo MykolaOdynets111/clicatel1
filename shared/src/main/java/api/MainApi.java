@@ -41,7 +41,7 @@ public abstract class MainApi {
         return Objects.requireNonNull(response.getBody());
     }
 
-    private static Response post(String endpoint, Object body, String authToken) {
+    static Response post(String endpoint, Object body, String authToken) {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .header("Authorization", authToken)
