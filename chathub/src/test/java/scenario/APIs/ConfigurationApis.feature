@@ -1,6 +1,6 @@
 Feature: Configuration API
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCH-568")
+  @TestCaseId("https://jira.clickatell.com/browse/CCH-567")
   Scenario Outline: CH :: Public :: Configurations API : Activate configuration
     Given User is able to activate configuration for a provider
       | i.name               | <i.name>               |
