@@ -22,8 +22,8 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Agent select Closed filter on Left Panel
     Then Verify ticket is present for orca for 2 seconds
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-7779")
-  Scenario: CD:: Agent Desk:: Tickets:: Agent_Desk-Tickets-Assigned:: Verify when Agent send message to Assigned ticket an error is not displayed as "Client already has a active conservation with Agent" when there is no active conversation
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-5850")
+  Scenario: CD :: Agent Desk :: Tickets :: Assigned Tickets :: Verify that Agent can send standard message to the customer
     Given Setup ORCA Whatsapp integration for General Bank Demo tenant
     And I select Touch in left menu and Supervisor Desk in submenu
     And Send to agent message by ORCA
@@ -124,6 +124,24 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     When Agent select Assigned filter on Left Panel
     Then Agent search chat orca on Supervisor desk
     And Agent see tickets from orca on Assigned filter page
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-5752")
+  Scenario: CD :: Agent Desk :: Tickets :: Unassigned :: Verify visual notification on moving chat from Unassigned to Assigned tab
+    Given Setup ORCA Whatsapp integration for General Bank Demo tenant
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Send chat to agent message by ORCA
+    When Agent select "Tickets" left menu option
+    And Agent search chat orca on Supervisor desk
+    And Agent see tickets from orca on Unassigned filter page
+    And Select orca ticket checkbox
+    And Click 'Assign manually' button for orca
+    And 'Assign chat' window is opened
+    And I assign chat on First Department for Department dropdown
+    And I select Touch in left menu and Agent Desk in submenu
+    And Agent select "Tickets" left menu option
+    And Agent search chat orca on Supervisor desk
+    And Agent accept first ticket
+    Then Agent sees toast message with Ticket accepted and moved to assigned text
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6092")
   Scenario: CD :: Agent Desk :: Tickets :: Unassigned :: Verify the tooltip text "Quickly accepts tickets from oldest to newest" when hovering on tooltip icon on the Quick accept bar
@@ -416,3 +434,61 @@ Feature: WhatsApp ORCA :: Supervisor Desk
 
     When Agent select Closed filter on Left Panel
     Then Verify ticket is present for orca for 2 seconds
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-5900")
+  Scenario: CD:: Supervisor Desk:: Tickets:: Supervisor_Desk-Tickets-Assigned:: Verify if Supervisor is able to see the ticket in the closed tab
+    Given Setup ORCA Whatsapp integration for General Bank Demo tenant
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Send to agent message by ORCA
+    When Agent select "Tickets" left menu option
+    And Agent search chat orca on Supervisor desk
+    Then Agent see tickets from orca on Unassigned filter page
+    And Select orca ticket checkbox
+    And Click 'Assign manually' button for orca
+    And 'Assign chat' window is opened
+    And I assign chat on Agent for Agent dropdown
+    And I select Touch in left menu and Agent Desk in submenu
+    And Agent select "Tickets" left menu option
+    And Agent select Assigned filter on Left Panel
+    And Agent search chat orca on Supervisor desk
+    Then Agent see tickets from orca on Assigned filter page
+    When Supervisor clicks on first ticket
+    Then Agent checks closed ticket is disabled
+
+    When Agent hover to the close ticket button and see Reply to the customer to close ticket message
+    And Agent send new ticket message message
+    And Wait for 2 second
+    Then Agent checks closed ticket is enabled
+
+    When Agent closes ticket manually
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Agent select "Tickets" left menu option
+    And Agent select Closed filter on Left Panel
+    And Agent search chat orca on Supervisor desk
+    Then Agent see tickets from orca on Assigned filter page
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-5871")
+  Scenario: CD:: Supervisor Desk:: Verify if Supervisor can see the reassign tickets button in the chat window
+    Given Setup ORCA Whatsapp integration for General Bank Demo tenant
+    And I select Touch in left menu and Supervisor Desk in submenu
+    And Send to agent message by ORCA
+    When Agent select "Tickets" left menu option
+    And Agent search chat orca on Supervisor desk
+    Then Agent see tickets from orca on Unassigned filter page
+
+    When Select orca ticket checkbox
+    And Click 'Assign manually' button for orca
+    And 'Assign chat' window is opened
+    And I assign chat on Agent for Agent dropdown
+    And Agent select Assigned filter on Left Panel
+    And Supervisor clicks on first ticket
+    Then Agent checks "reassign chat" icon visible on the chat desk
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-5854")
+  Scenario: CD :: Supervisor Desk :: Tickets :: Assigned Tickets :: Verify that Supervisor cannot initiate chat with tickets under Assigned Ticket Tab
+    Given Setup ORCA Whatsapp integration for General Bank Demo tenant
+    And I select Touch in left menu and Supervisor Desk in submenu
+    When Agent select "Tickets" left menu option
+    And Agent select Assigned filter on Left Panel
+    And Supervisor clicks on first ticket
+    Then Verify that "Message Customer" button should not be present
