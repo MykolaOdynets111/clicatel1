@@ -3,18 +3,22 @@ package steps;
 import api.MainApi;
 import clients.Endpoints;
 import datamodelsclasses.configurations.ActivateConfiguration;
+import datamodelsclasses.configurations.ActivateConfigurationBody;
 import datamodelsclasses.providers.ProviderState;
 import datamodelsclasses.validator.Validator;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import datamodelsclasses.providers.AllProviders;
 import api.ChatHubApiHelper;
 import urlproxymanager.Proxymanager;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import static abstractclasses.IntegrationsAbstractSteps.getIntegrationsPage;
@@ -64,18 +68,26 @@ public class IntegrationSteps extends MainApi {
     public void userIsAbleToActivateConfigurationForAProvider(Map<String, String> dataMap) throws IOException {
         String url = format(Endpoints.ACTIVATE_CONFIGURATION);
         Proxymanager proxy = new Proxymanager();
-        Map<String, String> body = new LinkedHashMap<>();
 
         //Post body should be picked by pojo class ActivateConfigurationBody. It will be fixed later
-        body.put("name", dataMap.get("i.name"));
-        body.put("clientSecret", dataMap.get("i.clientSecret"));
-        body.put("clientId", dataMap.get("i.clientId"));
-        body.put("host", dataMap.get("i.host"));
-        body.put("providerId", dataMap.get("i.providerId"));
-        body.put("type", dataMap.get("i.type"));
+        /*Map<String, String> activateConfigBody = new LinkedHashMap<>();
+
+        activateConfigBody.put("name", dataMap.get("i.name"));
+        activateConfigBody.put("clientSecret", dataMap.get("i.clientSecret"));
+        activateConfigBody.put("clientId", dataMap.get("i.clientId"));
+        activateConfigBody.put("host", dataMap.get("i.host"));
+        activateConfigBody.put("providerId", dataMap.get("i.providerId"));
+        activateConfigBody.put("type", dataMap.get("i.type"));*/
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> activateConfigBody = new ArrayList<>();
+        activateConfigBody.add(mapper.writeValueAsString(new ActivateConfigurationBody(
+                dataMap.get("i.name"), dataMap.get("i.clientSecret"),
+                dataMap.get("i.clientId"), dataMap.get("i.host"),
+                dataMap.get("i.providerId"), dataMap.get("i.type"))));
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
         if (responseCode == 200) {
-            ActivateConfiguration postActiveConfiguration = ChatHubApiHelper.postChatHubQuery(url, body).as(ActivateConfiguration.class);
+            ActivateConfiguration postActiveConfiguration = ChatHubApiHelper.postChatHubQuery(url, activateConfigBody).as(ActivateConfiguration.class);
             Assert.assertNotNull(postActiveConfiguration.getId(), "Configuration Id is empty");
             Assert.assertEquals(dataMap.get("o.type"), postActiveConfiguration.getType());
             Assert.assertEquals(dataMap.get("o.setupName"), postActiveConfiguration.getSetupName());
@@ -90,7 +102,7 @@ public class IntegrationSteps extends MainApi {
             Assert.assertEquals(Integer.parseInt(dataMap.get("o.authenticationLink")), code);*/
             Assert.assertEquals(dataMap.get("o.timeToExpire"), postActiveConfiguration.getTimeToExpire());
         } else {
-            Validator.validatedErrorResponseforPost(url, body, dataMap);
+            Validator.validatedErrorResponseforPost(url, (Map<String, String>) activateConfigBody, dataMap);
         }
     }
 }

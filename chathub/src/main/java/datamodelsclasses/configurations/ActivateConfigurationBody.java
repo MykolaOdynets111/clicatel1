@@ -20,30 +20,21 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ActivateConfigurationBody {
-    @JsonProperty("i.name")
+    @JsonProperty("name")
     public String name;
 
-    @JsonProperty("i.clientSecret")
+    @JsonProperty("clientSecret")
     public String clientSecret;
 
-    @JsonProperty("i.clientId")
+    @JsonProperty("clientId")
     public String clientId;
 
-    @JsonProperty("i.host")
+    @JsonProperty("host")
     public String host;
 
-    @JsonProperty("i.providerId")
+    @JsonProperty("providerId")
     public String providerId;
 
-    @JsonProperty("i.type")
+    @JsonProperty("type")
     public String type;
-
-    public void setActivateConfigurationBody(Map<String,String> parameters) {
-        setName(parameters.get("i.name"));
-        setClientSecret(parameters.get("i.clientSecret"));
-        setClientId(parameters.get("i.clientId"));
-        setHost(parameters.get("i.host"));
-        setProviderId(parameters.get("i.providerId"));
-        setType(parameters.get("i.type"));
-    }
 }
