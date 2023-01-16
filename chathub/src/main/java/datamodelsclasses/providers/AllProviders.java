@@ -3,6 +3,7 @@ package datamodelsclasses.providers;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ public class AllProviders {
 
     @JsonProperty("isAdded")
     public boolean isAdded;
+
     public AllProviders(Map<String,String> parameters) {
         this.id = parameters.get("o.id");
         this.name = parameters.get("o.name");

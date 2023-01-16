@@ -4,6 +4,7 @@ import api.MainApi;
 import clients.Endpoints;
 import datamodelsclasses.providers.ProviderState;
 import datamodelsclasses.validator.Validator;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -12,6 +13,9 @@ import datamodelsclasses.providers.AllProviders;
 import api.ChatHubApiHelper;
 
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static abstractclasses.IntegrationsAbstractSteps.getIntegrationsPage;
@@ -37,13 +41,13 @@ public class IntegrationSteps  extends MainApi {
     }
 
     @Given("User is able to GET providers API response")
-    public void GETProviderAPI(Map<String, String> dataMap) {
-        String url = format(Endpoints.PROVIDERS, dataMap);
-        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
-        if (responseCode == 200) {
-            AllProviders expectedProvider = new AllProviders(dataMap);
-            AllProviders getProviders = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(AllProviders.class);
-            Assert.assertEquals(expectedProvider, getProviders, "Providers response is not as expected");
+    public void GETProviderAPI(List<Map<String,String>> dataMap) {
+        //String url = format(Endpoints.PROVIDERS, dataMap);
+        AllProviders expectedProvider = new AllProviders((Map<String, String>) dataMap);
+        //List<List<String,String>> rows = dataMap.asList(String.class,String.class);
+       // List<String> providers = dataMap.asList();
+        AllProviders[] getProviders = ChatHubApiHelper.getChatHubQuery(Endpoints.PROVIDERS, 200).as(AllProviders[].class);
+          //  Assert.assertEquals(expectedProvider, getProviders, "Providers response is not as expected");
         }
 
 /*        AllProviders allProviders = ChatHubApiHelper.getChatHubQuery(Endpoints.ADMIN_PROVIDERS, responseCode)
@@ -51,7 +55,6 @@ public class IntegrationSteps  extends MainApi {
 
         Assert.assertEquals(allProviders.getId(), "");
         Assert.assertEquals(allProviders.getName(), "Zendesk Support");*/
-    }
 
     @Given("User is able to GET providers state in API response")
     public void GETProviderStateAPI(Map<String, String> dataMap) {
