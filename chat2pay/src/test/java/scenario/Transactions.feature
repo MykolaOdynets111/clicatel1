@@ -65,7 +65,7 @@ Feature: Transaction execution
 
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4594")
-  Scenario Outline: c2p-Widget-Payment-Service :: POST /cancel :: The user shouldn't be able to proceed with the canceled payment link
+  Scenario Outline: c2p-Widget-Payment-Service :: POST /cancel (positive)
     Given User is logged in to unity
     And User gets widgetId for UC form
     And User gets paymentGatewaySettingsId for widget
@@ -74,17 +74,15 @@ Feature: Transaction execution
     And User sets valid data in the payment body
     Then User gets a correct payment link with status code 201
     When User cancelling the payment link
-      | i.paymentLinkRef  | <i.paymentLinkRef>  |
-      | i.activationToken | <i.activationToken> |
-    Then User checks Valid Cancel Payment response
-
+      | i.paymentLinkRef      | <i.paymentLinkRef>      |
+      | i.activationToken     | <i.activationToken>     |
       | o.responsecode        | <o.responsecode>        |
-      | o.errorMessage        | <o.errorMessage>        |
       | o.error               | <o.error>               |
       | o.paymentlinkref      | <o.paymentlinkref>      |
       | o.transactionStatus   | <o.transactionStatus>   |
       | o.transactionStatusId | <o.transactionStatusId> |
-      | o.additionalData      | <o.additionalData>      |
+      | o.departmentID        | <o.departmentID>        |
+      | o.departmentName      | <o.departmentName>      |
       | o.timestamp           | <o.timestamp>           |
       | o.message             | <o.message>             |
       | o.reasonCode          | <o.reasonCode>          |
@@ -95,8 +93,11 @@ Feature: Transaction execution
 
 
     Examples:
-      | i.paymentLinkRef | i.activationToken | o.errorMessage | o.responsecode | o.error | o.paymentlinkref                     | o.transactionStatus    | o.transactionStatusId | o.additionalData | o.timestamp                   | o.message | o.reasonCode | o.reason | o.status | o.path | o.errors |
-      | valid            | TRUE              |                | 200            | 0       | c74d1942-23b1-4a75-8929-1ed21d35c800 | Payment Link Cancelled | 19                    | {}               | 2021-09-06T10:46:18.618+00:00 | 0         | 0            | 0        | 0        | 0      | 0        |
+      | i.paymentLinkRef | i.activationToken | o.responsecode | o.error | o.paymentlinkref                     | o.transactionStatus    | o.transactionStatusId | o.departmentID | o.departmentName | o.timestamp                   | o.message                                                                    | o.reasonCode | o.reason          | o.status    | o.path | o.errors                                                                                          |
+      | valid            | TRUE              | 200            | 0       | c74d1942-23b1-4a75-8929-1ed21d35c800 | Payment Link Cancelled | 19                    | 567            | Sales            | 2021-09-06T10:46:18.618+00:00 | 0                                                                            | 0            | 0                 | 0           | 0      | 0                                                                                                 |
+      | alreadyCancelled | TRUE              | 400            | 0       | 0                                    | 0                      | 0                     |                | 0                | 2021-09-06T10:46:18.618+00:01 | The payment link = c74d1942-23b1-4a75-8929-1ed21d35c800 is already cancelled | 1            | already_cancelled | BAD_REQUEST | 0      | 0                                                                                                 |
+#      | expired          | TRUE              | 400            | 0       | 0                                    | 0                      | 0                     |                | 0                | 2021-09-06T10:46:18.618+00:02 | The payment link = c207c0f9-da7b-45a1-bdf0-8086d5d8d732 expired              | 2            | expired           | BAD_REQUEST | 0      | 0                                                                                                 |
+      | nonexisted       | TRUE              | 404            | 0       | 0                                    | 0                      | 0                     |                | 0                | 2021-09-06T10:46:18.618+00:04 | URL /api/v2/cancel/f2e8612a-819d-4080-972a-85c13d7652924as34                 | 0            | 0                 | NOT_FOUND   | 0      | There is no such transaction with transaction reference f2e8612a-819d-4080-972a-85c13d7652924as34 |
 
 
 

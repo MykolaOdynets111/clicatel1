@@ -4,24 +4,21 @@ import api.clients.Chat2PayApiHelper;
 import api.clients.TransactionsHelper;
 import api.models.request.PaymentBody;
 import api.models.response.CancelPaymentLinkResponse;
+import api.models.response.ErrorResponse;
 import api.models.response.PaymentLinkResponse;
-import drivermanager.ConfigManager;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
-import steps.portalsteps.BasePortalSteps;
 
 import java.util.Map;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.testng.AssertJUnit.assertFalse;
 
 public class APISteps {
 
     public static final ThreadLocal<PaymentBody> paymentBody = new ThreadLocal<>();
-    public static final ThreadLocal<CancelPaymentLinkResponse> cancelPaymentLinkResponse = new ThreadLocal<>();
     public static final ThreadLocal<String> widgetId = new ThreadLocal<>();
     public static final ThreadLocal<String> paymentGatewaySettingsId = new ThreadLocal<>();
     public static final ThreadLocal<String> applicationID = new ThreadLocal<>();
@@ -77,10 +74,51 @@ public class APISteps {
     }
 
     @When("^User cancelling the payment link$")
-    public void cancelPayment(Map<String, String> dataMap) {
-        CancelPaymentLinkResponse response = TransactionsHelper.cancelPaymentLink(paymentLinkRef.get(), activationKey.get())
-                .as(CancelPaymentLinkResponse.class);
-        cancelPaymentLinkResponse.set(response);
+    public void cancelPayment(Map<String, String> dataMap) throws InterruptedException {
+        Response response;
+        switch (dataMap.get("i.paymentLinkRef")) {
+            case "valid":
+                response = TransactionsHelper.cancelPaymentLink(paymentLinkRef.get(), activationKey.get());
+                checkResponseCode(response, dataMap);
+                CancelPaymentLinkResponse cancelPaymentLinkResponse = response
+                        .as(CancelPaymentLinkResponse.class);
+                assertThat(cancelPaymentLinkResponse.getTransactionStatus())
+                        .as(format("transaction status is not equals to %s", cancelPaymentLinkResponse.getTransactionStatus()))
+                        .isEqualTo(dataMap.get("o.transactionStatus"));
+                break;
+            case "alreadyCancelled":
+                TransactionsHelper.cancelPaymentLink(paymentLinkRef.get(), activationKey.get());
+                response = TransactionsHelper.cancelPaymentLink(paymentLinkRef.get(), activationKey.get());
+                checkResponseCode(response, dataMap);
+                ErrorResponse errorResponse = response.as(ErrorResponse.class);
+                assertThat(errorResponse.getReason())
+                        .as(format("reason is not equals to %s", errorResponse.getReason()))
+                        .isEqualTo(dataMap.get("o.reason"));
+                assertThat(errorResponse.getStatus())
+                        .as(format("status is not equals to %s", errorResponse.getStatus()))
+                        .isEqualTo(dataMap.get("o.status"));
+                break;
+            case "nonexisted":
+                response = TransactionsHelper.cancelPaymentLink("nonExistedLink", activationKey.get());
+                checkResponseCode(response, dataMap);
+                ErrorResponse errorResponse2 = response.as(ErrorResponse.class);
+                assertThat(errorResponse2.getStatus())
+                        .as(format("status is not equals to %s", errorResponse2.getStatus()))
+                        .isEqualTo(dataMap.get("o.status"));
+                break;
+            case "expired":
+                Thread.sleep(10000);
+                response = TransactionsHelper.cancelPaymentLink(paymentLinkRef.get(), activationKey.get());
+                checkResponseCode(response, dataMap);
+                ErrorResponse errorResponse3 = response.as(ErrorResponse.class);
+                assertThat(errorResponse3.getReason())
+                        .as(format("reason is not equals to %s", errorResponse3.getReason()))
+                        .isEqualTo(dataMap.get("o.reason"));
+                assertThat(errorResponse3.getStatus())
+                        .as(format("status is not equals to %s", errorResponse3.getStatus()))
+                        .isEqualTo(dataMap.get("o.status"));
+                break;
+        }
     }
 
     @Then("^User gets a correct payment link with status code (.*)$")
@@ -101,18 +139,17 @@ public class APISteps {
         TransactionsHelper.checkWorkingPaymentLink(paymentLink.get());
     }
 
-    @Then("^User checks Valid Cancel Payment response$")
-    public void userChecksValidCancelPaymentResponse(Map<String, String> dataMap) {
-        assertThat(cancelPaymentLinkResponse.get().getTransactionStatus())
-                .as(format("transaction status is not equals to %s", cancelPaymentLinkResponse.get().getTransactionStatus()))
-                .isEqualTo(dataMap.get("o.transactionStatus"));
-    }
-
     private Response checkGetPaymentLinkResponseCode(int code) {
         Response response = TransactionsHelper.userGetAPaymentLinkResponse(paymentBody.get(), activationKey.get());
         assertThat(response.statusCode())
                 .as(format("status code is not equals to %s", code))
                 .isEqualTo(code);
         return response;
+    }
+
+    private void checkResponseCode(Response response, Map<String, String> dataMap) {
+        assertThat(response.statusCode())
+                .as(format("status code is not equals to %s", dataMap.get("o.responsecode")))
+                .isEqualTo(Integer.valueOf(dataMap.get("o.responsecode")));
     }
 }
