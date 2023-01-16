@@ -69,16 +69,6 @@ public class IntegrationSteps extends MainApi {
         String url = format(Endpoints.ACTIVATE_CONFIGURATION);
         Proxymanager proxy = new Proxymanager();
 
-        //Post body should be picked by pojo class ActivateConfigurationBody. It will be fixed later
-        /*Map<String, String> activateConfigBody = new LinkedHashMap<>();
-
-        activateConfigBody.put("name", dataMap.get("i.name"));
-        activateConfigBody.put("clientSecret", dataMap.get("i.clientSecret"));
-        activateConfigBody.put("clientId", dataMap.get("i.clientId"));
-        activateConfigBody.put("host", dataMap.get("i.host"));
-        activateConfigBody.put("providerId", dataMap.get("i.providerId"));
-        activateConfigBody.put("type", dataMap.get("i.type"));*/
-
         ObjectMapper mapper = new ObjectMapper();
         List<String> activateConfigBody = new ArrayList<>();
         activateConfigBody.add(mapper.writeValueAsString(new ActivateConfigurationBody(
@@ -98,7 +88,7 @@ public class IntegrationSteps extends MainApi {
             //Check the authorization link
  /*           String printLink = postActiveConfiguration.authenticationLink;
             System.out.println(printLink);*/
- /*           int code = proxy.addProxy("https://dev-mc2-authentication-front-end-service.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/authorize/request/a6bad634-8d45-4165-a2a0-13e288ce8564");
+ /*          int code = proxy.addProxy("https://dev-mc2-authentication-front-end-service.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/authorize/request/a6bad634-8d45-4165-a2a0-13e288ce8564");
             Assert.assertEquals(Integer.parseInt(dataMap.get("o.authenticationLink")), code);*/
             Assert.assertEquals(dataMap.get("o.timeToExpire"), postActiveConfiguration.getTimeToExpire());
         } else {
