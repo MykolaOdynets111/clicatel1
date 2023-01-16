@@ -32,6 +32,13 @@ public abstract class MainApi {
         return validate(response, responseCode);
     }
 
+    protected static ResponseBody getQueryWithoutAuth(String endpoint, int responseCode) {
+
+        Response response = getWithoutAuth(endpoint);
+
+        return validate(response, responseCode);
+    }
+
     private static ResponseBody validate(Response response, int responseCode){
         if (response.getStatusCode() != responseCode) {
             fail("Couldn't get the value \n"
@@ -60,6 +67,12 @@ public abstract class MainApi {
         return RestAssured.given().log().all()
                 .accept(ContentType.JSON)
                 .header("Authorization", authToken)
+                .get(endpoint);
+    }
+
+    private static Response getWithoutAuth(String endpoint) {
+        return RestAssured.given().log().all()
+                .accept(ContentType.JSON)
                 .get(endpoint);
     }
 }

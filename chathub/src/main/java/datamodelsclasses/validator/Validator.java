@@ -14,4 +14,12 @@ public class Validator {
                 "Error message is incorrect or not returned /n"+
                         "Error from server:" + error);
     }
+
+    public static void validatedErrorResponseWithoutAuth(String URL, Map<String, String> data ){
+        ErrorValidatorObject errorData = new ErrorValidatorObject(data);
+        String error = ChatHubApiHelper.getChatHubQueryWithoutAuth(URL, errorData.getResponseCode()).asString();
+        Assert.assertTrue(error.contains(errorData.getErrorMessage()),
+                "Error message is incorrect or not returned /n"+
+                        "Error from server:" + error);
+    }
 }

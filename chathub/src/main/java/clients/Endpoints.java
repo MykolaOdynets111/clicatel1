@@ -8,5 +8,5 @@ public class Endpoints extends UnityURLs {
 
     public static final String ADMIN_PROVIDERS = baseUrl + "/admin/providers";
     public static final String PROVIDERS_STATE = baseUrl + "/api/providers/%s/state";
-
+    public static final String ADMIN_ENDPOINTS = baseUrl + "/admin/endpoints?providerId=%s&versionId=%s";
 }
