@@ -2,12 +2,15 @@ package steps;
 
 import api.MainApi;
 import clients.Endpoints;
+import datamanager.jacksonschemas.chatextension.ChatExtension;
 import datamodelsclasses.providers.ProviderState;
 import datamodelsclasses.validator.Validator;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import datamodelsclasses.providers.AllProviders;
 import api.ChatHubApiHelper;
@@ -41,12 +44,27 @@ public class IntegrationSteps  extends MainApi {
     }
 
     @Given("User is able to GET providers API response")
-    public void GETProviderAPI(List<Map<String,String>> dataMap) {
-        //String url = format(Endpoints.PROVIDERS, dataMap);
-        AllProviders expectedProvider = new AllProviders((Map<String, String>) dataMap);
-        //List<List<String,String>> rows = dataMap.asList(String.class,String.class);
-       // List<String> providers = dataMap.asList();
+    public void GETProviderAPI(List<Map<String, String>> datatable) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> expectedProviders = new ArrayList<>();
+        for (int i = 0; i < datatable.size(); i++) {
+            try {
+                expectedProviders.add(mapper.writeValueAsString(new AllProviders(datatable.get(i).get("o.id"),
+                        datatable.get(i).get("o.name"),datatable.get(i).get("o.logoUrl")
+                        ,datatable.get(i).get("o.description"),
+                        datatable.get(i).get("o.moreInfoUrl"),datatable.get(i).get("o.isAdded"))));
+
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+
         AllProviders[] getProviders = ChatHubApiHelper.getChatHubQuery(Endpoints.PROVIDERS, 200).as(AllProviders[].class);
+        ObjectMapper mappergetProviders = new ObjectMapper();
+        List<String> expectedProvidersList = new ArrayList<>();
+        expectedProvidersList.add(mappergetProviders.writeValueAsString(getProviders));
+        System.out.println("wait");
           //  Assert.assertEquals(expectedProvider, getProviders, "Providers response is not as expected");
         }
 

@@ -1,18 +1,26 @@
 package datamodelsclasses.providers;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.*;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+        "id",
+        "name",
+        "logoUrl",
+        "description",
+        "moreInfoUrl",
+        "versions",
+        "isAdded"
+})
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class AllProviders {
 
     @JsonProperty("id")
@@ -33,14 +41,15 @@ public class AllProviders {
     private List<Versions> versions = Arrays.asList(new Versions());
 
     @JsonProperty("isAdded")
-    public boolean isAdded;
+    public String isAdded;
 
-    public AllProviders(Map<String,String> parameters) {
-        this.id = parameters.get("o.id");
-        this.name = parameters.get("o.name");
-        this.logoUrl = parameters.get("o.logoUrl");
-        this.description = parameters.get("o.description");
-        this.moreInfoUrl = parameters.get("o.moreInfoUrl");
-        this.isAdded = Boolean.parseBoolean(parameters.get("o.isAdded"));
+    public AllProviders(String id, String name, String logoUrl, String description, String moreInfoUrl, String isAdded) {
+        this.setId(id);
+        this.setName(name);
+        this.setLogoUrl(logoUrl);
+        this.setDescription(description);
+        this.setMoreInfoUrl(moreInfoUrl);
+        this.setIsAdded(isAdded);
+        this.setVersions(versions);
     }
 }
