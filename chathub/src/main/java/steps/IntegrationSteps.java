@@ -4,6 +4,7 @@ import api.MainApi;
 import clients.Endpoints;
 import datamodelsclasses.configurations.ActivateConfiguration;
 import datamodelsclasses.configurations.ActivateConfigurationBody;
+import datamodelsclasses.configurations.ConfigurationSecrets;
 import datamodelsclasses.providers.ProviderState;
 import datamodelsclasses.validator.Validator;
 import io.cucumber.java.en.And;
@@ -108,11 +109,13 @@ public class IntegrationSteps extends MainApi {
 
     @Given("User is able to get configuration secrects in astericks")
     public void userIsAbleToGetConfigurationSecrectsInAstericks(Map<String,String> dataMap) {
-        String url = format(Endpoints.CONFIGURATION_SECRETS, dataMap.get("i.ConfigurationID"));
+        String url = format(Endpoints.CONFIGURATION_SECRETS, dataMap.get("i.configurationId"));
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
         if (responseCode == 200) {
-            ConfigurationSecrets getProvider = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(ConfigurationSecrets.class);
-            Assert.assertEquals(expectedProviderState, getProvider, "Providers response is not as expected");
+            ConfigurationSecrets expectedConfigurationSecret = new ConfigurationSecrets(dataMap);
+            ConfigurationSecrets getConfigurationSecret = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(ConfigurationSecrets.class);
+            //Need to fix the Create date and Modified date
+            Assert.assertEquals(expectedConfigurationSecret,getConfigurationSecret,"The configuration secrets are not correct");
         } else {
             Validator.validatedErrorResponseforGet(url, dataMap);
         }

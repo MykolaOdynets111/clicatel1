@@ -10,5 +10,5 @@ public class Endpoints extends UnityURLs {
     public static final String PROVIDERS_STATE = baseUrl + "/api/providers/%s/state";
     public static final String ACTIVATE_CONFIGURATION = baseUrl + "/api/configurations/activate";
 
-    public static final String CONFIGURATION_SECRETS = baseUrl + "/api/providers/%s/secrets";
+    public static final String CONFIGURATION_SECRETS = baseUrl + "/api/configurations/%s/secrets";
 }
