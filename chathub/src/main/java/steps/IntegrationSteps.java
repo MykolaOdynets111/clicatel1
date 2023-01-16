@@ -4,6 +4,7 @@ import api.MainApi;
 import clients.Endpoints;
 import datamodelsclasses.configurations.ActivateConfiguration;
 import datamodelsclasses.configurations.ActivateConfigurationBody;
+import datamodelsclasses.configurations.ConfigurationState;
 import datamodelsclasses.providers.ProviderState;
 import datamodelsclasses.validator.Validator;
 import io.cucumber.java.en.And;
@@ -103,6 +104,19 @@ public class IntegrationSteps extends MainApi {
             Assert.assertEquals(dataMap.get("o.timeToExpire"), postActiveConfiguration.getTimeToExpire());
         } else {
             Validator.validatedErrorResponseforPost(url, (Map<String, String>) activateConfigBody, dataMap);
+        }
+    }
+
+    @Given("User is able to get configuration state")
+    public void userIsAbleToGetConfigurationState(Map<String,String> dataMap) {
+        String url = format(Endpoints.CONFIGURATION_STATE, dataMap.get("i.configurationId"));
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+        if (responseCode == 200) {
+            ConfigurationState getConfigurationState = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(ConfigurationState.class);
+            Assert.assertNotNull(getConfigurationState.id);
+            Assert.assertEquals(dataMap.get("o.accountProviderConfigStatusId"),getConfigurationState.accountProviderConfigStatusId);
+        } else {
+            Validator.validatedErrorResponseforGet(url, dataMap);
         }
     }
 }
