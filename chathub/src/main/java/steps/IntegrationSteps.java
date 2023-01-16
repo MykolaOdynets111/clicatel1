@@ -105,4 +105,16 @@ public class IntegrationSteps extends MainApi {
             Validator.validatedErrorResponseforPost(url, (Map<String, String>) activateConfigBody, dataMap);
         }
     }
+
+    @Given("User is able to get configuration secrects in astericks")
+    public void userIsAbleToGetConfigurationSecrectsInAstericks(Map<String,String> dataMap) {
+        String url = format(Endpoints.CONFIGURATION_SECRETS, dataMap.get("i.ConfigurationID"));
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+        if (responseCode == 200) {
+            ConfigurationSecrets getProvider = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(ConfigurationSecrets.class);
+            Assert.assertEquals(expectedProviderState, getProvider, "Providers response is not as expected");
+        } else {
+            Validator.validatedErrorResponseforGet(url, dataMap);
+        }
+    }
 }
