@@ -57,22 +57,13 @@ public class IntegrationSteps  extends MainApi {
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
-
         }
-
         AllProviders[] getProviders = ChatHubApiHelper.getChatHubQuery(Endpoints.PROVIDERS, 200).as(AllProviders[].class);
         ObjectMapper mappergetProviders = new ObjectMapper();
-        List<String> expectedProvidersList = new ArrayList<>();
-        expectedProvidersList.add(mappergetProviders.writeValueAsString(getProviders));
-        System.out.println("wait");
-          //  Assert.assertEquals(expectedProvider, getProviders, "Providers response is not as expected");
+        List<String> getProvidersList = new ArrayList<>();
+        getProvidersList.add(mappergetProviders.writeValueAsString(getProviders));
+        Assert.assertEquals(getProvidersList,expectedProviders.toString() , "Providers response is not as expected");
         }
-
-/*        AllProviders allProviders = ChatHubApiHelper.getChatHubQuery(Endpoints.ADMIN_PROVIDERS, responseCode)
-                .jsonPath().getList("", AllProviders.class).get(0);
-
-        Assert.assertEquals(allProviders.getId(), "");
-        Assert.assertEquals(allProviders.getName(), "Zendesk Support");*/
 
     @Given("User is able to GET providers state in API response")
     public void GETProviderStateAPI(Map<String, String> dataMap) {
