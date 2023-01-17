@@ -287,7 +287,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @And("^(.*) clicks the link message (.*)$")
     public void clickOnLinkMessage(String agent, String text) {
-        getChatBody(agent).clickLatestLinkMessage(text);
+        getChatBody(agent).clickLatestLinkMessage();
     }
 
     @Then("Sent emoji is displayed on chatdesk$")

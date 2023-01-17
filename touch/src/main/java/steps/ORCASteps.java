@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static apihelper.ApiHelper.getAgentInfo;
+import static steps.agentsteps.AbstractAgentSteps.faker;
 
 public class ORCASteps implements WebWait {
 
@@ -35,6 +36,9 @@ public class ORCASteps implements WebWait {
     public static ThreadLocal<String> mediaFileName = new ThreadLocal<>();
     private static final ThreadLocal<String> orcaChannelId = new ThreadLocal<>();
 
+    private static String phoneNumber = faker.numerify("78#########");
+
+    private static String name = "AQA ORCA" +  faker.number().randomNumber(7, false);
     public static String getClientId() {
         return clientId.get();
     }
@@ -71,6 +75,14 @@ public class ORCASteps implements WebWait {
             orcaMessageCallBody.get().getContent().getEvent().setText(message);
             System.out.println("Message body is: " + orcaMessageCallBody.get().toString());
         }
+        ApiORCA.sendMessageToAgent(orcaMessageCallBody.get());
+    }
+
+    @Given("^Send (.*) message by ORCA with same number$")
+    public void sendOrcaMessageWithSameNumber(String message) {
+        System.out.println("creating new OrcaEvent for message with same number: " + message);
+        createRequestMessageWithSameNumber(apiToken.get(), message);
+        System.out.println("Message body is: " + orcaMessageCallBody.get().toString());
         ApiORCA.sendMessageToAgent(orcaMessageCallBody.get());
     }
 
@@ -277,6 +289,12 @@ public class ORCASteps implements WebWait {
 
     private void createRequestMessage(String apiKey, String message) {
         orcaMessageCallBody.set(new OrcaEvent(apiKey, message));
+        clientId.set(orcaMessageCallBody.get().getUserInfo().getUserName());
+        smsSourceId.set(orcaMessageCallBody.get().getSourceId());
+    }
+
+    private void createRequestMessageWithSameNumber(String apiKey, String message) {
+        orcaMessageCallBody.set(new OrcaEvent(apiKey, message, phoneNumber, name));
         clientId.set(orcaMessageCallBody.get().getUserInfo().getUserName());
         smsSourceId.set(orcaMessageCallBody.get().getSourceId());
     }
