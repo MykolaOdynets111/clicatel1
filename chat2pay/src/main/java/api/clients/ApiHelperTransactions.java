@@ -11,6 +11,9 @@ import io.restassured.response.Response;
 
 import java.util.List;
 
+import static api.clients.Endpoints.CHAT_TO_PAY_CONFIGURATION_ENDPOINT;
+import static java.lang.String.format;
+
 public class ApiHelperTransactions extends ApiHelperChat2Pay {
 
     public static String getWidgetId(String widgetName) {
@@ -23,7 +26,7 @@ public class ApiHelperTransactions extends ApiHelperChat2Pay {
     }
 
     public static String getPaymentGatewaySettingsId(String widgetId) {
-        return getChat2PayQuery(String.format(Endpoints.PAYMENTS_GATEWAY_ENDPOINT, widgetId))
+        return getChat2PayQuery(format(Endpoints.PAYMENTS_GATEWAY_ENDPOINT, widgetId))
                 .jsonPath()
                 .getList("", PaymentGatewaySettingsResponse.class)
                 .get(0)
@@ -31,7 +34,7 @@ public class ApiHelperTransactions extends ApiHelperChat2Pay {
     }
 
     public static String getApplicationId(String widgetId) {
-        return getChat2PayQuery(String.format(Endpoints.WIDGET_INTEGRATION_ENDPOINT, widgetId))
+        return getChat2PayQuery(format(Endpoints.WIDGET_INTEGRATION_ENDPOINT, widgetId))
                 .jsonPath()
                 .getList("", IntegrationResponse.class)
                 .get(0)
@@ -39,7 +42,7 @@ public class ApiHelperTransactions extends ApiHelperChat2Pay {
     }
 
     public static String getActivationKey(String widgetId) {
-        return getChat2PayQuery(String.format(Endpoints.WIDGET_API_KEYS_ENDPOINT, widgetId))
+        return getChat2PayQuery(format(Endpoints.WIDGET_API_KEYS_ENDPOINT, widgetId))
                 .jsonPath()
                 .getList("", ApiKeysResponse.class)
                 .get(0)
@@ -57,7 +60,7 @@ public class ApiHelperTransactions extends ApiHelperChat2Pay {
     }
 
     public static Response getC2PConfigurationResponse(String authToken) {
-        return getQuery(Endpoints.CHAT_TO_PAY_CONFIGURATION_ENDPOINT, authToken);
+        return getQuery(CHAT_TO_PAY_CONFIGURATION_ENDPOINT, authToken);
     }
 
     public static void checkWorkingPaymentLink(String paymentLink) {

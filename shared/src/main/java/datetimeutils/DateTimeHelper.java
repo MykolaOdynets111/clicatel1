@@ -21,19 +21,26 @@ public class DateTimeHelper {
     }
 
     public static String getDateTimeWithHoursShift(int hours){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        return LocalDateTime.now(ZoneOffset.UTC).minusHours(hours).format(formatter);
+        return LocalDateTime.now(ZoneOffset.UTC).minusHours(hours).format(getYYYY_MM_DD_HH_MM());
     }
 
-    public static final DateTimeFormatter getYYYY_MM_DD_With_Time_Formatter() {
+    @NotNull
+    public static DateTimeFormatter getYYYY_MM_DD_HH_MM() {
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    }
+    @NotNull
+    public static DateTimeFormatter getYYYY_MM_DD_HH_MM_SS() {
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+    }
+    public static DateTimeFormatter getYYYY_MM_DD_With_Time_Formatter() {
         return DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' h:mm a", Locale.US);
     }
 
-    public static final DateTimeFormatter getDD_MMM_YYYY_With_Time_Formatter() {
+    public static DateTimeFormatter getDD_MMM_YYYY_With_Time_Formatter() {
         return DateTimeFormatter.ofPattern("dd MMM. yyyy 'at' h:mm a", Locale.US);
     }
 
-    public static final LocalDateTime parseDate(String stringDate) {
+    public static LocalDateTime parseDate(String stringDate) {
         DateTimeFormatter formatter;
 
         if (stringDate.contains("am")) {

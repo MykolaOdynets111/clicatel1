@@ -2,13 +2,18 @@ package steps;
 
 import api.clients.ApiHelperTransactions;
 import api.models.request.PaymentBody;
+import api.models.response.failedresponce.UnsuccessfulResponse;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.restassured.response.Response;
+import org.assertj.core.api.SoftAssertions;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import static api.clients.ApiHelperTransactions.getC2PConfigurationResponse;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static java.lang.String.format;
+import static org.assertj.core.api.Fail.fail;
 
 public class ApiPaymentsSteps {
 
@@ -59,10 +64,31 @@ public class ApiPaymentsSteps {
         ApiHelperTransactions.checkWorkingPaymentLink(paymentLink.get());
     }
 
-    @Then("^User get the C2P configuration with status code (.*) using (.*) key$")
-    public void getC2PConfiguration(int statusCode, String activationKey) {
-        assertThat(getC2PConfigurationResponse(activationKey).getStatusCode())
-                .as("User gets proper response")
-                .isEqualTo(statusCode);
+    @Then("^User get the C2P configuration")
+    public void getC2PConfiguration(Map<String, String> valuesMap) {
+        SoftAssertions softly = new SoftAssertions();
+        Response response = getC2PConfigurationResponse(valuesMap.get("activationKey"));
+        int statusCode = response.getStatusCode();
+        int expectedResponseCode = Integer.parseInt(valuesMap.get("statusCode"));
+
+        if (expectedResponseCode == statusCode) {
+//            if (statusCode == 200) {
+//
+//        } else
+
+                if (expectedResponseCode == 401) {
+                    UnsuccessfulResponse unsuccessful = response.as(UnsuccessfulResponse.class);
+
+                    softly.assertThat(valuesMap.get("status")).isEqualTo(unsuccessful.status);
+                    softly.assertThat(valuesMap.get("error")).isEqualTo(unsuccessful.error);
+                    softly.assertThat(valuesMap.get("path")).isEqualTo(unsuccessful.path);
+                    softly.assertThat(unsuccessful.getTimestamp()).isEqualTo(LocalDateTime.now());
+                }
+                softly.assertAll();
+            }
+//        }
+        else {
+            fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
+        }
     }
 }
