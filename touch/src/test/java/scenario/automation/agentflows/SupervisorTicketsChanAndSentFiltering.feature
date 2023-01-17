@@ -28,4 +28,4 @@ Feature: Supervisor desk
     When Agent filter by "Webchat" channel and "Negative" sentiment
     Then Agent see tickets from orca on Unassigned filter page
     When Agent filter by "Webchat" channel and "Positive" sentiment
-    Then Ticket from Touch is not present on Supervisor Desk
+    Then Agent checks Ticket from Touch is not present on Supervisor Desk

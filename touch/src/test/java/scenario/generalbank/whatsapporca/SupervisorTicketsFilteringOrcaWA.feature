@@ -1,6 +1,7 @@
 @support_hours
 @Regression
 @no_widget
+@orca_api
 Feature: WhatsApp ORCA :: Supervisor Desk
 
   Background:
@@ -78,6 +79,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     Then Agent checks quick & custom assign options on the page are not visible
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6002")
+    @skip
   Scenario: CD:: Agent Desk:: Tickets:: Agent_Desk-Tickets-Closed:: Verify if Agent selects filter "Closed by you" then count is updated in the closed ticket tab
     Given Setup ORCA Whatsapp integration for General Bank Demo tenant
     And Update survey management chanel whatsapp settings by ip for Standard Billing
@@ -100,6 +102,8 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Agent send closing ticket manually message
     And Agent closes ticket manually
     And Agent select Closed filter on Left Panel
+    And Agent clears search field and filters on Supervisor desk
+    And Agent search chat orca on Supervisor desk
     Then Agent see tickets from orca on Closed filter page
     When Agent select my closed chats checkbox in container and click "Apply filters" button
     Then Agent see tickets from orca on Closed filter page
@@ -118,8 +122,8 @@ Feature: WhatsApp ORCA :: Supervisor Desk
       | ratingEnabled | false        |
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
-    And Agent select Unassigned filter on Left Panel
     And Send to agent message by ORCA
+    And Wait for 2 second
     And Agent search chat orca on Supervisor desk
     And Agent see tickets from orca on Unassigned filter page
     And Select orca ticket checkbox

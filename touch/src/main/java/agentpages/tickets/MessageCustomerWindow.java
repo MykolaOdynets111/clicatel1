@@ -10,7 +10,7 @@ import java.util.List;
 @FindBy(css = ".ReactModal__Content")
 public class MessageCustomerWindow extends AbstractUIElement {
 
-    @FindBy(css = ".ReactModal__Content header div")
+    @FindBy(css = ".cl-modal-default-header-title")
     private WebElement header;
 
     @FindBy(css =".cl-select__control .cl-select__indicators")

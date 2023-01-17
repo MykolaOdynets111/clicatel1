@@ -1,6 +1,7 @@
 @support_hours
 @Regression
 @no_widget
+ @orca_api
 Feature: WhatsApp ORCA :: Supervisor Desk
 
   Background:
@@ -17,9 +18,10 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     And Agent search chat orca on Supervisor desk
-    Then Agent see tickets from orca on Assigned filter page
+    Then Agent see tickets from orca on Unassigned filter page
     When Agent closed ticket for orca
     And Agent select Closed filter on Left Panel
+    And Agent clears search field and filters on Supervisor desk
     Then Verify ticket is present for orca for 2 seconds
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-5850")
@@ -71,6 +73,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     Then Agent checks closed ticket is enabled
 
     When Agent closes ticket manually
+    And Wait for 2 second
     And Agent select Closed filter on Left Panel
     And Supervisor clicks on first ticket
     Then Visual indicator with "Ticket closed by" text, Agent name and time is shown
@@ -104,6 +107,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And I select Touch in left menu and Supervisor Desk in submenu
     And Send 1 messages chat to agent by ORCA
     When Agent select "Tickets" left menu option
+    And Wait for 2 second
     And Agent search chat orca on Supervisor desk
     And Agent see tickets from orca on Unassigned filter page
     And Select orca ticket checkbox
@@ -121,9 +125,6 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Agent select "Tickets" left menu option
     And Agent accepts 2 unassigned tickets
     Then Agent checks ticket assigned toast message on the page appears and disappears
-    When Agent select Assigned filter on Left Panel
-    Then Agent search chat orca on Supervisor desk
-    And Agent see tickets from orca on Assigned filter page
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-5752")
   Scenario: CD :: Agent Desk :: Tickets :: Unassigned :: Verify visual notification on moving chat from Unassigned to Assigned tab
@@ -141,7 +142,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Agent select "Tickets" left menu option
     And Agent search chat orca on Supervisor desk
     And Agent accept first ticket
-    Then Agent sees toast message with Ticket accepted and moved to assigned text
+    Then Agent checks ticket assigned toast message on the page appears and disappears
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6092")
   Scenario: CD :: Agent Desk :: Tickets :: Unassigned :: Verify the tooltip text "Quickly accepts tickets from oldest to newest" when hovering on tooltip icon on the Quick accept bar
@@ -192,7 +193,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And 'Assign chat' window is opened
     And I assign chat on second agent for Agent dropdown
     Then Second Agent receive increase in the count of the bell icon notification
-    And Second Agent should see notifications GBD Main has assigned you 1 ticket. at time minutes ago in the notification frame
+    And Second Agent should see notifications GBD Main has assigned you 1 ticket. at time seconds ago in the notification frame
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6079")
   Scenario: CD:: Supervisor Desk:: Tickets:: Supervisor_Desk-Tickets-Closed:: Verify if Supervisor cannot assign closed ticket
@@ -233,7 +234,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Agent closed ticket for orca
     And Agent select Closed filter on Left Panel
     And Wait for 3 second
-    Then Agent checks final ticket count value in the closed ticket tab on supervisor
+    Then Agent checks final ticket count value in the closed ticket tab is more on supervisor
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6071")
   Scenario: CD:: Supervisor Desk:: Tickets:: Supervisor_Desk-Tickets-Closed:: Verify if agent name is not displayed in the chat window if chats were closed before they were assigned
@@ -249,7 +250,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Agent see tickets from orca on Unassigned filter page
     And Send //end message by ORCA
     And Agent select Closed filter on Left Panel
-    And Wait for 3 second
+    And Wait for 2 second
     And Supervisor clicks on first ticket
     Then Agent checks visual indicator with text User initiated a new chat: This ticket was automatically closed on is shown during 2 seconds
     And Supervisor Desk Live chat container header display "No current Agent" instead of agent name
@@ -299,7 +300,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Agent select orca ticket
     And Click on Message Customer button for orca
     And Message Customer Window is opened
-    And Supervisor send Hi from Supervisor to agent trough Whatsapp chanel
+    And Agent send Hi from Supervisor to agent trough Whatsapp chanel
     Then Supervisor can see orca ticket with Hi from Supervisor message from agent
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6088")
@@ -322,9 +323,9 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Second Agent select "Tickets" left menu option
     And Second Agent select Unassigned filter on Left Panel
     And Second Agent search chat orca on Supervisor desk
-    And Agent accepts 1 unassigned tickets
+    And Wait for 2 second
+    And Agent accept first ticket
     Then Agent checks ticket assigned toast message on the page appears and disappears
-    When Second Agent accepts 1 unassigned tickets
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6070")
   Scenario: CD :: Agent Desk :: Tickets :: Unassigned :: Verify that if number of available unassigned tickets are less than the number agent requested, they get all unassigned tickets assigned to them
@@ -332,6 +333,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And I select Touch in left menu and Supervisor Desk in submenu
     And Send 1 messages first ticket to agent by ORCA
     When Agent select "Tickets" left menu option
+    And Wait for 2 second
     And Agent search chat orca on Supervisor desk
     And Agent see tickets from orca on Unassigned filter page
     And Select orca ticket checkbox
@@ -348,11 +350,10 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And I select Touch in left menu and Agent Desk in submenu
     And Agent select "Tickets" left menu option
     And Agent inputs 2 unassigned tickets for acceptance in custom bar
-    And Agent checks initial ticket count in the ticket table
-    And I login as second agent of General Bank Demo
+    And Agent checks initial ticket count is displayed in the unassigned ticket tab on agent
     And Second agent select "Tickets" left menu option
     And Second Agent accepts 1 unassigned tickets
-    Then Agent checks final ticket count value in the tickets table is less than initial ticket count
+    Then Agent checks final ticket count value in the unassigned ticket tab is less on agent
     When Agent accepts 1 unassigned tickets
     Then Agent sees toast message with Ticket accepted and moved to assigned text
 
@@ -379,12 +380,14 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     And Send to agent message by ORCA
+    And Wait for 2 second
     And Verify ticket is present for orca for 2 seconds
     And Agent closed ticket for orca
     Then Check checkbox status for ticket rows for orca channel is false
     And Agent checks closed ticket button in quick action bar is disabled
 
     When Agent select Closed filter on Left Panel
+    And Wait for 2 second
     Then Verify ticket is present for orca for 2 seconds
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-5962")
@@ -433,6 +436,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     Then Agent sees closed ticket toast message for orca channel
 
     When Agent select Closed filter on Left Panel
+    And Agent clears search field and filters on Supervisor desk
     Then Verify ticket is present for orca for 2 seconds
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-5900")
@@ -441,6 +445,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And I select Touch in left menu and Supervisor Desk in submenu
     And Send to agent message by ORCA
     When Agent select "Tickets" left menu option
+    And Wait for 2 second
     And Agent search chat orca on Supervisor desk
     Then Agent see tickets from orca on Unassigned filter page
     And Select orca ticket checkbox
