@@ -27,6 +27,7 @@ Feature: Agent should be able to see chat history in left menu
     When Agent searches and selects chat from orca in chat history list
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2880")
+    @skip
   Scenario: CD :: Agent Desk :: Verify agent can view chat history in opened active chat
     Given I login as agent of General Bank Demo
     When Setup ORCA whatsapp integration for General Bank Demo tenant

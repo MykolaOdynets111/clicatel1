@@ -2,25 +2,23 @@ package agentpages.tickets;
 
 
 import abstractclasses.AbstractWidget;
-import datetimeutils.DateTimeHelper;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 
 import static datetimeutils.DateTimeHelper.parseDate;
 
+@FindBy(css = ".extended-chat-list-item")
 public class TicketRow extends AbstractWidget {
 
     @FindBy(css = ".cl-checkbox")
     private WebElement checkbox;
 
-    @FindBy(css = "[type='checkbox']")
+    @FindBy(css = ".[type='checkbox']")
     private WebElement checkboxStatus;
 
     @FindBy(css = ".cl-agent-name")
@@ -38,7 +36,7 @@ public class TicketRow extends AbstractWidget {
     @FindBy(css = ".cl-light-grey span")
     private WebElement status;
 
-    @FindBy(xpath = "//div[@class = 'cl-table-user-data__description']/div[2]")
+    @FindBy(xpath = ".//div[@class = 'cl-table-user-data__description']/div[2]")
     private WebElement phone;
 
     @FindBy(css = ".cl-table-cell--ticketCreatedDate")
@@ -127,10 +125,6 @@ public class TicketRow extends AbstractWidget {
         hoverElem(this.getCurrentDriver(), userName, 5, "User Name");
     }
 
-    public String getLocation() {
-        return getTextFromElem(this.getCurrentDriver(), location, 2, "Location");
-    }
-
     public String getStatus() {
         return getTextFromElem(this.getCurrentDriver(), status, 2, "Status");
     }
@@ -156,7 +150,7 @@ public class TicketRow extends AbstractWidget {
         return isElementRemoved(this.getCurrentDriver(), assignButton, 5);
     }
 
-    public void clickCloseButton(){
+    public void clickCloseButton() {
         clickElem(this.getCurrentDriver(), closeTicketButton, 5, "Close ticket button");
     }
 }

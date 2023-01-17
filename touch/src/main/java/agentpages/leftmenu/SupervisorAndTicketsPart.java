@@ -27,9 +27,8 @@ public class SupervisorAndTicketsPart extends AbstractUIElement {
     }
 
     public int getTicketsCount(String platformType, String filterType){
-        String locator = String.format(ticketsCountCSS, platformType, filterType);
-        WebElement element = waitForElementToBePresentByCss(this.getCurrentDriver(), locator, 10);
-        return Integer.parseInt(getTextFromElem(this.getCurrentDriver(), element,5,"Default filter").trim());
+        String locator = String.format(ticketsCountCSS, filterType, platformType.toLowerCase());
+        return Integer.parseInt(getTextFromElem(this.getCurrentDriver(), locator,5,"Default filter").trim());
     }
 
     public List<String> getFilterNames(){

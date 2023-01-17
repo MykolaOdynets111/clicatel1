@@ -98,6 +98,16 @@ public interface WebActions extends WebWait {
         }
     }
 
+    default String getTextFromElem(WebDriver driver, String elementCSS, int wait, String elemName) {
+        try {
+            waitForElementToBePresentByCss(driver, elementCSS, wait);
+            return driver.findElement(By.cssSelector(elementCSS)).getText().trim();
+        } catch (TimeoutException | NoSuchElementException e) {
+            Assert.fail("Cannot get text from '" + elemName + "' because element is not visible.");
+            return "no text elem";
+        }
+    }
+
     default String getAttributeFromElem(WebDriver driver, WebElement element, int wait,
                                         String elemName, String attribute) {
         try {

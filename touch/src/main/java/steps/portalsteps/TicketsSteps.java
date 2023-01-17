@@ -17,10 +17,7 @@ import steps.dotcontrol.DotControlSteps;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TicketsSteps extends AbstractAgentSteps {
@@ -40,7 +37,7 @@ public class TicketsSteps extends AbstractAgentSteps {
     }
 
     private MessageCustomerWindow getTicketsMessageCustomerWindow() {
-        return getTicketsPage("main").getMessageCustomerWindow();
+        return getAgentHomePage("main").getMessageCustomerWindow();
     }
 
     @Then("^Message Customer Window is opened$")
@@ -65,7 +62,7 @@ public class TicketsSteps extends AbstractAgentSteps {
     }
 
     @When("^(.*) checks chat view for closed chat is displayed$")
-    public void verifyClosedChatView() {
+    public void verifyClosedChatView(String agent) {
         Assert.assertTrue(getTicketsClosedChatView().isDisplayed(),
                 "Chat view is not visible");
     }
@@ -149,9 +146,9 @@ public class TicketsSteps extends AbstractAgentSteps {
     @When("^(.*) checks closed ticket is (.*)")
     public void checkCloseButtonStatus(String agent, String buttonStatus) {
         if (buttonStatus.equalsIgnoreCase("disabled")) {
-            Assert.assertTrue(getTicketsTable(agent).closeButtonStatus(), "Close ticket button is enabled");
+            Assert.assertTrue(getChatHeader(agent).closeButtonStatus(), "Close ticket button is enabled");
         } else if (buttonStatus.equalsIgnoreCase("enabled")) {
-            Assert.assertFalse(getTicketsTable(agent).closeButtonStatus(), "Close ticket button is disabled");
+            Assert.assertFalse(getChatHeader(agent).closeButtonStatus(), "Close ticket button is disabled");
         }
     }
 
@@ -191,8 +188,9 @@ public class TicketsSteps extends AbstractAgentSteps {
 
     @Then("^Verify that only \"(.*)\" channel tickets chats are shown$")
     public void verifyTicketsChatsChannelsFilterUsingAttribute(String channelName) {
-        Assert.assertTrue(getTicketsTable("main").verifyCurrentChanelOfTheTickets(channelName),
-                channelName + " channel name is not shown.");
+        Assert.assertTrue(getTicketsTable("main").verifyCurrentChanelOfTheTickets()
+                        .containsAll(Collections.singleton(channelName)),
+                channelName + " channel name is not shown or incorrect.");
     }
 
     @Then("^Verify that only \"(.*)\" date tickets are shown in (.*) column$")
@@ -203,7 +201,7 @@ public class TicketsSteps extends AbstractAgentSteps {
 
     @Given("^Supervisor scroll Tickets page to the bottom$")
     public void scrollTicketsDown() {
-        getTicketsTable("main").scrollTicketsToTheButtom()
+        getTicketsTable("main").scrollTicketsToTheButton()
                 .waitForMoreTicketsAreLoading(2, 5);
     }
 
@@ -328,11 +326,17 @@ public class TicketsSteps extends AbstractAgentSteps {
         initialTicketsCount = getTicketsCountLeftMenu(agent, ticketType, platformType);
     }
 
-    @Then("^(.*) checks final ticket count value in the (.*) ticket tab on (.*)$")
-    public void verifyFinalTicketsCount(String agent, String ticketType, String platformType) {
+    @Then("^(.*) checks final ticket count value in the (.*) ticket tab is (.*) on (.*)$")
+    public void verifyFinalTicketsCount(String agent, String ticketType, String count, String platformType) {
         int finalTicketsCount = getTicketsCountLeftMenu(agent, ticketType, platformType);
-        Assert.assertEquals(finalTicketsCount, (initialTicketsCount + 1),
-                "Final ticket count is incorrect");
+
+        if (count.equalsIgnoreCase("more")) {
+            Assert.assertEquals(finalTicketsCount, (initialTicketsCount + 1),
+                    "Final ticket count is incorrect");
+        } else if (count.equalsIgnoreCase("less")) {
+            Assert.assertEquals(finalTicketsCount, (initialTicketsCount - 1),
+                    "Final ticket count is incorrect");
+        }
     }
 
     @Then("^(.*) checks ticket count value in the (.*) ticket tab is (.*) on (.*)$")
