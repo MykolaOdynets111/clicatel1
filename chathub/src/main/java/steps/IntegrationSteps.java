@@ -4,6 +4,7 @@ import api.MainApi;
 import clients.Endpoints;
 import datamodelsclasses.configurations.ActivateConfiguration;
 import datamodelsclasses.configurations.ActivateConfigurationBody;
+import datamodelsclasses.configurations.Configurations;
 import datamodelsclasses.providers.ProviderState;
 import datamodelsclasses.validator.Validator;
 import io.cucumber.java.en.And;
@@ -93,6 +94,19 @@ public class IntegrationSteps extends MainApi {
             Assert.assertEquals(dataMap.get("o.timeToExpire"), postActiveConfiguration.getTimeToExpire());
         } else {
             Validator.validatedErrorResponseforPost(url, (Map<String, String>) activateConfigBody, dataMap);
+        }
+    }
+
+    @Given("User is able to get all configurations for a provider")
+    public void userIsAbleToGetAllConfigurationsForAProvider(Map<String,String> dataMap){
+        String url = format(Endpoints.CONFIGURATIONS, dataMap.get("i.providerId"));
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+        if (responseCode == 200) {
+            Configurations expectedConfigurations = new Configurations(dataMap);
+            Configurations getConfigurations = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(Configurations.class);
+            Assert.assertEquals(expectedConfigurations, getConfigurations, "Get configurations response is not as expected");
+        } else {
+            Validator.validatedErrorResponseforGet(url, dataMap);
         }
     }
 }
