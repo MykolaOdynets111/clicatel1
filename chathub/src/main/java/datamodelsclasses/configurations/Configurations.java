@@ -3,6 +3,8 @@ package datamodelsclasses.configurations;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.util.Map;
+
 @Getter
 @Setter
 @Builder
@@ -32,4 +34,14 @@ public class Configurations {
 
     @JsonProperty("modifiedDate")
     public String modifiedDate;
+
+    public Configurations (Map<String,String> parameters){
+        this.id = parameters.get("o.id");
+        this.providerId = parameters.get("o.providerId");
+        this.type = parameters.get("o.type");
+        this.name = parameters.get("o.name");
+        this.status = parameters.get("o.status");
+        this.host = parameters.get("o.host");
+
+    }
 }
