@@ -8,9 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import portaluielem.ChatTagsWindow;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static datetimeutils.DateTimeHelper.getDD_MM_YYYY_DateFormatter;
@@ -22,10 +20,11 @@ import static steps.portalsteps.AbstractPortalSteps.getPortalTouchPreferencesPag
 public class ChatTagsSteps {
 
     @Then("^Verify (.*) column is sorted by ASC$")
-    public void verifyColumnIsSortedAsc(String column) {
+    public void verifyColumnIsSortedAsc(String column) throws InterruptedException {
         List<String> columnValue = getTagsWindow().getColumnValueList(column);
+        columnValue = columnValue.stream().filter(s -> !s.contains("\u2013")).collect(Collectors.toList());
         List<String> sorted;
-        if (column.equals("Created on")) {
+        if (column.equals("Created on") || column.equals("Last Used")) {
             sorted = columnValue.stream()
                     .sorted(ComparatorProvider.DATE_COMPARATOR)
                     .collect(Collectors.toList());
@@ -41,8 +40,9 @@ public class ChatTagsSteps {
     @Then("^Verify (.*) column is sorted by DESC$")
     public static void verifyColumnIsSortedDesc(String column) {
         List<String> columnValue = getTagsWindow().getColumnValueList(column);
+        columnValue = columnValue.stream().filter(s -> !s.contains("\u2013")).collect(Collectors.toList());
         List<String> sorted;
-        if (column.equals("Created on")) {
+        if (column.equals("Created on")|| column.equals("Last Used")) {
             sorted = columnValue.stream()
                     .sorted(ComparatorProvider.DATE_COMPARATOR)
                     .collect(Collectors.toList());
