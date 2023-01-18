@@ -10,6 +10,7 @@ import datamodelsclasses.validator.Validator;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import datamodelsclasses.providers.AllProviders;
@@ -18,7 +19,6 @@ import urlproxymanager.Proxymanager;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -97,16 +97,31 @@ public class IntegrationSteps extends MainApi {
         }
     }
 
-    @Given("User is able to get all configurations for a provider")
-    public void userIsAbleToGetAllConfigurationsForAProvider(Map<String,String> dataMap){
-        String url = format(Endpoints.CONFIGURATIONS, dataMap.get("i.providerId"));
-        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
-        if (responseCode == 200) {
-            Configurations expectedConfigurations = new Configurations(dataMap);
-            Configurations getConfigurations = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(Configurations.class);
-            Assert.assertEquals(expectedConfigurations, getConfigurations, "Get configurations response is not as expected");
-        } else {
-            Validator.validatedErrorResponseforGet(url, dataMap);
+    @Given("User is able to get all configurations for a provider - Check 200 responses")
+    public void userIsAbleToGetAllConfigurationsForAProvider(List<Map<String, String>> dataMap) throws JsonProcessingException {
+        String url = format(Endpoints.CONFIGURATIONS, dataMap.get(0).get("i.providerId"));
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> expectedConfigurations = new ArrayList<>();
+        for (int i = 0; i < dataMap.size(); i++) {
+            try {
+                expectedConfigurations.add(mapper.writeValueAsString(new Configurations(dataMap.get(i).get("o.id"),
+                        dataMap.get(i).get("o.providerId"), dataMap.get(i).get("o.type"), dataMap.get(i).get("o.name"),
+                        dataMap.get(i).get("o.status"), dataMap.get(i).get("o.host"))));
+            } catch (org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
         }
+        //Configurations[] getConfigurations = ChatHubApiHelper.getChatHubQuery(url, 200).as(Configurations[].class);
+        //Need to fix configurations taking from array and putting in the list
+        ObjectMapper mapperGetConfigurations = new ObjectMapper();
+        List<String> getConfigurationsList = new ArrayList<>();
+        getConfigurationsList.add(mapperGetConfigurations.writeValueAsString(ChatHubApiHelper.getChatHubQuery(url, 200).as(Configurations[].class)));
+        Assert.assertEquals(getConfigurationsList, expectedConfigurations.toString(), "Configurations response is not as expected");
+    }
+
+    @Given("User is able to get all configurations for a provider - Check non 200 responses")
+    public void userIsAbleToGetAllConfigurationsForAProviderCheckNonResponses(Map<String, String> dataMap) {
+        String url = format(Endpoints.CONFIGURATIONS, dataMap.get("i.providerId"));
+        Validator.validatedErrorResponseforGet(url, dataMap);
     }
 }

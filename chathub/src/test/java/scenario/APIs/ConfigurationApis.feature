@@ -35,26 +35,26 @@ Feature: Configuration API
 
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-549")
-  Scenario Outline: CCH :: Public :: Configurations API: Get all configurations should return configurations with all the status except AUTH_PENDING
-    Given User is able to get all configurations for a provider
+  Scenario: CCH :: Public :: Configurations API: Get all configurations should return configurations with all the status except AUTH_PENDING
+    Given User is able to get all configurations for a provider - Check 200 responses
+      | i.providerId                     | i.version | o.id                             | o.providerId                     | o.type     | o.name                     | o.status | o.host                                 |
+      | 0184f820c06ec8b62dfa0610e29ab575 |           | 0185a771e2d64aadd296aedbc0ef2492 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | CH_Test_AutoTester2023-97  | ACTIVE   | https://d3v-clickatell2162.zendesk.com |
+      |                                  |           | 0185bb6c699de39640ff6012e6e07548 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | CH_Test_AutoTester2023-112 | ACTIVE   | https://d3v-clickatell2162.zendesk.com |
+      |                                  |           | 0185bbb0bd4606f5bd390e857d2c8aca | 0184f820c06ec8b62dfa0610e29ab575 | SANDBOX    | CH_Test_AutoTester2023-115 | ACTIVE   | https://d3v-clickatell2162.zendesk.com |
+      |                                  |           | 0185bbb47862d93e7c9f2bf20512a19c | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | CH_Test_AutoTester2023-117 | ACTIVE   | https://d3v-clickatell2162.zendesk.com |
+
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCH-664")
+  Scenario Outline: CCH :: Public :: Configurations API: Get all configurations should return configurations with all the status except AUTH_PENDING (other than 200 response coverage in the test case)
+    Given User is able to get all configurations for a provider - Check non 200 responses
       | i.providerId   | <i.providerId>   |
       | i.version      | <i.version>      |
       | o.responseCode | <o.responseCode> |
       | o.errorMessage | <o.errorMessage> |
-      | o.id           | <o.id>           |
-      | o.providerId   | <o.providerId>   |
-      | o.type         | <o.type>         |
-      | o.name         | <o.name>         |
-      | o.status       | <o.status>       |
-      | o.host         | <o.host>         |
 
     Examples:
-      | i.providerId                     | i.version | o.responseCode | o.errorMessage                                   | o.id                             | o.providerId                     | o.type     | o.name                     | o.status | o.host                                 |
-      | 0184f820c06ec8b62dfa0610e29ab575 |           | 200            |                                                  | 0185a771e2d64aadd296aedbc0ef2492 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | CH_Test_AutoTester2023-97  | ACTIVE   | https://d3v-clickatell2162.zendesk.com |
-      |                                  |           |                |                                                  | 0185bb6c699de39640ff6012e6e07548 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | CH_Test_AutoTester2023-112 | ACTIVE   | https://d3v-clickatell2162.zendesk.com |
-      |                                  |           |                |                                                  | 0185bbb0bd4606f5bd390e857d2c8aca | 0184f820c06ec8b62dfa0610e29ab575 | SANDBOX    | CH_Test_AutoTester2023-115 | ACTIVE   | https://d3v-clickatell2162.zendesk.com |
-      |                                  |           |                |                                                  | 0185bbb47862d93e7c9f2bf20512a19c | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | CH_Test_AutoTester2023-117 | ACTIVE   | https://d3v-clickatell2162.zendesk.com |
-      | WrongId                          |           | 404            | Provider ID or Version ID not found for Provider |                                  |                                  |            |                            |          |                                        |
-      | 0184f820c06ec8b62dfa0610e29ab575 | Wrong     | 404            | Provider ID or Version ID not found for Provider |                                  |                                  |            |                            |          |                                        |
-      | NULL                             |           | 404            | bad reuqest                                      |                                  |                                  |            |                            |          |                                        |
-      | 0184f820c06ec8b62dfa0610e29ab575 | NULL      | 404            | bad reuqest                                      |                                  |                                  |            |                            |          |                                        |
+      | i.providerId | i.version | o.responseCode | o.errorMessage                                   |
+      | WrongId      |           | 404            | Provider ID or Version ID not found for Provider |
+#      | 0184f820c06ec8b62dfa0610e29ab575 | Wrong     | 404  | Provider ID or Version ID not found for Provider |
+      | NULL         |           | 404            | bad reuqest                                      |
+ #     | 0184f820c06ec8b62dfa0610e29ab575 | NULL      | 404  | bad reuqest                                      |

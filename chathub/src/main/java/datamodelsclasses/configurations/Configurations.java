@@ -1,15 +1,27 @@
 package datamodelsclasses.configurations;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.*;
 
 import java.util.Map;
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+        "id",
+        "providerId",
+        "type",
+        "name",
+        "status",
+        "host",
+        "createDate",
+        "modifiedDate"
+})
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
+
 public class Configurations {
     @JsonProperty("id")
     public String id;
@@ -35,13 +47,12 @@ public class Configurations {
     @JsonProperty("modifiedDate")
     public String modifiedDate;
 
-    public Configurations (Map<String,String> parameters){
-        this.id = parameters.get("o.id");
-        this.providerId = parameters.get("o.providerId");
-        this.type = parameters.get("o.type");
-        this.name = parameters.get("o.name");
-        this.status = parameters.get("o.status");
-        this.host = parameters.get("o.host");
-
+    public Configurations (String id, String providerId, String type, String name, String status, String host){
+        this.setId(id);
+        this.setProviderId(providerId);
+        this.setType(type);
+        this.setName(name);
+        this.setStatus(status);
+        this.setHost(host);
     }
 }
