@@ -27,6 +27,7 @@ public class APISteps {
     public static final ThreadLocal<String> activationKey = new ThreadLocal<>();
     public static final ThreadLocal<String> paymentLink = new ThreadLocal<>();
     public static final ThreadLocal<String> paymentLinkRef = new ThreadLocal<>();
+    public static final String EXPIRED_LINK = "629905f6-e916-4490-a547-bf8f0d5fb9f4";
 
 
     @Given("^User is logged in to unity$")
@@ -71,7 +72,7 @@ public class APISteps {
     }
 
     @When("^User cancelling the payment link$")
-    public void cancelPayment(Map<String, String> dataMap) throws InterruptedException {
+    public void cancelPayment(Map<String, String> dataMap) {
         Response response;
         String status = dataMap.get("i.paymentLinkRef");
         switch (status) {
@@ -94,8 +95,7 @@ public class APISteps {
                 Validator.validateErrorResponse(response, dataMap);
                 break;
             case "expired":
-                Thread.sleep(100000);
-                response = TransactionsHelper.cancelPaymentLink(paymentLinkRef.get(), activationKey.get());
+                response = TransactionsHelper.cancelPaymentLink(EXPIRED_LINK, activationKey.get());
                 Validator.validateErrorResponse(response, dataMap);
                 break;
             default:

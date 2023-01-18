@@ -83,7 +83,7 @@ Feature: Transaction execution
       | valid            | 200            | Payment Link Cancelled | 0                   |
       | alreadyCancelled | 400            | 0                      | already cancelled   |
       | nonExisted       | 404            | 0                      | URL /api/v2/cancel/ |
-            # TODO : find the solution for posting the expired payment link
+            # TODO : find the solution for posting the expired payment link (non-hardcoded)
       | expired          | 400            | 0                      | expired             |
 
 
