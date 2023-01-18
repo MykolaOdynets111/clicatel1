@@ -115,8 +115,9 @@ public class IntegrationSteps extends MainApi {
         //Need to fix configurations taking from array and putting in the list
         ObjectMapper mapperGetConfigurations = new ObjectMapper();
         List<String> getConfigurationsList = new ArrayList<>();
-        getConfigurationsList.add(mapperGetConfigurations.writeValueAsString(ChatHubApiHelper.getChatHubQuery(url, 200).as(Configurations[].class)));
-        Assert.assertEquals(getConfigurationsList, expectedConfigurations.toString(), "Configurations response is not as expected");
+        //getConfigurationsList.add(mapperGetConfigurations.writeValueAsString(ChatHubApiHelper.getChatHubQuery(url, 200).as(Configurations[].class)));
+        String abc = mapperGetConfigurations.writeValueAsString(ChatHubApiHelper.getChatHubQuery(url, 200).as(Configurations[].class));
+        Assert.assertEquals(abc, expectedConfigurations.toString(), "Configurations response is not as expected");
     }
 
     @Given("User is able to get all configurations for a provider - Check non 200 responses")

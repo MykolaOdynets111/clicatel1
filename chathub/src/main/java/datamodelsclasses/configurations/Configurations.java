@@ -54,5 +54,7 @@ public class Configurations {
         this.setName(name);
         this.setStatus(status);
         this.setHost(host);
+        this.setCreatedDate(createdDate);
+        this.setModifiedDate(modifiedDate);
     }
 }
