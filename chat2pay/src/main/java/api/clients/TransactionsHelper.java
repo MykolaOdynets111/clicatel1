@@ -18,22 +18,28 @@ public class TransactionsHelper extends Chat2PayApiHelper {
                 .getId();
     }
 
-    public static List<PaymentGatewaySettingsResponse> getPaymentGatewaySettingsResponse(String widgetId) {
+    public static PaymentGatewaySettingsResponse getPaymentGatewaySettingsResponse(String widgetId) {
         return getChat2PayQuery(String.format(Endpoints.PAYMENTS_GATEWAY_ENDPOINT, widgetId))
                 .jsonPath()
-                .getList("", PaymentGatewaySettingsResponse.class);
+                .getList("", PaymentGatewaySettingsResponse.class)
+                .stream().findAny()
+                .orElseThrow(() -> new AssertionError("No payment gateway settings found for widget" + widgetId));
     }
 
-    public static List<IntegrationResponse> getIntegrationResponse(String widgetId) {
+    public static IntegrationResponse getIntegrationResponse(String widgetId) {
         return getChat2PayQuery(String.format(Endpoints.WIDGET_INTEGRATION_ENDPOINT, widgetId))
                 .jsonPath()
-                .getList("", IntegrationResponse.class);
+                .getList("", IntegrationResponse.class)
+                .stream().findAny()
+                .orElseThrow(() -> new AssertionError("No integrations found for widget" + widgetId));
     }
 
-    public static List<ApiKeysResponse> getActivationKey(String widgetId) {
+    public static ApiKeysResponse getActivationKey(String widgetId) {
         return getChat2PayQuery(String.format(Endpoints.WIDGET_API_KEYS_ENDPOINT, widgetId))
                 .jsonPath()
-                .getList("", ApiKeysResponse.class);
+                .getList("", ApiKeysResponse.class)
+                .stream().findAny()
+                .orElseThrow(() -> new AssertionError("No activation key found for widget" + widgetId));
     }
 
     public static Response userGetAPaymentLinkResponse(PaymentBody paymentBody, String activationKey) {

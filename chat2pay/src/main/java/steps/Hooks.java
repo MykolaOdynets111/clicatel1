@@ -12,6 +12,7 @@ public class Hooks {
     public void beforeScenario(Scenario scenario){
         //TODO add precondition steps for ChatHub functionality
         System.out.println("Before hooks Chat To Pay");
+
     }
 
     @After()

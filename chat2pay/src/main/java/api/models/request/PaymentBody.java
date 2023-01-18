@@ -30,7 +30,7 @@ import java.util.Map;
 public class PaymentBody {
 
     @JsonProperty("channel")
-    private String channel ="sms";
+    private String channel = "sms";
 
     @JsonProperty("to")
     private String to = "447938556403";
@@ -55,9 +55,7 @@ public class PaymentBody {
 
     @JsonProperty("additionalData")
     private AdditionalData additionalData =
-            (AdditionalData.builder()
-                    .departmentId("567")
-                    .departmentName("Sales").build());
+            new AdditionalData("567", "Sales");
 
     @JsonProperty("paymentGatewaySettingsId")
     private String paymentGatewaySettingsId;
@@ -83,18 +81,15 @@ public class PaymentBody {
         this.taxAmount = (parameters.get("taxAmount"));
         this.totalAmount = (parameters.get("totalAmount"));
         this.timestamp = (parameters.get("timestamp"));
-        this.additionalData = (AdditionalData.builder()
-                .departmentId(parameters.get("departmentId"))
-                .departmentName(parameters.get("departmentName")).build());
+        this.additionalData = new AdditionalData(parameters.get("departmentId"), parameters.get("departmentName"));
         this.paymentGatewaySettingsId = (paymentGatewaySettingsId);
         this.returnPaymentLink = (parameters.get("returnPaymentLink"));
         this.paymentReviewAutoReversal = (parameters.get("paymentReviewAutoReversal"));
         this.applicationId = (applicationID);
         this.transactionType = (parameters.get("transactionType"));
-
     }
 
-    public PaymentBody( String paymentGatewaySettingsId, String applicationID) {
+    public PaymentBody(String paymentGatewaySettingsId, String applicationID) {
         this.paymentGatewaySettingsId = (paymentGatewaySettingsId);
         this.applicationId = (applicationID);
     }
