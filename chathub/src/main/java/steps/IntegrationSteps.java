@@ -13,6 +13,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import datamodelsclasses.providers.AllProviders;
 import api.ChatHubApiHelper;
+import org.testng.asserts.SoftAssert;
 import urlproxymanager.Proxymanager;
 
 import java.io.IOException;
@@ -78,11 +79,12 @@ public class IntegrationSteps extends MainApi {
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
         if (responseCode == 200) {
             ActivateConfiguration postActiveConfiguration = ChatHubApiHelper.postChatHubQuery(url, activateConfigBody).as(ActivateConfiguration.class);
-            Assert.assertNotNull(postActiveConfiguration.getId(), "Configuration Id is empty");
-            Assert.assertEquals(dataMap.get("o.type"), postActiveConfiguration.getType());
-            Assert.assertEquals(dataMap.get("o.setupName"), postActiveConfiguration.getSetupName());
-            Assert.assertNotNull(postActiveConfiguration.getCreatedDate(), "CurrentDate is Empty");
-            Assert.assertNotNull(postActiveConfiguration.getModifiedDate(), "Modfied Date is empty");
+            SoftAssert softAssert = new SoftAssert();
+            softAssert.assertNotNull(postActiveConfiguration.getId(), "Configuration Id is empty");
+            softAssert.assertEquals(dataMap.get("o.type"), postActiveConfiguration.getType());
+            softAssert.assertEquals(dataMap.get("o.setupName"), postActiveConfiguration.getSetupName());
+            softAssert.assertNotNull(postActiveConfiguration.getCreatedDate(), "CurrentDate is Empty");
+            softAssert.assertNotNull(postActiveConfiguration.getModifiedDate(), "Modfied Date is empty");
 
             //Checking of authentication link will be fixed later
             //Check the authorization link
@@ -90,7 +92,8 @@ public class IntegrationSteps extends MainApi {
             System.out.println(printLink);*/
  /*          int code = proxy.addProxy("https://dev-mc2-authentication-front-end-service.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/authorize/request/a6bad634-8d45-4165-a2a0-13e288ce8564");
             Assert.assertEquals(Integer.parseInt(dataMap.get("o.authenticationLink")), code);*/
-            Assert.assertEquals(dataMap.get("o.timeToExpire"), postActiveConfiguration.getTimeToExpire());
+            softAssert.assertEquals(dataMap.get("o.timeToExpire"), postActiveConfiguration.getTimeToExpire());
+            softAssert.assertAll();
         } else {
             Validator.validatedErrorResponseforPost(url, (Map<String, String>) activateConfigBody, dataMap);
         }
