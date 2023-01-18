@@ -7,6 +7,7 @@ import datamodelsclasses.configurations.ActivateConfigurationBody;
 import datamodelsclasses.configurations.Configurations;
 import datamodelsclasses.providers.ProviderState;
 import datamodelsclasses.validator.Validator;
+import datetimeutils.DateTimeHelper;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -100,22 +101,20 @@ public class IntegrationSteps extends MainApi {
     @Given("User is able to get all configurations for a provider - Check 200 responses")
     public void userIsAbleToGetAllConfigurationsForAProvider(List<Map<String, String>> dataMap) throws JsonProcessingException {
         String url = format(Endpoints.CONFIGURATIONS, dataMap.get(0).get("i.providerId"));
+        String createdDate = DateTimeHelper.getCurrentDateTime();
+        String modifiedDate = DateTimeHelper.getCurrentDateTime();
         ObjectMapper mapper = new ObjectMapper();
         List<String> expectedConfigurations = new ArrayList<>();
         for (int i = 0; i < dataMap.size(); i++) {
             try {
                 expectedConfigurations.add(mapper.writeValueAsString(new Configurations(dataMap.get(i).get("o.id"),
                         dataMap.get(i).get("o.providerId"), dataMap.get(i).get("o.type"), dataMap.get(i).get("o.name"),
-                        dataMap.get(i).get("o.status"), dataMap.get(i).get("o.host"))));
+                        dataMap.get(i).get("o.status"), dataMap.get(i).get("o.host"), dataMap.get(i).get(createdDate), dataMap.get(i).get(modifiedDate))));
             } catch (org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
         }
-        //Configurations[] getConfigurations = ChatHubApiHelper.getChatHubQuery(url, 200).as(Configurations[].class);
-        //Need to fix configurations taking from array and putting in the list
         ObjectMapper mapperGetConfigurations = new ObjectMapper();
-        List<String> getConfigurationsList = new ArrayList<>();
-        //getConfigurationsList.add(mapperGetConfigurations.writeValueAsString(ChatHubApiHelper.getChatHubQuery(url, 200).as(Configurations[].class)));
         String abc = mapperGetConfigurations.writeValueAsString(ChatHubApiHelper.getChatHubQuery(url, 200).as(Configurations[].class));
         Assert.assertEquals(abc, expectedConfigurations.toString(), "Configurations response is not as expected");
     }

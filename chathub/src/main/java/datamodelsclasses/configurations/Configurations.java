@@ -19,35 +19,34 @@ import java.util.Map;
         "modifiedDate"
 })
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 
 public class Configurations {
     @JsonProperty("id")
-    public String id;
+    private String id;
 
     @JsonProperty("providerId")
-    public String providerId;
+    private String providerId;
 
     @JsonProperty("type")
-    public String type;
+    private String type;
 
     @JsonProperty("name")
-    public String name;
+    private String name;
 
     @JsonProperty("status")
-    public String status;
+    private String status;
 
     @JsonProperty("host")
-    public String host;
+    private String host;
 
     @JsonProperty("createdDate")
-    public String createdDate;
+    private String createdDate;
 
     @JsonProperty("modifiedDate")
     public String modifiedDate;
 
-    public Configurations (String id, String providerId, String type, String name, String status, String host){
+    public Configurations (String id, String providerId, String type, String name, String status, String host, String createdDate, String modifiedDate){
         this.setId(id);
         this.setProviderId(providerId);
         this.setType(type);
