@@ -20,9 +20,9 @@ Feature: Get Chat 2 pay configuration
 
     Examples:
       | i.activationKey                  | o.statusCode | o.whatsappChannelEnabled | o.smsChannelEnabled | o.apiKey                         | o.supportedCurrencies | o.environment | o.integrations | o.error      | o.path         |
-#      | e9ac1ace130a465a8fb6f8eea293589e | 200          | FALSE                    | TRUE                | e9ac1ace130a465a8fb6f8eea293589e | 2                     | SANDBOX       | 2              |              |                |
+      | e9ac1ace130a465a8fb6f8eea293589e | 200          | FALSE                    | TRUE                | e9ac1ace130a465a8fb6f8eea293589e | 2                     | SANDBOX       | 2              |              |                |
       | qwerty                           | 401          |                          |                     |                                  |                       |               |                | Unauthorized | /api/v2/config |
-      |                                  | 401          |                          |                     |                                  |                       |               |                | Unauthorized | /api/v2/config |
+      | " "                              | 401          |                          |                     |                                  |                       |               |                | Unauthorized | /api/v2/config |
       | c80a79a9857040acafbea2774008ed1b | 200          | FALSE                    | TRUE                | c80a79a9857040acafbea2774008ed1b | 1                     | SANDBOX       | 1              |              |                |
       | test                             | 401          |                          |                     |                                  |                       |               |                | Unauthorized | /api/v2/config |
-      |                                  | 401          |                          |                     |                                  |                       |               |                | Unauthorized | /api/v2/config |
+      | " "                              | 401          |                          |                     |                                  |                       |               |                | Unauthorized | /api/v2/config |

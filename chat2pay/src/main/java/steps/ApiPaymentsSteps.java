@@ -2,18 +2,21 @@ package steps;
 
 import api.clients.ApiHelperTransactions;
 import api.models.request.PaymentBody;
+import api.models.response.c2pconfiguration.ConfigurationBody;
 import api.models.response.failedresponce.UnsuccessfulResponse;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Map;
 
 import static api.clients.ApiHelperTransactions.getC2PConfigurationResponse;
+import static java.lang.Boolean.getBoolean;
+import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
-import static org.assertj.core.api.Fail.fail;
 
 public class ApiPaymentsSteps {
 
@@ -69,26 +72,35 @@ public class ApiPaymentsSteps {
         SoftAssertions softly = new SoftAssertions();
         Response response = getC2PConfigurationResponse(valuesMap.get("activationKey"));
         int statusCode = response.getStatusCode();
-        int expectedResponseCode = Integer.parseInt(valuesMap.get("statusCode"));
+        int expectedResponseCode = parseInt(valuesMap.get("statusCode"));
 
         if (expectedResponseCode == statusCode) {
-//            if (statusCode == 200) {
-//
-//        } else
+            if (statusCode == 200) {
+                ConfigurationBody configuration = response.as(ConfigurationBody.class);
 
-                if (expectedResponseCode == 401) {
-                    UnsuccessfulResponse unsuccessful = response.as(UnsuccessfulResponse.class);
+                softly.assertThat(configuration.updateTime).isNotNull();
+                softly.assertThat(getBoolean(valuesMap.get("whatsappChannelEnabled"))).isEqualTo(configuration.whatsappChannelEnabled);
+                softly.assertThat(getBoolean(valuesMap.get("smsChannelEnabled"))).isEqualTo(configuration.whatsappChannelEnabled);
+                softly.assertThat(valuesMap.get("apiKey")).isEqualTo(configuration.apiKey);
+                softly.assertThat(valuesMap.get("environment")).isEqualTo(configuration.environment);
+                softly.assertThat(parseInt(valuesMap.get("integrations"))).isEqualTo(configuration.integrators.size());
+                softly.assertThat(parseInt(valuesMap.get("supportedCurrencies"))).isEqualTo(configuration.supportedCurrencies.size());
+                configuration.supportedCurrencies.forEach(sc ->
+                        softly.assertThat(sc.getClass().getFields()).isNotNull());
+                configuration.integrators.forEach(i ->
+                        softly.assertThat(i.getClass().getFields()).isNotNull());
 
-                    softly.assertThat(valuesMap.get("status")).isEqualTo(unsuccessful.status);
-                    softly.assertThat(valuesMap.get("error")).isEqualTo(unsuccessful.error);
-                    softly.assertThat(valuesMap.get("path")).isEqualTo(unsuccessful.path);
-                    softly.assertThat(unsuccessful.getTimestamp()).isEqualTo(LocalDateTime.now());
-                }
-                softly.assertAll();
+            } else if (expectedResponseCode == 401) {
+                 UnsuccessfulResponse unsuccessful = response.as(UnsuccessfulResponse.class);
+
+                softly.assertThat(expectedResponseCode).isEqualTo(unsuccessful.status);
+                softly.assertThat(valuesMap.get("error")).isEqualTo(unsuccessful.error);
+                softly.assertThat(valuesMap.get("path")).isEqualTo(unsuccessful.path);
+                softly.assertThat(unsuccessful.getTimestamp()).isEqualTo(LocalDate.now());
             }
-//        }
-        else {
-            fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
+            softly.assertAll();
+        } else {
+            Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
         }
     }
 }

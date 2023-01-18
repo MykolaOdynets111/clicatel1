@@ -1,13 +1,14 @@
 package api;
 
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+import static io.restassured.http.ContentType.ANY;
+import static io.restassured.http.ContentType.JSON;
 import static org.testng.Assert.fail;
 
 public abstract class MainApi {
@@ -50,7 +51,7 @@ public abstract class MainApi {
 
     private static Response post(String endpoint, Object body, String authToken) {
         return RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
+                .contentType(JSON)
                 .header("Authorization", authToken)
                 .body(body)
                 .post(endpoint);
@@ -58,14 +59,15 @@ public abstract class MainApi {
 
     private static Response postWithoutAuth(String endpoint, Object body) {
         return RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
+                .contentType(JSON)
                 .body(body)
                 .post(endpoint);
     }
 
     private static Response get(String endpoint, String authToken) {
         return RestAssured.given().log().all()
-                .accept(ContentType.JSON)
+                .accept(ANY)
+                .contentType(JSON)
                 .header("Authorization", authToken)
                 .get(endpoint);
     }
