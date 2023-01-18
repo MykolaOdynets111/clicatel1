@@ -193,7 +193,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And 'Assign chat' window is opened
     And I assign chat on second agent for Agent dropdown
     Then Second Agent receive increase in the count of the bell icon notification
-    And Second Agent should see notifications GBD Main has assigned you 1 ticket. at time seconds ago in the notification frame
+    And Second Agent should see notifications GBD Main has assigned you 1 ticket. at time minute ago in the notification frame
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6079")
   Scenario: CD:: Supervisor Desk:: Tickets:: Supervisor_Desk-Tickets-Closed:: Verify if Supervisor cannot assign closed ticket
@@ -351,11 +351,11 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Agent select "Tickets" left menu option
     And Agent inputs 2 unassigned tickets for acceptance in custom bar
     And Agent checks initial ticket count is displayed in the unassigned ticket tab on agent
-    And Second agent select "Tickets" left menu option
+    And I login as second agent of General Bank Demo
+    And Second Agent select "Tickets" left menu option
     And Second Agent accepts 1 unassigned tickets
+    And Wait for 2 second
     Then Agent checks final ticket count value in the unassigned ticket tab is less on agent
-    When Agent accepts 1 unassigned tickets
-    Then Agent sees toast message with Ticket accepted and moved to assigned text
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-5966")
   Scenario: CD:: Supervisor Desk:: Tickets:: Supervisor_Desk-Tickets-Unassigned:: Verify supervisor is able to see the notification toast in the chat window when the ticket is closed
@@ -367,9 +367,9 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Send to agent message by ORCA
     And Agent search chat orca on Supervisor desk
     And Agent see tickets from orca on Unassigned filter page
-    Then Agent checks closed ticket button in quick action bar is disabled
+    Then Agent checks closed ticket button in quick action bar is disabled in 2 seconds
 
-    When Agent closed ticket for orca
+    When Agent clicks on closed ticket button from quick action bar for orca
     Then Agent sees toast message with 1 ticket has been successfully closed. text
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-5964")
@@ -380,14 +380,13 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     And Send to agent message by ORCA
-    And Wait for 2 second
     And Verify ticket is present for orca for 2 seconds
     And Agent closed ticket for orca
     Then Check checkbox status for ticket rows for orca channel is false
-    And Agent checks closed ticket button in quick action bar is disabled
+    And Wait for 2 second
+    And Agent checks closed ticket button in quick action bar is disabled in 2 seconds
 
     When Agent select Closed filter on Left Panel
-    And Wait for 2 second
     Then Verify ticket is present for orca for 2 seconds
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-5962")

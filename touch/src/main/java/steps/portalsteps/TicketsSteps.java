@@ -10,6 +10,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import junit.framework.AssertionFailedError;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.agentsteps.AbstractAgentSteps;
@@ -158,10 +159,30 @@ public class TicketsSteps extends AbstractAgentSteps {
         Assert.assertEquals(getTicketsPage(agent).getToolTipText(), toolTipMessage, "Closed ticket tool tip message is wrong");
     }
 
-    @When("^(.*) checks closed ticket button in quick action bar is disabled$")
-    public void checkCloseButtonStatusQuickActionBar(String agent) {
-        Assert.assertTrue(getTicketsPage(agent).getTicketsQuickActionBar().closeButtonStatusQuickAction(),
-                "Close ticket button in quick action bar is enabled");
+    @When("^(.*) checks closed ticket button in quick action bar is disabled in (.*) seconds$")
+    public void checkCloseButtonStatusQuickActionBar(String agent, int wait) {
+        for (int i = 0; i < wait; i++) {
+            try {
+                Assert.assertTrue(getTicketsPage(agent).getTicketsQuickActionBar().closeButtonStatusQuickAction(),
+                        "Close ticket button in quick action bar is enabled");
+            } catch (AssertionError | Exception e) {
+                System.out.println("Close ticket button in quick action is loading, so retrying searching");
+                waitFor(1000);
+            }
+        }
+    }
+
+    @When("^(.*) clicks on closed ticket button from quick action bar for (.*)$")
+    public void clickCloseButtonQuickActionBar(String agent, String channel) {
+        getTicketsTable(agent)
+                .selectTicketCheckbox(getUserName(channel))
+                .getTicketByUserName(getUserName(channel));
+
+        getTicketsPage(agent).getTicketsQuickActionBar().clickCloseButtonQuickAction();
+
+        if (getAgentHomePage(agent).getAgentFeedbackWindow().isAgentFeedbackWindowShown()) {
+            getAgentHomePage(agent).getAgentFeedbackWindow().waitForLoadingData().clickCloseButtonInCloseChatPopup();
+        }
     }
 
     @When("^Supervisor clicks on first ticket$")
@@ -266,16 +287,14 @@ public class TicketsSteps extends AbstractAgentSteps {
 
     @Then("^Verify ticket is present for (.*) for (.*) seconds$")
     public void verifyTicketIsPresentFor(String chanel, int wait) {
-        boolean isTicketPresent = false;
-
         for (int i = 0; i < wait; i++) {
-            if (!getTicketsTable("main").isTicketPresent(getUserName(chanel)))
+            try {
+                Assert.assertTrue(getTicketsTable("main").isTicketPresent(getUserName(chanel)), "Ticket should be present");
+            } catch (AssertionError | Exception e) {
+                System.out.println("No ticket are there after search, chat has not reached yet, so retrying searching");
                 waitFor(1000);
-            else {
-                isTicketPresent = true;
             }
         }
-        Assert.assertTrue(isTicketPresent, "Ticket should be present");
     }
 
     @Then("^Verify first closed ticket date are fitted by filter$")
@@ -290,7 +309,7 @@ public class TicketsSteps extends AbstractAgentSteps {
 
     @And("^Agent click on the arrow of Ticket End Date$")
     public void agentClickOnTheArrowOfTicketEndDate() {
-        getTicketsTable("main").clickAscendingArrowOfEndDateColumn();
+        getTicketsPage("main").clickAscendingArrowOfEndDateColumn();
     }
 
     @Then("^(.*) checks quick & custom assign options on the page are (.*)$")

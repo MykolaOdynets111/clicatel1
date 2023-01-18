@@ -78,7 +78,7 @@ public class TicketRow extends AbstractWidget {
     }
 
     public String getName() {
-        return userName.getText();
+        return getTextFromElem(this.getCurrentDriver(), userName, 10, "User name field");
     }
 
     public String getCurrentAgent() {

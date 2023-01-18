@@ -339,7 +339,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 .selectStartDate(startDate)
                 .selectEndDate(endDate)
                 .clickApplyFilterButton();
-        getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
+        getSupervisorDeskPage().waitForConnectingDisappear(2, 6);
     }
 
     @And("^Admin checks value of start date filter is empty for (\\d+) year (\\d+) month and (\\d+) days ago$")

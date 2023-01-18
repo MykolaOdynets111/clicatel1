@@ -49,6 +49,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Send 1 messages chat to agent by ORCA
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
+    And Wait for 2 second
     And Agent search chat orca on Supervisor desk
     Then Agent see tickets from orca on Unassigned filter page
     When Agent closed ticket for orca
