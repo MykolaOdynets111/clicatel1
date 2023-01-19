@@ -13,6 +13,9 @@ public class TicketsQuickActionBar extends AbstractUIElement {
     @FindBy(xpath = "//button[text()='Accept']")
     private WebElement acceptButton;
 
+    @FindBy(xpath = "//button[text()='Close']")
+    private WebElement closeButton;
+
     @FindBy(css = "[name='customNumberOfTickets']")
     private WebElement numberOfTicketsInput;
 
@@ -27,5 +30,9 @@ public class TicketsQuickActionBar extends AbstractUIElement {
 
     public void clickAcceptButtonInHeader() {
         clickElem(this.getCurrentDriver(), acceptButton, 5, "Accept Button");
+    }
+
+    public boolean closeButtonStatusQuickAction(){
+        return Boolean.parseBoolean(getAttributeFromElem(this.getCurrentDriver(), closeButton, 5, "Close ticket button", "disabled"));
     }
 }

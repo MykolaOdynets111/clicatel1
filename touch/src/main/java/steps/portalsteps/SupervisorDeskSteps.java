@@ -205,6 +205,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 "Closed chat does not have Message Customer button");
     }
 
+    @Then("^Verify that \"Message Customer\" button should not be present$")
+    public void verifyMessageCustomerButtonVisibility() {
+        Assert.assertFalse(getTicketsPage("main").getSupervisorTicketClosedChatView().isMessageCustomerButtonOrStartChatPresent(),
+                "CHat view is having Message Customer button");
+    }
+
     @Then("^WA chat show the name of the user$")
     public void verifyUserName() {
         Assert.assertEquals(getSupervisorDeskPage().getSupervisorClosedChatsTable().getUserName(), DotControlSteps.getClient(),
