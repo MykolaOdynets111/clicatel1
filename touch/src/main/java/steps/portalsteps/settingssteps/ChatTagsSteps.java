@@ -19,42 +19,43 @@ import static steps.portalsteps.AbstractPortalSteps.getPortalTouchPreferencesPag
 
 public class ChatTagsSteps {
 
-    @Then("^Verify (.*) column is sorted by ASC$")
-    public void verifyColumnIsSortedAsc(String column) throws InterruptedException {
+    @Then("^Verify (.*) column is sorted by (.*)$")
+    public void verifyColumnIsSortedAsc(String column, String sortType) {
         List<String> columnValue = getTagsWindow().getColumnValueList(column);
         columnValue = columnValue.stream().filter(s -> !s.contains("\u2013")).collect(Collectors.toList());
         List<String> sorted;
-        if (column.equals("Created on") || column.equals("Last Used")) {
+        if  (column.equals("Created on") || column.equals("Last Used")){
             sorted = columnValue.stream()
                     .sorted(ComparatorProvider.DATE_COMPARATOR)
                     .collect(Collectors.toList());
+            if (sortType.equals("ASC")) {
+                assertThat(columnValue)
+                        .as("Values should be sorted by ASC for", column)
+                        .isEqualTo(sorted);
+            } else if (sortType.equals("DESC")) {
+                Collections.reverse(sorted);
+                assertThat(columnValue)
+                        .as("Values should be sorted by DESC ")
+                        .isEqualTo(sorted);
+            } else {
+                throw new AssertionError("Incorrect sorting type was provided");
+            }
         } else {
-            sorted = getSortedList(column, Comparator.naturalOrder());
-        }
+            if (sortType.equals("ASC")) {
+                sorted = getSortedList(column, Comparator.naturalOrder());
+                assertThat(columnValue)
+                        .as("Values should be sorted by ASC ")
+                        .isEqualTo(sorted);
+            } else if (sortType.equals("DESC")) {
+                sorted = getSortedList(column, Comparator.reverseOrder());
+                assertThat(columnValue)
+                        .as("Values should be sorted by DESC ")
+                        .isEqualTo(sorted);
+            } else {
+                throw new AssertionError("Incorrect sorting type was provided");
+            }
+        }}
 
-        assertThat(columnValue)
-                .as("Values should be sorted by ASC ")
-                .isEqualTo(sorted);
-    }
-
-    @Then("^Verify (.*) column is sorted by DESC$")
-    public static void verifyColumnIsSortedDesc(String column) {
-        List<String> columnValue = getTagsWindow().getColumnValueList(column);
-        columnValue = columnValue.stream().filter(s -> !s.contains("\u2013")).collect(Collectors.toList());
-        List<String> sorted;
-        if (column.equals("Created on")|| column.equals("Last Used")) {
-            sorted = columnValue.stream()
-                    .sorted(ComparatorProvider.DATE_COMPARATOR)
-                    .collect(Collectors.toList());
-            Collections.reverse(sorted);
-        } else {
-            sorted = getSortedList(column, Comparator.reverseOrder());
-        }
-
-        assertThat(columnValue)
-                .as("Values should be sorted by DESC ")
-                .isEqualTo(sorted);
-    }
 
     @When("^Sort (.*) column by (.*)$")
     public void sortColumnBy(String column, String sortedType) {
