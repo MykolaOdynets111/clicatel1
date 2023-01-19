@@ -1,4 +1,4 @@
-package api.models.response;
+package api.models.response.widgetresponse;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,7 +27,7 @@ public class Widget {
     private String status;
 
     @JsonProperty("configStatus")
-    private String configStatus;
+    private ConfigStatus configStatus;
 
     @JsonProperty("type")
     private String type;

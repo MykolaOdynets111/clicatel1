@@ -2,6 +2,10 @@ package api.clients;
 
 import api.models.request.PaymentBody;
 import api.models.response.*;
+import api.models.response.integrationresponse.IntegrationResponse;
+import api.models.response.paymentgatewaysettingsresponse.PaymentGatewaySettingsResponse;
+import api.models.response.widgetresponse.Widget;
+import api.models.response.widgetresponse.WidgetsContent;
 import io.restassured.response.Response;
 
 import java.util.List;
@@ -11,7 +15,7 @@ public class TransactionsHelper extends Chat2PayApiHelper {
 
     public static String getWidgetId(String widgetName) {
         List<Widget> widgets = getChat2PayQuery(Endpoints.EXISTED_WIDGETS_ENDPOINT)
-                .as(Content.class)
+                .as(WidgetsContent.class)
                 .getWidgets();
         return widgets.stream().filter(w -> w.getName().equals(widgetName)).findFirst()
                 .orElseThrow(() -> new AssertionError("Widget didn't find"))

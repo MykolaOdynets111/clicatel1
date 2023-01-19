@@ -4,7 +4,6 @@ import api.clients.Chat2PayApiHelper;
 import api.clients.TransactionsHelper;
 import api.models.request.PaymentBody;
 import api.models.response.CancelPaymentLinkResponse;
-import api.models.response.ErrorResponse;
 import api.models.response.PaymentLinkResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
