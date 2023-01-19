@@ -123,7 +123,6 @@ public class IntegrationSteps extends MainApi {
         if (responseCode == 200) {
             ConfigurationSecrets expectedConfigurationSecret = new ConfigurationSecrets(dataMap);
             ConfigurationSecrets getConfigurationSecret = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(ConfigurationSecrets.class);
-            //Need to fix the Create date and Modified date
             SoftAssert softAssert = new SoftAssert();
             softAssert.assertEquals(getConfigurationSecret.getId(),expectedConfigurationSecret.getId());
             softAssert.assertEquals(getConfigurationSecret.getProviderId(),expectedConfigurationSecret.getProviderId());
@@ -133,6 +132,8 @@ public class IntegrationSteps extends MainApi {
             softAssert.assertEquals(getConfigurationSecret.getClientId(),expectedConfigurationSecret.getClientId());
             softAssert.assertEquals(getConfigurationSecret.getClientSecret(),expectedConfigurationSecret.getClientSecret());
             softAssert.assertEquals(getConfigurationSecret.getHostUrl(),expectedConfigurationSecret.getHostUrl());
+            softAssert.assertNotNull(getConfigurationSecret.getCreatedDate());
+            softAssert.assertNotNull(getConfigurationSecret.getModifiedDate());
             softAssert.assertAll();
         } else {
             Validator.validatedErrorResponseforGet(url, dataMap);
