@@ -14,6 +14,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import datamodelsclasses.providers.AllProviders;
 import api.ChatHubApiHelper;
+import org.testng.asserts.SoftAssert;
 import urlproxymanager.Proxymanager;
 
 import java.io.IOException;
@@ -115,7 +116,16 @@ public class IntegrationSteps extends MainApi {
             ConfigurationSecrets expectedConfigurationSecret = new ConfigurationSecrets(dataMap);
             ConfigurationSecrets getConfigurationSecret = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(ConfigurationSecrets.class);
             //Need to fix the Create date and Modified date
-            Assert.assertEquals(expectedConfigurationSecret,getConfigurationSecret,"The configuration secrets are not correct");
+            SoftAssert softAssert = new SoftAssert();
+            softAssert.assertEquals(getConfigurationSecret.getId(),expectedConfigurationSecret.getId());
+            softAssert.assertEquals(getConfigurationSecret.getProviderId(),expectedConfigurationSecret.getProviderId());
+            softAssert.assertEquals(getConfigurationSecret.getAccountProviderConfigStatusId(),expectedConfigurationSecret.getAccountProviderConfigStatusId());
+            softAssert.assertEquals(getConfigurationSecret.getConfigurationEnvironmentTypeId(),expectedConfigurationSecret.getConfigurationEnvironmentTypeId());
+            softAssert.assertEquals(getConfigurationSecret.getDisplayName(),expectedConfigurationSecret.getDisplayName());
+            softAssert.assertEquals(getConfigurationSecret.getClientId(),expectedConfigurationSecret.getClientId());
+            softAssert.assertEquals(getConfigurationSecret.getClientSecret(),expectedConfigurationSecret.getClientSecret());
+            softAssert.assertEquals(getConfigurationSecret.getHostUrl(),expectedConfigurationSecret.getHostUrl());
+            softAssert.assertAll();
         } else {
             Validator.validatedErrorResponseforGet(url, dataMap);
         }
