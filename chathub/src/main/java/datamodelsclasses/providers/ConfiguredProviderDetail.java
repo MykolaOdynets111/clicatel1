@@ -3,7 +3,9 @@ package datamodelsclasses.providers;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,13 +18,11 @@ import java.util.List;
         "description",
         "moreInfoUrl",
         "versions",
-        "isAdded"
 })
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AllProviders {
-
+public class ConfiguredProviderDetail {
     @JsonProperty("id")
     private String id;
     @JsonProperty("name")
@@ -40,16 +40,12 @@ public class AllProviders {
     @JsonProperty("versions")
     private List<Versions> versions = Arrays.asList(new Versions());
 
-    @JsonProperty("isAdded")
-    public String isAdded;
-
-    public AllProviders(String id, String name, String logoUrl, String description, String moreInfoUrl, String vid, String version, String latest, String isAdded) {
+    public ConfiguredProviderDetail(String id, String name, String logoUrl, String description, String moreInfoUrl, String vid, String version, String latest) {
         this.setId(id);
         this.setName(name);
         this.setLogoUrl(logoUrl);
         this.setDescription(description);
         this.setMoreInfoUrl(moreInfoUrl);
-        this.setIsAdded(isAdded);
         List<Versions> versions = Arrays.asList(new Versions(vid,version,latest));
         this.setVersions(versions);
     }

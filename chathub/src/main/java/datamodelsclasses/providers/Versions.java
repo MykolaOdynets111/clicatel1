@@ -1,13 +1,18 @@
 package datamodelsclasses.providers;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.*;
 
-@Getter
-@Setter
-@Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+        "id",
+        "version",
+        "latest",
+})
+@Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Versions {
         @JsonProperty("id")
         private String id;
@@ -16,5 +21,12 @@ public class Versions {
         private String version;
 
         @JsonProperty("latest")
-        private boolean latest;
+        private String latest;
+
+        public Versions(String id, String version, String latest) {
+                this.setId(id);
+                this.setVersion(version);
+                this.setLatest(latest);
+        }
 }
+
