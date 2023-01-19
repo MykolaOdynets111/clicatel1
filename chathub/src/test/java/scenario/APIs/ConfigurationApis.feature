@@ -32,3 +32,20 @@ Feature: Configuration API
 #  #DefectID: CCH-651    | CH_Test_AutoTester2023-52 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  |                                    | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | 404            | ClientId and ClientSecret in request or in OAuthDetails should not be null |                   |          |                                   |               |
       | CH_Test_AutoTester2023-156 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com |                                  | PRODUCTION | 400            | Bad request    |            |                           |                      |                |
       | CH_Test_AutoTester2023-157 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 |            | 400            | Bad request    |            |                           |                      |                |
+
+
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCH-662")
+  Scenario Outline: CCH :: Public :: Configurations API: Get configuration state API should return the state of the configuration.
+    Given User is able to get configuration state
+      | i.configurationId        | <i.configurationId>        |
+      | o.responseCode           | <o.responseCode>           |
+      | o.errorMessage           | <o.errorMessage>           |
+      | o.accountProviderConfigStatusId | <o.accountProviderConfigStatusId> |
+
+    Examples:
+      | i.configurationId                | o.responseCode | o.errorMessage                                          | o.accountProviderConfigStatusId |
+      | 0185bb6c699de39640ff6012e6e07548 | 200            |                                                         | ACTIVE                        |
+      | 0185bb938e4a2c59f3aa9d6e5d588346 | 200            |                                                         | AUTH_PENDING                  |
+      | Wrong ID                         | 404            | Configuration ID not found                              |                               |
+  #BUG# TO BE ADDED    |                              | 404            | bad reuqest                                             |                               |
