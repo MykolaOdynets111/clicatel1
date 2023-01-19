@@ -3,6 +3,7 @@ package api.models.request;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.cucumber.java.it.Data;
 import lombok.Builder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -13,6 +14,12 @@ import lombok.Builder;
 
 @Builder
 public class AdditionalData {
+
+    public AdditionalData (String departmentId, String departmentName){
+        this.departmentId = departmentId;
+        this.departmentName = departmentName;
+    }
+
 
     @JsonProperty("departmentId")
     private String departmentId;

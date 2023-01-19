@@ -1,25 +1,21 @@
-package api.models.request;
+package api.models.response.widgetresponse;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Builder;
 import lombok.Data;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "email",
-        "password"
+        "id",
+        "name"
 })
 
 @Data
-@Builder
-public class Credentials {
+public class ConfigStatus {
+    @JsonProperty("id")
+    private int id;
 
-    @JsonProperty("email")
-    private String email;
-
-    @JsonProperty("password")
-    private String password;
-
+    @JsonProperty("name")
+    private String name;
 }
