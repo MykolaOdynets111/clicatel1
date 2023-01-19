@@ -25,6 +25,15 @@ public class TicketsPage extends AbstractUIElement {
     @FindBy(css = ".cl-table-header .cl-table-cell")
     private List<WebElement> ticketColumnHeaders;
 
+    @FindBy(css = ".cl-table-cell--ticketCreatedDate")
+    private WebElement startDate;
+
+    @FindBy(css = ".cl-table-cell--endedDate")
+    private WebElement endDate;
+
+    @FindBy(xpath = ".//span[text()='Ticket Opened']/ancestor::span/following-sibling::span/span[contains(@class, 'sorting-box__arrow--top')]")
+    private WebElement ascendingArrowOfEndDateColumn;
+
     private TicketsTable ticketsTable;
     private TicketChatView supervisorTicketChatView;
     private MessageCustomerWindow messageCustomerWindow;
@@ -73,5 +82,10 @@ public class TicketsPage extends AbstractUIElement {
     public List<String> getTicketsColumnHeaders() {
         waitForFirstElementToBeVisible(this.getCurrentDriver(), ticketColumnHeaders, 7);
         return ticketColumnHeaders.stream().map(a -> a.getText()).collect(Collectors.toList());
+    }
+
+    public void clickAscendingArrowOfEndDateColumn() {
+        clickElem(this.getCurrentDriver(), ascendingArrowOfEndDateColumn, 3,
+                "Ascending Arrow Of End Date Column");
     }
 }
