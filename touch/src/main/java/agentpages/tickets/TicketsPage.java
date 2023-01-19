@@ -30,7 +30,7 @@ public class TicketsPage extends PortalAbstractPage {
     }
 
     private TicketsTable ticketsTable;
-    private TicketClosedChatView supervisorTicketChatView;
+    private TicketChatView supervisorTicketChatView;
     private MessageCustomerWindow messageCustomerWindow;
 
     private TicketsQuickActionBar ticketsQuickActionBar;
@@ -45,7 +45,7 @@ public class TicketsPage extends PortalAbstractPage {
         return ticketsTable;
     }
 
-    public TicketClosedChatView getSupervisorTicketClosedChatView() {
+    public TicketChatView getSupervisorTicketClosedChatView() {
         supervisorTicketChatView.setCurrentDriver(this.getCurrentDriver());
         return supervisorTicketChatView;
     }

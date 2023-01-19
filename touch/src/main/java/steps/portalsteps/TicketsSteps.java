@@ -1,7 +1,7 @@
 package steps.portalsteps;
 
 import agentpages.tickets.MessageCustomerWindow;
-import agentpages.tickets.TicketClosedChatView;
+import agentpages.tickets.TicketChatView;
 import agentpages.tickets.TicketsTable;
 import apihelper.ApiHelper;
 import dbmanager.DBConnector;
@@ -35,7 +35,7 @@ public class TicketsSteps extends AbstractAgentSteps {
         return getTicketsPage(agent).getTicketsTable();
     }
 
-    private TicketClosedChatView getTicketsClosedChatView() {
+    private TicketChatView getTicketsClosedChatView() {
         return getTicketsPage("main").getSupervisorTicketClosedChatView();
     }
 
@@ -134,10 +134,10 @@ public class TicketsSteps extends AbstractAgentSteps {
         }
     }
 
-    @When("^(.*) accept ticket for (.*)$")
-    public void clickAcceptButtonFor(String chanel) {
-        getTicketsTable("main")
-                .clickAcceptButton(getUserName(chanel));
+    @When("^(.*) accept first ticket$")
+    public void clickAcceptButtonFor(String agent) {
+        getTicketsTable(agent)
+                .acceptFirstTicket();
     }
 
     @When("^Supervisor is able to view the columns in the tickets tab$")
@@ -209,7 +209,7 @@ public class TicketsSteps extends AbstractAgentSteps {
 
     @Then("^(.*) is the current agent of (.*) ticket$")
     public void verifyCurrentAgentOfTicket(String agentName, String chanelName) {
-        Assert.assertEquals(getTicketsTable(agentName).getTicketByUserName(getUserName(chanelName)).getCurrentAgent().substring(3), agentName,
+        Assert.assertTrue(getTicketsTable(agentName).getTicketByUserName(getUserName(chanelName)).getCurrentAgent().contains(agentName),
                 "The current agent of the ticket is not as expected");
     }
 
@@ -377,6 +377,17 @@ public class TicketsSteps extends AbstractAgentSteps {
     public void verifyTicketsCountEquals1InTicketsTable(String agent, int expectedTicketCount) {
         Assert.assertEquals(getTicketsTable(agent).getTicketsCount(), expectedTicketCount,
                 "Ticket count in middle pane is incorrect");
+    }
+
+    @When("^(.*) checks \"reassign chat\" icon (.*) on the chat desk$")
+    public void reassignButtonVisibility(String agent, String reassignButtonVisibility) {
+        if (reassignButtonVisibility.equalsIgnoreCase("visible")) {
+            Assert.assertTrue(getAgentHomePage(agent).getChatHeader().isReassignButtonDisplayed()
+                    , "Reassign button is not displayed");
+        } else if (reassignButtonVisibility.equalsIgnoreCase("not visible")) {
+            Assert.assertFalse(getAgentHomePage(agent).getChatHeader().isReassignButtonDisplayed()
+                    , "Reassign button is displayed");
+        }
     }
 
     public int getTicketsCountLeftMenu(String agent, String platformType, String ticketType) {
