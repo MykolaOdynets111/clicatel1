@@ -4,6 +4,7 @@ import api.MainApi;
 import clients.Endpoints;
 import datamodelsclasses.configurations.ActivateConfiguration;
 import datamodelsclasses.configurations.ActivateConfigurationBody;
+import datamodelsclasses.configurations.ConfigurationSecrets;
 import datamodelsclasses.configurations.ConfigurationState;
 import datamodelsclasses.providers.ProviderState;
 import datamodelsclasses.validator.Validator;
@@ -110,6 +111,30 @@ public class IntegrationSteps extends MainApi {
             ConfigurationState getConfigurationState = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(ConfigurationState.class);
             Assert.assertNotNull(getConfigurationState.id);
             Assert.assertEquals(dataMap.get("o.accountProviderConfigStatusId"),getConfigurationState.accountProviderConfigStatusId);
+        } else {
+            Validator.validatedErrorResponseforGet(url, dataMap);
+        }
+    }
+
+    @Given("User is able to get configuration secrects in astericks")
+    public void userIsAbleToGetConfigurationSecrectsInAstericks(Map<String,String> dataMap) {
+        String url = format(Endpoints.CONFIGURATION_SECRETS, dataMap.get("i.configurationId"));
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+        if (responseCode == 200) {
+            ConfigurationSecrets expectedConfigurationSecret = new ConfigurationSecrets(dataMap);
+            ConfigurationSecrets getConfigurationSecret = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(ConfigurationSecrets.class);
+            SoftAssert softAssert = new SoftAssert();
+            softAssert.assertEquals(getConfigurationSecret.getId(),expectedConfigurationSecret.getId());
+            softAssert.assertEquals(getConfigurationSecret.getProviderId(),expectedConfigurationSecret.getProviderId());
+            softAssert.assertEquals(getConfigurationSecret.getAccountProviderConfigStatusId(),expectedConfigurationSecret.getAccountProviderConfigStatusId());
+            softAssert.assertEquals(getConfigurationSecret.getConfigurationEnvironmentTypeId(),expectedConfigurationSecret.getConfigurationEnvironmentTypeId());
+            softAssert.assertEquals(getConfigurationSecret.getDisplayName(),expectedConfigurationSecret.getDisplayName());
+            softAssert.assertEquals(getConfigurationSecret.getClientId(),expectedConfigurationSecret.getClientId());
+            softAssert.assertEquals(getConfigurationSecret.getClientSecret(),expectedConfigurationSecret.getClientSecret());
+            softAssert.assertEquals(getConfigurationSecret.getHostUrl(),expectedConfigurationSecret.getHostUrl());
+            softAssert.assertNotNull(getConfigurationSecret.getCreatedDate());
+            softAssert.assertNotNull(getConfigurationSecret.getModifiedDate());
+            softAssert.assertAll();
         } else {
             Validator.validatedErrorResponseforGet(url, dataMap);
         }
