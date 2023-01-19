@@ -1,4 +1,4 @@
-package api.models.response.failedresponce;
+package api.models.response.failedresponse;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

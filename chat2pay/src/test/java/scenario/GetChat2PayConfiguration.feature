@@ -8,7 +8,7 @@ Feature: Get Chat 2 pay configuration
     And User gets widgetId for UC form
     And User get the C2P configuration
       | activationKey          | <i.activationKey>          |
-      | statusCode             | <o.statusCode>             |
+      | statusCode             | <o.responseCode>             |
       | whatsappChannelEnabled | <o.whatsappChannelEnabled> |
       | smsChannelEnabled      | <o.smsChannelEnabled>      |
       | apiKey                 | <o.apiKey>                 |
@@ -19,7 +19,7 @@ Feature: Get Chat 2 pay configuration
       | path                   | <o.path>                   |
 
     Examples:
-      | i.activationKey                  | o.statusCode | o.whatsappChannelEnabled | o.smsChannelEnabled | o.apiKey                         | o.supportedCurrencies | o.environment | o.integrations | o.error      | o.path         |
+      | i.activationKey                  | o.responseCode | o.whatsappChannelEnabled | o.smsChannelEnabled | o.apiKey                         | o.supportedCurrencies | o.environment | o.integrations | o.error      | o.path         |
       | e9ac1ace130a465a8fb6f8eea293589e | 200          | FALSE                    | TRUE                | e9ac1ace130a465a8fb6f8eea293589e | 2                     | SANDBOX       | 2              |              |                |
       | qwerty                           | 401          |                          |                     |                                  |                       |               |                | Unauthorized | /api/v2/config |
       | " "                              | 401          |                          |                     |                                  |                       |               |                | Unauthorized | /api/v2/config |

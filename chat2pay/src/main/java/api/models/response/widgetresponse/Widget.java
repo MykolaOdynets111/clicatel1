@@ -1,4 +1,4 @@
-package api.models.response.widget;
+package api.models.response.widgetresponse;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,13 +21,11 @@ import lombok.Data;
 @Data
 public class Widget {
 
-// ToDo add more fields, according to existed model from swagger
-
     @JsonProperty("status")
     private String status;
 
     @JsonProperty("configStatus")
-    private String configStatus;
+    private ConfigStatus configStatus;
 
     @JsonProperty("type")
     private String type;
@@ -49,5 +47,4 @@ public class Widget {
 
     @JsonProperty("modifiedTime")
     private String modifiedTime;
-
 }

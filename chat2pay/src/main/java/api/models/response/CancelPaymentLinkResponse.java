@@ -1,4 +1,4 @@
-package api.models.response.paymentgatewaysettingsresponse;
+package api.models.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,14 +10,12 @@ import lombok.Data;
         "paymentLinkRef",
         "transactionStatus",
         "transactionStatusId",
-        "timestamp",
-        "paymentLink",
-        "paymentLinkTTL",
-        "paymentPageTTL"
+        "additionalData",
+        "timestamp"
 })
 
 @Data
-public class PaymentLinkResponse {
+public class CancelPaymentLinkResponse {
     @JsonProperty("paymentLinkRef")
     public String paymentLinkRef;
 
@@ -27,15 +25,9 @@ public class PaymentLinkResponse {
     @JsonProperty("transactionStatusId")
     public int transactionStatusId;
 
+    @JsonProperty("additionalData")
+    public String additionalData;
+
     @JsonProperty("timestamp")
     public String timestamp;
-
-    @JsonProperty("paymentLink")
-    public String paymentLink;
-
-    @JsonProperty("paymentLinkTTL")
-    public int paymentLinkTTL;
-
-    @JsonProperty("paymentPageTTL")
-    public int paymentPageTTL;
 }

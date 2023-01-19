@@ -1,6 +1,5 @@
-package api.models.response;
+package api.models.response.widgetresponse;
 
-import api.models.response.widget.Widget;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -25,7 +24,7 @@ import java.util.ArrayList;
 })
 
 @Data
-public class Content {
+public class WidgetsContent {
 
     @JsonProperty("content")
     private ArrayList<Widget> widgets;
@@ -59,5 +58,4 @@ public class Content {
 
     @JsonProperty("empty")
     private boolean empty;
-
 }

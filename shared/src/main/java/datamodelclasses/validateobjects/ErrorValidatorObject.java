@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.Map;
 
 @Getter
-public class ErrorValidatorObject extends ValidatorObject{
+public class ErrorValidatorObject extends ValidatorObject {
 
     String errorMessage;
 

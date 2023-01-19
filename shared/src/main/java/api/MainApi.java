@@ -1,14 +1,13 @@
 package api;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-import static io.restassured.http.ContentType.ANY;
-import static io.restassured.http.ContentType.JSON;
 import static org.testng.Assert.fail;
 
 public abstract class MainApi {
@@ -18,6 +17,11 @@ public abstract class MainApi {
         Response response = post(endpoint, body, authToken);
 
         return validate(response, responseCode);
+    }
+
+    @NotNull
+    protected static Response postQuery(String endpoint, Object body, String authToken) {
+        return post(endpoint, body, authToken);
     }
 
     @NotNull
@@ -51,7 +55,7 @@ public abstract class MainApi {
 
     private static Response post(String endpoint, Object body, String authToken) {
         return RestAssured.given().log().all()
-                .contentType(JSON)
+                .contentType(ContentType.JSON)
                 .header("Authorization", authToken)
                 .body(body)
                 .post(endpoint);
@@ -59,15 +63,14 @@ public abstract class MainApi {
 
     private static Response postWithoutAuth(String endpoint, Object body) {
         return RestAssured.given().log().all()
-                .contentType(JSON)
+                .contentType(ContentType.JSON)
                 .body(body)
                 .post(endpoint);
     }
 
     private static Response get(String endpoint, String authToken) {
         return RestAssured.given().log().all()
-                .accept(ANY)
-                .contentType(JSON)
+                .contentType(ContentType.JSON)
                 .header("Authorization", authToken)
                 .get(endpoint);
     }
