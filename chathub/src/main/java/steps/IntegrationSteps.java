@@ -70,15 +70,18 @@ public class IntegrationSteps extends MainApi {
         String url = format(Endpoints.ACTIVATE_CONFIGURATION);
         Proxymanager proxy = new Proxymanager();
 
-        ObjectMapper mapper = new ObjectMapper();
         List<String> activateConfigBody = new ArrayList<>();
-        activateConfigBody.add(mapper.writeValueAsString(new ActivateConfigurationBody(
-                dataMap.get("i.name"), dataMap.get("i.clientSecret"),
-                dataMap.get("i.clientId"), dataMap.get("i.host"),
-                dataMap.get("i.providerId"), dataMap.get("i.type"))));
+        Map<String, String> confgiurationBody = new LinkedHashMap<>();
+        confgiurationBody.put("name", dataMap.get("i.name"));
+        confgiurationBody.put("clientSecret", dataMap.get("i.clientSecret"));
+        confgiurationBody.put("clientId", dataMap.get("i.clientId"));
+        confgiurationBody.put("host", dataMap.get("i.host"));
+        confgiurationBody.put("providerId", dataMap.get("i.providerId"));
+        confgiurationBody.put("type", dataMap.get("i.type"));
+
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
         if (responseCode == 200) {
-            ActivateConfiguration postActiveConfiguration = ChatHubApiHelper.postChatHubQuery(url, activateConfigBody).as(ActivateConfiguration.class);
+            ActivateConfiguration postActiveConfiguration = ChatHubApiHelper.postChatHubQuery(url, confgiurationBody).as(ActivateConfiguration.class);
             SoftAssert softAssert = new SoftAssert();
             softAssert.assertNotNull(postActiveConfiguration.getId(), "Configuration Id is empty");
             softAssert.assertEquals(dataMap.get("o.type"), postActiveConfiguration.getType());
@@ -95,7 +98,7 @@ public class IntegrationSteps extends MainApi {
             softAssert.assertEquals(dataMap.get("o.timeToExpire"), postActiveConfiguration.getTimeToExpire());
             softAssert.assertAll();
         } else {
-            Validator.validatedErrorResponseforPost(url, (Map<String, String>) activateConfigBody, dataMap);
+            Validator.validatedErrorResponseforPost(url, confgiurationBody, dataMap);
         }
     }
 }
