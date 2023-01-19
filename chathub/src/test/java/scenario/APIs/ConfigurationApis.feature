@@ -61,6 +61,6 @@ Feature: Configuration API
     Examples:
       | i.providerId | i.version | o.responseCode | o.errorMessage                                   |
       | WrongId      |           | 404            | Provider ID or Version ID not found for Provider |
-#      | 0184f820c06ec8b62dfa0610e29ab575 | Wrong     | 404  | Provider ID or Version ID not found for Provider |
-      | NULL         |           | 404            | bad reuqest                                      |
- #     | 0184f820c06ec8b62dfa0610e29ab575 | NULL      | 404  | bad reuqest                                      |
+# Will be implemented after LR     | 0184f820c06ec8b62dfa0610e29ab575 | Wrong     | 404  | Provider ID or Version ID not found for Provider |
+# bug to be reported      | NULL         |           | 404            | bad reuqest                                      |
+ # Will be implemented after LR    | 0184f820c06ec8b62dfa0610e29ab575 | NULL      | 404  | bad reuqest                                      |
