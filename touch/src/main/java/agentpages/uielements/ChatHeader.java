@@ -264,7 +264,7 @@ public class ChatHeader extends AbstractUIElement {
         return isElementRemoved(getCurrentDriver(), transferButton, 5);
     }
 
-    public boolean closeButtonStatus(){
+    public boolean getCloseButtonStatus(){
         return Boolean.parseBoolean(getAttributeFromElem(this.getCurrentDriver(), closeTicket, 5, "Close ticket button", "disabled"));
     }
 }

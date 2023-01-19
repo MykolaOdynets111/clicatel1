@@ -33,8 +33,8 @@ public class TicketsSteps extends AbstractAgentSteps {
         return getTicketsPage(agent).getTicketsTable();
     }
 
-    private TicketChatView getTicketsClosedChatView() {
-        return getTicketsPage("main").getSupervisorTicketClosedChatView();
+    private TicketChatView getTicketsClosedChatView(String agent) {
+        return getTicketsPage(agent).getSupervisorTicketClosedChatView();
     }
 
     private MessageCustomerWindow getTicketsMessageCustomerWindow() {
@@ -56,15 +56,15 @@ public class TicketsSteps extends AbstractAgentSteps {
         getTicketsTable("main").getTicketByUserName(getUserName(chanel)).clickOnUserName();
     }
 
-    @When("^Click on Message Customer button for (.*)$")
-    public void clickOnMessageCustomer(String chanel) {
-        getTicketsTable("main").clickAssignOpenTicketButton(getUserName(chanel));
-        getTicketsClosedChatView().clickOnMessageCustomerOrStartChatButton();
+    @When("^(.*) click on Message Customer button for (.*)$")
+    public void clickOnMessageCustomer(String agent, String chanel) {
+        getTicketsTable(agent).clickAssignOpenTicketButton(getUserName(chanel));
+        getTicketsClosedChatView(agent).clickOnMessageCustomerOrStartChatButton();
     }
 
     @When("^(.*) checks chat view for closed chat is displayed$")
     public void verifyClosedChatView(String agent) {
-        Assert.assertTrue(getTicketsClosedChatView().isDisplayed(),
+        Assert.assertTrue(getTicketsClosedChatView(agent).isDisplayed(),
                 "Chat view is not visible");
     }
 
@@ -123,7 +123,7 @@ public class TicketsSteps extends AbstractAgentSteps {
 
     @When("^(.*) closes ticket manually$")
     public void closeTicketManually(String agent) {
-        getTicketsClosedChatView().clickOnCloseTicketButton();
+        getTicketsClosedChatView(agent).clickOnCloseTicketButton();
 
         waitFor(1000);
 
@@ -147,15 +147,15 @@ public class TicketsSteps extends AbstractAgentSteps {
     @When("^(.*) checks closed ticket is (.*)")
     public void checkCloseButtonStatus(String agent, String buttonStatus) {
         if (buttonStatus.equalsIgnoreCase("disabled")) {
-            Assert.assertTrue(getChatHeader(agent).closeButtonStatus(), "Close ticket button is enabled");
+            Assert.assertTrue(getChatHeader(agent).getCloseButtonStatus(), "Close ticket button is enabled");
         } else if (buttonStatus.equalsIgnoreCase("enabled")) {
-            Assert.assertFalse(getChatHeader(agent).closeButtonStatus(), "Close ticket button is disabled");
+            Assert.assertFalse(getChatHeader(agent).getCloseButtonStatus(), "Close ticket button is disabled");
         }
     }
 
     @Then("^(.*) hover to the close ticket button and see (.*) message$")
     public void hoverCloseTicketButton(String agent, String toolTipMessage) {
-        getTicketsClosedChatView().hoverCloseTicket();
+        getTicketsClosedChatView(agent).hoverCloseTicket();
         Assert.assertEquals(getTicketsPage(agent).getToolTipText(), toolTipMessage, "Closed ticket tool tip message is wrong");
     }
 
@@ -285,11 +285,11 @@ public class TicketsSteps extends AbstractAgentSteps {
         Assert.assertTrue(isDateSorted(order, listOfDates), "Tickets are not sorted in " + order + " order");
     }
 
-    @Then("^Verify ticket is present for (.*) for (.*) seconds$")
-    public void verifyTicketIsPresentFor(String chanel, int wait) {
+    @Then("^(.*) verify ticket is present for (.*) for (.*) seconds$")
+    public void verifyTicketIsPresentFor(String agent, String chanel, int wait) {
         for (int i = 0; i < wait; i++) {
             try {
-                Assert.assertTrue(getTicketsTable("main").isTicketPresent(getUserName(chanel)), "Ticket should be present");
+                Assert.assertTrue(getTicketsTable(agent).isTicketPresent(getUserName(chanel)), "Ticket should be present");
             } catch (AssertionError | Exception e) {
                 System.out.println("No ticket are there after search, chat has not reached yet, so retrying searching");
                 waitFor(1000);
@@ -307,9 +307,9 @@ public class TicketsSteps extends AbstractAgentSteps {
         verifyDateTimeIsInRangeOfTwoDates(firstTicketEndDate, startDate, endDate);
     }
 
-    @And("^Agent click on the arrow of Ticket End Date$")
-    public void agentClickOnTheArrowOfTicketEndDate() {
-        getTicketsPage("main").clickAscendingArrowOfEndDateColumn();
+    @And("^(.*) click on the arrow of Ticket End Date$")
+    public void agentClickOnTheArrowOfTicketEndDate(String agent) {
+        getTicketsPage(agent).clickAscendingArrowOfEndDateColumn();
     }
 
     @Then("^(.*) checks quick & custom assign options on the page are (.*)$")

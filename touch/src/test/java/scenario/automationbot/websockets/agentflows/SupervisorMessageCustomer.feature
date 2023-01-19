@@ -20,7 +20,7 @@ Feature: Supervisor desk
     And Agent search chat sms on Supervisor desk
     And Agent see tickets from sms on Unassigned filter page
     And Agent select sms ticket
-    And Click on Message Customer button for sms
+    And Agent click on Message Customer button for sms
     And Message Customer Window is opened
     And Agent send Hi from Supervisor to agent trough SMS chanel
     Then Supervisor can see sms ticket with Hi from Supervisor message from agent
@@ -30,6 +30,6 @@ Feature: Supervisor desk
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     And Agent select sms ticket
-    And Click on Message Customer button for sms
+    And Agent click on Message Customer button for sms
     And Message Customer Window is opened
     And Agent is unable to send WhatsApp HSM on Tickets for sms chat

@@ -285,8 +285,8 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         messagesFromChatBody.set(getChatBody(agent).getAllMessages());
     }
 
-    @And("^(.*) clicks the link message (.*)$")
-    public void clickOnLinkMessage(String agent, String text) {
+    @And("^(.*) clicks the link message$")
+    public void clickOnLinkMessage(String agent) {
         getChatBody(agent).clickLatestLinkMessage();
     }
 

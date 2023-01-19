@@ -54,9 +54,9 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     Then Agent see tickets from orca on Unassigned filter page
     When Agent closed ticket for orca
     And Agent select Closed filter on Left Panel
-    Then Verify ticket is present for orca for 2 seconds
+    Then Agent verify ticket is present for orca for 2 seconds
     When Admin filter by 0 year 0 month and 1 days ago start date and 0 year 0 month and 0 days ago end date
-    Then Verify ticket is present for orca for 2 seconds
+    Then Agent verify ticket is present for orca for 2 seconds
     And Verify that only "whatsapp" tickets chats are shown
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6278")
