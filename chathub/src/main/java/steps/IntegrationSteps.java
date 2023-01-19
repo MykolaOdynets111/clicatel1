@@ -5,6 +5,7 @@ import clients.Endpoints;
 import datamodelsclasses.configurations.ActivateConfiguration;
 import datamodelsclasses.configurations.ActivateConfigurationBody;
 import datamodelsclasses.configurations.ConfigurationSecrets;
+import datamodelsclasses.configurations.ConfigurationState;
 import datamodelsclasses.providers.ProviderState;
 import datamodelsclasses.validator.Validator;
 import io.cucumber.java.en.And;
@@ -71,40 +72,47 @@ public class IntegrationSteps extends MainApi {
         String url = format(Endpoints.ACTIVATE_CONFIGURATION);
         Proxymanager proxy = new Proxymanager();
 
-        //Post body should be picked by pojo class ActivateConfigurationBody. It will be fixed later
-        /*Map<String, String> activateConfigBody = new LinkedHashMap<>();
+        Map<String, String> configurationBody = new LinkedHashMap<>();
+        configurationBody.put("name", dataMap.get("i.name"));
+        configurationBody.put("clientSecret", dataMap.get("i.clientSecret"));
+        configurationBody.put("clientId", dataMap.get("i.clientId"));
+        configurationBody.put("host", dataMap.get("i.host"));
+        configurationBody.put("providerId", dataMap.get("i.providerId"));
+        configurationBody.put("type", dataMap.get("i.type"));
 
-        activateConfigBody.put("name", dataMap.get("i.name"));
-        activateConfigBody.put("clientSecret", dataMap.get("i.clientSecret"));
-        activateConfigBody.put("clientId", dataMap.get("i.clientId"));
-        activateConfigBody.put("host", dataMap.get("i.host"));
-        activateConfigBody.put("providerId", dataMap.get("i.providerId"));
-        activateConfigBody.put("type", dataMap.get("i.type"));*/
-
-        ObjectMapper mapper = new ObjectMapper();
-        List<String> activateConfigBody = new ArrayList<>();
-        activateConfigBody.add(mapper.writeValueAsString(new ActivateConfigurationBody(
-                dataMap.get("i.name"), dataMap.get("i.clientSecret"),
-                dataMap.get("i.clientId"), dataMap.get("i.host"),
-                dataMap.get("i.providerId"), dataMap.get("i.type"))));
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
         if (responseCode == 200) {
-            ActivateConfiguration postActiveConfiguration = ChatHubApiHelper.postChatHubQuery(url, activateConfigBody).as(ActivateConfiguration.class);
-            Assert.assertNotNull(postActiveConfiguration.getId(), "Configuration Id is empty");
-            Assert.assertEquals(dataMap.get("o.type"), postActiveConfiguration.getType());
-            Assert.assertEquals(dataMap.get("o.setupName"), postActiveConfiguration.getSetupName());
-            Assert.assertNotNull(postActiveConfiguration.getCreatedDate(), "CurrentDate is Empty");
-            Assert.assertNotNull(postActiveConfiguration.getModifiedDate(), "Modfied Date is empty");
+            ActivateConfiguration postActiveConfiguration = ChatHubApiHelper.postChatHubQuery(url, configurationBody).as(ActivateConfiguration.class);
+            SoftAssert softAssert = new SoftAssert();
+            softAssert.assertNotNull(postActiveConfiguration.getId(), "Configuration Id is empty");
+            softAssert.assertEquals(dataMap.get("o.type"), postActiveConfiguration.getType());
+            softAssert.assertEquals(dataMap.get("o.setupName"), postActiveConfiguration.getSetupName());
+            softAssert.assertNotNull(postActiveConfiguration.getCreatedDate(), "CurrentDate is Empty");
+            softAssert.assertNotNull(postActiveConfiguration.getModifiedDate(), "Modfied Date is empty");
 
             //Checking of authentication link will be fixed later
             //Check the authorization link
  /*           String printLink = postActiveConfiguration.authenticationLink;
             System.out.println(printLink);*/
- /*           int code = proxy.addProxy("https://dev-mc2-authentication-front-end-service.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/authorize/request/a6bad634-8d45-4165-a2a0-13e288ce8564");
+ /*          int code = proxy.addProxy("https://dev-mc2-authentication-front-end-service.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/authorize/request/a6bad634-8d45-4165-a2a0-13e288ce8564");
             Assert.assertEquals(Integer.parseInt(dataMap.get("o.authenticationLink")), code);*/
-            Assert.assertEquals(dataMap.get("o.timeToExpire"), postActiveConfiguration.getTimeToExpire());
+            softAssert.assertEquals(dataMap.get("o.timeToExpire"), postActiveConfiguration.getTimeToExpire());
+            softAssert.assertAll();
         } else {
-            Validator.validatedErrorResponseforPost(url, (Map<String, String>) activateConfigBody, dataMap);
+            Validator.validatedErrorResponseforPost(url, configurationBody, dataMap);
+        }
+    }
+
+    @Given("User is able to get configuration state")
+    public void userIsAbleToGetConfigurationState(Map<String,String> dataMap) {
+        String url = format(Endpoints.CONFIGURATION_STATE, dataMap.get("i.configurationId"));
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+        if (responseCode == 200) {
+            ConfigurationState getConfigurationState = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(ConfigurationState.class);
+            Assert.assertNotNull(getConfigurationState.id);
+            Assert.assertEquals(dataMap.get("o.accountProviderConfigStatusId"),getConfigurationState.accountProviderConfigStatusId);
+        } else {
+            Validator.validatedErrorResponseforGet(url, dataMap);
         }
     }
 
