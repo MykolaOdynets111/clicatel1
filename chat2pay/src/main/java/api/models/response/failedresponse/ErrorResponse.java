@@ -36,7 +36,7 @@ public class ErrorResponse {
     public String reason;
 
     @JsonProperty("status")
-    public int status;
+    public String status;
 
     @JsonProperty("timestamp")
     public String timestamp;

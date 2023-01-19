@@ -3,30 +3,27 @@ package utils;
 import api.models.response.failedresponse.ErrorResponse;
 import datamodelclasses.validateobjects.ErrorValidatorObject;
 import io.restassured.response.Response;
-import org.assertj.core.api.SoftAssertions;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.lang.String.format;
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.testng.Assert.assertTrue;
 
 public class Validator {
 
     public static void validateErrorResponse(Response response, Map<String, String> data) {
-        SoftAssertions softly = new SoftAssertions();
         ErrorValidatorObject errorData = new ErrorValidatorObject(data);
         ErrorResponse errorResponse = response.as(ErrorResponse.class);
-        List<String> errors = Stream.of(singletonList(errorResponse.error), errorResponse.getErrors())
-                .flatMap(Collection::stream).collect(Collectors.toList());
+        String error = errorResponse.getMessage();
+        String expectedCode = data.get("o.responseCode");
 
-        softly.assertThat(errorResponse.status).isEqualTo(errorData.getResponseCode());
-        softly.assertThat(errors).contains(errorData.getErrorMessage());
-        softly.assertAll();
+        assertThat(response.statusCode())
+                .as(format("Status code is not equals to %s", expectedCode))
+                .isEqualTo(Integer.valueOf(expectedCode));
+        assertTrue(error.contains(errorData.getErrorMessage()),
+                "Error message is incorrect or not returned /n" +
+                        "Error from server:" + error);
     }
 
     public static void checkResponseCode(Response response, String code) {

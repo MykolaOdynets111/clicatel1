@@ -1,12 +1,11 @@
 package steps;
 
 import api.models.response.c2pconfiguration.ConfigurationBody;
-import api.models.response.failedresponse.ErrorResponse;
+import api.models.response.failedresponse.UnauthorisedResponse;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
-import utils.Validator;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -42,9 +41,11 @@ public class ConfigurationSteps {
                         softly.assertThat(i.getClass().getFields()).isNotNull());
 
             } else if (expectedResponseCode == 401) {
-                ErrorResponse unsuccessful = response.as(ErrorResponse.class);
-                Validator.validateErrorResponse(response, valuesMap);
+                UnauthorisedResponse unsuccessful = response.as(UnauthorisedResponse.class);
 
+                softly.assertThat(expectedResponseCode).isEqualTo(unsuccessful.status);
+                softly.assertThat(valuesMap.get("error")).isEqualTo(unsuccessful.error);
+                softly.assertThat(valuesMap.get("path")).isEqualTo(unsuccessful.path);
                 softly.assertThat(unsuccessful.getTimestamp()).isEqualTo(LocalDate.now());
             }
             softly.assertAll();

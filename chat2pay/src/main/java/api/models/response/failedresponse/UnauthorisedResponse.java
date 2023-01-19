@@ -18,7 +18,7 @@ import static datetimeutils.DateTimeHelper.getYYYY_MM_DD_HH_MM_SS;
         "error",
         "path"
 })
-public class UnsuccessfulResponse {
+public class UnauthorisedResponse {
 
     @JsonProperty("timestamp")
     private String timestamp;
