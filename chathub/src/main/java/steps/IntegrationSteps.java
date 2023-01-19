@@ -52,17 +52,17 @@ public class IntegrationSteps  extends MainApi {
                 expectedProviders.add(mapper.writeValueAsString(new AllProviders(datatable.get(i).get("o.id"),
                         datatable.get(i).get("o.name"),datatable.get(i).get("o.logoUrl")
                         ,datatable.get(i).get("o.description"),
-                        datatable.get(i).get("o.moreInfoUrl"),datatable.get(i).get("o.isAdded"))));
+                        datatable.get(i).get("o.moreInfoUrl"),datatable.get(i).get("o.vid"),
+                        datatable.get(i).get("o.version"),datatable.get(i).get("o.latest"),
+                        datatable.get(i).get("o.isAdded"))));
 
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
         }
-        AllProviders[] getProviders = ChatHubApiHelper.getChatHubQuery(Endpoints.PROVIDERS, 200).as(AllProviders[].class);
         ObjectMapper mappergetProviders = new ObjectMapper();
-        List<String> getProvidersList = new ArrayList<>();
-        getProvidersList.add(mappergetProviders.writeValueAsString(getProviders));
-        Assert.assertEquals(getProvidersList,expectedProviders.toString() , "Providers response is not as expected");
+        String getProviders = mappergetProviders.writeValueAsString(ChatHubApiHelper.getChatHubQuery(Endpoints.PROVIDERS, 200).as(AllProviders[].class));
+        Assert.assertEquals(expectedProviders.toString(),getProviders , "Providers response is not as expected");
         }
 
     @Given("User is able to GET providers state in API response")
