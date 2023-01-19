@@ -77,4 +77,4 @@ Feature: Provider API
 
     Examples:
       | i.name              | i.logoUrl | i.description | i.moreInfoUrl | o.responseCode | o.errorMessage | o.name              | o.logoUrl | o.description | o.moreInfoUrl |
-      | Auto_Test_Provider1 | NA        | NA            | NA            | 200            |                | Auto_Test_Provider1 | NA        | NA            | NA            |
+      | Auto_Test_Provider1 | NA        | NA            | NA            | 201            |                | Auto_Test_Provider1 | NA        | NA            | NA            |

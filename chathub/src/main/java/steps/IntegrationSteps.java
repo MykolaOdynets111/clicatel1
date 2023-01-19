@@ -158,17 +158,21 @@ public class IntegrationSteps extends MainApi {
     public void adminIsAbleToCreateProvider(Map<String, String> dataMap) throws JsonProcessingException {
         String url = format(Endpoints.ADMIN_PROVIDERS);
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
-        ObjectMapper mapper = new ObjectMapper();
-        List<String> createProviderBody = new ArrayList<>();
-        createProviderBody.add(mapper.writeValueAsString(new NewProviderBody(
-                dataMap.get("i.name"), dataMap.get("i.logoUrl"),
-                dataMap.get("i.description"), dataMap.get("i.moreInfoUrl"))));
-        if (responseCode == 200) {
+        Map<String, String> createProviderBody = new LinkedHashMap<>();
+        createProviderBody.put("name", dataMap.get("i.name"));
+        createProviderBody.put("logoUrl", dataMap.get("i.logoUrl"));
+        createProviderBody.put("description", dataMap.get("i.description"));
+        createProviderBody.put("moreInfoUrl", dataMap.get("i.moreInfoUrl"));
+
+        if (responseCode == 201) {
             ProviderDetails expectedCreateProviderDetails = new ProviderDetails(dataMap);
             ProviderDetails getCreatedProviderDetails = ChatHubApiHelper.postChatHubQueryWithoutAuth(url, createProviderBody, responseCode).as(ProviderDetails.class);
             SoftAssert softAssert = new SoftAssert();
             softAssert.assertNotNull(getCreatedProviderDetails.getId(), "Provider Id is empty");
-            softAssert.assertEquals(expectedCreateProviderDetails, getCreatedProviderDetails, "Providers response is not as expected");
+            softAssert.assertEquals(expectedCreateProviderDetails.getName(), getCreatedProviderDetails.getName(), "Names field does not match");
+            softAssert.assertEquals(expectedCreateProviderDetails.getLogoUrl(), getCreatedProviderDetails.getLogoUrl(), "LogoUrl field does not match");
+            softAssert.assertEquals(expectedCreateProviderDetails.getDescription(), getCreatedProviderDetails.getDescription(), "Description field does not match");
+            softAssert.assertEquals(expectedCreateProviderDetails.getMoreInfoUrl(), getCreatedProviderDetails.getMoreInfoUrl(), "MoreInfoUrl field does not match");
             softAssert.assertAll();
         } else {
             Validator.validatedErrorResponseforGet(url, dataMap);
