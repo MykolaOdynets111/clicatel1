@@ -105,18 +105,18 @@ public class IntegrationSteps extends MainApi {
         List<String> expectedProviders = new ArrayList<>();
         for (int i = 0; i < datatable.size(); i++) {
             try {
-                expectedProviders.add(mapper.writeValueAsString(new AllProviders(datatable.get(i).get("o.id"),
+                expectedProviders.add(mapper.writeValueAsString(new ConfiguredProviderDetail(datatable.get(i).get("o.id"),
                         datatable.get(i).get("o.name"),datatable.get(i).get("o.logoUrl")
                         ,datatable.get(i).get("o.description"),
                         datatable.get(i).get("o.moreInfoUrl"),datatable.get(i).get("o.vid"),
-                        datatable.get(i).get("o.version"),datatable.get(i).get("o.latest"),
-                        datatable.get(i).get("o.isAdded"))));
+                        datatable.get(i).get("o.version"),datatable.get(i).get("o.latest")
+                        )));
             } catch (org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
         }
         ObjectMapper mappergetProviders = new ObjectMapper();
-        String getProviders = mappergetProviders.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithoutAuthToken(Endpoints.ADMIN_PROVIDERS, 200).as(AllProviders[].class));
+        String getProviders = mappergetProviders.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithoutAuthToken(Endpoints.ADMIN_PROVIDERS, 200).as(ConfiguredProviderDetail[].class));
         Assert.assertEquals(expectedProviders.toString(),getProviders , "Providers response is not as expected");
     }
 
