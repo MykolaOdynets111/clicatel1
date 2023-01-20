@@ -74,6 +74,26 @@ Feature: Configuration API
   #BUG# TO BE ADDED    |                              | 404            | bad reuqest                                             |                               |
 
 
+  @TestCaseId("https://jira.clickatell.com/browse/CCH-668")
+  Scenario Outline: CH :: Public :: Configurations API : Delete configuration
+    Given User is able to delete configurations
+      | i.configurationId | <i.configurationId> |
+      | o.responseCode    | <o.responseCode>    |
+      | o.errorMessage    | <o.errorMessage>    |
+
+    Examples:
+    # For the first case, consider the following;
+        # Always give the configuration ID which is not DISABLED
+      | i.configurationId                | o.responseCode | o.errorMessage                                      |
+# BugID: ID to be added      |TRUE|200|Configuration Deleted|
+#Data to be created      |TRUE|412|Precondition failed - Configuration is not disabled|
+#Data to be created      |TRUE|412|Precondition failed - Configuration is not disabled|
+      | 0185ce88f2202c018711a8ac5278012c | 412            | Precondition failed - Configuration is not disabled |
+      | 0185a771e2d64aadd296aedbc0ef2492 | 412            | Precondition failed - Configuration is not disabled |
+#BugID: To be added from first example      |TRUE|404|Configuration ID not found|
+      | Wrong ConfigID                   | 404            | Configuration ID not found                          |
+
+
   @TestCaseId("https://jira.clickatell.com/browse/CCH-667")
   Scenario Outline: CCH :: Public :: Configuration API: Re-activate configuration API
     Given User is able to re-activate configuration for a provider
@@ -96,3 +116,4 @@ Feature: Configuration API
       | 0185ceb1577cb56bd671a5d651f2dd19  | 0184f820c06ec8b62dfa0610e29ab575 | 200            |                            | 0185ceb1577cb56bd671a5d651f2dd19 | SANDBOX    | chathub_test_UHTester2023-155 | 300            |
       | 0185ceb1a9d7b89b3d45f0fd6d0082b5  | 0184f820c06ec8b62dfa0610e29ab575 | 200            |                            | 0185ceb1a9d7b89b3d45f0fd6d0082b5 | SANDBOX    | chathub_test_UHTester2023-156 | 300            |
       | 0185ceb1a9d7b89b3d45f0fd6d0081123 | 0184f820c06ec8b62dfa0610e29ab575 | 404            | Configuration ID not found |                                  |            |                               |                |
+

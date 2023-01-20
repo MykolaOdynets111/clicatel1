@@ -137,6 +137,12 @@ public class IntegrationSteps extends MainApi {
         }
     }
 
+    @Given("User is able to delete configurations")
+    public void userIsAbleToDeleteConfigurations(Map<String,String> dataMap) {
+        String url = format(Endpoints.DELETE_CONFIGURATION, dataMap.get("i.configurationId"));
+            Validator.validatedErrorResponseforDeleteWithAuth(url, dataMap);
+        }
+
     @Given("User is able to re-activate configuration for a provider")
     public void userIsAbleToReActivateConfigurationForAProvider(Map<String,String> dataMap) {
         String url = format(Endpoints.RE_ACTIVATE_CONFIGURATION, dataMap.get("i.configurationId"));
@@ -161,4 +167,5 @@ public class IntegrationSteps extends MainApi {
             Validator.validatedErrorResponseforPutWithAuthAndBody(url,reActivateConfigurationBody,dataMap);
         }
     }
+
 }

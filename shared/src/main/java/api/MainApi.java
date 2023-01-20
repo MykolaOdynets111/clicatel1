@@ -33,6 +33,19 @@ public abstract class MainApi {
     }
 
     @NotNull
+    protected static ResponseBody deleteQueryWithAuth(String endpoint, String authToken, int responseCode) {
+
+        Response response = deleteWithAuth(endpoint, authToken);
+
+        return validate(response, responseCode);
+    }
+
+    private static Response deleteWithAuth(String endpoint, String authToken) {
+        return RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", authToken)
+                .delete(endpoint);
+    }
     protected static ResponseBody putQuerywithAuthAndBody(String endpoint, String authToken,Object body, int responseCode) {
         Response response = putwithBodyAndAuth(endpoint, authToken, body);
 
@@ -45,6 +58,7 @@ public abstract class MainApi {
                 .header("Authorization", authToken)
                 .body(body)
                 .put(endpoint);
+
     }
 
     private static ResponseBody validate(Response response, int responseCode){
