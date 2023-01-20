@@ -32,6 +32,21 @@ public abstract class MainApi {
         return validate(response, responseCode);
     }
 
+    @NotNull
+    protected static ResponseBody deleteQueryWithAuth(String endpoint, String authToken, int responseCode) {
+
+        Response response = deleteWithAuth(endpoint, authToken);
+
+        return validate(response, responseCode);
+    }
+
+    private static Response deleteWithAuth(String endpoint, String authToken) {
+        return RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", authToken)
+                .delete(endpoint);
+    }
+
     private static ResponseBody validate(Response response, int responseCode){
         if (response.getStatusCode() != responseCode) {
             fail("Couldn't get the value \n"

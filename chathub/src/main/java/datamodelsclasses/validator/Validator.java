@@ -23,4 +23,12 @@ public class Validator {
                 "Error message is incorrect or not returned /n" +
                         "Error from server:" + error);
     }
+
+    public static void validatedErrorResponseforDeleteWithAuth(String url, Map<String, String> data) {
+        ErrorValidatorObject errorData = new ErrorValidatorObject(data);
+        String error = ChatHubApiHelper.deleteChatHubQueryWithAuth(url, errorData.getResponseCode()).asString();
+        Assert.assertTrue(error.contains(errorData.getErrorMessage()),
+                "Error message is incorrect or not returned /n" +
+                        "Error from server:" + error);
+    }
 }

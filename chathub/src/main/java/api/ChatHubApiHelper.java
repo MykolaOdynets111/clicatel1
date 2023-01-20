@@ -15,4 +15,8 @@ public class ChatHubApiHelper extends MainApi {
         return post(endpoint, body, getAuthToken(UnityClients.DEMO_CHAT_2_PAY_USER));
     }
 
+    public static ResponseBody deleteChatHubQueryWithAuth(String endpoint, int responseCode) {
+        return deleteQueryWithAuth(endpoint, getAuthToken(UnityClients.DEMO_CHAT_2_PAY_USER),responseCode);
+    }
+
 }

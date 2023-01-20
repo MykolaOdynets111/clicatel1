@@ -139,4 +139,10 @@ public class IntegrationSteps extends MainApi {
             Validator.validatedErrorResponseforGet(url, dataMap);
         }
     }
+
+    @Given("User is able to delete configurations")
+    public void userIsAbleToDeleteConfigurations(Map<String,String> dataMap) {
+        String url = format(Endpoints.DELETE_CONFIGURATION, dataMap.get("i.configurationId"));
+            Validator.validatedErrorResponseforDeleteWithAuth(url, dataMap);
+        }
 }
