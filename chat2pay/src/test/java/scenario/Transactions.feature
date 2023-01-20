@@ -3,14 +3,16 @@ Feature: Transaction execution
   # user can get the transaction link and is able to make payment (positive and negative)
   # user can cancel transaction link and is able to make payment (positive and negative)
 
-  @TestCaseId("https://jira.clickatell.com/browse/C2P-4317")
-  Scenario Outline: chat2pay-service :: POST /chat-2-pay :: User can get a payment link
+  Background:
     Given User is logged in to unity
     And User gets widgetId for UC form
     And User gets paymentGatewaySettingsId for widget
     And User gets application Id for widget
     And User gets activation key for widget
-    And User sets data in the payment body
+
+  @TestCaseId("https://jira.clickatell.com/browse/C2P-4317")
+  Scenario Outline: chat2pay-service :: POST /chat-2-pay :: User can get a payment link
+    Given User sets data in the payment body
       | channel                   | <channel>                   |
       | to                        | <to>                        |
       | currency                  | <currency>                  |
@@ -34,12 +36,7 @@ Feature: Transaction execution
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4317")
   Scenario Outline: chat2pay-service :: POST /chat-2-pay :: the error description should be saved when transaction fails on the Recipient page
-    Given User is logged in to unity
-    And User gets widgetId for UC form
-    And User gets paymentGatewaySettingsId for widget
-    And User gets application Id for widget
-    And User gets activation key for widget
-    And User sets data in the payment body
+    Given User sets data in the payment body
       | channel                   | <channel>                   |
       | to                        | <to>                        |
       | currency                  | <currency>                  |
@@ -63,12 +60,7 @@ Feature: Transaction execution
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4594")
   Scenario Outline: c2p-Widget-Payment-Service :: POST /cancel :: user can cancel the created payment link
-    Given User is logged in to unity
-    And User gets widgetId for UC form
-    And User gets paymentGatewaySettingsId for widget
-    And User gets application Id for widget
-    And User gets activation key for widget
-    And User sets valid data in the payment body
+    Given User sets valid data in the payment body
     Then User gets a correct payment link with status code 201
     When User cancelling the payment link
       | i.paymentLinkRef    | <i.paymentLinkRef>    |
