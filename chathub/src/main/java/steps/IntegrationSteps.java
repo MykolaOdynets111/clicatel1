@@ -156,9 +156,11 @@ public class IntegrationSteps extends MainApi {
                 throw new RuntimeException(e);
             }
         }
+        String jsonString = expectedProviders.toString();
+        jsonString = jsonString.replace(", ", ",");
         ObjectMapper mappergetProviders = new ObjectMapper();
         String getProviders = mappergetProviders.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithoutAuthToken(Endpoints.ADMIN_PROVIDERS, 200).as(ConfiguredProviderDetail[].class));
-        Assert.assertEquals(expectedProviders.toString(),getProviders , "Providers response is not as expected");
+        Assert.assertEquals(jsonString,getProviders , "Providers response is not as expected");
     }
 
     @Given("Admin is able to GET existing provider details")
