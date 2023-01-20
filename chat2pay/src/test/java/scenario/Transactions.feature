@@ -29,7 +29,7 @@ Feature: Transaction execution
     Then The payment has success status code
 
     Examples:
-      | channel | to           | currency | orderNumber | subTotalAmount | taxAmount | totalAmount | timestamp                    | departmentId | departmentName | returnPaymentLink | paymentReviewAutoReversal | transactionType |  |
+      | channel | to           | currency | orderNumber | subTotalAmount | taxAmount | totalAmount | timestamp                    | departmentId | departmentName | returnPaymentLink | paymentReviewAutoReversal | transactionType |  | o.errorMessage
       | sms     | 447938556403 | ZAR      | 001         | 100            | 0.0       | 100.0       | 2021-04-27T17:35:58.000+0000 | 567          | Sales          | true              | false                     | authorization   |  |
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4317")
@@ -54,14 +54,15 @@ Feature: Transaction execution
       | paymentReviewAutoReversal | <paymentReviewAutoReversal> |
       | transactionType           | <transactionType>           |
 
-    Then User gets an error for payment link creation with status code 400
-
+    Then User gets an error for payment link creation
+      | o.responseCode | <o.responseCode> |
+      | o.errorMessage | <o.errorMessage> |
     Examples:
-      | channel | to           | currency | orderNumber | subTotalAmount | taxAmount | totalAmount | timestamp                    | departmentId | departmentName | returnPaymentLink | paymentReviewAutoReversal | transactionType |  |
-      | sms     | 447938556403 | ZAR      | 001         | 100            | 0.0       | 4004.0      | 2021-04-27T17:35:58.000+0000 | 567          | Sales          | true              | false                     | authorization   |  |
+      | channel | to           | currency | orderNumber | subTotalAmount | taxAmount | totalAmount | timestamp                    | departmentId | departmentName | returnPaymentLink | paymentReviewAutoReversal | transactionType | o.responseCode | o.errorMessage |
+      | sms     | 447938556403 | ZAR      | 001         | 100            | 0.0       | 4004.0      | 2021-04-27T17:35:58.000+0000 | 567          | Sales          | true              | false                     | authorization   | 400            | Request failed |
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4594")
-  Scenario Outline: c2p-Widget-Payment-Service :: POST /cancel
+  Scenario Outline: c2p-Widget-Payment-Service :: POST /cancel :: user can cancel the created payment link
     Given User is logged in to unity
     And User gets widgetId for UC form
     And User gets paymentGatewaySettingsId for widget
@@ -80,5 +81,4 @@ Feature: Transaction execution
       | valid            | 200            | Payment Link Cancelled | 0                   |
       | alreadyCancelled | 400            | 0                      | already cancelled   |
       | nonExisted       | 404            | 0                      | URL /api/v2/cancel/ |
-            # TODO : find the solution for posting the expired payment link (non-hardcoded)
       | expired          | 400            | 0                      | expired             |
