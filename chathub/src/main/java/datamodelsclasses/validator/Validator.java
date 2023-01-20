@@ -7,20 +7,28 @@ import org.testng.Assert;
 import java.util.Map;
 
 public class Validator {
-    public static void validatedErrorResponseforGet(String URL, Map<String, String> data) {
+    public static void validatedErrorResponseforGet(String url, Map<String, String> data) {
         ErrorValidatorObject errorData = new ErrorValidatorObject(data);
-        String error = ChatHubApiHelper.getChatHubQuery(URL, errorData.getResponseCode()).asString();
+        String error = ChatHubApiHelper.getChatHubQuery(url, errorData.getResponseCode()).asString();
         Assert.assertTrue(error.contains(errorData.getErrorMessage()),
                 "Error message is incorrect or not returned /n" +
                         "Error from server:" + error);
     }
 
-    public static void validatedErrorResponseforPost(String URL, Map<String, String> body, Map<String, String> data) {
+    public static void validatedErrorResponseforPost(String url, Map<String, String> body, Map<String, String> data) {
         ErrorValidatorObject errorData = new ErrorValidatorObject(data);
-        String error = ChatHubApiHelper.postChatHubQuery(URL, body).asString();
-        System.out.println("wait here");
+        String error = ChatHubApiHelper.postChatHubQuery(url, body).asString();
         Assert.assertTrue(error.contains(errorData.getErrorMessage()),
                 "Error message is incorrect or not returned /n" +
                         "Error from server:" + error);
     }
+
+    public static void validatedErrorResponseforPutWithoutAuth(String url, Map<String, String> body, Map<String, String> data) {
+        ErrorValidatorObject errorData = new ErrorValidatorObject(data);
+        String error = ChatHubApiHelper.putChatHubQueryWithoutAuth(url,body, 404).asString();
+        Assert.assertTrue(error.contains(errorData.getErrorMessage()),
+                "Error message is incorrect or not returned /n" +
+                        "Error from server:" + error);
+    }
+
 }
