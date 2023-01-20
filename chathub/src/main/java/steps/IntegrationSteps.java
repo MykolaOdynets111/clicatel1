@@ -2,19 +2,23 @@ package steps;
 
 import api.MainApi;
 import clients.Endpoints;
+import datamodelsclasses.configurations.ActivateConfiguration;
+import datamodelsclasses.configurations.ConfigurationSecrets;
+import datamodelsclasses.configurations.ConfigurationState;
+import datamodelsclasses.providers.UpdatedProviderDetails;
 import datamodelsclasses.configurations.*;
 import datamodelsclasses.providers.ProviderState;
 import datamodelsclasses.validator.Validator;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import datamodelsclasses.providers.AllProviders;
 import api.ChatHubApiHelper;
 import org.testng.asserts.SoftAssert;
 import urlproxymanager.Proxymanager;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -157,6 +161,56 @@ public class IntegrationSteps extends MainApi {
             softAssert.assertAll();
         } else {
             Validator.validatedErrorResponseforPutWithAuthWithoutBody(url, dataMap);
+        }
+    }
+
+    @Given("Admin is able to update existing provider details")
+    public void adminIsAbleToUpdateExistingProviderDetails(Map<String,String> dataMap) {
+        String url = format(Endpoints.ADMIN_UPDATE_PROVIDER, dataMap.get("i.id"));
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+        Map<String, String> updateProviderBody = new LinkedHashMap<>();
+        updateProviderBody.put("name",dataMap.get("i.name"));
+        updateProviderBody.put("logoUrl",dataMap.get("i.logoUrl"));
+        updateProviderBody.put("description",dataMap.get("i.description"));
+        updateProviderBody.put("moreInfoUrl",dataMap.get("i.moreInfoUrl"));
+        if (responseCode == 200) {
+            UpdatedProviderDetails expectedPorviderDetails = new UpdatedProviderDetails(dataMap);
+            UpdatedProviderDetails getUpdatedProvider = ChatHubApiHelper.putChatHubQueryWithoutAuth(url,updateProviderBody, 200).as(UpdatedProviderDetails.class);
+            Assert.assertEquals(expectedPorviderDetails,getUpdatedProvider,"Update provider details does not match");
+
+        } else {
+            Validator.validatedErrorResponseforPutWithoutAuth(url, updateProviderBody,dataMap);
+        }
+    }
+
+    @Given("User is able to delete configurations")
+    public void userIsAbleToDeleteConfigurations(Map<String,String> dataMap) {
+        String url = format(Endpoints.DELETE_CONFIGURATION, dataMap.get("i.configurationId"));
+            Validator.validatedErrorResponseforDeleteWithAuth(url, dataMap);
+        }
+
+    @Given("User is able to re-activate configuration for a provider")
+    public void userIsAbleToReActivateConfigurationForAProvider(Map<String,String> dataMap) {
+        String url = format(Endpoints.RE_ACTIVATE_CONFIGURATION, dataMap.get("i.configurationId"));
+        Map<String, String> reActivateConfigurationBody = new LinkedHashMap<>();
+        reActivateConfigurationBody.put("id", dataMap.get("i.id"));
+        reActivateConfigurationBody.put("providerId", dataMap.get("i.providerId"));
+
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+        if (responseCode == 200) {
+            ReActivateConfiguration expectedReActivatedConfiguration = new ReActivateConfiguration(dataMap);
+            ReActivateConfiguration actualReActivatedConfiguration = ChatHubApiHelper.putChatHubQuerywithAuthAndBody(url,reActivateConfigurationBody, responseCode).as(ReActivateConfiguration.class);
+            SoftAssert softAssert = new SoftAssert();
+            softAssert.assertEquals(expectedReActivatedConfiguration.getId(),actualReActivatedConfiguration.getId());
+            softAssert.assertEquals(expectedReActivatedConfiguration.getType(),actualReActivatedConfiguration.getType());
+            softAssert.assertEquals(expectedReActivatedConfiguration.getSetupName(),actualReActivatedConfiguration.getSetupName());
+            softAssert.assertNotNull(actualReActivatedConfiguration.getAuthenticationLink());
+            softAssert.assertEquals(expectedReActivatedConfiguration.timeToExpire,expectedReActivatedConfiguration.timeToExpire);
+            softAssert.assertNotNull(actualReActivatedConfiguration.getCreatedDate());
+            softAssert.assertNotNull(actualReActivatedConfiguration.getModifiedDate());
+            softAssert.assertAll();
+        } else {
+            Validator.validatedErrorResponseforPutWithAuthAndBody(url,reActivateConfigurationBody,dataMap);
         }
     }
 }
