@@ -103,10 +103,10 @@ public class PaymentsSteps {
         paymentLinkRef.set(paymentLinkResponse.paymentLinkRef);
     }
 
-    @Then("^User gets an error for payment link creation with status code (.*)$")
-    public void userCanNotGetAPaymentLink(String statusCode) {
+    @Then("^User gets an error for payment link creation$")
+    public void userCanNotGetAPaymentLink(Map<String, String> dataMap) {
         Response response = ApiHelperTransactions.userGetAPaymentLinkResponse(paymentBody.get(), activationKey.get());
-        checkResponseCode(response, statusCode);
+        Validator.validateErrorResponse(response, dataMap);
     }
 
     @Then("^The payment has success status code$")
