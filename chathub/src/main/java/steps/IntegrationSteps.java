@@ -2,10 +2,7 @@ package steps;
 
 import api.MainApi;
 import clients.Endpoints;
-import datamodelsclasses.configurations.ActivateConfiguration;
-import datamodelsclasses.configurations.ActivateConfigurationBody;
-import datamodelsclasses.configurations.ConfigurationSecrets;
-import datamodelsclasses.configurations.ConfigurationState;
+import datamodelsclasses.configurations.*;
 import datamodelsclasses.providers.ProviderState;
 import datamodelsclasses.validator.Validator;
 import io.cucumber.java.en.And;
@@ -137,6 +134,29 @@ public class IntegrationSteps extends MainApi {
             softAssert.assertAll();
         } else {
             Validator.validatedErrorResponseforGet(url, dataMap);
+        }
+    }
+
+    @Given("User is able to disable configurations")
+    public void userIsAbleToDisableConfigurations(Map<String,String> dataMap) {
+        String url = format(Endpoints.DISABLE_CONFIGURATION, dataMap.get("i.configurationId"));
+
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+        if (responseCode == 200) {
+            DisableConfiguration expectedDisableConfiguration = new DisableConfiguration(dataMap);
+            DisableConfiguration actualDisableConfiguration = ChatHubApiHelper.putChatHubQuerywithAuthNoBody(url,responseCode).as(DisableConfiguration.class);
+            SoftAssert softAssert = new SoftAssert();
+            softAssert.assertEquals(expectedDisableConfiguration.getId(),actualDisableConfiguration.getId());
+            softAssert.assertEquals(expectedDisableConfiguration.getProviderId(), actualDisableConfiguration.getProviderId());
+            softAssert.assertEquals(expectedDisableConfiguration.getType(), actualDisableConfiguration.getType());
+            softAssert.assertEquals(expectedDisableConfiguration.getName(),actualDisableConfiguration.getName());
+            softAssert.assertEquals(expectedDisableConfiguration.getStatus(),actualDisableConfiguration.getStatus());
+            softAssert.assertEquals(expectedDisableConfiguration.getHost(),actualDisableConfiguration.getHost());
+            softAssert.assertNotNull(actualDisableConfiguration.getCreatedDate());
+            softAssert.assertNotNull(actualDisableConfiguration.getModifiedDate());
+            softAssert.assertAll();
+        } else {
+            Validator.validatedErrorResponseforPutWithAuthWithoutBody(url, dataMap);
         }
     }
 }

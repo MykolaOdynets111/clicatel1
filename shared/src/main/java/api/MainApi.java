@@ -32,6 +32,20 @@ public abstract class MainApi {
         return validate(response, responseCode);
     }
 
+    @NotNull
+    protected static ResponseBody putQuerywithAuthNoBody(String endpoint, String authToken, int responseCode) {
+        Response response = put(endpoint, authToken);
+
+        return  validate(response, responseCode);
+    }
+
+    protected static Response put(String endpoint, String authToken) {
+        return RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", authToken)
+                .put(endpoint);
+    }
+
     private static ResponseBody validate(Response response, int responseCode){
         if (response.getStatusCode() != responseCode) {
             fail("Couldn't get the value \n"
