@@ -74,7 +74,28 @@ Feature: Provider API
       | o.logoUrl      | <o.logoUrl>      |
       | o.description  | <o.description>  |
       | o.moreInfoUrl  | <o.moreInfoUrl>  |
-
     Examples:
       | i.name              | i.logoUrl | i.description | i.moreInfoUrl | o.responseCode | o.errorMessage | o.name              | o.logoUrl | o.description | o.moreInfoUrl |
       | Auto_Test_Provider1 | NA        | NA            | NA            | 201            |                | Auto_Test_Provider1 | NA        | NA            | NA            |
+
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCH-675")
+  Scenario Outline: CCH :: Admin :: Provider API : Update existing provider details
+    Given Admin is able to update existing provider details
+      | i.id           | <i.id>           |
+      | i.name         | <i.name>         |
+      | i.logoUrl      | <i.logoUrl>      |
+      | i.description  | <i.description>  |
+      | i.moreInfoUrl  | <i.moreInfoUrl>  |
+      | o.responseCode | <o.responseCode> |
+      | o.errorMessage | <o.errorMessage> |
+      | o.id           | <o.id>           |
+      | o.name         | <o.name>         |
+      | o.logoUrl      | <o.logoUrl>      |
+      | o.description  | <o.description>  |
+      | o.moreInfoUrl  | <o.moreInfoUrl>  |
+
+    Examples:
+      | i.id                             | i.name                      | i.logoUrl  | i.description      | i.moreInfoUrl | o.responseCode | o.errorMessage     | o.id                             | o.name                      | o.logoUrl  | o.description      | o.moreInfoUrl |
+      | 0185cbc593c73974633631885e71053f | Auto_Tester_Provider_Update | UpdatedURL | UpdatedDescription | UpdatedInfo   | 200            |                    | 0185cbc593c73974633631885e71053f | Auto_Tester_Provider_Update | UpdatedURL | UpdatedDescription | UpdatedInfo   |
+      | Wrong ID                         | Auto_Tester_Provider_Update | UpdatedURL | UpdatedDescription | UpdatedInfo   | 404            | Provider not found |                                  |                             |            |                    |               |

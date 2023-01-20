@@ -6,6 +6,8 @@ import datamodelsclasses.configurations.ActivateConfiguration;
 import datamodelsclasses.providers.*;
 import datamodelsclasses.configurations.ConfigurationSecrets;
 import datamodelsclasses.configurations.ConfigurationState;
+import datamodelsclasses.providers.UpdatedProviderDetails;
+import datamodelsclasses.configurations.*;
 import datamodelsclasses.providers.ProviderState;
 import datamodelsclasses.validator.Validator;
 import io.cucumber.java.en.And;
@@ -17,7 +19,6 @@ import org.testng.Assert;
 import api.ChatHubApiHelper;
 import org.testng.asserts.SoftAssert;
 import urlproxymanager.Proxymanager;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -197,28 +198,102 @@ public class IntegrationSteps extends MainApi {
         Assert.assertEquals(expectedConfiguredProviderDetails.toString(),getProviders , "Providers response is not as expected");
     }
 
-    @Given("Admin is able to create provider")
-    public void adminIsAbleToCreateProvider(Map<String, String> dataMap) throws JsonProcessingException {
-        String url = format(Endpoints.ADMIN_PROVIDERS);
-        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
-        Map<String, String> createProviderBody = new LinkedHashMap<>();
-        createProviderBody.put("name", dataMap.get("i.name"));
-        createProviderBody.put("logoUrl", dataMap.get("i.logoUrl"));
-        createProviderBody.put("description", dataMap.get("i.description"));
-        createProviderBody.put("moreInfoUrl", dataMap.get("i.moreInfoUrl"));
+    @Given("User is able to disable configurations")
+    public void userIsAbleToDisableConfigurations(Map<String,String> dataMap) {
+        String url = format(Endpoints.DISABLE_CONFIGURATION, dataMap.get("i.configurationId"));
 
-        if (responseCode == 201) {
-            ProviderDetails expectedCreateProviderDetails = new ProviderDetails(dataMap);
-            ProviderDetails getCreatedProviderDetails = ChatHubApiHelper.postChatHubQueryWithoutAuth(url, createProviderBody, responseCode).as(ProviderDetails.class);
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+        if (responseCode == 200) {
+            DisableConfiguration expectedDisableConfiguration = new DisableConfiguration(dataMap);
+            DisableConfiguration actualDisableConfiguration = ChatHubApiHelper.putChatHubQuerywithAuthNoBody(url,responseCode).as(DisableConfiguration.class);
             SoftAssert softAssert = new SoftAssert();
-            softAssert.assertNotNull(getCreatedProviderDetails.getId(), "Provider Id is empty");
-            softAssert.assertEquals(expectedCreateProviderDetails.getName(), getCreatedProviderDetails.getName(), "Names field does not match");
-            softAssert.assertEquals(expectedCreateProviderDetails.getLogoUrl(), getCreatedProviderDetails.getLogoUrl(), "LogoUrl field does not match");
-            softAssert.assertEquals(expectedCreateProviderDetails.getDescription(), getCreatedProviderDetails.getDescription(), "Description field does not match");
-            softAssert.assertEquals(expectedCreateProviderDetails.getMoreInfoUrl(), getCreatedProviderDetails.getMoreInfoUrl(), "MoreInfoUrl field does not match");
+            softAssert.assertEquals(expectedDisableConfiguration.getId(),actualDisableConfiguration.getId());
+            softAssert.assertEquals(expectedDisableConfiguration.getProviderId(), actualDisableConfiguration.getProviderId());
+            softAssert.assertEquals(expectedDisableConfiguration.getType(), actualDisableConfiguration.getType());
+            softAssert.assertEquals(expectedDisableConfiguration.getName(),actualDisableConfiguration.getName());
+            softAssert.assertEquals(expectedDisableConfiguration.getStatus(),actualDisableConfiguration.getStatus());
+            softAssert.assertEquals(expectedDisableConfiguration.getHost(),actualDisableConfiguration.getHost());
+            softAssert.assertNotNull(actualDisableConfiguration.getCreatedDate());
+            softAssert.assertNotNull(actualDisableConfiguration.getModifiedDate());
             softAssert.assertAll();
         } else {
-            Validator.validatedErrorResponseforGet(url, dataMap);
+            Validator.validatedErrorResponseforPutWithAuthWithoutBody(url, dataMap);
         }
     }
+
+    @Given("Admin is able to update existing provider details")
+    public void adminIsAbleToUpdateExistingProviderDetails(Map<String,String> dataMap) {
+        String url = format(Endpoints.ADMIN_UPDATE_PROVIDER, dataMap.get("i.id"));
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+        Map<String, String> updateProviderBody = new LinkedHashMap<>();
+        updateProviderBody.put("name",dataMap.get("i.name"));
+        updateProviderBody.put("logoUrl",dataMap.get("i.logoUrl"));
+        updateProviderBody.put("description",dataMap.get("i.description"));
+        updateProviderBody.put("moreInfoUrl",dataMap.get("i.moreInfoUrl"));
+        if (responseCode == 200) {
+            UpdatedProviderDetails expectedPorviderDetails = new UpdatedProviderDetails(dataMap);
+            UpdatedProviderDetails getUpdatedProvider = ChatHubApiHelper.putChatHubQueryWithoutAuth(url,updateProviderBody, 200).as(UpdatedProviderDetails.class);
+            Assert.assertEquals(expectedPorviderDetails,getUpdatedProvider,"Update provider details does not match");
+
+        } else {
+            Validator.validatedErrorResponseforPutWithoutAuth(url, updateProviderBody,dataMap);
+        }
+    }
+
+    @Given("User is able to delete configurations")
+    public void userIsAbleToDeleteConfigurations(Map<String,String> dataMap) {
+        String url = format(Endpoints.DELETE_CONFIGURATION, dataMap.get("i.configurationId"));
+            Validator.validatedErrorResponseforDeleteWithAuth(url, dataMap);
+        }
+
+    @Given("User is able to re-activate configuration for a provider")
+    public void userIsAbleToReActivateConfigurationForAProvider(Map<String,String> dataMap) {
+        String url = format(Endpoints.RE_ACTIVATE_CONFIGURATION, dataMap.get("i.configurationId"));
+        Map<String, String> reActivateConfigurationBody = new LinkedHashMap<>();
+        reActivateConfigurationBody.put("id", dataMap.get("i.id"));
+        reActivateConfigurationBody.put("providerId", dataMap.get("i.providerId"));
+
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+        if (responseCode == 200) {
+            ReActivateConfiguration expectedReActivatedConfiguration = new ReActivateConfiguration(dataMap);
+            ReActivateConfiguration actualReActivatedConfiguration = ChatHubApiHelper.putChatHubQuerywithAuthAndBody(url,reActivateConfigurationBody, responseCode).as(ReActivateConfiguration.class);
+            SoftAssert softAssert = new SoftAssert();
+            softAssert.assertEquals(expectedReActivatedConfiguration.getId(),actualReActivatedConfiguration.getId());
+            softAssert.assertEquals(expectedReActivatedConfiguration.getType(),actualReActivatedConfiguration.getType());
+            softAssert.assertEquals(expectedReActivatedConfiguration.getSetupName(),actualReActivatedConfiguration.getSetupName());
+            softAssert.assertNotNull(actualReActivatedConfiguration.getAuthenticationLink());
+            softAssert.assertEquals(expectedReActivatedConfiguration.timeToExpire,expectedReActivatedConfiguration.timeToExpire);
+            softAssert.assertNotNull(actualReActivatedConfiguration.getCreatedDate());
+            softAssert.assertNotNull(actualReActivatedConfiguration.getModifiedDate());
+            softAssert.assertAll();
+        } else {
+            Validator.validatedErrorResponseforPutWithAuthAndBody(url,reActivateConfigurationBody,dataMap);
+        }
+    }
+
+    @Given("Admin is able to create provider")
+    public void adminIsAbleToCreateProvider(Map<String, String> dataMap)throws JsonProcessingException {
+            String url = format(Endpoints.ADMIN_PROVIDERS);
+            int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+            Map<String, String> createProviderBody = new LinkedHashMap<>();
+            createProviderBody.put("name", dataMap.get("i.name"));
+            createProviderBody.put("logoUrl", dataMap.get("i.logoUrl"));
+            createProviderBody.put("description", dataMap.get("i.description"));
+            createProviderBody.put("moreInfoUrl", dataMap.get("i.moreInfoUrl"));
+
+            if (responseCode == 201) {
+                ProviderDetails expectedCreateProviderDetails = new ProviderDetails(dataMap);
+                ProviderDetails getCreatedProviderDetails = ChatHubApiHelper.postChatHubQueryWithoutAuth(url, createProviderBody, responseCode).as(ProviderDetails.class);
+                SoftAssert softAssert = new SoftAssert();
+                softAssert.assertNotNull(getCreatedProviderDetails.getId(), "Provider Id is empty");
+                softAssert.assertEquals(expectedCreateProviderDetails.getName(), getCreatedProviderDetails.getName(), "Names field does not match");
+                softAssert.assertEquals(expectedCreateProviderDetails.getLogoUrl(), getCreatedProviderDetails.getLogoUrl(), "LogoUrl field does not match");
+                softAssert.assertEquals(expectedCreateProviderDetails.getDescription(), getCreatedProviderDetails.getDescription(), "Description field does not match");
+                softAssert.assertEquals(expectedCreateProviderDetails.getMoreInfoUrl(), getCreatedProviderDetails.getMoreInfoUrl(), "MoreInfoUrl field does not match");
+                softAssert.assertAll();
+            } else {
+                Validator.validatedErrorResponseforGet(url, dataMap);
+            }
+    }
 }
+
