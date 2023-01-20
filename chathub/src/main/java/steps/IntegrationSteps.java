@@ -2,12 +2,18 @@ package steps;
 
 import api.MainApi;
 import clients.Endpoints;
+
+import datamodelsclasses.configurations.ActivateConfiguration;
+import datamodelsclasses.configurations.ConfigurationSecrets;
+import datamodelsclasses.configurations.ConfigurationState;
+import datamodelsclasses.providers.UpdatedProviderDetails;
 import datamodelsclasses.configurations.*;
 import datamodelsclasses.providers.ProviderState;
 import datamodelsclasses.validator.Validator;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import datamodelsclasses.providers.AllProviders;
@@ -137,6 +143,25 @@ public class IntegrationSteps extends MainApi {
         }
     }
 
+    @Given("Admin is able to update existing provider details")
+    public void adminIsAbleToUpdateExistingProviderDetails(Map<String,String> dataMap) {
+        String url = format(Endpoints.ADMIN_UPDATE_PROVIDER, dataMap.get("i.id"));
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+        Map<String, String> updateProviderBody = new LinkedHashMap<>();
+        updateProviderBody.put("name",dataMap.get("i.name"));
+        updateProviderBody.put("logoUrl",dataMap.get("i.logoUrl"));
+        updateProviderBody.put("description",dataMap.get("i.description"));
+        updateProviderBody.put("moreInfoUrl",dataMap.get("i.moreInfoUrl"));
+        if (responseCode == 200) {
+            UpdatedProviderDetails expectedPorviderDetails = new UpdatedProviderDetails(dataMap);
+            UpdatedProviderDetails getUpdatedProvider = ChatHubApiHelper.putChatHubQueryWithoutAuth(url,updateProviderBody, 200).as(UpdatedProviderDetails.class);
+            Assert.assertEquals(expectedPorviderDetails,getUpdatedProvider,"Update provider details does not match");
+
+        } else {
+            Validator.validatedErrorResponseforPutWithoutAuth(url, updateProviderBody,dataMap);
+        }
+    }
+
     @Given("User is able to delete configurations")
     public void userIsAbleToDeleteConfigurations(Map<String,String> dataMap) {
         String url = format(Endpoints.DELETE_CONFIGURATION, dataMap.get("i.configurationId"));
@@ -167,5 +192,4 @@ public class IntegrationSteps extends MainApi {
             Validator.validatedErrorResponseforPutWithAuthAndBody(url,reActivateConfigurationBody,dataMap);
         }
     }
-
 }

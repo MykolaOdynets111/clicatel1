@@ -25,6 +25,20 @@ public abstract class MainApi {
     }
 
     @NotNull
+    protected static ResponseBody putQueryWithoutAuth(String endpoint, Object body, int responseCode) {
+        Response response = putWithoutAuthh(endpoint, body);
+
+        return  validate(response, responseCode);
+    }
+
+    private static Response putWithoutAuthh(String endpoint, Object body) {
+            return RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .body(body)
+                    .put(endpoint);
+        }
+
+    @NotNull
     protected static ResponseBody getQuery(String endpoint, String authToken, int responseCode) {
 
         Response response = get(endpoint, authToken);
