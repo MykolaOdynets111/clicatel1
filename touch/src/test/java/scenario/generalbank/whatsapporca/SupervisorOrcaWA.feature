@@ -43,4 +43,4 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Agent select Assigned filter on Left Panel
     Then Agent see tickets from orca on Assigned filter page
     When Agent select "WhatsApp" in Chanel container and click "Apply filters" button
-    Then Verify that only "whatsapp" tickets chats are shown
+    Then Agent verify that only "whatsapp" tickets chats are shown

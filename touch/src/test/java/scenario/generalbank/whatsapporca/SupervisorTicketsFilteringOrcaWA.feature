@@ -26,7 +26,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Send sfdsfsdfsd message by ORCA
 #    When Agent refreshes the page
     And Agent filter by "Apple Business Chat" channel and "Neutral" sentiment
-    Then Ticket from orca is not present on Supervisor Desk
+    Then Agent checks Ticket from orca is not present on Supervisor Desk
 #    When Send hate you message by ORCA
 #    When Agent refreshes the page
 #    And Agent filter by "Apple Business Chat" channel and "Negative" sentiment
@@ -57,7 +57,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     Then Agent verify ticket is present for orca for 2 seconds
     When Admin filter by 0 year 0 month and 1 days ago start date and 0 year 0 month and 0 days ago end date
     Then Agent verify ticket is present for orca for 2 seconds
-    And Verify that only "whatsapp" tickets chats are shown
+    And Agent verify that only "whatsapp" tickets chats are shown
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6278")
   Scenario: CD :: Agent Desk :: Tickets :: Unassigned :: Verify that if tickets are filtered, the quick & custom assign options shall not be available to agents

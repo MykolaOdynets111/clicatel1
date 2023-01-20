@@ -244,9 +244,9 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 
-    @And("^Agent select \"(.*)\" in Chanel container and click \"Apply filters\" button$")
-    public void selectChanelFilter(String name) {
-        getSupervisorAndTicketsHeader("main").selectChanel(name).clickApplyFilterButton();
+    @And("^(.*) select \"(.*)\" in Chanel container and click \"Apply filters\" button$")
+    public void selectChanelFilter(String agent, String name) {
+        getSupervisorAndTicketsHeader(agent).selectChanel(name).clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 

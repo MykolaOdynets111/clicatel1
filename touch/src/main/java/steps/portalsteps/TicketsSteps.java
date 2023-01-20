@@ -201,22 +201,22 @@ public class TicketsSteps extends AbstractAgentSteps {
         getTicketsPage(agent).getTicketsQuickActionBar().inputNumberOfTicketsForAccept(numberOfTickets);
     }
 
-    @Then("^Verify that only \"(.*)\" tickets chats are shown$")
-    public void verifyTicketsChatsChannelsFilter(String channelName) {
-        Assert.assertTrue(getTicketsTable("main").verifyChanelOfTheTicketsIsPresent(channelName),
+    @Then("^(.*) verify that only \"(.*)\" tickets chats are shown$")
+    public void verifyTicketsChatsChannelsFilter(String agent, String channelName) {
+        Assert.assertTrue(getTicketsTable(agent).verifyChanelOfTheTicketsIsPresent(channelName),
                 channelName + " channel name should be shown.");
     }
 
-    @Then("^Verify that only \"(.*)\" channel tickets chats are shown$")
-    public void verifyTicketsChatsChannelsFilterUsingAttribute(String channelName) {
-        Assert.assertTrue(getTicketsTable("main").verifyCurrentChanelOfTheTickets()
+    @Then("^(.*) verify that only \"(.*)\" channel tickets chats are shown$")
+    public void verifyTicketsChatsChannelsFilterUsingAttribute(String agent, String channelName) {
+        Assert.assertTrue(getTicketsTable(agent).verifyCurrentChanelOfTheTickets()
                         .containsAll(Collections.singleton(channelName)),
                 channelName + " channel name is not shown or incorrect.");
     }
 
-    @Then("^Verify that only \"(.*)\" date tickets are shown in (.*) column$")
-    public void verifyTicketsChatsStartDatesFilter(String dateText, String columnType) {
-        Assert.assertTrue(getTicketsTable("main").verifyCurrentDatesOfTheTickets(columnType, dateText),
+    @Then("^(.*) verify that only \"(.*)\" date tickets are shown in (.*) column$")
+    public void verifyTicketsChatsStartDatesFilter(String agent, String dateText, String columnType) {
+        Assert.assertTrue(getTicketsTable(agent).verifyCurrentDatesOfTheTickets(columnType, dateText),
                 dateText + " open date is not shown.");
     }
 
@@ -237,20 +237,20 @@ public class TicketsSteps extends AbstractAgentSteps {
         getTicketsTable(agent).getTicketByUserName(getUserName(channel));
     }
 
-    @Then("^Verify that only (.*) ticket is shown$")
-    public void verifyChatsChannelsFilter(int tickets) {
-        Assert.assertEquals(getTicketsTable("main").getUsersNames().size(), tickets,
+    @Then("^(.*) verify that only (.*) ticket is shown$")
+    public void verifyChatsChannelsFilter(String agent, int tickets) {
+        Assert.assertEquals(getTicketsTable(agent).getUsersNames().size(), tickets,
                 "Only " + tickets + " ticket(s) number should be present on Supervisor Tickets page" +
                         "Could be because of TPLAT-5959");
         //todo uncomment step in the feature when search with spaces will be fixed
     }
 
-    @Then("^Ticket from (.*) is not present on Supervisor Desk$")
-    public void verifyTicketPresent(String channel) {
+    @Then("^(.*) checks Ticket from (.*) is not present on Supervisor Desk$")
+    public void verifyTicketNotPresent(String agent, String channel) {
         String userName = getUserName(channel);
         boolean isTicketShown = true;
         try {
-            getTicketsTable("main").getTicketByUserName(userName);
+            getTicketsTable(agent).getTicketByUserName(userName);
         } catch (AssertionError e) {
             isTicketShown = false;
         }

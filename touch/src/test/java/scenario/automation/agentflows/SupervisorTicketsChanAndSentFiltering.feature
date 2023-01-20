@@ -14,7 +14,7 @@ Feature: Supervisor desk
     When Agent select "Tickets" left menu option
     And Agent search chat touch on Supervisor desk
     Then Agent see tickets from orca on Unassigned filter page
-    And Verify that only 1 ticket is shown
+    And Agent verify that only 1 ticket is shown
     When Agent refreshes the page
     When Agent filter by "Webchat" channel and "Positive" sentiment
     Then Agent see tickets from orca on Unassigned filter page
