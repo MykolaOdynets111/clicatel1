@@ -35,9 +35,15 @@ public abstract class MainApi {
 
     @NotNull
     protected static ResponseBody getQuery(String endpoint, String authToken, int responseCode) {
-
         Response response = get(endpoint, authToken);
 
+        return validate(response, responseCode);
+    }
+
+    @NotNull
+    protected static ResponseBody getQueryWithoutAuth(String endpoint, int responseCode) {
+
+        Response response = getwithoutAuth(endpoint);
         return validate(response, responseCode);
     }
 
@@ -51,7 +57,6 @@ public abstract class MainApi {
     protected static ResponseBody deleteQueryWithAuth(String endpoint, String authToken, int responseCode) {
 
         Response response = deleteWithAuth(endpoint, authToken);
-
         return validate(response, responseCode);
     }
 
@@ -69,6 +74,7 @@ public abstract class MainApi {
                 .delete(endpoint);
     }
 
+    @NotNull
     protected static ResponseBody putQuerywithAuthAndBody(String endpoint, String authToken, Object body, int responseCode) {
         Response response = putwithBodyAndAuth(endpoint, authToken, body);
         return validate(response, responseCode);
@@ -82,6 +88,7 @@ public abstract class MainApi {
                 .put(endpoint);
     }
 
+    @NotNull
     protected static Response putwithBodyAndAuth(String endpoint, String authToken, Object body) {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
@@ -118,6 +125,12 @@ public abstract class MainApi {
         return RestAssured.given().log().all()
                 .accept(ContentType.JSON)
                 .header("Authorization", authToken)
+                .get(endpoint);
+    }
+
+    private static Response getwithoutAuth(String endpoint) {
+        return RestAssured.given().log().all()
+                .accept(ContentType.JSON)
                 .get(endpoint);
     }
 }
