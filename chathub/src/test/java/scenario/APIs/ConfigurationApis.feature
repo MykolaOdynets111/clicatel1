@@ -74,6 +74,30 @@ Feature: Configuration API
   #BUG# TO BE ADDED    |                              | 404            | bad reuqest                                             |                               |
 
 
+  @TestCaseId("https://jira.clickatell.com/browse/CCH-666")
+  Scenario Outline: CCH :: Public :: Configuration API: Disable configuration API
+    Given User is able to disable configurations
+      | i.configurationId | <i.configurationId> |
+      | o.responseCode    | <o.responseCode>    |
+      | o.errorMessage    | <o.errorMessage>    |
+      | o.id              | <o.id>              |
+      | o.providerId      | <o.providerId>      |
+      | o.type            | <o.type>            |
+      | o.name            | <o.name>            |
+      | o.status          | <o.status>          |
+      | o.host            | <o.host>            |
+
+    Examples:
+    # For the first two cases, consider the following;
+        # Always give the configuration ID which is not DISABLED
+        # If the configuration ID is not in DISABLED state then make sure the configuration ID should not be in AUTHPENDING state
+      | i.configurationId                | o.responseCode | o.errorMessage             | o.id                             | o.providerId                     | o.type     | o.name                     | o.status | o.host                                 |
+      | 0185bbb47862d93e7c9f2bf20512a19c | 200            |                            | 0185bbb47862d93e7c9f2bf20512a19c | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | CH_Test_AutoTester2023-117 | DISABLED | https://d3v-clickatell2162.zendesk.com |
+      | 0185bbb0bd4606f5bd390e857d2c8aca | 200            |                            | 0185bbb0bd4606f5bd390e857d2c8aca | 0184f820c06ec8b62dfa0610e29ab575 | SANDBOX    | CH_Test_AutoTester2023-115 | DISABLED | https://d3v-clickatell2162.zendesk.com |
+      | Wrong Id                         | 404            | Configuration ID not found |                                  |                                  |            |                            |          |                                        |
+#AUTHPENDING case, BUGID: To be reported      | TRUE                             |                | Precondition failed     |                                      |                                  |            |                            |              |                                        |
+#With ChatFlow or ChatDesk activated, Date to be created      | TRUE                             | 500            | Precondition failed     |                                      |                                  |            |                            |              |                                        |
+
   @TestCaseId("https://jira.clickatell.com/browse/CCH-668")
   Scenario Outline: CH :: Public :: Configurations API : Delete configuration
     Given User is able to delete configurations
