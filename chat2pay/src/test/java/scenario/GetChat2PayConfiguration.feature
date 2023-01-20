@@ -1,8 +1,8 @@
 Feature: Get Chat 2 pay configuration
 #This API returns the configuration data for the configured Chat 2 Pay product.
 
-  @TestCaseId("https://jira.clickatell.com/browse/C2P-4433")
-  Scenario Outline: chat2pay-service :: GET /chat-2-pay :: User can get Chat 2 Pay configuration
+  @TestCaseId("https://jira.clickatell.com/browse/C2P-4695")
+  Scenario Outline: c2p-Widget-Payment-Service :: GET /config :: Get Chat 2 Pay configuration
 
     Given User is logged in to unity
     And User gets widgetId for UC form
