@@ -25,8 +25,7 @@ import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
-import static steps.agentsteps.AbstractAgentSteps.getSupervisorAndTicketsHeader;
-import static steps.agentsteps.AbstractAgentSteps.getTicketsPage;
+import static steps.agentsteps.AbstractAgentSteps.*;
 
 public class SupervisorDeskSteps extends AbstractPortalSteps {
 
@@ -43,14 +42,14 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), tenantChatPreferences);
     }
 
-    @When("^Supervisor send (.*) to agent trough (.*) chanel$")
-    public void sendTicketMessageToCustomer(String message, String chanel) {
-        getTicketsPage("main").getMessageCustomerWindow().selectChanel(chanel).setMessageText(message).clickSubmitButton();
+    @When("^(.*) send (.*) to agent trough (.*) chanel$")
+    public void sendTicketMessageToCustomer(String agent, String message, String chanel) {
+        getAgentHomePage(agent).getMessageCustomerWindow().selectChanel(chanel).setMessageText(message).clickSubmitButton();
     }
 
-    @When("^Supervisor is unable to send (.*) HSM on Tickets for (.*) chat$")
-    public void hsmChannelNotShownOnParticularChannel(String channel, String originalChannel) {
-        Assert.assertFalse(getTicketsPage("main").getMessageCustomerWindow().isChanelShown(channel),
+    @When("^(.*) is unable to send (.*) HSM on Tickets for (.*) chat$")
+    public void hsmChannelNotShownOnParticularChannel(String agent, String channel, String originalChannel) {
+        Assert.assertFalse(getAgentHomePage(agent).getMessageCustomerWindow().isChanelShown(channel),
                 channel + " HSM is present in: " + originalChannel);
     }
 
@@ -245,9 +244,9 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 
-    @And("^Agent select \"(.*)\" in Chanel container and click \"Apply filters\" button$")
-    public void selectChanelFilter(String name) {
-        getSupervisorAndTicketsHeader("main").selectChanel(name).clickApplyFilterButton();
+    @And("^(.*) select \"(.*)\" in Chanel container and click \"Apply filters\" button$")
+    public void selectChanelFilter(String agent, String name) {
+        getSupervisorAndTicketsHeader(agent).selectChanel(name).clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
     }
 
@@ -340,7 +339,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 .selectStartDate(startDate)
                 .selectEndDate(endDate)
                 .clickApplyFilterButton();
-        getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
+        getSupervisorDeskPage().waitForConnectingDisappear(2, 6);
     }
 
     @And("^Admin checks value of start date filter is empty for (\\d+) year (\\d+) month and (\\d+) days ago$")

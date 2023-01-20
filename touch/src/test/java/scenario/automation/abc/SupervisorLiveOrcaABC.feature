@@ -21,7 +21,7 @@ Feature: ABC ORCA :: Supervisor Desk
   And Agent select Assigned filter on Left Panel
   Then Agent see tickets from orca on Assigned filter page
   When Agent select "Apple Business Chat" in Chanel container and click "Apply filters" button
-  Then Verify that only "apple-business-chat" tickets chats are shown
+  Then Agent verify that only "apple-business-chat" tickets chats are shown
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1981")
   Scenario: CD :: Supervisor Desk :: Chats :: Verify the Chats that are currently in the 'Pending' tab will have a yellow 'Pending' icon on them in the Supervisor view

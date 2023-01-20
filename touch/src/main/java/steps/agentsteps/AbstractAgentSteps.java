@@ -98,12 +98,7 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
     }
 
     public static TicketsPage getTicketsPage(String agent){
-        if (ticketsPage.get() == null) {
-            ticketsPage.set(new TicketsPage(DriverFactory.getDriverForAgent(agent)));
-            return ticketsPage.get();
-        } else {
-            return ticketsPage.get();
-        }
+        return getAgentHomePage(agent).getTicketsPage();
     }
 
     public static SupervisorAndTicketsHeader getSupervisorAndTicketsHeader(String agent){

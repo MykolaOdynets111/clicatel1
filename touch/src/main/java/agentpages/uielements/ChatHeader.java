@@ -83,6 +83,9 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(xpath = "//div[@class='tippy-content']/div")
     private WebElement flaggedCloseChatToolTip;
 
+    @FindBy(xpath = ".//button[@name = 'Close_Ticket']")
+    private WebElement closeTicket;
+
     private final String transferChatButtonXpath =  ".//button[@selenium-id='header-transfer-chat']";
     private final String sendSMSXpath = ".//button[@selenium-id='header-send-sms']";
     private final String sendWhatsAppXpath = ".//button[text()='Send WhatsApp']";
@@ -261,4 +264,7 @@ public class ChatHeader extends AbstractUIElement {
         return isElementRemoved(getCurrentDriver(), transferButton, 5);
     }
 
+    public boolean getCloseButtonStatus(){
+        return Boolean.parseBoolean(getAttributeFromElem(this.getCurrentDriver(), closeTicket, 5, "Close ticket button", "disabled"));
+    }
 }
