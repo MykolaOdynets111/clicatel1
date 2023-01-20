@@ -3,8 +3,10 @@ package steps;
 import api.MainApi;
 import clients.Endpoints;
 import datamodelsclasses.configurations.ActivateConfiguration;
-import datamodelsclasses.configurations.ActivateConfigurationBody;
 import datamodelsclasses.providers.*;
+import datamodelsclasses.configurations.ConfigurationSecrets;
+import datamodelsclasses.configurations.ConfigurationState;
+import datamodelsclasses.providers.ProviderState;
 import datamodelsclasses.validator.Validator;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -70,15 +72,17 @@ public class IntegrationSteps extends MainApi {
         String url = format(Endpoints.ACTIVATE_CONFIGURATION);
         Proxymanager proxy = new Proxymanager();
 
-        ObjectMapper mapper = new ObjectMapper();
-        List<String> activateConfigBody = new ArrayList<>();
-        activateConfigBody.add(mapper.writeValueAsString(new ActivateConfigurationBody(
-                dataMap.get("i.name"), dataMap.get("i.clientSecret"),
-                dataMap.get("i.clientId"), dataMap.get("i.host"),
-                dataMap.get("i.providerId"), dataMap.get("i.type"))));
+        Map<String, String> configurationBody = new LinkedHashMap<>();
+        configurationBody.put("name", dataMap.get("i.name"));
+        configurationBody.put("clientSecret", dataMap.get("i.clientSecret"));
+        configurationBody.put("clientId", dataMap.get("i.clientId"));
+        configurationBody.put("host", dataMap.get("i.host"));
+        configurationBody.put("providerId", dataMap.get("i.providerId"));
+        configurationBody.put("type", dataMap.get("i.type"));
+
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
         if (responseCode == 200) {
-            ActivateConfiguration postActiveConfiguration = ChatHubApiHelper.postChatHubQuery(url, activateConfigBody).as(ActivateConfiguration.class);
+            ActivateConfiguration postActiveConfiguration = ChatHubApiHelper.postChatHubQuery(url, configurationBody).as(ActivateConfiguration.class);
             SoftAssert softAssert = new SoftAssert();
             softAssert.assertNotNull(postActiveConfiguration.getId(), "Configuration Id is empty");
             softAssert.assertEquals(dataMap.get("o.type"), postActiveConfiguration.getType());
@@ -95,7 +99,44 @@ public class IntegrationSteps extends MainApi {
             softAssert.assertEquals(dataMap.get("o.timeToExpire"), postActiveConfiguration.getTimeToExpire());
             softAssert.assertAll();
         } else {
-            Validator.validatedErrorResponseforPost(url, (Map<String, String>) activateConfigBody, dataMap);
+            Validator.validatedErrorResponseforPost(url, configurationBody, dataMap);
+        }
+    }
+
+    @Given("User is able to get configuration state")
+    public void userIsAbleToGetConfigurationState(Map<String,String> dataMap) {
+        String url = format(Endpoints.CONFIGURATION_STATE, dataMap.get("i.configurationId"));
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+        if (responseCode == 200) {
+            ConfigurationState getConfigurationState = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(ConfigurationState.class);
+            Assert.assertNotNull(getConfigurationState.id);
+            Assert.assertEquals(dataMap.get("o.accountProviderConfigStatusId"),getConfigurationState.accountProviderConfigStatusId);
+        } else {
+            Validator.validatedErrorResponseforGet(url, dataMap);
+        }
+    }
+
+    @Given("User is able to get configuration secrects in astericks")
+    public void userIsAbleToGetConfigurationSecrectsInAstericks(Map<String,String> dataMap) {
+        String url = format(Endpoints.CONFIGURATION_SECRETS, dataMap.get("i.configurationId"));
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+        if (responseCode == 200) {
+            ConfigurationSecrets expectedConfigurationSecret = new ConfigurationSecrets(dataMap);
+            ConfigurationSecrets getConfigurationSecret = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(ConfigurationSecrets.class);
+            SoftAssert softAssert = new SoftAssert();
+            softAssert.assertEquals(getConfigurationSecret.getId(),expectedConfigurationSecret.getId());
+            softAssert.assertEquals(getConfigurationSecret.getProviderId(),expectedConfigurationSecret.getProviderId());
+            softAssert.assertEquals(getConfigurationSecret.getAccountProviderConfigStatusId(),expectedConfigurationSecret.getAccountProviderConfigStatusId());
+            softAssert.assertEquals(getConfigurationSecret.getConfigurationEnvironmentTypeId(),expectedConfigurationSecret.getConfigurationEnvironmentTypeId());
+            softAssert.assertEquals(getConfigurationSecret.getDisplayName(),expectedConfigurationSecret.getDisplayName());
+            softAssert.assertEquals(getConfigurationSecret.getClientId(),expectedConfigurationSecret.getClientId());
+            softAssert.assertEquals(getConfigurationSecret.getClientSecret(),expectedConfigurationSecret.getClientSecret());
+            softAssert.assertEquals(getConfigurationSecret.getHostUrl(),expectedConfigurationSecret.getHostUrl());
+            softAssert.assertNotNull(getConfigurationSecret.getCreatedDate());
+            softAssert.assertNotNull(getConfigurationSecret.getModifiedDate());
+            softAssert.assertAll();
+        } else {
+            Validator.validatedErrorResponseforGet(url, dataMap);
         }
     }
 
