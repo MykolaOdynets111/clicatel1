@@ -2,10 +2,12 @@ package steps;
 
 import api.MainApi;
 import clients.Endpoints;
+
 import datamodelsclasses.configurations.ActivateConfiguration;
 import datamodelsclasses.configurations.ConfigurationSecrets;
 import datamodelsclasses.configurations.ConfigurationState;
 import datamodelsclasses.providers.UpdatedProviderDetails;
+import datamodelsclasses.configurations.*;
 import datamodelsclasses.providers.ProviderState;
 import datamodelsclasses.validator.Validator;
 import io.cucumber.java.en.And;
@@ -157,6 +159,37 @@ public class IntegrationSteps extends MainApi {
 
         } else {
             Validator.validatedErrorResponseforPutWithoutAuth(url, updateProviderBody,dataMap);
+        }
+    }
+
+    @Given("User is able to delete configurations")
+    public void userIsAbleToDeleteConfigurations(Map<String,String> dataMap) {
+        String url = format(Endpoints.DELETE_CONFIGURATION, dataMap.get("i.configurationId"));
+            Validator.validatedErrorResponseforDeleteWithAuth(url, dataMap);
+        }
+
+    @Given("User is able to re-activate configuration for a provider")
+    public void userIsAbleToReActivateConfigurationForAProvider(Map<String,String> dataMap) {
+        String url = format(Endpoints.RE_ACTIVATE_CONFIGURATION, dataMap.get("i.configurationId"));
+        Map<String, String> reActivateConfigurationBody = new LinkedHashMap<>();
+        reActivateConfigurationBody.put("id", dataMap.get("i.id"));
+        reActivateConfigurationBody.put("providerId", dataMap.get("i.providerId"));
+
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+        if (responseCode == 200) {
+            ReActivateConfiguration expectedReActivatedConfiguration = new ReActivateConfiguration(dataMap);
+            ReActivateConfiguration actualReActivatedConfiguration = ChatHubApiHelper.putChatHubQuerywithAuthAndBody(url,reActivateConfigurationBody, responseCode).as(ReActivateConfiguration.class);
+            SoftAssert softAssert = new SoftAssert();
+            softAssert.assertEquals(expectedReActivatedConfiguration.getId(),actualReActivatedConfiguration.getId());
+            softAssert.assertEquals(expectedReActivatedConfiguration.getType(),actualReActivatedConfiguration.getType());
+            softAssert.assertEquals(expectedReActivatedConfiguration.getSetupName(),actualReActivatedConfiguration.getSetupName());
+            softAssert.assertNotNull(actualReActivatedConfiguration.getAuthenticationLink());
+            softAssert.assertEquals(expectedReActivatedConfiguration.timeToExpire,expectedReActivatedConfiguration.timeToExpire);
+            softAssert.assertNotNull(actualReActivatedConfiguration.getCreatedDate());
+            softAssert.assertNotNull(actualReActivatedConfiguration.getModifiedDate());
+            softAssert.assertAll();
+        } else {
+            Validator.validatedErrorResponseforPutWithAuthAndBody(url,reActivateConfigurationBody,dataMap);
         }
     }
 }
