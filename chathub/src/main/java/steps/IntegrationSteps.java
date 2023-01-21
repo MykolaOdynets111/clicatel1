@@ -62,7 +62,11 @@ public class IntegrationSteps extends MainApi {
             }
             ObjectMapper mappergetProviders = new ObjectMapper();
             String getProviders = mappergetProviders.writeValueAsString(ChatHubApiHelper.getChatHubQuery(Endpoints.PROVIDERS, 200).as(AllProviders[].class));
-            Assert.assertEquals(expectedProviders.toString(),getProviders , "Providers response is not as expected");
+            System.out.println(expectedProviders);
+            System.out.println(getProviders);
+        String jsonString = expectedProviders.toString();
+        jsonString = jsonString.replace(", ", ",");
+            Assert.assertEquals(jsonString,getProviders , "Providers response is not as expected");
         }
 
 
