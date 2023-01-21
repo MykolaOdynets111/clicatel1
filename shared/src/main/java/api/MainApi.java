@@ -32,6 +32,15 @@ public abstract class MainApi {
         return validate(response, responseCode);
     }
 
+    @NotNull
+    protected static ResponseBody getQueryForInternalApi(String endpoint, String mc2ID,String internalProductToken, int responseCode) {
+
+        Response response = getForInternalAPI(endpoint, mc2ID, internalProductToken);
+
+        return validate(response, responseCode);
+    }
+
+    @NotNull
     protected static ResponseBody getQueryWithoutAuth(String endpoint, int responseCode) {
 
         Response response = getWithoutAuth(endpoint);
@@ -73,6 +82,14 @@ public abstract class MainApi {
     private static Response getWithoutAuth(String endpoint) {
         return RestAssured.given().log().all()
                 .accept(ContentType.JSON)
+                .get(endpoint);
+    }
+
+    private static Response getForInternalAPI(String endpoint,String mc2ID,String internalProductToken) {
+        return RestAssured.given().log().all()
+                .accept(ContentType.JSON)
+                .header("internalProductToken", internalProductToken)
+                .header("mc2AccountId",mc2ID)
                 .get(endpoint);
     }
 }
