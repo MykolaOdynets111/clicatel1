@@ -44,7 +44,9 @@ public class Configurations {
     private String createdDate;
 
     @JsonProperty("modifiedDate")
-    public String modifiedDate;
+    private String modifiedDate;
+
+
 
     public Configurations (String id, String providerId, String type, String name, String status, String host, String createdDate, String modifiedDate){
         this.setId(id);

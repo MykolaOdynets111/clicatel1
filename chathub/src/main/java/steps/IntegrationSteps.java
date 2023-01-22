@@ -98,25 +98,28 @@ public class IntegrationSteps extends MainApi {
         }
     }
 
-    @Given("User is able to get all configurations for a provider - Check 200 responses")
+    @And("User is able to get all configurations for a provider - Check 200 responses")
     public void userIsAbleToGetAllConfigurationsForAProvider(List<Map<String, String>> dataMap) throws JsonProcessingException {
         String url = format(Endpoints.CONFIGURATIONS, dataMap.get(0).get("i.providerId"));
-        String createdDate = DateTimeHelper.getCurrentDateTime();
-        String modifiedDate = DateTimeHelper.getCurrentDateTime();
         ObjectMapper mapper = new ObjectMapper();
         List<String> expectedConfigurations = new ArrayList<>();
         for (int i = 0; i < dataMap.size(); i++) {
             try {
                 expectedConfigurations.add(mapper.writeValueAsString(new Configurations(dataMap.get(i).get("o.id"),
                         dataMap.get(i).get("o.providerId"), dataMap.get(i).get("o.type"), dataMap.get(i).get("o.name"),
-                        dataMap.get(i).get("o.status"), dataMap.get(i).get("o.host"), dataMap.get(i).get(createdDate), dataMap.get(i).get(modifiedDate))));
+                        dataMap.get(i).get("o.status"), dataMap.get(i).get("o.host"), dataMap.get(i).get("o.createdDate"), dataMap.get(i).get("o.modifiedDate"))));
             } catch (org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
         }
         ObjectMapper mapperGetConfigurations = new ObjectMapper();
-        String abc = mapperGetConfigurations.writeValueAsString(ChatHubApiHelper.getChatHubQuery(url, 200).as(Configurations[].class));
-        Assert.assertEquals(abc, expectedConfigurations.toString(), "Configurations response is not as expected");
+        String actualConfigurations = mapperGetConfigurations.writeValueAsString(ChatHubApiHelper.getChatHubQuery(url, 200).as(Configurations[].class));
+
+        String jsonString = expectedConfigurations.toString();
+        jsonString = jsonString.replace(", ", ",");
+        System.out.println(jsonString);
+        System.out.println(actualConfigurations);
+        Assert.assertEquals(actualConfigurations, jsonString, "Configurations response is not as expected");
     }
 
     @Given("User is able to get all configurations for a provider - Check non 200 responses")
