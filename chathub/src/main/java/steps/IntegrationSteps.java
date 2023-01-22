@@ -2,6 +2,8 @@ package steps;
 
 import api.MainApi;
 import clients.Endpoints;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import datamodelsclasses.configurations.ActivateConfiguration;
 import datamodelsclasses.providers.*;
 import datamodelsclasses.configurations.ConfigurationSecrets;
@@ -13,8 +15,6 @@ import datamodelsclasses.validator.Validator;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import api.ChatHubApiHelper;
 import org.testng.asserts.SoftAssert;
@@ -48,12 +48,31 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("User is able to GET providers API response")
-    public void GETProviderAPI(int responseCode) {
-        AllProviders allProviders = ChatHubApiHelper.getChatHubQuery(Endpoints.ADMIN_PROVIDERS, responseCode)
-                .jsonPath().getList("", AllProviders.class).get(0);
-        Assert.assertEquals(allProviders.getId(), "");
-        Assert.assertEquals(allProviders.getName(), "Zendesk Support");
-    }
+        public void GETProviderAPI(List<Map<String, String>> datatable) throws JsonProcessingException {
+            ObjectMapper mapper = new ObjectMapper();
+            List<String> expectedProviders = new ArrayList<>();
+            for (int i = 0; i < datatable.size(); i++) {
+                try {
+                    expectedProviders.add(mapper.writeValueAsString(new AllProviders(datatable.get(i).get("o.id"),
+                            datatable.get(i).get("o.name"),datatable.get(i).get("o.logoUrl")
+                            ,datatable.get(i).get("o.description"),
+                            datatable.get(i).get("o.moreInfoUrl"),datatable.get(i).get("o.vid"),
+                            datatable.get(i).get("o.version"),datatable.get(i).get("o.latest"),
+                            datatable.get(i).get("o.isAdded"))));
+
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            ObjectMapper mappergetProviders = new ObjectMapper();
+            String getProviders = mappergetProviders.writeValueAsString(ChatHubApiHelper.getChatHubQuery(Endpoints.PROVIDERS, 200).as(AllProviders[].class));
+            System.out.println(expectedProviders);
+            System.out.println(getProviders);
+        String jsonString = expectedProviders.toString();
+        jsonString = jsonString.replace(", ", ",");
+            Assert.assertEquals(jsonString,getProviders , "Providers response is not as expected");
+        }
+
 
     @Given("User is able to GET providers state in API response")
     public void GETProviderStateAPI(Map<String, String> dataMap) {
@@ -146,16 +165,12 @@ public class IntegrationSteps extends MainApi {
         ObjectMapper mapper = new ObjectMapper();
         List<String> expectedProviders = new ArrayList<>();
         for (int i = 0; i < datatable.size(); i++) {
-            try {
-                expectedProviders.add(mapper.writeValueAsString(new ConfiguredProviderDetail(datatable.get(i).get("o.id"),
-                        datatable.get(i).get("o.name"),datatable.get(i).get("o.logoUrl")
-                        ,datatable.get(i).get("o.description"),
-                        datatable.get(i).get("o.moreInfoUrl"),datatable.get(i).get("o.vid"),
-                        datatable.get(i).get("o.version"),datatable.get(i).get("o.latest")
-                        )));
-            } catch (org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
+            expectedProviders.add(mapper.writeValueAsString(new ConfiguredProviderDetail(datatable.get(i).get("o.id"),
+                    datatable.get(i).get("o.name"),datatable.get(i).get("o.logoUrl")
+                    ,datatable.get(i).get("o.description"),
+                    datatable.get(i).get("o.moreInfoUrl"),datatable.get(i).get("o.vid"),
+                    datatable.get(i).get("o.version"),datatable.get(i).get("o.latest")
+                    )));
         }
         String jsonString = expectedProviders.toString();
         jsonString = jsonString.replace(", ", ",");
@@ -183,15 +198,11 @@ public class IntegrationSteps extends MainApi {
         ObjectMapper mapper = new ObjectMapper();
         List<String> expectedConfiguredProviderDetails = new ArrayList<>();
         for (int i = 0; i < datatable.size(); i++) {
-            try {
-                expectedConfiguredProviderDetails.add(mapper.writeValueAsString(new ConfiguredProviderDetail(datatable.get(i).get("o.id"),
-                        datatable.get(i).get("o.name"),datatable.get(i).get("o.logoUrl")
-                        ,datatable.get(i).get("o.description"),
-                        datatable.get(i).get("o.moreInfoUrl"),datatable.get(i).get("o.vid"),
-                        datatable.get(i).get("o.version"),datatable.get(i).get("o.latest"))));
-            } catch (org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
+            expectedConfiguredProviderDetails.add(mapper.writeValueAsString(new ConfiguredProviderDetail(datatable.get(i).get("o.id"),
+                    datatable.get(i).get("o.name"),datatable.get(i).get("o.logoUrl")
+                    ,datatable.get(i).get("o.description"),
+                    datatable.get(i).get("o.moreInfoUrl"),datatable.get(i).get("o.vid"),
+                    datatable.get(i).get("o.version"),datatable.get(i).get("o.latest"))));
         }
         ObjectMapper ActualConfiguredProviderDetails = new ObjectMapper();
         String getProviders = ActualConfiguredProviderDetails.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithoutAuthToken(url, 200).as(ConfiguredProviderDetail[].class));
