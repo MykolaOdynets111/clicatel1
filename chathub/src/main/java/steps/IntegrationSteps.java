@@ -5,6 +5,8 @@ import clients.Endpoints;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import datamodelsclasses.configurations.ActivateConfiguration;
+import datamodelsclasses.configurations.ActivateConfigurationBody;
+import datamodelsclasses.configurations.Configurations;
 import datamodelsclasses.providers.*;
 import datamodelsclasses.configurations.ConfigurationSecrets;
 import datamodelsclasses.configurations.ConfigurationState;
@@ -282,6 +284,30 @@ public class IntegrationSteps extends MainApi {
         }
     }
 
+    @And("User is able to get all configurations for a provider - Check 200 responses")
+    public void userIsAbleToGetAllConfigurationsForAProvider(List<Map<String, String>> dataMap) throws JsonProcessingException {
+        String url = format(Endpoints.CONFIGURATIONS, dataMap.get(0).get("i.providerId"));
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> expectedConfigurationsBody = new ArrayList<>();
+        for (int i = 0; i < dataMap.size(); i++) {
+            expectedConfigurationsBody.add(mapper.writeValueAsString(new Configurations(dataMap.get(i).get("o.id"),
+                    dataMap.get(i).get("o.providerId"), dataMap.get(i).get("o.type"), dataMap.get(i).get("o.name"),
+                    dataMap.get(i).get("o.status"), dataMap.get(i).get("o.host"), dataMap.get(i).get("o.createdDate"), dataMap.get(i).get("o.modifiedDate"))));
+        }
+        ObjectMapper mapperGetConfigurations = new ObjectMapper();
+        String actualConfigurations = mapperGetConfigurations.writeValueAsString(ChatHubApiHelper.getChatHubQuery(url, 200).as(Configurations[].class));
+
+        String expectedConfigurations = expectedConfigurationsBody.toString();
+        expectedConfigurations = expectedConfigurations.replace(", ", ",");
+        Assert.assertEquals(actualConfigurations, expectedConfigurations, "Configurations response is not as expected");
+    }
+
+    @Given("User is able to get all configurations for a provider - Check non 200 responses")
+    public void userIsAbleToGetAllConfigurationsForAProviderCheckNonResponses(Map<String, String> dataMap) {
+        String url = format(Endpoints.CONFIGURATIONS, dataMap.get("i.providerId"));
+        Validator.validatedErrorResponseforGet(url, dataMap);
+    }
+
     @Given("Admin is able to create provider")
     public void adminIsAbleToCreateProvider(Map<String, String> dataMap)throws JsonProcessingException {
             String url = format(Endpoints.ADMIN_PROVIDERS);
@@ -307,4 +333,3 @@ public class IntegrationSteps extends MainApi {
             }
     }
 }
-
