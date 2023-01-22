@@ -20,7 +20,7 @@ Feature: Endpoint API
   @TestCaseId("https://jira.clickatell.com/browse/CCH-676")
   Scenario: CH :: Admin API : User should be able to verify all returned endpoints for a provider
     Given User is able to verify all available endpoints for provider
-      |        id                      |     name                        |
+      |        o.id                    |     o.name                      |
       |0184f82f654d988ff09d6d08e8499c3a|Create lead                      |
       |0184f82f654de2b793510630141e9990|Search customer                  |
       |0184f82f654e445ba7e2e46ddb638085|Get TAGS                         |
@@ -49,7 +49,7 @@ Feature: Endpoint API
   @TestCaseId("https://jira.clickatell.com/browse/CCH-683")
   Scenario: CH :: Internal API : User should be able to verify all returned endpoints for a provider
     Given User is able to verify all available endpoints for provider via Internal API
-      |        id                      |     name                      |
+      |        o.id                    |     o.name                    |
       |0184f82f654d988ff09d6d08e8499c3a| Create lead                   |
       |0184f82f654de2b793510630141e9990| Search customer               |
       |0184f82f654e445ba7e2e46ddb638085|Get TAGS                       |

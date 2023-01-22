@@ -319,7 +319,7 @@ public class IntegrationSteps extends MainApi {
         List<String> endpoints = new ArrayList<>();
         for(int i = 0; i < datatable.size(); i++){
             try {
-                endpoints.add(mapper.writeValueAsString(new ProviderEndpoints(datatable.get(i).get("id"),datatable.get(i).get("name"))));
+                endpoints.add(mapper.writeValueAsString(new ProviderEndpoints(datatable.get(i).get("o.id"),datatable.get(i).get("o.name"))));
             } catch (JsonProcessingException e){
                 throw new RuntimeException(e);
             }
@@ -382,7 +382,7 @@ public class IntegrationSteps extends MainApi {
         for (int i = 0; i < datatable.size(); i++) {
             try {
                 endpoints.add(mapper.writeValueAsString(new ProviderEndpoints(
-                        datatable.get(i).get("id"),datatable.get(i).get("name"))));
+                        datatable.get(i).get("o.id"),datatable.get(i).get("o.name"))));
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
