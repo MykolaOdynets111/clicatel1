@@ -2,14 +2,15 @@ package steps;
 
 import api.MainApi;
 import clients.Endpoints;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import datamodelsclasses.configurations.ActivateConfiguration;
+import datamodelsclasses.configurations.Configurations;
 import datamodelsclasses.providers.*;
 import datamodelsclasses.configurations.ConfigurationSecrets;
 import datamodelsclasses.configurations.ConfigurationState;
 import datamodelsclasses.providers.UpdatedProviderDetails;
 import datamodelsclasses.configurations.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import datamodelsclasses.Endpoints.EndpointDetail;
 import datamodelsclasses.Endpoints.ProviderEndpoints;
 import datamodelsclasses.Endpoints.RequestParameters;
@@ -55,12 +56,31 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("User is able to GET providers API response")
-    public void GETProviderAPI(int responseCode) {
-        AllProviders allProviders = ChatHubApiHelper.getChatHubQuery(Endpoints.ADMIN_PROVIDERS, responseCode)
-                .jsonPath().getList("", AllProviders.class).get(0);
-        Assert.assertEquals(allProviders.getId(), "");
-        Assert.assertEquals(allProviders.getName(), "Zendesk Support");
-    }
+        public void GETProviderAPI(List<Map<String, String>> datatable) throws JsonProcessingException {
+            ObjectMapper mapper = new ObjectMapper();
+            List<String> expectedProviders = new ArrayList<>();
+            for (int i = 0; i < datatable.size(); i++) {
+                try {
+                    expectedProviders.add(mapper.writeValueAsString(new AllProviders(datatable.get(i).get("o.id"),
+                            datatable.get(i).get("o.name"),datatable.get(i).get("o.logoUrl")
+                            ,datatable.get(i).get("o.description"),
+                            datatable.get(i).get("o.moreInfoUrl"),datatable.get(i).get("o.vid"),
+                            datatable.get(i).get("o.version"),datatable.get(i).get("o.latest"),
+                            datatable.get(i).get("o.isAdded"))));
+
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            ObjectMapper mappergetProviders = new ObjectMapper();
+            String getProviders = mappergetProviders.writeValueAsString(ChatHubApiHelper.getChatHubQuery(Endpoints.PROVIDERS, 200).as(AllProviders[].class));
+            System.out.println(expectedProviders);
+            System.out.println(getProviders);
+        String jsonString = expectedProviders.toString();
+        jsonString = jsonString.replace(", ", ",");
+            Assert.assertEquals(jsonString,getProviders , "Providers response is not as expected");
+        }
+
 
     @Given("User is able to GET providers state in API response")
     public void GETProviderStateAPI(Map<String, String> dataMap) {
@@ -268,6 +288,30 @@ public class IntegrationSteps extends MainApi {
         } else {
             Validator.validatedErrorResponseforPutWithAuthAndBody(url,reActivateConfigurationBody,dataMap);
         }
+    }
+
+    @And("User is able to get all configurations for a provider - Check 200 responses")
+    public void userIsAbleToGetAllConfigurationsForAProvider(List<Map<String, String>> dataMap) throws JsonProcessingException {
+        String url = format(Endpoints.CONFIGURATIONS, dataMap.get(0).get("i.providerId"));
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> expectedConfigurationsBody = new ArrayList<>();
+        for (int i = 0; i < dataMap.size(); i++) {
+            expectedConfigurationsBody.add(mapper.writeValueAsString(new Configurations(dataMap.get(i).get("o.id"),
+                    dataMap.get(i).get("o.providerId"), dataMap.get(i).get("o.type"), dataMap.get(i).get("o.name"),
+                    dataMap.get(i).get("o.status"), dataMap.get(i).get("o.host"), dataMap.get(i).get("o.createdDate"), dataMap.get(i).get("o.modifiedDate"))));
+        }
+        ObjectMapper mapperGetConfigurations = new ObjectMapper();
+        String actualConfigurations = mapperGetConfigurations.writeValueAsString(ChatHubApiHelper.getChatHubQuery(url, 200).as(Configurations[].class));
+
+        String expectedConfigurations = expectedConfigurationsBody.toString();
+        expectedConfigurations = expectedConfigurations.replace(", ", ",");
+        Assert.assertEquals(actualConfigurations, expectedConfigurations, "Configurations response is not as expected");
+    }
+
+    @Given("User is able to get all configurations for a provider - Check non 200 responses")
+    public void userIsAbleToGetAllConfigurationsForAProviderCheckNonResponses(Map<String, String> dataMap) {
+        String url = format(Endpoints.CONFIGURATIONS, dataMap.get("i.providerId"));
+        Validator.validatedErrorResponseforGet(url, dataMap);
     }
 
     @Given("Admin is able to create provider")

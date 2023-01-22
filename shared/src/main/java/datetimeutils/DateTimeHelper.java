@@ -25,6 +25,11 @@ public class DateTimeHelper {
         return LocalDateTime.now(ZoneOffset.UTC).minusHours(hours).format(formatter);
     }
 
+    public static String getCurrentDateTime(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        return LocalDateTime.now(ZoneOffset.UTC).format(formatter);
+    }
+
     public static final DateTimeFormatter getYYYY_MM_DD_With_Time_Formatter() {
         return DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' h:mm a", Locale.US);
     }
