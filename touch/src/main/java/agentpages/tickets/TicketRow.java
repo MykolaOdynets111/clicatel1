@@ -15,11 +15,13 @@ import java.util.Locale;
 
 import static datetimeutils.DateTimeHelper.parseDate;
 
-
 public class TicketRow extends AbstractWidget {
 
     @FindBy(css = ".cl-checkbox")
     private WebElement checkbox;
+
+    @FindBy(css = "[type='checkbox']")
+    private WebElement checkboxStatus;
 
     @FindBy(css = ".cl-agent-name")
     private WebElement currentAgent;
@@ -29,6 +31,9 @@ public class TicketRow extends AbstractWidget {
 
     @FindBy(css = ".cl-table-user-description__location")
     private WebElement location;
+
+    @FindBy(xpath = ".//button[text() = 'Close']")
+    private WebElement closeTicketButton;
 
     @FindBy(css = ".cl-light-grey span")
     private WebElement status;
@@ -48,8 +53,13 @@ public class TicketRow extends AbstractWidget {
     @FindBy(xpath = ".//a[contains(text(), 'Open')]")
     private List<WebElement> openBtns;
 
+    @FindBy(xpath = ".//button[contains(text(), 'Accept')]")
+    private List<WebElement> acceptBtns;
+
     @FindBy(xpath = ".//button[contains(text(), 'Assign')]")
     private WebElement assignButton;
+
+    private static String checkboxStatusString = "[type='checkbox']";
 
     public TicketRow(WebElement element) {
         super(element);
@@ -62,6 +72,11 @@ public class TicketRow extends AbstractWidget {
 
     public void selectCheckbox() {
         clickElem(this.getCurrentDriver(), checkbox, 0, "Ticket checkbox");
+    }
+
+    public boolean getCheckboxStatus() {
+        return Boolean.parseBoolean(getAttributeFromElem(this.getCurrentDriver(), checkboxStatusString, 8,
+                "Checkbox ticket row", "aria-checked"));
     }
 
     public String getName() {
@@ -133,7 +148,15 @@ public class TicketRow extends AbstractWidget {
         clickElem(this.getCurrentDriver(), openBtns.get(ticketNum - 1), 5, "openTicketBtn");
     }
 
+    public void acceptTicket(int ticketNum) {
+        clickElem(this.getCurrentDriver(), acceptBtns.get(ticketNum - 1), 5, "Accept Ticket Btn");
+    }
+
     public boolean assignManualButtonVisibility() {
         return isElementRemoved(this.getCurrentDriver(), assignButton, 5);
+    }
+
+    public void clickCloseButton(){
+        clickElem(this.getCurrentDriver(), closeTicketButton, 5, "Close ticket button");
     }
 }

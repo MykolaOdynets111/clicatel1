@@ -41,6 +41,9 @@ public class ChatHeader extends AbstractUIElement {
     })
     private WebElement transferButton;
 
+    @FindBy(css = "[data-testid=header-transfer-chat]")
+    private WebElement reassignButton;
+
     @FindBy(css = "[data-testid=chat-header-title]")
     private WebElement chatHeaderTitle;
 
@@ -248,6 +251,10 @@ public class ChatHeader extends AbstractUIElement {
 
     public boolean isTransferButtonDisplayed() {
         return isElementShown(getCurrentDriver(), transferButton, 5);
+    }
+
+    public boolean isReassignButtonDisplayed() {
+        return isElementShown(getCurrentDriver(), reassignButton, 5);
     }
 
     public boolean isTransferButtonNotDisplayed() {

@@ -16,7 +16,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Agent select "Pending" left menu option
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
-    Then Agent view the visual indicator "This chat has been marked as Pending by " agent name and timestamp in the conversation area
+    Then Visual indicator with "This chat has been marked as Pending by" text, Agent name and time is shown
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2002")
@@ -32,11 +32,11 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Agent select "Pending" left menu option
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
-    Then Agent view the visual indicator "This chat has been marked as Pending by " agent name and timestamp in the conversation area
+    Then Visual indicator with "This chat has been marked as Pending by" text, Agent name and time is shown
     When Agent click 'Pending On' chat button
     When Agent select "Live Chats" left menu option
     And Agent click on new conversation request from orca
-    Then Agent view the visual indicator "This chat has been marked as live chat by " agent name and timestamp in the conversation area
+    Then Visual indicator with "This chat has been marked as live chat by" text, Agent name and time is shown
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2010")
@@ -52,7 +52,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent select "Pending" left menu option
     And Agent has new conversation request from orca user
     And Agent click on new conversation request from orca
-    Then Agent view the visual indicator "This chat has been marked as Pending by " agent name and timestamp in the conversation area
+    Then Visual indicator with "This chat has been marked as Pending by" text, Agent name and time is shown
     When Send move from pending to live chat message by ORCA
     And Agent clicks on go to chat button
     And Agent select "Live Chats" left menu option
