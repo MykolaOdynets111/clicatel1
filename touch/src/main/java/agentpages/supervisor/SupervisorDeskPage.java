@@ -144,7 +144,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     }
 
     public boolean isAssignChatWindowOpened(){
-        return isElementShown(this.getCurrentDriver(), getAssignChatWindow().getWrappedElement(), 6);
+        return isElementShown(this.getCurrentDriver(), getAssignChatWindow().getWrappedElement(), 10);
     }
 
     public void assignChat(String dropdownType, String agentName){

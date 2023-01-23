@@ -62,4 +62,15 @@ public class OrcaEvent {
         this.setExternalReferenceId(faker.letterify("RefId???"));
     }
 
+    public OrcaEvent(String routeId, String messageText, String phoneNumber, String name){
+        Faker faker = new Faker();
+        this.setEventId(faker.letterify("AQA???????"));
+        this.setProviderId("touch");
+        this.setRouteId(routeId);
+        this.setSourceId(phoneNumber);
+        this.setSessionId(faker.letterify("1?????"));
+        this.setContent(new Content(messageText, name));
+        this.setUserInfo(new UserInfo(name));
+        this.setExternalReferenceId(faker.letterify("RefId???"));
+    }
 }
