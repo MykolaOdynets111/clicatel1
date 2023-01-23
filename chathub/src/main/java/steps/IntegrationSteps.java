@@ -463,7 +463,7 @@ public class IntegrationSteps extends MainApi {
             softAssertions.assertEquals(actualEndpointDetail.getId(),dataMap.get("i.endpointID"));
             softAssertions.assertEquals(actualEndpointDetail.getOperationName(),dataMap.get("o.operationName"));
             softAssertions.assertNotNull(actualEndpointDetail.getResponseSample());
-
+            //Due to more than 40 objects in responseSample, it will be catered in a separate test case.
             softAssertions.assertAll();
         }else {
             Validator.validatedErrorResponseWithoutAuth(url, dataMap);
@@ -494,6 +494,7 @@ public class IntegrationSteps extends MainApi {
             softAssertions.assertEquals(actualEndpointDetail.getId(),dataMap.get("i.endpointID"));
             softAssertions.assertEquals(actualEndpointDetail.getOperationName(),dataMap.get("o.operationName"));
             softAssertions.assertNotNull(actualEndpointDetail.getResponseSample());
+            //Due to more than 40 objects in responseSample, it will be catered in a separate test case.
 
             softAssertions.assertAll();
         }else {
