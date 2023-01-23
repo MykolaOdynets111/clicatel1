@@ -14,7 +14,7 @@ import java.util.Properties;
 public class ResponseSample {
 
     @JsonProperty("statusCode")
-    private String statusCode;
+    private int statusCode;
 
     @JsonProperty("properties")
     private List<Properties> properties;

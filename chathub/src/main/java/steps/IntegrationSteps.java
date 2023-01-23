@@ -4,6 +4,7 @@ import api.MainApi;
 import clients.Endpoints;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import datamodelsclasses.Endpoints.*;
 import datamodelsclasses.configurations.ActivateConfiguration;
 import datamodelsclasses.configurations.Configurations;
 import datamodelsclasses.providers.*;
@@ -11,9 +12,6 @@ import datamodelsclasses.configurations.ConfigurationSecrets;
 import datamodelsclasses.configurations.ConfigurationState;
 import datamodelsclasses.providers.UpdatedProviderDetails;
 import datamodelsclasses.configurations.*;
-import datamodelsclasses.Endpoints.EndpointDetail;
-import datamodelsclasses.Endpoints.ProviderEndpoints;
-import datamodelsclasses.Endpoints.RequestParameters;
 import datamodelsclasses.Specifications.AuthDetails;
 import datamodelsclasses.Specifications.Specifications;
 import datamodelsclasses.providers.ProviderState;
@@ -500,5 +498,66 @@ public class IntegrationSteps extends MainApi {
         }else {
             Validator.validatedErrorResponseWithoutAuth(url, dataMap);
         }
+    }
+
+    @Given("User is able to verify response sample from specific endpoint detail via Internal Api")
+    public void userIsAbleToVerifyResponseSampleFromSpecificEndpointDetailViaInternalApi(List<Map<String, String>> dataMap) throws JsonProcessingException {
+        String url = format(Endpoints.INTERNAL_ENDPOINTS_ENDPOINT, dataMap.get(0).get("i.endpointID"));
+        int responseCode = Integer.parseInt(dataMap.get(0).get("o.statusCode"));
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> properties = new ArrayList<>();
+
+        for (int i = 0; i < dataMap.size(); i++) {
+            try {
+                properties.add(mapper.writeValueAsString(new EndpointProperties(
+                        dataMap.get(i).get("isArray"),dataMap.get(i).get("label"),dataMap.get(i).get("type"),dataMap.get(i).get("sourceRef"))));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        List<String> getProperties = Collections.singletonList(String.join(",", properties));
+
+        ObjectMapper actualEndpointMapper = new ObjectMapper();
+
+        EndpointDetail actualEndpointDetail = ChatHubApiHelper.getChatHubQueryWithInternalAuth(url, responseCode).as(EndpointDetail.class);
+
+        String actualResponseSampleProperties = actualEndpointMapper.writeValueAsString(actualEndpointDetail.getResponseSample().get(0).getProperties());
+        int actualResponseStatusCode = Integer.parseInt(actualEndpointMapper.writeValueAsString(actualEndpointDetail.getResponseSample().get(0).getStatusCode()));
+        SoftAssert assertion = new SoftAssert();
+
+        assertion.assertEquals(actualResponseSampleProperties,getProperties.toString());
+        assertion.assertEquals(actualResponseStatusCode,responseCode);
+        assertion.assertAll();
+    }
+
+    @Given("User is able to verify response sample from specific endpoint detail via Admin api")
+    public void userIsAbleToVerifyResponseSampleFromSpecificEndpointDetailViaAdminApi(List<Map<String, String>> dataMap) throws JsonProcessingException {
+        String url = format(Endpoints.ADMIN_ENDPOINTS_ENDPOINT, dataMap.get(0).get("i.endpointID"));
+        int responseCode = Integer.parseInt(dataMap.get(0).get("o.statusCode"));
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> properties = new ArrayList<>();
+
+        for (int i = 0; i < dataMap.size(); i++) {
+            try {
+                properties.add(mapper.writeValueAsString(new EndpointProperties(
+                        dataMap.get(i).get("isArray"),dataMap.get(i).get("label"),dataMap.get(i).get("type"),dataMap.get(i).get("sourceRef"))));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        List<String> getProperties = Collections.singletonList(String.join(",", properties));
+
+        ObjectMapper actualEndpointMapper = new ObjectMapper();
+
+        EndpointDetail actualEndpointDetail = ChatHubApiHelper.getChatHubQueryWithoutAuth(url, responseCode).as(EndpointDetail.class);
+
+        String actualResponseSampleProperties = actualEndpointMapper.writeValueAsString(actualEndpointDetail.getResponseSample().get(0).getProperties());
+        int actualResponseStatusCode = Integer.parseInt(actualEndpointMapper.writeValueAsString(actualEndpointDetail.getResponseSample().get(0).getStatusCode()));
+
+        SoftAssert assertion = new SoftAssert();
+
+        assertion.assertEquals(actualResponseSampleProperties,getProperties.toString());
+        assertion.assertEquals(actualResponseStatusCode,responseCode);
+        assertion.assertAll();
     }
 }
