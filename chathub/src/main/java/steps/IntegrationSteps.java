@@ -115,6 +115,19 @@ public class IntegrationSteps extends MainApi {
         }
     }
 
+    @Given("User is able to GET providers state in API response - Internal")
+    public void userIsAbleToGETProvidersStateInAPIResponseInternal(Map<String,String> dataMap) {
+        String url = format(Endpoints.INTERNAL_PROVIDERS_STATE, dataMap.get("i.providerId"));
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+        if (responseCode == 200) {
+            ProviderState expectedProviderState = new ProviderState(dataMap);
+            ProviderState getProvider = ChatHubApiHelper.getChatHubQueryWithInternalAuth(url, responseCode).as(ProviderState.class);
+            Assert.assertEquals(expectedProviderState, getProvider, "Providers response is not as expected");
+        } else {
+            Validator.validatedErrorResponseforGet(url, dataMap);
+        }
+    }
+
     @Given("User is able to activate configuration for a provider")
     public void userIsAbleToActivateConfigurationForAProvider(Map<String, String> dataMap) throws IOException {
         String url = format(Endpoints.ACTIVATE_CONFIGURATION);
@@ -521,5 +534,4 @@ public class IntegrationSteps extends MainApi {
             Validator.validatedErrorResponseWithoutAuth(url, dataMap);
         }
     }
-
 }
