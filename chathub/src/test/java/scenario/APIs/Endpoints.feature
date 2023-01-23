@@ -12,9 +12,9 @@ Feature: Endpoint API
       | i.providerID                     | i.versionID|o.responseCode|o.errorMessage                             |
       | 0184f828214f6b7a03c711284b2b8e39 | v1.0.0     |    200       |                                           |
       | 0184f828214f6b7a03c711284b2b8e39 | v1         |    404       |Provided or specification version not found|
+      | 0184f828214f6b7a                 | v1.0.0     |    404       |Provided or specification version not found|
       | 0184f828214f6b7a                 | v1         |    404       |Provided or specification version not found|
-      | 0184f828214f6b7a                 | v1         |    404       |Provided or specification version not found|
-      |                                  | v1         |    404       |Provided or specification version not found|
+      |                                  | v1.0.0     |    404       |Provided or specification version not found|
       | 0184f828214f6b7a03c711284b2b8e39 |            |    404       |Provided or specification version not found|
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-676")
@@ -41,9 +41,9 @@ Feature: Endpoint API
       | i.providerID                     | i.versionID|o.responseCode|o.errorMessage                             |
       | 0184f828214f6b7a03c711284b2b8e39 | v1.0.0     |    200       |                                           |
       | 0184f828214f6b7a03c711284b2b8e39 | v1         |    404       |Provided or specification version not found|
+      | 0184f828214f6b7a                 | v1.0.0     |    404       |Provided or specification version not found|
       | 0184f828214f6b7a                 | v1         |    404       |Provided or specification version not found|
-      | 0184f828214f6b7a                 | v1         |    404       |Provided or specification version not found|
-      |                                  | v1         |    404       |Provided or specification version not found|
+      |                                  | v1.0.0     |    404       |Provided or specification version not found|
       | 0184f828214f6b7a03c711284b2b8e39 |            |    404       |Provided or specification version not found|
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-683")
