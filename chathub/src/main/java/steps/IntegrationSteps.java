@@ -124,7 +124,7 @@ public class IntegrationSteps extends MainApi {
             ProviderState getProvider = ChatHubApiHelper.getChatHubQueryWithInternalAuth(url, responseCode).as(ProviderState.class);
             Assert.assertEquals(expectedProviderState, getProvider, "Providers response is not as expected");
         } else {
-            Validator.validatedErrorResponseforGet(url, dataMap);
+            Validator.validatedErrorResponseforGetInternalProviders(url, dataMap);
         }
     }
 
@@ -341,10 +341,34 @@ public class IntegrationSteps extends MainApi {
         Assert.assertEquals(actualConfigurations, expectedConfigurations, "Configurations response is not as expected");
     }
 
+    @Given("User is able to get all configurations for a provider - Check 200 responses - Internal")
+    public void userIsAbleToGetAllConfigurationsForAProviderCheckResponsesInternal(List<Map<String, String>> dataMap) throws JsonProcessingException {
+        String url = format(Endpoints.INTERNAL_CONFIGURATIONS, dataMap.get(0).get("i.providerId"));
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> expectedConfigurationsBody = new ArrayList<>();
+        for (int i = 0; i < dataMap.size(); i++) {
+            expectedConfigurationsBody.add(mapper.writeValueAsString(new InternalConfigurations(dataMap.get(i).get("o.id"),
+                    dataMap.get(i).get("o.displayName"), dataMap.get(i).get("o.configurationEnvironmentTypeId"),
+                    dataMap.get(i).get("o.accountProviderConfigStatusId"))));
+        }
+        ObjectMapper mapperGetConfigurations = new ObjectMapper();
+        String actualConfigurations = mapperGetConfigurations.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithInternalAuth(url, 200).as(InternalConfigurations[].class));
+
+        String expectedConfigurations = expectedConfigurationsBody.toString();
+        expectedConfigurations = expectedConfigurations.replace(", ", ",");
+        Assert.assertEquals(actualConfigurations, expectedConfigurations, "Configurations response is not as expected");
+    }
+
     @Given("User is able to get all configurations for a provider - Check non 200 responses")
     public void userIsAbleToGetAllConfigurationsForAProviderCheckNonResponses(Map<String, String> dataMap) {
         String url = format(Endpoints.CONFIGURATIONS, dataMap.get("i.providerId"));
         Validator.validatedErrorResponseforGet(url, dataMap);
+    }
+
+    @Given("User is able to get all configurations for a provider - Check non 200 responses - Internal")
+    public void userIsAbleToGetAllConfigurationsForAProviderCheckNonResponsesInternal(Map<String, String> dataMap) {
+        String url = format(Endpoints.INTERNAL_CONFIGURATIONS, dataMap.get("i.providerId"));
+        Validator.validatedErrorResponseforGetInternalProviders(url, dataMap);
     }
 
     @Given("Admin is able to create provider")
