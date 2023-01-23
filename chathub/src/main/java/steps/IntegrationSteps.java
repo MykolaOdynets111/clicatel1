@@ -58,10 +58,10 @@ public class IntegrationSteps extends MainApi {
     @Given("User is able to GET providers API response")
         public void GETProviderAPI(List<Map<String, String>> datatable) throws JsonProcessingException {
             ObjectMapper mapper = new ObjectMapper();
-            List<String> expectedProviders = new ArrayList<>();
+            List<String> expectedProvidersBody = new ArrayList<>();
             for (int i = 0; i < datatable.size(); i++) {
                 try {
-                    expectedProviders.add(mapper.writeValueAsString(new AllProviders(datatable.get(i).get("o.id"),
+                    expectedProvidersBody.add(mapper.writeValueAsString(new AllProviders(datatable.get(i).get("o.id"),
                             datatable.get(i).get("o.name"),datatable.get(i).get("o.logoUrl")
                             ,datatable.get(i).get("o.description"),
                             datatable.get(i).get("o.moreInfoUrl"),datatable.get(i).get("o.vid"),
@@ -74,13 +74,33 @@ public class IntegrationSteps extends MainApi {
             }
             ObjectMapper mappergetProviders = new ObjectMapper();
             String getProviders = mappergetProviders.writeValueAsString(ChatHubApiHelper.getChatHubQuery(Endpoints.PROVIDERS, 200).as(AllProviders[].class));
-            System.out.println(expectedProviders);
-            System.out.println(getProviders);
-        String jsonString = expectedProviders.toString();
-        jsonString = jsonString.replace(", ", ",");
-            Assert.assertEquals(jsonString,getProviders , "Providers response is not as expected");
+        String expectedProviders = expectedProvidersBody.toString();
+        expectedProviders = expectedProviders.replace(", ", ",");
+            Assert.assertEquals(expectedProviders,getProviders , "Providers response is not as expected");
         }
 
+    @Given("User is able to GET providers API response - Internal")
+    public void userIsAbleToGETProvidersAPIResponseInternal(List<Map<String, String>> datatable) throws JsonProcessingException {
+            ObjectMapper mapper = new ObjectMapper();
+            List<String> expectedProviders = new ArrayList<>();
+            for (int i = 0; i < datatable.size(); i++) {
+                try {
+                    expectedProviders.add(mapper.writeValueAsString(new AllProviders(datatable.get(i).get("o.id"),
+                            datatable.get(i).get("o.name"),datatable.get(i).get("o.logoUrl")
+                            ,datatable.get(i).get("o.description"),
+                            datatable.get(i).get("o.moreInfoUrl"),datatable.get(i).get("o.vid"),
+                            datatable.get(i).get("o.version"),datatable.get(i).get("o.latest"))));
+
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            ObjectMapper mappergetProviders = new ObjectMapper();
+            String getProviders = mappergetProviders.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithInternalAuth(Endpoints.INTERNAL_PROVIDERS, 200).as(AllProviders[].class));
+            String jsonString = expectedProviders.toString();
+            jsonString = jsonString.replace(", ", ",");
+            Assert.assertEquals(jsonString,getProviders , "Providers response is not as expected");
+        }
 
     @Given("User is able to GET providers state in API response")
     public void GETProviderStateAPI(Map<String, String> dataMap) {
@@ -501,4 +521,5 @@ public class IntegrationSteps extends MainApi {
             Validator.validatedErrorResponseWithoutAuth(url, dataMap);
         }
     }
+
 }
