@@ -3,6 +3,8 @@ package agentpages;
 import abstractclasses.AgentAbstractPage;
 import agentpages.commonelements.SupervisorAndTicketsHeader;
 import agentpages.leftmenu.LeftMenuWithChats;
+import agentpages.tickets.MessageCustomerWindow;
+import agentpages.tickets.TicketsPage;
 import agentpages.uielements.*;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -122,6 +124,9 @@ public class AgentHomePage extends AgentAbstractPage {
     private CRMTicketContainer crmTicketContainer;
     private LeftMenuWithChats leftMenuWithChats;
     private ChatBody chatBody;
+
+    private TicketsPage ticketsPage;
+
     private PageHeader pageHeader;
     private SuggestedGroup suggestedGroup;
     private ProfileWindow profileWindow;
@@ -145,8 +150,15 @@ public class AgentHomePage extends AgentAbstractPage {
     private HSMForm hsmForm;
     private SupervisorAndTicketsHeader supervisorAndTicketsHeader;
 
+    private MessageCustomerWindow messageCustomerWindow;
+
     public AgentHomePage(String agent) {
         super(agent);
+    }
+
+    public MessageCustomerWindow getMessageCustomerWindow() {
+        messageCustomerWindow.setCurrentDriver(this.getCurrentDriver());
+        return messageCustomerWindow;
     }
 
     public ChatAttachmentForm getChatAttachmentForm() {
@@ -289,6 +301,11 @@ public class AgentHomePage extends AgentAbstractPage {
         waitForElementToBePresentByCss(this.getCurrentDriver(), chatMessageContainer, 10);
         chatBody.setCurrentDriver(this.getCurrentDriver());
         return chatBody;
+    }
+
+    public TicketsPage getTicketsPage() {
+        ticketsPage.setCurrentDriver(this.getCurrentDriver());
+        return ticketsPage;
     }
 
     public SupervisorAndTicketsHeader getSupervisorAndTicketsHeader() {

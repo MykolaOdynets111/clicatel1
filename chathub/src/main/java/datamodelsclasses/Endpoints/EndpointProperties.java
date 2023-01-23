@@ -8,17 +8,16 @@ import lombok.NoArgsConstructor;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "sourceRef",
+        "isArray",
         "label",
         "type",
-        "isArray"
+        "sourceRef"
 })
 @Data
 @NoArgsConstructor
-public class Properties {
-
-    @JsonProperty("sourceRef")
-    private String sourceRef;
+public class EndpointProperties {
+    @JsonProperty("isArray")
+    private String isArray;
 
     @JsonProperty("label")
     private String label;
@@ -26,13 +25,12 @@ public class Properties {
     @JsonProperty("type")
     private String type;
 
-    @JsonProperty("isArray")
-    private Boolean isArray;
-
-    public Properties (String sourceRef, String label,String type,Boolean isArray)
-    {    this.setSourceRef(sourceRef);
+    @JsonProperty("sourceRef")
+    private String sourceRef;
+    public EndpointProperties (String isArray, String label,String type,String sourceRef)
+    { this.setIsArray(isArray);
         this.setLabel(label);
         this.setType(type);
-        this.setIsArray(isArray);
+        this.setSourceRef(sourceRef);;
     }
 }

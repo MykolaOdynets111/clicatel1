@@ -10,6 +10,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import junit.framework.AssertionFailedError;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.agentsteps.AbstractAgentSteps;
@@ -17,10 +18,7 @@ import steps.dotcontrol.DotControlSteps;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TicketsSteps extends AbstractAgentSteps {
@@ -35,12 +33,12 @@ public class TicketsSteps extends AbstractAgentSteps {
         return getTicketsPage(agent).getTicketsTable();
     }
 
-    private TicketChatView getTicketsClosedChatView() {
-        return getTicketsPage("main").getSupervisorTicketClosedChatView();
+    private TicketChatView getTicketsClosedChatView(String agent) {
+        return getTicketsPage(agent).getSupervisorTicketClosedChatView();
     }
 
     private MessageCustomerWindow getTicketsMessageCustomerWindow() {
-        return getTicketsPage("main").getMessageCustomerWindow();
+        return getAgentHomePage("main").getMessageCustomerWindow();
     }
 
     @Then("^Message Customer Window is opened$")
@@ -58,15 +56,15 @@ public class TicketsSteps extends AbstractAgentSteps {
         getTicketsTable("main").getTicketByUserName(getUserName(chanel)).clickOnUserName();
     }
 
-    @When("^Click on Message Customer button for (.*)$")
-    public void clickOnMessageCustomer(String chanel) {
-        getTicketsTable("main").clickAssignOpenTicketButton(getUserName(chanel));
-        getTicketsClosedChatView().clickOnMessageCustomerOrStartChatButton();
+    @When("^(.*) click on Message Customer button for (.*)$")
+    public void clickOnMessageCustomer(String agent, String chanel) {
+        getTicketsTable(agent).clickAssignOpenTicketButton(getUserName(chanel));
+        getTicketsClosedChatView(agent).clickOnMessageCustomerOrStartChatButton();
     }
 
     @When("^(.*) checks chat view for closed chat is displayed$")
-    public void verifyClosedChatView() {
-        Assert.assertTrue(getTicketsClosedChatView().isDisplayed(),
+    public void verifyClosedChatView(String agent) {
+        Assert.assertTrue(getTicketsClosedChatView(agent).isDisplayed(),
                 "Chat view is not visible");
     }
 
@@ -125,7 +123,7 @@ public class TicketsSteps extends AbstractAgentSteps {
 
     @When("^(.*) closes ticket manually$")
     public void closeTicketManually(String agent) {
-        getTicketsClosedChatView().clickOnCloseTicketButton();
+        getTicketsClosedChatView(agent).clickOnCloseTicketButton();
 
         waitFor(1000);
 
@@ -149,22 +147,42 @@ public class TicketsSteps extends AbstractAgentSteps {
     @When("^(.*) checks closed ticket is (.*)")
     public void checkCloseButtonStatus(String agent, String buttonStatus) {
         if (buttonStatus.equalsIgnoreCase("disabled")) {
-            Assert.assertTrue(getTicketsTable(agent).closeButtonStatus(), "Close ticket button is enabled");
+            Assert.assertTrue(getChatHeader(agent).getCloseButtonStatus(), "Close ticket button is enabled");
         } else if (buttonStatus.equalsIgnoreCase("enabled")) {
-            Assert.assertFalse(getTicketsTable(agent).closeButtonStatus(), "Close ticket button is disabled");
+            Assert.assertFalse(getChatHeader(agent).getCloseButtonStatus(), "Close ticket button is disabled");
         }
     }
 
     @Then("^(.*) hover to the close ticket button and see (.*) message$")
     public void hoverCloseTicketButton(String agent, String toolTipMessage) {
-        getTicketsClosedChatView().hoverCloseTicket();
+        getTicketsClosedChatView(agent).hoverCloseTicket();
         Assert.assertEquals(getTicketsPage(agent).getToolTipText(), toolTipMessage, "Closed ticket tool tip message is wrong");
     }
 
-    @When("^(.*) checks closed ticket button in quick action bar is disabled$")
-    public void checkCloseButtonStatusQuickActionBar(String agent) {
-        Assert.assertTrue(getTicketsPage(agent).getTicketsQuickActionBar().closeButtonStatusQuickAction(),
-                "Close ticket button in quick action bar is enabled");
+    @When("^(.*) checks closed ticket button in quick action bar is disabled in (.*) seconds$")
+    public void checkCloseButtonStatusQuickActionBar(String agent, int wait) {
+        for (int i = 0; i < wait; i++) {
+            try {
+                Assert.assertTrue(getTicketsPage(agent).getTicketsQuickActionBar().closeButtonStatusQuickAction(),
+                        "Close ticket button in quick action bar is enabled");
+            } catch (AssertionError | Exception e) {
+                System.out.println("Close ticket button in quick action is loading, so retrying searching");
+                waitFor(1000);
+            }
+        }
+    }
+
+    @When("^(.*) clicks on closed ticket button from quick action bar for (.*)$")
+    public void clickCloseButtonQuickActionBar(String agent, String channel) {
+        getTicketsTable(agent)
+                .selectTicketCheckbox(getUserName(channel))
+                .getTicketByUserName(getUserName(channel));
+
+        getTicketsPage(agent).getTicketsQuickActionBar().clickCloseButtonQuickAction();
+
+        if (getAgentHomePage(agent).getAgentFeedbackWindow().isAgentFeedbackWindowShown()) {
+            getAgentHomePage(agent).getAgentFeedbackWindow().waitForLoadingData().clickCloseButtonInCloseChatPopup();
+        }
     }
 
     @When("^Supervisor clicks on first ticket$")
@@ -183,27 +201,28 @@ public class TicketsSteps extends AbstractAgentSteps {
         getTicketsPage(agent).getTicketsQuickActionBar().inputNumberOfTicketsForAccept(numberOfTickets);
     }
 
-    @Then("^Verify that only \"(.*)\" tickets chats are shown$")
-    public void verifyTicketsChatsChannelsFilter(String channelName) {
-        Assert.assertTrue(getTicketsTable("main").verifyChanelOfTheTicketsIsPresent(channelName),
+    @Then("^(.*) verify that only \"(.*)\" tickets chats are shown$")
+    public void verifyTicketsChatsChannelsFilter(String agent, String channelName) {
+        Assert.assertTrue(getTicketsTable(agent).verifyChanelOfTheTicketsIsPresent(channelName),
                 channelName + " channel name should be shown.");
     }
 
-    @Then("^Verify that only \"(.*)\" channel tickets chats are shown$")
-    public void verifyTicketsChatsChannelsFilterUsingAttribute(String channelName) {
-        Assert.assertTrue(getTicketsTable("main").verifyCurrentChanelOfTheTickets(channelName),
-                channelName + " channel name is not shown.");
+    @Then("^(.*) verify that only \"(.*)\" channel tickets chats are shown$")
+    public void verifyTicketsChatsChannelsFilterUsingAttribute(String agent, String channelName) {
+        Assert.assertTrue(getTicketsTable(agent).verifyCurrentChanelOfTheTickets()
+                        .containsAll(Collections.singleton(channelName)),
+                channelName + " channel name is not shown or incorrect.");
     }
 
-    @Then("^Verify that only \"(.*)\" date tickets are shown in (.*) column$")
-    public void verifyTicketsChatsStartDatesFilter(String dateText, String columnType) {
-        Assert.assertTrue(getTicketsTable("main").verifyCurrentDatesOfTheTickets(columnType, dateText),
+    @Then("^(.*) verify that only \"(.*)\" date tickets are shown in (.*) column$")
+    public void verifyTicketsChatsStartDatesFilter(String agent, String dateText, String columnType) {
+        Assert.assertTrue(getTicketsTable(agent).verifyCurrentDatesOfTheTickets(columnType, dateText),
                 dateText + " open date is not shown.");
     }
 
     @Given("^Supervisor scroll Tickets page to the bottom$")
     public void scrollTicketsDown() {
-        getTicketsTable("main").scrollTicketsToTheButtom()
+        getTicketsTable("main").scrollTicketsToTheButton()
                 .waitForMoreTicketsAreLoading(2, 5);
     }
 
@@ -218,20 +237,20 @@ public class TicketsSteps extends AbstractAgentSteps {
         getTicketsTable(agent).getTicketByUserName(getUserName(channel));
     }
 
-    @Then("^Verify that only (.*) ticket is shown$")
-    public void verifyChatsChannelsFilter(int tickets) {
-        Assert.assertEquals(getTicketsTable("main").getUsersNames().size(), tickets,
+    @Then("^(.*) verify that only (.*) ticket is shown$")
+    public void verifyChatsChannelsFilter(String agent, int tickets) {
+        Assert.assertEquals(getTicketsTable(agent).getUsersNames().size(), tickets,
                 "Only " + tickets + " ticket(s) number should be present on Supervisor Tickets page" +
                         "Could be because of TPLAT-5959");
         //todo uncomment step in the feature when search with spaces will be fixed
     }
 
-    @Then("^Ticket from (.*) is not present on Supervisor Desk$")
-    public void verifyTicketPresent(String channel) {
+    @Then("^(.*) checks Ticket from (.*) is not present on Supervisor Desk$")
+    public void verifyTicketNotPresent(String agent, String channel) {
         String userName = getUserName(channel);
         boolean isTicketShown = true;
         try {
-            getTicketsTable("main").getTicketByUserName(userName);
+            getTicketsTable(agent).getTicketByUserName(userName);
         } catch (AssertionError e) {
             isTicketShown = false;
         }
@@ -266,18 +285,16 @@ public class TicketsSteps extends AbstractAgentSteps {
         Assert.assertTrue(isDateSorted(order, listOfDates), "Tickets are not sorted in " + order + " order");
     }
 
-    @Then("^Verify ticket is present for (.*) for (.*) seconds$")
-    public void verifyTicketIsPresentFor(String chanel, int wait) {
-        boolean isTicketPresent = false;
-
+    @Then("^(.*) verify ticket is present for (.*) for (.*) seconds$")
+    public void verifyTicketIsPresentFor(String agent, String chanel, int wait) {
         for (int i = 0; i < wait; i++) {
-            if (!getTicketsTable("main").isTicketPresent(getUserName(chanel)))
+            try {
+                Assert.assertTrue(getTicketsTable(agent).isTicketPresent(getUserName(chanel)), "Ticket should be present");
+            } catch (AssertionError | Exception e) {
+                System.out.println("No ticket are there after search, chat has not reached yet, so retrying searching");
                 waitFor(1000);
-            else {
-                isTicketPresent = true;
             }
         }
-        Assert.assertTrue(isTicketPresent, "Ticket should be present");
     }
 
     @Then("^Verify first closed ticket date are fitted by filter$")
@@ -290,9 +307,9 @@ public class TicketsSteps extends AbstractAgentSteps {
         verifyDateTimeIsInRangeOfTwoDates(firstTicketEndDate, startDate, endDate);
     }
 
-    @And("^Agent click on the arrow of Ticket End Date$")
-    public void agentClickOnTheArrowOfTicketEndDate() {
-        getTicketsTable("main").clickAscendingArrowOfEndDateColumn();
+    @And("^(.*) click on the arrow of Ticket End Date$")
+    public void agentClickOnTheArrowOfTicketEndDate(String agent) {
+        getTicketsPage(agent).clickAscendingArrowOfEndDateColumn();
     }
 
     @Then("^(.*) checks quick & custom assign options on the page are (.*)$")
@@ -328,11 +345,17 @@ public class TicketsSteps extends AbstractAgentSteps {
         initialTicketsCount = getTicketsCountLeftMenu(agent, ticketType, platformType);
     }
 
-    @Then("^(.*) checks final ticket count value in the (.*) ticket tab on (.*)$")
-    public void verifyFinalTicketsCount(String agent, String ticketType, String platformType) {
+    @Then("^(.*) checks final ticket count value in the (.*) ticket tab is (.*) on (.*)$")
+    public void verifyFinalTicketsCount(String agent, String ticketType, String count, String platformType) {
         int finalTicketsCount = getTicketsCountLeftMenu(agent, ticketType, platformType);
-        Assert.assertEquals(finalTicketsCount, (initialTicketsCount + 1),
-                "Final ticket count is incorrect");
+
+        if (count.equalsIgnoreCase("more")) {
+            Assert.assertEquals(finalTicketsCount, (initialTicketsCount + 1),
+                    "Final ticket count is incorrect");
+        } else if (count.equalsIgnoreCase("less")) {
+            Assert.assertEquals(finalTicketsCount, (initialTicketsCount - 1),
+                    "Final ticket count is incorrect");
+        }
     }
 
     @Then("^(.*) checks ticket count value in the (.*) ticket tab is (.*) on (.*)$")

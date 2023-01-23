@@ -31,7 +31,7 @@ public class ChatBody extends AbstractUIElement {
 
     private final String messagesInChatBodyLinkXPATH = ".//div[contains(@data-testid, 'chat-message-content-PlainMessage')]//a";
 
-    private final String messagesInChatBodyHistoryXPATH = ".//div[contains(@data-testid, 'history-detail')]//div[contains(@data-testid, 'chat-message-content-PlainMessage')]";
+    private final String messagesInChatBodyHistoryXPATH = "//div[contains(@data-testid, 'history-detail')]//div[contains(@data-testid, 'chat-message-content-PlainMessage')]";
 
     @FindBy(css = ".spinner")
     private WebElement spinner;
@@ -97,44 +97,44 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(xpath = ".//div[@class='channel-separator-title mb-2 mt-2']")
     private List<WebElement> channelSeparators;
 
-    @FindBy(css=".cl-c2p-event-message-title")
+    @FindBy(css = ".cl-c2p-event-message-title")
     private WebElement paymentLink_c2p_text;
 
-    @FindBy (css = "[data-testid='card']")
+    @FindBy(css = "[data-testid='card']")
     private WebElement c2pCard;
 
-    @FindBy (css = ".cl-extension-item")
+    @FindBy(css = ".cl-extension-item")
     private WebElement extensionItem;
 
-    @FindBy(css=".cl-c2p-message-footer-cancel-payment-text")
+    @FindBy(css = ".cl-c2p-message-footer-cancel-payment-text")
     private WebElement cancelPaymentButton;
 
     public List<String> getChanelSeparatorsText() {
-        return channelSeparators.stream().map(e->e.getText()).collect(Collectors.toList());
+        return channelSeparators.stream().map(e -> e.getText()).collect(Collectors.toList());
     }
 
     public String getLocationURLFromAgent() {
-        return getAttributeFromElem(this.getCurrentDriver(), locationHREFFromAgent,10, "Location href", "href");
+        return getAttributeFromElem(this.getCurrentDriver(), locationHREFFromAgent, 10, "Location href", "href");
     }
 
     public String getLocationURLFromUser() {
-        return getAttributeFromElem(this.getCurrentDriver(), locationHREFFormUser,5, "Location href", "href");
+        return getAttributeFromElem(this.getCurrentDriver(), locationHREFFormUser, 5, "Location href", "href");
     }
 
-    public String getC2pPaymentCardsText(){
-        return getTextFromElem(this.getCurrentDriver(), paymentLink_c2p_text, 5,"Expire c2p text");
+    public String getC2pPaymentCardsText() {
+        return getTextFromElem(this.getCurrentDriver(), paymentLink_c2p_text, 5, "Expire c2p text");
     }
 
-    public String getC2pCardsText(){
-        return getTextFromElem(this.getCurrentDriver(), c2pCard, 5,"c2p text");
+    public String getC2pCardsText() {
+        return getTextFromElem(this.getCurrentDriver(), c2pCard, 5, "c2p text");
     }
 
-    public String getExtensionCardText(){
-        return getTextFromElem(this.getCurrentDriver(), extensionItem, 5,"Extension Card text");
+    public String getExtensionCardText() {
+        return getTextFromElem(this.getCurrentDriver(), extensionItem, 5, "Extension Card text");
     }
 
-    public boolean isHSMShownForAgent(){
-        return isElementExistsInDOMCss(this.getCurrentDriver(),"[data-testid='chat-message-content-HsmMessage']",4);
+    public boolean isHSMShownForAgent() {
+        return isElementExistsInDOMCss(this.getCurrentDriver(), "[data-testid='chat-message-content-HsmMessage']", 4);
     }
 
     private WebElement getFromUserWebElement(String messageText) {
@@ -221,10 +221,10 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public boolean isToUserMessageShownWithWait(String userMessage, int seconds) {
-        for(int i = seconds; i>0; i--){
-            if (!isToUserMessageShown(userMessage)){
+        for (int i = seconds; i > 0; i--) {
+            if (!isToUserMessageShown(userMessage)) {
                 waitFor(1000);
-            }else {
+            } else {
                 return true;
             }
         }
@@ -232,16 +232,20 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public List<String> getAllMessages() {
-        List<String> allMessages = new ArrayList<>();
+        List<String> chatBodyMessages = new ArrayList<>();
+
         waitForElementsToBePresentByXpath(this.getCurrentDriver(), messagesInChatBodyXPATH, 10);
         findElemsByXPATH(this.getCurrentDriver(), messagesInChatBodyXPATH)
                 .stream().forEach(e -> {
-                    allMessages.add(e.getText());
+                    scrollToElem(this.getCurrentDriver(), e, "Chat body message");
+                    waitFor(500);
+
+                    chatBodyMessages.add(e.getText());
                 });
-        return allMessages;
+        return chatBodyMessages;
     }
 
-    public ChatBody clickLatestLinkMessage(String text) {
+    public ChatBody clickLatestLinkMessage() {
         clickElem(this.getCurrentDriver(), findElemByXPATH(this.getCurrentDriver(), messagesInChatBodyLinkXPATH), 10, "Latest user chat message");
         return this;
     }
@@ -252,6 +256,9 @@ public class ChatBody extends AbstractUIElement {
         waitForElementsToBePresentByXpath(this.getCurrentDriver(), messagesInChatBodyHistoryXPATH, 10);
         findElemsByXPATH(this.getCurrentDriver(), messagesInChatBodyHistoryXPATH)
                 .stream().forEach(e -> {
+                    scrollToElem(this.getCurrentDriver(), e, "Chat history message");
+                    waitFor(500);
+
                     historyMessages.add(e.getText());
                 });
         return historyMessages;
@@ -313,7 +320,7 @@ public class ChatBody extends AbstractUIElement {
 
     public String isValidDefaultUserProfileIcon() {
         wheelScrollUpToElement(this.getCurrentDriver(), this.getWrappedElement(), userProfileIcon, 0);
-        return getTextFromElem(this.getCurrentDriver(), userProfileIcon, 1,"User Initial Icon").toUpperCase();
+        return getTextFromElem(this.getCurrentDriver(), userProfileIcon, 1, "User Initial Icon").toUpperCase();
     }
 
     public boolean isValidAgentAvatarIsShown() {
@@ -343,10 +350,10 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public String getIndicatorsText() {
-        return  getTextFromElem(this.getCurrentDriver(), visualIndicator, 1, "Visual Indicator");
+        return getTextFromElem(this.getCurrentDriver(), visualIndicator, 1, "Visual Indicator");
     }
 
-    public void clickCancelPaymentButton(){
+    public void clickCancelPaymentButton() {
         clickElem(this.getCurrentDriver(), cancelPaymentButton, 10, "Cancel Payment button");
     }
 
