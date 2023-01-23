@@ -159,7 +159,6 @@ Feature: Configuration API
       |                                  |           |                | 0185c6889dd3bcf02085659411a68260 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | chathub_test_UHTester2023-121 | DISABLED | https://d3v-clickatell2162.zendesk.com | 2023-01-18T20:18:40.213Z | 2023-01-18T20:23:47.901Z |
       |                                  |           |                | 0185ca9a61a1ae246ac93a9e382c8de8 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | chathub_test_UHTester2023-121 | ACTIVE   | https://d3v-clickatell2162.zendesk.com | 2023-01-19T15:16:33.495Z | 2023-01-19T15:17:18.485Z |
       |                                  |           |                | 0185ce80cc6ac8aa1243eee8282ce872 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | chathub_test_UHTester2023-150 | DISABLED | https://d3v-clickatell2162.zendesk.com | 2023-01-20T09:27:05.588Z | 2023-01-20T09:32:04.030Z |
-
   @TestCaseId("https://jira.clickatell.com/browse/CCH-664")
   Scenario Outline: CCH :: Public :: Configurations API: Get all configurations should return configurations with all the status except AUTH_PENDING (other than 200 response coverage in the test case)
     Given User is able to get all configurations for a provider - Check non 200 responses
