@@ -143,7 +143,7 @@ Feature: Configuration API
 
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-549")
-  Scenario: CCH :: Public :: Configurations API: Get all configurations should return configurations with all the status except AUTH_PENDING
+  Scenario: CCH :: Public :: Configurations API: Get all configurations should return configurations with all the status except AUTH_PENDING (200 response coverage in the test case)
     Given User is able to get all configurations for a provider - Check 200 responses
       | i.providerId                     | i.version | o.responseCode | o.id                             | o.providerId                     | o.type     | o.name                        | o.status | o.host                                 | o.createdDate            | o.modifiedDate           |
       | 0184f820c06ec8b62dfa0610e29ab575 |           | 200            | 0185a771e2d64aadd296aedbc0ef2492 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | CH_Test_AutoTester2023-97     | ACTIVE   | https://d3v-clickatell2162.zendesk.com | 2023-01-12T19:25:37.065Z | 2023-01-16T11:10:06.477Z |
