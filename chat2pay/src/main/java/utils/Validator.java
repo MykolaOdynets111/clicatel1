@@ -26,6 +26,11 @@ public class Validator {
         softly.assertThat(error)
                 .as(format("Error message is incorrect. Error from server: %s", error))
                 .contains(errorData.getErrorMessage());
+        if (errorResponse.getErrors() != null) {
+            softly.assertThat(errorResponse.getErrors().stream()
+                            .anyMatch(e -> e.contains(data.get("o.errors"))))
+                    .as(format("Errors is not equals to %s", data.get("o.errors")));
+        }
         softly.assertAll();
     }
 

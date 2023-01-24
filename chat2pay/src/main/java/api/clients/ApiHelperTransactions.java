@@ -1,6 +1,7 @@
 package api.clients;
 
 import api.models.request.PaymentBody;
+import api.models.request.ReceiptBody;
 import api.models.response.ApiKeysResponse;
 import api.models.response.integrationresponse.IntegrationResponse;
 import api.models.response.paymentgatewaysettingsresponse.PaymentGatewaySettingsResponse;
@@ -55,5 +56,9 @@ public class ApiHelperTransactions extends ApiHelperChat2Pay {
 
     public static Response cancelPaymentLink(String paymentLinkRef, String activationKey) {
         return postQuery(Endpoints.CANCEL_PAYMENT_LINK_ENDPOINT + paymentLinkRef, "", activationKey);
+    }
+
+    public static Response receivePaymentLink(String paymentLinkRef, String activationKey) {
+        return postQuery(Endpoints.PAYMENT_RECEIPT, new ReceiptBody(paymentLinkRef), activationKey);
     }
 }

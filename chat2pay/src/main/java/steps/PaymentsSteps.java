@@ -4,6 +4,7 @@ import api.clients.ApiHelperTransactions;
 import api.models.request.PaymentBody;
 import api.models.response.CancelPaymentLinkResponse;
 import api.models.response.PaymentLinkResponse;
+import api.models.response.ReceiptOrderResponse;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
@@ -93,14 +94,43 @@ public class PaymentsSteps {
         }
     }
 
-    @Then("^User gets a correct payment link with status code (.*)$")
-    public void userCanGetAPaymentLink(String statusCode) {
+    @When("^user receives the order to email$")
+    public void receiptOrder(Map<String, String> dataMap) {
+        Response response;
+        String status = dataMap.get("i.receiptLinkRef");
+        switch (status) {
+            case "valid":
+                response = ApiHelperTransactions.receivePaymentLink(paymentLinkRef.get(), activationKey.get());
+                checkResponseCode(response, dataMap.get("o.responseCode"));
+                ReceiptOrderResponse receiptOrderResponse = response.as(ReceiptOrderResponse.class);
+                assertThat(receiptOrderResponse.getTransactionStatus())
+                        .as(format("transaction status is not equals to %s", receiptOrderResponse.getTransactionStatus()))
+                        .isEqualTo(dataMap.get("o.transactionStatus"));
+                break;
+            case "sentfailed":
+                response = ApiHelperTransactions.receivePaymentLink(paymentLinkRef.get(), activationKey.get());
+                Validator.validateErrorResponse(response, dataMap);
+                break;
+            case "nonExisted":
+                response = ApiHelperTransactions.receivePaymentLink("nonExistedLink", activationKey.get());
+                Validator.validateErrorResponse(response, dataMap);
+                break;
+            default:
+                Assertions.fail(format("Expected status %s is not existed", status));
+        }
+    }
+
+    @Then("^User gets a correct payment link with status code (.*) and (.*)$")
+    public void userCanGetAPaymentLink(String statusCode, String transactionStatus) {
         Response response = ApiHelperTransactions.userGetAPaymentLinkResponse(paymentBody.get(), activationKey.get());
         checkResponseCode(response, statusCode);
         PaymentLinkResponse paymentLinkResponse = response
                 .as(PaymentLinkResponse.class);
         paymentLink.set(paymentLinkResponse.getPaymentLink());
         paymentLinkRef.set(paymentLinkResponse.paymentLinkRef);
+        assertThat(paymentLinkResponse.getTransactionStatus())
+                .as(format("transaction status is not equals to %s", transactionStatus))
+                .isEqualTo(transactionStatus);
     }
 
     @Then("^User gets an error for payment link creation$")

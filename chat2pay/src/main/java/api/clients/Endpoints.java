@@ -12,4 +12,5 @@ public class Endpoints {
     public static final String PAYMENTS_GATEWAY_ENDPOINT = WIDGETS_ENDPOINT + "%s/payment-gateway-settings";
     public static final String WIDGET_INTEGRATION_ENDPOINT = WIDGETS_ENDPOINT + "%s/integration";
     public static final String WIDGET_API_KEYS_ENDPOINT = WIDGETS_ENDPOINT +"%s/api-keys";
+    public static final String PAYMENT_RECEIPT = C2P_URL + "/api/v2/order-receipt";
 }
