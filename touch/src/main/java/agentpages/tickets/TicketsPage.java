@@ -1,14 +1,14 @@
 package agentpages.tickets;
 
-import org.openqa.selenium.WebDriver;
+import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import portalpages.PortalAbstractPage;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TicketsPage extends PortalAbstractPage {
+@FindBy(css = ".cl_app_view_layout_tickets")
+public class TicketsPage extends AbstractUIElement {
 
     @FindBy(css = ".app-tickets-actions-bar")
     private WebElement quickActionBar;
@@ -25,13 +25,20 @@ public class TicketsPage extends PortalAbstractPage {
     @FindBy(css = ".cl-table-header .cl-table-cell")
     private List<WebElement> ticketColumnHeaders;
 
-    public TicketsPage(WebDriver driver) {
-        super(driver);
-    }
+    @FindBy(css = ".cl-table-cell--ticketCreatedDate")
+    private WebElement startDate;
+
+    @FindBy(css = ".cl-table-cell--endedDate")
+    private WebElement endDate;
+
+    @FindBy(xpath = ".//span[text()='Ticket Opened']/ancestor::span/following-sibling::span/span[contains(@class, 'sorting-box__arrow--top')]")
+    private WebElement ascendingArrowOfEndDateColumn;
 
     private TicketsTable ticketsTable;
     private TicketChatView supervisorTicketChatView;
     private MessageCustomerWindow messageCustomerWindow;
+
+    private TicketRow ticketRow;
 
     private TicketsQuickActionBar ticketsQuickActionBar;
 
@@ -48,11 +55,6 @@ public class TicketsPage extends PortalAbstractPage {
     public TicketChatView getSupervisorTicketClosedChatView() {
         supervisorTicketChatView.setCurrentDriver(this.getCurrentDriver());
         return supervisorTicketChatView;
-    }
-
-    public MessageCustomerWindow getMessageCustomerWindow() {
-        messageCustomerWindow.setCurrentDriver(this.getCurrentDriver());
-        return messageCustomerWindow;
     }
 
     public boolean quickActionBarVisibility(String isVisible) {
@@ -80,5 +82,10 @@ public class TicketsPage extends PortalAbstractPage {
     public List<String> getTicketsColumnHeaders() {
         waitForFirstElementToBeVisible(this.getCurrentDriver(), ticketColumnHeaders, 7);
         return ticketColumnHeaders.stream().map(a -> a.getText()).collect(Collectors.toList());
+    }
+
+    public void clickAscendingArrowOfEndDateColumn() {
+        clickElem(this.getCurrentDriver(), ascendingArrowOfEndDateColumn, 3,
+                "Ascending Arrow Of End Date Column");
     }
 }

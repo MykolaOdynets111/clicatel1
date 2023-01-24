@@ -12,6 +12,16 @@ Feature: Apple Business Chat :: Supervisor Desk
     When I select Touch in left menu and Supervisor Desk in submenu
     Then Supervisor can see orca live chat with chat to agent message to agent
 
+  @orca_api
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2844")
+  Scenario: CD :: Supervisor Desk :: Chats :: ABC :: Verify that supervisor is able to check apple live chats
+    Given Setup ORCA abc integration for General Bank Demo tenant
+    When Send chat to agent message by ORCA
+    Given I open portal
+    And Login into portal as an admin of General Bank Demo account
+    When I select Touch in left menu and Supervisor Desk in submenu
+    Then Supervisor can see orca live chat with chat to agent message to agent
+
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1882")
   Scenario: supervisor desk:: Verify if supervisor can filter closed chat by apple business chat channel
     Given I open portal
