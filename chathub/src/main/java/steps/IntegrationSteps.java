@@ -127,17 +127,25 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("User is able to activate configuration for a provider")
-    public void userIsAbleToActivateConfigurationForAProvider(Map<String, String> dataMap) throws IOException {
-        String url = format(Endpoints.ACTIVATE_CONFIGURATION);
+    public void userIsAbleToActivateConfigurationForAProvider(Map<String, String> dataMap) {
+        String url = Endpoints.ACTIVATE_CONFIGURATION;
         Proxymanager proxy = new Proxymanager();
 
-        Map<String, String> configurationBody = new LinkedHashMap<>();
+        /*Map<String, String> configurationBody = new LinkedHashMap<>();
         configurationBody.put("name", dataMap.get("i.name"));
         configurationBody.put("clientSecret", dataMap.get("i.clientSecret"));
         configurationBody.put("clientId", dataMap.get("i.clientId"));
         configurationBody.put("host", dataMap.get("i.host"));
         configurationBody.put("providerId", dataMap.get("i.providerId"));
-        configurationBody.put("type", dataMap.get("i.type"));
+        configurationBody.put("type", dataMap.get("i.type"));*/
+
+        Map<String, String> configurationBody = new LinkedHashMap<>();
+        for (String key : dataMap.keySet()) {
+            if (key.startsWith("i.")) {
+                configurationBody.put(key.substring(2), dataMap.get(key));
+            }
+        }
+        System.out.println("Wait");
 
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
         if (responseCode == 200) {
