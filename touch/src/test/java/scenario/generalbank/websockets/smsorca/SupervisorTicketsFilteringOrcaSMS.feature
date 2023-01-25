@@ -1,6 +1,7 @@
 @support_hours
 @Regression
 @no_widget
+@orca_api
 Feature: SMS ORCA :: Supervisor Desk Tickets
 
   Background:
@@ -20,12 +21,12 @@ Feature: SMS ORCA :: Supervisor Desk Tickets
     And Agent see tickets from sms on Unassigned filter page
     And Agent closed ticket for sms
     And Agent select Closed filter on Left Panel
-    And Verify ticket is present for sms for 2 seconds
     And Agent clears search field and filters on Supervisor desk
+    And Agent verify ticket is present for sms for 2 seconds
     And Agent select "SMS" in Chanel container and click "Apply filters" button
-    Then Verify that only "sms" channel tickets chats are shown
+    Then Agent verify that only "sms" channel tickets chats are shown
     When Admin filter by 0 year 0 month and 0 days ago start date and 0 year 0 month and 0 days ago end date
-    Then Verify ticket is present for sms for 2 seconds
-    And Verify that only "sms" channel tickets chats are shown
-    And Verify that only "Today" date tickets are shown in start date column
-    And Verify that only "Today" date tickets are shown in end date column
+    Then Agent verify ticket is present for sms for 2 seconds
+    And Agent verify that only "sms" channel tickets chats are shown
+    And Agent verify that only "Today" date tickets are shown in start date column
+    And Agent verify that only "Today" date tickets are shown in end date column

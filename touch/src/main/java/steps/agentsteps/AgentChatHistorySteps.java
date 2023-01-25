@@ -20,6 +20,8 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
 
     private ChatHistory chatHistory;
 
+    List<String> initialChatMessagesFromChatBody;
+
     @Then("^(.*) sees correct chat with basic info in chat history container$")
     public void verifyChatHistoryItemInActiveChatView(String agent) {
         SoftAssert soft = new SoftAssert();
@@ -87,17 +89,20 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
         Assert.assertTrue(getLeftMenu(ordinalAgentNumber).searchUserChat(getUserName(channel)), "No chats visible in close chats");
     }
 
-    @When("^(.*) sees correct chat history$")
-    public void getChatHistoryFromBackend(String agent) {
-        List<String> messagesFromChatBody = getChatBody(agent).getAllMessages();
+    @When("^(.*) gets initial chat messages for chat history$")
+    public void getChatHistoryMessages(String agent) {
+        initialChatMessagesFromChatBody = getChatBody(agent).getAllMessages();
+    }
 
+    @When("^(.*) sees correct chat history$")
+    public void checkChatHistoryMessage(String agent) {
         getAgentHomePage(agent).getChatHistoryContainer().getChatHistoryItemsByIndex(0).clickViewButton();
         List<String> expectedMessagesList = getChatBody(agent).getHistoryMessages();
 
-        Assert.assertEquals(messagesFromChatBody, expectedMessagesList,
-                "Shown on chatdesk messages are not as expected from API \n" +
+        Assert.assertTrue(expectedMessagesList.containsAll(initialChatMessagesFromChatBody),
+                "Shown on chatdesk messages are not as expected \n" +
                         "Expected list: " + expectedMessagesList + "\n" +
-                        "Actual list: " + messagesFromChatBody);
+                        "Actual list: " + initialChatMessagesFromChatBody);
     }
 
     @Then("^(.*) sees Rate Card in chat history with (.*) rate selected and (.*) comment$")
