@@ -73,20 +73,20 @@ public class PaymentBody {
     private String transactionType = "authorization";
 
     public PaymentBody(Map<String, String> parameters, String paymentGatewaySettingsId, String applicationID) {
-        this.channel = (parameters.get("channel"));
-        this.to = (parameters.get("to"));
-        this.currency = (parameters.get("currency"));
-        this.orderNumber = (parameters.get("orderNumber"));
-        this.subTotalAmount = (parameters.get("subTotalAmount"));
-        this.taxAmount = (parameters.get("taxAmount"));
-        this.totalAmount = (parameters.get("totalAmount"));
-        this.timestamp = (parameters.get("timestamp"));
-        this.additionalData = new AdditionalData(parameters.get("departmentId"), parameters.get("departmentName"));
+        this.channel = (parameters.get("i.channel"));
+        this.to = (parameters.get("i.to"));
+        this.currency = (parameters.get("i.currency"));
+        this.orderNumber = (parameters.get("i.orderNumber"));
+        this.subTotalAmount = (parameters.get("i.subTotalAmount"));
+        this.taxAmount = (parameters.get("i.taxAmount"));
+        this.totalAmount = (parameters.get("i.totalAmount"));
+        this.timestamp = (parameters.get("i.timestamp"));
+        this.additionalData = new AdditionalData(parameters.get("i.departmentId"), parameters.get("i.departmentName"));
         this.paymentGatewaySettingsId = (paymentGatewaySettingsId);
-        this.returnPaymentLink = (parameters.get("returnPaymentLink"));
-        this.paymentReviewAutoReversal = (parameters.get("paymentReviewAutoReversal"));
+        this.returnPaymentLink = (parameters.get("i.returnPaymentLink"));
+        this.paymentReviewAutoReversal = (parameters.get("i.paymentReviewAutoReversal"));
         this.applicationId = (applicationID);
-        this.transactionType = (parameters.get("transactionType"));
+        this.transactionType = (parameters.get("i.transactionType"));
     }
 
     public PaymentBody(String paymentGatewaySettingsId, String applicationID) {

@@ -13,19 +13,19 @@ Feature: Transaction execution
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4699")
   Scenario Outline: chat2pay-service :: POST /chat-2-pay :: User can get a payment link
     Given User sets data in the payment body
-      | channel                   | <i.channel>                   |
-      | to                        | <i.to>                        |
-      | currency                  | <i.currency>                  |
-      | orderNumber               | <i.orderNumber>               |
-      | subTotalAmount            | <i.subTotalAmount>            |
-      | taxAmount                 | <i.taxAmount>                 |
-      | totalAmount               | <i.totalAmount>               |
-      | timestamp                 | <i.timestamp>                 |
-      | departmentId              | <i.departmentId>              |
-      | departmentName            | <i.departmentName>            |
-      | returnPaymentLink         | <i.returnPaymentLink>         |
-      | paymentReviewAutoReversal | <i.paymentReviewAutoReversal> |
-      | transactionType           | <i.transactionType>           |
+      | i.channel                   | <i.channel>                   |
+      | i.to                        | <i.to>                        |
+      | i.currency                  | <i.currency>                  |
+      | i.orderNumber               | <i.orderNumber>               |
+      | i.subTotalAmount            | <i.subTotalAmount>            |
+      | i.taxAmount                 | <i.taxAmount>                 |
+      | i.totalAmount               | <i.totalAmount>               |
+      | i.timestamp                 | <i.timestamp>                 |
+      | i.departmentId              | <i.departmentId>              |
+      | i.departmentName            | <i.departmentName>            |
+      | i.returnPaymentLink         | <i.returnPaymentLink>         |
+      | i.paymentReviewAutoReversal | <i.paymentReviewAutoReversal> |
+      | i.transactionType           | <i.transactionType>           |
 
     Then User gets a correct payment link with status code 201 and <o.transactionStatus>
     Then The payment has success status code
@@ -39,27 +39,27 @@ Feature: Transaction execution
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4703")
   Scenario Outline: chat2pay-service :: POST /chat-2-pay :: User gets an error for a payment link creation
     Given User sets data in the payment body
-      | channel                   | <channel>                   |
-      | to                        | <to>                        |
-      | currency                  | <currency>                  |
-      | orderNumber               | <orderNumber>               |
-      | subTotalAmount            | <subTotalAmount>            |
-      | taxAmount                 | <taxAmount>                 |
-      | totalAmount               | <totalAmount>               |
-      | timestamp                 | <timestamp>                 |
-      | departmentId              | <departmentId>              |
-      | departmentName            | <departmentName>            |
-      | returnPaymentLink         | <returnPaymentLink>         |
-      | paymentReviewAutoReversal | <paymentReviewAutoReversal> |
-      | transactionType           | <transactionType>           |
+      | i.channel                   | <i.channel>                   |
+      | i.to                        | <i.to>                        |
+      | i.currency                  | <i.currency>                  |
+      | i.orderNumber               | <i.orderNumber>               |
+      | i.subTotalAmount            | <i.subTotalAmount>            |
+      | i.taxAmount                 | <i.taxAmount>                 |
+      | i.totalAmount               | <i.totalAmount>               |
+      | i.timestamp                 | <i.timestamp>                 |
+      | i.departmentId              | <i.departmentId>              |
+      | i.departmentName            | <i.departmentName>            |
+      | i.returnPaymentLink         | <i.returnPaymentLink>         |
+      | i.paymentReviewAutoReversal | <i.paymentReviewAutoReversal> |
+      | i.transactionType           | <i.transactionType>           |
 
     Then User gets an error for payment link creation
       | o.responseCode | <o.responseCode> |
       | o.errorMessage | <o.errorMessage> |
       | o.errors       | <o.errors>       |
     Examples:
-      | channel | to           | currency | orderNumber | subTotalAmount | taxAmount | totalAmount | timestamp                    | departmentId | departmentName | returnPaymentLink | paymentReviewAutoReversal | transactionType | o.responseCode | o.errorMessage | o.errors                                                 |  |
-      | sms     | 447938556403 | ZAR      | 001         | 100            | 0.0       | 4004.0      | 2021-04-27T17:35:58.000+0000 | 567          | Sales          | true              | false                     | authorization   | 400            | Request failed | Total amount is not equal to the sum of tax and subtotal |  |
+      | i.channel | i.to         | i.currency | i.orderNumber | i.subTotalAmount | i.taxAmount | i.totalAmount | i.timestamp                  | i.departmentId | i.departmentName | i.returnPaymentLink | i.paymentReviewAutoReversal | i.transactionType | o.responseCode | o.errorMessage | o.errors                                                 |  |
+      | sms       | 447938556403 | ZAR        | 001           | 100              | 0.0         | 4004.0        | 2021-04-27T17:35:58.000+0000 | 567            | Sales            | true                | false                       | authorization     | 400            | Request failed | Total amount is not equal to the sum of tax and subtotal |  |
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4594")
   Scenario Outline: c2p-Widget-Payment-Service :: POST /cancel :: user can cancel the created payment link
