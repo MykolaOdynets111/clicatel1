@@ -70,8 +70,8 @@ public class IntegrationSteps extends MainApi {
                     throw new RuntimeException(e);
                 }
             }
-            ObjectMapper mappergetProviders = new ObjectMapper();
-            String getProviders = mappergetProviders.writeValueAsString(ChatHubApiHelper.getChatHubQuery(Endpoints.PROVIDERS, 200).as(AllProviders[].class));
+            //ObjectMapper mappergetProviders = new ObjectMapper();
+            String getProviders = mapper.writeValueAsString(ChatHubApiHelper.getChatHubQuery(Endpoints.PROVIDERS, 200).as(AllProviders[].class));
         String expectedProviders = expectedProvidersBody.toString();
         expectedProviders = expectedProviders.replace(", ", ",");
             Assert.assertEquals(expectedProviders,getProviders , "Providers response is not as expected");
@@ -130,22 +130,12 @@ public class IntegrationSteps extends MainApi {
     public void userIsAbleToActivateConfigurationForAProvider(Map<String, String> dataMap) {
         String url = Endpoints.ACTIVATE_CONFIGURATION;
         Proxymanager proxy = new Proxymanager();
-
-        /*Map<String, String> configurationBody = new LinkedHashMap<>();
-        configurationBody.put("name", dataMap.get("i.name"));
-        configurationBody.put("clientSecret", dataMap.get("i.clientSecret"));
-        configurationBody.put("clientId", dataMap.get("i.clientId"));
-        configurationBody.put("host", dataMap.get("i.host"));
-        configurationBody.put("providerId", dataMap.get("i.providerId"));
-        configurationBody.put("type", dataMap.get("i.type"));*/
-
         Map<String, String> configurationBody = new LinkedHashMap<>();
         for (String key : dataMap.keySet()) {
             if (key.startsWith("i.")) {
                 configurationBody.put(key.substring(2), dataMap.get(key));
             }
         }
-        System.out.println("Wait");
 
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
         if (responseCode == 200) {
@@ -157,11 +147,28 @@ public class IntegrationSteps extends MainApi {
             softAssert.assertNotNull(postActiveConfiguration.getCreatedDate(), "CurrentDate is Empty");
             softAssert.assertNotNull(postActiveConfiguration.getModifiedDate(), "Modfied Date is empty");
 
-            //Checking of authentication link will be fixed later
+            /*
             //Check the authorization link
- /*           String printLink = postActiveConfiguration.authenticationLink;
-            System.out.println(printLink);*/
- /*          int code = proxy.addProxy("https://dev-mc2-authentication-front-end-service.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/authorize/request/a6bad634-8d45-4165-a2a0-13e288ce8564");
+              * PROBLEM:
+                * VPN (NetScope Client) is not allowing IntelliJ to access the link.
+
+              *TRIED SOLUTIONS:
+                *1- Added a proxy to bypass the security but it was working only for the expired links not for the valid ones.
+                *2- Added the NetScope certificates to IntelliJ.
+                *3- Added NetScope certifies to Java.
+
+               OBSERVATIONS:
+              * None of the above approaches worked.
+              * Other developers added the certificates which worked for them (but for other links).
+              * Another approach is to disabled NetScope Client by raising a request to IT. For the test automation it is not a viable solution because this will execute on multiple machines.
+
+              CONCLUSTION:
+              * Authentication link will be catered later
+            */
+            //Check the authorization link code
+            /*String printLink = postActiveConfiguration.authenticationLink;
+            System.out.println(printLink);
+            int code = proxy.addProxy("https://dev-mc2-authentication-front-end-service.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/authorize/request/a6bad634-8d45-4165-a2a0-13e288ce8564");
             Assert.assertEquals(Integer.parseInt(dataMap.get("o.authenticationLink")), code);*/
             softAssert.assertEquals(dataMap.get("o.timeToExpire"), postActiveConfiguration.getTimeToExpire());
             softAssert.assertAll();
@@ -308,8 +315,11 @@ public class IntegrationSteps extends MainApi {
     public void userIsAbleToReActivateConfigurationForAProvider(Map<String,String> dataMap) {
         String url = format(Endpoints.RE_ACTIVATE_CONFIGURATION, dataMap.get("i.configurationId"));
         Map<String, String> reActivateConfigurationBody = new LinkedHashMap<>();
-        reActivateConfigurationBody.put("id", dataMap.get("i.id"));
-        reActivateConfigurationBody.put("providerId", dataMap.get("i.providerId"));
+        for (String key : dataMap.keySet()) {
+            if (key.startsWith("i.")) {
+                reActivateConfigurationBody.put(key.substring(2), dataMap.get(key));
+            }
+        }
 
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
         if (responseCode == 200) {
