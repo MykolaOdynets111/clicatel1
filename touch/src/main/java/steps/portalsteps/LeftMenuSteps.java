@@ -363,18 +363,5 @@ public class LeftMenuSteps extends AbstractAgentSteps {
                 .as("Closed chat should be present!")
                 .contains(getUserName(chanel));
     }
-
-    @Then("^Open closed chat (.*)$")
-    public void openClosedChat(String channel) {
-        SupervisorClosedChatsTable closedChatsTable = getSupervisorDeskPage().getSupervisorClosedChatsTable();
-        String chatName = getUserName(channel);
-
-        if (closedChatsTable.isClosedChatPresent(chatName)) {
-            closedChatsTable.openClosedChat(chatName);
-        }
-        else {
-            throw new AssertionError("Closed chat was not found");
-        }
-    }
 }
 
