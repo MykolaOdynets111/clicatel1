@@ -1,6 +1,8 @@
 package steps;
 
 import api.models.response.c2pconfiguration.ConfigurationBody;
+import api.models.response.c2pconfiguration.ConfigurationIntegrator;
+import api.models.response.c2pconfiguration.SupportedCurrency;
 import api.models.response.failedresponse.UnauthorisedResponse;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
@@ -9,9 +11,9 @@ import org.assertj.core.api.SoftAssertions;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import static api.clients.ApiHelperConfigurations.getC2PConfigurationResponse;
-import static java.lang.Boolean.getBoolean;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 
@@ -29,16 +31,27 @@ public class ConfigurationSteps {
                 ConfigurationBody configuration = response.as(ConfigurationBody.class);
 
                 softly.assertThat(configuration.updateTime).isNotNull();
-                softly.assertThat(getBoolean(valuesMap.get("whatsappChannelEnabled"))).isEqualTo(configuration.whatsappChannelEnabled);
-                softly.assertThat(getBoolean(valuesMap.get("smsChannelEnabled"))).isEqualTo(configuration.whatsappChannelEnabled);
+                softly.assertThat(Boolean.valueOf(valuesMap.get("whatsappChannelEnabled"))).isEqualTo(configuration.whatsappChannelEnabled);
+                softly.assertThat(Boolean.valueOf(valuesMap.get("smsChannelEnabled"))).isEqualTo(configuration.smsChannelEnabled);
                 softly.assertThat(valuesMap.get("apiKey")).isEqualTo(configuration.apiKey);
                 softly.assertThat(valuesMap.get("environment")).isEqualTo(configuration.environment);
-                softly.assertThat(parseInt(valuesMap.get("integrations"))).isEqualTo(configuration.integrators.size());
-                softly.assertThat(parseInt(valuesMap.get("supportedCurrencies"))).isEqualTo(configuration.supportedCurrencies.size());
-                configuration.supportedCurrencies.forEach(sc ->
-                        softly.assertThat(sc.getClass().getFields()).isNotNull());
-                configuration.integrators.forEach(i ->
-                        softly.assertThat(i.getClass().getFields()).isNotNull());
+
+                String supportedCurrencyId = valuesMap.get("supportedCurrency.id");
+                SupportedCurrency currency = configuration.supportedCurrencies.stream()
+                        .filter(c -> c.id.equals(parseInt(supportedCurrencyId))).findFirst().orElseThrow(() ->
+                                new NoSuchElementException(format("Supported Currency with id %s is absent", supportedCurrencyId)));
+                softly.assertThat(valuesMap.get("supportedCurrencies.iso")).isEqualTo(currency.iso);
+                softly.assertThat(valuesMap.get("supportedCurrencies.name")).isEqualTo(currency.name);
+                softly.assertThat(valuesMap.get("supportedCurrencies.symbol")).isEqualTo(currency.symbol);
+                softly.assertThat(Boolean.valueOf(valuesMap.get("supportedCurrencies.isDefault"))).isEqualTo(currency.isDefault);
+
+                String integrationId = valuesMap.get("integration.id");
+                ConfigurationIntegrator integrator = configuration.integrators.stream()
+                        .filter(c -> c.applicationId.equals(integrationId)).findFirst().orElseThrow(() ->
+                                new NoSuchElementException(format("Integration with id %s is absent", integrationId)));
+                softly.assertThat(valuesMap.get("integration.name")).isEqualTo(integrator.name);
+                softly.assertThat(valuesMap.get("integration.status")).isEqualTo(integrator.status);
+                softly.assertThat(valuesMap.get("integration.type")).isEqualTo(integrator.type);
 
             } else if (expectedResponseCode == 401) {
                 UnauthorisedResponse unsuccessful = response.as(UnauthorisedResponse.class);
