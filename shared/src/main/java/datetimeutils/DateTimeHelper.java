@@ -15,15 +15,6 @@ public class DateTimeHelper {
         return DateTimeFormatter.ofPattern(DD_MM_YYYY);
     }
 
-    public static Long convertLocalDateTimeToMillis(LocalDateTime ldt, ZoneId zoneId) {
-        ZonedDateTime zdt = ldt.atZone(zoneId);
-        return zdt.toInstant().toEpochMilli();
-    }
-
-    public static String getDateTimeWithHoursShift(int hours){
-        return LocalDateTime.now(ZoneOffset.UTC).minusHours(hours).format(getYYYY_MM_DD_HH_MM());
-    }
-
     @NotNull
     public static DateTimeFormatter getYYYY_MM_DD_HH_MM() {
         return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -35,9 +26,17 @@ public class DateTimeHelper {
     public static DateTimeFormatter getYYYY_MM_DD_With_Time_Formatter() {
         return DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' h:mm a", Locale.US);
     }
-
     public static DateTimeFormatter getDD_MMM_YYYY_With_Time_Formatter() {
         return DateTimeFormatter.ofPattern("dd MMM. yyyy 'at' h:mm a", Locale.US);
+    }
+
+    public static Long convertLocalDateTimeToMillis(LocalDateTime ldt, ZoneId zoneId) {
+        ZonedDateTime zdt = ldt.atZone(zoneId);
+        return zdt.toInstant().toEpochMilli();
+    }
+
+    public static String getDateTimeWithHoursShift(int hours){
+        return LocalDateTime.now(ZoneOffset.UTC).minusHours(hours).format(getYYYY_MM_DD_HH_MM());
     }
 
     public static LocalDateTime parseDate(String stringDate) {

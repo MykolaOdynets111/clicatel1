@@ -30,7 +30,7 @@ public class ConfigurationSteps {
             if (statusCode == 200) {
                 ConfigurationBody configuration = response.as(ConfigurationBody.class);
 
-                softly.assertThat(configuration.updateTime).isNotNull();
+                softly.assertThat(configuration.getUpdatedTime()).isNotNull();
                 softly.assertThat(Boolean.valueOf(valuesMap.get("whatsappChannelEnabled"))).isEqualTo(configuration.whatsappChannelEnabled);
                 softly.assertThat(Boolean.valueOf(valuesMap.get("smsChannelEnabled"))).isEqualTo(configuration.smsChannelEnabled);
                 softly.assertThat(valuesMap.get("apiKey")).isEqualTo(configuration.apiKey);
