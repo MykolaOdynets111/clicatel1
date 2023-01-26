@@ -379,13 +379,19 @@ public class IntegrationSteps extends MainApi {
 
     @Given("Admin is able to create provider")
     public void adminIsAbleToCreateProvider(Map<String, String> dataMap)throws JsonProcessingException {
-            String url = format(Endpoints.ADMIN_PROVIDERS);
+            String url = Endpoints.ADMIN_PROVIDERS;
             int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
-            Map<String, String> createProviderBody = new LinkedHashMap<>();
+        Map<String, String> createProviderBody = new LinkedHashMap<>();
+        for (String key : dataMap.keySet()) {
+            if (key.startsWith("i.")) {
+                createProviderBody.put(key.substring(2), dataMap.get(key));
+            }
+        }
+            /*Map<String, String> createProviderBody = new LinkedHashMap<>();
             createProviderBody.put("name", dataMap.get("i.name"));
             createProviderBody.put("logoUrl", dataMap.get("i.logoUrl"));
             createProviderBody.put("description", dataMap.get("i.description"));
-            createProviderBody.put("moreInfoUrl", dataMap.get("i.moreInfoUrl"));
+            createProviderBody.put("moreInfoUrl", dataMap.get("i.moreInfoUrl"));*/
 
             if (responseCode == 201) {
                 ProviderDetails expectedCreateProviderDetails = new ProviderDetails(dataMap);
@@ -398,8 +404,9 @@ public class IntegrationSteps extends MainApi {
                 softAssert.assertEquals(expectedCreateProviderDetails.getMoreInfoUrl(), getCreatedProviderDetails.getMoreInfoUrl(), "MoreInfoUrl field does not match");
                 softAssert.assertAll();
             } else {
-                Validator.validatedErrorResponseforGet(url, dataMap);
+                Validator.validatedErrorResponseforPost(url, createProviderBody, dataMap);
             }
+
     }
 
     @Given("User is able to get all endpoint detail for Provider")

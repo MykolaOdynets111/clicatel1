@@ -25,7 +25,7 @@ Feature: Configuration API
       | CH_Test_AutoTester2023-207 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | WrongInput | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | SANDBOX    | 200            |                | SANDBOX    | CH_Test_AutoTester2023-207 | 200                  | 300            |
       | CH_Test_AutoTester2023-208 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https:/wrongInput.zendesk.com          | 0184f820c06ec8b62dfa0610e29ab575 | SANDBOX    | 200            |                | SANDBOX    | CH_Test_AutoTester2023-208 | 200                  | 300            |
 #   #DefectID: CCH-650    | CH_Test_AutoTester2023-51 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com | WrongInput   | SANDBOX | 404            | Provider not found |        |             |                      |                |
-      | CH_Test_AutoTester2023-11 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | WrongInput | 404            | Bad request    |            |                            |                      |                |
+      | CH_Test_AutoTester2023-11  | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | WrongInput | 404            | Bad request    |            |                            |                      |                |
       |                            | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | 404            | Bad request    |            |                            |                      |                |
 #  #DefectID: CCH-651    | CH_Test_AutoTester2023-52 |                                                              | testoauth  | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | 404            | ClientId and ClientSecret in request or in OAuthDetails should not be null |                   |          |                                   |               |
 #  #DefectID: CCH-651    | CH_Test_AutoTester2023-52 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 |        | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | 404            | ClientId and ClientSecret in request or in OAuthDetails should not be null |                   |          |                                   |               |
@@ -38,7 +38,7 @@ Feature: Configuration API
     Given User is able to get configuration secrects in astericks
       | i.configurationId                | <i.configurationId>                |
       | o.responseCode                   | <o.responseCode>                   |
-      | o.Error Description              | <o.Error Description>              |
+      | o.errorMessage                   | <o.errorMessage>                   |
       | o.id                             | <o.id>                             |
       | o.providerId                     | <o.providerId>                     |
       | o.accountProviderConfigStatusId  | <o.accountProviderConfigStatusId>  |
@@ -49,12 +49,13 @@ Feature: Configuration API
       | o.hostUrl                        | <o.hostUrl>                        |
 
     Examples:
-      | i.configurationId                | o.responseCode | o.Error Description | o.id                             | o.providerId                     | o.accountProviderConfigStatusId | o.configurationEnvironmentTypeId | o.displayName              | o.clientId | o.clientSecret          | o.hostUrl                              |
+      | i.configurationId | o.responseCode | o.errorMessage             | o.id | o.providerId | o.accountProviderConfigStatusId | o.configurationEnvironmentTypeId | o.displayName | o.clientId | o.clientSecret | o.hostUrl |
       | 0185a771e2d64aadd296aedbc0ef2492 | 200            |                     | 0185a771e2d64aadd296aedbc0ef2492 | 0184f820c06ec8b62dfa0610e29ab575 | ACTIVE                          | PRODUCTION                       | CH_Test_AutoTester2023-97  | testoauth  | 6b38***************6bf5 | https://d3v-clickatell2162.zendesk.com |
       | 0185bbb0bd4606f5bd390e857d2c8aca | 200            |                     | 0185bbb0bd4606f5bd390e857d2c8aca | 0184f820c06ec8b62dfa0610e29ab575 | DISABLED                        | SANDBOX                          | CH_Test_AutoTester2023-115 | testoauth  | 6b38***************6bf5 | https://d3v-clickatell2162.zendesk.com |
       | 0185bbb287a0e71d4c06bfb4de2a910c | 200            |                     | 0185bbb287a0e71d4c06bfb4de2a910c | 0184f820c06ec8b62dfa0610e29ab575 | AUTH_PENDING                    | SANDBOX                          | CH_Test_AutoTester2023-116 | testoauth  | 6b38***************6bf5 | https://d3v-clickatell2162.zendesk.com |
       | 0185bbb47862d93e7c9f2bf20512a19c | 200            |                     | 0185bbb47862d93e7c9f2bf20512a19c | 0184f820c06ec8b62dfa0610e29ab575 | DISABLED                        | PRODUCTION                       | CH_Test_AutoTester2023-117 | testoauth  | 6b38***************6bf5 | https://d3v-clickatell2162.zendesk.com |
-  # Bug to be reported    | Wrong Input                      | 404                                | Configuration ID not found |                                  |                                  |                                 |                                  |                            |            |                         | https://d3v-clickatell2162.zendesk.com |
+      | Wrong Input       | 404            | Configuration ID not found |      |              |                                 |                                  |               |            |                |           |
+#BugId CCH-699      |                   | 400            | Bad request         |      |              |                                 |                                  |               |            |                |           |
 
 
 
@@ -71,7 +72,7 @@ Feature: Configuration API
       | 0185bb6c699de39640ff6012e6e07548 | 200            |                            | ACTIVE                          |
       | 0185bb938e4a2c59f3aa9d6e5d588346 | 200            |                            | AUTH_PENDING                    |
       | Wrong ID                         | 404            | Configuration ID not found |                                 |
-  #BUG# TO BE ADDED    |                              | 404            | bad reuqest                                             |                               |
+  #BUG# CCH-699    |                              | 404            | bad reuqest                                             |                               |
 
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-666")
@@ -94,9 +95,13 @@ Feature: Configuration API
       | i.configurationId                | o.responseCode | o.errorMessage             | o.id                             | o.providerId                     | o.type     | o.name                     | o.status | o.host                                 |
       | 0185bbb47862d93e7c9f2bf20512a19c | 200            |                            | 0185bbb47862d93e7c9f2bf20512a19c | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | CH_Test_AutoTester2023-117 | DISABLED | https://d3v-clickatell2162.zendesk.com |
       | 0185bbb0bd4606f5bd390e857d2c8aca | 200            |                            | 0185bbb0bd4606f5bd390e857d2c8aca | 0184f820c06ec8b62dfa0610e29ab575 | SANDBOX    | CH_Test_AutoTester2023-115 | DISABLED | https://d3v-clickatell2162.zendesk.com |
-      | Wrong Id                         | 404            | Configuration ID not found |                                  |                                  |            |                            |          |                                        |
-#AUTHPENDING case, BUGID: To be reported      | TRUE                             |                | Precondition failed     |                                      |                                  |            |                            |              |                                        |
-#With ChatFlow or ChatDesk activated, Date to be created      | TRUE                             | 500            | Precondition failed     |                                      |                                  |            |                            |              |                                        |
+#ExpiringSoon - Data to be create once integrated build will be deployed |TRUE|200||[configurationId]|[providerId]|SANDBOX|[name]|DISABLED|[host]|
+#Expired - Data to be create once integrated build will be deployed |TRUE|200||[configurationId]|[providerId]|SANDBOX|[name]|DISABLED|[host]|
+#Disabled - BugId: CCH-711       |TRUE|500|Precondition failed|||||||
+      | Wrong Input                      | 404            | Configuration ID not found |                                  |                                  |            |                            |          |                                        |
+#Null - BugId: CCH-712      ||400|Bad request|||||||
+#AuthPending - BugId: CCH-224      |TRUE|500|Precondition failed|||||||
+#With ChatFlow and ChatDesk activated - Data to be created once integrated build will be deployed      |TRUE|500|Precondition failed|||||||
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-668")
   Scenario Outline: CH :: Public :: Configurations API : Delete configuration
@@ -106,16 +111,21 @@ Feature: Configuration API
       | o.errorMessage    | <o.errorMessage>    |
 
     Examples:
-    # For the first case, consider the following;
-        # Always give the configuration ID which is not DISABLED
       | i.configurationId                | o.responseCode | o.errorMessage                                      |
-# BugID: ID to be added      |TRUE|200|Configuration Deleted|
-#Data to be created      |TRUE|412|Precondition failed - Configuration is not disabled|
-#Data to be created      |TRUE|412|Precondition failed - Configuration is not disabled|
+#Disabled Scenario: Configuration ID in disabled state should be given
+      # BugID: CCH-715      |TRUE|200|Configuration Deleted|
+#Expiring soon scenario: Data to be created when integration build will be deployed
+      # |TRUE|412|Precondition failed - Configuration is not disabled|
+#Expired scenario: Data to be created when integration build will be deployed
+      # |TRUE|412|Precondition failed - Configuration is not disabled|
+#AuthPending scenario: Input ID which is in AUTH_PENDING state
       | 0185ce88f2202c018711a8ac5278012c | 412            | Precondition failed - Configuration is not disabled |
+#Activated scenario: Input ID which is in ACTIVE state
       | 0185a771e2d64aadd296aedbc0ef2492 | 412            | Precondition failed - Configuration is not disabled |
-#BugID: To be added from first example      |TRUE|404|Configuration ID not found|
-      | Wrong ConfigID                   | 404            | Configuration ID not found                          |
+#Wrong input scenario:
+      | Wrong Id                         | 404            | Configuration ID not found                          |
+#Null scenario:
+# BugID: CCH-699      |                                  | 400            | Bad request                                         |
 
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-667")
@@ -171,7 +181,7 @@ Feature: Configuration API
       | i.providerId | i.version | o.responseCode | o.errorMessage                                   |
       | WrongId      |           | 404            | Provider ID or Version ID not found for Provider |
 # Will be implemented after LR     | 0184f820c06ec8b62dfa0610e29ab575 | Wrong     | 404  | Provider ID or Version ID not found for Provider |
-# bug to be reported      | NULL         |           | 404            | bad reuqest                                      |
+# BugId: CCH-698  | NULL         |           | 404            | bad reuqest                                      |
  # Will be implemented after LR    | 0184f820c06ec8b62dfa0610e29ab575 | NULL      | 404  | bad reuqest                                      |
 
 
@@ -183,7 +193,7 @@ Feature: Configuration API
       |                                  |           |                |                | 0185bb6c699de39640ff6012e6e07548 | CH_Test_AutoTester2023-112    | PRODUCTION                       | ACTIVE                          |
       |                                  |           |                |                | 0185c5cc199e5bce1883edfce9b7f38e | chathub_test_UHTester2023-111 | PRODUCTION                       | ACTIVE                          |
       |                                  |           |                |                | 0185c5cd63abb75652e8096bf6ba0129 | chathub_test_UHTester2023-112 | PRODUCTION                       | ACTIVE                          |
-      |                                  |           |                |                | 0185c5e1085e3684bac8193a6511957d | chathub_test_ADTester2023-114  | PRODUCTION                       | ACTIVE                          |
+      |                                  |           |                |                | 0185c5e1085e3684bac8193a6511957d | chathub_test_ADTester2023-114 | PRODUCTION                       | ACTIVE                          |
       |                                  |           |                |                | 0185c616d6faca2c2e727cc660a146dd | chathub_test_ADTester2023-110 | PRODUCTION                       | ACTIVE                          |
       |                                  |           |                |                | 0185ca9a61a1ae246ac93a9e382c8de8 | chathub_test_UHTester2023-121 | PRODUCTION                       | ACTIVE                          |
 
@@ -200,5 +210,5 @@ Feature: Configuration API
       | i.providerId | i.version | o.responseCode | o.errorMessage                                   |
       | WrongId      |           | 404            | Provider ID or Version ID not found for Provider |
 # Will be implemented after LR     | 0184f820c06ec8b62dfa0610e29ab575 | Wrong     | 404  | Provider ID or Version ID not found for Provider |
-# bug to be reported      | NULL         |           | 404            | bad reuqest                                      |
+# BugID: CCH-700     |         |           | 404            | Bad reuqest                                      |
  # Will be implemented after LR    | 0184f820c06ec8b62dfa0610e29ab575 | NULL      | 404  | bad reuqest                                      |
