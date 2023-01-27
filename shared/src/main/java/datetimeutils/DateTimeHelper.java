@@ -4,7 +4,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 
 public class DateTimeHelper {
 
@@ -37,6 +39,13 @@ public class DateTimeHelper {
 
     public static String getDateTimeWithHoursShift(int hours){
         return LocalDateTime.now(ZoneOffset.UTC).minusHours(hours).format(getYYYY_MM_DD_HH_MM());
+    }
+
+    public static LocalDate parseToLocalDate(String timestamp) {
+        String localDateTime = Arrays.stream(timestamp.split("\\+")).findFirst()
+                .orElseThrow(NoSuchElementException::new);
+
+        return LocalDateTime.parse(localDateTime, getYYYY_MM_DD_HH_MM_SS()).toLocalDate();
     }
 
     public static LocalDateTime parseDate(String stringDate) {
