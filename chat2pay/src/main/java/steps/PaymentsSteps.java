@@ -63,7 +63,7 @@ public class PaymentsSteps {
         paymentBody.set(new PaymentBody(paymentGatewaySettingsId.get(), applicationID.get()));
     }
 
-    @When("^User cancelling the payment link$")
+    @Then("^User cancelling the payment link$")
     public void cancelPayment(Map<String, String> dataMap) {
         Response response;
         String status = dataMap.get("i.paymentLinkRef");
@@ -94,7 +94,7 @@ public class PaymentsSteps {
         }
     }
 
-    @When("^user receives the order to email$")
+    @Then("^user receives the order to email$")
     public void receiptOrder(Map<String, String> dataMap) {
         Response response;
         String status = dataMap.get("i.receiptLinkRef");
