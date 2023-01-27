@@ -50,7 +50,7 @@ Feature: Whatsapp And SMS ORCA :: ChatDesk
     And Verify Orca returns Lviv Location sent by Agent during 40 seconds
 
   @start_orca_server
-    @TestCaseId("https://jira.clickatell.com/browse/CCD-1964")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1964")
   Scenario: CD :: Whatsapp :: Location:: Verify if agent is able to send location to Whatsapp user
     Given I login as agent of General Bank Demo
     Given Setup ORCA Whatsapp integration for General Bank Demo tenant

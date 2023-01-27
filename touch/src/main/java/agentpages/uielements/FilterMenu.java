@@ -17,7 +17,7 @@ public class FilterMenu extends AbstractUIElement {
     @FindBy(xpath = ".//span[contains(text(), 'Flagged')]")
     private WebElement flaggedCheckbox;
 
-    @FindBy(xpath = ".//button[contains(text(),'Apply Filters')]")
+    @FindBy(css = "[data-testid= 'applyfilters']")
     private WebElement applyFiltersButton;
 
     @FindBy(xpath = "//button[contains(@data-testid, 'close-filter-tab-btn')]")
