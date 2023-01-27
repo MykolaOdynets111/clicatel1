@@ -25,6 +25,11 @@ public abstract class MainApi {
     }
 
     @NotNull
+    protected static Response deleteQuery(String endpoint, String authToken) {
+        return delete(endpoint, "", authToken);
+    }
+
+    @NotNull
     protected static ResponseBody postQueryWithoutAuth(String endpoint, Object body, int responseCode) {
         Response response = postWithoutAuth(endpoint, body);
 
@@ -73,5 +78,12 @@ public abstract class MainApi {
                 .contentType(ContentType.JSON)
                 .header("Authorization", authToken)
                 .get(endpoint);
+    }
+    private static Response delete(String endpoint, Object body, String authToken) {
+        return RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", authToken)
+                .body(body)
+                .delete(endpoint);
     }
 }
