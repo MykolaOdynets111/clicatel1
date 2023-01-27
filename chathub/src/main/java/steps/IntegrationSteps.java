@@ -330,52 +330,46 @@ public class IntegrationSteps extends MainApi {
         }
     }
 
-    @And("User is able to get all configurations for a provider - Check 200 responses")
-    public void userIsAbleToGetAllConfigurationsForAProvider(List<Map<String, String>> dataMap) throws JsonProcessingException {
+    @Given("User is able to get all configurations for a provider - Public")
+    public void userIsAbleToGetAllConfigurationsForAProviderCheckNonResponses(List<Map<String, String>> dataMap) throws JsonProcessingException {
         String url = format(Endpoints.CONFIGURATIONS, dataMap.get(0).get("i.providerId"));
-        ObjectMapper mapper = new ObjectMapper();
-        List<String> expectedConfigurationsBody = new ArrayList<>();
-        for (int i = 0; i < dataMap.size(); i++) {
-            expectedConfigurationsBody.add(mapper.writeValueAsString(new Configurations(dataMap.get(i).get("o.id"),
-                    dataMap.get(i).get("o.providerId"), dataMap.get(i).get("o.type"), dataMap.get(i).get("o.name"),
-                    dataMap.get(i).get("o.status"), dataMap.get(i).get("o.host"), dataMap.get(i).get("o.createdDate"), dataMap.get(i).get("o.modifiedDate"))));
-        }
-        ObjectMapper mapperGetConfigurations = new ObjectMapper();
-        String actualConfigurations = mapperGetConfigurations.writeValueAsString(ChatHubApiHelper.getChatHubQuery(url, 200).as(Configurations[].class));
+        if (dataMap.size() == 1)
+            Validator.validatedErrorResponseforGet(url, dataMap.get(0));
+        else {
+            ObjectMapper mapper = new ObjectMapper();
+            List<String> expectedConfigurationsBody = new ArrayList<>();
+            for (Map<String, String> data : dataMap)
+                expectedConfigurationsBody.add(mapper.writeValueAsString(new Configurations(data.get("o.id"),
+                        data.get("o.providerId"), data.get("o.type"), data.get("o.name"),
+                        data.get("o.status"), data.get("o.host"), data.get("o.createdDate"), data.get("o.modifiedDate"))));
+            String actualConfigurations = mapper.writeValueAsString(ChatHubApiHelper.getChatHubQuery(url, 200).as(Configurations[].class));
 
-        String expectedConfigurations = expectedConfigurationsBody.toString();
-        expectedConfigurations = expectedConfigurations.replace(", ", ",");
-        Assert.assertEquals(actualConfigurations, expectedConfigurations, "Configurations response is not as expected");
+            String expectedConfigurations = expectedConfigurationsBody.toString();
+            expectedConfigurations = expectedConfigurations.replace(", ", ",");
+            System.out.println(expectedConfigurations);
+            System.out.println(actualConfigurations);
+            Assert.assertEquals(actualConfigurations, expectedConfigurations, "Configurations response is not as expected");
+        }
     }
 
-    @Given("User is able to get all configurations for a provider - Check 200 responses - Internal")
-    public void userIsAbleToGetAllConfigurationsForAProviderCheckResponsesInternal(List<Map<String, String>> dataMap) throws JsonProcessingException {
+    @Given("User is able to get all configurations for a provider - Internal")
+    public void userIsAbleToGetAllConfigurationsForAProviderCheckNonResponsesInternal(List<Map<String, String>> dataMap) throws JsonProcessingException {
         String url = format(Endpoints.INTERNAL_CONFIGURATIONS, dataMap.get(0).get("i.providerId"));
-        ObjectMapper mapper = new ObjectMapper();
-        List<String> expectedConfigurationsBody = new ArrayList<>();
-        for (int i = 0; i < dataMap.size(); i++) {
-            expectedConfigurationsBody.add(mapper.writeValueAsString(new InternalConfigurations(dataMap.get(i).get("o.id"),
-                    dataMap.get(i).get("o.displayName"), dataMap.get(i).get("o.configurationEnvironmentTypeId"),
-                    dataMap.get(i).get("o.accountProviderConfigStatusId"))));
+        if (dataMap.size() == 1) {
+            Validator.validatedErrorResponseforGetInternalProviders(url, dataMap.get(0));
         }
-        ObjectMapper mapperGetConfigurations = new ObjectMapper();
-        String actualConfigurations = mapperGetConfigurations.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithInternalAuth(url, 200).as(InternalConfigurations[].class));
-
-        String expectedConfigurations = expectedConfigurationsBody.toString();
-        expectedConfigurations = expectedConfigurations.replace(", ", ",");
-        Assert.assertEquals(actualConfigurations, expectedConfigurations, "Configurations response is not as expected");
-    }
-
-    @Given("User is able to get all configurations for a provider - Check non 200 responses")
-    public void userIsAbleToGetAllConfigurationsForAProviderCheckNonResponses(Map<String, String> dataMap) {
-        String url = format(Endpoints.CONFIGURATIONS, dataMap.get("i.providerId"));
-        Validator.validatedErrorResponseforGet(url, dataMap);
-    }
-
-    @Given("User is able to get all configurations for a provider - Check non 200 responses - Internal")
-    public void userIsAbleToGetAllConfigurationsForAProviderCheckNonResponsesInternal(Map<String, String> dataMap) {
-        String url = format(Endpoints.INTERNAL_CONFIGURATIONS, dataMap.get("i.providerId"));
-        Validator.validatedErrorResponseforGetInternalProviders(url, dataMap);
+        else {
+            ObjectMapper mapper = new ObjectMapper();
+            List<String> expectedConfigurationsBody = new ArrayList<>();
+            for (Map<String, String> data : dataMap)
+                expectedConfigurationsBody.add(mapper.writeValueAsString(new InternalConfigurations(data.get("o.id"),
+                        data.get("o.displayName"), data.get("o.configurationEnvironmentTypeId"),
+                        data.get("o.accountProviderConfigStatusId"))));
+            String actualConfigurations = mapper.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithInternalAuth(url, 200).as(InternalConfigurations[].class));
+            String expectedConfigurations = expectedConfigurationsBody.toString();
+            expectedConfigurations = expectedConfigurations.replace(", ", ",");
+            Assert.assertEquals(actualConfigurations, expectedConfigurations, "Configurations response is not as expected");
+        }
     }
 
     @Given("Admin is able to create provider")

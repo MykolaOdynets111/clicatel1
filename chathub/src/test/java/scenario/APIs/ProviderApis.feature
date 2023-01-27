@@ -78,7 +78,7 @@ Feature: Provider API
       | 0184f828214f6b7a03c711284b2b8e39 | 200            |                | 0184f828214f6b7a03c711284b2b8e39 | Zendesk Sell    | NA        | NA            | NA            |
       | 0184f8322847eaddbda79d5a29eaa5d4 | 200            |                | 0184f8322847eaddbda79d5a29eaa5d4 | Salesforce      | NA        | NA            | NA            |
       | 0185172bf6b57e9831c6d6616bc68317 | 200            |                | 0185172bf6b57e9831c6d6616bc68317 | Shopify         | string    | string        | string        |
- #     | Wrong Id                         | 404            | Provider not found |                                  |                 |           |               |               |
+      | Wrong Id                         | 404            | Provider not found |                                  |                 |           |               |               |
      #BugId: CCH-701 ||400|Bad request||||||
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-672")

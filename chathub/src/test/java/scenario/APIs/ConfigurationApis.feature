@@ -158,7 +158,7 @@ Feature: Configuration API
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-549")
   Scenario: CCH :: Public :: Configurations API: Get all configurations should return configurations with all the status except AUTH_PENDING (200 response coverage in the test case)
-    Given User is able to get all configurations for a provider - Check 200 responses
+    Given User is able to get all configurations for a provider - Public
       | i.providerId                     | i.version | o.responseCode | o.id                             | o.providerId                     | o.type     | o.name                        | o.status | o.host                                 | o.createdDate            | o.modifiedDate           |
       | 0184f820c06ec8b62dfa0610e29ab575 |           | 200            | 0185a771e2d64aadd296aedbc0ef2492 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | CH_Test_AutoTester2023-97     | ACTIVE   | https://d3v-clickatell2162.zendesk.com | 2023-01-12T19:25:37.065Z | 2023-01-16T11:10:06.477Z |
       |                                  |           |                | 0185bb6c699de39640ff6012e6e07548 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | CH_Test_AutoTester2023-112    | ACTIVE   | https://d3v-clickatell2162.zendesk.com | 2023-01-16T16:32:02.463Z | 2023-01-16T16:32:50.350Z |
@@ -172,15 +172,14 @@ Feature: Configuration API
       |                                  |           |                | 0185c6889dd3bcf02085659411a68260 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | chathub_test_UHTester2023-121 | DISABLED | https://d3v-clickatell2162.zendesk.com | 2023-01-18T20:18:40.213Z | 2023-01-18T20:23:47.901Z |
       |                                  |           |                | 0185ca9a61a1ae246ac93a9e382c8de8 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | chathub_test_UHTester2023-121 | ACTIVE   | https://d3v-clickatell2162.zendesk.com | 2023-01-19T15:16:33.495Z | 2023-01-19T15:17:18.485Z |
       |                                  |           |                | 0185ce80cc6ac8aa1243eee8282ce872 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | chathub_test_UHTester2023-150 | DISABLED | https://d3v-clickatell2162.zendesk.com | 2023-01-20T09:27:05.588Z | 2023-01-20T09:32:04.030Z |
+      |                                  |           |                | 0185eac3be42d3bc9df801732948a10a | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | chathub_test_UHTester2023-161 | DISABLED | https://d3v-clickatell2162.zendesk.com | 2023-01-25T21:09:34.922Z | 2023-01-25T21:12:04.533Z |
+      |                                  |           |                | 0185ef5b3d60318eae8352fde21b8442 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | chathub_test_UHTester2023-168 | DISABLED | https://d3v-clickatell2162.zendesk.com | 2023-01-26T18:33:32.258Z | 2023-01-26T18:35:15.555Z |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-664")
   Scenario Outline: CCH :: Public :: Configurations API: Get all configurations should return configurations with all the status except AUTH_PENDING (other than 200 response coverage in the test case)
-    Given User is able to get all configurations for a provider - Check non 200 responses
-      | i.providerId   | <i.providerId>   |
-      | i.version      | <i.version>      |
-      | o.responseCode | <o.responseCode> |
-      | o.errorMessage | <o.errorMessage> |
-
+    Given User is able to get all configurations for a provider - Public
+      | i.providerId   | i.version   | o.responseCode   | o.errorMessage   |
+      | <i.providerId> | <i.version> | <o.responseCode> | <o.errorMessage> |
     Examples:
       | i.providerId | i.version | o.responseCode | o.errorMessage                                   |
       | WrongId      |           | 404            | Provider ID or Version ID not found for Provider |
@@ -191,7 +190,7 @@ Feature: Configuration API
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-571")
   Scenario: CCH :: Internal :: Configurations API: Get all configurations should return configurations with all the status (200 response coverage in the test case)
-    Given User is able to get all configurations for a provider - Check 200 responses - Internal
+    Given User is able to get all configurations for a provider - Internal
       | i.providerId                     | i.version | o.responseCode | o.errorMessage | o.id                             | o.displayName                 | o.configurationEnvironmentTypeId | o.accountProviderConfigStatusId |
       | 0184f820c06ec8b62dfa0610e29ab575 |           | 200            |                | 0185a771e2d64aadd296aedbc0ef2492 | CH_Test_AutoTester2023-97     | PRODUCTION                       | ACTIVE                          |
       |                                  |           |                |                | 0185bb6c699de39640ff6012e6e07548 | CH_Test_AutoTester2023-112    | PRODUCTION                       | ACTIVE                          |
@@ -204,11 +203,9 @@ Feature: Configuration API
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-685")
   Scenario Outline: CCH :: Internal :: Configurations API: Get all configurations should return configurations with all the status (other than 200 response coverage in the test case)
-    Given User is able to get all configurations for a provider - Check non 200 responses - Internal
-      | i.providerId   | <i.providerId>   |
-      | i.version      | <i.version>      |
-      | o.responseCode | <o.responseCode> |
-      | o.errorMessage | <o.errorMessage> |
+    Given User is able to get all configurations for a provider - Internal
+      | i.providerId   | i.version   | o.responseCode   | o.errorMessage   |
+      | <i.providerId> | <i.version> | <o.responseCode> | <o.errorMessage> |
 
     Examples:
       | i.providerId | i.version | o.responseCode | o.errorMessage                                   |
