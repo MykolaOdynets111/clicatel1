@@ -12,7 +12,7 @@ Feature: Transaction execution
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4699")
   Scenario Outline: chat2pay-service :: POST /chat-2-pay :: User can get a payment link
-    Given User sets data in the payment body
+    When User sets data in the payment body
       | i.channel                   | <i.channel>                   |
       | i.to                        | <i.to>                        |
       | i.currency                  | <i.currency>                  |
@@ -28,7 +28,7 @@ Feature: Transaction execution
       | i.transactionType           | <i.transactionType>           |
 
     Then User gets a correct payment link with status code 201 and <o.transactionStatus>
-    Then The payment has success status code
+    And The payment has success status code
 
     Examples:
 
@@ -38,7 +38,7 @@ Feature: Transaction execution
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4703")
   Scenario Outline: chat2pay-service :: POST /chat-2-pay :: User gets an error for a payment link creation
-    Given User sets data in the payment body
+    When User sets data in the payment body
       | i.channel                   | <i.channel>                   |
       | i.to                        | <i.to>                        |
       | i.currency                  | <i.currency>                  |
@@ -63,9 +63,9 @@ Feature: Transaction execution
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4594")
   Scenario Outline: c2p-Widget-Payment-Service :: POST /cancel :: user can cancel the created payment link
-    Given User sets valid data in the payment body
+    When User sets valid data in the payment body
     Then User gets a correct payment link with status code 201 and PAYMENT_LINK_SENT
-    When User cancelling the payment link
+    And User cancelling the payment link
       | i.paymentLinkRef    | <i.paymentLinkRef>    |
       | o.responseCode      | <o.responseCode>      |
       | o.transactionStatus | <o.transactionStatus> |
@@ -81,9 +81,9 @@ Feature: Transaction execution
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4688")
   Scenario Outline: c2p-Widget-Payment-Service :: POST /order-receipt :: user can receive the order
-    Given User sets valid data in the payment body
+    When User sets valid data in the payment body
     Then User gets a correct payment link with status code 201 and PAYMENT_LINK_SENT
-    When user receives the order to email
+    And user receives the order to email
       | i.receiptLinkRef    | <i.receiptLinkRef>    |
       | o.responseCode      | <o.responseCode>      |
       | o.transactionStatus | <o.transactionStatus> |
