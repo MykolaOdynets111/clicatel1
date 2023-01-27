@@ -91,7 +91,7 @@ public class IntegrationSteps extends MainApi {
 
     @Given("User is able to GET providers state in API response")
     public void GETProviderStateAPI(Map<String, String> dataMap) {
-        String url = format(Endpoints.PROVIDERS_STATE, dataMap.get("i.providerID"));
+        String url = format(Endpoints.PROVIDERS_STATE, dataMap.get("i.providerId"));
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
         if (responseCode == 200) {
             ProviderState expectedProviderState = new ProviderState(dataMap);
