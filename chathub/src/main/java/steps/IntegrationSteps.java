@@ -563,4 +563,106 @@ public class IntegrationSteps extends MainApi {
         }
         assertion.assertAll();
     }
+
+    @Given("User is able to get all configurations for a provider via Admin API")
+    public void userIsAbleToGetAllConfigurationsForAProviderViaAdminAPI(List<Map<String, String>> datatable) throws JsonProcessingException {
+        String url = format(Endpoints.ADMIN_GET_CONFIGURATIONS, datatable.get(0).get("i.providerId"), datatable.get(0).get("i.version"), datatable.get(0).get("i.mc2AccountId"));
+        int responseCode = Integer.parseInt(datatable.get(0).get("o.responseCode"));
+
+        if (datatable.size() == 1) {
+            Validator.validatedErrorResponseWithoutAuth(url, datatable.get(0));
+        } else {
+            ObjectMapper mapper = new ObjectMapper();
+            List<String> expectedConfigurations = new ArrayList<>();
+            for (Map<String, String> data : datatable) {
+                try {
+                    expectedConfigurations.add(mapper.writeValueAsString(new Configurations(data.get("o.id"),
+                            data.get("o.providerId"), data.get("o.type"), data.get("o.name"),
+                            data.get("o.status"), data.get("o.host"), data.get("o.createdDate"), data.get("o.modifiedDate"))));
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            List<String> expectedConfigurationsFormatted = Collections.singletonList(String.join(",", expectedConfigurations));
+
+            String getActualConfigurations = mapper.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithoutAuth(url, responseCode).as(Configurations[].class));
+            Assert.assertEquals(getActualConfigurations, expectedConfigurationsFormatted.toString(), "Returned Configurations is not expected");
+        }
+    }
+
+    @Given("User is able to get specific configuration detail")
+    public void userIsAbleToGetSpecificConfigurationDetail(Map<String, String> dataMap) {
+        String url = format(Endpoints.ADMIN_GET_CONFIGURATIONS_CONFIGURATION_ID, dataMap.get("i.configurationID"));
+
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+        if (responseCode == 200) {
+
+            Configurations expectedConfigurations = new Configurations(
+                    dataMap.get("o.id"), dataMap.get("o.providerId"),
+                    dataMap.get("o.type"), dataMap.get("o.name"), dataMap.get("o.status"),
+                    dataMap.get("o.host"), dataMap.get("o.createdDate"),dataMap.get("o.modifiedDate"));
+
+            Configurations actualConfigurations = ChatHubApiHelper.getChatHubQueryWithoutAuth(url, responseCode).as(Configurations.class);
+            Assert.assertEquals(expectedConfigurations,actualConfigurations);
+        }
+        else {
+            Validator.validatedErrorResponseWithoutAuth(url, dataMap);
+        }
+    }
+
+    @Given("User is able to get configuration with client id and client secret")
+    public void userIsAbleToGetConfigurationWithClientIdAndClientSecret(Map<String, String> dataMap) {
+        String url = format(Endpoints.ADMIN_GET_CONFIGURATIONS_SECRET, dataMap.get("i.configurationId"));
+
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+        if (responseCode == 200) {
+            ConfigurationSecrets expectedConfigurationSecret = new ConfigurationSecrets(dataMap);
+            ConfigurationSecrets getConfigurationSecret = ChatHubApiHelper.getChatHubQueryAdminSecret(url, responseCode).as(ConfigurationSecrets.class);
+            SoftAssert softAssert = new SoftAssert();
+            softAssert.assertEquals(getConfigurationSecret.getId(),expectedConfigurationSecret.getId());
+            softAssert.assertEquals(getConfigurationSecret.getProviderId(),expectedConfigurationSecret.getProviderId());
+            softAssert.assertEquals(getConfigurationSecret.getAccountProviderConfigStatusId(),expectedConfigurationSecret.getAccountProviderConfigStatusId());
+            softAssert.assertEquals(getConfigurationSecret.getConfigurationEnvironmentTypeId(),expectedConfigurationSecret.getConfigurationEnvironmentTypeId());
+            softAssert.assertEquals(getConfigurationSecret.getDisplayName(),expectedConfigurationSecret.getDisplayName());
+            softAssert.assertEquals(getConfigurationSecret.getClientId(),expectedConfigurationSecret.getClientId());
+            softAssert.assertEquals(getConfigurationSecret.getClientSecret(),expectedConfigurationSecret.getClientSecret());
+            softAssert.assertEquals(getConfigurationSecret.getHostUrl(),expectedConfigurationSecret.getHostUrl());
+            softAssert.assertNotNull(getConfigurationSecret.getCreatedDate());
+            softAssert.assertNotNull(getConfigurationSecret.getModifiedDate());
+            softAssert.assertAll();
+        }
+        else {
+            Validator.validatedErrorResponseAdminConfigurationsSecrets(url,dataMap);
+        }
+    }
+
+    @Given("User should be able to create and activate configuration")
+    public void userShouldBeAbleToCreateAndActivateConfiguration(Map<String, String> dataMap) {
+        String url = format(Endpoints.ADMIN_CONFIGURATION_ACTIVATE, dataMap.get("i.mc2AccountId"));
+        int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
+
+        Map<String, String> expectedConfigurationBody = new LinkedHashMap<>();
+        expectedConfigurationBody.put("name", dataMap.get("i.name"));
+        expectedConfigurationBody.put("clientSecret", dataMap.get("i.clientSecret"));
+        expectedConfigurationBody.put("clientId", dataMap.get("i.clientId"));
+        expectedConfigurationBody.put("host", dataMap.get("i.host"));
+        expectedConfigurationBody.put("providerId", dataMap.get("i.providerId"));
+        expectedConfigurationBody.put("type", dataMap.get("i.type"));
+
+        if (responseCode == 200) {
+            ActivateConfiguration postActiveConfiguration = ChatHubApiHelper.postChatHubQueryWithMC2Token(url, expectedConfigurationBody,responseCode).as(ActivateConfiguration.class);
+            SoftAssert softAssert = new SoftAssert();
+            softAssert.assertNotNull(postActiveConfiguration.getId(), "Configuration Id is empty");
+            softAssert.assertEquals(dataMap.get("o.type"), postActiveConfiguration.getType());
+            softAssert.assertEquals(dataMap.get("o.setupName"),postActiveConfiguration.getSetupName());
+            softAssert.assertNotNull(postActiveConfiguration.getCreatedDate(), "CurrentDate is Empty");
+            softAssert.assertNotNull(postActiveConfiguration.getModifiedDate(), "Modfied Date is empty");
+            softAssert.assertEquals(dataMap.get("o.timeToExpire"), postActiveConfiguration.getTimeToExpire());
+            softAssert.assertNotNull(postActiveConfiguration.getAuthenticationLink(),"Authentication link is empty");
+
+            softAssert.assertAll();
+        } else {
+            Validator.validatedErrorResponseAdminActiveConfiguration(url, expectedConfigurationBody, dataMap);
+        }
+    }
 }

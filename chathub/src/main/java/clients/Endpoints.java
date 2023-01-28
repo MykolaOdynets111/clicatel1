@@ -26,4 +26,8 @@ public class Endpoints extends UnityURLs {
     public static final String INTERNAL_PROVIDERS = baseUrl + "/internal/providers";
     public static final String INTERNAL_PROVIDERS_STATE = baseUrl + "/internal/providers/%s/state";
     public static final String INTERNAL_CONFIGURATIONS = baseUrl + "/internal/configurations?providerId=%s" ;
+    public static final String ADMIN_GET_CONFIGURATIONS = baseUrl+"/admin/configurations?providerId=%s&version=%s&mc2AccountId=%s";
+    public static final String ADMIN_GET_CONFIGURATIONS_CONFIGURATION_ID = baseUrl+"/admin/configurations/%s";
+    public static final String ADMIN_GET_CONFIGURATIONS_SECRET = baseUrl+"/admin/configurations/%s/secrets";
+    public static final String ADMIN_CONFIGURATION_ACTIVATE = baseUrl+"/admin/configurations/activate?mc2AccountId=%s";
 }
