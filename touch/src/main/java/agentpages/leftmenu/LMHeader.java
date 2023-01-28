@@ -22,6 +22,9 @@ public class LMHeader extends AbstractUIElement {
     @FindBy(css = "[data-testid='tab-navigation-panel-pending']")
     private WebElement pending;
 
+    @FindBy(css = "[data-testid='tab-navigation-panel-tagged']")
+    private WebElement tagged;
+
     public void selectChatsMenu(String option) {
         if (option.equalsIgnoreCase("Live Chats")) {
             clickElem(this.getCurrentDriver(), liveChats, 1, "Live chats menu");
@@ -30,7 +33,9 @@ public class LMHeader extends AbstractUIElement {
         } else if (option.equalsIgnoreCase("Closed")) {
             clickElem(this.getCurrentDriver(), closed, 1, "Closed menu");
         } else if (option.equalsIgnoreCase("Pending")) {
-            clickElem(this.getCurrentDriver(), pending, 1, "Closed menu");
+            clickElem(this.getCurrentDriver(), pending, 1, "Pending menu");
+        } else if (option.equalsIgnoreCase("Tagged")) {
+            clickElem(this.getCurrentDriver(), tagged, 1, "Tagged menu");
         } else {
             throw new AssertionError("Incorrect menu option was provided");
         }

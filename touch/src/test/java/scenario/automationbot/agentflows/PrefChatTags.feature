@@ -15,3 +15,4 @@ Feature: Chat Tags
       | Auto Responders  |
       | Preferences      |
       | Surveys          |
+      | Canned Replies   |

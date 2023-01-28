@@ -1,7 +1,5 @@
-package api.models.response;
+package api.models.response.integrationresponse;
 
-import api.models.response.integrationresponse.Integrator;
-import api.models.response.integrationresponse.NotificationUrls;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

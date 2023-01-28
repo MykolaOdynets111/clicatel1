@@ -12,11 +12,11 @@ Feature: Supervisor desk
     And Agent click on new conversation request from orca
     When Agent click 'Flag chat' button
     Then Agent sees 'flag' icon in this chat
-    And I open portal
-    And Login into portal as an admin of General Bank Demo account
     And I select Touch in left menu and Supervisor Desk in submenu
     When Supervisor put a check mark on "Flagged Only" and click "Apply Filters" button
     Then Orca request is shown on Supervisor Desk Live page
+    And I select Touch in left menu and Agent Desk in submenu
+    And Agent click on new conversation request from orca
     And Agent click 'Unflag chat' button
 
 

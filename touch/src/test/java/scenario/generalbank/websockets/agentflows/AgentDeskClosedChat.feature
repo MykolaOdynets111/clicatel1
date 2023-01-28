@@ -42,14 +42,10 @@ Feature: Closed chats :: Chatdesk
     Then Agent has new conversation request
     And Agent click on new conversation request from orca
     And Conversation area becomes active with chat to agent user's message
-
     When Agent closes chat
     Then Agent should not see from user chat in agent desk from orca
-
     When Agent select "Closed" left menu option
-    Then Verify closed chat is present for orca
-
-    When Open closed chat orca
+    And Agent searches and selects chat from orca in chat history list
     Then Verify if End Chat message autoresponder message is shown
 
 

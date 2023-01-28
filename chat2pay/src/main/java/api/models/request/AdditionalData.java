@@ -14,11 +14,15 @@ import lombok.Builder;
 @Builder
 public class AdditionalData {
 
+    public AdditionalData (String departmentId, String departmentName){
+        this.departmentId = departmentId;
+        this.departmentName = departmentName;
+    }
+
+
     @JsonProperty("departmentId")
     private String departmentId;
 
     @JsonProperty("departmentName")
     private String departmentName;
-
-
 }
