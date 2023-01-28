@@ -18,8 +18,6 @@ public class Endpoints extends UnityURLs {
     public static final String DELETE_CONFIGURATION = baseUrl + "/api/configurations/%s";
     public static final String RE_ACTIVATE_CONFIGURATION = baseUrl + "/api/configurations/re-activate";
     public static final String ADMIN_ENDPOINTS = baseUrl + "/admin/endpoints?providerId=%s&versionId=%s";
-    public static final String ADMIN_ENDPOINTS_SUCCESS_REQUEST = baseUrl + "/admin/endpoints?providerId=0184f828214f6b7a03c711284b2b8e39&versionId=v1.0.0";
-    public static final String INTERNAL_ENDPOINT_SUCCESS_REQUEST = baseUrl + "/internal/endpoints?providerId=0184f828214f6b7a03c711284b2b8e39&versionId=v1.0.0";
     public static final String ADMIN_SPECIFICATIONS = baseUrl + "/admin/specifications?providerId=%s";
     public static final String ADMIN_INTERNAL_PRODUCTS = baseUrl+"/admin/internal-products";
     public static final String ADMIN_ENDPOINTS_ENDPOINT = baseUrl+"/admin/endpoints/%s";
@@ -28,4 +26,8 @@ public class Endpoints extends UnityURLs {
     public static final String INTERNAL_PROVIDERS = baseUrl + "/internal/providers";
     public static final String INTERNAL_PROVIDERS_STATE = baseUrl + "/internal/providers/%s/state";
     public static final String INTERNAL_CONFIGURATIONS = baseUrl + "/internal/configurations?providerId=%s" ;
+    public static final String ADMIN_GET_CONFIGURATIONS = baseUrl+"/admin/configurations?providerId=%s&version=%s&mc2AccountId=%s";
+    public static final String ADMIN_GET_CONFIGURATIONS_CONFIGURATION_ID = baseUrl+"/admin/configurations/%s";
+    public static final String ADMIN_GET_CONFIGURATIONS_SECRET = baseUrl+"/admin/configurations/%s/secrets";
+    public static final String ADMIN_CONFIGURATION_ACTIVATE = baseUrl+"/admin/configurations/activate?mc2AccountId=%s";
 }

@@ -47,6 +47,14 @@ public class ChatHubApiHelper extends MainApi {
     public static ResponseBody getChatHubQueryWithInternalAuth(String endpoint,int responseCode){
         return getQueryForInternalApi(endpoint,getMC2ID(UnityClients.DEMO_CHAT_2_PAY_USER),getInternalProductToken(),responseCode);
     }
+
+    public static ResponseBody getChatHubQueryAdminSecret(String endpoint, int responseCode) {
+        return getQueryForAdminConfigurationSecret(endpoint, getAuthToken(UnityClients.DEMO_CHAT_2_PAY_USER), responseCode);
+    }
+
+    public static ResponseBody postChatHubQueryWithMC2Token(String endpoint, Object body,int responseCode) {
+        return postQueryAdminMC2TokenAuth(endpoint, body, getAuthToken(UnityClients.DEMO_CHAT_2_PAY_USER),responseCode);
+    }
     public static String getInternalProductToken(){
         List<InternalProducts> response =RestAssured.given().log().all()
                 .accept(ContentType.JSON)

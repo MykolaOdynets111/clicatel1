@@ -97,6 +97,20 @@ public abstract class MainApi {
                 .put(endpoint);
     }
 
+    @NotNull
+    protected static ResponseBody getQueryForAdminConfigurationSecret(String endpoint, String authToken, int responseCode) {
+        Response response = getForAdminConfigurationSecret(endpoint, authToken);
+
+        return validate(response, responseCode);
+    }
+
+    @NotNull
+    protected static ResponseBody postQueryAdminMC2TokenAuth(String endpoint, Object body, String authToken, int responseCode) {
+        Response response = postAdminMC2TokenAuth(endpoint, body, authToken);
+
+        return validate(response, responseCode);
+    }
+
     private static ResponseBody validate(Response response, int responseCode) {
         if (response.getStatusCode() != responseCode) {
             fail("Couldn't get the value \n"
@@ -147,6 +161,21 @@ public abstract class MainApi {
                 .accept(ContentType.JSON)
                 .header("internalProductToken", internalProductToken)
                 .header("mc2AccountId",mc2ID)
+                .get(endpoint);
+    }
+
+    protected static Response postAdminMC2TokenAuth(String endpoint, Object body, String authToken) {
+        return RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header("mc2Token", authToken)
+                .body(body)
+                .post(endpoint);
+    }
+
+    private static Response getForAdminConfigurationSecret(String endpoint, String authToken) {
+        return RestAssured.given().log().all()
+                .accept(ContentType.JSON)
+                .header("authKey", authToken)
                 .get(endpoint);
     }
 }
