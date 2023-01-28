@@ -415,7 +415,7 @@ public class IntegrationSteps extends MainApi {
             List<String> expectedEndpointsFormatted = Collections.singletonList(String.join(",", expectedEndpoints));
 
             String ActualEndpoints = mapper.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithoutAuth(url, responseCode).as(ProviderEndpoints[].class));
-            Assert.assertEquals(ActualEndpoints, expectedEndpointsFormatted.toString(),"Endpoint response is not as expected");
+            Assert.assertEquals(ActualEndpoints, expectedEndpointsFormatted.toString(),"Expected endpoints does not match actual endpoints response");
         }
     }
 
@@ -464,7 +464,7 @@ public class IntegrationSteps extends MainApi {
             List<String> expectedEndpointsFormatted = Collections.singletonList(String.join(",", expectedEndpoints));
 
             String ActualEndpoints = mapper.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithInternalAuth(url, responseCode).as(ProviderEndpoints[].class));
-            Assert.assertEquals(ActualEndpoints, expectedEndpointsFormatted.toString(), "Endpoint response is not as expected");
+            Assert.assertEquals(ActualEndpoints, expectedEndpointsFormatted.toString(), "Expected endpoints does not match actual endpoints response");
         }
     }
 

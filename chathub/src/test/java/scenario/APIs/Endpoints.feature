@@ -11,6 +11,7 @@ Feature: Endpoint API
       | 0184f828214f6b7a03c711284b2b8e39 | v1         |    404       |Provider or specification version not found|
       | 0184f828214f6b7a                 | v1.0.0     |    404       |Provider or specification version not found|
       | 0184f828214f6b7a                 | v1         |    404       |Provider or specification version not found|
+      #Bug logged:CCH-699|                                  |                                  |            |    404       |Provider or specification version not found|
       #Bug logged:CCH-699|                                  | v1.0.0     |    404       |Bad Request|
       #Bug logged:CCH-699| 0184f828214f6b7a03c711284b2b8e39 |            |    404       |Bad Request|
 
@@ -37,6 +38,7 @@ Feature: Endpoint API
       | 0184f828214f6b7a03c711284b2b8e39 | v1         |    404       |Provider or specification version not found|
       | 0184f828214f6b7a                 | v1.0.0     |    404       |Provider or specification version not found|
       | 0184f828214f6b7a                 | v1         |    404       |Provider or specification version not found|
+      #Bug logged:CCH-699|                                  |                                  |            |    404       |Provider or specification version not found|
       #Bug logged:CCH-699|                                  | v1.0.0     |    404       |Bad Request|
       #Bug logged:CCH-699| 0184f828214f6b7a03c711284b2b8e39 |            |    404       |Bad Request|
 
