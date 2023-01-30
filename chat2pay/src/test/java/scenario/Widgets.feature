@@ -9,13 +9,22 @@ Feature: Widgets Configuration
   Scenario Outline: C2P :: Unity API :: Widget Configuration :: POST :: Create widget for an account
 
     Then User creates widget for an account
+      | i.widget       | <i.widget>       |
+      | i.type         | <i.type>         |
+      | i.environment  | <i.environment>  |
+      | o.responseCode | <o.responseCode> |
+      | o.errors       | <o.errors>       |
+      | o.errorMessage | <o.errorMessage> |
 
-      | i.type        | <i.type>        |
-      | i.environment | <i.environment> |
     Then User delete newly created widget
 
 
     Examples:
-      | i.type      | i.environment | o.responseCode | o.widgetId                       | o.createdTime                 | o.timestamp | o.status | o.error | o.path |
-      | CHAT_TO_PAY | SANDBOX       | 200            | 2c9acc1485d2efb70185e97e0c3e02a9 | 2023-01-25T15:13:50.145+00:00 |             |          |         |        |
-      | CHAT_TO_PAY | PRODUCTION    | 200            |                                  |                               |             |          |         |        |
+      |  | i.widget   | i.type      | i.environment | o.responseCode | o.errorMessage                | o.errors                          |
+      |  | valid      | CHAT_TO_PAY | SANDBOX       | 200            |                               |                                   |
+      |  | valid      | CHAT_TO_PAY | PRODUCTION    | 200            |                               |                                   |
+      |  | nonexisted | CHAT_TO_PAY | xxx           | 400            | Request failed for /v2/widget | Invalid value for EnvironmentMode |
+      |  | nonexisted | xxx         | SANDBOX       | 400            | Request failed for /v2/widget | Invalid value for WidgetType      |
+
+
+

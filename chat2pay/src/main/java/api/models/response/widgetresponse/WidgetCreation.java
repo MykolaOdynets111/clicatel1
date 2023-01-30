@@ -5,6 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
+import java.time.LocalDate;
+
+import static datetimeutils.DateTimeHelper.parseToLocalDate;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "widgetId",
@@ -18,4 +22,8 @@ public class WidgetCreation {
 
     @JsonProperty("createdTime")
     private String createdTime;
+
+    public LocalDate getTimestamp() {
+        return parseToLocalDate(createdTime);
+    }
 }

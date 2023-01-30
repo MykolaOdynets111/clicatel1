@@ -3,28 +3,61 @@ package steps;
 import api.clients.ApiHelperTransactions;
 import api.models.request.WidgetBody;
 import api.models.response.widgetresponse.WidgetCreation;
+import api.models.response.widgetresponse.WidgetDelete;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import io.restassured.response.Response;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
+import utils.Validator;
 
+import java.time.LocalDate;
 import java.util.Map;
 
+import static java.lang.String.format;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 public class WidgetSteps {
-    public static final ThreadLocal<WidgetBody> widgetBody = new ThreadLocal<>();
     public static final ThreadLocal<String> createdWidgetId = new ThreadLocal<>();
 
 
     @Then("^User creates widget for an account$")
     public void createWidget(Map<String, String> dataMap) {
-        widgetBody.set(new WidgetBody(dataMap.get("i.type"), dataMap.get("i.environment")));
-        Response response = ApiHelperTransactions.createWidget(widgetBody.get());
-        createdWidgetId.set(response.as(WidgetCreation.class).getWidgetId());
+        Response response = ApiHelperTransactions
+                .createWidget(new WidgetBody(dataMap.get("i.type"), dataMap.get("i.environment")));
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(response.getStatusCode())
+                .as("Status code does not equal to expected")
+                .isEqualTo(Integer.parseInt(dataMap.get("o.responseCode")));
+        String status = dataMap.get("i.widget");
+        switch (status) {
+            case "valid":
+                WidgetCreation widgetCreation = response.as(WidgetCreation.class);
+                softly.assertThat(widgetCreation.getWidgetId())
+                        .as("widget ID is not exist in the response")
+                        .isNotEqualTo(null);
+                softly.assertThat(widgetCreation.getTimestamp())
+                        .as(format("widget creation date is not equals to %s", LocalDate.now()))
+                        .isEqualTo(LocalDate.now());
+                softly.assertAll();
+                createdWidgetId.set(response.as(WidgetCreation.class).getWidgetId());
+                break;
+            case "nonexisted":
+                Validator.validateErrorResponse(response, dataMap);
+                break;
+            default:
+                Assertions.fail(format("Expected status %s is not existed", status));
+        }
     }
 
     @Then("^User delete newly created widget$")
     public void deleteCreatedWidget() {
-        ApiHelperTransactions.deleteWidget(createdWidgetId.get());
-
+        if (createdWidgetId.get() != null) {
+            WidgetDelete widgetDeleteResponse = ApiHelperTransactions.deleteWidget(createdWidgetId.get()).as(WidgetDelete.class);
+            assertThat(widgetDeleteResponse.getTimestamp())
+                    .as(format("widget creation date is not equals to %s", LocalDate.now()))
+                    .isEqualTo(LocalDate.now());
+            createdWidgetId.remove();
+        }
     }
 
 }

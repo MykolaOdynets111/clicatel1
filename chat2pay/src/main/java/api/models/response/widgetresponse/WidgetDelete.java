@@ -5,19 +5,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
+import java.time.LocalDate;
+
+import static datetimeutils.DateTimeHelper.parseToLocalDate;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "id",
-        "name"
+        "updateTime"
 })
 
 @Data
-public class ConfigStatus {
+public class WidgetDelete {
 
-    @JsonProperty("id")
-    private int id;
+    @JsonProperty("updateTime")
+    private String updateTime;
 
-    @JsonProperty("name")
-    private String name;
-
+    public LocalDate getTimestamp() {
+        return parseToLocalDate(updateTime);
+    }
 }
