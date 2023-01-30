@@ -346,8 +346,7 @@ public class IntegrationSteps extends MainApi {
 
             String expectedConfigurations = expectedConfigurationsBody.toString();
             expectedConfigurations = expectedConfigurations.replace(", ", ",");
-            System.out.println(expectedConfigurations);
-            System.out.println(actualConfigurations);
+
             Assert.assertEquals(actualConfigurations, expectedConfigurations, "Configurations response is not as expected");
         }
     }
@@ -482,20 +481,17 @@ public class IntegrationSteps extends MainApi {
         if (dataMap.size() == 1) {
             if (responseCode == 200) {
                 String[] requestParameters_Constraints = new String[]{};
-                List<String> getRequestParameter = new ArrayList<>();
-                getRequestParameter.add(mapper.writeValueAsString(new RequestParameters(
+                List<String> expectedRequestParameter = new ArrayList<>();
+                expectedRequestParameter.add(mapper.writeValueAsString(new RequestParameters(
                         dataMap.get(0).get("o.requestParameters.id"), dataMap.get(0).get("o.requestParameters.label"), dataMap.get(0).get("o.requestParameters.placeholder"), dataMap.get(0).get("o.requestParameters.default"), Boolean.valueOf(dataMap.get(0).get("o.requestParameters.required")),
                         requestParameters_Constraints, dataMap.get(0).get("o.requestParameters.parameterType"), dataMap.get(0).get("o.requestParameters.availableOptions"), Boolean.valueOf(dataMap.get(0).get("o.requestParameters.isArray")), dataMap.get(0).get("o.requestParameters.presentationType"),
                         dataMap.get(0).get("o.requestParameters.repeatableGroupId"), dataMap.get(0).get("o.requestParameters.repeatableGroupName"), dataMap.get(0).get("o.requestParameters.placementType"), dataMap.get(0).get("o.requestParameters.destinationPath"))));
                 EndpointDetail actualEndpointDetail = ChatHubApiHelper.getChatHubQueryWithoutAuth(url, responseCode).as(EndpointDetail.class);
-                String actualRequestParameters = mapper.writeValueAsString(actualEndpointDetail.getRequestParameters());
-                System.out.println(actualRequestParameters);
+                String actualRequestParameter = mapper.writeValueAsString(actualEndpointDetail.getRequestParameters());
 
-                assertion.assertEquals(actualRequestParameters, getRequestParameter.toString(), "Request parameter is not as expected");
+                assertion.assertEquals(actualRequestParameter, expectedRequestParameter.toString(), "Request parameter is not as expected");
                 assertion.assertEquals(actualEndpointDetail.getId(), dataMap.get(0).get("i.endpointID"));
                 assertion.assertEquals(actualEndpointDetail.getOperationName(), dataMap.get(0).get("o.operationName"));
-                assertion.assertNotNull(actualEndpointDetail.getResponseSample());
-
             } else {
                 Validator.validatedErrorResponseWithoutAuth(url, dataMap.get(0));
             }
@@ -505,18 +501,17 @@ public class IntegrationSteps extends MainApi {
             for (Map<String, String> element : dataMap) {
                 try {
                     expectedProperties.add(mapper.writeValueAsString(new EndpointProperties(
-                            element.get("isArray"), element.get("label"), element.get("type"), element.get("sourceRef"))));
+                            element.get("o.isArray"), element.get("o.label"), element.get("o.type"), element.get("o.sourceRef"))));
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
             }
-            List<String> getExpectedPropertiesFormatted = Collections.singletonList(String.join(",", expectedProperties));
-
+            List<String> expectedPropertiesFormatted = Collections.singletonList(String.join(",", expectedProperties));
             EndpointDetail actualEndpointDetail = ChatHubApiHelper.getChatHubQueryWithoutAuth(url, responseCode).as(EndpointDetail.class);
-            String actualResponseSampleProperties = mapper.writeValueAsString(actualEndpointDetail.getResponseSample().get(0).getProperties());
-            int actualResponseStatusCode = Integer.parseInt(mapper.writeValueAsString(actualEndpointDetail.getResponseSample().get(0).getStatusCode()));
-            assertion.assertEquals(actualResponseSampleProperties, getExpectedPropertiesFormatted.toString());
-            assertion.assertEquals(actualResponseStatusCode,responseCode);
+            String actualProperties = mapper.writeValueAsString(actualEndpointDetail.getResponseSample().get(0).getProperties());
+            int actualStatusCode = Integer.parseInt(mapper.writeValueAsString(actualEndpointDetail.getResponseSample().get(0).getStatusCode()));
+            assertion.assertEquals(actualProperties, expectedPropertiesFormatted.toString());
+            assertion.assertEquals(actualStatusCode,Integer.parseInt(dataMap.get(0).get("o.statusCode")));
         }
         assertion.assertAll();
     }
@@ -530,19 +525,17 @@ public class IntegrationSteps extends MainApi {
         if (dataMap.size() == 1) {
             if (responseCode == 200) {
                 String[] requestParameters_Constraints = new String[]{};
-                List<String> getRequestParameter = new ArrayList<>();
-                getRequestParameter.add(mapper.writeValueAsString(new RequestParameters(
+                List<String> expectedRequestParameter = new ArrayList<>();
+                expectedRequestParameter.add(mapper.writeValueAsString(new RequestParameters(
                         dataMap.get(0).get("o.requestParameters.id"), dataMap.get(0).get("o.requestParameters.label"), dataMap.get(0).get("o.requestParameters.placeholder"), dataMap.get(0).get("o.requestParameters.default"), Boolean.valueOf(dataMap.get(0).get("o.requestParameters.required")),
                         requestParameters_Constraints, dataMap.get(0).get("o.requestParameters.parameterType"), dataMap.get(0).get("o.requestParameters.availableOptions"), Boolean.valueOf(dataMap.get(0).get("o.requestParameters.isArray")), dataMap.get(0).get("o.requestParameters.presentationType"),
                         dataMap.get(0).get("o.requestParameters.repeatableGroupId"), dataMap.get(0).get("o.requestParameters.repeatableGroupName"), dataMap.get(0).get("o.requestParameters.placementType"), dataMap.get(0).get("o.requestParameters.destinationPath"))));
                 EndpointDetail actualEndpointDetail = ChatHubApiHelper.getChatHubQueryWithInternalAuth(url, responseCode).as(EndpointDetail.class);
-                String actualRequestParameters = mapper.writeValueAsString(actualEndpointDetail.getRequestParameters());
+                String actualRequestParameter = mapper.writeValueAsString(actualEndpointDetail.getRequestParameters());
 
-                assertion.assertEquals(actualRequestParameters, getRequestParameter.toString(), "Request parameter is not as expected");
+                assertion.assertEquals(actualRequestParameter, expectedRequestParameter.toString(), "Request parameter is not as expected");
                 assertion.assertEquals(actualEndpointDetail.getId(), dataMap.get(0).get("i.endpointID"));
                 assertion.assertEquals(actualEndpointDetail.getOperationName(), dataMap.get(0).get("o.operationName"));
-                assertion.assertNotNull(actualEndpointDetail.getResponseSample());
-
             } else {
                 Validator.validatedErrorResponseWithInternalAuth(url,dataMap.get(0));
             }
@@ -552,18 +545,18 @@ public class IntegrationSteps extends MainApi {
             for (Map<String, String> element : dataMap) {
                 try {
                     expectedProperties.add(mapper.writeValueAsString(new EndpointProperties(
-                            element.get("isArray"), element.get("label"), element.get("type"), element.get("sourceRef"))));
+                            element.get("o.isArray"), element.get("o.label"), element.get("o.type"), element.get("o.sourceRef"))));
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
             }
-            List<String> getExpectedPropertiesFormatted = Collections.singletonList(String.join(",", expectedProperties));
+            List<String> ExpectedPropertiesFormatted = Collections.singletonList(String.join(",", expectedProperties));
             EndpointDetail actualEndpointDetail = ChatHubApiHelper.getChatHubQueryWithInternalAuth(url, responseCode).as(EndpointDetail.class);
 
             String actualResponseSampleProperties = mapper.writeValueAsString(actualEndpointDetail.getResponseSample().get(0).getProperties());
-            int actualResponseStatusCode = Integer.parseInt(mapper.writeValueAsString(actualEndpointDetail.getResponseSample().get(0).getStatusCode()));
-            assertion.assertEquals(actualResponseSampleProperties, getExpectedPropertiesFormatted.toString());
-            assertion.assertEquals(actualResponseStatusCode, responseCode);
+            int actualStatusCode = Integer.parseInt(mapper.writeValueAsString(actualEndpointDetail.getResponseSample().get(0).getStatusCode()));
+            assertion.assertEquals(actualResponseSampleProperties, ExpectedPropertiesFormatted.toString());
+            assertion.assertEquals(actualStatusCode, Integer.parseInt(dataMap.get(0).get("o.statusCode")));
         }
         assertion.assertAll();
     }

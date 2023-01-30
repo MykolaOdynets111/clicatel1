@@ -94,63 +94,62 @@ Feature: Endpoint API
   @TestCaseId("https://jira.clickatell.com/browse/CCH-686")
   Scenario: CH :: Admin API : Verify "response sample" from GET /admin/endpoints/{endpoint}
     Given User is able to get specific endpoint detail for Provider via Admin api
-      |        sourceRef                      |     label                        |type         |isArray   |i.endpointID                    |o.responseCode |
-      |user/updated_at                        |Updated At                        |STRING       |false     |0184f82664fb33c510da20cc404772ce|    200        |
-      |user/verified                          |Verified?                         |BOOLEAN      |false     |                                |               |
-      |user/url                               |URL                               |STRING       |false     |                                |               |
-      |user/two_factor_auth_enabled           |Is Two Factor Auth Enabled?       |BOOLEAN      |false     |                                |               |
-      |user/time_zone                         |Time Zone                         |STRING       |false    |                                 |               |
-      |user/ticket_restriction                |Ticket Restriction                |STRING       |false    |                                 |               |
-      |user/tags                              |Tags                              |STRING       |true     |                                 |               |
-      |user/suspended                         |Suspended                         |BOOLEAN      |false     |                                |               |
-      |user/signature                         |Signature                         |STRING       |false     |                                |               |
-      |user/shared_phone_number               |Is Shared Phone Number?           |BOOLEAN      |false     |                                |               |
-      |user/shared_agent                      |Is Shared Agent?                  |BOOLEAN      |false     |                                |               |
-      |user/shared                            |Is Shared?                        |BOOLEAN      |false     |                                |               |
-      |user/role_type                         |Role Type                         |NUMBER       |false     |                                |               |
-      |user/role                              |Role                              |STRING       |false     |                                |               |
-      |user/restricted_agent                  |Restricted Agent?                 |BOOLEAN      |false     |                                |               |
-      |user/report_csv                        |Is Report CSV?                    |BOOLEAN      |false     |                                |               |
-      |user/remote_photo_url                  |Remote Photo URL                  |STRING       |false     |                                |               |
-      |user/photo/$thumbnails/size            |Thumbnail Size                    |NUMBER       |false     |                                |               |
-      |user/photo/$thumbnails/content_type    |Thumbnail Content Type            |STRING       |false     |                                |               |
-      |user/photo/$thumbnails/content_url     |Thumbnail Content URL             |STRING       |false     |                                |               |
-      |user/photo/$thumbnails/name            |Thumbnail Name                    |STRING       |false     |                                |               |
-      |user/photo/$thumbnails/id              |Thumbnail ID                      |NUMBER       |false     |                                |               |
-      |user/photo/width                       |Photo Width                       |STRING       |false     |                                |               |
-      |user/photo/url                         |Photo URL                         |STRING       |false     |                                |               |
-      |user/photo/size                        |Photo Size                        |NUMBER       |false     |                                |               |
-      |user/photo/mapped_content_url          |Photo Mapped Content URL          |STRING       |false     |                                |               |
-      |user/photo/malware_scan_result         |Photo Malware Scan Result         |STRING       |false     |                                |               |
-      |user/photo/malware_access_override     |Photo Malware Access Override?    |BOOLEAN      |false     |                                |               |
-      |user/photo/inline                      |Photo Inline?                     |BOOLEAN      |false     |                                |               |
-      |user/photo/id                          |Photo ID                          |NUMBER       |false     |                                |               |
-      |user/photo/height                      |Photo Height                      |STRING       |false     |                                |               |
-      |user/photo/file_name                   |Photo File Name                   |STRING       |false     |                                |               |
-      |user/photo/deleted                     |Photo Deleted?                    |BOOLEAN      |false     |                                |               |
-      |user/photo/content_url                 |Photo Content URL                 |STRING       |false     |                                |               |
-      |user/photo/content_type                |Photo Content Type                |STRING       |false     |                                |               |
-      |user/phone                             |Phone                             |STRING       |false     |                                |               |
-      |user/organization_id                   |Organization ID                   |NUMBER       |false     |                                |               |
-      |user/only_private_comments             |Only Private Comments?            |BOOLEAN      |false     |                                |               |
-      |user/notes                             |Notes                             |STRING       |false     |                                |               |
-      |user/name                              |Name                              |STRING       |false     |                                |               |
-      |user/moderator                         |Moderator                         |BOOLEAN      |false     |                                |               |
-      |user/locale_id                         |Locale ID                         |NUMBER       |false     |                                |               |
-      |user/locale                            |Locale                            |STRING       |false     |                                |               |
-      |user/last_login_at                     |Last Login At                     |STRING       |false     |                                |               |
-      |user/id                                |ID                                |NUMBER       |false     |                                |               |
-      |user/iana_time_zone                    |IANA Time Zone                    |STRING       |false     |                                |               |
-      |user/external_id                       |External ID                       |STRING       |false     |                                |               |
-      |user/email                             |Email                             |STRING       |false     |                                |               |
-      |user/details                           |Details                           |STRING       |false     |                                |               |
-      |user/default_group_id                  |Default Group ID                  |NUMBER       |false     |                                |               |
-      |user/custom_role_id                    |Custom Role ID                    |NUMBER       |false     |                                |               |
-      |user/created_at                        |Created At                        |STRING       |false     |                                |               |
-      |user/chat_only                         |Chat Only?                        |BOOLEAN      |false     |                                |               |
-      |user/alias                             |Alias                             |STRING       |false     |                                |               |
-      |user/active                            |Active?                           |BOOLEAN      |false     |                                |               |
-
+      |        o.sourceRef                    |     o.label                      |o.type       |o.isArray |i.endpointID                    |o.responseCode |o.statusCode |
+      |user/updated_at                        |Updated At                        |STRING       |false     |0184f82664fb33c510da20cc404772ce|    200        |  200        |
+      |user/verified                          |Verified?                         |BOOLEAN      |false     |                                |               |             |
+      |user/url                               |URL                               |STRING       |false     |                                |               |             |
+      |user/two_factor_auth_enabled           |Is Two Factor Auth Enabled?       |BOOLEAN      |false     |                                |               |             |
+      |user/time_zone                         |Time Zone                         |STRING       |false    |                                 |               |             |
+      |user/ticket_restriction                |Ticket Restriction                |STRING       |false    |                                 |               |             |
+      |user/tags                              |Tags                              |STRING       |true     |                                 |               |             |
+      |user/suspended                         |Suspended                         |BOOLEAN      |false     |                                |               |             |
+      |user/signature                         |Signature                         |STRING       |false     |                                |               |             |
+      |user/shared_phone_number               |Is Shared Phone Number?           |BOOLEAN      |false     |                                |               |             |
+      |user/shared_agent                      |Is Shared Agent?                  |BOOLEAN      |false     |                                |               |             |
+      |user/shared                            |Is Shared?                        |BOOLEAN      |false     |                                |               |             |
+      |user/role_type                         |Role Type                         |NUMBER       |false     |                                |               |             |
+      |user/role                              |Role                              |STRING       |false     |                                |               |             |
+      |user/restricted_agent                  |Restricted Agent?                 |BOOLEAN      |false     |                                |               |             |
+      |user/report_csv                        |Is Report CSV?                    |BOOLEAN      |false     |                                |               |             |
+      |user/remote_photo_url                  |Remote Photo URL                  |STRING       |false     |                                |               |             |
+      |user/photo/$thumbnails/size            |Thumbnail Size                    |NUMBER       |false     |                                |               |             |
+      |user/photo/$thumbnails/content_type    |Thumbnail Content Type            |STRING       |false     |                                |               |             |
+      |user/photo/$thumbnails/content_url     |Thumbnail Content URL             |STRING       |false     |                                |               |             |
+      |user/photo/$thumbnails/name            |Thumbnail Name                    |STRING       |false     |                                |               |             |
+      |user/photo/$thumbnails/id              |Thumbnail ID                      |NUMBER       |false     |                                |               |             |
+      |user/photo/width                       |Photo Width                       |STRING       |false     |                                |               |             |
+      |user/photo/url                         |Photo URL                         |STRING       |false     |                                |               |             |
+      |user/photo/size                        |Photo Size                        |NUMBER       |false     |                                |               |             |
+      |user/photo/mapped_content_url          |Photo Mapped Content URL          |STRING       |false     |                                |               |             |
+      |user/photo/malware_scan_result         |Photo Malware Scan Result         |STRING       |false     |                                |               |             |
+      |user/photo/malware_access_override     |Photo Malware Access Override?    |BOOLEAN      |false     |                                |               |             |
+      |user/photo/inline                      |Photo Inline?                     |BOOLEAN      |false     |                                |               |             |
+      |user/photo/id                          |Photo ID                          |NUMBER       |false     |                                |               |             |
+      |user/photo/height                      |Photo Height                      |STRING       |false     |                                |               |             |
+      |user/photo/file_name                   |Photo File Name                   |STRING       |false     |                                |               |             |
+      |user/photo/deleted                     |Photo Deleted?                    |BOOLEAN      |false     |                                |               |             |
+      |user/photo/content_url                 |Photo Content URL                 |STRING       |false     |                                |               |             |
+      |user/photo/content_type                |Photo Content Type                |STRING       |false     |                                |               |             |
+      |user/phone                             |Phone                             |STRING       |false     |                                |               |             |
+      |user/organization_id                   |Organization ID                   |NUMBER       |false     |                                |               |             |
+      |user/only_private_comments             |Only Private Comments?            |BOOLEAN      |false     |                                |               |             |
+      |user/notes                             |Notes                             |STRING       |false     |                                |               |             |
+      |user/name                              |Name                              |STRING       |false     |                                |               |             |
+      |user/moderator                         |Moderator                         |BOOLEAN      |false     |                                |               |             |
+      |user/locale_id                         |Locale ID                         |NUMBER       |false     |                                |               |             |
+      |user/locale                            |Locale                            |STRING       |false     |                                |               |             |
+      |user/last_login_at                     |Last Login At                     |STRING       |false     |                                |               |             |
+      |user/id                                |ID                                |NUMBER       |false     |                                |               |             |
+      |user/iana_time_zone                    |IANA Time Zone                    |STRING       |false     |                                |               |             |
+      |user/external_id                       |External ID                       |STRING       |false     |                                |               |             |
+      |user/email                             |Email                             |STRING       |false     |                                |               |             |
+      |user/details                           |Details                           |STRING       |false     |                                |               |             |
+      |user/default_group_id                  |Default Group ID                  |NUMBER       |false     |                                |               |             |
+      |user/custom_role_id                    |Custom Role ID                    |NUMBER       |false     |                                |               |             |
+      |user/created_at                        |Created At                        |STRING       |false     |                                |               |             |
+      |user/chat_only                         |Chat Only?                        |BOOLEAN      |false     |                                |               |             |
+      |user/alias                             |Alias                             |STRING       |false     |                                |               |             |
+      |user/active                            |Active?                           |BOOLEAN      |false     |                                |               |             |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-627")
   Scenario Outline: CH :: Internal API : Verify that GET /internal/endpoints/{endpoint} should return available endpoint details with correct requestParameter details
@@ -167,62 +166,62 @@ Feature: Endpoint API
   @TestCaseId("https://jira.clickatell.com/browse/CCH-684")
   Scenario: CH :: Internal API : Verify "response sample" from GET /internal/endpoints/{endpoint}
     Given User is able to get specific endpoint detail for Provider via Internal Api
-      |        sourceRef                      |     label                        |type         |isArray   |i.endpointID                    |o.responseCode |
-      |user/updated_at                        |Updated At                        |STRING       |false     |0184f82664fb33c510da20cc404772ce|    200        |
-      |user/verified                          |Verified?                         |BOOLEAN      |false     |                                |               |
-      |user/url                               |URL                               |STRING       |false     |                                |               |
-      |user/two_factor_auth_enabled           |Is Two Factor Auth Enabled?       |BOOLEAN      |false     |                                |               |
-      |user/time_zone                         |Time Zone                         |STRING       |false    |                                 |               |
-      |user/ticket_restriction                |Ticket Restriction                |STRING       |false    |                                 |               |
-      |user/tags                              |Tags                              |STRING       |true     |                                 |               |
-      |user/suspended                         |Suspended                         |BOOLEAN      |false     |                                |               |
-      |user/signature                         |Signature                         |STRING       |false     |                                |               |
-      |user/shared_phone_number               |Is Shared Phone Number?           |BOOLEAN      |false     |                                |               |
-      |user/shared_agent                      |Is Shared Agent?                  |BOOLEAN      |false     |                                |               |
-      |user/shared                            |Is Shared?                        |BOOLEAN      |false     |                                |               |
-      |user/role_type                         |Role Type                         |NUMBER       |false     |                                |               |
-      |user/role                              |Role                              |STRING       |false     |                                |               |
-      |user/restricted_agent                  |Restricted Agent?                 |BOOLEAN      |false     |                                |               |
-      |user/report_csv                        |Is Report CSV?                    |BOOLEAN      |false     |                                |               |
-      |user/remote_photo_url                  |Remote Photo URL                  |STRING       |false     |                                |               |
-      |user/photo/$thumbnails/size            |Thumbnail Size                    |NUMBER       |false     |                                |               |
-      |user/photo/$thumbnails/content_type    |Thumbnail Content Type            |STRING       |false     |                                |               |
-      |user/photo/$thumbnails/content_url     |Thumbnail Content URL             |STRING       |false     |                                |               |
-      |user/photo/$thumbnails/name            |Thumbnail Name                    |STRING       |false     |                                |               |
-      |user/photo/$thumbnails/id              |Thumbnail ID                      |NUMBER       |false     |                                |               |
-      |user/photo/width                       |Photo Width                       |STRING       |false     |                                |               |
-      |user/photo/url                         |Photo URL                         |STRING       |false     |                                |               |
-      |user/photo/size                        |Photo Size                        |NUMBER       |false     |                                |               |
-      |user/photo/mapped_content_url          |Photo Mapped Content URL          |STRING       |false     |                                |               |
-      |user/photo/malware_scan_result         |Photo Malware Scan Result         |STRING       |false     |                                |               |
-      |user/photo/malware_access_override     |Photo Malware Access Override?    |BOOLEAN      |false     |                                |               |
-      |user/photo/inline                      |Photo Inline?                     |BOOLEAN      |false     |                                |               |
-      |user/photo/id                          |Photo ID                          |NUMBER       |false     |                                |               |
-      |user/photo/height                      |Photo Height                      |STRING       |false     |                                |               |
-      |user/photo/file_name                   |Photo File Name                   |STRING       |false     |                                |               |
-      |user/photo/deleted                     |Photo Deleted?                    |BOOLEAN      |false     |                                |               |
-      |user/photo/content_url                 |Photo Content URL                 |STRING       |false     |                                |               |
-      |user/photo/content_type                |Photo Content Type                |STRING       |false     |                                |               |
-      |user/phone                             |Phone                             |STRING       |false     |                                |               |
-      |user/organization_id                   |Organization ID                   |NUMBER       |false     |                                |               |
-      |user/only_private_comments             |Only Private Comments?            |BOOLEAN      |false     |                                |               |
-      |user/notes                             |Notes                             |STRING       |false     |                                |               |
-      |user/name                              |Name                              |STRING       |false     |                                |               |
-      |user/moderator                         |Moderator                         |BOOLEAN      |false     |                                |               |
-      |user/locale_id                         |Locale ID                         |NUMBER       |false     |                                |               |
-      |user/locale                            |Locale                            |STRING       |false     |                                |               |
-      |user/last_login_at                     |Last Login At                     |STRING       |false     |                                |               |
-      |user/id                                |ID                                |NUMBER       |false     |                                |               |
-      |user/iana_time_zone                    |IANA Time Zone                    |STRING       |false     |                                |               |
-      |user/external_id                       |External ID                       |STRING       |false     |                                |               |
-      |user/email                             |Email                             |STRING       |false     |                                |               |
-      |user/details                           |Details                           |STRING       |false     |                                |               |
-      |user/default_group_id                  |Default Group ID                  |NUMBER       |false     |                                |               |
-      |user/custom_role_id                    |Custom Role ID                    |NUMBER       |false     |                                |               |
-      |user/created_at                        |Created At                        |STRING       |false     |                                |               |
-      |user/chat_only                         |Chat Only?                        |BOOLEAN      |false     |                                |               |
-      |user/alias                             |Alias                             |STRING       |false     |                                |               |
-      |user/active                            |Active?                           |BOOLEAN      |false     |                                |               |
+      |        o.sourceRef                    |     o.label                      |o.type       |o.isArray |i.endpointID                    |o.responseCode |o.statusCode |
+      |user/updated_at                        |Updated At                        |STRING       |false     |0184f82664fb33c510da20cc404772ce|    200        |  200        |
+      |user/verified                          |Verified?                         |BOOLEAN      |false     |                                |               |             |
+      |user/url                               |URL                               |STRING       |false     |                                |               |             |
+      |user/two_factor_auth_enabled           |Is Two Factor Auth Enabled?       |BOOLEAN      |false     |                                |               |             |
+      |user/time_zone                         |Time Zone                         |STRING       |false    |                                 |               |             |
+      |user/ticket_restriction                |Ticket Restriction                |STRING       |false    |                                 |               |             |
+      |user/tags                              |Tags                              |STRING       |true     |                                 |               |             |
+      |user/suspended                         |Suspended                         |BOOLEAN      |false     |                                |               |             |
+      |user/signature                         |Signature                         |STRING       |false     |                                |               |             |
+      |user/shared_phone_number               |Is Shared Phone Number?           |BOOLEAN      |false     |                                |               |             |
+      |user/shared_agent                      |Is Shared Agent?                  |BOOLEAN      |false     |                                |               |             |
+      |user/shared                            |Is Shared?                        |BOOLEAN      |false     |                                |               |             |
+      |user/role_type                         |Role Type                         |NUMBER       |false     |                                |               |             |
+      |user/role                              |Role                              |STRING       |false     |                                |               |             |
+      |user/restricted_agent                  |Restricted Agent?                 |BOOLEAN      |false     |                                |               |             |
+      |user/report_csv                        |Is Report CSV?                    |BOOLEAN      |false     |                                |               |             |
+      |user/remote_photo_url                  |Remote Photo URL                  |STRING       |false     |                                |               |             |
+      |user/photo/$thumbnails/size            |Thumbnail Size                    |NUMBER       |false     |                                |               |             |
+      |user/photo/$thumbnails/content_type    |Thumbnail Content Type            |STRING       |false     |                                |               |             |
+      |user/photo/$thumbnails/content_url     |Thumbnail Content URL             |STRING       |false     |                                |               |             |
+      |user/photo/$thumbnails/name            |Thumbnail Name                    |STRING       |false     |                                |               |             |
+      |user/photo/$thumbnails/id              |Thumbnail ID                      |NUMBER       |false     |                                |               |             |
+      |user/photo/width                       |Photo Width                       |STRING       |false     |                                |               |             |
+      |user/photo/url                         |Photo URL                         |STRING       |false     |                                |               |             |
+      |user/photo/size                        |Photo Size                        |NUMBER       |false     |                                |               |             |
+      |user/photo/mapped_content_url          |Photo Mapped Content URL          |STRING       |false     |                                |               |             |
+      |user/photo/malware_scan_result         |Photo Malware Scan Result         |STRING       |false     |                                |               |             |
+      |user/photo/malware_access_override     |Photo Malware Access Override?    |BOOLEAN      |false     |                                |               |             |
+      |user/photo/inline                      |Photo Inline?                     |BOOLEAN      |false     |                                |               |             |
+      |user/photo/id                          |Photo ID                          |NUMBER       |false     |                                |               |             |
+      |user/photo/height                      |Photo Height                      |STRING       |false     |                                |               |             |
+      |user/photo/file_name                   |Photo File Name                   |STRING       |false     |                                |               |             |
+      |user/photo/deleted                     |Photo Deleted?                    |BOOLEAN      |false     |                                |               |             |
+      |user/photo/content_url                 |Photo Content URL                 |STRING       |false     |                                |               |             |
+      |user/photo/content_type                |Photo Content Type                |STRING       |false     |                                |               |             |
+      |user/phone                             |Phone                             |STRING       |false     |                                |               |             |
+      |user/organization_id                   |Organization ID                   |NUMBER       |false     |                                |               |             |
+      |user/only_private_comments             |Only Private Comments?            |BOOLEAN      |false     |                                |               |             |
+      |user/notes                             |Notes                             |STRING       |false     |                                |               |             |
+      |user/name                              |Name                              |STRING       |false     |                                |               |             |
+      |user/moderator                         |Moderator                         |BOOLEAN      |false     |                                |               |             |
+      |user/locale_id                         |Locale ID                         |NUMBER       |false     |                                |               |             |
+      |user/locale                            |Locale                            |STRING       |false     |                                |               |             |
+      |user/last_login_at                     |Last Login At                     |STRING       |false     |                                |               |             |
+      |user/id                                |ID                                |NUMBER       |false     |                                |               |             |
+      |user/iana_time_zone                    |IANA Time Zone                    |STRING       |false     |                                |               |             |
+      |user/external_id                       |External ID                       |STRING       |false     |                                |               |             |
+      |user/email                             |Email                             |STRING       |false     |                                |               |             |
+      |user/details                           |Details                           |STRING       |false     |                                |               |             |
+      |user/default_group_id                  |Default Group ID                  |NUMBER       |false     |                                |               |             |
+      |user/custom_role_id                    |Custom Role ID                    |NUMBER       |false     |                                |               |             |
+      |user/created_at                        |Created At                        |STRING       |false     |                                |               |             |
+      |user/chat_only                         |Chat Only?                        |BOOLEAN      |false     |                                |               |             |
+      |user/alias                             |Alias                             |STRING       |false     |                                |               |             |
+      |user/active                            |Active?                           |BOOLEAN      |false     |                                |               |             |
 
 
 
