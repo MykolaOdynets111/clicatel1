@@ -1,4 +1,4 @@
-package api.models.response.widgetresponse;
+package api.models.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,12 +15,12 @@ import static datetimeutils.DateTimeHelper.parseToLocalDate;
 })
 
 @Data
-public class WidgetDelete {
+public class UpdatedEntityResponse {
 
     @JsonProperty("updateTime")
     private String updateTime;
 
-    public LocalDate getTimestamp() {
+    public LocalDate getUpdateTime() {
         return parseToLocalDate(updateTime);
     }
 }

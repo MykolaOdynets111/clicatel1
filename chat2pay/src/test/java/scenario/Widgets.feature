@@ -1,6 +1,6 @@
-# Created by modynets at 25.01.2023
-Feature: Widgets Configuration
-  # Enter feature description here
+Feature: Widgets operations
+    # CRUD operations for Widgets
+
 
   Background:
     Given User is logged in to unity
@@ -20,11 +20,11 @@ Feature: Widgets Configuration
 
 
     Examples:
-      |  | i.widget   | i.type      | i.environment | o.responseCode | o.errorMessage                | o.errors                          |
-      |  | valid      | CHAT_TO_PAY | SANDBOX       | 200            |                               |                                   |
-      |  | valid      | CHAT_TO_PAY | PRODUCTION    | 200            |                               |                                   |
-      |  | nonexisted | CHAT_TO_PAY | xxx           | 400            | Request failed for /v2/widget | Invalid value for EnvironmentMode |
-      |  | nonexisted | xxx         | SANDBOX       | 400            | Request failed for /v2/widget | Invalid value for WidgetType      |
+      | i.widget   | i.type      | i.environment | o.responseCode | o.errorMessage                | o.errors                          |
+      | valid      | CHAT_TO_PAY | SANDBOX       | 200            |                               |                                   |
+      | valid      | CHAT_TO_PAY | PRODUCTION    | 200            |                               |                                   |
+      | nonexisted | CHAT_TO_PAY | xxx           | 400            | Request failed for /v2/widget | Invalid value for EnvironmentMode |
+      | nonexisted | xxx         | SANDBOX       | 400            | Request failed for /v2/widget | Invalid value for WidgetType      |
 
 
 

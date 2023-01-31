@@ -1,4 +1,3 @@
-# Created by modynets at 15.12.2022
 Feature: Transaction execution
   # user can get the transaction link and is able to make payment (positive and negative)
   # user can cancel transaction link and is able to make payment (positive and negative)

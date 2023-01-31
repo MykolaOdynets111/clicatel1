@@ -2,7 +2,6 @@ package api.clients;
 
 import api.models.request.PaymentBody;
 import api.models.request.ReceiptBody;
-import api.models.request.WidgetBody;
 import api.models.response.ApiKeysResponse;
 import api.models.response.integrationresponse.IntegrationResponse;
 import api.models.response.paymentgatewaysettingsresponse.PaymentGatewaySettingsResponse;
@@ -53,14 +52,6 @@ public class ApiHelperTransactions extends ApiHelperChat2Pay {
 
     public static Response userGetAPaymentLinkResponse(PaymentBody paymentBody, String activationKey) {
         return postQuery(Endpoints.CHAT_TO_PAY_ENDPOINT, paymentBody, activationKey);
-    }
-
-    public static Response createWidget(WidgetBody widgetBody) {
-        return postQuery(Endpoints.WIDGETS_ENDPOINT, widgetBody, token.get());
-    }
-
-    public static Response deleteWidget(String widgetId) {
-        return deleteQuery(Endpoints.WIDGETS_ENDPOINT + "/" + widgetId, token.get());
     }
 
     public static Response cancelPaymentLink(String paymentLinkRef, String activationKey) {

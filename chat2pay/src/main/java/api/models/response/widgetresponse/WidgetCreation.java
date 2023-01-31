@@ -23,7 +23,7 @@ public class WidgetCreation {
     @JsonProperty("createdTime")
     private String createdTime;
 
-    public LocalDate getTimestamp() {
+    public LocalDate getCreatedTime() {
         return parseToLocalDate(createdTime);
     }
 }

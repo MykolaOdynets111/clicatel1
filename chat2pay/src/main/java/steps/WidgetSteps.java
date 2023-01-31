@@ -1,9 +1,9 @@
 package steps;
 
-import api.clients.ApiHelperTransactions;
+import api.clients.ApiHelperWidgets;
 import api.models.request.WidgetBody;
 import api.models.response.widgetresponse.WidgetCreation;
-import api.models.response.widgetresponse.WidgetDelete;
+import api.models.response.UpdatedEntityResponse;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
@@ -22,7 +22,7 @@ public class WidgetSteps {
 
     @Then("^User creates widget for an account$")
     public void createWidget(Map<String, String> dataMap) {
-        Response response = ApiHelperTransactions
+        Response response = ApiHelperWidgets
                 .createWidget(new WidgetBody(dataMap.get("i.type"), dataMap.get("i.environment")));
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(response.getStatusCode())
@@ -35,7 +35,7 @@ public class WidgetSteps {
                 softly.assertThat(widgetCreation.getWidgetId())
                         .as("widget ID is not exist in the response")
                         .isNotEqualTo(null);
-                softly.assertThat(widgetCreation.getTimestamp())
+                softly.assertThat(widgetCreation.getCreatedTime())
                         .as(format("widget creation date is not equals to %s", LocalDate.now()))
                         .isEqualTo(LocalDate.now());
                 softly.assertAll();
@@ -52,8 +52,8 @@ public class WidgetSteps {
     @Then("^User delete newly created widget$")
     public void deleteCreatedWidget() {
         if (createdWidgetId.get() != null) {
-            WidgetDelete widgetDeleteResponse = ApiHelperTransactions.deleteWidget(createdWidgetId.get()).as(WidgetDelete.class);
-            assertThat(widgetDeleteResponse.getTimestamp())
+            UpdatedEntityResponse updatedEntityResponseResponse = ApiHelperWidgets.deleteWidget(createdWidgetId.get()).as(UpdatedEntityResponse.class);
+            assertThat(updatedEntityResponseResponse.getUpdateTime())
                     .as(format("widget creation date is not equals to %s", LocalDate.now()))
                     .isEqualTo(LocalDate.now());
             createdWidgetId.remove();

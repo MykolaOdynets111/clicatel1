@@ -26,7 +26,7 @@ public abstract class MainApi {
 
     @NotNull
     protected static Response deleteQuery(String endpoint, String authToken) {
-        return delete(endpoint, "", authToken);
+        return delete(endpoint, authToken);
     }
 
     @NotNull
@@ -79,11 +79,11 @@ public abstract class MainApi {
                 .header("Authorization", authToken)
                 .get(endpoint);
     }
-    private static Response delete(String endpoint, Object body, String authToken) {
+
+    private static Response delete(String endpoint, String authToken) {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .header("Authorization", authToken)
-                .body(body)
                 .delete(endpoint);
     }
 }

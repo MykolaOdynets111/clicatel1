@@ -21,5 +21,5 @@ public class WidgetBody {
     private String type;
 
     @JsonProperty("environment")
-    private String environment = "2021-04-27T17:35:58.000+0000";
+    private String environment;
 }
