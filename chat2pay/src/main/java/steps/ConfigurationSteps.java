@@ -12,9 +12,9 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static api.clients.ApiHelperConfigurations.getC2PConfigurationResponse;
-import static api.models.response.failedresponse.UnauthorisedResponse.verifyUnauthorisedResponse;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
+import static utils.Validator.verifyUnauthorisedResponse;
 
 public class ConfigurationSteps {
 

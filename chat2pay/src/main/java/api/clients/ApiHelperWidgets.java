@@ -5,12 +5,10 @@ import api.models.response.ApiKeysResponse;
 import api.models.response.integrationresponse.IntegrationResponse;
 import api.models.response.widgetresponse.Widget;
 import api.models.response.widgetresponse.WidgetsContent;
-import io.restassured.response.Response;
 
 import java.util.List;
 
 import static api.clients.ApiHelperChat2Pay.getChat2PayQuery;
-import static api.clients.Endpoints.ALL_WIDGETS_ENDPOINT;
 
 public class ApiHelperWidgets extends MainApi {
 
@@ -37,9 +35,5 @@ public class ApiHelperWidgets extends MainApi {
         return widgets.stream().filter(w -> w.getName().equals(widgetName)).findFirst()
                 .orElseThrow(() -> new AssertionError("Widget didn't find"))
                 .getId();
-    }
-
-    public static Response getWidgetConfigurationResponse(String authToken) {
-        return getQuery(ALL_WIDGETS_ENDPOINT, authToken);
     }
 }
