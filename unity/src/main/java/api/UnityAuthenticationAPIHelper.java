@@ -15,11 +15,11 @@ public class UnityAuthenticationAPIHelper extends MainApi {
         credentials.put("email", unityClient.getUsername());
         credentials.put("password", unityClient.getPassword());
         //Get Token and ID
-        AuthTokenBody authTokenBody = postQueryWithoutAuth(UnityURLs.AUTH_ACCOUNTS, credentials,200).as(AuthTokenBody.class);
+        AuthTokenBody authTokenBody = postQueryWithoutAuth(UnityURLs.AUTH_ACCOUNTS, credentials, 200).as(AuthTokenBody.class);
         Map<String, Object> body = new HashMap<>();
         body.put("token", authTokenBody.getToken());
         body.put("accountId", authTokenBody.getAccounts().get(0).getId());
         //Return JWT
-        return postQueryWithoutAuth(UnityURLs.JWT_ACCOUNT,body,200).as(UnityJWT.class).getToken();
+        return postQueryWithoutAuth(UnityURLs.JWT_ACCOUNT, body, 200).as(UnityJWT.class).getToken();
     }
 }
