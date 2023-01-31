@@ -28,7 +28,7 @@ public class ChatHubApiHelper extends MainApi {
         return postQueryWithoutAuth(endpoint, body, responseCode);
     }
     public static ResponseBody putChatHubQuerywithAuthNoBody(String endpoint, int responseCode) {
-        return putQuerywithAuthNoBody(endpoint, getAuthToken(UnityClients.DEMO_CHAT_2_PAY_USER), responseCode);
+        return putQueryWithAuthNoBody(endpoint, getAuthToken(UnityClients.DEMO_CHAT_2_PAY_USER), responseCode);
     }
     public static ResponseBody putChatHubQueryWithoutAuth(String endpoint, Object body, int responseCode) {
         return putQueryWithoutAuth(endpoint, body, responseCode);
@@ -37,7 +37,7 @@ public class ChatHubApiHelper extends MainApi {
         return deleteQueryWithAuth(endpoint, getAuthToken(UnityClients.DEMO_CHAT_2_PAY_USER), responseCode);
     }
     public static ResponseBody putChatHubQuerywithAuthAndBody(String endpoint, Object body, int responseCode) {
-        return putQuerywithAuthAndBody(endpoint, getAuthToken(UnityClients.DEMO_CHAT_2_PAY_USER), body, responseCode);
+        return putQueryWithAuthAndBody(endpoint, getAuthToken(UnityClients.DEMO_CHAT_2_PAY_USER), body, responseCode);
     }
 
     public static ResponseBody getChatHubQueryWithoutAuth(String endpoint, int responseCode) {

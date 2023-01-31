@@ -33,7 +33,7 @@ public abstract class MainApi {
 
     @NotNull
     protected static ResponseBody putQueryWithoutAuth(String endpoint, Object body, int responseCode) {
-        Response response = putWithoutAuthh(endpoint, body);
+        Response response = putWithoutAuth(endpoint, body);
 
         return validate(response, responseCode);
     }
@@ -54,7 +54,7 @@ public abstract class MainApi {
     }
 
     @NotNull
-    protected static ResponseBody putQuerywithAuthNoBody(String endpoint, String authToken, int responseCode) {
+    protected static ResponseBody putQueryWithAuthNoBody(String endpoint, String authToken, int responseCode) {
         Response response = put(endpoint, authToken);
         return validate(response, responseCode);
     }
@@ -66,7 +66,7 @@ public abstract class MainApi {
         return validate(response, responseCode);
     }
 
-    private static Response putWithoutAuthh(String endpoint, Object body) {
+    private static Response putWithoutAuth(String endpoint, Object body) {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(body)
@@ -81,7 +81,7 @@ public abstract class MainApi {
     }
 
     @NotNull
-    protected static ResponseBody putQuerywithAuthAndBody(String endpoint, String authToken, Object body, int responseCode) {
+    protected static ResponseBody putQueryWithAuthAndBody(String endpoint, String authToken, Object body, int responseCode) {
         Response response = putwithBodyAndAuth(endpoint, authToken, body);
         return validate(response, responseCode);
     }

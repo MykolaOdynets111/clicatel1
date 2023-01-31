@@ -23,7 +23,9 @@ import org.testng.Assert;
 import api.ChatHubApiHelper;
 import org.testng.asserts.SoftAssert;
 import urlproxymanager.Proxymanager;
-import java.io.IOException;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -32,6 +34,7 @@ import java.util.Map;
 import java.util.*;
 
 import static abstractclasses.IntegrationsAbstractSteps.getIntegrationsPage;
+import static datetimeutils.DateTimeHelper.getYYYY_MM_DD_HH_MM_SS;
 import static java.lang.String.format;
 
 public class IntegrationSteps extends MainApi {
@@ -66,13 +69,11 @@ public class IntegrationSteps extends MainApi {
                             data.get("o.isAdded"))));
                 }
         String getProviders = mapper.writeValueAsString(ChatHubApiHelper.getChatHubQuery(Endpoints.PROVIDERS, 200).as(AllProviders[].class));
-        String expectedProviders = expectedProvidersBody.toString();
-        expectedProviders = expectedProviders.replace(", ", ",");
-            Assert.assertEquals(expectedProviders,getProviders , "Providers response is not as expected");
+            Assert.assertEquals(expectedProvidersBody.toString().replace(", ", ","),getProviders , "Providers response is not as expected");
         }
 
     @Given("User is able to GET providers API response - Internal")
-    public void userIsAbleToGETProvidersAPIResponseInternal(List<Map<String, String>> datatable) throws JsonProcessingException {
+    public void validateGETProvidersAPIResponseInternal(List<Map<String, String>> datatable) throws JsonProcessingException {
             ObjectMapper mapper = new ObjectMapper();
             List<String> expectedProvidersBody = new ArrayList<>();
             for(Map<String, String> data : datatable)
@@ -84,9 +85,7 @@ public class IntegrationSteps extends MainApi {
                             data.get("o.version"),data.get("o.latest"))));
                  }
             String getProviders = mapper.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithInternalAuth(Endpoints.INTERNAL_PROVIDERS, 200).as(AllProviders[].class));
-            String expectedProviders = expectedProvidersBody.toString();
-        expectedProviders = expectedProviders.replace(", ", ",");
-            Assert.assertEquals(expectedProviders,getProviders , "Providers response is not as expected");
+            Assert.assertEquals(expectedProvidersBody.toString().replace(", ", ","),getProviders , "Providers response is not as expected");
         }
 
     @Given("User is able to GET providers state in API response")
@@ -103,7 +102,7 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("User is able to GET providers state in API response - Internal")
-    public void userIsAbleToGETProvidersStateInAPIResponseInternal(Map<String,String> dataMap) {
+    public void validateGETProvidersStateInAPIResponseInternal(Map<String,String> dataMap) {
         String url = format(Endpoints.INTERNAL_PROVIDERS_STATE, dataMap.get("i.providerId"));
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
         if (responseCode == 200) {
@@ -116,7 +115,7 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("User is able to activate configuration for a provider")
-    public void userIsAbleToActivateConfigurationForAProvider(Map<String, String> dataMap) {
+    public void validateActivateConfigurationForAProvider(Map<String, String> dataMap) {
         String url = Endpoints.ACTIVATE_CONFIGURATION;
         Proxymanager proxy = new Proxymanager();
         Map<String, String> configurationBody = new LinkedHashMap<>();
@@ -167,20 +166,22 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("User is able to get configuration state")
-    public void userIsAbleToGetConfigurationState(Map<String,String> dataMap) {
+    public void validateGetConfigurationState(Map<String,String> dataMap) {
         String url = format(Endpoints.CONFIGURATION_STATE, dataMap.get("i.configurationId"));
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
         if (responseCode == 200) {
             ConfigurationState getConfigurationState = ChatHubApiHelper.getChatHubQuery(url, responseCode).as(ConfigurationState.class);
-            Assert.assertNotNull(getConfigurationState.id);
-            Assert.assertEquals(dataMap.get("o.accountProviderConfigStatusId"),getConfigurationState.accountProviderConfigStatusId);
+            SoftAssert softAssert = new SoftAssert();
+            softAssert.assertNotNull(getConfigurationState.id);
+            softAssert.assertEquals(dataMap.get("o.accountProviderConfigStatusId"),getConfigurationState.accountProviderConfigStatusId);
+            softAssert.assertAll();
         } else {
             Validator.validatedErrorResponseforGet(url, dataMap);
         }
     }
 
     @Given("User is able to get configuration secrects in astericks")
-    public void userIsAbleToGetConfigurationSecrectsInAstericks(Map<String,String> dataMap) {
+    public void validateGetConfigurationSecrectsInAstericks(Map<String,String> dataMap) {
         String url = format(Endpoints.CONFIGURATION_SECRETS, dataMap.get("i.configurationId"));
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
         if (responseCode == 200) {
@@ -204,7 +205,7 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("Admin is able to GET providers API response")
-    public void adminIsAbleToGETProvidersAPIResponse(List<Map<String, String>> datatable) throws JsonProcessingException {
+    public void validateGETProvidersAPIResponse(List<Map<String, String>> datatable) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         List<String> expectedProvidersBody = new ArrayList<>();
         for(Map<String, String> data : datatable)
@@ -223,7 +224,7 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("Admin is able to GET existing provider details")
-    public void adminIsAbleToGETExistingProviderDetails(Map<String, String> dataMap) {
+    public void validateGETExistingProviderDetails(Map<String, String> dataMap) {
         String url = format(Endpoints.ADMIN_PROVIDER_DETAILS, dataMap.get("i.providerId"));
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
         if (responseCode == 200) {
@@ -236,7 +237,7 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("Admin is able to GET configured provider for customer")
-    public void adminIsAbleToGETConfiguredProviderForCustomer(List<Map<String, String>> datatable) throws JsonProcessingException {
+    public void validateGETConfiguredProviderForCustomer(List<Map<String, String>> datatable) throws JsonProcessingException {
         String url = format(Endpoints.ADMIN_CONFIGURED_PROVIDER_DETAILS,datatable.get(0).get("i.mc2AccountId"));
         ObjectMapper mapper = new ObjectMapper();
         List<String> expectedConfiguredProviderDetails = new ArrayList<>();
@@ -253,7 +254,7 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("User is able to disable configurations")
-    public void userIsAbleToDisableConfigurations(Map<String,String> dataMap) {
+    public void validateDisableConfigurations(Map<String,String> dataMap) {
         String url = format(Endpoints.DISABLE_CONFIGURATION, dataMap.get("i.configurationId"));
 
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
@@ -276,7 +277,7 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("Admin is able to update existing provider details")
-    public void adminIsAbleToUpdateExistingProviderDetails(Map<String,String> dataMap) {
+    public void validateUpdateExistingProviderDetails(Map<String,String> dataMap) {
         String url = format(Endpoints.ADMIN_UPDATE_PROVIDER, dataMap.get("i.id"));
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
         Map<String, String> updateProviderBody = new LinkedHashMap<>();
@@ -297,13 +298,13 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("User is able to delete configurations")
-    public void userIsAbleToDeleteConfigurations(Map<String,String> dataMap) {
+    public void validateDeleteConfigurations(Map<String,String> dataMap) {
         String url = format(Endpoints.DELETE_CONFIGURATION, dataMap.get("i.configurationId"));
             Validator.validatedErrorResponseforDeleteWithAuth(url, dataMap);
         }
 
     @Given("User is able to re-activate configuration for a provider")
-    public void userIsAbleToReActivateConfigurationForAProvider(Map<String,String> dataMap) {
+    public void validateReActivateConfigurationForAProvider(Map<String,String> dataMap) {
         String url = format(Endpoints.RE_ACTIVATE_CONFIGURATION, dataMap.get("i.configurationId"));
         Map<String, String> reActivateConfigurationBody = new LinkedHashMap<>();
         for (String key : dataMap.keySet()) {
@@ -331,7 +332,7 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("User is able to get all configurations for a provider - Public")
-    public void userIsAbleToGetAllConfigurationsForAProviderCheckNonResponses(List<Map<String, String>> dataMap) throws JsonProcessingException {
+    public void validateGetAllConfigurationsForAProvider(List<Map<String, String>> dataMap) throws JsonProcessingException {
         String url = format(Endpoints.CONFIGURATIONS, dataMap.get(0).get("i.providerId"));
         if (dataMap.size() == 1)
             Validator.validatedErrorResponseforGet(url, dataMap.get(0));
@@ -352,7 +353,7 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("User is able to get all configurations for a provider - Internal")
-    public void userIsAbleToGetAllConfigurationsForAProviderCheckNonResponsesInternal(List<Map<String, String>> dataMap) throws JsonProcessingException {
+    public void validateAllConfigurationsForAProviderInternal(List<Map<String, String>> dataMap) throws JsonProcessingException {
         String url = format(Endpoints.INTERNAL_CONFIGURATIONS, dataMap.get(0).get("i.providerId"));
         if (dataMap.size() == 1) {
             Validator.validatedErrorResponseforGetInternalProviders(url, dataMap.get(0));
@@ -372,7 +373,7 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("Admin is able to create provider")
-    public void adminIsAbleToCreateProvider(Map<String, String> dataMap)throws JsonProcessingException {
+    public void validateToCreateProvider(Map<String, String> dataMap) {
             String url = Endpoints.ADMIN_PROVIDERS;
             int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
         Map<String, String> createProviderBody = new LinkedHashMap<>();
@@ -398,7 +399,7 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("User is able to get all endpoint detail for Provider")
-    public void userIsAbleToGetAllEndpointDetailForProvider(List<Map<String, String>> datatable) throws JsonProcessingException {
+    public void validateAllEndpointDetailForProvider(List<Map<String, String>> datatable) throws JsonProcessingException {
 
         String url = format(Endpoints.ADMIN_ENDPOINTS, datatable.get(0).get("i.providerID"), datatable.get(0).get("i.versionID"));
         int responseCode = Integer.parseInt(datatable.get(0).get("o.responseCode"));
@@ -423,7 +424,7 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("User is able to get all specifications for a provider")
-    public void userIsAbleToGetAllSpecificationsForAProvider(Map<String, String> dataMap) throws JsonProcessingException {
+    public void validateAllSpecificationsForAProvider(Map<String, String> dataMap) throws JsonProcessingException {
         String url = format(Endpoints.ADMIN_SPECIFICATIONS, dataMap.get("i.providerID"));
 
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
@@ -448,7 +449,7 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("User is able to get all endpoint detail for Provider via Internal API")
-    public void userIsAbleToGetAllEndpointDetailForProviderViaInternalAPI(List<Map<String, String>> datatable) throws JsonProcessingException {
+    public void validateAllEndpointDetailForProviderViaInternalAPI(List<Map<String, String>> datatable) throws JsonProcessingException {
         String url = format(Endpoints.INTERNAL_ENDPOINTS, datatable.get(0).get("i.providerID"), datatable.get(0).get("i.versionID"));
         int responseCode = Integer.parseInt(datatable.get(0).get("o.responseCode"));
 
@@ -472,7 +473,7 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("User is able to get specific endpoint detail for Provider via Admin api")
-    public void userIsAbleToGetSpecificEndpointDetailForProviderViaAdminApi(List<Map<String, String>> dataMap) throws JsonProcessingException {
+    public void validateSpecificEndpointDetailForProviderViaAdminApi(List<Map<String, String>> dataMap) throws JsonProcessingException {
 
         String url = format(Endpoints.ADMIN_ENDPOINTS_ENDPOINT, dataMap.get(0).get("i.endpointID"));
         ObjectMapper mapper = new ObjectMapper();
@@ -517,7 +518,7 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("User is able to get specific endpoint detail for Provider via Internal Api")
-    public void userIsAbleToGetSpecificEndpointDetailForProviderViaInternalApi(List<Map<String, String>> dataMap) throws JsonProcessingException {
+    public void validateSpecificEndpointDetailForProviderViaInternalApi(List<Map<String, String>> dataMap) throws JsonProcessingException {
         String url = format(Endpoints.INTERNAL_ENDPOINTS_ENDPOINT, dataMap.get(0).get("i.endpointID"));
         ObjectMapper mapper = new ObjectMapper();
         int responseCode = Integer.parseInt(dataMap.get(0).get("o.responseCode"));
@@ -562,7 +563,7 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("User is able to get all configurations for a provider via Admin API")
-    public void userIsAbleToGetAllConfigurationsForAProviderViaAdminAPI(List<Map<String, String>> datatable) throws JsonProcessingException {
+    public void validateAllConfigurationsForAProviderViaAdminAPI(List<Map<String, String>> datatable) throws JsonProcessingException {
         String url = format(Endpoints.ADMIN_GET_CONFIGURATIONS, datatable.get(0).get("i.providerId"), datatable.get(0).get("i.version"), datatable.get(0).get("i.mc2AccountId"));
         int responseCode = Integer.parseInt(datatable.get(0).get("o.responseCode"));
 
@@ -588,7 +589,7 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("User is able to get specific configuration detail")
-    public void userIsAbleToGetSpecificConfigurationDetail(Map<String, String> dataMap) {
+    public void validateSpecificConfigurationDetail(Map<String, String> dataMap) {
         String url = format(Endpoints.ADMIN_GET_CONFIGURATIONS_CONFIGURATION_ID, dataMap.get("i.configurationID"));
 
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
@@ -608,7 +609,7 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("User is able to get configuration with client id and client secret")
-    public void userIsAbleToGetConfigurationWithClientIdAndClientSecret(Map<String, String> dataMap) {
+    public void validateConfigurationWithClientIdAndClientSecret(Map<String, String> dataMap) {
         String url = format(Endpoints.ADMIN_GET_CONFIGURATIONS_SECRET, dataMap.get("i.configurationId"));
 
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
@@ -634,7 +635,7 @@ public class IntegrationSteps extends MainApi {
     }
 
     @Given("User should be able to create and activate configuration")
-    public void userShouldBeAbleToCreateAndActivateConfiguration(Map<String, String> dataMap) {
+    public void validateCreateAndActivateConfiguration(Map<String, String> dataMap) {
         String url = format(Endpoints.ADMIN_CONFIGURATION_ACTIVATE, dataMap.get("i.mc2AccountId"));
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
 
@@ -651,8 +652,7 @@ public class IntegrationSteps extends MainApi {
             SoftAssert softAssert = new SoftAssert();
             softAssert.assertNotNull(postActiveConfiguration.getId(), "Configuration Id is empty");
             softAssert.assertEquals(dataMap.get("o.type"), postActiveConfiguration.getType());
-            softAssert.assertEquals(dataMap.get("o.setupName"),postActiveConfiguration.getSetupName());
-            softAssert.assertNotNull(postActiveConfiguration.getCreatedDate(), "CurrentDate is Empty");
+            softAssert.assertEquals(dataMap.get("o.setupName"),postActiveConfiguration.getSetupName());softAssert.assertNotNull(postActiveConfiguration.getCreatedDate(), "CurrentDate is Empty");
             softAssert.assertNotNull(postActiveConfiguration.getModifiedDate(), "Modfied Date is empty");
             softAssert.assertEquals(dataMap.get("o.timeToExpire"), postActiveConfiguration.getTimeToExpire());
             softAssert.assertNotNull(postActiveConfiguration.getAuthenticationLink(),"Authentication link is empty");
