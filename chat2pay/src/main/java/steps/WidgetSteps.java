@@ -17,25 +17,22 @@ import java.util.Map;
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class WidgetSteps extends GeneralSteps{
+public class WidgetSteps extends GeneralSteps {
     public static final ThreadLocal<String> createdWidgetId = new ThreadLocal<>();
 
     @When("^User gets widgetId for (.*) form$")
     public void getWidgetId(String widgetName) {
-        widgetId.set(ApiHelperWidgets.getWidgetId(widgetName));
+        setWidgetIdWidgetId(widgetName);
     }
 
     @When("^User gets application Id for widget$")
     public void getApplicationId() {
-        applicationID.set(ApiHelperWidgets
-                .getIntegrationResponse(widgetId.get())
-                .getIntegrator()
-                .getApplicationUuid());
+        setApplicationId();
     }
 
     @When("^User gets activation key for widget$")
     public void getActivationKey() {
-        activationKey.set(ApiHelperWidgets.getActivationKey(widgetId.get()).getApiKey());
+        setActivationKey();
     }
 
 

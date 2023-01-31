@@ -1,16 +1,18 @@
 package api.clients;
 
 import api.MainApi;
+import api.models.request.WidgetBody;
 import api.models.response.ApiKeysResponse;
 import api.models.response.integrationresponse.IntegrationResponse;
 import api.models.response.widgetresponse.Widget;
 import api.models.response.widgetresponse.WidgetsContent;
+import io.restassured.response.Response;
 
 import java.util.List;
 
 import static api.clients.ApiHelperChat2Pay.getChat2PayQuery;
 
-public class ApiHelperWidgets extends MainApi {
+public class ApiHelperWidgets extends ApiHelperChat2Pay {
 
     public static IntegrationResponse getIntegrationResponse(String widgetId) {
         return getChat2PayQuery(String.format(Endpoints.WIDGET_INTEGRATION_ENDPOINT, widgetId))
@@ -36,4 +38,12 @@ public class ApiHelperWidgets extends MainApi {
                 .orElseThrow(() -> new AssertionError("Widget didn't find"))
                 .getId();
     }
+    public static Response createWidget(WidgetBody widgetBody) {
+        return postQuery(Endpoints.WIDGETS_ENDPOINT, widgetBody, token.get());
+    }
+
+    public static Response deleteWidget(String widgetId) {
+        return deleteQuery(Endpoints.WIDGETS_ENDPOINT + "/" + widgetId, token.get());
+    }
+
 }

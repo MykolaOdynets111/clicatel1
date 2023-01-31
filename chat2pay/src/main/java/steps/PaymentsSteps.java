@@ -27,24 +27,6 @@ public class PaymentsSteps extends GeneralSteps{
     public static final ThreadLocal<String> paymentLinkRef = new ThreadLocal<>();
     public static final String EXPIRED_LINK = "629905f6-e916-4490-a547-bf8f0d5fb9f4";
 
-    @When("^User gets widgetId for (.*) form$")
-    public void getWidgetId(String widgetName) {
-        widgetId.set(ApiHelperWidgets.getWidgetId(widgetName));
-    }
-
-    @When("^User gets application Id for widget$")
-    public void getApplicationId() {
-        applicationID.set(ApiHelperWidgets
-                .getIntegrationResponse(widgetId.get())
-                .getIntegrator()
-                .getApplicationUuid());
-    }
-
-    @When("^User gets activation key for widget$")
-    public void getActivationKey() {
-        activationKey.set(ApiHelperWidgets.getActivationKey(widgetId.get()).getApiKey());
-    }
-
     @When("^User gets paymentGatewaySettingsId for widget$")
     public void getPaymentGatewaySettingsId() {
         paymentGatewaySettingsId.set(ApiHelperPayments
