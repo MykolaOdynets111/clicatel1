@@ -16,7 +16,7 @@ import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static utils.Validator.verifyUnauthorisedResponse;
 
-public class ConfigurationSteps {
+public class ConfigurationSteps extends GeneralSteps{
 
     @Then("^User get the C2P configuration")
     public void getC2PConfiguration(Map<String, String> valuesMap) {

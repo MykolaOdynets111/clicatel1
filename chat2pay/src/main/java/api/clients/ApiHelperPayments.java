@@ -5,7 +5,7 @@ import api.models.request.ReceiptBody;
 import api.models.response.paymentgatewaysettingsresponse.PaymentGatewaySettingsResponse;
 import io.restassured.response.Response;
 
-public class ApiHelperTransactions extends ApiHelperChat2Pay {
+public class ApiHelperPayments extends ApiHelperChat2Pay {
 
     public static PaymentGatewaySettingsResponse getPaymentGatewaySettingsResponse(String widgetId) {
         return getChat2PayQuery(String.format(Endpoints.PAYMENTS_GATEWAY_ENDPOINT, widgetId))
