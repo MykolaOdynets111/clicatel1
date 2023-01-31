@@ -1,6 +1,7 @@
 package steps;
 
 import api.clients.ApiHelperTransactions;
+import api.clients.ApiHelperWidgets;
 import api.models.request.PaymentBody;
 import api.models.response.CancelPaymentLinkResponse;
 import api.models.response.PaymentLinkResponse;
@@ -30,12 +31,12 @@ public class PaymentsSteps {
 
     @When("^User gets widgetId for (.*) form$")
     public void getWidgetId(String widgetName) {
-        widgetId.set(ApiHelperTransactions.getWidgetId(widgetName));
+        widgetId.set(ApiHelperWidgets.getWidgetId(widgetName));
     }
 
     @When("^User gets application Id for widget$")
     public void getApplicationId() {
-        applicationID.set(ApiHelperTransactions
+        applicationID.set(ApiHelperWidgets
                 .getIntegrationResponse(widgetId.get())
                 .getIntegrator()
                 .getApplicationUuid());
@@ -43,7 +44,7 @@ public class PaymentsSteps {
 
     @When("^User gets activation key for widget$")
     public void getActivationKey() {
-        activationKey.set(ApiHelperTransactions.getActivationKey(widgetId.get()).getApiKey());
+        activationKey.set(ApiHelperWidgets.getActivationKey(widgetId.get()).getApiKey());
     }
 
     @When("^User gets paymentGatewaySettingsId for widget$")
