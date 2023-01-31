@@ -5,6 +5,7 @@ import api.models.request.WidgetBody;
 import api.models.response.widgetresponse.WidgetCreation;
 import api.models.response.UpdatedEntityResponse;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
@@ -16,8 +17,26 @@ import java.util.Map;
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class WidgetSteps {
+public class WidgetSteps extends GeneralSteps{
     public static final ThreadLocal<String> createdWidgetId = new ThreadLocal<>();
+
+    @When("^User gets widgetId for (.*) form$")
+    public void getWidgetId(String widgetName) {
+        widgetId.set(ApiHelperWidgets.getWidgetId(widgetName));
+    }
+
+    @When("^User gets application Id for widget$")
+    public void getApplicationId() {
+        applicationID.set(ApiHelperWidgets
+                .getIntegrationResponse(widgetId.get())
+                .getIntegrator()
+                .getApplicationUuid());
+    }
+
+    @When("^User gets activation key for widget$")
+    public void getActivationKey() {
+        activationKey.set(ApiHelperWidgets.getActivationKey(widgetId.get()).getApiKey());
+    }
 
 
     @Then("^User creates widget for an account$")

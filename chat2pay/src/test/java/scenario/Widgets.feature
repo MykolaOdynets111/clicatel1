@@ -1,6 +1,5 @@
 Feature: Widgets operations
-    # CRUD operations for Widgets
-
+# CRUD operations for Widgets
 
   Background:
     Given User is logged in to unity
@@ -25,6 +24,4 @@ Feature: Widgets operations
       | valid      | CHAT_TO_PAY | PRODUCTION    | 200            |                               |                                   |
       | nonexisted | CHAT_TO_PAY | xxx           | 400            | Request failed for /v2/widget | Invalid value for EnvironmentMode |
       | nonexisted | xxx         | SANDBOX       | 400            | Request failed for /v2/widget | Invalid value for WidgetType      |
-
-
 
