@@ -14,6 +14,11 @@ import lombok.Data;
 @Data
 public class ConfigStatus {
 
+    public ConfigStatus(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     @JsonProperty("id")
     private int id;
 

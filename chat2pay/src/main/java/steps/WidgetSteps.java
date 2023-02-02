@@ -2,6 +2,8 @@ package steps;
 
 import api.clients.ApiHelperWidgets;
 import api.models.request.WidgetBody;
+import api.models.response.widgetresponse.ConfigStatus;
+import api.models.response.widgetresponse.Widget;
 import api.models.response.widgetresponse.WidgetCreation;
 import api.models.response.UpdatedEntityResponse;
 import io.cucumber.java.en.Then;
@@ -65,12 +67,49 @@ public class WidgetSteps extends GeneralSteps {
         }
     }
 
+    @Then("^User updates newly created widget$")
+    public void updateCreatedWidget(Map<String, String> dataMap) {
+        Widget updateBody = new Widget();
+        updateBody.setEnvironment(dataMap.get("i.environment"));
+        updateBody.setStatus(dataMap.get("i.status"));
+        updateBody.setConfigStatus
+                (new ConfigStatus(Integer.parseInt(dataMap.get("i.configStatus_id")), dataMap.get("i.configStatus_name")));
+        updateBody.setName(dataMap.get("i.name"));
+        Response response;
+        switch (dataMap.get("i.widgetId")) {
+            case "valid":
+                response = ApiHelperWidgets.updateWidget(createdWidgetId.get(), updateBody);
+                checkStatusCode(dataMap, response);
+                assertThat(response.as(UpdatedEntityResponse.class).getUpdateTime())
+                        .as(format("widget update date is not equals to %s", LocalDate.now()))
+                        .isEqualTo(LocalDate.now());
+                break;
+            case "non_existed":
+                response = ApiHelperWidgets.updateWidget("non_existed", updateBody);
+                checkStatusCode(dataMap, response);
+                Validator.validateErrorResponse(response, dataMap);
+                break;
+            case "wrong_status":
+            case "wrong_env":
+                response = ApiHelperWidgets.updateWidget(createdWidgetId.get(), updateBody);
+                checkStatusCode(dataMap, response);
+                Validator.validateErrorResponse(response, dataMap);
+                break;
+            default:
+                Assertions.fail(format("Expected status %s is not existed", dataMap.get("i.widgetId")));
+        }
+
+    }
+
+
+
+
     @Then("^User delete newly created widget$")
     public void deleteCreatedWidget() {
         if (createdWidgetId.get() != null) {
-            UpdatedEntityResponse updatedEntityResponseResponse = ApiHelperWidgets.deleteWidget(createdWidgetId.get()).as(UpdatedEntityResponse.class);
-            assertThat(updatedEntityResponseResponse.getUpdateTime())
-                    .as(format("widget creation date is not equals to %s", LocalDate.now()))
+            UpdatedEntityResponse updatedEntityResponse = ApiHelperWidgets.deleteWidget(createdWidgetId.get()).as(UpdatedEntityResponse.class);
+            assertThat(updatedEntityResponse.getUpdateTime())
+                    .as(format("widget delete date is not equals to %s", LocalDate.now()))
                     .isEqualTo(LocalDate.now());
             createdWidgetId.remove();
         }

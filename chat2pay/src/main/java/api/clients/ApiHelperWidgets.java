@@ -38,8 +38,13 @@ public class ApiHelperWidgets extends ApiHelperChat2Pay {
                 .orElseThrow(() -> new AssertionError("Widget didn't find"))
                 .getId();
     }
+
     public static Response createWidget(WidgetBody widgetBody) {
         return postQuery(Endpoints.WIDGETS_ENDPOINT, widgetBody, token.get());
+    }
+
+    public static Response updateWidget(String widgetId, Widget widgetBody) {
+        return putQuery(Endpoints.WIDGETS_ENDPOINT + "/" + widgetId, widgetBody, token.get());
     }
 
     public static Response deleteWidget(String widgetId) {
