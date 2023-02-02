@@ -1,6 +1,8 @@
 package steps;
 
+import api.clients.ApiHelperAccounts;
 import api.clients.ApiHelperChat2Pay;
+import api.models.request.AccountSettingsPropertyBody;
 import api.models.response.accountresponse.AccountSettingsResponse;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
@@ -12,18 +14,16 @@ import java.util.Map;
 import static api.clients.ApiHelperAccounts.getAccountSettingsResponse;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static utils.Validator.verifyUnauthorisedResponse;
 
 public class AccountSteps {
 
+    private final SoftAssertions softly = new SoftAssertions();
+
     @Then("^User gets account settings")
     public void getAccountSettings(Map<String, String> valuesMap) {
-        SoftAssertions softly = new SoftAssertions();
-        String authToken = valuesMap.get("activationKey");
-        if (authToken.equals("token")) {
-            authToken = ApiHelperChat2Pay.token.get();
-        }
-        Response response = getAccountSettingsResponse(authToken);
+        Response response = getAccountSettingsResponse(getActivationKey(valuesMap));
         int statusCode = response.getStatusCode();
         int expectedResponseCode = parseInt(valuesMap.get("responseCode"));
 
@@ -41,5 +41,39 @@ public class AccountSteps {
         } else {
             Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
         }
+    }
+
+    @Then("^User updates account settings")
+    public void putAccountSettings(Map<String, String> valuesMap) {
+        AccountSettingsPropertyBody body = AccountSettingsPropertyBody.builder()
+                .showTutorial(Boolean.parseBoolean(valuesMap.get("showTutorial")))
+                .build();
+
+        Response response = ApiHelperAccounts.putAccountSettings(body, getActivationKey(valuesMap));
+        int statusCode = response.getStatusCode();
+        int expectedResponseCode = parseInt(valuesMap.get("responseCode"));
+
+        if (expectedResponseCode == statusCode) {
+            if (statusCode == 200) {
+                AccountSettingsResponse settings = getAccountSettingsResponse(getActivationKey(valuesMap))
+                        .as(AccountSettingsResponse.class);
+
+                assertThat(Boolean.valueOf(valuesMap.get("updatedShowTutorial")))
+                        .isEqualTo(settings.isShowTutorial());
+
+            } else if (expectedResponseCode == 401) {
+                verifyUnauthorisedResponse(valuesMap, response);
+            }
+        } else {
+            Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
+        }
+    }
+
+    private static String getActivationKey(Map<String, String> valuesMap) {
+        String authToken = valuesMap.get("activationKey");
+        if (authToken.equals("token")) {
+            authToken = ApiHelperChat2Pay.token.get();
+        }
+        return authToken;
     }
 }
