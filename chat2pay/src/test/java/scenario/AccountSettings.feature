@@ -32,7 +32,7 @@ Feature: Get settings for an account
 
     Examples:
       | i.activationKey | i.showTutorial | o.responseCode | o.showTutorial | o.error      | o.path                             |
-      | token           | false          | 200            | false          |              |                                    |
       | token           | true           | 200            | true           |              |                                    |
+      | token           | false          | 200            | false          |              |                                    |
       | test            |                | 401            |                | Unauthorized | /v2/account/settings/show-tutorial |
       | " "             |                | 401            |                | Unauthorized | /v2/account/settings/show-tutorial |
