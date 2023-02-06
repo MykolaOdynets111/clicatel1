@@ -10,14 +10,14 @@ public class Hooks extends GeneralSteps{
 
     @Before
     public void beforeScenario(Scenario scenario){
-        //TODO add precondition steps for ChatHub functionality
-        System.out.println("Before hooks Chat Hub");
+        //TODO add precondition steps for Chat2Pay functionality
+        System.out.println("Before hooks Chat 2 Pay");
     }
 
-    @After()
+    @After
     public void afterScenario(Scenario scenario){
 
-        System.out.println("After hooks Chat Hub");
+        System.out.println("After hooks Chat 2 Pay");
 
         if (DriverFactory.isTouchDriverExists()){
             DriverFactory.closeTouchBrowser();
