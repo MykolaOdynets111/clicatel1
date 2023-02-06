@@ -41,7 +41,7 @@ public class ApiHelperWidgets extends ApiHelperChat2Pay {
         return postQuery(Endpoints.WIDGETS_ENDPOINT, widgetBody, token.get());
     }
 
-    public static Response readWidget(String widgetId) {
+    public static Response getWidget(String widgetId) {
         return getQuery(Endpoints.WIDGETS_ENDPOINT + "/" + widgetId, token.get());
     }
 

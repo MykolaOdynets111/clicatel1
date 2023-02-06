@@ -43,10 +43,6 @@ public class Validator {
         softly.assertAll();
     }
 
-    public static void checkResponseCode(Response response, Map<String, String> dataMap){
-        checkResponseCode(response, dataMap.get("o.responseCode"));
-    }
-
     public static void checkResponseCode(Response response, String code) {
         assertThat(response.statusCode())
                 .as(format("Status code is not equals to %s", code))

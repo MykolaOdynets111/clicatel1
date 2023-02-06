@@ -44,7 +44,7 @@ public class WidgetSteps extends GeneralSteps {
         Response response = ApiHelperWidgets
                 .createWidget(new WidgetBody(dataMap.get("i.type"), dataMap.get("i.environment")));
         SoftAssertions softly = new SoftAssertions();
-        Validator.checkResponseCode(response, dataMap);
+        Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
         String status = dataMap.get("i.widget");
         switch (status) {
             case "valid":
@@ -73,8 +73,8 @@ public class WidgetSteps extends GeneralSteps {
             case "valid":
                 SoftAssertions softly = new SoftAssertions();
 
-                Response response = ApiHelperWidgets.readWidget(createdWidgetId.get());
-                Validator.checkResponseCode(response, dataMap);
+                Response response = ApiHelperWidgets.getWidget(createdWidgetId.get());
+                Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
 
                 Widget widget = response.as(Widget.class);
 
@@ -89,7 +89,7 @@ public class WidgetSteps extends GeneralSteps {
                 break;
 
             case "non_existed":
-                response = ApiHelperWidgets.readWidget("non_existed");
+                response = ApiHelperWidgets.getWidget("non_existed");
                 Validator.validateErrorResponse(response, dataMap);
                 break;
         }
@@ -107,7 +107,7 @@ public class WidgetSteps extends GeneralSteps {
         switch (dataMap.get("i.widgetId")) {
             case "valid":
                 response = ApiHelperWidgets.updateWidget(createdWidgetId.get(), updateBody);
-                Validator.checkResponseCode(response, dataMap);
+                Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
                 assertThat(response.as(UpdatedEntityResponse.class).getUpdateTime())
                         .as(format("widget update date is not equals to %s", LocalDate.now()))
                         .isEqualTo(LocalDate.now());
@@ -127,7 +127,6 @@ public class WidgetSteps extends GeneralSteps {
 
     }
 
-
     @Then("^User delete newly created widget$")
     public void deleteCreatedWidget() {
         if (createdWidgetId.get() != null) {
@@ -135,7 +134,7 @@ public class WidgetSteps extends GeneralSteps {
             assertThat(updatedEntityResponse.getUpdateTime())
                     .as(format("widget delete date is not equals to %s", LocalDate.now()))
                     .isEqualTo(LocalDate.now());
-            Response response = ApiHelperWidgets.readWidget(createdWidgetId.get());
+            Response response = ApiHelperWidgets.getWidget(createdWidgetId.get());
             Validator.checkResponseCode(response, "404");
             assertThat(response.as(ErrorResponse.class).getErrors().stream()
                     .anyMatch(e -> e.contains("Widget does not exist")))
