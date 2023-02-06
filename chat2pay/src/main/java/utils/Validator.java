@@ -21,11 +21,7 @@ public class Validator {
         ErrorValidatorObject errorData = new ErrorValidatorObject(data);
         ErrorResponse errorResponse = response.as(ErrorResponse.class);
         String error = errorResponse.getMessage();
-        String expectedCode = data.get("o.responseCode");
-
-        softly.assertThat(response.statusCode())
-                .as(format("Status code is not equals to %s", expectedCode))
-                .isEqualTo(Integer.valueOf(expectedCode));
+        checkResponseCode(response, data.get("o.responseCode"));
         softly.assertThat(error)
                 .as(format("Error message is incorrect. Error from server: %s", error))
                 .contains(errorData.getErrorMessage());
@@ -45,6 +41,10 @@ public class Validator {
         softly.assertThat(valuesMap.get("path")).isEqualTo(unsuccessful.path);
         softly.assertThat(unsuccessful.getTimestamp()).isEqualTo(LocalDate.now());
         softly.assertAll();
+    }
+
+    public static void checkResponseCode(Response response, Map<String, String> dataMap){
+        checkResponseCode(response, dataMap.get("o.responseCode"));
     }
 
     public static void checkResponseCode(Response response, String code) {
