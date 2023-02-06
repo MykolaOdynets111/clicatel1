@@ -17,7 +17,6 @@ import java.util.Map;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static utils.Validator.checkResponseCode;
 
 public class PaymentsSteps extends GeneralSteps{
 
@@ -51,7 +50,7 @@ public class PaymentsSteps extends GeneralSteps{
         switch (status) {
             case "valid":
                 response = ApiHelperPayments.cancelPaymentLink(paymentLinkRef.get(), activationKey.get());
-                checkResponseCode(response, dataMap.get("o.responseCode"));
+                Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
                 CancelPaymentLinkResponse cancelPaymentLinkResponse = response.as(CancelPaymentLinkResponse.class);
                 assertThat(cancelPaymentLinkResponse.getTransactionStatus())
                         .as(format("transaction status is not equals to %s", cancelPaymentLinkResponse.getTransactionStatus()))
@@ -82,7 +81,7 @@ public class PaymentsSteps extends GeneralSteps{
         switch (status) {
             case "valid":
                 response = ApiHelperPayments.receivePaymentLink(paymentLinkRef.get(), activationKey.get());
-                checkResponseCode(response, dataMap.get("o.responseCode"));
+                Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
                 ReceiptOrderResponse receiptOrderResponse = response.as(ReceiptOrderResponse.class);
                 assertThat(receiptOrderResponse.getTransactionStatus())
                         .as(format("transaction status is not equals to %s", receiptOrderResponse.getTransactionStatus()))
@@ -104,7 +103,7 @@ public class PaymentsSteps extends GeneralSteps{
     @Then("^User gets a correct payment link with status code (.*) and (.*)$")
     public void userCanGetAPaymentLink(String statusCode, String transactionStatus) {
         Response response = ApiHelperPayments.userGetAPaymentLinkResponse(paymentBody.get(), activationKey.get());
-        checkResponseCode(response, statusCode);
+        Validator.checkResponseCode(response, statusCode);
         PaymentLinkResponse paymentLinkResponse = response
                 .as(PaymentLinkResponse.class);
         paymentLink.set(paymentLinkResponse.getPaymentLink());

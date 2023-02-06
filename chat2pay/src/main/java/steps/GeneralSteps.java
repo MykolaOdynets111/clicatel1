@@ -7,8 +7,9 @@ public class GeneralSteps {
     protected static final ThreadLocal<String> widgetId = new ThreadLocal<>();
     protected static final ThreadLocal<String> applicationID = new ThreadLocal<>();
     protected static final ThreadLocal<String> activationKey = new ThreadLocal<>();
+    protected static final ThreadLocal<String> createdWidgetId = new ThreadLocal<>();
 
-    protected void setWidgetIdWidgetId(String widgetName) {
+    protected void setWidgetId(String widgetName) {
         widgetId.set(ApiHelperWidgets.getWidgetId(widgetName));
     }
 
