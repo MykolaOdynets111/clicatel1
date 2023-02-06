@@ -1,27 +1,21 @@
-package steps;
+package utils;
 
-import driverfactory.DriverFactory;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
-import io.cucumber.java.Scenario;
+import steps.GeneralSteps;
 
-
-public class Hooks extends GeneralSteps{
+public class Hooks extends GeneralSteps {
 
     @Before
-    public void beforeScenario(Scenario scenario){
+    public void beforeScenario() {
         //TODO add precondition steps for Chat2Pay functionality
         System.out.println("Before hooks Chat 2 Pay");
     }
 
     @After
-    public void afterScenario(Scenario scenario){
+    public void afterScenario() {
 
         System.out.println("After hooks Chat 2 Pay");
-
-        if (DriverFactory.isTouchDriverExists()){
-            DriverFactory.closeTouchBrowser();
-        }
         if (createdWidgetId.get() != null) {
             createdWidgetId.remove();
         }
