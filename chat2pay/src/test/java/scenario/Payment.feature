@@ -1,4 +1,3 @@
-# Created by modynets at 15.12.2022
 Feature: Transaction execution
   # user can get the transaction link and is able to make payment (positive and negative)
   # user can cancel transaction link and is able to make payment (positive and negative)
@@ -57,6 +56,7 @@ Feature: Transaction execution
       | o.responseCode | <o.responseCode> |
       | o.errorMessage | <o.errorMessage> |
       | o.errors       | <o.errors>       |
+
     Examples:
       | i.channel | i.to         | i.currency | i.orderNumber | i.subTotalAmount | i.taxAmount | i.totalAmount | i.timestamp                  | i.departmentId | i.departmentName | i.returnPaymentLink | i.paymentReviewAutoReversal | i.transactionType | o.responseCode | o.errorMessage | o.errors                                                 |  |
       | sms       | 447938556403 | ZAR        | 001           | 100              | 0.0         | 4004.0        | 2021-04-27T17:35:58.000+0000 | 567            | Sales            | true                | false                       | authorization     | 400            | Request failed | Total amount is not equal to the sum of tax and subtotal |  |
