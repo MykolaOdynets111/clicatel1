@@ -21,6 +21,8 @@ import java.util.Map;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static utils.Validator.validateErrorResponse;
+import static utils.Validator.verifyBadRequestResponse;
 import static utils.Validator.verifyUnauthorisedResponse;
 
 public class WidgetSteps extends GeneralSteps {
@@ -61,7 +63,7 @@ public class WidgetSteps extends GeneralSteps {
                 createdWidgetId.set(response.as(WidgetCreation.class).getWidgetId());
                 break;
             case "nonexisted":
-                Validator.validateErrorResponse(response, dataMap);
+                validateErrorResponse(response, dataMap);
                 break;
             default:
                 Assertions.fail(format("Expected status %s is not existed", status));
@@ -87,7 +89,7 @@ public class WidgetSteps extends GeneralSteps {
                 break;
             case "non_existed":
                 response = ApiHelperWidgets.getWidget("non_existed");
-                Validator.validateErrorResponse(response, dataMap);
+                validateErrorResponse(response, dataMap);
                 break;
         }
     }
@@ -110,12 +112,12 @@ public class WidgetSteps extends GeneralSteps {
                 break;
             case "non_existed":
                 response = ApiHelperWidgets.updateWidget("non_existed", updateBody);
-                Validator.validateErrorResponse(response, dataMap);
+                validateErrorResponse(response, dataMap);
                 break;
             case "wrong_status":
             case "wrong_env":
                 response = ApiHelperWidgets.updateWidget(createdWidgetId.get(), updateBody);
-                Validator.validateErrorResponse(response, dataMap);
+                validateErrorResponse(response, dataMap);
                 break;
             default:
                 Assertions.fail(format("Expected status %s is not existed", dataMap.get("i.widgetId")));
@@ -124,25 +126,24 @@ public class WidgetSteps extends GeneralSteps {
 
     @Then("^User links channel to the widget")
     public void linkChannelToWidget(Map<String, String> valuesMap) {
+        String widgetId = valuesMap.get("i.widgetId");
         ChannelManagement body = ChannelManagement.builder()
-                .smsOmniIntegrationId(valuesMap.get("smsOmniIntegrationId"))
-                .whatsappOmniIntegrationId(valuesMap.get("whatsappOmniIntegrationId"))
+                .smsOmniIntegrationId(valuesMap.get("i.smsOmniIntegrationId"))
+                .whatsappOmniIntegrationId(valuesMap.get("i.whatsappOmniIntegrationId"))
                 .build();
 
-        response = ApiHelperChannelManagement.postChannelManagement(body, getActivationKey(valuesMap));
+        response = ApiHelperChannelManagement.postChannelManagement(body, widgetId, getActivationKey(valuesMap));
         int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(valuesMap.get("responseCode"));
+        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
 
         if (expectedResponseCode == statusCode) {
-            if (statusCode == 200) {
-                UpdatedEntityResponse entityResponse = ApiHelperChannelManagement
-                        .postChannelManagement(body, getActivationKey(valuesMap))
-                        .as(UpdatedEntityResponse.class);
-
-                assertThat(valuesMap.get("updatedShowTutorial")).isEqualTo(entityResponse.getUpdateTime());
-
+            if (statusCode == 202) {
+                assertThat(response.as(UpdatedEntityResponse.class).getUpdateTime())
+                        .isEqualTo(LocalDate.now());
             } else if (expectedResponseCode == 401) {
                 verifyUnauthorisedResponse(valuesMap, response);
+            } else if (expectedResponseCode == 404) {
+                verifyBadRequestResponse(valuesMap, response);
             }
         } else {
             Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));

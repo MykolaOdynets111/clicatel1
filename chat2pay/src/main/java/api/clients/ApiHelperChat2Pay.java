@@ -19,6 +19,13 @@ public class ApiHelperChat2Pay extends MainApi {
         return token.get();
     }
 
+    public static String logInToUnityAsQA() {
+        if (token.get() == null) {
+            token.set(getAuthToken(UnityClients.QA_C2P_USER));
+        }
+        return token.get();
+    }
+
     public static ResponseBody getChat2PayQuery(String endpoint) {
         return getQuery(endpoint, token.get(), 200);
     }

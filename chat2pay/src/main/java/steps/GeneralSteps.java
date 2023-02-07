@@ -30,7 +30,7 @@ public class GeneralSteps {
     }
 
     protected static String getActivationKey(Map<String, String> valuesMap) {
-        String authToken = valuesMap.get("activationKey");
+        String authToken = valuesMap.get("i.activationKey");
         if (authToken.equals("token")) {
             authToken = ApiHelperChat2Pay.token.get();
         }

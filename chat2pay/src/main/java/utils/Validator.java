@@ -1,5 +1,6 @@
 package utils;
 
+import api.models.response.failedresponse.BadRequestResponse;
 import api.models.response.failedresponse.ErrorResponse;
 import api.models.response.failedresponse.UnauthorisedResponse;
 import datamodelclasses.validateobjects.ErrorValidatorObject;
@@ -21,7 +22,11 @@ public class Validator {
         ErrorValidatorObject errorData = new ErrorValidatorObject(data);
         ErrorResponse errorResponse = response.as(ErrorResponse.class);
         String error = errorResponse.getMessage();
-        checkResponseCode(response, data.get("o.responseCode"));
+        String expectedCode = data.get("o.responseCode");
+
+        softly.assertThat(response.statusCode())
+                .as(format("Status code is not equals to %s", expectedCode))
+                .isEqualTo(Integer.valueOf(expectedCode));
         softly.assertThat(error)
                 .as(format("Error message is incorrect. Error from server: %s", error))
                 .contains(errorData.getErrorMessage());
@@ -36,10 +41,18 @@ public class Validator {
     public static void verifyUnauthorisedResponse(Map<String, String> valuesMap, Response response) {
         UnauthorisedResponse unsuccessful = response.as(UnauthorisedResponse.class);
 
-        softly.assertThat(parseInt(valuesMap.get("responseCode"))).isEqualTo(unsuccessful.status);
-        softly.assertThat(valuesMap.get("error")).isEqualTo(unsuccessful.error);
-        softly.assertThat(valuesMap.get("path")).isEqualTo(unsuccessful.path);
+        softly.assertThat(parseInt(valuesMap.get("o.responseCode"))).isEqualTo(unsuccessful.status);
+        softly.assertThat(valuesMap.get("o.errors")).isEqualTo(unsuccessful.error);
+        softly.assertThat(valuesMap.get("o.path")).isEqualTo(unsuccessful.path);
         softly.assertThat(unsuccessful.getTimestamp()).isEqualTo(LocalDate.now());
+        softly.assertAll();
+    }
+
+    public static void verifyBadRequestResponse(Map<String, String> valuesMap, Response response) {
+        BadRequestResponse badRequestResponse = response.as(BadRequestResponse.class);
+
+        softly.assertThat(valuesMap.get("o.errors")).isEqualTo(badRequestResponse.status);
+        softly.assertThat(valuesMap.get("o.path")).isEqualTo(badRequestResponse.message);
         softly.assertAll();
     }
 
