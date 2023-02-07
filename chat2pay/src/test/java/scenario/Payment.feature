@@ -28,8 +28,8 @@ Feature: Transaction execution
 
     Then User gets a correct payment link with status code 201 and <o.transactionStatus>
     And The payment has success status code
-    Examples:
 
+    Examples:
       | i.channel | i.to         | i.currency | i.orderNumber | i.subTotalAmount | i.taxAmount | i.totalAmount | i.timestamp                  | i.departmentId | i.departmentName | i.returnPaymentLink | i.paymentReviewAutoReversal | i.transactionType | o.transactionStatus           |
       | sms       | 447938556403 | ZAR        | 1             | 100              | 0           | 100           | 2021-04-27T17:35:58.000+0000 | 567            | Sales            | TRUE                | FALSE                       | authorization     | PAYMENT_LINK_SENT             |
       | none      | 447938556403 | ZAR        | 1             | 100              | 0           | 100           | 2021-04-27T17:35:58.000+0001 | 568            | Sales            | TRUE                | FALSE                       | authorization     | PAYMENT_LINK_REQUEST_RECEIVED |

@@ -12,16 +12,9 @@ public class ApiHelperChat2Pay extends MainApi {
 
     public static final ThreadLocal<String> token = new ThreadLocal<>();
 
-    public static String logInToUnity() {
+    public static String logInToUnity(UnityClients unityClients) {
         if (token.get() == null) {
-            token.set(getAuthToken(UnityClients.DEV_CHAT_2_PAY_USER));
-        }
-        return token.get();
-    }
-
-    public static String logInToUnityAsQA() {
-        if (token.get() == null) {
-            token.set(getAuthToken(UnityClients.QA_C2P_USER));
+            token.set(getAuthToken(unityClients));
         }
         return token.get();
     }

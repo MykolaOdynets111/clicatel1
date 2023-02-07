@@ -3,7 +3,7 @@ package api.models.response.widgetresponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
@@ -15,7 +15,7 @@ import static datetimeutils.DateTimeHelper.parseToLocalDate;
         "createdTime"
 })
 
-@Data
+@Getter
 public class WidgetCreation {
     @JsonProperty("widgetId")
     private String widgetId;
@@ -24,6 +24,6 @@ public class WidgetCreation {
     private String createdTime;
 
     public LocalDate getCreatedTime() {
-        return parseToLocalDate(createdTime);
+        return parseToLocalDate(this.createdTime);
     }
 }

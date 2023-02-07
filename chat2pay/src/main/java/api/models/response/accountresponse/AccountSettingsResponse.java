@@ -3,7 +3,7 @@ package api.models.response.accountresponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Data;
+import lombok.Getter;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -11,10 +11,10 @@ import lombok.Data;
         "showTutorial"
 })
 
-@Data
+@Getter
 public class AccountSettingsResponse {
     @JsonProperty("accountId")
-    private String accountId;
+    public String accountId;
     @JsonProperty("showTutorial")
-    private boolean showTutorial;
+    public boolean showTutorial;
 }

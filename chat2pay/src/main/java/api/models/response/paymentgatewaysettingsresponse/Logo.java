@@ -3,7 +3,6 @@ package api.models.response.paymentgatewaysettingsresponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Data;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -17,30 +16,29 @@ import lombok.Data;
         "createdTime"
 })
 
-@Data
 public class Logo {
 
     @JsonProperty("id")
-    private String id;
+    public String id;
 
     @JsonProperty("fileKey")
-    private String fileKey;
+    public String fileKey;
 
     @JsonProperty("originalFilename")
-    private String originalFilename;
+    public String originalFilename;
 
     @JsonProperty("fileSizeBytes")
-    private int fileSizeBytes;
+    public int fileSizeBytes;
 
     @JsonProperty("mediaType")
-    private String mediaType;
+    public String mediaType;
 
     @JsonProperty("imageWidth")
-    private int imageWidth;
+    public int imageWidth;
 
     @JsonProperty("imageHeight")
-    private int imageHeight;
+    public int imageHeight;
 
     @JsonProperty("createdTime")
-    private String createdTime;
+    public String createdTime;
 }

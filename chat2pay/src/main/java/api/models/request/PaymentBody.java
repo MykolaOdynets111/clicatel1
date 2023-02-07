@@ -3,7 +3,7 @@ package api.models.request;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Data;
+import lombok.Getter;
 
 import java.util.Map;
 
@@ -26,7 +26,7 @@ import java.util.Map;
         "transactionType"
 })
 
-@Data
+@Getter
 public class PaymentBody {
 
     @JsonProperty("channel")

@@ -3,7 +3,7 @@ package api.models.response.widgetresponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Data;
+import lombok.Getter;
 
 import java.util.ArrayList;
 
@@ -23,7 +23,7 @@ import java.util.ArrayList;
         "empty"
 })
 
-@Data
+@Getter
 public class WidgetsContent {
 
     @JsonProperty("content")
