@@ -1,27 +1,31 @@
 package steps;
 
+import api.clients.ApiHelperChannelManagement;
 import api.clients.ApiHelperWidgets;
+import api.models.request.ChannelManagement;
 import api.models.request.WidgetBody;
+import api.models.response.UpdatedEntityResponse;
 import api.models.response.failedresponse.ErrorResponse;
 import api.models.response.widgetresponse.ConfigStatus;
 import api.models.response.widgetresponse.Widget;
 import api.models.response.widgetresponse.WidgetCreation;
-import api.models.response.UpdatedEntityResponse;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.SoftAssertions;
 import utils.Validator;
 
 import java.time.LocalDate;
 import java.util.Map;
 
+import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static utils.Validator.verifyUnauthorisedResponse;
 
 public class WidgetSteps extends GeneralSteps {
 
+    private Response response;
 
     @When("^User gets widgetId for (.*) form$")
     public void getWidgetId(String widgetName) {
@@ -38,12 +42,10 @@ public class WidgetSteps extends GeneralSteps {
         setActivationKey();
     }
 
-
     @Then("^User creates widget for an account$")
     public void createWidget(Map<String, String> dataMap) {
-        Response response = ApiHelperWidgets
-                .createWidget(new WidgetBody(dataMap.get("i.type"), dataMap.get("i.environment")));
-        SoftAssertions softly = new SoftAssertions();
+        response = ApiHelperWidgets.createWidget(new WidgetBody(dataMap.get("i.type"), dataMap.get("i.environment")));
+
         Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
         String status = dataMap.get("i.widget");
         switch (status) {
@@ -68,16 +70,12 @@ public class WidgetSteps extends GeneralSteps {
 
     @Then("^User gets newly created widget$")
     public void getCreatedWidget(Map<String, String> dataMap) {
-
         switch (dataMap.get("i.widgetId")) {
             case "valid":
-                SoftAssertions softly = new SoftAssertions();
-
-                Response response = ApiHelperWidgets.getWidget(createdWidgetId.get());
+                response = ApiHelperWidgets.getWidget(createdWidgetId.get());
                 Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
 
                 Widget widget = response.as(Widget.class);
-
                 softly.assertThat(widget.getModifiedTime()).isNotNull();
                 softly.assertThat(widget.getCreatedTime()).isNotNull();
                 softly.assertThat(dataMap.get("o.name")).isEqualTo(widget.getName());
@@ -87,7 +85,6 @@ public class WidgetSteps extends GeneralSteps {
                 softly.assertThat(dataMap.get("o.environment")).isEqualTo(widget.getEnvironment());
                 softly.assertAll();
                 break;
-
             case "non_existed":
                 response = ApiHelperWidgets.getWidget("non_existed");
                 Validator.validateErrorResponse(response, dataMap);
@@ -103,7 +100,6 @@ public class WidgetSteps extends GeneralSteps {
         updateBody.setConfigStatus
                 (new ConfigStatus(Integer.parseInt(dataMap.get("i.configStatus_id")), dataMap.get("i.configStatus_name")));
         updateBody.setName(dataMap.get("i.name"));
-        Response response;
         switch (dataMap.get("i.widgetId")) {
             case "valid":
                 response = ApiHelperWidgets.updateWidget(createdWidgetId.get(), updateBody);
@@ -124,22 +120,59 @@ public class WidgetSteps extends GeneralSteps {
             default:
                 Assertions.fail(format("Expected status %s is not existed", dataMap.get("i.widgetId")));
         }
+    }
 
+    @Then("^User links channel to the widget")
+    public void linkChannelToWidget(Map<String, String> valuesMap) {
+        ChannelManagement body = ChannelManagement.builder()
+                .smsOmniIntegrationId(valuesMap.get("smsOmniIntegrationId"))
+                .whatsappOmniIntegrationId(valuesMap.get("whatsappOmniIntegrationId"))
+                .build();
+
+        response = ApiHelperChannelManagement.postChannelManagement(body, getActivationKey(valuesMap));
+        int statusCode = response.getStatusCode();
+        int expectedResponseCode = parseInt(valuesMap.get("responseCode"));
+
+        if (expectedResponseCode == statusCode) {
+            if (statusCode == 200) {
+                UpdatedEntityResponse entityResponse = ApiHelperChannelManagement
+                        .postChannelManagement(body, getActivationKey(valuesMap))
+                        .as(UpdatedEntityResponse.class);
+
+                assertThat(valuesMap.get("updatedShowTutorial")).isEqualTo(entityResponse.getUpdateTime());
+
+            } else if (expectedResponseCode == 401) {
+                verifyUnauthorisedResponse(valuesMap, response);
+            }
+        } else {
+            Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
+        }
     }
 
     @Then("^User delete newly created widget$")
     public void deleteCreatedWidget() {
         if (createdWidgetId.get() != null) {
-            UpdatedEntityResponse updatedEntityResponse = ApiHelperWidgets.deleteWidget(createdWidgetId.get()).as(UpdatedEntityResponse.class);
-            assertThat(updatedEntityResponse.getUpdateTime())
-                    .as(format("widget delete date is not equals to %s", LocalDate.now()))
-                    .isEqualTo(LocalDate.now());
-            Response response = ApiHelperWidgets.getWidget(createdWidgetId.get());
-            Validator.checkResponseCode(response, "404");
-            assertThat(response.as(ErrorResponse.class).getErrors().stream()
-                    .anyMatch(e -> e.contains("Widget does not exist")))
-                    .as(format("The newly created widget has not been deleted. widgetId : %s", createdWidgetId.get()));
+            deleteWidget(createdWidgetId.get());
+            verifyWidgetIsDeleted(createdWidgetId.get());
         }
     }
 
+    private void verifyWidgetIsDeleted(String widgetId) {
+        response = ApiHelperWidgets.getWidget(widgetId);
+        Validator.checkResponseCode(response, "404");
+        boolean widgetDoesNotExist = response.as(ErrorResponse.class).getErrors()
+                .stream()
+                .anyMatch(e -> e.contains("Widget does not exist"));
+        assertThat(widgetDoesNotExist)
+                .as(format("The newly created widget has not been deleted. widgetId : %s", widgetId))
+                .isTrue();
+    }
+
+    private static void deleteWidget(String widgetId) {
+        UpdatedEntityResponse updatedEntityResponse = ApiHelperWidgets.deleteWidget(widgetId)
+                .as(UpdatedEntityResponse.class);
+        assertThat(updatedEntityResponse.getUpdateTime())
+                .as(format("widget delete date is not equals to %s", LocalDate.now()))
+                .isEqualTo(LocalDate.now());
+    }
 }

@@ -16,8 +16,6 @@ Feature: Widgets operations
       | o.errorMessage | <o.errorMessage> |
 
     Then User delete newly created widget
-
-
     Examples:
       | i.widget   | i.type      | i.environment | o.responseCode | o.errorMessage                | o.errors                          |
       | valid      | CHAT_TO_PAY | SANDBOX       | 200            |                               |                                   |
@@ -34,7 +32,6 @@ Feature: Widgets operations
       | i.environment  | SANDBOX     |
       | o.responseCode | 200         |
 
-
     Then User updates newly created widget
       | i.widgetId          | <i.widgetId>          |
       | i.name              | <i.name>              |
@@ -48,9 +45,7 @@ Feature: Widgets operations
       | o.errorMessage      | <o.errorMessage>      |
       | o.errors            | <o.errors>            |
 
-
     Then User delete newly created widget
-
     Examples:
       | i.widgetId   | i.name          | i.status   | i.configStatus_id | i.configStatus_name | i.environment | o.responseCode | o.updateTime | o.status    | o.errorMessage                 | o.errors                          |
       | valid        | My first widget | CONFIGURED | 1                 | Configured          | SANDBOX       | 200            | TRUE         |             |                                |                                   |
@@ -91,6 +86,7 @@ Feature: Widgets operations
       | o.updateTime        | <o.updateTime>        |
       | o.errorMessage      | <o.errorMessage>      |
       | o.errors            | <o.errors>            |
+
     Then User delete newly created widget
     Examples:
       | i.widgetId   | i.name          | i.status   | i.configStatus_id | i.configStatus_name | i.environment | o.responseCode | o.updateTime | o.status    | o.errorMessage                 | o.errors                          |

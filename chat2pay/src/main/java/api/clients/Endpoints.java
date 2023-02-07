@@ -15,4 +15,5 @@ public class Endpoints {
     public static final String PAYMENT_RECEIPT = C2P_URL + "/api/v2/order-receipt";
     public static final String ACCOUNT_SETTINGS = C2P_URL + "/v2/account/settings";
     public static final String ACCOUNT_SETTINGS_SHOW_TUTORIAL = C2P_URL + "/v2/account/settings/show-tutorial";
+    public static final String CHANNEL_MANAGEMENT_LINK_CHANNEL = C2P_URL_DEMO + "v2/widget/%s/link-channels";
 }

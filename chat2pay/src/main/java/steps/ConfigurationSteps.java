@@ -6,7 +6,6 @@ import api.models.response.c2pconfiguration.SupportedCurrency;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.SoftAssertions;
 
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -16,11 +15,10 @@ import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static utils.Validator.verifyUnauthorisedResponse;
 
-public class ConfigurationSteps extends GeneralSteps{
+public class ConfigurationSteps extends GeneralSteps {
 
     @Then("^User get the C2P configuration")
     public void getC2PConfiguration(Map<String, String> valuesMap) {
-        SoftAssertions softly = new SoftAssertions();
         Response response = getC2PConfigurationResponse(valuesMap.get("activationKey"));
         int statusCode = response.getStatusCode();
         int expectedResponseCode = parseInt(valuesMap.get("responseCode"));

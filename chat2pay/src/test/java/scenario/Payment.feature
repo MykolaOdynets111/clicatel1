@@ -28,7 +28,6 @@ Feature: Transaction execution
 
     Then User gets a correct payment link with status code 201 and <o.transactionStatus>
     And The payment has success status code
-
     Examples:
 
       | i.channel | i.to         | i.currency | i.orderNumber | i.subTotalAmount | i.taxAmount | i.totalAmount | i.timestamp                  | i.departmentId | i.departmentName | i.returnPaymentLink | i.paymentReviewAutoReversal | i.transactionType | o.transactionStatus           |
