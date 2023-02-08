@@ -88,7 +88,7 @@ public class WidgetSteps extends GeneralSteps {
                 softly.assertAll();
                 break;
             case "non_existed":
-                response = ApiHelperWidgets.getWidget("non_existed");
+                response = ApiHelperWidgets.getWidget(dataMap.get("i.widgetId"));
                 validateErrorResponse(response, dataMap);
                 break;
         }
@@ -111,7 +111,7 @@ public class WidgetSteps extends GeneralSteps {
                         .isEqualTo(LocalDate.now());
                 break;
             case "non_existed":
-                response = ApiHelperWidgets.updateWidget("non_existed", updateBody);
+                response = ApiHelperWidgets.updateWidget(dataMap.get("i.widgetId"), updateBody);
                 validateErrorResponse(response, dataMap);
                 break;
             case "wrong_status":
@@ -157,6 +157,39 @@ public class WidgetSteps extends GeneralSteps {
             verifyWidgetIsDeleted(createdWidgetId.get());
         }
     }
+
+    @Then("^User updates show_linked_api for newly created widget$")
+    public void updateShowLinkedApiCreatedWidget(Map<String, String> dataMap) {
+        Widget body = new Widget();
+        body.setShowLinkedApi(Boolean.parseBoolean(dataMap.get("i.showLinkedApi")));
+
+
+        switch (dataMap.get("i.widgetId")) {
+            case "valid":
+                response = ApiHelperWidgets.updateShowLinkedApiForWidget(createdWidgetId.get(), body);
+                Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
+                UpdatedEntityResponse updatedEntityResponse = response.as(UpdatedEntityResponse.class);
+                softly.assertThat(updatedEntityResponse.getUpdateTime())
+                        .as(format("widget update date is not equals to %s", LocalDate.now()))
+                        .isEqualTo(LocalDate.now());
+                softly.assertThat(updatedEntityResponse.isShowLinkedApi())
+                        .isEqualTo(Boolean.valueOf(Boolean.parseBoolean(dataMap.get("i.showLinkedApi"))));
+                softly.assertThat(ApiHelperWidgets.getWidget(createdWidgetId.get()).as(Widget.class)
+                                .isShowLinkedApi())
+                        .isEqualTo(Boolean.valueOf(Boolean.parseBoolean(dataMap.get("i.showLinkedApi"))));
+                softly.assertAll();
+                break;
+            case "non_existed":
+                response = ApiHelperWidgets.updateShowLinkedApiForWidget(dataMap.get("i.widgetId"), body);
+                Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
+                validateErrorResponse(response, dataMap);
+                break;
+            default:
+                Assertions.fail(format("Expected status %s is not existed", dataMap.get("i.widgetId")));
+
+        }
+    }
+
 
     private void verifyWidgetIsDeleted(String widgetId) {
         response = ApiHelperWidgets.getWidget(widgetId);

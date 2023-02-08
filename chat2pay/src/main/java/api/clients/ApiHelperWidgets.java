@@ -53,4 +53,8 @@ public class ApiHelperWidgets extends ApiHelperChat2Pay {
         return deleteQuery(Endpoints.WIDGETS_ENDPOINT + "/" + widgetId, token.get());
     }
 
+    public static Response updateShowLinkedApiForWidget(String widgetId, Widget widgetBody) {
+        return putQuery(Endpoints.WIDGETS_ENDPOINT + "/" + widgetId + "/show-linked-api", widgetBody, token.get());
+    }
+
 }

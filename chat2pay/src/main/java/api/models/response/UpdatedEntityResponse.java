@@ -11,7 +11,10 @@ import static datetimeutils.DateTimeHelper.parseToLocalDate;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "updateTime"
+        "updateTime",
+        "showLinkedApi",
+        "enabledApplicationCount",
+        "disabledApplicationCount"
 })
 
 @Data
@@ -19,6 +22,15 @@ public class UpdatedEntityResponse {
 
     @JsonProperty("updateTime")
     private String updateTime;
+
+    @JsonProperty("showLinkedApi")
+    public boolean showLinkedApi;
+
+    @JsonProperty("enabledApplicationCount")
+    public int enabledApplicationCount;
+
+    @JsonProperty("disabledApplicationCount")
+    public int disabledApplicationCount;
 
     public LocalDate getUpdateTime() {
         return parseToLocalDate(updateTime);
