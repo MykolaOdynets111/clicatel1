@@ -33,6 +33,6 @@ public class UpdatedEntityResponse {
     public int disabledApplicationCount;
 
     public LocalDate getUpdateTime() {
-        return parseToLocalDate(updateTime);
+        return parseToLocalDate(this.updateTime);
     }
 }

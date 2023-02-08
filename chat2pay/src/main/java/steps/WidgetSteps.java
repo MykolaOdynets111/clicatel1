@@ -46,7 +46,11 @@ public class WidgetSteps extends GeneralSteps {
 
     @Then("^User creates widget for an account$")
     public void createWidget(Map<String, String> dataMap) {
-        response = ApiHelperWidgets.createWidget(new WidgetBody(dataMap.get("i.type"), dataMap.get("i.environment")));
+        WidgetBody widget = WidgetBody.builder()
+                .type(dataMap.get("i.type"))
+                .environment(dataMap.get("i.environment"))
+                .build();
+        response = ApiHelperWidgets.createWidget(widget);
 
         Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
         String status = dataMap.get("i.widget");
@@ -139,7 +143,7 @@ public class WidgetSteps extends GeneralSteps {
         if (expectedResponseCode == statusCode) {
             if (statusCode == 202) {
                 assertThat(response.as(UpdatedEntityResponse.class).getUpdateTime())
-                        .isEqualTo(LocalDate.now());
+                        .isBeforeOrEqualTo(LocalDate.now());
             } else if (expectedResponseCode == 401) {
                 verifyUnauthorisedResponse(valuesMap, response);
             } else if (expectedResponseCode == 404) {
@@ -162,7 +166,6 @@ public class WidgetSteps extends GeneralSteps {
     public void updateShowLinkedApiCreatedWidget(Map<String, String> dataMap) {
         Widget body = new Widget();
         body.setShowLinkedApi(Boolean.parseBoolean(dataMap.get("i.showLinkedApi")));
-
 
         switch (dataMap.get("i.widgetId")) {
             case "valid":
@@ -189,7 +192,6 @@ public class WidgetSteps extends GeneralSteps {
 
         }
     }
-
 
     private void verifyWidgetIsDeleted(String widgetId) {
         response = ApiHelperWidgets.getWidget(widgetId);

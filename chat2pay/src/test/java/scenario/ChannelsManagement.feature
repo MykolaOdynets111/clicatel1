@@ -15,12 +15,12 @@ Feature: Channels Management
 
     Examples:
       | i.activationKey | i.widgetId                       | i.smsOmniIntegrationId           | i.whatsappOmniIntegrationId      | o.responseCode | o.errors     | o.path                                                        |
-      | token           | 2c9acc0c85881a0e0185a110da8f0129 | bd1841e281444637a3abb6d640065d98 | 875b399337ea4898a3665ce9e921b639 | 202            |              |                                                               |
-      | token           |                                  | bd1841e281444637a3abb6d640065d98 | 875b399337ea4898a3665ce9e921b639 | 404            | NOT_FOUND    | URL /v2/widget/null/link-channels                             |
-      | token           | 2c9acc0c85881a0e0185a110da8f0129 |                                  | 875b399337ea4898a3665ce9e921b639 | 202            |              |                                                               |
-      | token           | 2c9acc0c85881a0e0185a110da8f0129 | bd1841e281444637a3abb6d640065d98 |                                  | 202            |              |                                                               |
-      | token           | test                             | bd1841e281444637a3abb6d640065d98 | 875b399337ea4898a3665ce9e921b639 | 404            | NOT_FOUND    | URL /v2/widget/test/link-channels                             |
-      | token           | 2c9acc0c85881a0e0185a110da8f0129 | test                             | 875b399337ea4898a3665ce9e921b639 | 404            | NOT_FOUND    | URL /v2/widget/2c9acc0c85881a0e0185a110da8f0129/link-channels |
-      | token           | 2c9acc0c85881a0e0185a110da8f0129 | bd1841e281444637a3abb6d640065d98 | test                             | 404            | NOT_FOUND    | URL /v2/widget/2c9acc0c85881a0e0185a110da8f0129/link-channels |
+      | token           | 2c9ac7b285c8be190185d02a8a680012 | 2d3a731733dd475f953a22fda647f040 | 2c9acc3078b5cfe80178db9d9c991a79 | 202            |              |                                                               |
+      | token           |                                  | 2d3a731733dd475f953a22fda647f040 | 2c9acc3078b5cfe80178db9d9c991a79 | 404            | NOT_FOUND    | URL /v2/widget/null/link-channels                             |
+      | token           | 2c9ac7b285c8be190185d02a8a680012 |                                  | 2c9acc3078b5cfe80178db9d9c991a79 | 202            |              |                                                               |
+      | token           | 2c9ac7b285c8be190185d02a8a680012 | 2d3a731733dd475f953a22fda647f040 |                                  | 202            |              |                                                               |
+      | token           | test                             | 2d3a731733dd475f953a22fda647f040 | 2c9acc3078b5cfe80178db9d9c991a79 | 404            | NOT_FOUND    | URL /v2/widget/test/link-channels                             |
+      | token           | 2c9ac7b285c8be190185d02a8a680012 | test                             | 2c9acc3078b5cfe80178db9d9c991a79 | 404            | NOT_FOUND    | URL /v2/widget/2c9ac7b285c8be190185d02a8a680012/link-channels |
+      | token           | 2c9ac7b285c8be190185d02a8a680012 | 2d3a731733dd475f953a22fda647f040 | test                             | 404            | NOT_FOUND    | URL /v2/widget/2c9ac7b285c8be190185d02a8a680012/link-channels |
       | test            |                                  |                                  |                                  | 401            | Unauthorized | /v2/widget/null/link-channels                                 |
       | " "             |                                  |                                  |                                  | 401            | Unauthorized | /v2/widget/null/link-channels                                 |

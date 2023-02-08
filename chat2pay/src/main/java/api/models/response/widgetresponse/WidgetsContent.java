@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public class WidgetsContent {
 
     @JsonProperty("content")
-    private ArrayList<Widget> widgets;
+    private List<Widget> widgets;
 
     @JsonProperty("pageable")
     private Object pageable;

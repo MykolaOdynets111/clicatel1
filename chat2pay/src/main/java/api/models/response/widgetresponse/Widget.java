@@ -3,8 +3,7 @@ package api.models.response.widgetresponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -29,8 +28,7 @@ import lombok.Setter;
         "disabledApplicationCount"
 })
 
-@Getter
-@Setter
+@Data
 public class Widget {
 
     @JsonProperty("status")
@@ -61,32 +59,32 @@ public class Widget {
     private String modifiedTime;
 
     @JsonProperty("smsOmniIntegrationId")
-    public Object smsOmniIntegrationId;
+    private Object smsOmniIntegrationId;
 
     @JsonProperty("waOmniIntegrationId")
-    public Object waOmniIntegrationId;
+    private Object waOmniIntegrationId;
 
     @JsonProperty("smsOmniIntegrationStatus")
-    public boolean smsOmniIntegrationStatus;
+    private boolean smsOmniIntegrationStatus;
 
     @JsonProperty("waOmniIntegrationStatus")
-    public boolean waOmniIntegrationStatus;
+    private boolean waOmniIntegrationStatus;
 
     @JsonProperty("createdByUserName")
-    public String createdByUserName;
+    private String createdByUserName;
 
     @JsonProperty("createdByUserId")
-    public String createdByUserId;
+    private String createdByUserId;
 
     @JsonProperty("showTutorial")
-    public boolean showTutorial;
+    private boolean showTutorial;
 
     @JsonProperty("showLinkedApi")
-    public boolean showLinkedApi;
+    private boolean showLinkedApi;
 
     @JsonProperty("enabledApplicationCount")
-    public int enabledApplicationCount;
+    private int enabledApplicationCount;
 
     @JsonProperty("disabledApplicationCount")
-    public int disabledApplicationCount;
+    private int disabledApplicationCount;
 }
