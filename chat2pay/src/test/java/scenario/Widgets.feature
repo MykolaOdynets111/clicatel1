@@ -6,7 +6,6 @@ Feature: Widgets operations
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4336")
   Scenario Outline: C2P :: Unity API :: Widget Configuration :: POST :: Create widget for an account
-
     Then User creates widget for an account
       | i.widget       | <i.widget>       |
       | i.type         | <i.type>         |
@@ -25,7 +24,6 @@ Feature: Widgets operations
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4309")
   Scenario Outline: C2P Unity API :: PUT /widget/{widgetId} :: update widget
-
     Then User creates widget for an account
       | i.widget       | valid       |
       | i.type         | CHAT_TO_PAY |
@@ -55,7 +53,6 @@ Feature: Widgets operations
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4313")
   Scenario Outline: C2P Unity API :: GET /widget/{widgetId} :: get widget by id
-
     Then User creates widget for an account
       | i.widget       | valid       |
       | i.type         | CHAT_TO_PAY |
@@ -89,9 +86,9 @@ Feature: Widgets operations
 
     Then User delete newly created widget
     Examples:
-      | i.widgetId   | i.name          | i.status   | i.configStatus_id | i.configStatus_name | i.environment | o.responseCode | o.updateTime | o.status    | o.errorMessage                 | o.errors                          |
-      | valid        | My first widget | CONFIGURED | 1                 | Configured          | SANDBOX       | 200            | TRUE         |             |                                |                                   |
-      | non_existed  | My first widget | CONFIGURED | 1                 | Configured          | SANDBOX       | 404            |              | NOT_FOUND   | URL /v2/widget                 | Widget does not exist, id =       |
+      | i.widgetId  | i.name          | i.status   | i.configStatus_id | i.configStatus_name | i.environment | o.responseCode | o.updateTime | o.status  | o.errorMessage | o.errors                    |
+      | valid       | My first widget | CONFIGURED | 1                 | Configured          | SANDBOX       | 200            | TRUE         |           |                |                             |
+      | non_existed | My first widget | CONFIGURED | 1                 | Configured          | SANDBOX       | 404            |              | NOT_FOUND | URL /v2/widget | Widget does not exist, id = |
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4717")
   Scenario Outline: C2P Unity API :: GET /widget/{widgetId} :: get widget by id

@@ -12,14 +12,14 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 public class WidgetBody {
 
+    @JsonProperty("type")
+    private final String type;
+
+    @JsonProperty("environment")
+    private final String environment;
+
     public WidgetBody(String type, String environment) {
         this.type = type;
         this.environment = environment;
     }
-
-    @JsonProperty("type")
-    private String type;
-
-    @JsonProperty("environment")
-    private String environment;
 }

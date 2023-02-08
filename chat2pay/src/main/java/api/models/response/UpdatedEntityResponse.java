@@ -3,7 +3,6 @@ package api.models.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Data;
 
 import java.time.LocalDate;
 
@@ -17,7 +16,6 @@ import static datetimeutils.DateTimeHelper.parseToLocalDate;
         "disabledApplicationCount"
 })
 
-@Data
 public class UpdatedEntityResponse {
 
     @JsonProperty("updateTime")

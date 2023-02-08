@@ -3,7 +3,7 @@ package api.models.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Data;
+import lombok.Getter;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -14,7 +14,7 @@ import lombok.Data;
         "transactionStatusId"
 })
 
-@Data
+@Getter
 public class ReceiptOrderResponse {
     @JsonProperty("receiptLinkRef")
     public String receiptLinkRef;
