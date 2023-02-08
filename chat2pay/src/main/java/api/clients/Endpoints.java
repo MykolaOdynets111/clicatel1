@@ -12,6 +12,7 @@ public class Endpoints {
     public static final String PAYMENTS_GATEWAY_ENDPOINT = WIDGETS_ENDPOINT + "/%s/payment-gateway-settings";
     public static final String WIDGET_INTEGRATION_ENDPOINT = WIDGETS_ENDPOINT + "/%s/integration";
     public static final String WIDGET_API_KEYS_ENDPOINT = WIDGETS_ENDPOINT + "/%s/api-keys";
+    public static final String WIDGET_SHOWED_LINKED_API_ENDPOINT =WIDGETS_ENDPOINT + "/%s/show-linked-api";
     public static final String PAYMENT_RECEIPT = C2P_URL + "/api/v2/order-receipt";
     public static final String ACCOUNT_SETTINGS = C2P_URL + "/v2/account/settings";
     public static final String ACCOUNT_SETTINGS_SHOW_TUTORIAL = C2P_URL + "/v2/account/settings/show-tutorial";
