@@ -30,7 +30,9 @@ public class ApiHelperWidgets extends ApiHelperChat2Pay {
     }
 
     public static String getWidgetId(String widgetName) {
-        return getWidgets().stream().filter(widget -> Objects.nonNull(widget.getName())).filter(w -> w.getName().equals(widgetName)).findFirst()
+        return getWidgets().stream()
+                .filter(widget -> Objects.nonNull(widget.getName()))
+                .filter(w -> w.getName().equals(widgetName)).findFirst()
                 .orElseThrow(() -> new AssertionError("Widget didn't find"))
                 .getId();
     }
@@ -56,8 +58,6 @@ public class ApiHelperWidgets extends ApiHelperChat2Pay {
     }
 
     private static List<Widget> getWidgets() {
-        return getChat2PayQuery(Endpoints.EXISTED_WIDGETS_ENDPOINT)
-                .as(WidgetsContent.class)
-                .getWidgets();
+        return getChat2PayQuery(Endpoints.EXISTED_WIDGETS_ENDPOINT).as(WidgetsContent.class).getWidgets();
     }
 }
