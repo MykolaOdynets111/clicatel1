@@ -73,16 +73,14 @@ Feature: Widgets operations
       | o.errors            | <o.errors>            |
 
     Then User gets newly created widget
-      | i.widgetId          | <i.widgetId>          |
-      | o.name              | <i.name>              |
-      | o.status            | <i.status>            |
-      | o.configStatus_id   | <i.configStatus_id>   |
-      | o.configStatus_name | <i.configStatus_name> |
-      | o.environment       | <i.environment>       |
-      | o.responseCode      | <o.responseCode>      |
-      | o.updateTime        | <o.updateTime>        |
-      | o.errorMessage      | <o.errorMessage>      |
-      | o.errors            | <o.errors>            |
+      | i.widgetId     | <i.widgetId>     |
+      | o.name         | <i.name>         |
+      | o.status       | <i.status>       |
+      | o.environment  | <i.environment>  |
+      | o.responseCode | <o.responseCode> |
+      | o.updateTime   | <o.updateTime>   |
+      | o.errorMessage | <o.errorMessage> |
+      | o.errors       | <o.errors>       |
 
     Then User delete newly created widget
     Examples:

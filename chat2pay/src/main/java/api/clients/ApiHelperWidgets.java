@@ -32,7 +32,7 @@ public class ApiHelperWidgets extends ApiHelperChat2Pay {
         List<Widget> widgets = getChat2PayQuery(Endpoints.EXISTED_WIDGETS_ENDPOINT)
                 .as(WidgetsContent.class)
                 .getWidgets();
-        return widgets.stream().filter(w -> w.getName().equals(widgetName)).findFirst()
+        return widgets.stream().filter(widget -> widget.getName()!=null).filter(w -> w.getName().equals(widgetName)).findFirst()
                 .orElseThrow(() -> new AssertionError("Widget didn't find"))
                 .getId();
     }

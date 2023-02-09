@@ -7,7 +7,7 @@ public class Endpoints {
     public static final String CHAT_TO_PAY_ENDPOINT = C2P_URL_DEMO + "/api/v2/chat-2-pay";
     public static final String CANCEL_PAYMENT_LINK_ENDPOINT = C2P_URL_DEMO + "/api/v2/cancel/";
     public static final String CHAT_TO_PAY_CONFIGURATION_ENDPOINT = C2P_URL_DEMO + "/api/v2/config";
-    public static final String EXISTED_WIDGETS_ENDPOINT = WIDGETS_ENDPOINT + "/all?detailed=false&page=0&size=20";
+    public static final String EXISTED_WIDGETS_ENDPOINT = WIDGETS_ENDPOINT + "/all?detailed=false&page=0&size=50";
     public static final String PAYMENTS_GATEWAY_ENDPOINT = WIDGETS_ENDPOINT + "/%s/payment-gateway-settings";
     public static final String WIDGET_INTEGRATION_ENDPOINT = WIDGETS_ENDPOINT + "/%s/integration";
     public static final String WIDGET_API_KEYS_ENDPOINT = WIDGETS_ENDPOINT + "/%s/api-keys";
