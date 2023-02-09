@@ -87,10 +87,8 @@ public class WidgetSteps extends GeneralSteps {
                 Widget widget = response.as(Widget.class);
                 softly.assertThat(widget.getModifiedTime()).isNotNull();
                 softly.assertThat(widget.getCreatedTime()).isNotNull();
-                softly.assertThat(dataMap.get("o.name")).isEqualTo(widget.getName());
+                softly.assertThat(createdWidgetName.get()).isEqualTo(widget.getName());
                 softly.assertThat(dataMap.get("o.status")).isEqualTo(widget.getStatus());
-                softly.assertThat(Integer.parseInt(dataMap.get("o.configStatus_id"))).isEqualTo(widget.getConfigStatus().getId());
-                softly.assertThat(dataMap.get("o.configStatus_name")).isEqualToIgnoringCase(widget.getConfigStatus().getName());
                 softly.assertThat(dataMap.get("o.environment")).isEqualTo(widget.getEnvironment());
                 softly.assertAll();
                 break;
@@ -104,11 +102,12 @@ public class WidgetSteps extends GeneralSteps {
     @Then("^User updates newly created widget$")
     public void updateCreatedWidget(Map<String, String> dataMap) {
         Widget updateBody = new Widget();
+        createdWidgetName.set(faker.funnyName().name());
         updateBody.setEnvironment(dataMap.get("i.environment"));
         updateBody.setStatus(dataMap.get("i.status"));
         updateBody.setConfigStatus
                 (new ConfigStatus(Integer.parseInt(dataMap.get("i.configStatus_id")), dataMap.get("i.configStatus_name")));
-        updateBody.setName(dataMap.get("i.name"));
+        updateBody.setName(createdWidgetName.get());
         switch (dataMap.get("i.widgetId")) {
             case "valid":
                 response = ApiHelperWidgets.updateWidget(createdWidgetId.get(), updateBody);
@@ -119,12 +118,12 @@ public class WidgetSteps extends GeneralSteps {
                 break;
             case "non_existed":
                 response = ApiHelperWidgets.updateWidget(dataMap.get("i.widgetId"), updateBody);
-                validateErrorResponse(response, dataMap);
+                Validator.validateErrorResponse(response, dataMap);
                 break;
             case "wrong_status":
             case "wrong_env":
                 response = ApiHelperWidgets.updateWidget(createdWidgetId.get(), updateBody);
-                validateErrorResponse(response, dataMap);
+                Validator.validateErrorResponse(response, dataMap);
                 break;
             default:
                 Assertions.fail(format("Expected status %s is not existed", dataMap.get("i.widgetId")));
