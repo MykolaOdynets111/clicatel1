@@ -1,9 +1,12 @@
 package steps;
 
 import api.clients.ApiHelperChannelManagement;
+import api.clients.ApiHelperChat2Pay;
 import api.clients.ApiHelperWidgets;
 import api.models.request.ChannelManagement;
+import api.models.request.ChannelStatus;
 import api.models.request.WidgetBody;
+import api.models.response.ChannelManagementStatusResponse;
 import api.models.response.UpdatedEntityResponse;
 import api.models.response.failedresponse.ErrorResponse;
 import api.models.response.widgetresponse.ConfigStatus;
@@ -143,6 +146,35 @@ public class WidgetSteps extends GeneralSteps {
             if (statusCode == 202) {
                 assertThat(response.as(UpdatedEntityResponse.class).getUpdateTime())
                         .isBeforeOrEqualTo(LocalDate.now());
+            } else if (expectedResponseCode == 401) {
+                verifyUnauthorisedResponse(valuesMap, response);
+            } else if (expectedResponseCode == 404) {
+                verifyBadRequestResponse(valuesMap, response);
+            }
+        } else {
+            Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
+        }
+    }
+
+    @Then("^User updates channel status")
+    public void updateChannelStatus(Map<String, String> valuesMap) {
+        String widgetId = valuesMap.get("i.widgetId");
+        ChannelStatus body = ChannelStatus.builder()
+                .smsOmniIntStatus(valuesMap.get("i.smsOmniIntStatus"))
+                .waOmniIntStatus(valuesMap.get("i.waOmniIntStatus"))
+                .build();
+
+        response = ApiHelperChannelManagement.updateChannelStatus(body, widgetId, ApiHelperChat2Pay.token.get());
+        int statusCode = response.getStatusCode();
+        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
+
+        if (expectedResponseCode == statusCode) {
+            if (statusCode == 202) {
+                ChannelManagementStatusResponse statusResponse = response.as(ChannelManagementStatusResponse.class);
+                softly.assertThat(statusResponse.getUpdateTime()).isEqualTo(LocalDate.now());
+                softly.assertThat(statusResponse.smsChannelEnabled).isEqualTo(Boolean.parseBoolean(valuesMap.get("i.smsOmniIntStatus")));
+                softly.assertThat(statusResponse.whatsappChannelEnabled).isEqualTo(Boolean.parseBoolean(valuesMap.get("i.waOmniIntStatus")));
+                softly.assertAll();
             } else if (expectedResponseCode == 401) {
                 verifyUnauthorisedResponse(valuesMap, response);
             } else if (expectedResponseCode == 404) {
