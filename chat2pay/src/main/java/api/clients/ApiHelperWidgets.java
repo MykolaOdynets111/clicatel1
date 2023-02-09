@@ -8,6 +8,7 @@ import api.models.response.widgetresponse.WidgetsContent;
 import io.restassured.response.Response;
 
 import java.util.List;
+import java.util.Objects;
 
 
 public class ApiHelperWidgets extends ApiHelperChat2Pay {
@@ -29,10 +30,7 @@ public class ApiHelperWidgets extends ApiHelperChat2Pay {
     }
 
     public static String getWidgetId(String widgetName) {
-        List<Widget> widgets = getChat2PayQuery(Endpoints.EXISTED_WIDGETS_ENDPOINT)
-                .as(WidgetsContent.class)
-                .getWidgets();
-        return widgets.stream().filter(widget -> widget.getName()!=null).filter(w -> w.getName().equals(widgetName)).findFirst()
+        return getWidgets().stream().filter(widget -> Objects.nonNull(widget.getName())).filter(w -> w.getName().equals(widgetName)).findFirst()
                 .orElseThrow(() -> new AssertionError("Widget didn't find"))
                 .getId();
     }
@@ -55,5 +53,11 @@ public class ApiHelperWidgets extends ApiHelperChat2Pay {
 
     public static Response updateShowLinkedApiForWidget(String widgetId, Widget widgetBody) {
         return putQuery(String.format(Endpoints.WIDGET_SHOWED_LINKED_API_ENDPOINT, widgetId), widgetBody, token.get());
+    }
+
+    private static List<Widget> getWidgets() {
+        return getChat2PayQuery(Endpoints.EXISTED_WIDGETS_ENDPOINT)
+                .as(WidgetsContent.class)
+                .getWidgets();
     }
 }
