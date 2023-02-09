@@ -22,6 +22,7 @@ import java.util.List;
         "currencies",
         "cardNetworks",
         "paymentTypes",
+        "merchantDescriptor",
         "createdTime",
         "modifiedTime",
         "requestEmail",
@@ -75,6 +76,9 @@ public class PaymentGatewaySettingsResponse {
     @JsonProperty("paymentTypes")
     public List<PaymentType> paymentTypes = null;
 
+    @JsonProperty("merchantDescriptor")
+    public String merchantDescriptor;
+
     @JsonProperty("createdTime")
     public String createdTime;
 
@@ -98,9 +102,6 @@ public class PaymentGatewaySettingsResponse {
 
     @JsonProperty("restApiSecretKey")
     public String restApiSecretKey;
-
-    @JsonProperty("logo")
-    public Logo logo;
 
     @JsonProperty("billingType")
     public String billingType;

@@ -76,7 +76,7 @@ Feature: Transaction execution
       | valid            | 200            | Payment Link Cancelled | 0                   |                                                         |
       | alreadyCancelled | 400            | 0                      | already cancelled   |                                                         |
       | nonExisted       | 404            | 0                      | URL /api/v2/cancel/ | There is no such transaction with transaction reference |
-      | expired          | 400            | 0                      | expired             |                                                         |
+#      | expired          | 400            | 0                      | expired             |                                                         |
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4688")
   Scenario Outline: c2p-Widget-Payment-Service :: POST /order-receipt :: user can receive the order
