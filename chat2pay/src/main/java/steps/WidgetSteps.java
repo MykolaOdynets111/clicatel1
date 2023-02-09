@@ -3,9 +3,10 @@ package steps;
 import api.clients.ApiHelperChannelManagement;
 import api.clients.ApiHelperChat2Pay;
 import api.clients.ApiHelperWidgets;
-import api.models.request.ChannelManagement;
-import api.models.request.ChannelStatus;
 import api.models.request.WidgetBody;
+import api.models.request.channels.ChannelManagement;
+import api.models.request.channels.ChannelStatus;
+import api.models.request.channels.ChannelType;
 import api.models.response.ChannelManagementStatusResponse;
 import api.models.response.UpdatedEntityResponse;
 import api.models.response.failedresponse.ErrorResponse;
@@ -170,14 +171,35 @@ public class WidgetSteps extends GeneralSteps {
         int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
 
         if (expectedResponseCode == statusCode) {
-            if (statusCode == 202) {
+            if (statusCode == 200) {
                 ChannelManagementStatusResponse statusResponse = response.as(ChannelManagementStatusResponse.class);
                 softly.assertThat(statusResponse.getUpdateTime()).isEqualTo(LocalDate.now());
                 softly.assertThat(statusResponse.smsChannelEnabled).isEqualTo(Boolean.parseBoolean(valuesMap.get("i.smsOmniIntStatus")));
                 softly.assertThat(statusResponse.whatsappChannelEnabled).isEqualTo(Boolean.parseBoolean(valuesMap.get("i.waOmniIntStatus")));
                 softly.assertAll();
-            } else if (expectedResponseCode == 401) {
-                verifyUnauthorisedResponse(valuesMap, response);
+            } else if (expectedResponseCode == 404) {
+                verifyBadRequestResponse(valuesMap, response);
+            }
+        } else {
+            Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
+        }
+    }
+
+    @Then("^User deletes channel integration")
+    public void deleteChannelIntegration(Map<String, String> valuesMap) {
+        String widgetId = valuesMap.get("i.widgetId");
+        ChannelType body = ChannelType.builder()
+                .channelType(valuesMap.get("i.channelType"))
+                .build();
+
+        response = ApiHelperChannelManagement.removeChannelIntegration(body, widgetId, ApiHelperChat2Pay.token.get());
+        int statusCode = response.getStatusCode();
+        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
+
+        if (expectedResponseCode == statusCode) {
+            if (statusCode == 202) {
+                assertThat(response.as(UpdatedEntityResponse.class).getMessage())
+                        .isEqualTo(format("Channel %s deleted successfully", valuesMap.get("i.channelType")));
             } else if (expectedResponseCode == 404) {
                 verifyBadRequestResponse(valuesMap, response);
             }

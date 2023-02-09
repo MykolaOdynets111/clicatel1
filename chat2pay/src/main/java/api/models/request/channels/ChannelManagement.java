@@ -1,4 +1,4 @@
-package api.models.request;
+package api.models.request.channels;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
