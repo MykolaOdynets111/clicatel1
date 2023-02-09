@@ -15,7 +15,6 @@ public enum UnityClients {
 
     QA_C2P_USER("pay@by.link", "1234567890"),
     QA_C2P_USER_ONE("chat2payqauser11+echo1@gmail.com", "Password#1", "QA_C2P_USER_0NE", QA),
-
     DEV_CHAT_2_PAY_USER("testuserc2p+001@gmail.com", "Password#1"),
 
     // =======  Unity Clients used by CHAT HUB ======== //

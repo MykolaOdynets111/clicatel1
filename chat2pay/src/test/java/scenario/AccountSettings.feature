@@ -3,7 +3,7 @@ Feature: Get settings for an account
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4712")
   Scenario Outline: C2P Unity API :: GET /settings :: truth table
 
-    Given QA User is logged in to unity
+    Given User is logged in to unity
     And User gets account settings
       | i.activationKey | <i.activationKey> |
       | o.responseCode  | <o.responseCode>  |

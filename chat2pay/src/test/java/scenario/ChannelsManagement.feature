@@ -3,7 +3,7 @@ Feature: Channels Management
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4714")
   Scenario Outline: C2P Unity API :: POST /link-channels :: truth table
 
-    Given QA User is logged in to unity
+    Given User is logged in to unity
     And User links channel to the widget
       | i.activationKey             | <i.activationKey>             |
       | i.widgetId                  | <i.widgetId>                  |
