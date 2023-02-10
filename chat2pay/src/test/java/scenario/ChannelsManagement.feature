@@ -44,7 +44,6 @@ Feature: Channels Management
       | 2c9ac7b285c8be190185d02a8a680012 | test               |                   | 400            | NOT_FOUND | Request failed for /v2/widget/2c9ac7b285c8be190185d02a8a680012/status |
       |                                  | false              | true              | 404            | NOT_FOUND | URL /v2/widget/null/status                                            |
 
-
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4715")
   Scenario Outline: C2P Unity API :: Channels Management :: DELETE /link-channels :: truth table
 
@@ -60,4 +59,4 @@ Feature: Channels Management
       | i.widgetId                       | i.channelType | o.responseCode | o.errors    | o.path                                                                       |
       | 2c9ac7b285c8be190185d02a8a680012 | SMS           | 200            |             |                                                                              |
       | 2c9ac7b285c8be190185d02a8a680012 | WHATSAPP      | 200            |             |                                                                              |
-      | 2c9ac7b285c8be190185d02a8a680012 |               | 400            | BAD_REQUEST | Request failed for /v2/widget/2c9ac7b285c8be190185d02a8a680012/link-channels |
+      | 2c9ac7b285c8be190185d02a8a680012 |               | 400            | BAD_REQUEST | Validation failed for /v2/widget/2c9ac7b285c8be190185d02a8a680012/link-channels |

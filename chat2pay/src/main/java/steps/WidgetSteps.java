@@ -176,6 +176,8 @@ public class WidgetSteps extends GeneralSteps {
                 softly.assertThat(statusResponse.smsChannelEnabled).isEqualTo(Boolean.parseBoolean(valuesMap.get("i.smsOmniIntStatus")));
                 softly.assertThat(statusResponse.whatsappChannelEnabled).isEqualTo(Boolean.parseBoolean(valuesMap.get("i.waOmniIntStatus")));
                 softly.assertAll();
+            } else if (expectedResponseCode == 401) {
+                verifyUnauthorisedResponse(valuesMap, response);
             } else if (expectedResponseCode == 404) {
                 verifyBadRequestResponse(valuesMap, response);
             }
@@ -196,10 +198,10 @@ public class WidgetSteps extends GeneralSteps {
         int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
 
         if (expectedResponseCode == statusCode) {
-            if (statusCode == 202) {
+            if (statusCode == 200) {
                 assertThat(response.as(UpdatedEntityResponse.class).getMessage())
                         .isEqualTo(format("Channel %s deleted successfully", valuesMap.get("i.channelType")));
-            } else if (expectedResponseCode == 404) {
+            } else if (expectedResponseCode == 400) {
                 verifyBadRequestResponse(valuesMap, response);
             }
         } else {
@@ -219,7 +221,6 @@ public class WidgetSteps extends GeneralSteps {
     public void updateShowLinkedApiCreatedWidget(Map<String, String> dataMap) {
         Widget body = new Widget();
         body.setShowLinkedApi(Boolean.parseBoolean(dataMap.get("i.showLinkedApi")));
-
         switch (dataMap.get("i.widgetId")) {
             case "valid":
                 response = ApiHelperWidgets.updateShowLinkedApiForWidget(createdWidgetId.get(), body);
@@ -242,7 +243,6 @@ public class WidgetSteps extends GeneralSteps {
                 break;
             default:
                 Assertions.fail(format("Expected status %s is not existed", dataMap.get("i.widgetId")));
-
         }
     }
 
