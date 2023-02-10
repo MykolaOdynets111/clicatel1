@@ -30,5 +30,4 @@ public class ReceiptOrderResponse {
 
     @JsonProperty("transactionStatusId")
     public int transactionStatusId;
-
 }
