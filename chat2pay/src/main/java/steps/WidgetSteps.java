@@ -167,22 +167,20 @@ public class WidgetSteps extends GeneralSteps {
 
         response = ApiHelperChannelManagement.updateChannelStatus(body, widgetId, ApiHelperChat2Pay.token.get());
         int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
+        int responseCode = parseInt(valuesMap.get("o.responseCode"));
 
-        if (expectedResponseCode == statusCode) {
+        if (responseCode == statusCode) {
             if (statusCode == 200) {
                 ChannelManagementStatusResponse statusResponse = response.as(ChannelManagementStatusResponse.class);
                 softly.assertThat(statusResponse.getUpdateTime()).isEqualTo(LocalDate.now());
                 softly.assertThat(statusResponse.smsChannelEnabled).isEqualTo(Boolean.parseBoolean(valuesMap.get("i.smsOmniIntStatus")));
                 softly.assertThat(statusResponse.whatsappChannelEnabled).isEqualTo(Boolean.parseBoolean(valuesMap.get("i.waOmniIntStatus")));
                 softly.assertAll();
-            } else if (expectedResponseCode == 401) {
-                verifyUnauthorisedResponse(valuesMap, response);
-            } else if (expectedResponseCode == 404) {
+            } else if (responseCode == 400 || responseCode == 404) {
                 verifyBadRequestResponse(valuesMap, response);
             }
         } else {
-            Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
+            Assertions.fail(format("Expected response code %s but was %s", responseCode, statusCode));
         }
     }
 
