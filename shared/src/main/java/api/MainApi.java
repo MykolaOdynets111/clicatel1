@@ -15,7 +15,6 @@ public abstract class MainApi {
     @NotNull
     protected static ResponseBody postQuery(String endpoint, Object body, String authToken, int responseCode) {
         Response response = post(endpoint, body, authToken);
-
         return validate(response, responseCode);
     }
 
@@ -27,7 +26,6 @@ public abstract class MainApi {
     @NotNull
     protected static ResponseBody postQueryWithoutAuth(String endpoint, Object body, int responseCode) {
         Response response = postWithoutAuth(endpoint, body);
-
         return validate(response, responseCode);
     }
 
@@ -38,17 +36,18 @@ public abstract class MainApi {
         return validate(response, responseCode);
     }
 
+    protected static Response putQuery(String endpoint, Object body, String authToken) {
+        return put(endpoint, body, authToken);
+    }
+
     @NotNull
     protected static ResponseBody getQuery(String endpoint, String authToken, int responseCode) {
         Response response = get(endpoint, authToken);
-
         return validate(response, responseCode);
     }
 
     @NotNull
-
     protected static ResponseBody getQueryWithoutAuth(String endpoint, int responseCode) {
-
         Response response = getWithoutAuth(endpoint);
         return validate(response, responseCode);
     }
@@ -61,7 +60,6 @@ public abstract class MainApi {
 
     @NotNull
     protected static ResponseBody deleteQueryWithAuth(String endpoint, String authToken, int responseCode) {
-
         Response response = deleteWithAuth(endpoint, authToken);
         return validate(response, responseCode);
     }
@@ -117,6 +115,11 @@ public abstract class MainApi {
         return validate(response, responseCode);
     }
 
+    @NotNull
+    protected static Response deleteQuery(String endpoint, String authToken) {
+        return delete(endpoint, authToken);
+    }
+
     private static ResponseBody validate(Response response, int responseCode) {
         if (response.getStatusCode() != responseCode) {
             fail("Couldn't get the value \n"
@@ -127,7 +130,7 @@ public abstract class MainApi {
     }
 
 
-    protected static ResponseBody getQueryForInternalApi(String endpoint, String mc2ID,String internalProductToken, int responseCode) {
+    protected static ResponseBody getQueryForInternalApi(String endpoint, String mc2ID, String internalProductToken, int responseCode) {
 
         Response response = getForInternalAPI(endpoint, mc2ID, internalProductToken);
 
@@ -149,6 +152,14 @@ public abstract class MainApi {
                 .post(endpoint);
     }
 
+    private static Response put(String endpoint, Object body, String authToken) {
+        return RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", authToken)
+                .body(body)
+                .put(endpoint);
+    }
+
     private static Response get(String endpoint, String authToken) {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
@@ -162,11 +173,11 @@ public abstract class MainApi {
                 .get(endpoint);
     }
 
-    private static Response getForInternalAPI(String endpoint,String mc2ID,String internalProductToken) {
+    private static Response getForInternalAPI(String endpoint, String mc2ID, String internalProductToken) {
         return RestAssured.given().log().all()
                 .accept(ContentType.JSON)
                 .header("internalProductToken", internalProductToken)
-                .header("mc2AccountId",mc2ID)
+                .header("mc2AccountId", mc2ID)
                 .get(endpoint);
     }
 
@@ -183,5 +194,12 @@ public abstract class MainApi {
                 .accept(ContentType.JSON)
                 .header("authKey", authToken)
                 .get(endpoint);
+    }
+
+    private static Response delete(String endpoint, String authToken) {
+        return RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", authToken)
+                .delete(endpoint);
     }
 }

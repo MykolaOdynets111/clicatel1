@@ -6,12 +6,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
 
-import static datetimeutils.DateTimeHelper.getYYYY_MM_DD_HH_MM_SS;
+import static datetimeutils.DateTimeHelper.parseToLocalDate;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -42,9 +39,6 @@ public class ConfigurationBody {
     public String environment;
 
     public LocalDate getUpdatedTime() {
-        String localDateTime = Arrays.stream(updateTime.split("\\+")).findFirst()
-                .orElseThrow(NoSuchElementException::new);
-
-        return LocalDateTime.parse(localDateTime, getYYYY_MM_DD_HH_MM_SS()).toLocalDate();
+        return parseToLocalDate(updateTime);
     }
 }

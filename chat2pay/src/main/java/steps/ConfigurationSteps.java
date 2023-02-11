@@ -3,21 +3,20 @@ package steps;
 import api.models.response.c2pconfiguration.ConfigurationBody;
 import api.models.response.c2pconfiguration.ConfigurationIntegrator;
 import api.models.response.c2pconfiguration.SupportedCurrency;
-import api.models.response.failedresponse.UnauthorisedResponse;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 
-import java.time.LocalDate;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static api.clients.ApiHelperConfigurations.getC2PConfigurationResponse;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
+import static utils.Validator.verifyUnauthorisedResponse;
 
-public class ConfigurationSteps {
+public class ConfigurationSteps extends GeneralSteps{
 
     @Then("^User get the C2P configuration")
     public void getC2PConfiguration(Map<String, String> valuesMap) {
@@ -54,12 +53,7 @@ public class ConfigurationSteps {
                 softly.assertThat(valuesMap.get("integration.type")).isEqualTo(integrator.type);
 
             } else if (expectedResponseCode == 401) {
-                UnauthorisedResponse unsuccessful = response.as(UnauthorisedResponse.class);
-
-                softly.assertThat(expectedResponseCode).isEqualTo(unsuccessful.status);
-                softly.assertThat(valuesMap.get("error")).isEqualTo(unsuccessful.error);
-                softly.assertThat(valuesMap.get("path")).isEqualTo(unsuccessful.path);
-                softly.assertThat(unsuccessful.getTimestamp()).isEqualTo(LocalDate.now());
+                verifyUnauthorisedResponse(valuesMap, response);
             }
             softly.assertAll();
         } else {

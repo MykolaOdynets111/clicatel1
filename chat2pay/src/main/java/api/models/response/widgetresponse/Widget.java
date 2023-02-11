@@ -16,6 +16,16 @@ import lombok.Data;
         "environment",
         "createdTime",
         "modifiedTime",
+        "smsOmniIntegrationId",
+        "waOmniIntegrationId",
+        "smsOmniIntegrationStatus",
+        "waOmniIntegrationStatus",
+        "createdByUserName",
+        "createdByUserId",
+        "showTutorial",
+        "showLinkedApi",
+        "enabledApplicationCount",
+        "disabledApplicationCount"
 })
 
 @Data
@@ -47,4 +57,34 @@ public class Widget {
 
     @JsonProperty("modifiedTime")
     private String modifiedTime;
+
+    @JsonProperty("smsOmniIntegrationId")
+    public Object smsOmniIntegrationId;
+
+    @JsonProperty("waOmniIntegrationId")
+    public Object waOmniIntegrationId;
+
+    @JsonProperty("smsOmniIntegrationStatus")
+    public boolean smsOmniIntegrationStatus;
+
+    @JsonProperty("waOmniIntegrationStatus")
+    public boolean waOmniIntegrationStatus;
+
+    @JsonProperty("createdByUserName")
+    public String createdByUserName;
+
+    @JsonProperty("createdByUserId")
+    public String createdByUserId;
+
+    @JsonProperty("showTutorial")
+    public boolean showTutorial;
+
+    @JsonProperty("showLinkedApi")
+    public boolean showLinkedApi;
+
+    @JsonProperty("enabledApplicationCount")
+    public int enabledApplicationCount;
+
+    @JsonProperty("disabledApplicationCount")
+    public int disabledApplicationCount;
 }
