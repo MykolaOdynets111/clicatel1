@@ -21,10 +21,12 @@ public class DateTimeHelper {
     public static DateTimeFormatter getYYYY_MM_DD_HH_MM() {
         return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     }
+
     @NotNull
     public static DateTimeFormatter getYYYY_MM_DD_HH_MM_SS() {
         return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
     }
+
     public static DateTimeFormatter getYYYY_MM_DD_With_Time_Formatter() {
         return DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' h:mm a", Locale.US);
     }
@@ -38,13 +40,13 @@ public class DateTimeHelper {
         return zdt.toInstant().toEpochMilli();
     }
 
-    public static String getDateTimeWithHoursShift(int hours){
+    public static String getDateTimeWithHoursShift(int hours) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         return LocalDateTime.now(ZoneOffset.UTC).minusHours(hours).format(formatter);
     }
 
-    public static String getCurrentDateTime(){
+    public static String getCurrentDateTime() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         return LocalDateTime.now(ZoneOffset.UTC).format(formatter);
     }

@@ -26,7 +26,7 @@ public class ReActivateConfiguration {
     @JsonProperty("timeToExpire")
     public String timeToExpire;
 
-    public ReActivateConfiguration(Map<String,String> parameters){
+    public ReActivateConfiguration(Map<String, String> parameters) {
         this.id = parameters.get("o.id");
         this.type = parameters.get("o.type");
         this.setupName = parameters.get("o.setupName");

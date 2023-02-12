@@ -3,10 +3,12 @@ package datamodelsclasses.providers;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Arrays;
 import java.util.List;
-
 
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -51,7 +53,7 @@ public class AllProviders {
         this.setDescription(description);
         this.setMoreInfoUrl(moreInfoUrl);
         this.setIsAdded(isAdded);
-        List<Versions> versions = Arrays.asList(new Versions(vid,version,latest));
+        List<Versions> versions = Arrays.asList(new Versions(vid, version, latest));
         this.setVersions(versions);
     }
 
@@ -61,7 +63,7 @@ public class AllProviders {
         this.setLogoUrl(logoUrl);
         this.setDescription(description);
         this.setMoreInfoUrl(moreInfoUrl);
-        List<Versions> versions = Arrays.asList(new Versions(vid,version,latest));
+        List<Versions> versions = Arrays.asList(new Versions(vid, version, latest));
         this.setVersions(versions);
     }
 }

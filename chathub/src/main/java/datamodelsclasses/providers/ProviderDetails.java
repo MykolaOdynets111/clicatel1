@@ -28,7 +28,7 @@ public class ProviderDetails {
     @JsonProperty("moreInfoUrl")
     private String moreInfoUrl;
 
-    public ProviderDetails(Map<String,String> parameters){
+    public ProviderDetails(Map<String, String> parameters) {
         this.id = parameters.get("o.id");
         this.name = parameters.get("o.name");
         this.logoUrl = parameters.get("o.logoUrl");

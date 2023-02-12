@@ -41,7 +41,7 @@ public class ConfigurationSecrets {
     @JsonProperty("modifiedDate")
     public String modifiedDate;
 
-    public ConfigurationSecrets(Map<String,String> parameters) {
+    public ConfigurationSecrets(Map<String, String> parameters) {
         this.id = parameters.get("o.id");
         this.providerId = parameters.get("o.providerId");
         this.accountProviderConfigStatusId = parameters.get("o.accountProviderConfigStatusId");

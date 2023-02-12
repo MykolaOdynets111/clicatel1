@@ -27,10 +27,12 @@ public class EndpointProperties {
 
     @JsonProperty("sourceRef")
     private String sourceRef;
-    public EndpointProperties (String isArray, String label,String type,String sourceRef)
-    { this.setIsArray(isArray);
+
+    public EndpointProperties(String isArray, String label, String type, String sourceRef) {
+        this.setIsArray(isArray);
         this.setLabel(label);
         this.setType(type);
-        this.setSourceRef(sourceRef);;
+        this.setSourceRef(sourceRef);
+        ;
     }
 }

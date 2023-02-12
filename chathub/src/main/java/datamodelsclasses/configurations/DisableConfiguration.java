@@ -28,7 +28,7 @@ public class DisableConfiguration {
     @JsonProperty("modifiedDate")
     private String modifiedDate;
 
-    public DisableConfiguration(Map<String,String> parameters) {
+    public DisableConfiguration(Map<String, String> parameters) {
         this.id = parameters.get("o.id");
         this.providerId = parameters.get("o.providerId");
         this.type = parameters.get("o.type");

@@ -73,11 +73,11 @@ Feature: Provider API
       | o.moreInfoUrl  | <o.moreInfoUrl>  |
 
     Examples:
-      | i.providerId                     | o.responseCode | o.errorMessage | o.id                             | o.name          | o.logoUrl | o.description | o.moreInfoUrl |
-      | 0184f820c06ec8b62dfa0610e29ab575 | 200            |                | 0184f820c06ec8b62dfa0610e29ab575 | Zendesk Support | NA        | NA            | NA            |
-      | 0184f828214f6b7a03c711284b2b8e39 | 200            |                | 0184f828214f6b7a03c711284b2b8e39 | Zendesk Sell    | NA        | NA            | NA            |
-      | 0184f8322847eaddbda79d5a29eaa5d4 | 200            |                | 0184f8322847eaddbda79d5a29eaa5d4 | Salesforce      | NA        | NA            | NA            |
-      | 0185172bf6b57e9831c6d6616bc68317 | 200            |                | 0185172bf6b57e9831c6d6616bc68317 | Shopify         | string    | string        | string        |
+      | i.providerId                     | o.responseCode | o.errorMessage     | o.id                             | o.name          | o.logoUrl | o.description | o.moreInfoUrl |
+      | 0184f820c06ec8b62dfa0610e29ab575 | 200            |                    | 0184f820c06ec8b62dfa0610e29ab575 | Zendesk Support | NA        | NA            | NA            |
+      | 0184f828214f6b7a03c711284b2b8e39 | 200            |                    | 0184f828214f6b7a03c711284b2b8e39 | Zendesk Sell    | NA        | NA            | NA            |
+      | 0184f8322847eaddbda79d5a29eaa5d4 | 200            |                    | 0184f8322847eaddbda79d5a29eaa5d4 | Salesforce      | NA        | NA            | NA            |
+      | 0185172bf6b57e9831c6d6616bc68317 | 200            |                    | 0185172bf6b57e9831c6d6616bc68317 | Shopify         | string    | string        | string        |
       | Wrong Id                         | 404            | Provider not found |                                  |                 |           |               |               |
      #BugId: CCH-701 ||400|Bad request||||||
 

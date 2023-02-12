@@ -46,7 +46,7 @@ public class ConfiguredProviderDetail {
         this.setLogoUrl(logoUrl);
         this.setDescription(description);
         this.setMoreInfoUrl(moreInfoUrl);
-        List<Versions> versions = Arrays.asList(new Versions(vid,version,latest));
+        List<Versions> versions = Arrays.asList(new Versions(vid, version, latest));
         this.setVersions(versions);
     }
 }

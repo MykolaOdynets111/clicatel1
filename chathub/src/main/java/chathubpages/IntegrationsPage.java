@@ -25,12 +25,12 @@ public class IntegrationsPage extends AgentAbstractPage {
         clickElem(this.getCurrentDriver(), zendeskIntegrationsCard, 3, "Zendesk Support");
     }
 
-    public boolean availableIntegrationsDisplayed(){
-        return isElementShown(this.getCurrentDriver(), availableIntegrations,3);
+    public boolean availableIntegrationsDisplayed() {
+        return isElementShown(this.getCurrentDriver(), availableIntegrations, 3);
     }
 
-    public String integrationsIsFirstCard(){
-        return getTextFromElem(this.getCurrentDriver(), firstCard,3,"First Card of Numbers & Integrations");
+    public String integrationsIsFirstCard() {
+        return getTextFromElem(this.getCurrentDriver(), firstCard, 3, "First Card of Numbers & Integrations");
     }
 
 }
