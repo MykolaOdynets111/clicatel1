@@ -203,10 +203,8 @@ public class IntegrationSteps extends MainApi {
                     data.get("o.version"), data.get("o.latest")
             )));
         }
-        String expectedProviders = expectedProvidersBody.toString();
-        expectedProviders = expectedProviders.replace(", ", ",");
         String getProviders = mapper.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithoutAuthToken(Endpoints.ADMIN_PROVIDERS, 200).as(ConfiguredProviderDetail[].class));
-        Assert.assertEquals(expectedProviders, getProviders, "Providers response is not as expected");
+        Assert.assertEquals(expectedProvidersBody.toString().replace(", ", ","), getProviders, "Providers response is not as expected");
     }
 
     @Given("Admin is able to GET existing provider details")
@@ -329,11 +327,7 @@ public class IntegrationSteps extends MainApi {
                         data.get("o.providerId"), data.get("o.type"), data.get("o.name"),
                         data.get("o.status"), data.get("o.host"), data.get("o.createdDate"), data.get("o.modifiedDate"))));
             String actualConfigurations = mapper.writeValueAsString(ChatHubApiHelper.getChatHubQuery(url, 200).as(Configurations[].class));
-
-            String expectedConfigurations = expectedConfigurationsBody.toString();
-            expectedConfigurations = expectedConfigurations.replace(", ", ",");
-
-            Assert.assertEquals(actualConfigurations, expectedConfigurations, "Configurations response is not as expected");
+            Assert.assertEquals(actualConfigurations, expectedConfigurationsBody.toString().replace(", ", ","), "Configurations response is not as expected");
         }
     }
 
@@ -350,9 +344,7 @@ public class IntegrationSteps extends MainApi {
                         data.get("o.displayName"), data.get("o.configurationEnvironmentTypeId"),
                         data.get("o.accountProviderConfigStatusId"))));
             String actualConfigurations = mapper.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithInternalAuth(url, 200).as(InternalConfigurations[].class));
-            String expectedConfigurations = expectedConfigurationsBody.toString();
-            expectedConfigurations = expectedConfigurations.replace(", ", ",");
-            Assert.assertEquals(actualConfigurations, expectedConfigurations, "Configurations response is not as expected");
+            Assert.assertEquals(actualConfigurations, expectedConfigurationsBody.toString().replace(", ", ","), "Configurations response is not as expected");
         }
     }
 
@@ -400,10 +392,8 @@ public class IntegrationSteps extends MainApi {
                     throw new RuntimeException(e);
                 }
             }
-            List<String> expectedEndpointsFormatted = Collections.singletonList(String.join(",", expectedEndpoints));
-
             String ActualEndpoints = mapper.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithoutAuth(url, responseCode).as(ProviderEndpoints[].class));
-            Assert.assertEquals(ActualEndpoints, expectedEndpointsFormatted.toString(), "Expected endpoints does not match actual endpoints response");
+            Assert.assertEquals(ActualEndpoints, expectedEndpoints.toString().replace(", ", ","), "Expected endpoints does not match actual endpoints response");
         }
     }
 
@@ -449,10 +439,8 @@ public class IntegrationSteps extends MainApi {
                     throw new RuntimeException(e);
                 }
             }
-            List<String> expectedEndpointsFormatted = Collections.singletonList(String.join(",", expectedEndpoints));
-
             String ActualEndpoints = mapper.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithInternalAuth(url, responseCode).as(ProviderEndpoints[].class));
-            Assert.assertEquals(ActualEndpoints, expectedEndpointsFormatted.toString(), "Expected endpoints does not match actual endpoints response");
+            Assert.assertEquals(ActualEndpoints, expectedEndpoints.toString().replace(", ", ","), "Expected endpoints does not match actual endpoints response");
         }
     }
 
@@ -563,10 +551,8 @@ public class IntegrationSteps extends MainApi {
                     throw new RuntimeException(e);
                 }
             }
-            List<String> expectedConfigurationsFormatted = Collections.singletonList(String.join(",", expectedConfigurations));
-
             String getActualConfigurations = mapper.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithoutAuth(url, responseCode).as(Configurations[].class));
-            Assert.assertEquals(getActualConfigurations, expectedConfigurationsFormatted.toString(), "Returned Configurations is not expected");
+            Assert.assertEquals(getActualConfigurations, expectedConfigurations.toString().replace(", ", ","), "Returned Configurations is not expected");
         }
     }
 
