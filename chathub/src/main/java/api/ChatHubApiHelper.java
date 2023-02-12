@@ -16,7 +16,7 @@ import static clients.Endpoints.ADMIN_INTERNAL_PRODUCTS;
 
 public class ChatHubApiHelper extends MainApi {
     public static ResponseBody getChatHubQuery(String endpoint, int responseCode) {
-        return getQuery(endpoint, getAuthToken(UnityClients.DEMO_CHAT_2_PAY_USER), responseCode);
+        return getQuery(endpoint, getAuthToken(UnityClients.DEMO_CHAT_HUB_USER), responseCode);
     }
 
     public static ResponseBody getChatHubQueryWithoutAuthToken(String endpoint, int responseCode) {
