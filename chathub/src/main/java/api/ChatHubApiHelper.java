@@ -24,7 +24,7 @@ public class ChatHubApiHelper extends MainApi {
     }
 
     public static Response postChatHubQuery(String endpoint, Object body) {
-        return post(endpoint, body, getAuthToken(UnityClients.DEMO_CHAT_2_PAY_USER));
+        return post(endpoint, body, getAuthToken(UnityClients.DEMO_CHAT_HUB_USER));
     }
 
     public static ResponseBody postChatHubQueryWithoutAuth(String endpoint, Object body, int responseCode) {
@@ -32,7 +32,7 @@ public class ChatHubApiHelper extends MainApi {
     }
 
     public static ResponseBody putChatHubQuerywithAuthNoBody(String endpoint, int responseCode) {
-        return putQueryWithAuthNoBody(endpoint, getAuthToken(UnityClients.DEMO_CHAT_2_PAY_USER), responseCode);
+        return putQueryWithAuthNoBody(endpoint, getAuthToken(UnityClients.DEMO_CHAT_HUB_USER), responseCode);
     }
 
     public static ResponseBody putChatHubQueryWithoutAuth(String endpoint, Object body, int responseCode) {
@@ -40,11 +40,11 @@ public class ChatHubApiHelper extends MainApi {
     }
 
     public static ResponseBody deleteChatHubQueryWithAuth(String endpoint, int responseCode) {
-        return deleteQueryWithAuth(endpoint, getAuthToken(UnityClients.DEMO_CHAT_2_PAY_USER), responseCode);
+        return deleteQueryWithAuth(endpoint, getAuthToken(UnityClients.DEMO_CHAT_HUB_USER), responseCode);
     }
 
     public static ResponseBody putChatHubQuerywithAuthAndBody(String endpoint, Object body, int responseCode) {
-        return putQueryWithAuthAndBody(endpoint, getAuthToken(UnityClients.DEMO_CHAT_2_PAY_USER), body, responseCode);
+        return putQueryWithAuthAndBody(endpoint, getAuthToken(UnityClients.DEMO_CHAT_HUB_USER), body, responseCode);
     }
 
     public static ResponseBody getChatHubQueryWithoutAuth(String endpoint, int responseCode) {
@@ -52,15 +52,15 @@ public class ChatHubApiHelper extends MainApi {
     }
 
     public static ResponseBody getChatHubQueryWithInternalAuth(String endpoint, int responseCode) {
-        return getQueryForInternalApi(endpoint, getMC2ID(UnityClients.DEMO_CHAT_2_PAY_USER), getInternalProductToken(), responseCode);
+        return getQueryForInternalApi(endpoint, getMC2ID(UnityClients.DEMO_CHAT_HUB_USER), getInternalProductToken(), responseCode);
     }
 
     public static ResponseBody getChatHubQueryAdminSecret(String endpoint, int responseCode) {
-        return getQueryForAdminConfigurationSecret(endpoint, getAuthToken(UnityClients.DEMO_CHAT_2_PAY_USER), responseCode);
+        return getQueryForAdminConfigurationSecret(endpoint, getAuthToken(UnityClients.DEMO_CHAT_HUB_USER), responseCode);
     }
 
     public static ResponseBody postChatHubQueryWithMC2Token(String endpoint, Object body, int responseCode) {
-        return postQueryAdminMC2TokenAuth(endpoint, body, getAuthToken(UnityClients.DEMO_CHAT_2_PAY_USER), responseCode);
+        return postQueryAdminMC2TokenAuth(endpoint, body, getAuthToken(UnityClients.DEMO_CHAT_HUB_USER), responseCode);
     }
 
     public static String getInternalProductToken() {

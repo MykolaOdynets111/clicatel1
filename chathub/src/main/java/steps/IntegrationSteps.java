@@ -14,6 +14,7 @@ import datamodelsclasses.Specifications.Specifications;
 import datamodelsclasses.configurations.*;
 import datamodelsclasses.providers.*;
 import datamodelsclasses.validator.Validator;
+import datetimeutils.DateTimeHelper;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -119,9 +120,8 @@ public class IntegrationSteps extends MainApi {
             softAssert.assertNotNull(postActiveConfiguration.getId(), "Configuration Id is empty");
             softAssert.assertEquals(dataMap.get("o.type"), postActiveConfiguration.getType());
             softAssert.assertEquals(dataMap.get("o.setupName"), postActiveConfiguration.getSetupName());
-            softAssert.assertNotNull(postActiveConfiguration.getCreatedDate(), "CurrentDate is Empty");
-            softAssert.assertNotNull(postActiveConfiguration.getModifiedDate(), "Modfied Date is empty");
-
+            softAssert.assertTrue(DateTimeHelper.checkDateTimeFormat(postActiveConfiguration.getCreatedDate()));
+            softAssert.assertTrue(DateTimeHelper.checkDateTimeFormat(postActiveConfiguration.getModifiedDate()));
             /*
             //Check the authorization link
               * PROBLEM:
@@ -183,8 +183,8 @@ public class IntegrationSteps extends MainApi {
             softAssert.assertEquals(getConfigurationSecret.getClientId(), expectedConfigurationSecret.getClientId());
             softAssert.assertEquals(getConfigurationSecret.getClientSecret(), expectedConfigurationSecret.getClientSecret());
             softAssert.assertEquals(getConfigurationSecret.getHostUrl(), expectedConfigurationSecret.getHostUrl());
-            softAssert.assertNotNull(getConfigurationSecret.getCreatedDate());
-            softAssert.assertNotNull(getConfigurationSecret.getModifiedDate());
+            softAssert.assertTrue(DateTimeHelper.checkDateTimeFormat(getConfigurationSecret.getCreatedDate()));
+            softAssert.assertTrue(DateTimeHelper.checkDateTimeFormat(getConfigurationSecret.getModifiedDate()));
             softAssert.assertAll();
         } else {
             Validator.validatedErrorResponseforGet(url, dataMap);
@@ -251,8 +251,8 @@ public class IntegrationSteps extends MainApi {
             softAssert.assertEquals(expectedDisableConfiguration.getName(), actualDisableConfiguration.getName());
             softAssert.assertEquals(expectedDisableConfiguration.getStatus(), actualDisableConfiguration.getStatus());
             softAssert.assertEquals(expectedDisableConfiguration.getHost(), actualDisableConfiguration.getHost());
-            softAssert.assertNotNull(actualDisableConfiguration.getCreatedDate());
-            softAssert.assertNotNull(actualDisableConfiguration.getModifiedDate());
+            softAssert.assertTrue(DateTimeHelper.checkDateTimeFormat(actualDisableConfiguration.getCreatedDate()));
+            softAssert.assertTrue(DateTimeHelper.checkDateTimeFormat(actualDisableConfiguration.getModifiedDate()));
             softAssert.assertAll();
         } else {
             Validator.validatedErrorResponseforPutWithAuthWithoutBody(url, dataMap);
@@ -306,8 +306,8 @@ public class IntegrationSteps extends MainApi {
             softAssert.assertEquals(expectedReActivatedConfiguration.getSetupName(), actualReActivatedConfiguration.getSetupName());
             softAssert.assertNotNull(actualReActivatedConfiguration.getAuthenticationLink());
             softAssert.assertEquals(expectedReActivatedConfiguration.timeToExpire, expectedReActivatedConfiguration.timeToExpire);
-            softAssert.assertNotNull(actualReActivatedConfiguration.getCreatedDate());
-            softAssert.assertNotNull(actualReActivatedConfiguration.getModifiedDate());
+            softAssert.assertTrue(DateTimeHelper.checkDateTimeFormat(actualReActivatedConfiguration.getCreatedDate()));
+            softAssert.assertTrue(DateTimeHelper.checkDateTimeFormat(actualReActivatedConfiguration.getModifiedDate()));
             softAssert.assertAll();
         } else {
             Validator.validatedErrorResponseforPutWithAuthAndBody(url, reActivateConfigurationBody, dataMap);
@@ -521,12 +521,11 @@ public class IntegrationSteps extends MainApi {
                     throw new RuntimeException(e);
                 }
             }
-            List<String> ExpectedPropertiesFormatted = Collections.singletonList(String.join(",", expectedProperties));
             EndpointDetail actualEndpointDetail = ChatHubApiHelper.getChatHubQueryWithInternalAuth(url, responseCode).as(EndpointDetail.class);
 
             String actualResponseSampleProperties = mapper.writeValueAsString(actualEndpointDetail.getResponseSample().get(0).getProperties());
             int actualStatusCode = Integer.parseInt(mapper.writeValueAsString(actualEndpointDetail.getResponseSample().get(0).getStatusCode()));
-            assertion.assertEquals(actualResponseSampleProperties, ExpectedPropertiesFormatted.toString());
+            assertion.assertEquals(actualResponseSampleProperties, expectedProperties.toString().replace(", ", ","));
             assertion.assertEquals(actualStatusCode, Integer.parseInt(dataMap.get(0).get("o.statusCode")));
         }
         assertion.assertAll();
@@ -592,8 +591,8 @@ public class IntegrationSteps extends MainApi {
             softAssert.assertEquals(getConfigurationSecret.getClientId(), expectedConfigurationSecret.getClientId());
             softAssert.assertEquals(getConfigurationSecret.getClientSecret(), expectedConfigurationSecret.getClientSecret());
             softAssert.assertEquals(getConfigurationSecret.getHostUrl(), expectedConfigurationSecret.getHostUrl());
-            softAssert.assertNotNull(getConfigurationSecret.getCreatedDate());
-            softAssert.assertNotNull(getConfigurationSecret.getModifiedDate());
+            softAssert.assertTrue(DateTimeHelper.checkDateTimeFormat(getConfigurationSecret.getCreatedDate()));
+            softAssert.assertTrue(DateTimeHelper.checkDateTimeFormat(getConfigurationSecret.getModifiedDate()));
             softAssert.assertAll();
         } else {
             Validator.validatedErrorResponseAdminConfigurationsSecrets(url, dataMap);
@@ -619,8 +618,8 @@ public class IntegrationSteps extends MainApi {
             softAssert.assertNotNull(postActiveConfiguration.getId(), "Configuration Id is empty");
             softAssert.assertEquals(dataMap.get("o.type"), postActiveConfiguration.getType());
             softAssert.assertEquals(dataMap.get("o.setupName"), postActiveConfiguration.getSetupName());
-            softAssert.assertNotNull(postActiveConfiguration.getCreatedDate(), "CurrentDate is Empty");
-            softAssert.assertNotNull(postActiveConfiguration.getModifiedDate(), "Modfied Date is empty");
+            softAssert.assertTrue(DateTimeHelper.checkDateTimeFormat(postActiveConfiguration.getCreatedDate()));
+            softAssert.assertTrue(DateTimeHelper.checkDateTimeFormat(postActiveConfiguration.getModifiedDate()));
             softAssert.assertEquals(dataMap.get("o.timeToExpire"), postActiveConfiguration.getTimeToExpire());
             softAssert.assertNotNull(postActiveConfiguration.getAuthenticationLink(), "Authentication link is empty");
 
