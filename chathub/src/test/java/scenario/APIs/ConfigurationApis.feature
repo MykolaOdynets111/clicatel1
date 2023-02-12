@@ -98,6 +98,7 @@ Feature: Configuration API
       | i.configurationId                | o.responseCode | o.errorMessage             | o.id                             | o.providerId                     | o.type     | o.name                     | o.status | o.host                                 |
       | 0185bbb47862d93e7c9f2bf20512a19c | 200            |                            | 0185bbb47862d93e7c9f2bf20512a19c | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | CH_Test_AutoTester2023-117 | DISABLED | https://d3v-clickatell2162.zendesk.com |
       | 0185bbb0bd4606f5bd390e857d2c8aca | 200            |                            | 0185bbb0bd4606f5bd390e857d2c8aca | 0184f820c06ec8b62dfa0610e29ab575 | SANDBOX    | CH_Test_AutoTester2023-115 | DISABLED | https://d3v-clickatell2162.zendesk.com |
+      | 0185bbb0bd4606f5bd390e857d2c8aca | 200            |                            | 0185bbb0bd4606f5bd390e857d2c8aca | 0184f820c06ec8b62dfa0610e29ab575 | SANDBOX    | CH_Test_AutoTester2023-115 | DISABLED | https://d3v-clickatell2162.zendesk.com |
 #ExpiringSoon - Data to be create once integrated build will be deployed |TRUE|200||[configurationId]|[providerId]|SANDBOX|[name]|DISABLED|[host]|
 #Expired - Data to be create once integrated build will be deployed |TRUE|200||[configurationId]|[providerId]|SANDBOX|[name]|DISABLED|[host]|
 #Disabled - BugId: CCH-711       |TRUE|500|Precondition failed|||||||
