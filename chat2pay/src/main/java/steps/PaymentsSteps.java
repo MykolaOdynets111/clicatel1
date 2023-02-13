@@ -2,11 +2,8 @@ package steps;
 
 import api.clients.ApiHelperPayments;
 
-import api.clients.ApiHelperWidgets;
 import api.models.request.PaymentBody;
-import api.models.response.CancelPaymentLinkResponse;
 import api.models.response.PaymentLinkResponse;
-import api.models.response.ReceiptOrderResponse;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
@@ -51,9 +48,9 @@ public class PaymentsSteps extends GeneralSteps{
             case "valid":
                 response = ApiHelperPayments.cancelPaymentLink(paymentLinkRef.get(), activationKey.get());
                 Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
-                CancelPaymentLinkResponse cancelPaymentLinkResponse = response.as(CancelPaymentLinkResponse.class);
-                assertThat(cancelPaymentLinkResponse.getTransactionStatus())
-                        .as(format("transaction status is not equals to %s", cancelPaymentLinkResponse.getTransactionStatus()))
+                PaymentLinkResponse paymentLinkResponse = response.as(PaymentLinkResponse.class);
+                assertThat(paymentLinkResponse.getTransactionStatus())
+                        .as(format("transaction status is not equals to %s", paymentLinkResponse.getTransactionStatus()))
                         .isEqualTo(dataMap.get("o.transactionStatus"));
                 break;
             case "alreadyCancelled":
@@ -82,9 +79,9 @@ public class PaymentsSteps extends GeneralSteps{
             case "valid":
                 response = ApiHelperPayments.receivePaymentLink(paymentLinkRef.get(), activationKey.get());
                 Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
-                ReceiptOrderResponse receiptOrderResponse = response.as(ReceiptOrderResponse.class);
-                assertThat(receiptOrderResponse.getTransactionStatus())
-                        .as(format("transaction status is not equals to %s", receiptOrderResponse.getTransactionStatus()))
+                PaymentLinkResponse paymentLinkResponse = response.as(PaymentLinkResponse.class);
+                assertThat(paymentLinkResponse.getTransactionStatus())
+                        .as(format("transaction status is not equals to %s", paymentLinkResponse.getTransactionStatus()))
                         .isEqualTo(dataMap.get("o.transactionStatus"));
                 break;
             case "sentfailed":

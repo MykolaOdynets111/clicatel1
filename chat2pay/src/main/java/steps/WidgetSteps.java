@@ -25,9 +25,7 @@ import java.util.Map;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static utils.Validator.validateErrorResponse;
-import static utils.Validator.verifyBadRequestResponse;
-import static utils.Validator.verifyUnauthorisedResponse;
+import static utils.Validator.*;
 
 public class WidgetSteps extends GeneralSteps {
 
@@ -56,7 +54,7 @@ public class WidgetSteps extends GeneralSteps {
                 .build();
         response = ApiHelperWidgets.createWidget(widget);
 
-        Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
+        checkResponseCode(response, dataMap.get("o.responseCode"));
         String status = dataMap.get("i.widget");
         switch (status) {
             case "valid":
@@ -83,7 +81,7 @@ public class WidgetSteps extends GeneralSteps {
         switch (dataMap.get("i.widgetId")) {
             case "valid":
                 response = ApiHelperWidgets.getWidget(createdWidgetId.get());
-                Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
+                checkResponseCode(response, dataMap.get("o.responseCode"));
 
                 Widget widget = response.as(Widget.class);
                 softly.assertThat(widget.getModifiedTime()).isNotNull();
@@ -113,7 +111,7 @@ public class WidgetSteps extends GeneralSteps {
         switch (dataMap.get("i.widgetId")) {
             case "valid":
                 response = ApiHelperWidgets.updateWidget(createdWidgetId.get(), updateBody);
-                Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
+                checkResponseCode(response, dataMap.get("o.responseCode"));
                 assertThat(response.as(UpdatedEntityResponse.class).getUpdateTime())
                         .as(format("widget update date is not equals to %s", LocalDate.now()))
                         .isEqualTo(LocalDate.now());
@@ -223,7 +221,7 @@ public class WidgetSteps extends GeneralSteps {
         switch (dataMap.get("i.widgetId")) {
             case "valid":
                 response = ApiHelperWidgets.updateShowLinkedApiForWidget(createdWidgetId.get(), body);
-                Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
+                checkResponseCode(response, dataMap.get("o.responseCode"));
                 UpdatedEntityResponse updatedEntityResponse = response.as(UpdatedEntityResponse.class);
                 softly.assertThat(updatedEntityResponse.getUpdateTime())
                         .as(format("widget update date is not equals to %s", LocalDate.now()))
@@ -237,7 +235,7 @@ public class WidgetSteps extends GeneralSteps {
                 break;
             case "non_existed":
                 response = ApiHelperWidgets.updateShowLinkedApiForWidget(dataMap.get("i.widgetId"), body);
-                Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
+                checkResponseCode(response, dataMap.get("o.responseCode"));
                 validateErrorResponse(response, dataMap);
                 break;
             default:
@@ -247,7 +245,7 @@ public class WidgetSteps extends GeneralSteps {
 
     private void verifyWidgetIsDeleted(String widgetId) {
         response = ApiHelperWidgets.getWidget(widgetId);
-        Validator.checkResponseCode(response, "404");
+        checkResponseCode(response, "404");
         boolean widgetDoesNotExist = response.as(ErrorResponse.class).getErrors()
                 .stream()
                 .anyMatch(e -> e.contains("Widget does not exist"));
