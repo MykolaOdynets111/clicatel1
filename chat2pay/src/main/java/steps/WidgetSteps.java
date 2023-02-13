@@ -118,12 +118,12 @@ public class WidgetSteps extends GeneralSteps {
                 break;
             case "non_existed":
                 response = ApiHelperWidgets.updateWidget(dataMap.get("i.widgetId"), updateBody);
-                Validator.validateErrorResponse(response, dataMap);
+                validateErrorResponse(response, dataMap);
                 break;
             case "wrong_status":
             case "wrong_env":
                 response = ApiHelperWidgets.updateWidget(createdWidgetId.get(), updateBody);
-                Validator.validateErrorResponse(response, dataMap);
+                validateErrorResponse(response, dataMap);
                 break;
             default:
                 Assertions.fail(format("Expected status %s is not existed", dataMap.get("i.widgetId")));

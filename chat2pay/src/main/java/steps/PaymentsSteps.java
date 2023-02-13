@@ -8,12 +8,13 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
-import utils.Validator;
 
 import java.util.Map;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static utils.Validator.checkResponseCode;
+import static utils.Validator.validateErrorResponse;
 
 public class PaymentsSteps extends GeneralSteps{
 
@@ -47,7 +48,7 @@ public class PaymentsSteps extends GeneralSteps{
         switch (status) {
             case "valid":
                 response = ApiHelperPayments.cancelPaymentLink(paymentLinkRef.get(), activationKey.get());
-                Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
+                checkResponseCode(response, dataMap.get("o.responseCode"));
                 PaymentLinkResponse paymentLinkResponse = response.as(PaymentLinkResponse.class);
                 assertThat(paymentLinkResponse.getTransactionStatus())
                         .as(format("transaction status is not equals to %s", paymentLinkResponse.getTransactionStatus()))
@@ -56,15 +57,15 @@ public class PaymentsSteps extends GeneralSteps{
             case "alreadyCancelled":
                 ApiHelperPayments.cancelPaymentLink(paymentLinkRef.get(), activationKey.get());
                 response = ApiHelperPayments.cancelPaymentLink(paymentLinkRef.get(), activationKey.get());
-                Validator.validateErrorResponse(response, dataMap);
+                validateErrorResponse(response, dataMap);
                 break;
             case "nonExisted":
                 response = ApiHelperPayments.cancelPaymentLink("nonExistedLink", activationKey.get());
-                Validator.validateErrorResponse(response, dataMap);
+                validateErrorResponse(response, dataMap);
                 break;
             case "expired":
                 response = ApiHelperPayments.cancelPaymentLink(EXPIRED_LINK, activationKey.get());
-                Validator.validateErrorResponse(response, dataMap);
+                validateErrorResponse(response, dataMap);
                 break;
             default:
                 Assertions.fail(format("Expected status %s is not existed", status));
@@ -78,7 +79,7 @@ public class PaymentsSteps extends GeneralSteps{
         switch (status) {
             case "valid":
                 response = ApiHelperPayments.receivePaymentLink(paymentLinkRef.get(), activationKey.get());
-                Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
+                checkResponseCode(response, dataMap.get("o.responseCode"));
                 PaymentLinkResponse paymentLinkResponse = response.as(PaymentLinkResponse.class);
                 assertThat(paymentLinkResponse.getTransactionStatus())
                         .as(format("transaction status is not equals to %s", paymentLinkResponse.getTransactionStatus()))
@@ -86,11 +87,11 @@ public class PaymentsSteps extends GeneralSteps{
                 break;
             case "sentfailed":
                 response = ApiHelperPayments.receivePaymentLink(paymentLinkRef.get(), activationKey.get());
-                Validator.validateErrorResponse(response, dataMap);
+                validateErrorResponse(response, dataMap);
                 break;
             case "nonExisted":
                 response = ApiHelperPayments.receivePaymentLink("nonExistedLink", activationKey.get());
-                Validator.validateErrorResponse(response, dataMap);
+                validateErrorResponse(response, dataMap);
                 break;
             default:
                 Assertions.fail(format("Expected status %s is not existed", status));
@@ -100,7 +101,7 @@ public class PaymentsSteps extends GeneralSteps{
     @Then("^User gets a correct payment link with status code (.*) and (.*)$")
     public void userCanGetAPaymentLink(String statusCode, String transactionStatus) {
         Response response = ApiHelperPayments.userGetAPaymentLinkResponse(paymentBody.get(), activationKey.get());
-        Validator.checkResponseCode(response, statusCode);
+        checkResponseCode(response, statusCode);
         PaymentLinkResponse paymentLinkResponse = response
                 .as(PaymentLinkResponse.class);
         paymentLink.set(paymentLinkResponse.getPaymentLink());
@@ -113,7 +114,7 @@ public class PaymentsSteps extends GeneralSteps{
     @Then("^User gets an error for payment link creation$")
     public void userCanNotGetAPaymentLink(Map<String, String> dataMap) {
         Response response = ApiHelperPayments.userGetAPaymentLinkResponse(paymentBody.get(), activationKey.get());
-        Validator.validateErrorResponse(response, dataMap);
+        validateErrorResponse(response, dataMap);
     }
 
     @Then("^The payment has success status code$")
