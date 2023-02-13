@@ -18,10 +18,6 @@ import static utils.Validator.validateErrorResponse;
 
 public class PaymentsSteps extends GeneralSteps{
 
-    public static final ThreadLocal<PaymentBody> paymentBody = new ThreadLocal<>();
-    public static final ThreadLocal<String> paymentGatewaySettingsId = new ThreadLocal<>();
-    public static final ThreadLocal<String> paymentLink = new ThreadLocal<>();
-    public static final ThreadLocal<String> paymentLinkRef = new ThreadLocal<>();
     public static final String EXPIRED_LINK = "629905f6-e916-4490-a547-bf8f0d5fb9f4";
 
     @When("^User gets paymentGatewaySettingsId for widget$")
