@@ -33,6 +33,7 @@ Feature: Two-way Numbers Configuration
 
     Examples:
       | i.widgetId                       | o.numbers                  | o.defaultNumbers | o.responseCode | o.errors  | o.path                              |
+      | 2c9ac7b285c8be190185ddd9cd9f002b | " "                        | " "              | 200            |           |                                     |
       | 2c9ac7b285c8be190185ddd9cd9f002b | 447938562268               | 447938562268     | 200            |           |                                     |
       | 2c9ac7b285c8be190185ddd9cd9f002b | 447938562268, 441138562268 | 447938562268     | 200            |           |                                     |
       |                                  |                            |                  | 404            | NOT_FOUND | URL /v2/widget/null/two-way-numbers |

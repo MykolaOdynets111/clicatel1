@@ -20,7 +20,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
-import utils.Validator;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -30,7 +29,10 @@ import java.util.Optional;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static utils.Validator.*;
+import static utils.Validator.checkResponseCode;
+import static utils.Validator.validateErrorResponse;
+import static utils.Validator.verifyBadRequestResponse;
+import static utils.Validator.verifyUnauthorisedResponse;
 
 public class WidgetSteps extends GeneralSteps {
 
