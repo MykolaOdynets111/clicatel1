@@ -1,20 +1,17 @@
-package api.models.response.accountresponse;
+package api.models.request.widgetConfigurations;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Getter;
+import lombok.Builder;
 
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "accountId",
         "showTutorial"
 })
+public class AccountSettingsPropertyBody {
 
-@Getter
-public class AccountSettingsResponse {
-    @JsonProperty("accountId")
-    public String accountId;
     @JsonProperty("showTutorial")
-    public boolean showTutorial;
+    private boolean showTutorial;
 }

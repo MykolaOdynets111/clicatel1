@@ -2,9 +2,9 @@ package api.clients;
 
 import api.models.request.WidgetBody;
 import api.models.response.ApiKeysResponse;
-import api.models.response.integrationresponse.IntegrationResponse;
-import api.models.response.widgetresponse.Widget;
-import api.models.response.widgetresponse.WidgetsContent;
+import api.models.response.integration.IntegrationResponse;
+import api.models.response.widget.Widget;
+import api.models.response.widget.WidgetsContent;
 import io.restassured.response.Response;
 
 import java.util.List;

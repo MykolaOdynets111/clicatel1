@@ -4,8 +4,13 @@ import api.clients.ApiHelperChat2Pay;
 import api.clients.ApiHelperWidgets;
 import com.github.javafaker.Faker;
 import org.assertj.core.api.SoftAssertions;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class GeneralSteps {
 
@@ -38,5 +43,16 @@ public class GeneralSteps {
             authToken = ApiHelperChat2Pay.token.get();
         }
         return authToken;
+    }
+
+    @NotNull
+    protected static List<String> getListOfElementsFromTruthTable(String number) {
+        List<String> numbers;
+        if (Objects.nonNull(number) && number.contains(",")) {
+            numbers = Arrays.asList(number.split(","));
+        } else {
+            numbers = Collections.singletonList(number);
+        }
+        return numbers;
     }
 }

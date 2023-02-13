@@ -1,25 +1,22 @@
-package api.models.response.widgetresponse;
+package api.models.response.widgetConfigurations;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Builder;
 import lombok.Getter;
-
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "id",
-        "name"
+        "number",
+        "default"
 })
 
 @Getter
-@Builder
-public class ConfigStatus {
+public class TwoWayNumbersBody {
 
-    @JsonProperty("id")
-    private int id;
+    @JsonProperty("number")
+    private String number;
 
-    @JsonProperty("name")
-    private String name;
+    @JsonProperty("default")
+    private boolean isDefault;
 }

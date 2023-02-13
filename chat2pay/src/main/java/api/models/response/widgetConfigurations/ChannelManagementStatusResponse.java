@@ -1,4 +1,4 @@
-package api.models.response.widgetConfigurationResponse;
+package api.models.response.widgetConfigurations;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

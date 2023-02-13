@@ -1,4 +1,4 @@
-package api.models.response.widgetConfigurationResponse;
+package api.models.response.account;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,16 +7,14 @@ import lombok.Getter;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "number",
-        "default"
+        "accountId",
+        "showTutorial"
 })
 
 @Getter
-public class TwoWayNumbersBody {
-
-    @JsonProperty("number")
-    public String number;
-
-    @JsonProperty("default")
-    public boolean isDefault;
+public class AccountSettingsResponse {
+    @JsonProperty("accountId")
+    public String accountId;
+    @JsonProperty("showTutorial")
+    public boolean showTutorial;
 }

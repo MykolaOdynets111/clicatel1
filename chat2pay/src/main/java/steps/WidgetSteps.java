@@ -8,14 +8,14 @@ import api.models.request.WidgetBody;
 import api.models.request.channels.ChannelManagement;
 import api.models.request.channels.ChannelStatus;
 import api.models.request.channels.ChannelType;
-import api.models.response.UpdatedEntityResponse;
+import api.models.request.widgetConfigurations.TwoWayNumberConfiguration;
 import api.models.response.failedresponse.ErrorResponse;
-import api.models.response.widgetConfigurationResponse.ChannelManagementStatusResponse;
-import api.models.response.widgetConfigurationResponse.TwoWayNumbersBody;
-import api.models.response.widgetConfigurationResponse.TwoWayNumbersResponse;
-import api.models.response.widgetresponse.ConfigStatus;
-import api.models.response.widgetresponse.Widget;
-import api.models.response.widgetresponse.WidgetCreation;
+import api.models.response.updateEntityResponse.UpdatedEntityResponse;
+import api.models.response.widget.ConfigStatus;
+import api.models.response.widget.Widget;
+import api.models.response.widget.WidgetCreation;
+import api.models.response.widgetConfigurations.ChannelManagementStatusResponse;
+import api.models.response.widgetConfigurations.TwoWayNumbersBody;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
@@ -23,8 +23,9 @@ import org.assertj.core.api.Assertions;
 import utils.Validator;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
@@ -228,15 +229,45 @@ public class WidgetSteps extends GeneralSteps {
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {
-                TwoWayNumbersResponse statusResponse = response.as(TwoWayNumbersResponse.class);
+                List<TwoWayNumbersBody> twoWayNumbersList = response.jsonPath().getList("", TwoWayNumbersBody.class);
 
-                TwoWayNumbersBody twoWayNumbersBody = statusResponse.getTwoWayNumbers()
-                        .stream().filter(n -> n.getNumber().equals("o.number"))
-                        .findFirst().orElseThrow(NoSuchElementException::new);
-                softly.assertThat(twoWayNumbersBody.isDefault()).isEqualTo(Boolean.parseBoolean(valuesMap.get("o.default")));
+                Optional<TwoWayNumbersBody> body = twoWayNumbersList.stream()
+                        .filter(n -> n.getNumber().equals(valuesMap.get("o.number")))
+                        .findFirst();
+                body.ifPresent(twoWayNumbersBody ->
+                        assertThat(twoWayNumbersBody.isDefault())
+                                .isEqualTo(Boolean.parseBoolean(valuesMap.get("o.default"))));
+            } else if (expectedResponseCode == 404) {
+                verifyBadRequestResponse(valuesMap, response);
+            }
+        } else {
+            Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
+        }
+    }
+
+    @Then("^User updates two-way numbers$")
+    public void updatesTwoWayNumbers(Map<String, String> valuesMap) {
+        String widgetId = valuesMap.get("i.widgetId");
+        List<String> numbers = getListOfElementsFromTruthTable(valuesMap.get("o.numbers"));
+        TwoWayNumberConfiguration configuration = TwoWayNumberConfiguration.builder()
+                .numbers(numbers)
+                .defaultNumber(valuesMap.get("o.defaultNumbers")).build();
+
+        response = ApiHelperTwoWayNumbers.updateTwoWayNumbers(widgetId, configuration, ApiHelperChat2Pay.token.get());
+        int statusCode = response.getStatusCode();
+        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
+
+        if (expectedResponseCode == statusCode) {
+            if (statusCode == 200) {
+                ApiHelperTwoWayNumbers.getTwoWayNumbers(widgetId, ApiHelperChat2Pay.token.get())
+                        .jsonPath().getList("", TwoWayNumbersBody.class).forEach(n -> {
+                            boolean isDefault = n.getNumber().equals(valuesMap.get("o.defaultNumbers"));
+                            softly.assertThat(n.getNumber()).isIn(numbers);
+                            softly.assertThat(n.isDefault()).isEqualTo(isDefault);
+                        });
                 softly.assertAll();
-//            } else if (expectedResponseCode == 401) {
-//                verifyUnauthorisedResponse(valuesMap, response);
+            } else if (expectedResponseCode == 404) {
+                verifyBadRequestResponse(valuesMap, response);
             }
         } else {
             Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
