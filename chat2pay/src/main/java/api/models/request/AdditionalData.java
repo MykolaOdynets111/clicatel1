@@ -19,9 +19,4 @@ public class AdditionalData {
 
     @JsonProperty("departmentName")
     private String departmentName;
-
-    public AdditionalData(String departmentId, String departmentName) {
-        this.departmentId = departmentId;
-        this.departmentName = departmentName;
-    }
 }

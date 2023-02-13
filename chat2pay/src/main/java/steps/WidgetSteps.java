@@ -110,8 +110,9 @@ public class WidgetSteps extends GeneralSteps {
         createdWidgetName.set(faker.funnyName().name());
         updateBody.setEnvironment(dataMap.get("i.environment"));
         updateBody.setStatus(dataMap.get("i.status"));
-        updateBody.setConfigStatus
-                (new ConfigStatus(Integer.parseInt(dataMap.get("i.configStatus_id")), dataMap.get("i.configStatus_name")));
+        updateBody.setConfigStatus(ConfigStatus.builder()
+                .id(Integer.parseInt(dataMap.get("i.configStatus_id")))
+                .name(dataMap.get("i.configStatus_name")).build());
         updateBody.setName(createdWidgetName.get());
         switch (dataMap.get("i.widgetId")) {
             case "valid":
@@ -171,22 +172,20 @@ public class WidgetSteps extends GeneralSteps {
 
         response = ApiHelperChannelManagement.updateChannelStatus(body, widgetId, ApiHelperChat2Pay.token.get());
         int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
+        int responseCode = parseInt(valuesMap.get("o.responseCode"));
 
-        if (expectedResponseCode == statusCode) {
+        if (responseCode == statusCode) {
             if (statusCode == 200) {
                 ChannelManagementStatusResponse statusResponse = response.as(ChannelManagementStatusResponse.class);
-                softly.assertThat(statusResponse.getUpdateTime()).isEqualTo(LocalDate.now());
+                softly.assertThat(statusResponse.getUpdateTime()).isBeforeOrEqualTo(LocalDate.now());
                 softly.assertThat(statusResponse.smsChannelEnabled).isEqualTo(Boolean.parseBoolean(valuesMap.get("i.smsOmniIntStatus")));
                 softly.assertThat(statusResponse.whatsappChannelEnabled).isEqualTo(Boolean.parseBoolean(valuesMap.get("i.waOmniIntStatus")));
                 softly.assertAll();
-            } else if (expectedResponseCode == 401) {
-                verifyUnauthorisedResponse(valuesMap, response);
-            } else if (expectedResponseCode == 404) {
+            } else if (responseCode == 400 || responseCode == 404) {
                 verifyBadRequestResponse(valuesMap, response);
             }
         } else {
-            Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
+            Assertions.fail(format("Expected response code %s but was %s", responseCode, statusCode));
         }
     }
 

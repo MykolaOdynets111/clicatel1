@@ -8,7 +8,7 @@ import static datamanager.UnityClients.QA_C2P_USER;
 public class LoginSteps extends GeneralSteps {
 
     @Given("^User is logged in to unity$")
-    public void qaLogInToUnity() {
+    public void logInToUnity() {
         ApiHelperChat2Pay.logInToUnity(QA_C2P_USER);
     }
 }
