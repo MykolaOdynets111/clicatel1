@@ -21,7 +21,7 @@ Feature: Get settings for an account
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4713")
   Scenario Outline: C2P Unity API :: PUT /show-tutorial :: truth table
 
-    Given QA User is logged in to unity
+    Given User is logged in to unity
     And User updates account settings
       | i.activationKey       | <i.activationKey> |
       | i.showTutorial        | <i.showTutorial>  |

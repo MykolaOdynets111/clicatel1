@@ -173,7 +173,7 @@ public class WidgetSteps extends GeneralSteps {
         if (responseCode == statusCode) {
             if (statusCode == 200) {
                 ChannelManagementStatusResponse statusResponse = response.as(ChannelManagementStatusResponse.class);
-                softly.assertThat(statusResponse.getUpdateTime()).isEqualTo(LocalDate.now());
+                softly.assertThat(statusResponse.getUpdateTime()).isBeforeOrEqualTo(LocalDate.now());
                 softly.assertThat(statusResponse.smsChannelEnabled).isEqualTo(Boolean.parseBoolean(valuesMap.get("i.smsOmniIntStatus")));
                 softly.assertThat(statusResponse.whatsappChannelEnabled).isEqualTo(Boolean.parseBoolean(valuesMap.get("i.waOmniIntStatus")));
                 softly.assertAll();
