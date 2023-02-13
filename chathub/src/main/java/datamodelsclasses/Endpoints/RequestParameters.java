@@ -3,6 +3,7 @@ package datamodelsclasses.Endpoints;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.jetbrains.annotations.NotNull;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,7 +29,7 @@ public class RequestParameters {
 
     @JsonProperty("constraints")
     @NotNull
-    private String[] constraints;
+    private List<String> constraints;
 
     @JsonProperty("parameterType")
     private String parameterType;
