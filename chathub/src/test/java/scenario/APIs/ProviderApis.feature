@@ -6,8 +6,8 @@ Feature: Provider API
       | o.id                             | o.name          | o.logoUrl | o.description | o.moreInfoUrl | o.vid  | o.version       | o.latest | o.isAdded |
       | 0184f820c06ec8b62dfa0610e29ab575 | Zendesk Support | NA        | NA            | NA            | v1.0.0 | Zendesk Support | true     | true      |
       | 0184f828214f6b7a03c711284b2b8e39 | Zendesk Sell    | NA        | NA            | NA            | v1.0.0 | Zendesk Sell    | true     | true      |
-      | 0184f8322847eaddbda79d5a29eaa5d4 | Salesforce      | NA        | NA            | NA            | v1.0.0 | Salesforce      | true     | false     |
-      | 0185172bf6b57e9831c6d6616bc68317 | Shopify         | string    | string        | string        | v1.0.0 | Shopify         | true     | false     |
+      | 0184f8322847eaddbda79d5a29eaa5d4 | Salesforce      | NA        | NA            | NA            | v1.0.0 | Salesforce      | true     | true     |
+      | 0185172bf6b57e9831c6d6616bc68317 | Shopify         | string    | string        | string        | v1.0.0 | Shopify         | true     | true     |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-518")
   Scenario: CCH :: Internal :: Provider API : Get providers
