@@ -10,6 +10,9 @@ import lombok.Getter;
         "paymentLinkRef",
         "transactionStatus",
         "transactionStatusId",
+        "additionalData",
+        "receiptLinkRef",
+        "orderNumber",
         "timestamp",
         "paymentLink",
         "paymentLinkTTL",
@@ -26,6 +29,15 @@ public class PaymentLinkResponse {
 
     @JsonProperty("transactionStatusId")
     public int transactionStatusId;
+
+    @JsonProperty("additionalData")
+    public String additionalData;
+
+    @JsonProperty("receiptLinkRef")
+    public String receiptLinkRef;
+
+    @JsonProperty("orderNumber")
+    public String orderNumber;
 
     @JsonProperty("timestamp")
     public String timestamp;
