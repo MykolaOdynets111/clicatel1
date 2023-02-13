@@ -14,6 +14,7 @@ import io.cucumber.java.en.Then;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import urlproxymanager.Proxymanager;
+import urlproxymanager.UrlFormatValidator;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -61,6 +62,8 @@ public class ConfigurationsSteps extends MainApi {
             softAssert.assertEquals(dataMap.get("o.setupName"), postActiveConfiguration.getSetupName());
             softAssert.assertTrue(DateTimeHelper.checkDateTimeFormat(postActiveConfiguration.getCreatedDate()));
             softAssert.assertTrue(DateTimeHelper.checkDateTimeFormat(postActiveConfiguration.getModifiedDate()));
+            // Checking if the generated URL is valid. It is a temporary fix till we get to add the certificates to validate the URL
+            softAssert.assertTrue(UrlFormatValidator.isUrlValid(postActiveConfiguration.getAuthenticationLink()));
             /*
             //Check the authorization link
               * PROBLEM:
