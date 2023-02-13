@@ -3,9 +3,8 @@ package datamodelsclasses.configurations;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.*;
-
-import java.util.Map;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -47,8 +46,7 @@ public class Configurations {
     private String modifiedDate;
 
 
-
-    public Configurations (String id, String providerId, String type, String name, String status, String host, String createdDate, String modifiedDate){
+    public Configurations(String id, String providerId, String type, String name, String status, String host, String createdDate, String modifiedDate) {
         this.setId(id);
         this.setProviderId(providerId);
         this.setType(type);

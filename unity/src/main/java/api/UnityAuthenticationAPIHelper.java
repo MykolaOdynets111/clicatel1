@@ -28,7 +28,7 @@ public class UnityAuthenticationAPIHelper extends MainApi {
         Map<String, Object> credentials = new HashMap<>();
         credentials.put("email", unityClient.getUsername());
         credentials.put("password", unityClient.getPassword());
-        AuthTokenBody authTokenBody = postQueryWithoutAuth(UnityURLs.AUTH_ACCOUNTS, credentials,200).as(AuthTokenBody.class);
+        AuthTokenBody authTokenBody = postQueryWithoutAuth(UnityURLs.AUTH_ACCOUNTS, credentials, 200).as(AuthTokenBody.class);
         //Return MC2ID
         return authTokenBody.getAccounts().get(0).getId();
     }

@@ -30,7 +30,7 @@ public class InternalConfigurations {
     private String accountProviderConfigStatusId;
 
 
-    public InternalConfigurations (String id, String displayName, String configurationEnvironmentTypeId, String accountProviderConfigStatusId){
+    public InternalConfigurations(String id, String displayName, String configurationEnvironmentTypeId, String accountProviderConfigStatusId) {
         this.setId(id);
         this.setDisplayName(displayName);
         this.setConfigurationEnvironmentTypeId(configurationEnvironmentTypeId);

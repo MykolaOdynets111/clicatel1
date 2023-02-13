@@ -1,7 +1,9 @@
 package datamodelsclasses.Endpoints;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Data
 @NoArgsConstructor
 public class ProviderEndpoints {
@@ -10,8 +12,9 @@ public class ProviderEndpoints {
 
     @JsonProperty("name")
     private String name;
-    public ProviderEndpoints (String id, String name)
-    {    this.setId(id);
-         this.setName(name);
+
+    public ProviderEndpoints(String id, String name) {
+        this.setId(id);
+        this.setName(name);
     }
 }

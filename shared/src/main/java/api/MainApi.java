@@ -80,7 +80,7 @@ public abstract class MainApi {
 
     @NotNull
     protected static ResponseBody putQueryWithAuthAndBody(String endpoint, String authToken, Object body, int responseCode) {
-        Response response = putwithBodyAndAuth(endpoint, authToken, body);
+        Response response = putWithBodyAndAuth(endpoint, authToken, body);
         return validate(response, responseCode);
     }
 
@@ -93,7 +93,7 @@ public abstract class MainApi {
     }
 
     @NotNull
-    protected static Response putwithBodyAndAuth(String endpoint, String authToken, Object body) {
+    protected static Response putWithBodyAndAuth(String endpoint, String authToken, Object body) {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .header("Authorization", authToken)

@@ -25,8 +25,8 @@ public class AuthDetails {
     @JsonProperty("tokenExpirationDurationSeconds")
     private String tokenExpirationDurationSeconds;
 
-   @JsonProperty("scopes")
-   private String[] scopes;
+    @JsonProperty("scopes")
+    private String[] scopes;
 
     @JsonProperty("authorizationHeaderValuePrefix")
     private String authorizationHeaderValuePrefix;
