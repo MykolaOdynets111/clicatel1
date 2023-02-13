@@ -45,6 +45,8 @@ public class ProviderSteps {
                     data.get("o.version"), data.get("o.latest"))));
         }
         String getProviders = mapper.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithInternalAuth(Endpoints.INTERNAL_PROVIDERS, 200).as(AllProviders[].class));
+        System.out.println(expectedProvidersBody.toString().replace(", ", ","));
+        System.out.println(getProviders);
         Assert.assertEquals(expectedProvidersBody.toString().replace(", ", ","), getProviders, "Providers response is not as expected");
     }
 
