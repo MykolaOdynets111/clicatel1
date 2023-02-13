@@ -106,8 +106,9 @@ public class WidgetSteps extends GeneralSteps {
         createdWidgetName.set(faker.funnyName().name());
         updateBody.setEnvironment(dataMap.get("i.environment"));
         updateBody.setStatus(dataMap.get("i.status"));
-        updateBody.setConfigStatus
-                (new ConfigStatus(Integer.parseInt(dataMap.get("i.configStatus_id")), dataMap.get("i.configStatus_name")));
+        updateBody.setConfigStatus(ConfigStatus.builder()
+                .id(Integer.parseInt(dataMap.get("i.configStatus_id")))
+                .name(dataMap.get("i.configStatus_name")).build());
         updateBody.setName(createdWidgetName.get());
         switch (dataMap.get("i.widgetId")) {
             case "valid":
