@@ -82,7 +82,7 @@ Feature: Transaction execution
   Scenario Outline: c2p-Widget-Payment-Service :: POST /order-receipt :: user can receive the order
     When User sets valid data in the payment body
     Then User gets a correct payment link with status code 201 and PAYMENT_LINK_SENT
-    And user receives the order to email
+    And User receives the order to email
       | i.receiptLinkRef    | <i.receiptLinkRef>    |
       | o.responseCode      | <o.responseCode>      |
       | o.transactionStatus | <o.transactionStatus> |
