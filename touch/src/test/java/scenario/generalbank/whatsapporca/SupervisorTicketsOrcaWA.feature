@@ -233,7 +233,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Agent see tickets from orca on Unassigned filter page
     And Agent closed ticket for orca
     And Agent select Closed filter on Left Panel
-    And Wait for 6 second
+    And Wait for 3 second
     Then Agent checks final ticket count value in the closed ticket tab is more on supervisor
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6071")
