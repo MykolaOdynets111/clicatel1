@@ -183,14 +183,13 @@ Feature: Configuration API
   @TestCaseId("https://jira.clickatell.com/browse/CCH-571")
   Scenario: CCH :: Internal :: Configurations API: Get all configurations should return configurations with all the status (200 response coverage in the test case)
     Given User is able to get all configurations for a provider - Internal
-      | i.providerId                     | i.version | o.responseCode | o.errorMessage | o.id                             | o.displayName                 | o.configurationEnvironmentTypeId | o.accountProviderConfigStatusId |
-      | 0184f820c06ec8b62dfa0610e29ab575 |           | 200            |                | 0185a771e2d64aadd296aedbc0ef2492 | CH_Test_AutoTester2023-97     | PRODUCTION                       | ACTIVE                          |
-      |                                  |           |                |                | 0185bb6c699de39640ff6012e6e07548 | CH_Test_AutoTester2023-112    | PRODUCTION                       | ACTIVE                          |
-      |                                  |           |                |                | 0185c5cc199e5bce1883edfce9b7f38e | chathub_test_UHTester2023-111 | PRODUCTION                       | ACTIVE                          |
-      |                                  |           |                |                | 0185c5cd63abb75652e8096bf6ba0129 | chathub_test_UHTester2023-112 | PRODUCTION                       | ACTIVE                          |
-      |                                  |           |                |                | 0185c5e1085e3684bac8193a6511957d | chathub_test_ADTester2023-114 | PRODUCTION                       | ACTIVE                          |
-      |                                  |           |                |                | 0185c616d6faca2c2e727cc660a146dd | chathub_test_ADTester2023-110 | PRODUCTION                       | ACTIVE                          |
-      |                                  |           |                |                | 0185ca9a61a1ae246ac93a9e382c8de8 | chathub_test_UHTester2023-121 | PRODUCTION                       | ACTIVE                          |
+      | i.providerId                     | i.version | o.responseCode | o.errorMessage | o.id                             | o.displayName                    | o.configurationEnvironmentTypeId | o.accountProviderConfigStatusId |
+      | 0184f820c06ec8b62dfa0610e29ab575 |           | 200            |                | 01860e79275cec65d8eb4e734c1dd170 | mehdi and amrit test 2           | PRODUCTION                       | ACTIVE                          |
+      |                                  |           |                |                | 0186196f64a30e428c8fcada2788031a | Chathub Zendesk Support Testing1 | SANDBOX                          | ACTIVE                          |
+      |                                  |           |                |                | 01864ca331f6d6b61dbe38739fc2bb59 | accountTest                      | PRODUCTION                       | ACTIVE                          |
+      |                                  |           |                |                | 01864ca6b38368317bc58735eeac8213 | Chathub 045 671                  | SANDBOX                          | ACTIVE                          |
+      |                                  |           |                |                | 01864e7ea911860501de7719acb3f263 | chathub_test_AutoTester2023-1000 | PRODUCTION                       | ACTIVE                          |
+      |                                  |           |                |                | 01864e80ccadb659f4728d79e8d43f4c | chathub_test_AutoTester2023-1001 | SANDBOX                          | ACTIVE                          |
 
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-685")
