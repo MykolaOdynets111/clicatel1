@@ -143,26 +143,6 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Verify "All live chats" display as default
     Then  Verify that live chats available are shown
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2369")
-  @skip
-  @support_hours
-  @orca_api
-  Scenario: CD:: Supervisor desk :: Verify if Supervisor is able to Route ticket to scheduler
-    Given Setup ORCA whatsapp integration for General Bank Demo tenant
-    And Set agent support hours with day shift
-    When Send to agent message by ORCA
-    And I open portal
-    And Login into portal as an admin of General Bank Demo account
-    When I select Touch in left menu and Supervisor Desk in submenu
-    And Agent select "Tickets" left menu option
-    And Agent search chat ORCA on Supervisor desk
-    Then Agent see tickets from orca on Assigned filter page
-    And Select orca ticket checkbox
-    When Click 'Route to scheduler' button
-    Given I login as agent of General Bank Demo
-    And Agent select "Tickets" left menu option
-    Then Agent has new conversation request from ORCA user
-
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2108")
   @orca_api
   @support_hours

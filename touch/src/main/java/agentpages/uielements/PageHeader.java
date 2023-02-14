@@ -54,7 +54,7 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = "[name='message-forward']")
     private WebElement forwadIcon;
 
-    @FindBy(css = "[selenium-id=agent-email]")
+    @FindBy(css = "[data-testid=agent-email]")
     private WebElement agentEmail;
 
     @FindBy(css = ".cl-profile-info__agent-name")
