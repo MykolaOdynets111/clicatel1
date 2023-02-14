@@ -3,8 +3,9 @@ package api.models.response.widgetresponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -12,19 +13,13 @@ import lombok.NoArgsConstructor;
         "name"
 })
 
-@NoArgsConstructor
-@Data
+@Getter
+@Builder
 public class ConfigStatus {
-
-    public ConfigStatus(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 
     @JsonProperty("id")
     private int id;
 
     @JsonProperty("name")
     private String name;
-
 }

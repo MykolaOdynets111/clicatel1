@@ -1,13 +1,11 @@
 package steps;
 
 import api.clients.ApiHelperAccounts;
-import api.clients.ApiHelperChat2Pay;
 import api.models.request.AccountSettingsPropertyBody;
 import api.models.response.accountresponse.AccountSettingsResponse;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.SoftAssertions;
 
 import java.util.Map;
 
@@ -17,22 +15,20 @@ import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static utils.Validator.verifyUnauthorisedResponse;
 
-public class AccountSteps {
-
-    private final SoftAssertions softly = new SoftAssertions();
+public class AccountSteps extends GeneralSteps {
 
     @Then("^User gets account settings")
     public void getAccountSettings(Map<String, String> valuesMap) {
         Response response = getAccountSettingsResponse(getActivationKey(valuesMap));
         int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(valuesMap.get("responseCode"));
+        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {
                 AccountSettingsResponse settings = response.as(AccountSettingsResponse.class);
 
-                softly.assertThat(valuesMap.get("accountId")).isEqualTo(settings.getAccountId());
-                softly.assertThat(Boolean.valueOf(valuesMap.get("showTutorial"))).isEqualTo(settings.isShowTutorial());
+                softly.assertThat(valuesMap.get("o.accountId")).isEqualTo(settings.getAccountId());
+                softly.assertThat(Boolean.valueOf(valuesMap.get("o.showTutorial"))).isEqualTo(settings.isShowTutorial());
 
             } else if (expectedResponseCode == 401) {
                 verifyUnauthorisedResponse(valuesMap, response);
@@ -46,19 +42,19 @@ public class AccountSteps {
     @Then("^User updates account settings")
     public void putAccountSettings(Map<String, String> valuesMap) {
         AccountSettingsPropertyBody body = AccountSettingsPropertyBody.builder()
-                .showTutorial(Boolean.parseBoolean(valuesMap.get("showTutorial")))
+                .showTutorial(Boolean.parseBoolean(valuesMap.get("i.showTutorial")))
                 .build();
 
         Response response = ApiHelperAccounts.putAccountSettings(body, getActivationKey(valuesMap));
         int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(valuesMap.get("responseCode"));
+        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {
                 AccountSettingsResponse settings = getAccountSettingsResponse(getActivationKey(valuesMap))
                         .as(AccountSettingsResponse.class);
 
-                assertThat(Boolean.valueOf(valuesMap.get("updatedShowTutorial")))
+                assertThat(Boolean.valueOf(valuesMap.get("o.updatedShowTutorial")))
                         .isEqualTo(settings.isShowTutorial());
 
             } else if (expectedResponseCode == 401) {
@@ -67,13 +63,5 @@ public class AccountSteps {
         } else {
             Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
         }
-    }
-
-    private static String getActivationKey(Map<String, String> valuesMap) {
-        String authToken = valuesMap.get("activationKey");
-        if (authToken.equals("token")) {
-            authToken = ApiHelperChat2Pay.token.get();
-        }
-        return authToken;
     }
 }

@@ -1,19 +1,17 @@
-package api.models.response.paymentgatewaysettingsresponse;
+package api.models.request.channels;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.Builder;
 
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "id",
-        "name"
+        "channelType"
 })
+public class ChannelType {
 
-public class CardNetwork {
-
-    @JsonProperty("id")
-    private int id;
-    @JsonProperty("name")
-    private String name;
+    @JsonProperty("channelType")
+    private String channelType;
 }

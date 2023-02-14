@@ -3,7 +3,7 @@ package api.models.response.failedresponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Data;
+import lombok.Getter;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
         "path"
 })
 
-@Data
+@Getter
 public class ErrorResponse {
     @JsonProperty("message")
     public String message;
