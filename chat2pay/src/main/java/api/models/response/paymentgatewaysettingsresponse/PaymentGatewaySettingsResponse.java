@@ -3,7 +3,7 @@ package api.models.response.paymentgatewaysettingsresponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Data;
+import lombok.Getter;
 
 import java.util.List;
 
@@ -22,6 +22,7 @@ import java.util.List;
         "currencies",
         "cardNetworks",
         "paymentTypes",
+        "merchantDescriptor",
         "createdTime",
         "modifiedTime",
         "requestEmail",
@@ -34,75 +35,74 @@ import java.util.List;
         "billingType"
 })
 
-@Data
+@Getter
 public class PaymentGatewaySettingsResponse {
     @JsonProperty("paymentGatewaySettingsId")
-    private String paymentGatewaySettingsId;
+    public String paymentGatewaySettingsId;
 
     @JsonProperty("paymentGatewayId")
-    private int paymentGatewayId;
+    public int paymentGatewayId;
 
     @JsonProperty("paymentIntegrationTypeId")
-    private int paymentIntegrationTypeId;
+    public int paymentIntegrationTypeId;
 
     @JsonProperty("merchantId")
-    private String merchantId;
+    public String merchantId;
 
     @JsonProperty("saProfileId")
-    private String saProfileId;
+    public String saProfileId;
 
     @JsonProperty("saAccessKey")
-    private String saAccessKey;
+    public String saAccessKey;
 
     @JsonProperty("locale")
-    private Locale locale;
+    public Locale locale;
 
     @JsonProperty("country")
-    private Country country;
+    public Country country;
 
     @JsonProperty("shipToCountries")
-    private List<Object> shipToCountries = null;
+    public List<Object> shipToCountries = null;
 
     @JsonProperty("defaultCurrency")
-    private DefaultCurrency defaultCurrency;
+    public DefaultCurrency defaultCurrency;
 
     @JsonProperty("currencies")
-    private List<Currency> currencies = null;
+    public List<Currency> currencies = null;
 
     @JsonProperty("cardNetworks")
-    private List<CardNetwork> cardNetworks = null;
+    public List<CardNetwork> cardNetworks = null;
 
     @JsonProperty("paymentTypes")
-    private List<PaymentType> paymentTypes = null;
+    public List<PaymentType> paymentTypes = null;
+
+    @JsonProperty("merchantDescriptor")
+    public String merchantDescriptor;
 
     @JsonProperty("createdTime")
-    private String createdTime;
+    public String createdTime;
 
     @JsonProperty("modifiedTime")
-    private String modifiedTime;
+    public String modifiedTime;
 
     @JsonProperty("requestEmail")
-    private boolean requestEmail;
+    public boolean requestEmail;
 
     @JsonProperty("requestPhone")
-    private boolean requestPhone;
+    public boolean requestPhone;
 
     @JsonProperty("requestShipping")
-    private boolean requestShipping;
+    public boolean requestShipping;
 
     @JsonProperty("transactionType")
-    private String transactionType;
+    public String transactionType;
 
     @JsonProperty("restApiAccessKey")
-    private String restApiAccessKey;
+    public String restApiAccessKey;
 
     @JsonProperty("restApiSecretKey")
-    private String restApiSecretKey;
-
-    @JsonProperty("logo")
-    private Logo logo;
+    public String restApiSecretKey;
 
     @JsonProperty("billingType")
-    private String billingType;
-
+    public String billingType;
 }

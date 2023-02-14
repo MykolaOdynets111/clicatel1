@@ -3,7 +3,7 @@ package api.models.request;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Data;
+import lombok.Getter;
 
 import java.util.Map;
 
@@ -26,7 +26,7 @@ import java.util.Map;
         "transactionType"
 })
 
-@Data
+@Getter
 public class PaymentBody {
 
     @JsonProperty("channel")
@@ -54,8 +54,7 @@ public class PaymentBody {
     private String timestamp = "2021-04-27T17:35:58.000+0000";
 
     @JsonProperty("additionalData")
-    private AdditionalData additionalData =
-            new AdditionalData("567", "Sales");
+    private AdditionalData additionalData = AdditionalData.builder().departmentId("567").departmentName("Sales").build();
 
     @JsonProperty("paymentGatewaySettingsId")
     private String paymentGatewaySettingsId;
@@ -81,7 +80,9 @@ public class PaymentBody {
         this.taxAmount = (parameters.get("i.taxAmount"));
         this.totalAmount = (parameters.get("i.totalAmount"));
         this.timestamp = (parameters.get("i.timestamp"));
-        this.additionalData = new AdditionalData(parameters.get("i.departmentId"), parameters.get("i.departmentName"));
+        this.additionalData = AdditionalData.builder()
+                .departmentId(parameters.get("i.departmentId"))
+                .departmentName(parameters.get("i.departmentName")).build();
         this.paymentGatewaySettingsId = (paymentGatewaySettingsId);
         this.returnPaymentLink = (parameters.get("i.returnPaymentLink"));
         this.paymentReviewAutoReversal = (parameters.get("i.paymentReviewAutoReversal"));

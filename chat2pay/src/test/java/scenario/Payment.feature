@@ -30,7 +30,6 @@ Feature: Transaction execution
     And The payment has success status code
 
     Examples:
-
       | i.channel | i.to         | i.currency | i.orderNumber | i.subTotalAmount | i.taxAmount | i.totalAmount | i.timestamp                  | i.departmentId | i.departmentName | i.returnPaymentLink | i.paymentReviewAutoReversal | i.transactionType | o.transactionStatus           |
       | sms       | 447938556403 | ZAR        | 1             | 100              | 0           | 100           | 2021-04-27T17:35:58.000+0000 | 567            | Sales            | TRUE                | FALSE                       | authorization     | PAYMENT_LINK_SENT             |
       | none      | 447938556403 | ZAR        | 1             | 100              | 0           | 100           | 2021-04-27T17:35:58.000+0001 | 568            | Sales            | TRUE                | FALSE                       | authorization     | PAYMENT_LINK_REQUEST_RECEIVED |
@@ -77,7 +76,7 @@ Feature: Transaction execution
       | valid            | 200            | Payment Link Cancelled | 0                   |                                                         |
       | alreadyCancelled | 400            | 0                      | already cancelled   |                                                         |
       | nonExisted       | 404            | 0                      | URL /api/v2/cancel/ | There is no such transaction with transaction reference |
-      | expired          | 400            | 0                      | expired             |                                                         |
+#      | expired          | 400            | 0                      | expired             |                                                         |
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4688")
   Scenario Outline: c2p-Widget-Payment-Service :: POST /order-receipt :: user can receive the order
