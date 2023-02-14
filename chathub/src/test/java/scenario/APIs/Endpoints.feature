@@ -15,6 +15,7 @@ Feature: Endpoint API
       #Bug logged:CCH-699 : Provider Null              |                                  | v1.0.0     |    400       |Bad Request|
       #Bug logged:CCH-699 : VersionID Null             | 0184f828214f6b7a03c711284b2b8e39 |            |    400      |Bad Request|
 
+
   @TestCaseId("https://jira.clickatell.com/browse/CCH-676")
   Scenario:CH :: Admin API : User should be able to verify all returned endpoints for a provider
     Given Validate all endpoint detail for Provider via Admin API
@@ -26,6 +27,7 @@ Feature: Endpoint API
       | 0184f82f654ec9cdb6eed670afdd7e36 | Retrieve account details       |                                  |             |                |
       | 0184f82f654ef40f88d3929be7ee05c7 | Get customer                   |                                  |             |                |
       | 0184f82f654ef7950075689898286775 | Update lead                    |                                  |             |                |
+
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-626")
   Scenario Outline: CH :: Internal API : GET /internal/endpoints should return available endpoints for a provider.
@@ -42,6 +44,7 @@ Feature: Endpoint API
       #Bug logged:CCH-699 : Provider Null              |                                  | v1.0.0     |    400       |Bad Request|
       #Bug logged:CCH-699 : VersionID Null             | 0184f828214f6b7a03c711284b2b8e39 |            |    400      |Bad Request|
 
+
   @TestCaseId("https://jira.clickatell.com/browse/CCH-683")
   Scenario:CH :: Internal API : User should be able to verify all returned endpoints for a provider
     Given Validate all endpoint detail for Provider via Internal API
@@ -53,6 +56,7 @@ Feature: Endpoint API
       | 0184f82f654ec9cdb6eed670afdd7e36 | Retrieve account details       |                                  |             |                |
       | 0184f82f654ef40f88d3929be7ee05c7 | Get customer                   |                                  |             |                |
       | 0184f82f654ef7950075689898286775 | Update lead                    |                                  |             |                |
+
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-630")
   Scenario Outline: CH :: Admin API : GET /admin/specifications should return all specifications for a provider
@@ -78,6 +82,7 @@ Feature: Endpoint API
       | 0184f828214f6b7a03c711284b2false | 404            | Specifications not found |                                  |                         |                        |                           |                         |                                              |                      |                                              |                        |           |                                          |
       #Bug logged:CCH-699|                                  |404            | Bad Request      |                                |                        |                                 |                             |                                     |                                               |                                   |                                              |                         |                      |                                             |
 
+
   @TestCaseId("https://jira.clickatell.com/browse/CCH-623")
   Scenario Outline:CH :: Admin API : Verify that GET /Admin/endpoints/{endpoint} should return available endpoint details with correct requestParameter details
     Given Validate specific endpoint detail for Provider via Admin api
@@ -89,6 +94,7 @@ Feature: Endpoint API
       | 0184f82664fb33c510da20cc404772ce | 0184f82664fb33c510da20cc404772ce |                    | 200            | Get customer    | 0184f82664fb87852199fc962680a301 | User ID                   | User ID                         |                             | true                         |                                 | NUMBER                            |                                      | false                       | NUMBER                               |                                       |                                         | PATH                              | user_id                             | 200                         |                             |
       | 0184f82664fb33c510da20cIncorrect |                                  | Endpoint not found | 404            |                 |                                  |                           |                                 |                             |                              |                                 |                                   |                                      |                             |                                      |                                       |                                         |                                   |                                     |                             |                             |
       #Bug logged:CCH-699|                                  | 0184f82664fb33c510da20cc404772ce|Bad Request     |404                  |Get customer         |0184f82664fb87852199fc962680a301|User ID                      |User ID                           |                              |  true                      |                               |NUMBER                           |                                    |false                          |NUMBER                                 |                                       |                                       |PATH                             |user_id                             |200                          |                           |
+
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-686")
   Scenario: CH :: Admin API : Verify "response sample" from GET /admin/endpoints/{endpoint}
@@ -150,6 +156,7 @@ Feature: Endpoint API
       | user/alias                          | Alias                          | STRING  | false     |                                  |                |              |
       | user/active                         | Active?                        | BOOLEAN | false     |                                  |                |              |
 
+
   @TestCaseId("https://jira.clickatell.com/browse/CCH-627")
   Scenario Outline: CH :: Internal API : Verify that GET /internal/endpoints/{endpoint} should return available endpoint details with correct requestParameter details
     Given Validate specific endpoint detail for Provider via Internal Api
@@ -161,6 +168,7 @@ Feature: Endpoint API
       | 0184f82664fb33c510da20cc404772ce | 0184f82664fb33c510da20cc404772ce |                    | 200            | Get customer    | 0184f82664fb87852199fc962680a301 | User ID                   | User ID                         |                             | true                         |                                 | NUMBER                            |                                      | false                       | NUMBER                               |                                       |                                         | PATH                              | user_id                             | 200                         |                             |
       | 0184f82664fb33c510da20cIncorrect |                                  | Endpoint not found | 404            |                 |                                  |                           |                                 |                             |                              |                                 |                                   |                                      |                             |                                      |                                       |                                         |                                   |                                     |                             |                             |
       #Bug logged:CCH-699|                                  |0184f82664fb33c510da20cc404772ce|Endpoint not found     |404                  |Get customer         |0184f82664fb87852199fc962680a301|User ID                      |User ID                           |                              |  true                      |                               |NUMBER                           |                                    |false                          |NUMBER                                 |                                       |                                       |PATH                             |user_id                             |200                          |                           |
+
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-684")
   Scenario: CH :: Internal API : Verify "response sample" from GET /internal/endpoints/{endpoint}
@@ -221,23 +229,3 @@ Feature: Endpoint API
       | user/chat_only                      | Chat Only?                     | BOOLEAN | false     |                                  |                |              |
       | user/alias                          | Alias                          | STRING  | false     |                                  |                |              |
       | user/active                         | Active?                        | BOOLEAN | false     |                                  |                |              |
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

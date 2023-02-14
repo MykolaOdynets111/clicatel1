@@ -108,17 +108,21 @@ public class ProviderSteps {
     @Given("Admin is able to GET configured provider for customer")
     public void validateGETConfiguredProviderForCustomer(List<Map<String, String>> datatable) throws JsonProcessingException {
         String url = format(Endpoints.ADMIN_CONFIGURED_PROVIDER_DETAILS, datatable.get(0).get("i.mc2AccountId"));
-        ObjectMapper mapper = new ObjectMapper();
-        List<String> expectedConfiguredProviderDetails = new ArrayList<>();
-        for (Map<String, String> data : datatable) {
-            expectedConfiguredProviderDetails.add(mapper.writeValueAsString(new ConfiguredProviderDetail(data.get("o.id"),
-                    data.get("o.name"), data.get("o.logoUrl"),
-                    data.get("o.description"),
-                    data.get("o.moreInfoUrl"), data.get("o.vid"),
-                    data.get("o.version"), data.get("o.latest"))));
+        if (datatable.size() == 1)
+            Validator.validatedErrorResponseforGet(url, datatable.get(0));
+        else {
+            ObjectMapper mapper = new ObjectMapper();
+            List<String> expectedConfiguredProviderDetails = new ArrayList<>();
+            for (Map<String, String> data : datatable) {
+                expectedConfiguredProviderDetails.add(mapper.writeValueAsString(new ConfiguredProviderDetail(data.get("o.id"),
+                        data.get("o.name"), data.get("o.logoUrl"),
+                        data.get("o.description"),
+                        data.get("o.moreInfoUrl"), data.get("o.vid"),
+                        data.get("o.version"), data.get("o.latest"))));
+            }
+            String getProviders = mapper.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithoutAuthToken(url, 200).as(ConfiguredProviderDetail[].class));
+            Assert.assertEquals(expectedConfiguredProviderDetails.toString().replace(", ", ","), getProviders, "Providers response is not as expected");
         }
-        String getProviders = mapper.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithoutAuthToken(url, 200).as(ConfiguredProviderDetail[].class));
-        Assert.assertEquals(expectedConfiguredProviderDetails.toString(), getProviders, "Providers response is not as expected");
     }
 
     @Given("Admin is able to create provider")

@@ -22,19 +22,20 @@ Feature: Configuration API
     Examples:
       | i.name                     | i.clientSecret                                                   | i.clientId | i.host                                 | i.providerId                     | i.type     | o.responseCode | o.errorMessage | o.type     | o.setupName                | o.authenticationLink | o.timeToExpire |
       | CH_Test_AutoTester2023-002 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | 200            |                | PRODUCTION | CH_Test_AutoTester2023-002 | 200                  | 300            |
- #     | CH_Test_AutoTester2023-205 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | SANDBOX    | 200            |                | SANDBOX    | CH_Test_AutoTester2023-205 | 200                  | 300            |
-#  #Defect CCH-649      | CH_Test_AutoTester2023-42 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | SANDBOX    | 200            |                      |  SANDBOX |  CH_Test_AutoTester2023-42       | 200               | 300            |
- #     | CH_Test_AutoTester2023-206 | WrongInput                                                       | testoauth  | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | SANDBOX    | 200            |                | SANDBOX    | CH_Test_AutoTester2023-206 | 200                  | 300            |
- #     | CH_Test_AutoTester2023-207 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | WrongInput | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | SANDBOX    | 200            |                | SANDBOX    | CH_Test_AutoTester2023-207 | 200                  | 300            |
-  #    | CH_Test_AutoTester2023-208 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https:/wrongInput.zendesk.com          | 0184f820c06ec8b62dfa0610e29ab575 | SANDBOX    | 200            |                | SANDBOX    | CH_Test_AutoTester2023-208 | 200                  | 300            |
-#   #DefectID: CCH-650    | CH_Test_AutoTester2023-51 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com | WrongInput   | SANDBOX | 404            | Provider not found |        |             |                      |                |
- #     | CH_Test_AutoTester2023-11  | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | WrongInput | 404            | Bad request    |            |                            |                      |                |
+      | CH_Test_AutoTester2023-205 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | SANDBOX    | 200            |                | SANDBOX    | CH_Test_AutoTester2023-205 | 200                  | 300            |
+  #Defect CCH-649      | CH_Test_AutoTester2023-42 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | SANDBOX    | 200            |                      |  SANDBOX |  CH_Test_AutoTester2023-42       | 200               | 300            |
+      | CH_Test_AutoTester2023-206 | WrongInput                                                       | testoauth  | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | SANDBOX    | 200            |                | SANDBOX    | CH_Test_AutoTester2023-206 | 200                  | 300            |
+      | CH_Test_AutoTester2023-207 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | WrongInput | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | SANDBOX    | 200            |                | SANDBOX    | CH_Test_AutoTester2023-207 | 200                  | 300            |
+      | CH_Test_AutoTester2023-208 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https:/wrongInput.zendesk.com          | 0184f820c06ec8b62dfa0610e29ab575 | SANDBOX    | 200            |                | SANDBOX    | CH_Test_AutoTester2023-208 | 200                  | 300            |
+   #DefectID: CCH-650    | CH_Test_AutoTester2023-51 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com | WrongInput   | SANDBOX | 404            | Provider not found |        |             |                      |                |
+      | CH_Test_AutoTester2023-11  | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | WrongInput | 404            | Bad request    |            |                            |                      |                |
       |                            | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | 404            | Bad request    |            |                            |                      |                |
-#  #DefectID: CCH-651    | CH_Test_AutoTester2023-52 |                                                              | testoauth  | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | 404            | ClientId and ClientSecret in request or in OAuthDetails should not be null |                   |          |                                   |               |
-#  #DefectID: CCH-651    | CH_Test_AutoTester2023-52 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 |        | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | 404            | ClientId and ClientSecret in request or in OAuthDetails should not be null |                   |          |                                   |               |
-#  #DefectID: CCH-651    | CH_Test_AutoTester2023-52 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  |                                    | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | 404            | ClientId and ClientSecret in request or in OAuthDetails should not be null |                   |          |                                   |               |
-   #   | CH_Test_AutoTester2023-156 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com |                                  | PRODUCTION | 400            | Bad request    |            |                            |                      |                |
-   #   | CH_Test_AutoTester2023-157 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 |            | 400            | Bad request    |            |                            |                      |                |
+  #DefectID: CCH-651    | CH_Test_AutoTester2023-52 |                                                              | testoauth  | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | 404            | ClientId and ClientSecret in request or in OAuthDetails should not be null |                   |          |                                   |               |
+  #DefectID: CCH-651    | CH_Test_AutoTester2023-52 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 |        | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | 404            | ClientId and ClientSecret in request or in OAuthDetails should not be null |                   |          |                                   |               |
+  #DefectID: CCH-651    | CH_Test_AutoTester2023-52 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  |                                    | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | 404            | ClientId and ClientSecret in request or in OAuthDetails should not be null |                   |          |                                   |               |
+      | CH_Test_AutoTester2023-156 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com |                                  | PRODUCTION | 400            | Bad request    |            |                            |                      |                |
+      | CH_Test_AutoTester2023-157 | 6b3806f4286be63fb6ef2ef1d7f73a6940c559e3f096a5a24a329740820f6bf5 | testoauth  | https://d3v-clickatell2162.zendesk.com | 0184f820c06ec8b62dfa0610e29ab575 |            | 400            | Bad request    |            |                            |                      |                |
+
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-561")
   Scenario Outline: CCH :: Public :: Configurations API: Get configuration secrets API should return the clientSecret in astericks.
@@ -59,7 +60,6 @@ Feature: Configuration API
       | 0185bbb47862d93e7c9f2bf20512a19c | 200            |                            | 0185bbb47862d93e7c9f2bf20512a19c | 0184f820c06ec8b62dfa0610e29ab575 | DISABLED                        | PRODUCTION                       | CH_Test_AutoTester2023-117 | testoauth  | 6b38***************6bf5 | https://d3v-clickatell2162.zendesk.com |
       | Wrong Input                      | 404            | Configuration ID not found |                                  |                                  |                                 |                                  |                            |            |                         |                                        |
 #DefectId CCH-699      |                   | 400            | Bad request         |      |              |                                 |                                  |               |            |                |           |
-
 
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-662")
@@ -107,6 +107,7 @@ Feature: Configuration API
 #AuthPending - BugId: CCH-224      |TRUE|500|Precondition failed|||||||
 #With ChatFlow and ChatDesk activated - Data to be created once integrated build will be deployed      |TRUE|500|Precondition failed|||||||
 
+
   @TestCaseId("https://jira.clickatell.com/browse/CCH-668")
   Scenario Outline: CH :: Public :: Configurations API : Delete configuration
     Given User is able to delete configurations
@@ -145,36 +146,26 @@ Feature: Configuration API
       | o.timeToExpire | <o.timeToExpire> |
 # Note: If test fails make sure that the data is not updated i.e. id or outputs.
     Examples:
-      | i.id                              | i.providerId                     | o.responseCode | o.errorMessage             | o.id                             | o.type     | o.setupName                   | o.timeToExpire |
-      | 0185ceb0c0f5dc0bad548c3baf3ea2fa  | 0184f820c06ec8b62dfa0610e29ab575 | 200            |                            | 0185ceb0c0f5dc0bad548c3baf3ea2fa | SANDBOX    | chathub_test_UHTester2023-153 | 300            |
-      | 0185ceaddc7af760ebfb1e3cbfbe0e0d  | 0184f820c06ec8b62dfa0610e29ab575 | 200            |                            | 0185ceaddc7af760ebfb1e3cbfbe0e0d | PRODUCTION | chathub_test_UHTester2023-152 | 300            |
-      | WrongId                           | 0184f820c06ec8b62dfa0610e29ab575 | 404            | Configuration ID not found |                                  |            |                               |                |
-#DefectId: CCH-716      | 0185ceaddc7af760ebfb1e3cbfbe0e0d  | WrongId                          | 404            | ProviderId not found       |                                  |            |                               |                |
-      | 0185ceb113150350596852b3d3dd42f1  | 0184f820c06ec8b62dfa0610e29ab575 | 200            |                            | 0185ceb113150350596852b3d3dd42f1 | SANDBOX    | chathub_test_UHTester2023-154 | 300            |
-      | 0185ceb1577cb56bd671a5d651f2dd19  | 0184f820c06ec8b62dfa0610e29ab575 | 200            |                            | 0185ceb1577cb56bd671a5d651f2dd19 | SANDBOX    | chathub_test_UHTester2023-155 | 300            |
-      | 0185ceb1a9d7b89b3d45f0fd6d0082b5  | 0184f820c06ec8b62dfa0610e29ab575 | 200            |                            | 0185ceb1a9d7b89b3d45f0fd6d0082b5 | SANDBOX    | chathub_test_UHTester2023-156 | 300            |
-      | 0185ceb1a9d7b89b3d45f0fd6d0081123 | 0184f820c06ec8b62dfa0610e29ab575 | 404            | Configuration ID not found |                                  |            |                               |                |
-      |                                   | 0184f820c06ec8b62dfa0610e29ab575 | 400            | Bad request                |                                  |            |                               |                |
-      |                                   |                                  | 400            | Bad request                |                                  |            |                               |                |
+      | i.id                             | i.providerId                     | o.responseCode | o.errorMessage             | o.id                             | o.type     | o.setupName                      | o.timeToExpire |
+      | 01864e80ccadb659f4728d79e8d43f4c | 0184f820c06ec8b62dfa0610e29ab575 | 200            |                            | 01864e80ccadb659f4728d79e8d43f4c | SANDBOX    | chathub_test_AutoTester2023-1001 | 300            |
+      | 01864e7ea911860501de7719acb3f263 | 0184f820c06ec8b62dfa0610e29ab575 | 200            |                            | 01864e7ea911860501de7719acb3f263 | PRODUCTION | chathub_test_AutoTester2023-1000 | 300            |
+      | WrongId                          | 0184f820c06ec8b62dfa0610e29ab575 | 404            | Configuration ID not found |                                  |            |                                  |                |
+#DefectId: CCH-716      |0185ceaddc7af760ebfb1e3cbfbe0e0d|WrongId|404|ProviderId not found|||||
+      | 01864e862367dd01e9f47c3aff28a835 | 0184f820c06ec8b62dfa0610e29ab575 | 200            |                            | 01864e862367dd01e9f47c3aff28a835 | SANDBOX    | chathub_test_AutoTester2023-1003 | 300            |
+      | 01864e80ccadb659f4728d79e8d43f4c | 0184f820c06ec8b62dfa0610e29ab575 | 200            |                            | 01864e80ccadb659f4728d79e8d43f4c | SANDBOX    | chathub_test_AutoTester2023-1001 | 300            |
+      | 01864e8313f67d4fe7134bcfd6642c83 | 0184f820c06ec8b62dfa0610e29ab575 | 200            |                            | 01864e8313f67d4fe7134bcfd6642c83 | SANDBOX    | chathub_test_AutoTester2023-1002 | 300            |
+#Unable to create data due to defectId: CCH-715 |0185ceb1a9d7b89b3d45f0fd6d0081123|0184f820c06ec8b62dfa0610e29ab575|404|Configuration ID not found|||||
+      |                                  | 0184f820c06ec8b62dfa0610e29ab575 | 400            | Bad request                |                                  |            |                                  |                |
+      | TRUE                             |                                  | 400            | Bad request                |                                  |            |                                  |                |
+
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-549")
   Scenario: CCH :: Public :: Configurations API: Get all configurations should return configurations with all the status except AUTH_PENDING (200 response coverage in the test case)
     Given User is able to get all configurations for a provider - Public
-      | i.providerId                     | i.version | o.responseCode | o.id                             | o.providerId                     | o.type     | o.name                        | o.status | o.host                                 | o.createdDate            | o.modifiedDate           |
-      | 0184f820c06ec8b62dfa0610e29ab575 |           | 200            | 0185a771e2d64aadd296aedbc0ef2492 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | CH_Test_AutoTester2023-97     | ACTIVE   | https://d3v-clickatell2162.zendesk.com | 2023-01-12T19:25:37.065Z | 2023-01-16T11:10:06.477Z |
-      |                                  |           |                | 0185bb6c699de39640ff6012e6e07548 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | CH_Test_AutoTester2023-112    | ACTIVE   | https://d3v-clickatell2162.zendesk.com | 2023-01-16T16:32:02.463Z | 2023-01-16T16:32:50.350Z |
-      |                                  |           |                | 0185bbb0bd4606f5bd390e857d2c8aca | 0184f820c06ec8b62dfa0610e29ab575 | SANDBOX    | CH_Test_AutoTester2023-115    | DISABLED | https://d3v-clickatell2162.zendesk.com | 2023-01-16T17:46:40.329Z | 2023-01-20T09:12:34.093Z |
-      |                                  |           |                | 0185bbb47862d93e7c9f2bf20512a19c | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | CH_Test_AutoTester2023-117    | DISABLED | https://d3v-clickatell2162.zendesk.com | 2023-01-16T17:50:44.837Z | 2023-01-20T08:29:19.934Z |
-      |                                  |           |                | 0185c5cc199e5bce1883edfce9b7f38e | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | chathub_test_UHTester2023-111 | ACTIVE   | https://d3v-clickatell2162.zendesk.com | 2023-01-18T16:52:45.600Z | 2023-01-18T16:53:16.983Z |
-      |                                  |           |                | 0185c5cd63abb75652e8096bf6ba0129 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | chathub_test_UHTester2023-112 | ACTIVE   | https://d3v-clickatell2162.zendesk.com | 2023-01-18T16:54:10.093Z | 2023-01-18T16:54:20.437Z |
-      |                                  |           |                | 0185c5e1085e3684bac8193a6511957d | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | chathub_test_ADTester2023-114 | ACTIVE   | https://d3v-clickatell2162.zendesk.com | 2023-01-18T17:15:37.440Z | 2023-01-18T17:15:47.884Z |
-      |                                  |           |                | 0185c616d6faca2c2e727cc660a146dd | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | chathub_test_ADTester2023-110 | ACTIVE   | https://d3v-clickatell2162.zendesk.com | 2023-01-18T18:14:23.740Z | 2023-01-18T18:15:51.984Z |
-      |                                  |           |                | 0185c61b8d3e3f432e082d17303d7eef | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | chathub_test_UHTester2023-120 | DISABLED | https://d3v-clickatell2162.zendesk.com | 2023-01-18T18:19:32.544Z | 2023-01-18T20:11:38.610Z |
-      |                                  |           |                | 0185c6889dd3bcf02085659411a68260 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | chathub_test_UHTester2023-121 | DISABLED | https://d3v-clickatell2162.zendesk.com | 2023-01-18T20:18:40.213Z | 2023-01-18T20:23:47.901Z |
-      |                                  |           |                | 0185ca9a61a1ae246ac93a9e382c8de8 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | chathub_test_UHTester2023-121 | ACTIVE   | https://d3v-clickatell2162.zendesk.com | 2023-01-19T15:16:33.495Z | 2023-01-19T15:17:18.485Z |
-      |                                  |           |                | 0185ce80cc6ac8aa1243eee8282ce872 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | chathub_test_UHTester2023-150 | DISABLED | https://d3v-clickatell2162.zendesk.com | 2023-01-20T09:27:05.588Z | 2023-01-20T09:32:04.030Z |
-      |                                  |           |                | 0185eac3be42d3bc9df801732948a10a | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | chathub_test_UHTester2023-161 | DISABLED | https://d3v-clickatell2162.zendesk.com | 2023-01-25T21:09:34.922Z | 2023-01-25T21:12:04.533Z |
-      |                                  |           |                | 0185ef5b3d60318eae8352fde21b8442 | 0184f820c06ec8b62dfa0610e29ab575 | PRODUCTION | chathub_test_UHTester2023-168 | DISABLED | https://d3v-clickatell2162.zendesk.com | 2023-01-26T18:33:32.258Z | 2023-01-26T18:35:15.555Z |
+      | i.providerId                     | i.version | o.responseCode | o.id                             | o.providerId                     | o.type     | o.name                           | o.status | o.host                  | o.createdDate            | o.modifiedDate           |
+      | 0184f828214f6b7a03c711284b2b8e39 |           | 200            | 01862ce7755f24b59d1c03c025f121f4 | 0184f828214f6b7a03c711284b2b8e39 | PRODUCTION | Chathub Zendesk Support Testing8 | DISABLED | https://api.getbase.com | 2023-02-07T17:23:31.810Z | 2023-02-13T19:19:44.314Z |
+      |                                  |           |                | 01862ce93da4a8d251d104969c9cee3d | 0184f828214f6b7a03c711284b2b8e39 | PRODUCTION | Chathub Zendesk Sell Testing7    | ACTIVE   | https://api.getbase.com | 2023-02-07T17:25:28.615Z | 2023-02-13T20:27:40.416Z |
+
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-664")
   Scenario Outline: CCH :: Public :: Configurations API: Get all configurations should return configurations with all the status except AUTH_PENDING (other than 200 response coverage in the test case)
@@ -192,14 +183,13 @@ Feature: Configuration API
   @TestCaseId("https://jira.clickatell.com/browse/CCH-571")
   Scenario: CCH :: Internal :: Configurations API: Get all configurations should return configurations with all the status (200 response coverage in the test case)
     Given User is able to get all configurations for a provider - Internal
-      | i.providerId                     | i.version | o.responseCode | o.errorMessage | o.id                             | o.displayName                 | o.configurationEnvironmentTypeId | o.accountProviderConfigStatusId |
-      | 0184f820c06ec8b62dfa0610e29ab575 |           | 200            |                | 0185a771e2d64aadd296aedbc0ef2492 | CH_Test_AutoTester2023-97     | PRODUCTION                       | ACTIVE                          |
-      |                                  |           |                |                | 0185bb6c699de39640ff6012e6e07548 | CH_Test_AutoTester2023-112    | PRODUCTION                       | ACTIVE                          |
-      |                                  |           |                |                | 0185c5cc199e5bce1883edfce9b7f38e | chathub_test_UHTester2023-111 | PRODUCTION                       | ACTIVE                          |
-      |                                  |           |                |                | 0185c5cd63abb75652e8096bf6ba0129 | chathub_test_UHTester2023-112 | PRODUCTION                       | ACTIVE                          |
-      |                                  |           |                |                | 0185c5e1085e3684bac8193a6511957d | chathub_test_ADTester2023-114 | PRODUCTION                       | ACTIVE                          |
-      |                                  |           |                |                | 0185c616d6faca2c2e727cc660a146dd | chathub_test_ADTester2023-110 | PRODUCTION                       | ACTIVE                          |
-      |                                  |           |                |                | 0185ca9a61a1ae246ac93a9e382c8de8 | chathub_test_UHTester2023-121 | PRODUCTION                       | ACTIVE                          |
+      | i.providerId                     | i.version | o.responseCode | o.errorMessage | o.id                             | o.displayName                    | o.configurationEnvironmentTypeId | o.accountProviderConfigStatusId |
+      | 0184f820c06ec8b62dfa0610e29ab575 |           | 200            |                | 01860e79275cec65d8eb4e734c1dd170 | mehdi and amrit test 2           | PRODUCTION                       | ACTIVE                          |
+      |                                  |           |                |                | 0186196f64a30e428c8fcada2788031a | Chathub Zendesk Support Testing1 | SANDBOX                          | ACTIVE                          |
+      |                                  |           |                |                | 01864ca331f6d6b61dbe38739fc2bb59 | accountTest                      | PRODUCTION                       | ACTIVE                          |
+      |                                  |           |                |                | 01864ca6b38368317bc58735eeac8213 | Chathub 045 671                  | SANDBOX                          | ACTIVE                          |
+      |                                  |           |                |                | 01864e7ea911860501de7719acb3f263 | chathub_test_AutoTester2023-1000 | PRODUCTION                       | ACTIVE                          |
+      |                                  |           |                |                | 01864e80ccadb659f4728d79e8d43f4c | chathub_test_AutoTester2023-1001 | SANDBOX                          | ACTIVE                          |
 
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-685")
@@ -214,6 +204,7 @@ Feature: Configuration API
 # Will be implemented after LR     | 0184f820c06ec8b62dfa0610e29ab575 | Wrong     | 404  | Provider ID or Version ID not found for Provider |
 # BugID: CCH-700     |         |           | 404            | Bad reuqest                                      |
  # Will be implemented after LR    | 0184f820c06ec8b62dfa0610e29ab575 | NULL      | 404  | bad reuqest                                      |
+
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-693")
   Scenario Outline: CH :: Admin API : GET - /admin/configurations should return all available configurations for a provider
@@ -230,6 +221,7 @@ Feature: Configuration API
       #Incorrect MC2ID Bug ID : CCH-697 |0184f828214f6b7a03c711284b2b8e39 |v1.0.0     |bb0496c20c434a76a927e7419wrong    |  404            | Provider ID or Version ID not found for Provider |
       #Null MC2ID      Bug ID : CCH-697 |0184f828214f6b7a03c711284b2b8e39 |v1.0.0     |                                  |  400            | Bad request                                      |
 
+
   @TestCaseId("https://jira.clickatell.com/browse/CCH-694")
   Scenario: CH :: Admin API : GET - /admin/configurations: User is able to verify all returned configurations for a provider
     Given User is able to get all configurations for a provider via Admin API
@@ -237,6 +229,7 @@ Feature: Configuration API
       | 0184f828214f6b7a03c711284b2b8e39 | v1.0.0    | bb0496c20c434a76a927e7419075fcc3 | 200            | 0185e57d00ccb0e68298c0a8e5b45a73 | 0184f828214f6b7a03c711284b2b8e39 | PRODUCTION | Chatflow Zendesk Sell PROD1 | DISABLED     | https://api.getbase.com | 2023-01-24T20:34:12.815Z | 2023-01-24T23:19:02.189Z |
       |                                  |           |                                  |                | 0185e5937f2c47f215ffc6dad87142f0 | 0184f828214f6b7a03c711284b2b8e39 | PRODUCTION | Chatflow Zendesk Sell PROD2 | EXPIRED      | https://api.getbase.com | 2023-01-24T20:58:46.959Z | 2023-01-24T21:00:04.680Z |
       |                                  |           |                                  |                | 0185e59ab160a98da89afd18b2775c9b | 0184f828214f6b7a03c711284b2b8e39 | PRODUCTION | Chatflow Zendesk Sell PROD5 | AUTH_PENDING | https://api.getbase.com | 2023-01-24T21:06:38.562Z | 2023-01-27T21:20:22.024Z |
+
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-695")
   Scenario Outline: CH :: Admin API : GET - /admin/configurations : User is able to get configuration detail from endpoint /admin/configurations/{ConfigurationID}
@@ -259,6 +252,7 @@ Feature: Configuration API
       | 404            | Configuration ID not found | 0184f828214f6b7a03c711284b2false |                                  |                                  |            |                             |          |                         |                          |                          |
      #Null configurationID Bug logged: CCH-700|400            | Bad request               |                                  |                                |                                |          |                                 |               |                             |                           |
 
+
   @TestCaseId("https://jira.clickatell.com/browse/CCH-703")
   Scenario Outline: CH :: Admin API :: Configurations API: /admin/configurations/{configurationId}/{secrets} should return configuration with client id and client secret
     Given User is able to get configuration with client id and client secret
@@ -275,10 +269,11 @@ Feature: Configuration API
       | o.hostUrl                        | <o.hostUrl>                        |
 
     Examples:
-      | o.responseCode | o.errorMessage             | i.configurationId                | o.id                             | o.providerId                     | o.accountProviderConfigStatusId | o.configurationEnvironmentTypeId | o.displayName             | o.clientId | o.clientSecret          | o.hostUrl                              |
-      | 200            |                            | 0185a771e2d64aadd296aedbc0ef2492 | 0185a771e2d64aadd296aedbc0ef2492 | 0184f820c06ec8b62dfa0610e29ab575 | ACTIVE                          | PRODUCTION                       | CH_Test_AutoTester2023-97 | testoauth  | 6b38***************6bf5 | https://d3v-clickatell2162.zendesk.com |
-      | 404            | Configuration ID not found | 0185a771e2d64aadd296aedbc0Af2492 |                                  |                                  |                                 |                                  |                           |            |                         |                                        |
+      | o.responseCode | o.errorMessage             | i.configurationId                | o.id | o.providerId | o.accountProviderConfigStatusId | o.configurationEnvironmentTypeId | o.displayName | o.clientId | o.clientSecret | o.hostUrl |
+#DefectId: CCH-822      | 200            |                            | 0185a771e2d64aadd296aedbc0ef2492 | 0185a771e2d64aadd296aedbc0ef2492 | 0184f820c06ec8b62dfa0610e29ab575 | ACTIVE                          | PRODUCTION                       | CH_Test_AutoTester2023-97 | testoauth  | 6b38***************6bf5 | https://d3v-clickatell2162.zendesk.com |
+      | 404            | Configuration ID not found | 0185a771e2d64aadd296aedbc0Af2492 |      |              |                                 |                                  |               |            |                |           |
     #Null configurationID Bug logged: CCH-700|400           |Bad request                     |                                |                                |                                 |                                   |                                            |                             |                |                          |
+
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-704")
   Scenario Outline: CH :: Admin API :: Configurations API: /admin/configurations/activate: User should be able to create and activate configuration
