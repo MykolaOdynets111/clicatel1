@@ -68,7 +68,7 @@ public class PaymentsSteps extends GeneralSteps{
         }
     }
 
-    @Then("^user receives the order to email$")
+    @Then("^User receives the order to email$")
     public void receiptOrder(Map<String, String> dataMap) {
         Response response;
         String status = dataMap.get("i.receiptLinkRef");
