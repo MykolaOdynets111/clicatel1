@@ -14,7 +14,6 @@ Feature: Widgets operations
       | o.errors       | <o.errors>       |
       | o.errorMessage | <o.errorMessage> |
 
-    Then User delete newly created widget
     Examples:
       | i.widget   | i.type      | i.environment | o.responseCode | o.errorMessage                | o.errors                          |
       | valid      | CHAT_TO_PAY | SANDBOX       | 200            |                               |                                   |
@@ -43,7 +42,6 @@ Feature: Widgets operations
       | o.errorMessage      | <o.errorMessage>      |
       | o.errors            | <o.errors>            |
 
-    Then User delete newly created widget
     Examples:
       | i.widgetId   | i.name          | i.status   | i.configStatus_id | i.configStatus_name | i.environment | o.responseCode | o.updateTime | o.status    | o.errorMessage                 | o.errors                          |
       | valid        | My first widget | CONFIGURED | 1                 | Configured          | SANDBOX       | 200            | TRUE         |             |                                |                                   |
@@ -82,7 +80,6 @@ Feature: Widgets operations
       | o.errorMessage | <o.errorMessage> |
       | o.errors       | <o.errors>       |
 
-    Then User delete newly created widget
     Examples:
       | i.widgetId  | i.name          | i.status   | i.configStatus_id | i.configStatus_name | i.environment | o.responseCode | o.updateTime | o.status  | o.errorMessage | o.errors                    |
       | valid       | My first widget | CONFIGURED | 1                 | Configured          | SANDBOX       | 200            | TRUE         |           |                |                             |
@@ -108,9 +105,31 @@ Feature: Widgets operations
       | o.errorMessage  | <o.errorMessage>  |
       | o.errors        | <o.errors>        |
 
-    Then User delete newly created widget
     Examples:
       | i.widgetId  | i.showLinkedApi | o.responseCode | o.updateTime | o.status  | o.errorMessage | o.errors                           |
       | valid       | true            | 200            | TRUE         |           |                |                                    |
       | valid       | false           | 200            | TRUE         |           |                |                                    |
       | non_existed | true            | 404            |              | NOT_FOUND | URL /v2/widget | Settings for widget does not exist |
+
+
+  @TestCaseId("https://jira.clickatell.com/browse/C2P-4322")
+  Scenario Outline: C2P Unity API :: Widget Configuration :: DELETE widget/{widgetId} :: delete widget by id
+
+    Then User creates widget for an account
+      | i.widget       | valid       |
+      | i.type         | CHAT_TO_PAY |
+      | i.environment  | SANDBOX     |
+      | o.responseCode | 200         |
+
+    Then User delete widget
+      | i.widgetId     | <i.widgetId>     |
+      | o.responseCode | <o.responseCode> |
+      | o.updateTime   | <o.updateTime>   |
+      | o.status       | <o.status>       |
+      | o.errorMessage | <o.errorMessage> |
+      | o.errors       | <o.errors>       |
+
+    Examples:
+      | i.widgetId  | o.responseCode | o.updateTime | o.status  | o.errorMessage | o.errors                    |
+      | valid       | 200            | TRUE         |           |                |                             |
+      | non_existed | 404            |              | NOT_FOUND | URL /v2/widget | Widget does not exist, id = |
