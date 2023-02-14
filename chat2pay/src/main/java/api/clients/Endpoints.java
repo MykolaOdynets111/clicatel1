@@ -17,4 +17,5 @@ public class Endpoints {
     public static final String ACCOUNT_SETTINGS_SHOW_TUTORIAL = C2P_URL_DEMO + "/v2/account/settings/show-tutorial";
     public static final String CHANNEL_CONFIGURATION = C2P_URL_DEMO + "/v2/widget/%s/link-channels";
     public static final String CHANNEL_STATUS = C2P_URL_DEMO + "/v2/widget/%s/status";
+    public static final String MESSAGE_CONFIGURATIONS = WIDGETS_ENDPOINT + "/%s/message-configurations";
 }

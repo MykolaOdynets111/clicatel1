@@ -28,6 +28,11 @@ public class ApiHelperPayments extends ApiHelperChat2Pay {
     }
 
     public static Response receivePaymentLink(String paymentLinkRef, String activationKey) {
-        return postQuery(Endpoints.PAYMENT_RECEIPT, new ReceiptBody(paymentLinkRef), activationKey);
+        ReceiptBody receiptBody = ReceiptBody.builder()
+                .paymentLinkRef(paymentLinkRef)
+                .receiptLink("https://your.domain/receipt")
+                .timestamp("2021-04-27T17:35:58.000+0000")
+                .build();
+        return postQuery(Endpoints.PAYMENT_RECEIPT, receiptBody, activationKey);
     }
 }
