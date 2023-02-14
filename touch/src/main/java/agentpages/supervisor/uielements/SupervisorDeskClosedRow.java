@@ -18,7 +18,7 @@ public class SupervisorDeskClosedRow extends AbstractWidget {
     @FindBy(css = ".cl-agent-name")
     private WebElement currentAgent;
 
-    @FindBy(css = ".cl-chat-item-user-name")
+    @FindBy(css = ".user-details__name")
     private WebElement userName;
 
     @FindBy(css = ".cl-table-user-description__location")

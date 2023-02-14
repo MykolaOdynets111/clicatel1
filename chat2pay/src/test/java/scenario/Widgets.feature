@@ -6,7 +6,6 @@ Feature: Widgets operations
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4336")
   Scenario Outline: C2P :: Unity API :: Widget Configuration :: POST :: Create widget for an account
-
     Then User creates widget for an account
       | i.widget       | <i.widget>       |
       | i.type         | <i.type>         |
@@ -16,8 +15,6 @@ Feature: Widgets operations
       | o.errorMessage | <o.errorMessage> |
 
     Then User delete newly created widget
-
-
     Examples:
       | i.widget   | i.type      | i.environment | o.responseCode | o.errorMessage                | o.errors                          |
       | valid      | CHAT_TO_PAY | SANDBOX       | 200            |                               |                                   |
@@ -27,13 +24,11 @@ Feature: Widgets operations
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4309")
   Scenario Outline: C2P Unity API :: PUT /widget/{widgetId} :: update widget
-
     Then User creates widget for an account
       | i.widget       | valid       |
       | i.type         | CHAT_TO_PAY |
       | i.environment  | SANDBOX     |
       | o.responseCode | 200         |
-
 
     Then User updates newly created widget
       | i.widgetId          | <i.widgetId>          |
@@ -48,9 +43,7 @@ Feature: Widgets operations
       | o.errorMessage      | <o.errorMessage>      |
       | o.errors            | <o.errors>            |
 
-
     Then User delete newly created widget
-
     Examples:
       | i.widgetId   | i.name          | i.status   | i.configStatus_id | i.configStatus_name | i.environment | o.responseCode | o.updateTime | o.status    | o.errorMessage                 | o.errors                          |
       | valid        | My first widget | CONFIGURED | 1                 | Configured          | SANDBOX       | 200            | TRUE         |             |                                |                                   |
@@ -60,7 +53,6 @@ Feature: Widgets operations
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4313")
   Scenario Outline: C2P Unity API :: GET /widget/{widgetId} :: get widget by id
-
     Then User creates widget for an account
       | i.widget       | valid       |
       | i.type         | CHAT_TO_PAY |
@@ -81,18 +73,44 @@ Feature: Widgets operations
       | o.errors            | <o.errors>            |
 
     Then User gets newly created widget
-      | i.widgetId          | <i.widgetId>          |
-      | o.name              | <i.name>              |
-      | o.status            | <i.status>            |
-      | o.configStatus_id   | <i.configStatus_id>   |
-      | o.configStatus_name | <i.configStatus_name> |
-      | o.environment       | <i.environment>       |
-      | o.responseCode      | <o.responseCode>      |
-      | o.updateTime        | <o.updateTime>        |
-      | o.errorMessage      | <o.errorMessage>      |
-      | o.errors            | <o.errors>            |
+      | i.widgetId     | <i.widgetId>     |
+      | o.name         | <i.name>         |
+      | o.status       | <i.status>       |
+      | o.environment  | <i.environment>  |
+      | o.responseCode | <o.responseCode> |
+      | o.updateTime   | <o.updateTime>   |
+      | o.errorMessage | <o.errorMessage> |
+      | o.errors       | <o.errors>       |
+
     Then User delete newly created widget
     Examples:
-      | i.widgetId   | i.name          | i.status   | i.configStatus_id | i.configStatus_name | i.environment | o.responseCode | o.updateTime | o.status    | o.errorMessage                 | o.errors                          |
-      | valid        | My first widget | CONFIGURED | 1                 | Configured          | SANDBOX       | 200            | TRUE         |             |                                |                                   |
-      | non_existed  | My first widget | CONFIGURED | 1                 | Configured          | SANDBOX       | 404            |              | NOT_FOUND   | URL /v2/widget                 | Widget does not exist, id =       |
+      | i.widgetId  | i.name          | i.status   | i.configStatus_id | i.configStatus_name | i.environment | o.responseCode | o.updateTime | o.status  | o.errorMessage | o.errors                    |
+      | valid       | My first widget | CONFIGURED | 1                 | Configured          | SANDBOX       | 200            | TRUE         |           |                |                             |
+      | non_existed | My first widget | CONFIGURED | 1                 | Configured          | SANDBOX       | 404            |              | NOT_FOUND | URL /v2/widget | Widget does not exist, id = |
+
+  @TestCaseId("https://jira.clickatell.com/browse/C2P-4717")
+  Scenario Outline: C2P Unity API :: GET /widget/{widgetId} :: get widget by id
+
+    Then User creates widget for an account
+      | i.widget       | valid       |
+      | i.type         | CHAT_TO_PAY |
+      | i.environment  | SANDBOX     |
+      | o.responseCode | 200         |
+
+    Then User updates show_linked_api for newly created widget
+
+      | i.widgetId      | <i.widgetId>      |
+      | i.showLinkedApi | <i.showLinkedApi> |
+      | o.responseCode  | <o.responseCode>  |
+      | o.updateTime    | <o.updateTime>    |
+      | o.showLinkedApi | <i.showLinkedApi> |
+      | o.status        | <o.status>        |
+      | o.errorMessage  | <o.errorMessage>  |
+      | o.errors        | <o.errors>        |
+
+    Then User delete newly created widget
+    Examples:
+      | i.widgetId  | i.showLinkedApi | o.responseCode | o.updateTime | o.status  | o.errorMessage | o.errors                           |
+      | valid       | true            | 200            | TRUE         |           |                |                                    |
+      | valid       | false           | 200            | TRUE         |           |                |                                    |
+      | non_existed | true            | 404            |              | NOT_FOUND | URL /v2/widget | Settings for widget does not exist |

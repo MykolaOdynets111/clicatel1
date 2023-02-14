@@ -3,20 +3,23 @@ package api.models.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Data;
+import lombok.Getter;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "paymentLinkRef",
         "transactionStatus",
         "transactionStatusId",
+        "additionalData",
+        "receiptLinkRef",
+        "orderNumber",
         "timestamp",
         "paymentLink",
         "paymentLinkTTL",
         "paymentPageTTL"
 })
 
-@Data
+@Getter
 public class PaymentLinkResponse {
     @JsonProperty("paymentLinkRef")
     public String paymentLinkRef;
@@ -26,6 +29,15 @@ public class PaymentLinkResponse {
 
     @JsonProperty("transactionStatusId")
     public int transactionStatusId;
+
+    @JsonProperty("additionalData")
+    public String additionalData;
+
+    @JsonProperty("receiptLinkRef")
+    public String receiptLinkRef;
+
+    @JsonProperty("orderNumber")
+    public String orderNumber;
 
     @JsonProperty("timestamp")
     public String timestamp;

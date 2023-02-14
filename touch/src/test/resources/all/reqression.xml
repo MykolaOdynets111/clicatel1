@@ -16,6 +16,11 @@
             <class name="runner.automationbot.RunAutomationBotTenantRegressionTest" />
         </classes>
     </test>
+    <test name="Test from Automation tenant">
+        <classes>
+            <class name="runner.automation.RunAutomationTenantRegressionTest" />
+        </classes>
+    </test>
     <test name="Test from Standard Billing tenant">
         <classes>
             <class name="runner.standardbilling.RunStandartBilingTenantRegressionTest" />

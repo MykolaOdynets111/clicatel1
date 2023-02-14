@@ -120,6 +120,11 @@ public abstract class MainApi {
         return delete(endpoint, authToken);
     }
 
+    @NotNull
+    protected static Response deleteQuery(String endpoint, Object body, String authToken) {
+        return delete(endpoint, body, authToken);
+    }
+
     private static ResponseBody validate(Response response, int responseCode) {
         if (response.getStatusCode() != responseCode) {
             fail("Couldn't get the value \n"
@@ -200,6 +205,14 @@ public abstract class MainApi {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .header("Authorization", authToken)
+                .delete(endpoint);
+    }
+
+    private static Response delete(String endpoint, Object body, String authToken) {
+        return RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", authToken)
+                .body(body)
                 .delete(endpoint);
     }
 }
