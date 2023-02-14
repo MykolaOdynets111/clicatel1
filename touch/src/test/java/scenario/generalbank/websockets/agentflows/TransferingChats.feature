@@ -69,7 +69,7 @@ Feature: CD :: Chat Desk :: Live Chat :: Chat Transferring
     When Second agent click "Accept transfer" button
     Then Second agent has new conversation request
 
-    And Second Agent should not see from user chat in agent desk from orca
+    And Agent should not see from user chat in agent desk from orca
     When Second Agent click on new conversation request from orca
     Then Conversation area becomes active with connect to Support user's message in it for second agent
     And Second agent responds with hello to User
