@@ -35,7 +35,7 @@ Feature: CD :: Dashboard :: Configure :: Settings :: Auto Responders
     Then Verify Orca returns Out of Support Hours message autoresponder during 40 seconds for agent
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2538")
-  Scenario Outline: : CD :: Dashboard :: Changing agent auto responders, save it and check if it saved on backend
+  Scenario Outline: CD :: Dashboard :: Changing agent auto responders, save it and check if it saved on backend
 
     Given I login as Agent of Automation Bot
     And I select Touch in left menu and Dashboard in submenu

@@ -1,9 +1,10 @@
 @no_widget
 @orca_api
+@Regression
 Feature: Agent Date Time Picker Extension
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-860")
-    @skip
+  @skip
   Scenario Outline: CD :: <channelType> :: Agent Desk :: Live Chat :: Verify the "Date/Time picker" extension cards for the tenant
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Agent creates tenant extension with label and name
@@ -24,7 +25,7 @@ Feature: Agent Date Time Picker Extension
       | ABC         | orca     |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1617")
-    @skip
+  @skip
   Scenario Outline: CD :: <channelType> :: Verify that selected emoticons with text (title) display the title of each selected option in same format to agent as they display to user
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Agent creates tenant extension with label and name
@@ -42,7 +43,6 @@ Feature: Agent Date Time Picker Extension
       | ABC         | orca     |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1625")
-    @Regression
   Scenario Outline: CD :: ABC :: Verify that frequently used extensions will be a sub-set of all extensions list
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Agent creates tenant extension with label and name
@@ -63,7 +63,6 @@ Feature: Agent Date Time Picker Extension
       | ABC         | orca     |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1650")
-  @Regression
   Scenario: CD :: ABC :: Verify that "Frequently Used" extension tab options according to customer, if used less than 10 extensions, then those will only show up
     Given Setup ORCA ABC integration for General Bank Demo tenant
     And Agent creates tenant extension with label and name

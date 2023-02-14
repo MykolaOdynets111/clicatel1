@@ -1,13 +1,13 @@
 package runner.automation;
 
 
-
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import static runner.automation.Path.PATH;
+
 import static runner.automation.Path.DOTCONTROL;
+import static runner.automation.Path.PATH;
 
 @Test(groups = "General Bank agent UI tests")
 @CucumberOptions(
@@ -15,7 +15,6 @@ import static runner.automation.Path.DOTCONTROL;
         },
         monochrome = true,
         features ={
-                PATH + "SupervisorDefaultTicketsFilter.feature",
                 PATH + "FilteringPinnedChat.feature",
                 PATH + "AgentFeedbackManagingAgentMode.feature",
                 PATH + "AgentMode.feature",

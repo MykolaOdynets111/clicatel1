@@ -1,6 +1,10 @@
 package agentpages.supervisor;
 
-import agentpages.supervisor.uielements.*;
+import agentpages.supervisor.uielements.SupervisorAvailableAsAgentDialog;
+import agentpages.supervisor.uielements.SupervisorClosedChatsTable;
+import agentpages.supervisor.uielements.SupervisorDeskClosedRow;
+import agentpages.supervisor.uielements.SupervisorDeskLiveRow;
+import agentpages.supervisor.uielements.SupervisorOpenedClosedChatsList;
 import agentpages.uielements.ChatBody;
 import agentpages.uielements.ChatHeader;
 import agentpages.uielements.Profile;
@@ -22,6 +26,9 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     @FindBy(css = ".cl-chat-item")
     private List<WebElement> chatsList;
+
+    @FindBy(css = ".extended-chat-list-item")
+    private List<WebElement> chatsListClosed;
 
     @FindBy (css = ".ReactModal__Content.ReactModal__Content--after-open.cl-modal")
     private WebElement assignWindowsDialog;
@@ -213,7 +220,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     }
 
     private List<SupervisorDeskClosedRow> getClosedChatRows() {
-        return chatsList.stream()
+        return chatsListClosed.stream()
                 .map(e -> new SupervisorDeskClosedRow(e).setCurrentDriver(this.getCurrentDriver()))
                 .collect(Collectors.toList());
     }
