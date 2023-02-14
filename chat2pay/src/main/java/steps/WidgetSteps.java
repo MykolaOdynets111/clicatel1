@@ -2,29 +2,21 @@ package steps;
 
 import api.clients.ApiHelperChannelManagement;
 import api.clients.ApiHelperChat2Pay;
-import api.clients.ApiHelperTwoWayNumbers;
 import api.clients.ApiHelperWidgets;
 import api.models.request.WidgetBody;
-import api.models.request.channels.ChannelManagement;
-import api.models.request.channels.ChannelStatus;
 import api.models.request.channels.ChannelType;
-import api.models.request.widgetconfigurations.TwoWayNumberConfiguration;
 import api.models.response.failedresponse.ErrorResponse;
 import api.models.response.updateentityresponse.UpdatedEntityResponse;
 import api.models.response.widget.ConfigStatus;
 import api.models.response.widget.Widget;
 import api.models.response.widget.WidgetCreation;
-import api.models.response.widgetconfigurations.ChannelManagementStatusResponse;
-import api.models.response.widgetconfigurations.TwoWayNumbersBody;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
@@ -32,7 +24,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static utils.Validator.checkResponseCode;
 import static utils.Validator.validateErrorResponse;
 import static utils.Validator.verifyBadRequestResponse;
-import static utils.Validator.verifyUnauthorisedResponse;
 
 public class WidgetSteps extends GeneralSteps {
 
@@ -137,59 +128,6 @@ public class WidgetSteps extends GeneralSteps {
         }
     }
 
-    @Then("^User links channel to the widget")
-    public void linkChannelToWidget(Map<String, String> valuesMap) {
-        String widgetId = valuesMap.get("i.widgetId");
-        ChannelManagement body = ChannelManagement.builder()
-                .smsOmniIntegrationId(valuesMap.get("i.smsOmniIntegrationId"))
-                .whatsappOmniIntegrationId(valuesMap.get("i.whatsappOmniIntegrationId"))
-                .build();
-
-        response = ApiHelperChannelManagement.postChannelManagement(body, widgetId, getActivationKey(valuesMap));
-        int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
-
-        if (expectedResponseCode == statusCode) {
-            if (statusCode == 202) {
-                assertThat(response.as(UpdatedEntityResponse.class).getUpdateTime())
-                        .isBeforeOrEqualTo(LocalDate.now());
-            } else if (expectedResponseCode == 401) {
-                verifyUnauthorisedResponse(valuesMap, response);
-            } else if (expectedResponseCode == 404) {
-                verifyBadRequestResponse(valuesMap, response);
-            }
-        } else {
-            Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
-        }
-    }
-
-    @Then("^User updates channel status")
-    public void updateChannelStatus(Map<String, String> valuesMap) {
-        String widgetId = valuesMap.get("i.widgetId");
-        ChannelStatus body = ChannelStatus.builder()
-                .smsOmniIntStatus(valuesMap.get("i.smsOmniIntStatus"))
-                .waOmniIntStatus(valuesMap.get("i.waOmniIntStatus"))
-                .build();
-
-        response = ApiHelperChannelManagement.updateChannelStatus(body, widgetId, ApiHelperChat2Pay.token.get());
-        int statusCode = response.getStatusCode();
-        int responseCode = parseInt(valuesMap.get("o.responseCode"));
-
-        if (responseCode == statusCode) {
-            if (statusCode == 200) {
-                ChannelManagementStatusResponse statusResponse = response.as(ChannelManagementStatusResponse.class);
-                softly.assertThat(statusResponse.getUpdateTime()).isBeforeOrEqualTo(LocalDate.now());
-                softly.assertThat(statusResponse.smsChannelEnabled).isEqualTo(Boolean.parseBoolean(valuesMap.get("i.smsOmniIntStatus")));
-                softly.assertThat(statusResponse.whatsappChannelEnabled).isEqualTo(Boolean.parseBoolean(valuesMap.get("i.waOmniIntStatus")));
-                softly.assertAll();
-            } else if (responseCode == 400 || responseCode == 404) {
-                verifyBadRequestResponse(valuesMap, response);
-            }
-        } else {
-            Assertions.fail(format("Expected response code %s but was %s", responseCode, statusCode));
-        }
-    }
-
     @Then("^User updates show_linked_api for newly created widget$")
     public void updateShowLinkedApiCreatedWidget(Map<String, String> dataMap) {
         Widget body = new Widget();
@@ -216,61 +154,6 @@ public class WidgetSteps extends GeneralSteps {
                 break;
             default:
                 Assertions.fail(format("Expected status %s is not existed", dataMap.get("i.widgetId")));
-        }
-    }
-
-    @Then("^User gets two-way numbers$")
-    public void getTwoWayNumbers(Map<String, String> valuesMap) {
-        String widgetId = valuesMap.get("i.widgetId");
-
-        response = ApiHelperTwoWayNumbers.getTwoWayNumbers(widgetId, ApiHelperChat2Pay.token.get());
-        int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
-
-        if (expectedResponseCode == statusCode) {
-            if (statusCode == 200) {
-                List<TwoWayNumbersBody> twoWayNumbersList = response.jsonPath().getList("", TwoWayNumbersBody.class);
-
-                Optional<TwoWayNumbersBody> body = twoWayNumbersList.stream()
-                        .filter(n -> n.getNumber().equals(valuesMap.get("o.number")))
-                        .findFirst();
-                body.ifPresent(twoWayNumbersBody ->
-                        assertThat(twoWayNumbersBody.isDefault())
-                                .isEqualTo(Boolean.parseBoolean(valuesMap.get("o.default"))));
-            } else if (expectedResponseCode == 404) {
-                verifyBadRequestResponse(valuesMap, response);
-            }
-        } else {
-            Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
-        }
-    }
-
-    @Then("^User updates two-way numbers$")
-    public void updatesTwoWayNumbers(Map<String, String> valuesMap) {
-        String widgetId = valuesMap.get("i.widgetId");
-        List<String> numbers = getListOfElementsFromTruthTable(valuesMap.get("o.numbers"));
-        TwoWayNumberConfiguration configuration = TwoWayNumberConfiguration.builder()
-                .numbers(numbers)
-                .defaultNumber(valuesMap.get("o.defaultNumbers")).build();
-
-        response = ApiHelperTwoWayNumbers.updateTwoWayNumbers(widgetId, configuration, ApiHelperChat2Pay.token.get());
-        int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
-
-        if (expectedResponseCode == statusCode) {
-            if (statusCode == 200) {
-                ApiHelperTwoWayNumbers.getTwoWayNumbers(widgetId, ApiHelperChat2Pay.token.get())
-                        .jsonPath().getList("", TwoWayNumbersBody.class).forEach(n -> {
-                            boolean isDefault = n.getNumber().equals(valuesMap.get("o.defaultNumbers"));
-                            softly.assertThat(n.getNumber()).isIn(numbers);
-                            softly.assertThat(n.isDefault()).isEqualTo(isDefault);
-                        });
-                softly.assertAll();
-            } else if (expectedResponseCode == 404) {
-                verifyBadRequestResponse(valuesMap, response);
-            }
-        } else {
-            Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
         }
     }
 

@@ -15,11 +15,11 @@ import java.util.Objects;
 
 public class GeneralSteps {
 
+    protected static final ThreadLocal<String> widgetId = new ThreadLocal<>();
     protected static final ThreadLocal<PaymentBody> paymentBody = new ThreadLocal<>();
     protected static final ThreadLocal<String> paymentGatewaySettingsId = new ThreadLocal<>();
     protected static final ThreadLocal<String> paymentLink = new ThreadLocal<>();
     protected static final ThreadLocal<String> paymentLinkRef = new ThreadLocal<>();
-    protected static final ThreadLocal<String> widgetId = new ThreadLocal<>();
     protected static final ThreadLocal<String> applicationID = new ThreadLocal<>();
     protected static final ThreadLocal<String> activationKey = new ThreadLocal<>();
     protected static final ThreadLocal<String> createdWidgetId = new ThreadLocal<>();
