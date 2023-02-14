@@ -2,30 +2,37 @@ package steps;
 
 import api.clients.ApiHelperChannelManagement;
 import api.clients.ApiHelperChat2Pay;
+import api.clients.ApiHelperTwoWayNumbers;
 import api.clients.ApiHelperWidgets;
 import api.models.request.WidgetBody;
 import api.models.request.channels.ChannelManagement;
 import api.models.request.channels.ChannelStatus;
 import api.models.request.channels.ChannelType;
+import api.models.request.widgetconfigurations.TwoWayNumberConfiguration;
 import api.models.response.failedresponse.ErrorResponse;
-import api.models.response.updateEntityResponse.UpdatedEntityResponse;
-import api.models.response.widgetConfigurationResponse.ChannelManagementStatusResponse;
-import api.models.response.widgetresponse.ConfigStatus;
-import api.models.response.widgetresponse.Widget;
-import api.models.response.widgetresponse.WidgetCreation;
+import api.models.response.updateentityresponse.UpdatedEntityResponse;
+import api.models.response.widget.ConfigStatus;
+import api.models.response.widget.Widget;
+import api.models.response.widget.WidgetCreation;
+import api.models.response.widgetconfigurations.ChannelManagementStatusResponse;
+import api.models.response.widgetconfigurations.TwoWayNumbersBody;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
-import utils.Validator;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static utils.Validator.*;
+import static utils.Validator.checkResponseCode;
+import static utils.Validator.validateErrorResponse;
+import static utils.Validator.verifyBadRequestResponse;
+import static utils.Validator.verifyUnauthorisedResponse;
 
 public class WidgetSteps extends GeneralSteps {
 
@@ -183,6 +190,90 @@ public class WidgetSteps extends GeneralSteps {
         }
     }
 
+    @Then("^User updates show_linked_api for newly created widget$")
+    public void updateShowLinkedApiCreatedWidget(Map<String, String> dataMap) {
+        Widget body = new Widget();
+        body.setShowLinkedApi(Boolean.parseBoolean(dataMap.get("i.showLinkedApi")));
+        switch (dataMap.get("i.widgetId")) {
+            case "valid":
+                response = ApiHelperWidgets.updateShowLinkedApiForWidget(createdWidgetId.get(), body);
+                checkResponseCode(response, dataMap.get("o.responseCode"));
+                UpdatedEntityResponse updatedEntityResponse = response.as(UpdatedEntityResponse.class);
+                softly.assertThat(updatedEntityResponse.getUpdateTime())
+                        .as(format("widget update date is not equals to %s", LocalDate.now()))
+                        .isEqualTo(LocalDate.now());
+                softly.assertThat(updatedEntityResponse.isShowLinkedApi())
+                        .isEqualTo(Boolean.valueOf(Boolean.parseBoolean(dataMap.get("i.showLinkedApi"))));
+                softly.assertThat(ApiHelperWidgets.getWidget(createdWidgetId.get()).as(Widget.class)
+                                .isShowLinkedApi())
+                        .isEqualTo(Boolean.valueOf(Boolean.parseBoolean(dataMap.get("i.showLinkedApi"))));
+                softly.assertAll();
+                break;
+            case "non_existed":
+                response = ApiHelperWidgets.updateShowLinkedApiForWidget(dataMap.get("i.widgetId"), body);
+                checkResponseCode(response, dataMap.get("o.responseCode"));
+                validateErrorResponse(response, dataMap);
+                break;
+            default:
+                Assertions.fail(format("Expected status %s is not existed", dataMap.get("i.widgetId")));
+        }
+    }
+
+    @Then("^User gets two-way numbers$")
+    public void getTwoWayNumbers(Map<String, String> valuesMap) {
+        String widgetId = valuesMap.get("i.widgetId");
+
+        response = ApiHelperTwoWayNumbers.getTwoWayNumbers(widgetId, ApiHelperChat2Pay.token.get());
+        int statusCode = response.getStatusCode();
+        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
+
+        if (expectedResponseCode == statusCode) {
+            if (statusCode == 200) {
+                List<TwoWayNumbersBody> twoWayNumbersList = response.jsonPath().getList("", TwoWayNumbersBody.class);
+
+                Optional<TwoWayNumbersBody> body = twoWayNumbersList.stream()
+                        .filter(n -> n.getNumber().equals(valuesMap.get("o.number")))
+                        .findFirst();
+                body.ifPresent(twoWayNumbersBody ->
+                        assertThat(twoWayNumbersBody.isDefault())
+                                .isEqualTo(Boolean.parseBoolean(valuesMap.get("o.default"))));
+            } else if (expectedResponseCode == 404) {
+                verifyBadRequestResponse(valuesMap, response);
+            }
+        } else {
+            Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
+        }
+    }
+
+    @Then("^User updates two-way numbers$")
+    public void updatesTwoWayNumbers(Map<String, String> valuesMap) {
+        String widgetId = valuesMap.get("i.widgetId");
+        List<String> numbers = getListOfElementsFromTruthTable(valuesMap.get("o.numbers"));
+        TwoWayNumberConfiguration configuration = TwoWayNumberConfiguration.builder()
+                .numbers(numbers)
+                .defaultNumber(valuesMap.get("o.defaultNumbers")).build();
+
+        response = ApiHelperTwoWayNumbers.updateTwoWayNumbers(widgetId, configuration, ApiHelperChat2Pay.token.get());
+        int statusCode = response.getStatusCode();
+        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
+
+        if (expectedResponseCode == statusCode) {
+            if (statusCode == 200) {
+                ApiHelperTwoWayNumbers.getTwoWayNumbers(widgetId, ApiHelperChat2Pay.token.get())
+                        .jsonPath().getList("", TwoWayNumbersBody.class).forEach(n -> {
+                            boolean isDefault = n.getNumber().equals(valuesMap.get("o.defaultNumbers"));
+                            softly.assertThat(n.getNumber()).isIn(numbers);
+                            softly.assertThat(n.isDefault()).isEqualTo(isDefault);
+                        });
+                softly.assertAll();
+            } else if (expectedResponseCode == 404) {
+                verifyBadRequestResponse(valuesMap, response);
+            }
+        } else {
+            Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
+        }
+    }
+
     @Then("^User deletes channel integration")
     public void deleteChannelIntegration(Map<String, String> valuesMap) {
         String widgetId = valuesMap.get("i.widgetId");
@@ -211,35 +302,6 @@ public class WidgetSteps extends GeneralSteps {
         if (createdWidgetId.get() != null) {
             deleteWidget(createdWidgetId.get());
             verifyWidgetIsDeleted(createdWidgetId.get());
-        }
-    }
-
-    @Then("^User updates show_linked_api for newly created widget$")
-    public void updateShowLinkedApiCreatedWidget(Map<String, String> dataMap) {
-        Widget body = new Widget();
-        body.setShowLinkedApi(Boolean.parseBoolean(dataMap.get("i.showLinkedApi")));
-        switch (dataMap.get("i.widgetId")) {
-            case "valid":
-                response = ApiHelperWidgets.updateShowLinkedApiForWidget(createdWidgetId.get(), body);
-                checkResponseCode(response, dataMap.get("o.responseCode"));
-                UpdatedEntityResponse updatedEntityResponse = response.as(UpdatedEntityResponse.class);
-                softly.assertThat(updatedEntityResponse.getUpdateTime())
-                        .as(format("widget update date is not equals to %s", LocalDate.now()))
-                        .isEqualTo(LocalDate.now());
-                softly.assertThat(updatedEntityResponse.isShowLinkedApi())
-                        .isEqualTo(Boolean.valueOf(Boolean.parseBoolean(dataMap.get("i.showLinkedApi"))));
-                softly.assertThat(ApiHelperWidgets.getWidget(createdWidgetId.get()).as(Widget.class)
-                                .isShowLinkedApi())
-                        .isEqualTo(Boolean.valueOf(Boolean.parseBoolean(dataMap.get("i.showLinkedApi"))));
-                softly.assertAll();
-                break;
-            case "non_existed":
-                response = ApiHelperWidgets.updateShowLinkedApiForWidget(dataMap.get("i.widgetId"), body);
-                checkResponseCode(response, dataMap.get("o.responseCode"));
-                validateErrorResponse(response, dataMap);
-                break;
-            default:
-                Assertions.fail(format("Expected status %s is not existed", dataMap.get("i.widgetId")));
         }
     }
 

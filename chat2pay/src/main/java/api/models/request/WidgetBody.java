@@ -1,6 +1,6 @@
 package api.models.request;
 
-import api.models.response.widgetresponse.ConfigStatus;
+import api.models.response.widget.ConfigStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
