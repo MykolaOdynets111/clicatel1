@@ -1,7 +1,7 @@
 package api.clients;
 
 import api.MainApi;
-import api.models.request.widgetConfigurations.AccountSettingsPropertyBody;
+import api.models.request.widgetconfigurations.AccountSettingsPropertyBody;
 import io.restassured.response.Response;
 
 

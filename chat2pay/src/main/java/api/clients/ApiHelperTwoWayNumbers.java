@@ -1,7 +1,7 @@
 package api.clients;
 
 import api.MainApi;
-import api.models.request.widgetConfigurations.TwoWayNumberConfiguration;
+import api.models.request.widgetconfigurations.TwoWayNumberConfiguration;
 import io.restassured.response.Response;
 
 import static java.lang.String.format;

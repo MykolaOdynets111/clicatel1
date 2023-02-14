@@ -1,7 +1,7 @@
 package steps;
 
 import api.clients.ApiHelperAccounts;
-import api.models.request.widgetConfigurations.AccountSettingsPropertyBody;
+import api.models.request.widgetconfigurations.AccountSettingsPropertyBody;
 import api.models.response.account.AccountSettingsResponse;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;

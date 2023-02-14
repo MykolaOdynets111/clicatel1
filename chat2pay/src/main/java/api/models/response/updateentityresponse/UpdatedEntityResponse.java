@@ -1,4 +1,4 @@
-package api.models.response.widgetConfigurations;
+package api.models.response.updateentityresponse;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,21 +12,29 @@ import static datetimeutils.DateTimeHelper.parseToLocalDate;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "updateTime",
-        "whatsappChannelEnabled",
-        "smsChannelEnabled"
+        "message",
+        "showLinkedApi",
+        "enabledApplicationCount",
+        "disabledApplicationCount"
 })
 
 @Getter
-public class ChannelManagementStatusResponse {
+public class UpdatedEntityResponse {
 
     @JsonProperty("updateTime")
     private String updateTime;
 
-    @JsonProperty("whatsappChannelEnabled")
-    public boolean whatsappChannelEnabled;
+    @JsonProperty("message")
+    private String message;
 
-    @JsonProperty("smsChannelEnabled")
-    public boolean smsChannelEnabled;
+    @JsonProperty("showLinkedApi")
+    public boolean showLinkedApi;
+
+    @JsonProperty("enabledApplicationCount")
+    public int enabledApplicationCount;
+
+    @JsonProperty("disabledApplicationCount")
+    public int disabledApplicationCount;
 
     public LocalDate getUpdateTime() {
         return parseToLocalDate(this.updateTime);
