@@ -2,7 +2,7 @@ Feature: Endpoint API
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-622")
   Scenario Outline: CH :: Admin API : GET /admin/endpoints should return all available endpoints for a provider.
-    Given User is able to get all endpoint detail for Provider
+    Given Validate all endpoint detail for Provider via Admin API
       | i.providerID   | i.versionID   | o.errorMessage   | o.responseCode   |
       | <i.providerID> | <i.versionID> | <o.errorMessage> | <o.responseCode> |
 
@@ -11,13 +11,13 @@ Feature: Endpoint API
       | 0184f828214f6b7a03c711284b2b8e39 | v1          | 404            | Provider or specification version not found |
       | 0184f828214f6b7a                 | v1.0.0      | 404            | Provider or specification version not found |
       | 0184f828214f6b7a                 | v1          | 404            | Provider or specification version not found |
-      #Bug logged:CCH-699|                                  |                                  |            |    404       |Provider or specification version not found|
-      #Bug logged:CCH-699|                                  | v1.0.0     |    404       |Bad Request|
-      #Bug logged:CCH-699| 0184f828214f6b7a03c711284b2b8e39 |            |    404       |Bad Request|
+      #Bug logged:CCH-699 : Provider and VersionID Null|                                  |             |400       |Provider or specification version not found|
+      #Bug logged:CCH-699 : Provider Null              |                                  | v1.0.0     |    400       |Bad Request|
+      #Bug logged:CCH-699 : VersionID Null             | 0184f828214f6b7a03c711284b2b8e39 |            |    400      |Bad Request|
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-676")
   Scenario:CH :: Admin API : User should be able to verify all returned endpoints for a provider
-    Given User is able to get all endpoint detail for Provider
+    Given Validate all endpoint detail for Provider via Admin API
       | o.id                             | o.name                         | i.providerID                     | i.versionID | o.responseCode |
       | 0184f82f654d988ff09d6d08e8499c3a | Create lead                    | 0184f828214f6b7a03c711284b2b8e39 | v1.0.0      | 200            |
       | 0184f82f654de2b793510630141e9990 | Search customer                |                                  |             |                |
@@ -29,7 +29,7 @@ Feature: Endpoint API
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-626")
   Scenario Outline: CH :: Internal API : GET /internal/endpoints should return available endpoints for a provider.
-    Given User is able to get all endpoint detail for Provider via Internal API
+    Given Validate all endpoint detail for Provider via Internal API
       | i.providerID   | i.versionID   | o.errorMessage   | o.responseCode   |
       | <i.providerID> | <i.versionID> | <o.errorMessage> | <o.responseCode> |
 
@@ -38,13 +38,13 @@ Feature: Endpoint API
       | 0184f828214f6b7a03c711284b2b8e39 | v1          | 404            | Provider or specification version not found |
       | 0184f828214f6b7a                 | v1.0.0      | 404            | Provider or specification version not found |
       | 0184f828214f6b7a                 | v1          | 404            | Provider or specification version not found |
-      #Bug logged:CCH-699|                                  |                                  |            |    404       |Provider or specification version not found|
-      #Bug logged:CCH-699|                                  | v1.0.0     |    404       |Bad Request|
-      #Bug logged:CCH-699| 0184f828214f6b7a03c711284b2b8e39 |            |    404       |Bad Request|
+      #Bug logged:CCH-699 : Provider and VersionID Null|                                  |             |400       |Provider or specification version not found|
+      #Bug logged:CCH-699 : Provider Null              |                                  | v1.0.0     |    400       |Bad Request|
+      #Bug logged:CCH-699 : VersionID Null             | 0184f828214f6b7a03c711284b2b8e39 |            |    400      |Bad Request|
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-683")
   Scenario:CH :: Internal API : User should be able to verify all returned endpoints for a provider
-    Given User is able to get all endpoint detail for Provider via Internal API
+    Given Validate all endpoint detail for Provider via Internal API
       | o.id                             | o.name                         | i.providerID                     | i.versionID | o.responseCode |
       | 0184f82f654d988ff09d6d08e8499c3a | Create lead                    | 0184f828214f6b7a03c711284b2b8e39 | v1.0.0      | 200            |
       | 0184f82f654de2b793510630141e9990 | Search customer                |                                  |             |                |
@@ -56,7 +56,7 @@ Feature: Endpoint API
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-630")
   Scenario Outline: CH :: Admin API : GET /admin/specifications should return all specifications for a provider
-    Given User is able to get all specifications for a provider
+    Given Validate all specifications for a provider via Admin API
       | i.providerID                                 | <i.providerID>                                 |
       | o.id                                         | <o.id>                                         |
       | o.errorMessage                               | <o.errorMessage>                               |
@@ -72,7 +72,6 @@ Feature: Endpoint API
       | o.version                                    | <o.version>                                    |
       | o.openApiSpecS3Key                           | <o.openApiSpecS3Key>                           |
 
-
     Examples:
       | i.providerID                     | o.responseCode | o.errorMessage           | o.id                             | o.authDetails.grantType | o.authDetails.authPath | o.authDetails.refreshPath | o.authDetails.tokenPath | o.authDetails.tokenExpirationDurationSeconds | o.authDetails.scopes | o.authDetails.authorizationHeaderValuePrefix | o.authDetails.authType | o.version | o.openApiSpecS3Key                       |
       | 0184f828214f6b7a03c711284b2b8e39 | 200            |                          | 0184f82f61a2613547072daf82115294 | AUTHORIZATION_CODE      | /oauth2/authorize      | /oauth2/token             | /oauth2/token           | 300                                          | read+write+profile   | Bearer                                       | OAUTH                  | v1.0.0    | /0184f828214f6b7a03c711284b2b8e39/v1.0.0 |
@@ -81,7 +80,7 @@ Feature: Endpoint API
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-623")
   Scenario Outline:CH :: Admin API : Verify that GET /Admin/endpoints/{endpoint} should return available endpoint details with correct requestParameter details
-    Given User is able to get specific endpoint detail for Provider via Admin api
+    Given Validate specific endpoint detail for Provider via Admin api
       | i.endpointID   | o.id   | o.errorMessage   | o.responseCode   | o.operationName   | o.requestParameters.id   | o.requestParameters.label   | o.requestParameters.placeholder   | o.requestParameters.default   | o.requestParameters.required   | o.requestParameters.constraints   | o.requestParameters.parameterType   | o.requestParameters.availableOptions   | o.requestParameters.isArray   | o.requestParameters.presentationType   | o.requestParameters.repeatableGroupId   | o.requestParameters.repeatableGroupName   | o.requestParameters.placementType   | o.requestParameters.destinationPath   | o.responseSample.statusCode   | o.responseSample.properties   |
       | <i.endpointID> | <o.id> | <o.errorMessage> | <o.responseCode> | <o.operationName> | <o.requestParameters.id> | <o.requestParameters.label> | <o.requestParameters.placeholder> | <o.requestParameters.default> | <o.requestParameters.required> | <o.requestParameters.constraints> | <o.requestParameters.parameterType> | <o.requestParameters.availableOptions> | <o.requestParameters.isArray> | <o.requestParameters.presentationType> | <o.requestParameters.repeatableGroupId> | <o.requestParameters.repeatableGroupName> | <o.requestParameters.placementType> | <o.requestParameters.destinationPath> | <o.responseSample.statusCode> | <o.responseSample.properties> |
 
@@ -93,7 +92,7 @@ Feature: Endpoint API
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-686")
   Scenario: CH :: Admin API : Verify "response sample" from GET /admin/endpoints/{endpoint}
-    Given User is able to get specific endpoint detail for Provider via Admin api
+    Given Validate specific endpoint detail for Provider via Admin api
       | o.sourceRef                         | o.label                        | o.type  | o.isArray | i.endpointID                     | o.responseCode | o.statusCode |
       | user/updated_at                     | Updated At                     | STRING  | false     | 0184f82664fb33c510da20cc404772ce | 200            | 200          |
       | user/verified                       | Verified?                      | BOOLEAN | false     |                                  |                |              |
@@ -153,7 +152,7 @@ Feature: Endpoint API
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-627")
   Scenario Outline: CH :: Internal API : Verify that GET /internal/endpoints/{endpoint} should return available endpoint details with correct requestParameter details
-    Given User is able to get specific endpoint detail for Provider via Internal Api
+    Given Validate specific endpoint detail for Provider via Internal Api
       | i.endpointID   | o.id   | o.errorMessage   | o.responseCode   | o.operationName   | o.requestParameters.id   | o.requestParameters.label   | o.requestParameters.placeholder   | o.requestParameters.default   | o.requestParameters.required   | o.requestParameters.constraints   | o.requestParameters.parameterType   | o.requestParameters.availableOptions   | o.requestParameters.isArray   | o.requestParameters.presentationType   | o.requestParameters.repeatableGroupId   | o.requestParameters.repeatableGroupName   | o.requestParameters.placementType   | o.requestParameters.destinationPath   | o.responseSample.statusCode   | o.responseSample.properties   |
       | <i.endpointID> | <o.id> | <o.errorMessage> | <o.responseCode> | <o.operationName> | <o.requestParameters.id> | <o.requestParameters.label> | <o.requestParameters.placeholder> | <o.requestParameters.default> | <o.requestParameters.required> | <o.requestParameters.constraints> | <o.requestParameters.parameterType> | <o.requestParameters.availableOptions> | <o.requestParameters.isArray> | <o.requestParameters.presentationType> | <o.requestParameters.repeatableGroupId> | <o.requestParameters.repeatableGroupName> | <o.requestParameters.placementType> | <o.requestParameters.destinationPath> | <o.responseSample.statusCode> | <o.responseSample.properties> |
 
@@ -165,7 +164,7 @@ Feature: Endpoint API
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-684")
   Scenario: CH :: Internal API : Verify "response sample" from GET /internal/endpoints/{endpoint}
-    Given User is able to get specific endpoint detail for Provider via Internal Api
+    Given Validate specific endpoint detail for Provider via Internal Api
       | o.sourceRef                         | o.label                        | o.type  | o.isArray | i.endpointID                     | o.responseCode | o.statusCode |
       | user/updated_at                     | Updated At                     | STRING  | false     | 0184f82664fb33c510da20cc404772ce | 200            | 200          |
       | user/verified                       | Verified?                      | BOOLEAN | false     |                                  |                |              |

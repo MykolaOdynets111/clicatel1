@@ -23,8 +23,8 @@ import java.util.Map;
 import static java.lang.String.format;
 
 public class EndpointSteps {
-    @Given("User is able to get all endpoint detail for Provider")
-    public void validateAllEndpointDetailForProvider(List<Map<String, String>> datatable) throws JsonProcessingException {
+    @Given("Validate all endpoint detail for Provider via Admin API")
+    public void validateAllEndpointDetailForProviderViaAdminAPI(List<Map<String, String>> datatable) throws JsonProcessingException {
 
         String url = format(Endpoints.ADMIN_ENDPOINTS, datatable.get(0).get("i.providerID"), datatable.get(0).get("i.versionID"));
         int responseCode = Integer.parseInt(datatable.get(0).get("o.responseCode"));
@@ -46,7 +46,7 @@ public class EndpointSteps {
         }
     }
 
-    @Given("User is able to get all endpoint detail for Provider via Internal API")
+    @Given("Validate all endpoint detail for Provider via Internal API")
     public void validateAllEndpointDetailForProviderViaInternalAPI(List<Map<String, String>> datatable) throws JsonProcessingException {
         String url = format(Endpoints.INTERNAL_ENDPOINTS, datatable.get(0).get("i.providerID"), datatable.get(0).get("i.versionID"));
         int responseCode = Integer.parseInt(datatable.get(0).get("o.responseCode"));
@@ -68,8 +68,8 @@ public class EndpointSteps {
         }
     }
 
-    @Given("User is able to get all specifications for a provider")
-    public void validateAllSpecificationsForAProvider(Map<String, String> dataMap) throws JsonProcessingException {
+    @Given("Validate all specifications for a provider via Admin API")
+    public void validateAllSpecificationsForAProviderViaAdminAPI(Map<String, String> dataMap) throws JsonProcessingException {
         String url = format(Endpoints.ADMIN_SPECIFICATIONS, dataMap.get("i.providerID"));
 
         int responseCode = Integer.parseInt(dataMap.get("o.responseCode"));
@@ -93,7 +93,7 @@ public class EndpointSteps {
         }
     }
 
-    @Given("User is able to get specific endpoint detail for Provider via Admin api")
+    @Given("Validate specific endpoint detail for Provider via Admin api")
     public void validateSpecificEndpointDetailForProviderViaAdminApi(List<Map<String, String>> dataMap) throws JsonProcessingException {
 
         String url = format(Endpoints.ADMIN_ENDPOINTS_ENDPOINT, dataMap.get(0).get("i.endpointID"));
@@ -102,11 +102,10 @@ public class EndpointSteps {
         SoftAssert assertion = new SoftAssert();
         if (dataMap.size() == 1) {
             if (responseCode == 200) {
-                String[] requestParameters_Constraints = new String[]{};
                 List<String> expectedRequestParameter = new ArrayList<>();
                 expectedRequestParameter.add(mapper.writeValueAsString(new RequestParameters(
                         dataMap.get(0).get("o.requestParameters.id"), dataMap.get(0).get("o.requestParameters.label"), dataMap.get(0).get("o.requestParameters.placeholder"), dataMap.get(0).get("o.requestParameters.default"), Boolean.valueOf(dataMap.get(0).get("o.requestParameters.required")),
-                        requestParameters_Constraints, dataMap.get(0).get("o.requestParameters.parameterType"), dataMap.get(0).get("o.requestParameters.availableOptions"), Boolean.valueOf(dataMap.get(0).get("o.requestParameters.isArray")), dataMap.get(0).get("o.requestParameters.presentationType"),
+                        expectedRequestParameter, dataMap.get(0).get("o.requestParameters.parameterType"), dataMap.get(0).get("o.requestParameters.availableOptions"), Boolean.valueOf(dataMap.get(0).get("o.requestParameters.isArray")), dataMap.get(0).get("o.requestParameters.presentationType"),
                         dataMap.get(0).get("o.requestParameters.repeatableGroupId"), dataMap.get(0).get("o.requestParameters.repeatableGroupName"), dataMap.get(0).get("o.requestParameters.placementType"), dataMap.get(0).get("o.requestParameters.destinationPath"))));
                 EndpointDetail actualEndpointDetail = ChatHubApiHelper.getChatHubQueryWithoutAuth(url, responseCode).as(EndpointDetail.class);
                 String actualRequestParameter = mapper.writeValueAsString(actualEndpointDetail.getRequestParameters());
@@ -137,7 +136,7 @@ public class EndpointSteps {
         assertion.assertAll();
     }
 
-    @Given("User is able to get specific endpoint detail for Provider via Internal Api")
+    @Given("Validate specific endpoint detail for Provider via Internal Api")
     public void validateSpecificEndpointDetailForProviderViaInternalApi(List<Map<String, String>> dataMap) throws JsonProcessingException {
         String url = format(Endpoints.INTERNAL_ENDPOINTS_ENDPOINT, dataMap.get(0).get("i.endpointID"));
         ObjectMapper mapper = new ObjectMapper();
@@ -145,11 +144,10 @@ public class EndpointSteps {
         SoftAssert assertion = new SoftAssert();
         if (dataMap.size() == 1) {
             if (responseCode == 200) {
-                String[] requestParameters_Constraints = new String[]{};
                 List<String> expectedRequestParameter = new ArrayList<>();
                 expectedRequestParameter.add(mapper.writeValueAsString(new RequestParameters(
                         dataMap.get(0).get("o.requestParameters.id"), dataMap.get(0).get("o.requestParameters.label"), dataMap.get(0).get("o.requestParameters.placeholder"), dataMap.get(0).get("o.requestParameters.default"), Boolean.valueOf(dataMap.get(0).get("o.requestParameters.required")),
-                        requestParameters_Constraints, dataMap.get(0).get("o.requestParameters.parameterType"), dataMap.get(0).get("o.requestParameters.availableOptions"), Boolean.valueOf(dataMap.get(0).get("o.requestParameters.isArray")), dataMap.get(0).get("o.requestParameters.presentationType"),
+                        expectedRequestParameter, dataMap.get(0).get("o.requestParameters.parameterType"), dataMap.get(0).get("o.requestParameters.availableOptions"), Boolean.valueOf(dataMap.get(0).get("o.requestParameters.isArray")), dataMap.get(0).get("o.requestParameters.presentationType"),
                         dataMap.get(0).get("o.requestParameters.repeatableGroupId"), dataMap.get(0).get("o.requestParameters.repeatableGroupName"), dataMap.get(0).get("o.requestParameters.placementType"), dataMap.get(0).get("o.requestParameters.destinationPath"))));
                 EndpointDetail actualEndpointDetail = ChatHubApiHelper.getChatHubQueryWithInternalAuth(url, responseCode).as(EndpointDetail.class);
                 String actualRequestParameter = mapper.writeValueAsString(actualEndpointDetail.getRequestParameters());
