@@ -9,6 +9,7 @@ Feature: Provider API
       | 0184f8322847eaddbda79d5a29eaa5d4 | Salesforce      | NA        | NA            | NA            | v1.0.0 | Salesforce      | true     | true      |
       | 0185172bf6b57e9831c6d6616bc68317 | Shopify         | string    | string        | string        | v1.0.0 | Shopify         | true     | true      |
 
+
   @TestCaseId("https://jira.clickatell.com/browse/CCH-518")
   Scenario: CCH :: Internal :: Provider API : Get providers
     Given User is able to GET providers API response - Internal
@@ -17,6 +18,7 @@ Feature: Provider API
       | 0184f828214f6b7a03c711284b2b8e39 | Zendesk Sell    | NA        | NA            | NA            | v1.0.0 | Zendesk Sell    | true     |
       | 0184f8322847eaddbda79d5a29eaa5d4 | Salesforce      | NA        | NA            | NA            | v1.0.0 | Salesforce      | true     |
       | 0185172bf6b57e9831c6d6616bc68317 | Shopify         | string    | string        | string        | v1.0.0 | Shopify         | true     |
+
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-639")
   Scenario Outline: CCH :: Public :: Provider API : Validate provider state
@@ -35,6 +37,7 @@ Feature: Provider API
       |                                  | 404            | Provider not found |                                  |                 |          |
       | 17hfo72rhwf                      | 404            | Provider not found |                                  |                 |          |
 
+
   @TestCaseId("https://jira.clickatell.com/browse/CCH-513")
   Scenario Outline: CCH :: Internal :: Provider API : Validate provider state
     Given User is able to GET providers state in API response - Internal
@@ -51,6 +54,7 @@ Feature: Provider API
 #Data to be created after integration build is deployed      | 99                               | 200            |                    | 99                               | Salesforce     | Inactive |
 #BugID: CCH-696      |                                  | 404            | Provider not found |                                  |                 |          |
       | Wrong id                         | 404            | Provider not found |                                  |                 |          |
+
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-669")
   Scenario: CCH :: Admin :: Provider API : Get providers
@@ -83,11 +87,21 @@ Feature: Provider API
       | Wrong Id                         | 404            | Provider not found |                                  |                 |           |               |               |
      #BugId: CCH-701 ||400|Bad request||||||
 
+
   @TestCaseId("https://jira.clickatell.com/browse/CCH-672")
-  Scenario: CCH :: Admin :: Get configured provider for customer
+  Scenario: CCH :: Admin :: Get configured provider for customer (200 response coverage in the test case)
     Given Admin is able to GET configured provider for customer
-      | i.mc2AccountId                   | o.responseCode | o.errorMessage | o.id                             | o.name          | o.logoUrl | o.description | o.moreInfoUrl | o.id   | o.version       | o.latest |
-      | bb0496c20c434a76a927e7419075fcc3 | 200            |                | 0184f820c06ec8b62dfa0610e29ab575 | Zendesk Support | NA        | NA            | NA            | v1.0.0 | Zendesk Support | TRUE     |
+      | i.mc2AccountId                   | o.responseCode | o.errorMessage | o.id                             | o.name          | o.logoUrl | o.description | o.moreInfoUrl | o.vid  | o.version       | o.latest |
+      | bb0496c20c434a76a927e7419075fcc3 | 200            |                | 0184f820c06ec8b62dfa0610e29ab575 | Zendesk Support | NA        | NA            | NA            | v1.0.0 | Zendesk Support | true     |
+      |                                  |                |                | 0184f8322847eaddbda79d5a29eaa5d4 | Salesforce      | NA        | NA            | NA            | v1.0.0 | Salesforce      | true     |
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCH-823")
+  Scenario Outline: CCH :: Admin :: Get configured provider for customer (other than 200 response coverage in the test case)
+    Given Admin is able to GET configured provider for customer
+      | i.mc2AccountId   | o.responseCode   | o.errorMessage   | o.id   | o.name   | o.logoUrl   | o.description   | o.moreInfoUrl   | o.vid   | o.version   | o.latest   |
+      | <i.mc2AccountId> | <o.responseCode> | <o.errorMessage> | <o.id> | <o.name> | <o.logoUrl> | <o.description> | <o.moreInfoUrl> | <o.vid> | <o.version> | <o.latest> |
+    Examples:
+      | i.mc2AccountId | o.responseCode | o.errorMessage | o.id | o.name | o.logoUrl | o.description | o.moreInfoUrl | o.vid | o.version | o.latest |
     #BugId CCH-710  | Wrong input                      | 404            | mc2AccountId not found |                                  |                 |           |               |               |        |                 |          |
     #BUgId CCH-701 |                                  | 400            | Bad request            |                                  |                 |           |               |               |        |                 |          |
 
@@ -113,6 +127,7 @@ Feature: Provider API
       | Auto_Test_Provider2 |           | NA            | NA            | 404            | Bad request    |                     |           |               |               |
       | Auto_Test_Provider3 | NA        |               | NA            | 404            | Bad request    |                     |           |               |               |
       | Auto_Test_Provider4 | NA        | NA            |               | 404            | Bad request    |                     |           |               |               |
+
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-675")
   Scenario Outline: CCH :: Admin :: Provider API : Update existing provider details

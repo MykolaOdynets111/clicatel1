@@ -269,9 +269,9 @@ Feature: Configuration API
       | o.hostUrl                        | <o.hostUrl>                        |
 
     Examples:
-      | o.responseCode | o.errorMessage             | i.configurationId                | o.id                             | o.providerId                     | o.accountProviderConfigStatusId | o.configurationEnvironmentTypeId | o.displayName             | o.clientId | o.clientSecret          | o.hostUrl                              |
+      | o.responseCode | o.errorMessage             | i.configurationId                | o.id | o.providerId | o.accountProviderConfigStatusId | o.configurationEnvironmentTypeId | o.displayName | o.clientId | o.clientSecret | o.hostUrl |
 #DefectId: CCH-822      | 200            |                            | 0185a771e2d64aadd296aedbc0ef2492 | 0185a771e2d64aadd296aedbc0ef2492 | 0184f820c06ec8b62dfa0610e29ab575 | ACTIVE                          | PRODUCTION                       | CH_Test_AutoTester2023-97 | testoauth  | 6b38***************6bf5 | https://d3v-clickatell2162.zendesk.com |
-      | 404            | Configuration ID not found | 0185a771e2d64aadd296aedbc0Af2492 |                                  |                                  |                                 |                                  |                           |            |                         |                                        |
+      | 404            | Configuration ID not found | 0185a771e2d64aadd296aedbc0Af2492 |      |              |                                 |                                  |               |            |                |           |
     #Null configurationID Bug logged: CCH-700|400           |Bad request                     |                                |                                |                                 |                                   |                                            |                             |                |                          |
 
 
