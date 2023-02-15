@@ -78,28 +78,29 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Supervisor clicks on first ticket
     Then Visual indicator with "Ticket closed by" text, Agent name and time is shown
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-7777")
-  @skip
-  Scenario: CD :: Agent Desk :: Verify End-User is not connected to the agent when reinitiating a chat after a ticket is created without typing //end
-    Given Setup ORCA Whatsapp integration for General Bank Demo tenant
-    And I select Touch in left menu and Supervisor Desk in submenu
-    And Send to agent message by ORCA
-    When Agent select "Tickets" left menu option
-    And Agent search chat orca on Supervisor desk
-    Then Agent see tickets from orca on Unassigned filter page
-    And Select orca ticket checkbox
-    And Click 'Assign manually' button for orca
-    And 'Assign chat' window is opened
-    And I assign chat on Agent for Agent dropdown
-    And Set agent support hours for all week
-    And I select Touch in left menu and Agent Desk in submenu
-    When Agent select "Tickets" left menu option
-    And Agent select Assigned filter on Left Panel
-    Then Agent verify ticket is present for orca for 2 seconds
-    And Send 1 messages chat to agent by ORCA
-    Then Agent has new conversation request from orca user
-    And Agent click on new conversation request from orca
-    Then Visual indicator with "This chat has been assigned to" text, Agent name and time is shown
+#  @TestCaseId("https://jira.clickatell.com/browse/CCD-7777")
+# Commenting out as it needs to be worked on but because of skip tagging it is being created everytime regression is run in Test Plan.
+#  @skip
+#  Scenario: CD :: Agent Desk :: Verify End-User is not connected to the agent when reinitiating a chat after a ticket is created without typing //end
+#    Given Setup ORCA Whatsapp integration for General Bank Demo tenant
+#    And I select Touch in left menu and Supervisor Desk in submenu
+#    And Send to agent message by ORCA
+#    When Agent select "Tickets" left menu option
+#    And Agent search chat orca on Supervisor desk
+#    Then Agent see tickets from orca on Unassigned filter page
+#    And Select orca ticket checkbox
+#    And Click 'Assign manually' button for orca
+#    And 'Assign chat' window is opened
+#    And I assign chat on Agent for Agent dropdown
+#    And Set agent support hours for all week
+#    And I select Touch in left menu and Agent Desk in submenu
+#    When Agent select "Tickets" left menu option
+#    And Agent select Assigned filter on Left Panel
+#    Then Agent verify ticket is present for orca for 2 seconds
+#    And Send 1 messages chat to agent by ORCA
+#    Then Agent has new conversation request from orca user
+#    And Agent click on new conversation request from orca
+#    Then Visual indicator with "This chat has been assigned to" text, Agent name and time is shown
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-6093")
   Scenario: CD :: Agent Desk :: Tickets :: Verify that notification message pop-up on the bottom right corner when Agent assign tickets to the himself

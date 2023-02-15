@@ -9,15 +9,6 @@ Feature: Chat console: Waiting customers
     When I select Touch in left menu and Dashboard in submenu
     And Save Chats waiting in queue counter value
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-2674")
-  @setting_changes
-  @skip
-  Scenario: Dashboard:: Chats waiting in a queue increases in case no session capacity
-    Given I login as second agent of General Bank Demo
-    Given Setup ORCA whatsapp integration for General Bank Demo tenant
-    When Send connect to agent message by ORCA
-    Then Chats waiting in queue widget value increased on 1
-
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2586")
   @setting_changes
   Scenario: CD::Dashboards:: Chats waiting in a queue increase in case no agents online
