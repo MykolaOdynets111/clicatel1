@@ -4,6 +4,7 @@ import api.clients.ApiHelperChannelManagement;
 import api.clients.ApiHelperChat2Pay;
 import api.models.request.channels.ChannelManagement;
 import api.models.request.channels.ChannelStatus;
+import api.models.request.channels.ChannelType;
 import api.models.response.updatedresponse.UpdatedEntityResponse;
 import api.models.response.widgetconfigurations.ChannelManagementStatusResponse;
 import io.cucumber.java.en.Then;
@@ -73,6 +74,29 @@ public class WidgetChannelSteps extends GeneralSteps {
             }
         } else {
             Assertions.fail(format("Expected response code %s but was %s", responseCode, statusCode));
+        }
+    }
+
+    @Then("^User deletes channel integration")
+    public void deleteChannelIntegration(Map<String, String> valuesMap) {
+        String widgetId = valuesMap.get("i.widgetId");
+        ChannelType body = ChannelType.builder()
+                .channelType(valuesMap.get("i.channelType"))
+                .build();
+
+        response = ApiHelperChannelManagement.removeChannelIntegration(body, widgetId, ApiHelperChat2Pay.token.get());
+        int statusCode = response.getStatusCode();
+        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
+
+        if (expectedResponseCode == statusCode) {
+            if (statusCode == 200) {
+                assertThat(response.as(UpdatedEntityResponse.class).getMessage())
+                        .isEqualTo(format("Channel %s deleted successfully", valuesMap.get("i.channelType")));
+            } else if (expectedResponseCode == 400) {
+                verifyBadRequestResponse(valuesMap, response);
+            }
+        } else {
+            Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
         }
     }
 }

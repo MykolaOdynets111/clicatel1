@@ -1,11 +1,7 @@
 package steps;
 
-import api.clients.ApiHelperChannelManagement;
-import api.clients.ApiHelperChat2Pay;
 import api.clients.ApiHelperWidgets;
 import api.models.request.WidgetBody;
-import api.models.request.channels.ChannelType;
-import api.models.response.failedresponse.ErrorResponse;
 import api.models.response.updatedresponse.UpdatedEntityResponse;
 import api.models.response.widget.ConfigStatus;
 import api.models.response.widget.Widget;
@@ -18,12 +14,10 @@ import org.assertj.core.api.Assertions;
 import java.time.LocalDate;
 import java.util.Map;
 
-import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static utils.Validator.checkResponseCode;
 import static utils.Validator.validateErrorResponse;
-import static utils.Validator.verifyBadRequestResponse;
 
 public class WidgetSteps extends GeneralSteps {
 
@@ -157,29 +151,6 @@ public class WidgetSteps extends GeneralSteps {
         }
     }
 
-    @Then("^User deletes channel integration")
-    public void deleteChannelIntegration(Map<String, String> valuesMap) {
-        String widgetId = valuesMap.get("i.widgetId");
-        ChannelType body = ChannelType.builder()
-                .channelType(valuesMap.get("i.channelType"))
-                .build();
-
-        response = ApiHelperChannelManagement.removeChannelIntegration(body, widgetId, ApiHelperChat2Pay.token.get());
-        int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
-
-        if (expectedResponseCode == statusCode) {
-            if (statusCode == 200) {
-                assertThat(response.as(UpdatedEntityResponse.class).getMessage())
-                        .isEqualTo(format("Channel %s deleted successfully", valuesMap.get("i.channelType")));
-            } else if (expectedResponseCode == 400) {
-                verifyBadRequestResponse(valuesMap, response);
-            }
-        } else {
-            Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
-        }
-    }
-
     @Then("^User delete widget$")
     public void deleteWidget(Map<String, String> dataMap) {
         switch (dataMap.get("i.widgetId")) {
@@ -198,24 +169,5 @@ public class WidgetSteps extends GeneralSteps {
             default:
                 Assertions.fail(format("Expected status %s is not existed", dataMap.get("i.widgetId")));
         }
-    }
-
-    private void verifyWidgetIsDeleted(String widgetId) {
-        response = ApiHelperWidgets.getWidget(widgetId);
-        checkResponseCode(response, "404");
-        boolean widgetDoesNotExist = response.as(ErrorResponse.class).getErrors()
-                .stream()
-                .anyMatch(e -> e.contains("Widget does not exist"));
-        assertThat(widgetDoesNotExist)
-                .as(format("The newly created widget has not been deleted. widgetId : %s", widgetId))
-                .isTrue();
-    }
-
-    private static void deleteWidget(String widgetId) {
-        UpdatedEntityResponse updatedEntityResponse = ApiHelperWidgets.deleteWidget(widgetId)
-                .as(UpdatedEntityResponse.class);
-        assertThat(updatedEntityResponse.getUpdateTime())
-                .as(format("widget delete date is not equals to %s", LocalDate.now()))
-                .isEqualTo(LocalDate.now());
     }
 }
