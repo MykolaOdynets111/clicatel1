@@ -1,4 +1,4 @@
-package api.models.response.updateEntityResponse;
+package api.models.response.updatedresponse;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
