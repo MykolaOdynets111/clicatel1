@@ -1,9 +1,11 @@
 Feature: API Keys Management
 
+  Background:
+    Given User is logged in to unity
+
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4748")
   Scenario Outline: C2P Unity API :: API Keys Management :: GET /api-keys :: truth table
 
-    Given User is logged in to unity
     And User gets 'API Keys Management'
       | i.widgetId     | <i.widgetId>     |
       | o.apiKey       | <o.apiKey>       |
@@ -19,7 +21,6 @@ Feature: API Keys Management
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4749")
   Scenario Outline: C2P Unity API :: API Keys Management :: POST /api-keys :: truth table
 
-    Given User is logged in to unity
     And User posts 'API Keys Management'
       | i.widgetId     | <i.widgetId>     |
       | o.responseCode | <o.responseCode> |
