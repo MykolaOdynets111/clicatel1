@@ -1,4 +1,4 @@
-package api.models.response.accountresponse;
+package api.models.response.account;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

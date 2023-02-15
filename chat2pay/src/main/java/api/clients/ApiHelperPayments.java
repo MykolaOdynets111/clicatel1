@@ -28,6 +28,8 @@ public class ApiHelperPayments extends ApiHelperChat2Pay {
     }
 
     public static Response receivePaymentLink(String paymentLinkRef, String activationKey) {
-        return postQuery(Endpoints.PAYMENT_RECEIPT, new ReceiptBody(paymentLinkRef), activationKey);
+        ReceiptBody receiptBody = new ReceiptBody();
+        receiptBody.setPaymentLinkRef(paymentLinkRef);
+        return postQuery(Endpoints.PAYMENT_RECEIPT, receiptBody, activationKey);
     }
 }

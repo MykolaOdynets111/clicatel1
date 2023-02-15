@@ -1,6 +1,10 @@
 package agentpages.supervisor;
 
-import agentpages.supervisor.uielements.*;
+import agentpages.supervisor.uielements.SupervisorAvailableAsAgentDialog;
+import agentpages.supervisor.uielements.SupervisorClosedChatsTable;
+import agentpages.supervisor.uielements.SupervisorDeskClosedRow;
+import agentpages.supervisor.uielements.SupervisorDeskLiveRow;
+import agentpages.supervisor.uielements.SupervisorOpenedClosedChatsList;
 import agentpages.uielements.ChatBody;
 import agentpages.uielements.ChatHeader;
 import agentpages.uielements.Profile;
