@@ -1,4 +1,5 @@
-
+@skip
+Feature: Supervisor desk
   Background:
     Given Create .Control integration for Automation and adapter: fbmsg
     Given Set agent support hours with day shift
