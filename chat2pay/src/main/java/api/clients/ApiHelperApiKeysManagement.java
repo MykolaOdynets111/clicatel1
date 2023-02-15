@@ -12,7 +12,7 @@ public class ApiHelperApiKeysManagement extends MainApi {
         return getQuery(format(Endpoints.WIDGET_API_KEYS_ENDPOINT, widgetId), authToken);
     }
 
-//    public static Response updateTwoWayNumbers(String widgetId, TwoWayNumberConfiguration configuration, String authToken) {
-//        return postQuery(format(Endpoints.API_KEYS_MANAGEMENT, widgetId), configuration, authToken);
-//    }
+    public static Response updateApiKeysManagement(String widgetId, String authToken) {
+        return postQuery(format(Endpoints.WIDGET_API_KEYS_ENDPOINT, widgetId), "", authToken);
+    }
 }

@@ -20,7 +20,7 @@ public class ApiKeysResponse {
     @JsonProperty("apiKey")
     public String apiKey;
     @JsonProperty("createdTime")
-    private String createdTime;
+    public String createdTime;
 
     public LocalDate getCreatedTime() {
         return parseToLocalDate(this.createdTime);
