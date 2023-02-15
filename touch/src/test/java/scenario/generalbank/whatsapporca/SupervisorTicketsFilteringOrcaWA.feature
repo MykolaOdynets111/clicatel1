@@ -79,42 +79,42 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     When Admin filter by 0 year 0 month and 1 days ago start date and 0 year 0 month and 0 days ago end date
     Then Agent checks quick & custom assign options on the page are not visible
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-6002")
-    @skip
-  Scenario: CD:: Agent Desk:: Tickets:: Agent_Desk-Tickets-Closed:: Verify if Agent selects filter "Closed by you" then count is updated in the closed ticket tab
-    Given Setup ORCA Whatsapp integration for General Bank Demo tenant
-    And Update survey management chanel whatsapp settings by ip for Standard Billing
-      | ratingEnabled | false        |
-    When I select Touch in left menu and Supervisor Desk in submenu
-    And Agent select "Tickets" left menu option
-    And Agent select Unassigned filter on Left Panel
-    And Send to agent message by ORCA
-    And Agent search chat orca on Supervisor desk
-    And Agent see tickets from orca on Unassigned filter page
-    And Select orca ticket checkbox
-    And Click 'Assign manually' button for orca
-    And 'Assign chat' window is opened
-    And I assign chat on Agent for Agent dropdown
-    And I select Touch in left menu and Agent Desk in submenu
-    And Agent select "Tickets" left menu option
-    And Agent select Assigned filter on Left Panel
-    And Agent search chat orca on Supervisor desk
-    And Supervisor clicks on first ticket
-    And Agent send closing ticket manually message
-    And Agent closes ticket manually
-    And Agent select Closed filter on Left Panel
-    And Agent clears search field and filters on Supervisor desk
-    And Agent search chat orca on Supervisor desk
-    Then Agent see tickets from orca on Closed filter page
-    When Agent select my closed chats checkbox in container and click "Apply filters" button
-    Then Agent see tickets from orca on Closed filter page
-    And Agent checks ticket count value in the Closed ticket tab is 1 on agent
-    And Agent checks ticket count value 1 in tickets table
-    #deselecting the checkbox
-    When Agent clears search field and filters on Supervisor desk
-    And Agent select my closed chats checkbox in container and click "Apply filters" button
-    Then Agent checks ticket count value greater than 1 in Closed ticket tab on agent
-    And Agent checks ticket count greater than 1 in tickets table
+#  @TestCaseId("https://jira.clickatell.com/browse/CCD-6002")
+#    @skip--In progress by Deepak. It will be picked up later. Commenting as it keeps on creating in JIRA test plan.
+#  Scenario: CD:: Agent Desk:: Tickets:: Agent_Desk-Tickets-Closed:: Verify if Agent selects filter "Closed by you" then count is updated in the closed ticket tab
+#    Given Setup ORCA Whatsapp integration for General Bank Demo tenant
+#    And Update survey management chanel whatsapp settings by ip for Standard Billing
+#      | ratingEnabled | false        |
+#    When I select Touch in left menu and Supervisor Desk in submenu
+#    And Agent select "Tickets" left menu option
+#    And Agent select Unassigned filter on Left Panel
+#    And Send to agent message by ORCA
+#    And Agent search chat orca on Supervisor desk
+#    And Agent see tickets from orca on Unassigned filter page
+#    And Select orca ticket checkbox
+#    And Click 'Assign manually' button for orca
+#    And 'Assign chat' window is opened
+#    And I assign chat on Agent for Agent dropdown
+#    And I select Touch in left menu and Agent Desk in submenu
+#    And Agent select "Tickets" left menu option
+#    And Agent select Assigned filter on Left Panel
+#    And Agent search chat orca on Supervisor desk
+#    And Supervisor clicks on first ticket
+#    And Agent send closing ticket manually message
+#    And Agent closes ticket manually
+#    And Agent select Closed filter on Left Panel
+#    And Agent clears search field and filters on Supervisor desk
+#    And Agent search chat orca on Supervisor desk
+#    Then Agent see tickets from orca on Closed filter page
+#    When Agent select my closed chats checkbox in container and click "Apply filters" button
+#    Then Agent see tickets from orca on Closed filter page
+#    And Agent checks ticket count value in the Closed ticket tab is 1 on agent
+#    And Agent checks ticket count value 1 in tickets table
+#    #deselecting the checkbox
+#    When Agent clears search field and filters on Supervisor desk
+#    And Agent select my closed chats checkbox in container and click "Apply filters" button
+#    Then Agent checks ticket count value greater than 1 in Closed ticket tab on agent
+#    And Agent checks ticket count greater than 1 in tickets table
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-5879")
   Scenario: CD:: Agent Desk:: Verify if Agent can filter closed ticket by clicking "Closed by you" checkbox

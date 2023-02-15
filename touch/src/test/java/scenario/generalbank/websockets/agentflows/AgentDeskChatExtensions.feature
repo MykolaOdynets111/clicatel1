@@ -1,28 +1,6 @@
 @no_widget
 @orca_api
-@Regression
 Feature: Agent Date Time Picker Extension
-
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-860")
-  @skip
-  Scenario Outline: CD :: <channelType> :: Agent Desk :: Live Chat :: Verify the "Date/Time picker" extension cards for the tenant
-    Given Setup ORCA <channelType> integration for General Bank Demo tenant
-    And Agent creates tenant extension with label and name
-      | extensionType | label                            | name            |
-      | TIME_PICKER   | Schedule Appointment with picker | WaveBank Sranch |
-    And I login as agent of General Bank Demo
-    When Send chat to agent message by ORCA
-    And Agent has new conversation request from <userType> user
-    And Agent click on new conversation request from <userType>
-    And Conversation area becomes active with chat to agent user's message
-    And Agent open c2p form
-    And Agent send date picker form with name WaveBank Sranch and send
-    And Agent sees extension link with Schedule Appointment with picker name in chat body
-    #Can't be finished with Automation as user side validation is pending, after sending extension, UI comes on user side to
-    #select option from the extension
-    Examples:
-      | channelType | userType |
-      | ABC         | orca     |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1617")
   @skip
@@ -43,6 +21,7 @@ Feature: Agent Date Time Picker Extension
       | ABC         | orca     |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1625")
+  @Regression
   Scenario Outline: CD :: ABC :: Verify that frequently used extensions will be a sub-set of all extensions list
     Given Setup ORCA <channelType> integration for General Bank Demo tenant
     And Agent creates tenant extension with label and name
@@ -63,6 +42,7 @@ Feature: Agent Date Time Picker Extension
       | ABC         | orca     |
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1650")
+  @Regression
   Scenario: CD :: ABC :: Verify that "Frequently Used" extension tab options according to customer, if used less than 10 extensions, then those will only show up
     Given Setup ORCA ABC integration for General Bank Demo tenant
     And Agent creates tenant extension with label and name
