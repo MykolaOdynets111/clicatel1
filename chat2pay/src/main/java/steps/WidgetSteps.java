@@ -9,7 +9,6 @@ import api.models.request.channels.ChannelManagement;
 import api.models.request.channels.ChannelStatus;
 import api.models.request.channels.ChannelType;
 import api.models.request.widgetconfigurations.TwoWayNumberConfiguration;
-import api.models.response.failedresponse.ErrorResponse;
 import api.models.response.updatedresponse.UpdatedEntityResponse;
 import api.models.response.widget.ConfigStatus;
 import api.models.response.widget.Widget;
@@ -315,24 +314,5 @@ public class WidgetSteps extends GeneralSteps {
             default:
                 Assertions.fail(format("Expected status %s is not existed", dataMap.get("i.widgetId")));
         }
-    }
-
-    private void verifyWidgetIsDeleted(String widgetId) {
-        response = ApiHelperWidgets.getWidget(widgetId);
-        checkResponseCode(response, "404");
-        boolean widgetDoesNotExist = response.as(ErrorResponse.class).getErrors()
-                .stream()
-                .anyMatch(e -> e.contains("Widget does not exist"));
-        assertThat(widgetDoesNotExist)
-                .as(format("The newly created widget has not been deleted. widgetId : %s", widgetId))
-                .isTrue();
-    }
-
-    private static void deleteWidget(String widgetId) {
-        UpdatedEntityResponse updatedEntityResponse = ApiHelperWidgets.deleteWidget(widgetId)
-                .as(UpdatedEntityResponse.class);
-        assertThat(updatedEntityResponse.getUpdateTime())
-                .as(format("widget delete date is not equals to %s", LocalDate.now()))
-                .isEqualTo(LocalDate.now());
     }
 }
