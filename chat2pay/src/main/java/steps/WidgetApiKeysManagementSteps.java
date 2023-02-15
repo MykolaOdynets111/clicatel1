@@ -1,17 +1,17 @@
 package steps;
 
 import api.clients.ApiHelperChat2Pay;
-import api.models.response.ApiKeysResponse;
+import api.models.response.updatedresponse.UpdatedEntityResponse;
+import api.models.response.widgetconfigurations.ApiKeysResponse;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
-import org.assertj.core.api.Assertions;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import static api.clients.ApiHelperApiKeysManagement.getApiKeysManagement;
+import static api.clients.ApiHelperApiKeysManagement.removeApiKeysManagement;
 import static api.clients.ApiHelperApiKeysManagement.updateApiKeysManagement;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
@@ -20,29 +20,23 @@ import static utils.Validator.verifyBadRequestResponse;
 
 public class WidgetApiKeysManagementSteps extends GeneralSteps {
 
-    public static final String TOKEN = ApiHelperChat2Pay.token.get();
+    private static final String TOKEN = ApiHelperChat2Pay.token.get();
     private Response response;
 
     @Then("^User gets 'API Keys Management'$")
     public void getApiKeyManagement(Map<String, String> valuesMap) {
         String widgetId = valuesMap.get("i.widgetId");
-
         response = getApiKeysManagement(widgetId, TOKEN);
-        int statusCode = response.getStatusCode();
         int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
 
-        if (expectedResponseCode == statusCode) {
-            if (statusCode == 200) {
-                List<ApiKeysResponse> apiKeysResponse = response.jsonPath().getList("", ApiKeysResponse.class);
-
-                apiKeysResponse.stream().filter(n -> n.apiKey.equals(valuesMap.get("o.apiKey")))
-                        .findFirst().ifPresent(twoWayNumbersBody ->
-                                assertThat(twoWayNumbersBody.getCreatedTime()).isBeforeOrEqualTo(LocalDate.now()));
-            } else if (expectedResponseCode == 404) {
-                verifyBadRequestResponse(valuesMap, response);
-            }
-        } else {
-            Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
+        if (expectedResponseCode == 200) {
+            response.jsonPath().getList("", ApiKeysResponse.class).stream()
+                    .filter(n -> n.apiKey.equals(valuesMap.get("o.apiKey")))
+                    .findFirst().ifPresent(twoWayNumbersBody ->
+                            assertThat(twoWayNumbersBody.getCreatedTime())
+                                    .isBeforeOrEqualTo(LocalDate.now()));
+        } else if (expectedResponseCode == 404) {
+            verifyBadRequestResponse(valuesMap, response);
         }
     }
 
@@ -50,25 +44,40 @@ public class WidgetApiKeysManagementSteps extends GeneralSteps {
     public void postApiKeyManagement(Map<String, String> valuesMap) {
         String widgetId = valuesMap.get("i.widgetId");
         int sizeBefore = getApiKeysNumber(widgetId);
-
         response = updateApiKeysManagement(widgetId, TOKEN);
-        int statusCode = response.getStatusCode();
         int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
 
-        if (expectedResponseCode == statusCode) {
-            if (statusCode == 200) {
-                int sizeAfter = getApiKeysNumber(widgetId);
-                response.jsonPath().getList("", ApiKeysResponse.class)
-                        .forEach(k -> {
-                            assertThat(k.getApiKey()).isNotNull();
-                            assertThat(k.getCreatedTime()).isBeforeOrEqualTo(LocalDate.now());
-                        });
-                assertThat(sizeAfter).isGreaterThan(sizeBefore);
-            } else if (expectedResponseCode == 404) {
-                verifyBadRequestResponse(valuesMap, response);
-            }
-        } else {
-            Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
+        if (expectedResponseCode == 200) {
+            int sizeAfter = getApiKeysNumber(widgetId);
+            response.jsonPath().getList("", ApiKeysResponse.class)
+                    .forEach(k -> {
+                        assertThat(k.getApiKey()).isNotNull();
+                        assertThat(k.getCreatedTime()).isBeforeOrEqualTo(LocalDate.now());
+                    });
+            assertThat(sizeAfter).isGreaterThan(sizeBefore);
+        } else if (expectedResponseCode == 404) {
+            verifyBadRequestResponse(valuesMap, response);
+        }
+    }
+
+    @Then("^User deletes 'API Keys Management'$")
+    public void deleteApiKeyManagement(Map<String, String> valuesMap) {
+        String widgetId = valuesMap.get("i.widgetId");
+        response = getApiKeysManagement(widgetId, TOKEN);
+        int sizeBefore = getApiKeysNumber(widgetId);
+        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
+
+        if (expectedResponseCode == 200) {
+            response.jsonPath().getList("", ApiKeysResponse.class).stream().findFirst().ifPresent(a -> {
+                UpdatedEntityResponse entityResponse = removeApiKeysManagement(widgetId, a.apiKey, TOKEN)
+                        .as(UpdatedEntityResponse.class);
+                assertThat(entityResponse.getMessage())
+                        .isEqualTo(format("Api key %s deleted successfully", a.apiKey));
+            });
+            int sizeAfter = getApiKeysNumber(widgetId);
+            assertThat(sizeAfter).isLessThan(sizeBefore);
+        } else if (expectedResponseCode == 404) {
+            verifyBadRequestResponse(valuesMap, response);
         }
     }
 

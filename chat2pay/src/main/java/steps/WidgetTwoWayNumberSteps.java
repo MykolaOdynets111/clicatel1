@@ -19,13 +19,15 @@ import static utils.Validator.verifyBadRequestResponse;
 
 public class WidgetTwoWayNumberSteps extends GeneralSteps {
 
+    private static final String TOKEN = ApiHelperChat2Pay.token.get();
+
     private Response response;
 
     @Then("^User gets two-way numbers$")
     public void getTwoWayNumbers(Map<String, String> valuesMap) {
         String widgetId = valuesMap.get("i.widgetId");
 
-        response = ApiHelperTwoWayNumbers.getTwoWayNumbers(widgetId, ApiHelperChat2Pay.token.get());
+        response = ApiHelperTwoWayNumbers.getTwoWayNumbers(widgetId, TOKEN);
         int statusCode = response.getStatusCode();
         int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
 
@@ -55,13 +57,13 @@ public class WidgetTwoWayNumberSteps extends GeneralSteps {
                 .numbers(numbers)
                 .defaultNumber(valuesMap.get("o.defaultNumbers")).build();
 
-        response = ApiHelperTwoWayNumbers.updateTwoWayNumbers(widgetId, configuration, ApiHelperChat2Pay.token.get());
+        response = ApiHelperTwoWayNumbers.updateTwoWayNumbers(widgetId, configuration, TOKEN);
         int statusCode = response.getStatusCode();
         int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {
-                ApiHelperTwoWayNumbers.getTwoWayNumbers(widgetId, ApiHelperChat2Pay.token.get())
+                ApiHelperTwoWayNumbers.getTwoWayNumbers(widgetId, TOKEN)
                         .jsonPath().getList("", TwoWayNumbersBody.class).forEach(n -> {
                             boolean isDefault = n.getNumber().equals(valuesMap.get("o.defaultNumbers"));
                             softly.assertThat(n.getNumber()).isIn(numbers);

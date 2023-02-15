@@ -31,3 +31,17 @@ Feature: API Keys Management
       | i.widgetId                       | o.responseCode | o.errors  | o.path                       |
       | 2c9ac9b48639761f01864e92d81201c9 | 201            |           |                              |
       |                                  | 404            | NOT_FOUND | URL /v2/widget/null/api-keys |
+
+  @TestCaseId("https://jira.clickatell.com/browse/C2P-4750")
+  Scenario Outline: C2P Unity API :: API Keys Management :: DELETE /api-keys/{apiKey} :: truth table
+
+    And User deletes 'API Keys Management'
+      | i.widgetId     | <i.widgetId>     |
+      | o.responseCode | <o.responseCode> |
+      | o.errors       | <o.errors>       |
+      | o.path         | <o.path>         |
+
+    Examples:
+      | i.widgetId                       | o.responseCode | o.errors  | o.path                       |
+      | 2c9ac9b48639761f01864e92d81201c9 | 200            |           |                              |
+      |                                  | 404            | NOT_FOUND | URL /v2/widget/null/api-keys |

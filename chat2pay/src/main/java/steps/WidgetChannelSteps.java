@@ -4,7 +4,7 @@ import api.clients.ApiHelperChannelManagement;
 import api.clients.ApiHelperChat2Pay;
 import api.models.request.channels.ChannelManagement;
 import api.models.request.channels.ChannelStatus;
-import api.models.response.updateentityresponse.UpdatedEntityResponse;
+import api.models.response.updatedresponse.UpdatedEntityResponse;
 import api.models.response.widgetconfigurations.ChannelManagementStatusResponse;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
