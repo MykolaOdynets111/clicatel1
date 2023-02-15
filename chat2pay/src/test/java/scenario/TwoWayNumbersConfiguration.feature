@@ -1,9 +1,11 @@
 Feature: Two-way Numbers Configuration
 
+  Background:
+    Given User is logged in to unity
+
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4739")
   Scenario Outline: C2P Unity API :: Two-way Numbers Configuration :: GET /two-way-numbers :: truth table
 
-    Given User is logged in to unity
     And User gets two-way numbers
       | i.widgetId     | <i.widgetId>     |
       | o.number       | <o.number>       |
@@ -22,7 +24,6 @@ Feature: Two-way Numbers Configuration
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4740")
   Scenario Outline: C2P Unity API :: Two-way Numbers Configuration :: POST /two-way-numbers :: truth table
 
-    Given User is logged in to unity
     And User updates two-way numbers
       | i.widgetId       | <i.widgetId>       |
       | o.numbers        | <o.numbers>        |

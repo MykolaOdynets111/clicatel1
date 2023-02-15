@@ -2,7 +2,8 @@ package steps;
 
 
 import api.clients.ApiHelperMessagesConfigurations;
-import api.models.Message;
+import api.models.request.message.MessageBody;
+import api.models.response.message.Message;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
@@ -36,7 +37,7 @@ public class MessageSteps extends GeneralSteps {
 
     @Then("^User updates configuration for newly created widget$")
     public void putMessageConfiguration(Map<String, String> dataMap) {
-        Message requestBody = Message.builder()
+        MessageBody requestBody = MessageBody.builder()
                 .waPaymentTemplateId(dataMap.get("i.waPaymentTemplateId"))
                 .waPaymentTemplateName(dataMap.get("i.waPaymentTemplateName"))
                 .waReceiptTemplateId(dataMap.get("i.waReceiptTemplateId"))

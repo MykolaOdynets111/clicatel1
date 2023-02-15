@@ -1,14 +1,9 @@
-package api.models;
+package api.models.request.message;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.*;
-
-import java.time.LocalDate;
-
-import static datetimeutils.DateTimeHelper.parseToLocalDate;
+import lombok.Builder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -21,16 +16,11 @@ import static datetimeutils.DateTimeHelper.parseToLocalDate;
         "smsOmniIntegrationId",
         "waOmniIntegrationId",
         "waMsgConfigComplete",
-        "smsMsgConfigComplete",
-        "updateTime"
+        "smsMsgConfigComplete"
 })
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class Message {
+public class MessageBody {
 
     @JsonProperty("waPaymentTemplateId")
     public Object waPaymentTemplateId;
@@ -62,11 +52,4 @@ public class Message {
     @JsonProperty("smsMsgConfigComplete")
     public boolean smsMsgConfigComplete;
 
-    @JsonProperty("updateTime")
-    public String updateTime;
-
-    @JsonIgnore
-    public LocalDate getUpdateTime() {
-        return parseToLocalDate(this.updateTime);
-    }
 }
