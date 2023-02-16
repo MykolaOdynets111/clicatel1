@@ -1,8 +1,7 @@
 @remove_dep
 @support_hours
-@Regression
 @orca_api
-  @skip
+@skip
 Feature: Departments
 
   Background:

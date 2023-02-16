@@ -12,7 +12,6 @@ Feature: out_of_support_hours auto responder (Bot mode)
     Then There is no out_of_support_hours response
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2600")
-  @Regression
   @start_orca_server
   @support_hours
   @orca_api
