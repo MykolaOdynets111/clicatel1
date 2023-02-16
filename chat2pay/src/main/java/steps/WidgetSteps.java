@@ -297,30 +297,23 @@ public class WidgetSteps extends GeneralSteps {
         }
     }
 
-    @Then("^User delete newly created widget$")
-    public void deleteCreatedWidget() {
-        if (createdWidgetId.get() != null) {
-            deleteWidget(createdWidgetId.get());
-            verifyWidgetIsDeleted(createdWidgetId.get());
+    @Then("^User delete widget$")
+    public void deleteWidget(Map<String, String> dataMap) {
+        switch (dataMap.get("i.widgetId")) {
+            case "valid":
+                response = ApiHelperWidgets.deleteWidget(createdWidgetId.get());
+                checkResponseCode(response, dataMap.get("o.responseCode"));
+                UpdatedEntityResponse updatedEntityResponse = response.as(UpdatedEntityResponse.class);
+                softly.assertThat(updatedEntityResponse.getUpdateTime())
+                        .as(format("widget update date is not equals to %s", LocalDate.now()))
+                        .isEqualTo(LocalDate.now());
+                break;
+            case "non_existed":
+                response = ApiHelperWidgets.deleteWidget(dataMap.get("i.widgetId"));
+                validateErrorResponse(response, dataMap);
+                break;
+            default:
+                Assertions.fail(format("Expected status %s is not existed", dataMap.get("i.widgetId")));
         }
-    }
-
-    private void verifyWidgetIsDeleted(String widgetId) {
-        response = ApiHelperWidgets.getWidget(widgetId);
-        checkResponseCode(response, "404");
-        boolean widgetDoesNotExist = response.as(ErrorResponse.class).getErrors()
-                .stream()
-                .anyMatch(e -> e.contains("Widget does not exist"));
-        assertThat(widgetDoesNotExist)
-                .as(format("The newly created widget has not been deleted. widgetId : %s", widgetId))
-                .isTrue();
-    }
-
-    private static void deleteWidget(String widgetId) {
-        UpdatedEntityResponse updatedEntityResponse = ApiHelperWidgets.deleteWidget(widgetId)
-                .as(UpdatedEntityResponse.class);
-        assertThat(updatedEntityResponse.getUpdateTime())
-                .as(format("widget delete date is not equals to %s", LocalDate.now()))
-                .isEqualTo(LocalDate.now());
     }
 }

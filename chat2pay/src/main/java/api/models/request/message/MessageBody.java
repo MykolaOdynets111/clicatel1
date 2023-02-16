@@ -1,9 +1,11 @@
-package api.models.response;
+package api.models.request.message;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Getter;
+import lombok.Builder;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "waPaymentTemplateId",
         "waPaymentTemplateName",
@@ -17,8 +19,8 @@ import lombok.Getter;
         "smsMsgConfigComplete"
 })
 
-@Getter
-public class MessageResponse {
+@Builder
+public class MessageBody {
 
     @JsonProperty("waPaymentTemplateId")
     public Object waPaymentTemplateId;
@@ -49,4 +51,5 @@ public class MessageResponse {
 
     @JsonProperty("smsMsgConfigComplete")
     public boolean smsMsgConfigComplete;
+
 }
