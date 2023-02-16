@@ -1,4 +1,3 @@
-@Regression
 Feature: Chat console: Overview tab
 
   @skip
