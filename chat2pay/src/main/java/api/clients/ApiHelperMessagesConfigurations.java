@@ -1,6 +1,6 @@
 package api.clients;
 
-import api.models.Message;
+import api.models.request.message.MessageBody;
 import io.restassured.response.Response;
 
 
@@ -10,7 +10,7 @@ public class ApiHelperMessagesConfigurations extends ApiHelperChat2Pay {
         return getQuery(String.format(Endpoints.MESSAGE_CONFIGURATIONS, widgetId), token.get());
     }
 
-    public static Response putMessageConfiguration(String widgetId, Message messageBody) {
-        return putQuery((String.format(Endpoints.MESSAGE_CONFIGURATIONS, widgetId)), messageBody, token.get());
+    public static Response putMessageConfiguration(String widgetId, MessageBody messageBody) {
+        return putQuery(String.format(Endpoints.MESSAGE_CONFIGURATIONS, widgetId), messageBody, token.get());
     }
 }
