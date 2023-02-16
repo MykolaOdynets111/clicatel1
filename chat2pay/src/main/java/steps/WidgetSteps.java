@@ -10,7 +10,7 @@ import api.models.request.channels.ChannelStatus;
 import api.models.request.channels.ChannelType;
 import api.models.request.widgetconfigurations.TwoWayNumberConfiguration;
 import api.models.response.failedresponse.ErrorResponse;
-import api.models.response.updateentityresponse.UpdatedEntityResponse;
+import api.models.response.updatedresponse.UpdatedEntityResponse;
 import api.models.response.widget.ConfigStatus;
 import api.models.response.widget.Widget;
 import api.models.response.widget.WidgetCreation;
