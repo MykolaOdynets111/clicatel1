@@ -2,7 +2,6 @@ package steps;
 
 
 import api.clients.ApiHelperMessagesConfigurations;
-import api.models.Message;
 import api.models.response.widget.Widget;
 import api.models.request.message.MessageBody;
 import api.models.response.message.Message;
