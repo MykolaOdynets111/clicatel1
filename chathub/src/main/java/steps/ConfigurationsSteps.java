@@ -63,7 +63,7 @@ public class ConfigurationsSteps extends MainApi {
             softAssert.assertTrue(DateTimeHelper.checkDateTimeFormat(postActiveConfiguration.getCreatedDate()));
             softAssert.assertTrue(DateTimeHelper.checkDateTimeFormat(postActiveConfiguration.getModifiedDate()));
             // Checking if the generated URL is valid. It is a temporary fix till we get to add the certificates to validate the URL
-            softAssert.assertTrue(UrlFormatValidator.isUrlValid(postActiveConfiguration.getAuthenticationLink()));
+            softAssert.assertTrue(UrlFormatValidator.isUrlValid(postActiveConfiguration.getAuthenticationLink())); //Update the implementation of URL validation through regex
             /*
             //Check the authorization link
               * PROBLEM:
