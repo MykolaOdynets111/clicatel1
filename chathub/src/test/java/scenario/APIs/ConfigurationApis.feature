@@ -164,9 +164,9 @@ Feature: Configuration API
   @TestCaseId("https://jira.clickatell.com/browse/CCH-549")
   Scenario: CCH :: Public :: Configurations API: Get all configurations should return configurations with all the status except AUTH_PENDING (200 response coverage in the test case)
     Given User is able to get all configurations for a provider - Public
-      | i.providerId                     | i.version | o.responseCode | o.id                             | o.providerId                     | o.type     | o.name                           | o.status | o.host                  | o.createdDate            | o.modifiedDate           |
-      | 0184f828214f6b7a03c711284b2b8e39 |           | 200            | 01862ce7755f24b59d1c03c025f121f4 | 0184f828214f6b7a03c711284b2b8e39 | PRODUCTION | Chathub Zendesk Support Testing8 | DISABLED | https://api.getbase.com | 2023-02-07T17:23:31.810Z | 2023-02-13T19:19:44.314Z |
-      |                                  |           |                | 01862ce93da4a8d251d104969c9cee3d | 0184f828214f6b7a03c711284b2b8e39 | PRODUCTION | Chathub Zendesk Sell Testing7    | ACTIVE   | https://api.getbase.com | 2023-02-07T17:25:28.615Z | 2023-02-13T20:27:40.416Z |
+      | i.providerId                     | i.version | o.responseCode | o.id                             | o.providerId                     | o.type     | o.name                | o.status | o.host                            | o.createdDate            | o.modifiedDate           |
+      | 0185172bf6b57e9831c6d6616bc68317 |           | 200            | 01861351de1a5234dd705346088f724c | 0185172bf6b57e9831c6d6616bc68317 | PRODUCTION | Shopify_Demo_Testing3 | ACTIVE   | https://cyan-bottle.myshopify.com | 2023-02-02T18:09:38.218Z | 2023-02-06T17:36:35.905Z |
+      |                                  |           |                | 0186139cd724b9f391e014bff9486c2d | 0185172bf6b57e9831c6d6616bc68317 | PRODUCTION | Shopify_Demo_Testing9 | ACTIVE   | https://cyan-bottle.myshopify.com | 2023-02-02T19:31:31.239Z | 2023-02-02T19:32:11.145Z |
 
 
   @TestCaseId("https://jira.clickatell.com/browse/CCH-664")
