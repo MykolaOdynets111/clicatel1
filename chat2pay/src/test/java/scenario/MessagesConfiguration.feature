@@ -19,6 +19,7 @@ Feature: Messages Configuration operations
       | o.errorMessage | <o.errorMessage> |
       | o.errors       | <o.errors>       |
 
+    Then User delete newly created widget
     Examples:
       | i.widgetId  | o.responseCode | o.updateTime | o.errorMessage | o.errors                           |
       | valid       | 200            | TRUE         | 0              | 0                                  |
