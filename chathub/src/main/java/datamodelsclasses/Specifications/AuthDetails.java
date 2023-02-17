@@ -28,6 +28,9 @@ public class AuthDetails {
     @JsonProperty("scopes")
     private String[] scopes;
 
+    @JsonProperty("staticSecrets")
+    private String staticSecrets;
+
     @JsonProperty("authorizationHeaderValuePrefix")
     private String authorizationHeaderValuePrefix;
 

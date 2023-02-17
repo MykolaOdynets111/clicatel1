@@ -78,7 +78,7 @@ public class EndpointSteps {
             AuthDetails authDetails = new AuthDetails(
                     dataMap.get("o.authDetails.grantType"), dataMap.get("o.authDetails.authPath"),
                     dataMap.get("o.authDetails.refreshPath"), dataMap.get("o.authDetails.tokenPath"), dataMap.get("o.authDetails.tokenExpirationDurationSeconds"),
-                    authDetails_scopes, dataMap.get("o.authDetails.authorizationHeaderValuePrefix") + " ", dataMap.get("o.authDetails.authType"));
+                    authDetails_scopes, dataMap.get("o.staticSecrets"),dataMap.get("o.authDetails.authorizationHeaderValuePrefix") + " ", dataMap.get("o.authDetails.authType"));
 
             ObjectMapper mapper = new ObjectMapper();
             List<String> expectedSpecifications = new ArrayList<>();
@@ -87,6 +87,8 @@ public class EndpointSteps {
                     dataMap.get("o.version"), dataMap.get("o.openApiSpecS3Key"))));
 
             String actualSpecification = mapper.writeValueAsString(ChatHubApiHelper.getChatHubQueryWithoutAuth(url, responseCode).as(Specifications[].class));
+            System.out.println(actualSpecification);
+            System.out.println(expectedSpecifications);
             Assert.assertEquals(actualSpecification, expectedSpecifications.toString(), "Specifications response is not as expected");
         } else {
             Validator.validatedErrorResponseWithoutAuth(url, dataMap);
