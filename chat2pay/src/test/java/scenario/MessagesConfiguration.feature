@@ -53,3 +53,20 @@ Feature: Messages Configuration operations
       | valid       | valid                 | valid                   | valid                 | valid                   | valid                | valid                | 200            | TRUE         | true                  | true                   |           |                |                                          |
       | non_existed | valid                 | valid                   | valid                 | valid                   | valid                | valid                | 404            |              |                       |                        | NOT_FOUND | URL /v2/widget | Settings for widget does not exist, id = |
 
+  @TestCaseId("https://jira.clickatell.com/browse/C2P-4722")
+  Scenario Outline: C2P Unity API :: Messages Configuration :: GET /template-usage :: get template usage for widget
+
+    Then User gets template usage for templateId
+
+      | i.templateId   | <i.templateId>   |
+      | o.responseCode | <o.responseCode> |
+      | o.status       | <o.status>       |
+      | o.type         | <o.type>         |
+      | o.id           | <o.id>           |
+      | o.accountId    | <o.accountId>    |
+      | o.environment  | <o.environment>  |
+
+    Examples:
+      | i.templateId                     | o.responseCode | o.status       | o.type      | o.id                             | o.accountId                      | o.environment |
+      | 7662fe1804e54704a1cf8e52a0a7bdbc | 200            | NOT_CONFIGURED | CHAT_TO_PAY | 2c9acdc2865469380186559c805e0039 | 2c9acc3078b5cfe80178db93bd871a58 | SANDBOX       |
+

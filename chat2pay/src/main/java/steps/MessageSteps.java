@@ -3,6 +3,7 @@ package steps;
 
 import api.clients.ApiHelperMessagesConfigurations;
 import api.models.Message;
+import api.models.response.widget.Widget;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
@@ -73,5 +74,19 @@ public class MessageSteps extends GeneralSteps {
             default:
                 Assertions.fail(format("Expected status %s is not existed", dataMap.get("i.widgetId")));
         }
+    }
+
+    @Then("^User gets template usage for templateId$")
+    public void getTemplateUsage(Map<String, String> dataMap) {
+
+        response = ApiHelperMessagesConfigurations.getTemplateUsageResponse(dataMap.get("i.templateId"));
+        Validator.checkResponseCode(response, getResponseCode(dataMap));
+        Widget widget = response.getBody().jsonPath().getList("", Widget.class).get(0);
+        softly.assertThat(dataMap.get("o.status")).isEqualTo(widget.getStatus());
+        softly.assertThat(dataMap.get("o.type")).isEqualTo(widget.getType());
+        softly.assertThat(dataMap.get("o.id")).isEqualTo(widget.getId());
+        softly.assertThat(dataMap.get("o.accountId")).isEqualTo(widget.getAccountId());
+        softly.assertThat(dataMap.get("o.environment")).isEqualTo(widget.getEnvironment());
+        softly.assertAll();
     }
 }
