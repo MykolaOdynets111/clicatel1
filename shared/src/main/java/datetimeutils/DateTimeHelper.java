@@ -2,8 +2,12 @@ package datetimeutils;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.NoSuchElementException;
@@ -21,13 +25,21 @@ public class DateTimeHelper {
     public static DateTimeFormatter getYYYY_MM_DD_HH_MM() {
         return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     }
+
     @NotNull
     public static DateTimeFormatter getYYYY_MM_DD_HH_MM_SS() {
         return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
     }
+
+    @NotNull
+    public static DateTimeFormatter getFormatYYYY_MM_DD_HH_MM_SS() {
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+    }
+
     public static DateTimeFormatter getYYYY_MM_DD_With_Time_Formatter() {
         return DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' h:mm a", Locale.US);
     }
+
     public static DateTimeFormatter getDD_MMM_YYYY_With_Time_Formatter() {
         return DateTimeFormatter.ofPattern("dd MMM. yyyy 'at' h:mm a", Locale.US);
     }
@@ -37,8 +49,15 @@ public class DateTimeHelper {
         return zdt.toInstant().toEpochMilli();
     }
 
-    public static String getDateTimeWithHoursShift(int hours){
-        return LocalDateTime.now(ZoneOffset.UTC).minusHours(hours).format(getYYYY_MM_DD_HH_MM());
+    public static String getDateTimeWithHoursShift(int hours) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        return LocalDateTime.now(ZoneOffset.UTC).minusHours(hours).format(formatter);
+    }
+
+    public static String getCurrentDateTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        return LocalDateTime.now(ZoneOffset.UTC).format(formatter);
     }
 
     public static LocalDate parseToLocalDate(String timestamp) {
@@ -46,6 +65,17 @@ public class DateTimeHelper {
                 .orElseThrow(NoSuchElementException::new);
 
         return LocalDateTime.parse(localDateTime, getYYYY_MM_DD_HH_MM_SS()).toLocalDate();
+    }
+
+    public static boolean checkDateTimeFormat(String timestamp) {
+        String localDateTime = Arrays.stream(timestamp.split("\\.")).findFirst()
+                .orElseThrow(NoSuchElementException::new);
+        try {
+            getFormatYYYY_MM_DD_HH_MM_SS().parse(localDateTime);
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+        return true;
     }
 
     public static LocalDateTime parseDate(String stringDate) {
