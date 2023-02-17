@@ -49,7 +49,7 @@ Feature: Messages Configuration operations
       | o.errors                | <o.errors>                |
 
     Examples:
-      | i.widgetId  | i.waPaymentTemplateId | i.waPaymentTemplateName | i.waReceiptTemplateId | i.waReceiptTemplateName | i.smsPaymentTemplate | i.smsReceiptTemplate | o.responseCode | o.updateTime | o.waMsgConfigComplete | o.smsMsgConfigComplete | o.status  | o.errorMessage      | o.errors                                 |
+      | i.widgetId  | i.waPaymentTemplateId | i.waPaymentTemplateName | i.waReceiptTemplateId | i.waReceiptTemplateName | i.smsPaymentTemplate | i.smsReceiptTemplate | o.responseCode | o.updateTime | o.waMsgConfigComplete | o.smsMsgConfigComplete | o.status  | o.errorMessage | o.errors                                 |
       | valid       | valid                 | valid                   | valid                 | valid                   | valid                | valid                | 200            | TRUE         | true                  | true                   |           |                |                                          |
       | non_existed | valid                 | valid                   | valid                 | valid                   | valid                | valid                | 404            |              |                       |                        | NOT_FOUND | URL /v2/widget | Settings for widget does not exist, id = |
 

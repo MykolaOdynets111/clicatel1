@@ -15,11 +15,11 @@ import java.util.Objects;
 
 public class GeneralSteps {
 
+    protected static final ThreadLocal<String> widgetId = new ThreadLocal<>();
     protected static final ThreadLocal<PaymentBody> paymentBody = new ThreadLocal<>();
     protected static final ThreadLocal<String> paymentGatewaySettingsId = new ThreadLocal<>();
     protected static final ThreadLocal<String> paymentLink = new ThreadLocal<>();
     protected static final ThreadLocal<String> paymentLinkRef = new ThreadLocal<>();
-    protected static final ThreadLocal<String> widgetId = new ThreadLocal<>();
     protected static final ThreadLocal<String> applicationID = new ThreadLocal<>();
     protected static final ThreadLocal<String> activationKey = new ThreadLocal<>();
     protected static final ThreadLocal<String> createdWidgetId = new ThreadLocal<>();
@@ -59,6 +59,14 @@ public class GeneralSteps {
             numbers = Collections.singletonList(number);
         }
         return numbers;
+    }
+
+    protected String getWidgetId(Map<String, String> dataMap) {
+        return dataMap.get("i.widgetId");
+    }
+
+    protected String getResponseCode(Map<String, String> dataMap) {
+        return dataMap.get("o.responseCode");
     }
 
     protected void clearTestData() {

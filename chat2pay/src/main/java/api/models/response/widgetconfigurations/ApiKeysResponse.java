@@ -1,9 +1,13 @@
-package api.models.response;
+package api.models.response.widgetconfigurations;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
+
+import java.time.LocalDate;
+
+import static datetimeutils.DateTimeHelper.parseToLocalDate;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -17,4 +21,8 @@ public class ApiKeysResponse {
     public String apiKey;
     @JsonProperty("createdTime")
     public String createdTime;
+
+    public LocalDate getCreatedTime() {
+        return parseToLocalDate(this.createdTime);
+    }
 }
