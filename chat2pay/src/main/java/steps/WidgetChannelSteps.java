@@ -25,25 +25,25 @@ public class WidgetChannelSteps extends GeneralSteps {
     private Response response;
 
     @Then("^User links channel to the widget")
-    public void linkChannelToWidget(Map<String, String> valuesMap) {
-        String widgetId = valuesMap.get("i.widgetId");
+    public void linkChannelToWidget(Map<String, String> dataMap) {
+        String widgetId = getWidgetId(dataMap);
         ChannelManagement body = ChannelManagement.builder()
-                .smsOmniIntegrationId(valuesMap.get("i.smsOmniIntegrationId"))
-                .whatsappOmniIntegrationId(valuesMap.get("i.whatsappOmniIntegrationId"))
+                .smsOmniIntegrationId(dataMap.get("i.smsOmniIntegrationId"))
+                .whatsappOmniIntegrationId(dataMap.get("i.whatsappOmniIntegrationId"))
                 .build();
 
-        response = ApiHelperChannelManagement.postChannelManagement(body, widgetId, getActivationKey(valuesMap));
+        response = ApiHelperChannelManagement.postChannelManagement(body, widgetId, getActivationKey(dataMap));
         int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
+        int expectedResponseCode = parseInt(getResponseCode(dataMap));
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 202) {
                 assertThat(response.as(UpdatedEntityResponse.class).getUpdateTime())
                         .isBeforeOrEqualTo(LocalDate.now());
             } else if (expectedResponseCode == 401) {
-                verifyUnauthorisedResponse(valuesMap, response);
+                verifyUnauthorisedResponse(dataMap, response);
             } else if (expectedResponseCode == 404) {
-                verifyBadRequestResponse(valuesMap, response);
+                verifyBadRequestResponse(dataMap, response);
             }
         } else {
             Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
@@ -51,26 +51,26 @@ public class WidgetChannelSteps extends GeneralSteps {
     }
 
     @Then("^User updates channel status")
-    public void updateChannelStatus(Map<String, String> valuesMap) {
-        String widgetId = valuesMap.get("i.widgetId");
+    public void updateChannelStatus(Map<String, String> dataMap) {
+        String widgetId = getWidgetId(dataMap);
         ChannelStatus body = ChannelStatus.builder()
-                .smsOmniIntStatus(valuesMap.get("i.smsOmniIntStatus"))
-                .waOmniIntStatus(valuesMap.get("i.waOmniIntStatus"))
+                .smsOmniIntStatus(dataMap.get("i.smsOmniIntStatus"))
+                .waOmniIntStatus(dataMap.get("i.waOmniIntStatus"))
                 .build();
 
         response = ApiHelperChannelManagement.updateChannelStatus(body, widgetId, ApiHelperChat2Pay.token.get());
         int statusCode = response.getStatusCode();
-        int responseCode = parseInt(valuesMap.get("o.responseCode"));
+        int responseCode = parseInt(getResponseCode(dataMap));
 
         if (responseCode == statusCode) {
             if (statusCode == 200) {
                 ChannelManagementStatusResponse statusResponse = response.as(ChannelManagementStatusResponse.class);
                 softly.assertThat(statusResponse.getUpdateTime()).isBeforeOrEqualTo(LocalDate.now());
-                softly.assertThat(statusResponse.smsChannelEnabled).isEqualTo(Boolean.parseBoolean(valuesMap.get("i.smsOmniIntStatus")));
-                softly.assertThat(statusResponse.whatsappChannelEnabled).isEqualTo(Boolean.parseBoolean(valuesMap.get("i.waOmniIntStatus")));
+                softly.assertThat(statusResponse.smsChannelEnabled).isEqualTo(Boolean.parseBoolean(dataMap.get("i.smsOmniIntStatus")));
+                softly.assertThat(statusResponse.whatsappChannelEnabled).isEqualTo(Boolean.parseBoolean(dataMap.get("i.waOmniIntStatus")));
                 softly.assertAll();
             } else if (responseCode == 400 || responseCode == 404) {
-                verifyBadRequestResponse(valuesMap, response);
+                verifyBadRequestResponse(dataMap, response);
             }
         } else {
             Assertions.fail(format("Expected response code %s but was %s", responseCode, statusCode));
@@ -78,22 +78,22 @@ public class WidgetChannelSteps extends GeneralSteps {
     }
 
     @Then("^User deletes channel integration")
-    public void deleteChannelIntegration(Map<String, String> valuesMap) {
-        String widgetId = valuesMap.get("i.widgetId");
+    public void deleteChannelIntegration(Map<String, String> dataMap) {
+        String widgetId = getWidgetId(dataMap);
         ChannelType body = ChannelType.builder()
-                .channelType(valuesMap.get("i.channelType"))
+                .channelType(dataMap.get("i.channelType"))
                 .build();
 
         response = ApiHelperChannelManagement.removeChannelIntegration(body, widgetId, ApiHelperChat2Pay.token.get());
         int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
+        int expectedResponseCode = parseInt(getResponseCode(dataMap));
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {
                 assertThat(response.as(UpdatedEntityResponse.class).getMessage())
-                        .isEqualTo(format("Channel %s deleted successfully", valuesMap.get("i.channelType")));
+                        .isEqualTo(format("Channel %s deleted successfully", dataMap.get("i.channelType")));
             } else if (expectedResponseCode == 400) {
-                verifyBadRequestResponse(valuesMap, response);
+                verifyBadRequestResponse(dataMap, response);
             }
         } else {
             Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));

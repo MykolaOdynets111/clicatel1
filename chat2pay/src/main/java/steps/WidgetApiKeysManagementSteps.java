@@ -24,28 +24,28 @@ public class WidgetApiKeysManagementSteps extends GeneralSteps {
     private Response response;
 
     @Then("^User gets 'API Keys Management'$")
-    public void getApiKeyManagement(Map<String, String> valuesMap) {
-        String widgetId = valuesMap.get("i.widgetId");
+    public void getApiKeyManagement(Map<String, String> dataMap) {
+        String widgetId = getWidgetId(dataMap);
         response = getApiKeysManagement(widgetId, TOKEN);
-        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
+        int expectedResponseCode = parseInt(getResponseCode(dataMap));
 
         if (expectedResponseCode == 200) {
             response.jsonPath().getList("", ApiKeysResponse.class).stream()
-                    .filter(n -> n.apiKey.equals(valuesMap.get("o.apiKey")))
+                    .filter(n -> n.apiKey.equals(dataMap.get("o.apiKey")))
                     .findFirst().ifPresent(twoWayNumbersBody ->
                             assertThat(twoWayNumbersBody.getCreatedTime())
                                     .isBeforeOrEqualTo(LocalDate.now()));
         } else if (expectedResponseCode == 404) {
-            verifyBadRequestResponse(valuesMap, response);
+            verifyBadRequestResponse(dataMap, response);
         }
     }
 
     @Then("^User posts 'API Keys Management'$")
-    public void postApiKeyManagement(Map<String, String> valuesMap) {
-        String widgetId = valuesMap.get("i.widgetId");
+    public void postApiKeyManagement(Map<String, String> dataMap) {
+        String widgetId = getWidgetId(dataMap);
         int sizeBefore = getApiKeysNumber(widgetId);
         response = updateApiKeysManagement(widgetId, TOKEN);
-        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
+        int expectedResponseCode = parseInt(getResponseCode(dataMap));
 
         if (expectedResponseCode == 200) {
             int sizeAfter = getApiKeysNumber(widgetId);
@@ -56,16 +56,16 @@ public class WidgetApiKeysManagementSteps extends GeneralSteps {
                     });
             assertThat(sizeAfter).isGreaterThan(sizeBefore);
         } else if (expectedResponseCode == 404) {
-            verifyBadRequestResponse(valuesMap, response);
+            verifyBadRequestResponse(dataMap, response);
         }
     }
 
     @Then("^User deletes 'API Keys Management'$")
-    public void deleteApiKeyManagement(Map<String, String> valuesMap) {
-        String widgetId = valuesMap.get("i.widgetId");
+    public void deleteApiKeyManagement(Map<String, String> dataMap) {
+        String widgetId = getWidgetId(dataMap);
         response = getApiKeysManagement(widgetId, TOKEN);
         int sizeBefore = getApiKeysNumber(widgetId);
-        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
+        int expectedResponseCode = parseInt(getResponseCode(dataMap));
 
         if (expectedResponseCode == 200) {
             response.jsonPath().getList("", ApiKeysResponse.class).stream().findFirst().ifPresent(a -> {
@@ -77,7 +77,7 @@ public class WidgetApiKeysManagementSteps extends GeneralSteps {
             int sizeAfter = getApiKeysNumber(widgetId);
             assertThat(sizeAfter).isLessThan(sizeBefore);
         } else if (expectedResponseCode == 404) {
-            verifyBadRequestResponse(valuesMap, response);
+            verifyBadRequestResponse(dataMap, response);
         }
     }
 

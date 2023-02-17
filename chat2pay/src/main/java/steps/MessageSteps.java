@@ -21,17 +21,17 @@ public class MessageSteps extends GeneralSteps {
 
     @Then("^User gets configuration for newly created widget$")
     public void getMessageConfiguration(Map<String, String> dataMap) {
-        switch (dataMap.get("i.widgetId")) {
+        switch (getWidgetId(dataMap)) {
             case "valid":
                 response = ApiHelperMessagesConfigurations.getMessageConfigurationResponse(createdWidgetId.get());
-                Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
+                Validator.checkResponseCode(response, getResponseCode(dataMap));
                 break;
             case "non_existed":
-                response = ApiHelperMessagesConfigurations.getMessageConfigurationResponse(dataMap.get("i.widgetId"));
+                response = ApiHelperMessagesConfigurations.getMessageConfigurationResponse(getWidgetId(dataMap));
                 validateErrorResponse(response, dataMap);
                 break;
             default:
-                Assertions.fail(format("Expected status %s is not existed", dataMap.get("i.widgetId")));
+                Assertions.fail(format("Expected status %s is not existed", getWidgetId(dataMap)));
         }
     }
 
@@ -45,10 +45,10 @@ public class MessageSteps extends GeneralSteps {
                 .smsPaymentTemplate(dataMap.get("i.smsPaymentTemplate"))
                 .smsReceiptTemplate(dataMap.get("i.smsReceiptTemplate"))
                 .build();
-        switch (dataMap.get("i.widgetId")) {
+        switch (getWidgetId(dataMap)) {
             case "valid":
                 response = ApiHelperMessagesConfigurations.putMessageConfiguration(createdWidgetId.get(), requestBody);
-                Validator.checkResponseCode(response, dataMap.get("o.responseCode"));
+                Validator.checkResponseCode(response, getResponseCode(dataMap));
                 Message updateResponse = response.as(Message.class);
                 softly.assertThat(updateResponse.getUpdateTime())
                         .as(format("widget update date is not equals to %s", LocalDate.now()))
@@ -68,11 +68,11 @@ public class MessageSteps extends GeneralSteps {
                 softly.assertAll();
                 break;
             case "non_existed":
-                response = ApiHelperMessagesConfigurations.putMessageConfiguration(dataMap.get("i.widgetId"), requestBody);
+                response = ApiHelperMessagesConfigurations.putMessageConfiguration(getWidgetId(dataMap), requestBody);
                 validateErrorResponse(response, dataMap);
                 break;
             default:
-                Assertions.fail(format("Expected status %s is not existed", dataMap.get("i.widgetId")));
+                Assertions.fail(format("Expected status %s is not existed", getWidgetId(dataMap)));
         }
     }
 }

@@ -44,7 +44,7 @@ public class PaymentsSteps extends GeneralSteps{
         switch (status) {
             case "valid":
                 response = ApiHelperPayments.cancelPaymentLink(paymentLinkRef.get(), activationKey.get());
-                checkResponseCode(response, dataMap.get("o.responseCode"));
+                checkResponseCode(response, getResponseCode(dataMap));
                 PaymentLinkResponse paymentLinkResponse = response.as(PaymentLinkResponse.class);
                 assertThat(paymentLinkResponse.getTransactionStatus())
                         .as(format("transaction status is not equals to %s", paymentLinkResponse.getTransactionStatus()))
@@ -75,7 +75,7 @@ public class PaymentsSteps extends GeneralSteps{
         switch (status) {
             case "valid":
                 response = ApiHelperPayments.receivePaymentLink(paymentLinkRef.get(), activationKey.get());
-                checkResponseCode(response, dataMap.get("o.responseCode"));
+                checkResponseCode(response, getResponseCode(dataMap));
                 PaymentLinkResponse paymentLinkResponse = response.as(PaymentLinkResponse.class);
                 assertThat(paymentLinkResponse.getTransactionStatus())
                         .as(format("transaction status is not equals to %s", paymentLinkResponse.getTransactionStatus()))

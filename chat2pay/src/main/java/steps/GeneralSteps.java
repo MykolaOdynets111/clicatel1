@@ -61,6 +61,14 @@ public class GeneralSteps {
         return numbers;
     }
 
+    protected String getWidgetId(Map<String, String> dataMap) {
+        return dataMap.get("i.widgetId");
+    }
+
+    protected String getResponseCode(Map<String, String> dataMap) {
+        return dataMap.get("o.responseCode");
+    }
+
     protected void clearTestData() {
         paymentBody.remove();
         paymentGatewaySettingsId.remove();

@@ -46,7 +46,7 @@ public class WidgetSteps extends GeneralSteps {
                 .build();
         response = ApiHelperWidgets.createWidget(widget);
 
-        checkResponseCode(response, dataMap.get("o.responseCode"));
+        checkResponseCode(response, getResponseCode(dataMap));
         String status = dataMap.get("i.widget");
         switch (status) {
             case "valid":
@@ -70,10 +70,10 @@ public class WidgetSteps extends GeneralSteps {
 
     @Then("^User gets newly created widget$")
     public void getCreatedWidget(Map<String, String> dataMap) {
-        switch (dataMap.get("i.widgetId")) {
+        switch (getWidgetId(dataMap)) {
             case "valid":
                 response = ApiHelperWidgets.getWidget(createdWidgetId.get());
-                checkResponseCode(response, dataMap.get("o.responseCode"));
+                checkResponseCode(response, getResponseCode(dataMap));
 
                 Widget widget = response.as(Widget.class);
                 softly.assertThat(widget.getModifiedTime()).isNotNull();
@@ -84,7 +84,7 @@ public class WidgetSteps extends GeneralSteps {
                 softly.assertAll();
                 break;
             case "non_existed":
-                response = ApiHelperWidgets.getWidget(dataMap.get("i.widgetId"));
+                response = ApiHelperWidgets.getWidget(getWidgetId(dataMap));
                 validateErrorResponse(response, dataMap);
                 break;
         }
@@ -100,16 +100,16 @@ public class WidgetSteps extends GeneralSteps {
                 .id(Integer.parseInt(dataMap.get("i.configStatus_id")))
                 .name(dataMap.get("i.configStatus_name")).build());
         updateBody.setName(createdWidgetName.get());
-        switch (dataMap.get("i.widgetId")) {
+        switch (getWidgetId(dataMap)) {
             case "valid":
                 response = ApiHelperWidgets.updateWidget(createdWidgetId.get(), updateBody);
-                checkResponseCode(response, dataMap.get("o.responseCode"));
+                checkResponseCode(response, getResponseCode(dataMap));
                 assertThat(response.as(UpdatedEntityResponse.class).getUpdateTime())
                         .as(format("widget update date is not equals to %s", LocalDate.now()))
                         .isEqualTo(LocalDate.now());
                 break;
             case "non_existed":
-                response = ApiHelperWidgets.updateWidget(dataMap.get("i.widgetId"), updateBody);
+                response = ApiHelperWidgets.updateWidget(getWidgetId(dataMap), updateBody);
                 validateErrorResponse(response, dataMap);
                 break;
             case "wrong_status":
@@ -118,7 +118,7 @@ public class WidgetSteps extends GeneralSteps {
                 validateErrorResponse(response, dataMap);
                 break;
             default:
-                Assertions.fail(format("Expected status %s is not existed", dataMap.get("i.widgetId")));
+                Assertions.fail(format("Expected status %s is not existed", getWidgetId(dataMap)));
         }
     }
 
@@ -126,10 +126,10 @@ public class WidgetSteps extends GeneralSteps {
     public void updateShowLinkedApiCreatedWidget(Map<String, String> dataMap) {
         Widget body = new Widget();
         body.setShowLinkedApi(Boolean.parseBoolean(dataMap.get("i.showLinkedApi")));
-        switch (dataMap.get("i.widgetId")) {
+        switch (getWidgetId(dataMap)) {
             case "valid":
                 response = ApiHelperWidgets.updateShowLinkedApiForWidget(createdWidgetId.get(), body);
-                checkResponseCode(response, dataMap.get("o.responseCode"));
+                checkResponseCode(response, getResponseCode(dataMap));
                 UpdatedEntityResponse updatedEntityResponse = response.as(UpdatedEntityResponse.class);
                 softly.assertThat(updatedEntityResponse.getUpdateTime())
                         .as(format("widget update date is not equals to %s", LocalDate.now()))
@@ -142,32 +142,32 @@ public class WidgetSteps extends GeneralSteps {
                 softly.assertAll();
                 break;
             case "non_existed":
-                response = ApiHelperWidgets.updateShowLinkedApiForWidget(dataMap.get("i.widgetId"), body);
-                checkResponseCode(response, dataMap.get("o.responseCode"));
+                response = ApiHelperWidgets.updateShowLinkedApiForWidget(getWidgetId(dataMap), body);
+                checkResponseCode(response, getResponseCode(dataMap));
                 validateErrorResponse(response, dataMap);
                 break;
             default:
-                Assertions.fail(format("Expected status %s is not existed", dataMap.get("i.widgetId")));
+                Assertions.fail(format("Expected status %s is not existed", getWidgetId(dataMap)));
         }
     }
 
     @Then("^User delete widget$")
     public void deleteWidget(Map<String, String> dataMap) {
-        switch (dataMap.get("i.widgetId")) {
+        switch (getWidgetId(dataMap)) {
             case "valid":
                 response = ApiHelperWidgets.deleteWidget(createdWidgetId.get());
-                checkResponseCode(response, dataMap.get("o.responseCode"));
+                checkResponseCode(response, getResponseCode(dataMap));
                 UpdatedEntityResponse updatedEntityResponse = response.as(UpdatedEntityResponse.class);
                 softly.assertThat(updatedEntityResponse.getUpdateTime())
                         .as(format("widget update date is not equals to %s", LocalDate.now()))
                         .isEqualTo(LocalDate.now());
                 break;
             case "non_existed":
-                response = ApiHelperWidgets.deleteWidget(dataMap.get("i.widgetId"));
+                response = ApiHelperWidgets.deleteWidget(getWidgetId(dataMap));
                 validateErrorResponse(response, dataMap);
                 break;
             default:
-                Assertions.fail(format("Expected status %s is not existed", dataMap.get("i.widgetId")));
+                Assertions.fail(format("Expected status %s is not existed", getWidgetId(dataMap)));
         }
     }
 }

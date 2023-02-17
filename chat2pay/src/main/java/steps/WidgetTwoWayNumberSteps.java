@@ -24,25 +24,25 @@ public class WidgetTwoWayNumberSteps extends GeneralSteps {
     private Response response;
 
     @Then("^User gets two-way numbers$")
-    public void getTwoWayNumbers(Map<String, String> valuesMap) {
-        String widgetId = valuesMap.get("i.widgetId");
+    public void getTwoWayNumbers(Map<String, String> dataMap) {
+        String widgetId = getWidgetId(dataMap);
 
         response = ApiHelperTwoWayNumbers.getTwoWayNumbers(widgetId, TOKEN);
         int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
+        int expectedResponseCode = parseInt(getResponseCode(dataMap));
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {
                 List<TwoWayNumbersBody> twoWayNumbersList = response.jsonPath().getList("", TwoWayNumbersBody.class);
 
                 Optional<TwoWayNumbersBody> body = twoWayNumbersList.stream()
-                        .filter(n -> n.getNumber().equals(valuesMap.get("o.number")))
+                        .filter(n -> n.getNumber().equals(dataMap.get("o.number")))
                         .findFirst();
                 body.ifPresent(twoWayNumbersBody ->
                         assertThat(twoWayNumbersBody.isDefault())
-                                .isEqualTo(Boolean.parseBoolean(valuesMap.get("o.default"))));
+                                .isEqualTo(Boolean.parseBoolean(dataMap.get("o.default"))));
             } else if (expectedResponseCode == 404) {
-                verifyBadRequestResponse(valuesMap, response);
+                verifyBadRequestResponse(dataMap, response);
             }
         } else {
             Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
@@ -50,28 +50,28 @@ public class WidgetTwoWayNumberSteps extends GeneralSteps {
     }
 
     @Then("^User updates two-way numbers$")
-    public void updatesTwoWayNumbers(Map<String, String> valuesMap) {
-        String widgetId = valuesMap.get("i.widgetId");
-        List<String> numbers = getListOfElementsFromTruthTable(valuesMap.get("o.numbers"));
+    public void updatesTwoWayNumbers(Map<String, String> dataMap) {
+        String widgetId = getWidgetId(dataMap);
+        List<String> numbers = getListOfElementsFromTruthTable(dataMap.get("o.numbers"));
         TwoWayNumberConfiguration configuration = TwoWayNumberConfiguration.builder()
                 .numbers(numbers)
-                .defaultNumber(valuesMap.get("o.defaultNumbers")).build();
+                .defaultNumber(dataMap.get("o.defaultNumbers")).build();
 
         response = ApiHelperTwoWayNumbers.updateTwoWayNumbers(widgetId, configuration, TOKEN);
         int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
+        int expectedResponseCode = parseInt(getResponseCode(dataMap));
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {
                 ApiHelperTwoWayNumbers.getTwoWayNumbers(widgetId, TOKEN)
                         .jsonPath().getList("", TwoWayNumbersBody.class).forEach(n -> {
-                            boolean isDefault = n.getNumber().equals(valuesMap.get("o.defaultNumbers"));
+                            boolean isDefault = n.getNumber().equals(dataMap.get("o.defaultNumbers"));
                             softly.assertThat(n.getNumber()).isIn(numbers);
                             softly.assertThat(n.isDefault()).isEqualTo(isDefault);
                         });
                 softly.assertAll();
             } else if (expectedResponseCode == 404) {
-                verifyBadRequestResponse(valuesMap, response);
+                verifyBadRequestResponse(dataMap, response);
             }
         } else {
             Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));
