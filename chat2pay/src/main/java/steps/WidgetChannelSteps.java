@@ -26,13 +26,12 @@ public class WidgetChannelSteps extends GeneralSteps {
 
     @Then("^User links channel to the widget")
     public void linkChannelToWidget(Map<String, String> dataMap) {
-        String widgetId = getWidgetId(dataMap);
         ChannelManagement body = ChannelManagement.builder()
                 .smsOmniIntegrationId(dataMap.get("i.smsOmniIntegrationId"))
                 .whatsappOmniIntegrationId(dataMap.get("i.whatsappOmniIntegrationId"))
                 .build();
 
-        response = ApiHelperChannelManagement.postChannelManagement(body, widgetId, getActivationKey(dataMap));
+        response = ApiHelperChannelManagement.postChannelManagement(body, getWidgetId(dataMap), getActivationKey(dataMap));
         int statusCode = response.getStatusCode();
         int expectedResponseCode = parseInt(getResponseCode(dataMap));
 
@@ -52,13 +51,12 @@ public class WidgetChannelSteps extends GeneralSteps {
 
     @Then("^User updates channel status")
     public void updateChannelStatus(Map<String, String> dataMap) {
-        String widgetId = getWidgetId(dataMap);
         ChannelStatus body = ChannelStatus.builder()
                 .smsOmniIntStatus(dataMap.get("i.smsOmniIntStatus"))
                 .waOmniIntStatus(dataMap.get("i.waOmniIntStatus"))
                 .build();
 
-        response = ApiHelperChannelManagement.updateChannelStatus(body, widgetId, ApiHelperChat2Pay.token.get());
+        response = ApiHelperChannelManagement.updateChannelStatus(body, getWidgetId(dataMap), ApiHelperChat2Pay.token.get());
         int statusCode = response.getStatusCode();
         int responseCode = parseInt(getResponseCode(dataMap));
 
@@ -79,12 +77,11 @@ public class WidgetChannelSteps extends GeneralSteps {
 
     @Then("^User deletes channel integration")
     public void deleteChannelIntegration(Map<String, String> dataMap) {
-        String widgetId = getWidgetId(dataMap);
         ChannelType body = ChannelType.builder()
                 .channelType(dataMap.get("i.channelType"))
                 .build();
 
-        response = ApiHelperChannelManagement.removeChannelIntegration(body, widgetId, ApiHelperChat2Pay.token.get());
+        response = ApiHelperChannelManagement.removeChannelIntegration(body, getWidgetId(dataMap), ApiHelperChat2Pay.token.get());
         int statusCode = response.getStatusCode();
         int expectedResponseCode = parseInt(getResponseCode(dataMap));
 

@@ -42,6 +42,14 @@ public class GeneralSteps {
         activationKey.set(ApiHelperWidgets.getActivationKey(widgetId.get()).getApiKey());
     }
 
+    protected String getWidgetId(Map<String, String> dataMap) {
+        return dataMap.get("i.widgetId");
+    }
+
+    protected String getResponseCode(Map<String, String> dataMap) {
+        return dataMap.get("o.responseCode");
+    }
+
     protected static String getActivationKey(Map<String, String> valuesMap) {
         String authToken = valuesMap.get("i.activationKey");
         if (authToken.equals("token")) {
@@ -59,14 +67,6 @@ public class GeneralSteps {
             numbers = Collections.singletonList(number);
         }
         return numbers;
-    }
-
-    protected String getWidgetId(Map<String, String> dataMap) {
-        return dataMap.get("i.widgetId");
-    }
-
-    protected String getResponseCode(Map<String, String> dataMap) {
-        return dataMap.get("o.responseCode");
     }
 
     protected void clearTestData() {

@@ -25,8 +25,7 @@ public class WidgetApiKeysManagementSteps extends GeneralSteps {
 
     @Then("^User gets 'API Keys Management'$")
     public void getApiKeyManagement(Map<String, String> dataMap) {
-        String widgetId = getWidgetId(dataMap);
-        response = getApiKeysManagement(widgetId, TOKEN);
+        response = getApiKeysManagement(getWidgetId(dataMap), TOKEN);
         int expectedResponseCode = parseInt(getResponseCode(dataMap));
 
         if (expectedResponseCode == 200) {
