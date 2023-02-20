@@ -21,7 +21,9 @@ public enum UnityClients {
 
     QA_CH_USER_ONE("chathubabc123@gmail.com", "Password#1", "QA_CH_USER_ONE", QA),
 
-    DEMO_CHAT_2_PAY_USER("chat2payqauser11+chathub@gmail.com", "Password#1");
+    DEMO_CHAT_2_PAY_USER("chat2payqauser11+chathub@gmail.com", "Password#1"),
+
+    DEMO_CHAT_HUB_USER("chat2payqauser11+demo11231@gmail.com","Password#1");
 
     String username;
     String password;

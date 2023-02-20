@@ -24,4 +24,14 @@ public class UnityAuthenticationAPIHelper extends MainApi {
         //Return JWT
         return postQueryWithoutAuth(UnityURLs.JWT_ACCOUNT, body, 200).as(UnityJWT.class).getToken();
     }
+
+    public static String getMC2ID(UnityClients unityClient) {
+        //Create a body
+        Map<String, Object> credentials = new HashMap<>();
+        credentials.put("email", unityClient.getUsername());
+        credentials.put("password", unityClient.getPassword());
+        AuthTokenBody authTokenBody = postQueryWithoutAuth(UnityURLs.AUTH_ACCOUNTS, credentials, 200).as(AuthTokenBody.class);
+        //Return MC2ID
+        return authTokenBody.getAccounts().get(0).getId();
+    }
 }

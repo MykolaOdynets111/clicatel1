@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import java.util.Arrays;
 import java.util.List;
 
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id",
@@ -19,13 +18,11 @@ import java.util.List;
         "description",
         "moreInfoUrl",
         "versions",
-        "isAdded"
 })
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AllProviders {
-
+public class ConfiguredProviderDetail {
     @JsonProperty("id")
     private String id;
     @JsonProperty("name")
@@ -43,21 +40,7 @@ public class AllProviders {
     @JsonProperty("versions")
     private List<Versions> versions = Arrays.asList(new Versions());
 
-    @JsonProperty("isAdded")
-    public String isAdded;
-
-    public AllProviders(String id, String name, String logoUrl, String description, String moreInfoUrl, String vid, String version, String latest, String isAdded) {
-        this.setId(id);
-        this.setName(name);
-        this.setLogoUrl(logoUrl);
-        this.setDescription(description);
-        this.setMoreInfoUrl(moreInfoUrl);
-        this.setIsAdded(isAdded);
-        List<Versions> versions = Arrays.asList(new Versions(vid, version, latest));
-        this.setVersions(versions);
-    }
-
-    public AllProviders(String id, String name, String logoUrl, String description, String moreInfoUrl, String vid, String version, String latest) {
+    public ConfiguredProviderDetail(String id, String name, String logoUrl, String description, String moreInfoUrl, String vid, String version, String latest) {
         this.setId(id);
         this.setName(name);
         this.setLogoUrl(logoUrl);
@@ -67,4 +50,3 @@ public class AllProviders {
         this.setVersions(versions);
     }
 }
-
