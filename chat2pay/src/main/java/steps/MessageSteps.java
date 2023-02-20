@@ -79,7 +79,6 @@ public class MessageSteps extends GeneralSteps {
 
     @Then("^User gets template usage for templateId$")
     public void getTemplateUsage(Map<String, String> dataMap) {
-
         response = ApiHelperMessagesConfigurations.getTemplateUsageResponse(dataMap.get("i.templateId"));
         Validator.checkResponseCode(response, getResponseCode(dataMap));
         Widget widget = response.getBody().jsonPath().getList("", Widget.class).get(0);
