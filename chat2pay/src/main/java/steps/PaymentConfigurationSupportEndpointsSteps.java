@@ -2,6 +2,8 @@ package steps;
 
 import api.clients.ApiHelperChat2Pay;
 import api.models.response.paymentgatewaysettingsresponse.BillingType;
+import api.models.response.paymentgatewaysettingsresponse.CardNetwork;
+import api.models.response.paymentgatewaysettingsresponse.Country;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 
@@ -28,12 +30,13 @@ public class PaymentConfigurationSupportEndpointsSteps extends GeneralSteps {
                             assertThat(b.getName()).isEqualToIgnoringCase(dataMap.get("o.name")));
         }
     }
+
     @Then("^User gets 'Card Network'$")
     public void getCardNetworks(Map<String, String> dataMap) {
         response = getCardNetwork(TOKEN);
 
         if (getResponseCode(dataMap) == 200) {
-            response.jsonPath().getList("", BillingType.class)
+            response.jsonPath().getList("", CardNetwork.class)
                     .stream().filter(bt -> bt.getId() == parseInt(dataMap.get("o.id")))
                     .findFirst().ifPresent(b ->
                             assertThat(b.getName()).isEqualToIgnoringCase(dataMap.get("o.name")));
@@ -45,7 +48,7 @@ public class PaymentConfigurationSupportEndpointsSteps extends GeneralSteps {
         response = getCountry(TOKEN);
 
         if (getResponseCode(dataMap) == 200) {
-            response.jsonPath().getList("", BillingType.class)
+            response.jsonPath().getList("", Country.class)
                     .stream().filter(bt -> bt.getId() == parseInt(dataMap.get("o.id")))
                     .findFirst().ifPresent(b ->
                             assertThat(b.getName()).isEqualToIgnoringCase(dataMap.get("o.name")));

@@ -44,10 +44,7 @@ Feature: Payment Configuration Support Endpoints
       | o.responseCode | <o.responseCode> |
 
     Examples:
-      | o.id | o.name     | o.responseCode |
-      | 1    | AMEX       | 200            |
-      | 6    | DINERSCLUB | 200            |
-      | 4    | DISCOVER   | 200            |
-      | 5    | JCB        | 200            |
-      | 3    | MASTERCARD | 200            |
-      | 2    | VISA       | 200            |
+      | o.id | o.name  | o.responseCode |
+      | 40   | Canada  | 200            |
+      | 177  | Poland  | 200            |
+      | 233  | Ukraine | 200            |

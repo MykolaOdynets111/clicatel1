@@ -1,6 +1,5 @@
 package api.models.response.paymentgatewaysettingsresponse;
 
-import api.models.response.PaymentsConfigurationDetail;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -12,7 +11,7 @@ import lombok.Getter;
         "name"
 })
 @Getter
-public class BillingType implements PaymentsConfigurationDetail {
+public class BillingType {
 
     @JsonProperty("id")
     private int id;
