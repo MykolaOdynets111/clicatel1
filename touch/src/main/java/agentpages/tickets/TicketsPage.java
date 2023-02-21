@@ -7,7 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(css = ".cl_app_view_layout_tickets")
+@FindBy(xpath = "//section[contains(@class, 'cl_app_view_layout_closed')] | //section[contains(@class, 'cl_app_view_layout_tickets')]")
 public class TicketsPage extends AbstractUIElement {
 
     @FindBy(css = ".app-tickets-actions-bar")
