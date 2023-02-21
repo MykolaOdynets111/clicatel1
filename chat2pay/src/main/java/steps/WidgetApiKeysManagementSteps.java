@@ -41,18 +41,18 @@ public class WidgetApiKeysManagementSteps extends GeneralSteps {
     @Then("^User posts 'API Keys Management'$")
     public void postApiKeyManagement(Map<String, String> dataMap) {
         String widgetId = getWidgetId(dataMap);
-        int sizeBefore = getApiKeysNumber(widgetId);
+        int originalApiKeyNumber = getApiKeysNumber(widgetId);
         response = updateApiKeysManagement(widgetId, TOKEN);
         int expectedResponseCode = getResponseCode(dataMap);
 
         if (expectedResponseCode == 200) {
-            int sizeAfter = getApiKeysNumber(widgetId);
+            int updatedApiKeyNumber = getApiKeysNumber(widgetId);
             response.jsonPath().getList("", ApiKeysResponse.class)
                     .forEach(k -> {
                         assertThat(k.getApiKey()).isNotNull();
                         assertThat(k.getCreatedTime()).isBeforeOrEqualTo(LocalDate.now());
                     });
-            assertThat(sizeAfter).isGreaterThan(sizeBefore);
+            assertThat(updatedApiKeyNumber).isGreaterThan(originalApiKeyNumber);
         } else if (expectedResponseCode == 404) {
             verifyBadRequestResponse(dataMap, response);
         }
@@ -62,7 +62,7 @@ public class WidgetApiKeysManagementSteps extends GeneralSteps {
     public void deleteApiKeyManagement(Map<String, String> dataMap) {
         String widgetId = getWidgetId(dataMap);
         response = getApiKeysManagement(widgetId, TOKEN);
-        int sizeBefore = getApiKeysNumber(widgetId);
+        int originalApiKeysNumber = getApiKeysNumber(widgetId);
         int expectedResponseCode = getResponseCode(dataMap);
 
         if (expectedResponseCode == 200) {
@@ -72,8 +72,8 @@ public class WidgetApiKeysManagementSteps extends GeneralSteps {
                 assertThat(entityResponse.getMessage())
                         .isEqualTo(format("Api key %s deleted successfully", a.apiKey));
             });
-            int sizeAfter = getApiKeysNumber(widgetId);
-            assertThat(sizeAfter).isLessThan(sizeBefore);
+            int updatedApiKeyNumber = getApiKeysNumber(widgetId);
+            assertThat(updatedApiKeyNumber).isLessThan(originalApiKeysNumber);
         } else if (expectedResponseCode == 404) {
             verifyBadRequestResponse(dataMap, response);
         }
