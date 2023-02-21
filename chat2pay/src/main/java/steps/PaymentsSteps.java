@@ -15,7 +15,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static utils.Validator.checkResponseCode;
 import static utils.Validator.validateErrorResponse;
 
-public class PaymentsSteps extends GeneralSteps{
+public class PaymentsSteps extends GeneralSteps {
 
     public static final String EXPIRED_LINK = "629905f6-e916-4490-a547-bf8f0d5fb9f4";
 

@@ -40,6 +40,10 @@ public class Endpoints {
     public static final String CARD_NETWORK = WIDGETS_ENDPOINT + "/payment-config/card-network";
     public static final String COUNTRY = WIDGETS_ENDPOINT + "/payment-config/country";
     public static final String CURRENCY = WIDGETS_ENDPOINT + "/payment-config/currency";
+    public static final String CURRENCY_FOR_PAYMENT_INTEGRATION_TYPE = CURRENCY + "?paymentIntegrationTypeId=%s";
+    public static final String INTEGRATION_TYPE = WIDGETS_ENDPOINT + "/payment-config/integration-type";
+    public static final String LOCALE = WIDGETS_ENDPOINT + "/payment-config/locale";
+    public static final String LOCALE_FOR_PAYMENT_GATEWAY = LOCALE + "?paymentGatewayId=%s";
 
 
     // Payments
