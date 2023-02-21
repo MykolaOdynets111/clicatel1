@@ -10,7 +10,6 @@ import org.assertj.core.api.Assertions;
 import java.util.Map;
 
 import static api.clients.ApiHelperAccounts.getAccountSettingsResponse;
-import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static utils.Validator.verifyUnauthorisedResponse;
@@ -18,20 +17,20 @@ import static utils.Validator.verifyUnauthorisedResponse;
 public class AccountSteps extends GeneralSteps {
 
     @Then("^User gets account settings")
-    public void getAccountSettings(Map<String, String> valuesMap) {
-        Response response = getAccountSettingsResponse(getActivationKey(valuesMap));
+    public void getAccountSettings(Map<String, String> dataMap) {
+        Response response = getAccountSettingsResponse(getActivationKey(dataMap));
         int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
+        int expectedResponseCode = getResponseCode(dataMap);
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {
                 AccountSettingsResponse settings = response.as(AccountSettingsResponse.class);
 
-                softly.assertThat(valuesMap.get("o.accountId")).isEqualTo(settings.getAccountId());
-                softly.assertThat(Boolean.valueOf(valuesMap.get("o.showTutorial"))).isEqualTo(settings.isShowTutorial());
+                softly.assertThat(dataMap.get("o.accountId")).isEqualTo(settings.getAccountId());
+                softly.assertThat(Boolean.valueOf(dataMap.get("o.showTutorial"))).isEqualTo(settings.isShowTutorial());
 
             } else if (expectedResponseCode == 401) {
-                verifyUnauthorisedResponse(valuesMap, response);
+                verifyUnauthorisedResponse(dataMap, response);
             }
             softly.assertAll();
         } else {
@@ -40,25 +39,25 @@ public class AccountSteps extends GeneralSteps {
     }
 
     @Then("^User updates account settings")
-    public void putAccountSettings(Map<String, String> valuesMap) {
+    public void putAccountSettings(Map<String, String> dataMap) {
         AccountSettingsPropertyBody body = AccountSettingsPropertyBody.builder()
-                .showTutorial(Boolean.parseBoolean(valuesMap.get("i.showTutorial")))
+                .showTutorial(Boolean.parseBoolean(dataMap.get("i.showTutorial")))
                 .build();
 
-        Response response = ApiHelperAccounts.putAccountSettings(body, getActivationKey(valuesMap));
+        Response response = ApiHelperAccounts.putAccountSettings(body, getActivationKey(dataMap));
         int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(valuesMap.get("o.responseCode"));
+        int expectedResponseCode = getResponseCode(dataMap);
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {
-                AccountSettingsResponse settings = getAccountSettingsResponse(getActivationKey(valuesMap))
+                AccountSettingsResponse settings = getAccountSettingsResponse(getActivationKey(dataMap))
                         .as(AccountSettingsResponse.class);
 
-                assertThat(Boolean.valueOf(valuesMap.get("o.updatedShowTutorial")))
+                assertThat(Boolean.valueOf(dataMap.get("o.updatedShowTutorial")))
                         .isEqualTo(settings.isShowTutorial());
 
             } else if (expectedResponseCode == 401) {
-                verifyUnauthorisedResponse(valuesMap, response);
+                verifyUnauthorisedResponse(dataMap, response);
             }
         } else {
             Assertions.fail(format("Expected response code %s but was %s", expectedResponseCode, statusCode));

@@ -1,7 +1,6 @@
 package steps;
 
 import api.clients.ApiHelperPayments;
-
 import api.models.request.PaymentBody;
 import api.models.response.PaymentLinkResponse;
 import io.cucumber.java.en.Then;
@@ -16,7 +15,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static utils.Validator.checkResponseCode;
 import static utils.Validator.validateErrorResponse;
 
-public class PaymentsSteps extends GeneralSteps{
+public class PaymentsSteps extends GeneralSteps {
 
     public static final String EXPIRED_LINK = "629905f6-e916-4490-a547-bf8f0d5fb9f4";
 
@@ -44,7 +43,7 @@ public class PaymentsSteps extends GeneralSteps{
         switch (status) {
             case "valid":
                 response = ApiHelperPayments.cancelPaymentLink(paymentLinkRef.get(), activationKey.get());
-                checkResponseCode(response, dataMap.get("o.responseCode"));
+                checkResponseCode(response, getResponseCode(dataMap));
                 PaymentLinkResponse paymentLinkResponse = response.as(PaymentLinkResponse.class);
                 assertThat(paymentLinkResponse.getTransactionStatus())
                         .as(format("transaction status is not equals to %s", paymentLinkResponse.getTransactionStatus()))
@@ -75,7 +74,7 @@ public class PaymentsSteps extends GeneralSteps{
         switch (status) {
             case "valid":
                 response = ApiHelperPayments.receivePaymentLink(paymentLinkRef.get(), activationKey.get());
-                checkResponseCode(response, dataMap.get("o.responseCode"));
+                checkResponseCode(response, getResponseCode(dataMap));
                 PaymentLinkResponse paymentLinkResponse = response.as(PaymentLinkResponse.class);
                 assertThat(paymentLinkResponse.getTransactionStatus())
                         .as(format("transaction status is not equals to %s", paymentLinkResponse.getTransactionStatus()))
@@ -97,7 +96,7 @@ public class PaymentsSteps extends GeneralSteps{
     @Then("^User gets a correct payment link with status code (.*) and (.*)$")
     public void userCanGetAPaymentLink(String statusCode, String transactionStatus) {
         Response response = ApiHelperPayments.userGetAPaymentLinkResponse(paymentBody.get(), activationKey.get());
-        checkResponseCode(response, statusCode);
+        checkResponseCode(response, Integer.parseInt(statusCode));
         PaymentLinkResponse paymentLinkResponse = response
                 .as(PaymentLinkResponse.class);
         paymentLink.set(paymentLinkResponse.getPaymentLink());

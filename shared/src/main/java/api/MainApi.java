@@ -53,6 +53,11 @@ public abstract class MainApi {
     }
 
     @NotNull
+    protected static Response getQuery(String endpoint, String authToken) {
+        return get(endpoint, authToken);
+    }
+
+    @NotNull
     protected static ResponseBody putQueryWithAuthNoBody(String endpoint, String authToken, int responseCode) {
         Response response = put(endpoint, authToken);
         return validate(response, responseCode);
