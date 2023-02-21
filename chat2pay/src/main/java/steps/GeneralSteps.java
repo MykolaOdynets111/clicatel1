@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static java.lang.Integer.parseInt;
+
 public class GeneralSteps {
 
     protected static final ThreadLocal<String> widgetId = new ThreadLocal<>();
@@ -46,8 +48,8 @@ public class GeneralSteps {
         return dataMap.get("i.widgetId");
     }
 
-    protected String getResponseCode(Map<String, String> dataMap) {
-        return dataMap.get("o.responseCode");
+    protected int getResponseCode(Map<String, String> dataMap) {
+        return parseInt(dataMap.get("o.responseCode"));
     }
 
     protected static String getActivationKey(Map<String, String> valuesMap) {

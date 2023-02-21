@@ -1,7 +1,6 @@
 package steps;
 
 import api.clients.ApiHelperPayments;
-
 import api.models.request.PaymentBody;
 import api.models.response.PaymentLinkResponse;
 import io.cucumber.java.en.Then;
@@ -97,7 +96,7 @@ public class PaymentsSteps extends GeneralSteps{
     @Then("^User gets a correct payment link with status code (.*) and (.*)$")
     public void userCanGetAPaymentLink(String statusCode, String transactionStatus) {
         Response response = ApiHelperPayments.userGetAPaymentLinkResponse(paymentBody.get(), activationKey.get());
-        checkResponseCode(response, statusCode);
+        checkResponseCode(response, Integer.parseInt(statusCode));
         PaymentLinkResponse paymentLinkResponse = response
                 .as(PaymentLinkResponse.class);
         paymentLink.set(paymentLinkResponse.getPaymentLink());

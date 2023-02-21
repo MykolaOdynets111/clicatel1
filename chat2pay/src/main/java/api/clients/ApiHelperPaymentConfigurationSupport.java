@@ -13,4 +13,8 @@ public class ApiHelperPaymentConfigurationSupport extends MainApi {
     public static Response getCardNetwork(String authToken) {
         return getQuery(Endpoints.CARD_NETWORK, authToken);
     }
+
+    public static Response getCountry(String authToken) {
+        return getQuery(Endpoints.COUNTRY, authToken);
+    }
 }

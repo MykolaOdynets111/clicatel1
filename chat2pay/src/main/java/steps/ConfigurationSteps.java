@@ -21,7 +21,7 @@ public class ConfigurationSteps extends GeneralSteps {
     public void getC2PConfiguration(Map<String, String> dataMap) {
         Response response = getC2PConfigurationResponse(dataMap.get("i.activationKey"));
         int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(getResponseCode(dataMap));
+        int expectedResponseCode = getResponseCode(dataMap);
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {

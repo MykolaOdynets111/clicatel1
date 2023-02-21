@@ -9,20 +9,19 @@ import java.util.Map;
 
 import static api.clients.ApiHelperPaymentConfigurationSupport.getBillingType;
 import static api.clients.ApiHelperPaymentConfigurationSupport.getCardNetwork;
+import static api.clients.ApiHelperPaymentConfigurationSupport.getCountry;
 import static java.lang.Integer.parseInt;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class PaymentConfigurationSupportEndpointsSteps extends GeneralSteps {
     private static final String TOKEN = ApiHelperChat2Pay.token.get();
-
     private Response response;
 
     @Then("^User gets 'Billing Type'$")
     public void getBillingTypes(Map<String, String> dataMap) {
         response = getBillingType(TOKEN);
-        int expectedResponseCode = parseInt(getResponseCode(dataMap));
 
-        if (expectedResponseCode == 200) {
+        if (getResponseCode(dataMap) == 200) {
             response.jsonPath().getList("", BillingType.class)
                     .stream().filter(bt -> bt.getId() == parseInt(dataMap.get("o.id")))
                     .findFirst().ifPresent(b ->
@@ -32,9 +31,20 @@ public class PaymentConfigurationSupportEndpointsSteps extends GeneralSteps {
     @Then("^User gets 'Card Network'$")
     public void getCardNetworks(Map<String, String> dataMap) {
         response = getCardNetwork(TOKEN);
-        int expectedResponseCode = parseInt(getResponseCode(dataMap));
 
-        if (expectedResponseCode == 200) {
+        if (getResponseCode(dataMap) == 200) {
+            response.jsonPath().getList("", BillingType.class)
+                    .stream().filter(bt -> bt.getId() == parseInt(dataMap.get("o.id")))
+                    .findFirst().ifPresent(b ->
+                            assertThat(b.getName()).isEqualToIgnoringCase(dataMap.get("o.name")));
+        }
+    }
+
+    @Then("^User gets 'Country'$")
+    public void getCountries(Map<String, String> dataMap) {
+        response = getCountry(TOKEN);
+
+        if (getResponseCode(dataMap) == 200) {
             response.jsonPath().getList("", BillingType.class)
                     .stream().filter(bt -> bt.getId() == parseInt(dataMap.get("o.id")))
                     .findFirst().ifPresent(b ->

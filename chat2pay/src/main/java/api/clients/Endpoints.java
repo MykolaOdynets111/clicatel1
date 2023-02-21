@@ -38,6 +38,7 @@ public class Endpoints {
     // Payment Configuration Support Endpoints
     public static final String BILLING_TYPE = WIDGETS_ENDPOINT + "/payment-config/billing-type";
     public static final String CARD_NETWORK = WIDGETS_ENDPOINT + "/payment-config/card-network";
+    public static final String COUNTRY = WIDGETS_ENDPOINT + "/payment-config/country";
 
 
     // Payments

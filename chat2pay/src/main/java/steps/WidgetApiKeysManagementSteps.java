@@ -13,7 +13,6 @@ import java.util.Objects;
 import static api.clients.ApiHelperApiKeysManagement.getApiKeysManagement;
 import static api.clients.ApiHelperApiKeysManagement.removeApiKeysManagement;
 import static api.clients.ApiHelperApiKeysManagement.updateApiKeysManagement;
-import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static utils.Validator.verifyBadRequestResponse;
@@ -26,7 +25,7 @@ public class WidgetApiKeysManagementSteps extends GeneralSteps {
     @Then("^User gets 'API Keys Management'$")
     public void getApiKeyManagement(Map<String, String> dataMap) {
         response = getApiKeysManagement(getWidgetId(dataMap), TOKEN);
-        int expectedResponseCode = parseInt(getResponseCode(dataMap));
+        int expectedResponseCode = getResponseCode(dataMap);
 
         if (expectedResponseCode == 200) {
             response.jsonPath().getList("", ApiKeysResponse.class).stream()
@@ -44,7 +43,7 @@ public class WidgetApiKeysManagementSteps extends GeneralSteps {
         String widgetId = getWidgetId(dataMap);
         int sizeBefore = getApiKeysNumber(widgetId);
         response = updateApiKeysManagement(widgetId, TOKEN);
-        int expectedResponseCode = parseInt(getResponseCode(dataMap));
+        int expectedResponseCode = getResponseCode(dataMap);
 
         if (expectedResponseCode == 200) {
             int sizeAfter = getApiKeysNumber(widgetId);
@@ -64,7 +63,7 @@ public class WidgetApiKeysManagementSteps extends GeneralSteps {
         String widgetId = getWidgetId(dataMap);
         response = getApiKeysManagement(widgetId, TOKEN);
         int sizeBefore = getApiKeysNumber(widgetId);
-        int expectedResponseCode = parseInt(getResponseCode(dataMap));
+        int expectedResponseCode = getResponseCode(dataMap);
 
         if (expectedResponseCode == 200) {
             response.jsonPath().getList("", ApiKeysResponse.class).stream().findFirst().ifPresent(a -> {

@@ -56,9 +56,9 @@ public class Validator {
         softly.assertAll();
     }
 
-    public static void checkResponseCode(Response response, String code) {
+    public static void checkResponseCode(Response response, int code) {
         assertThat(response.statusCode())
                 .as(format("Status code is not equals to %s", code))
-                .isEqualTo(Integer.valueOf(code));
+                .isEqualTo(code);
     }
 }

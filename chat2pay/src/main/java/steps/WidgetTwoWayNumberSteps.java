@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static utils.Validator.verifyBadRequestResponse;
@@ -27,7 +26,7 @@ public class WidgetTwoWayNumberSteps extends GeneralSteps {
     public void getTwoWayNumbers(Map<String, String> dataMap) {
         response = ApiHelperTwoWayNumbers.getTwoWayNumbers(getWidgetId(dataMap), TOKEN);
         int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(getResponseCode(dataMap));
+        int expectedResponseCode = getResponseCode(dataMap);
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {
@@ -57,7 +56,7 @@ public class WidgetTwoWayNumberSteps extends GeneralSteps {
 
         response = ApiHelperTwoWayNumbers.updateTwoWayNumbers(widgetId, configuration, TOKEN);
         int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(getResponseCode(dataMap));
+        int expectedResponseCode = getResponseCode(dataMap);
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {
