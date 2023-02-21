@@ -45,7 +45,7 @@ Feature: Messages Configuration operations
       | o.waMsgConfigComplete   | <o.waMsgConfigComplete>   |
       | o.smsMsgConfigComplete  | <o.smsMsgConfigComplete>  |
       | o.status                | <o.status>                |
-      | o.errorMessage               | <o.errorMessage>               |
+      | o.errorMessage          | <o.errorMessage>          |
       | o.errors                | <o.errors>                |
 
     Examples:
@@ -55,6 +55,8 @@ Feature: Messages Configuration operations
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4722")
   Scenario Outline: C2P Unity API :: Messages Configuration :: GET /template-usage :: get template usage for widget
+#  There are no negative scenarios for this endpoint yet because the GET response returns an empty array with the same (200) response code even for empty parameters
+    # TODO add negative scenarios when they will be released by developers
 
     Then User gets template usage for templateId
 
@@ -69,4 +71,3 @@ Feature: Messages Configuration operations
     Examples:
       | i.templateId                     | o.responseCode | o.status       | o.type      | o.id                             | o.accountId                      | o.environment |
       | 7662fe1804e54704a1cf8e52a0a7bdbc | 200            | NOT_CONFIGURED | CHAT_TO_PAY | 2c9acdc2865469380186559c805e0039 | 2c9acc3078b5cfe80178db93bd871a58 | SANDBOX       |
-
