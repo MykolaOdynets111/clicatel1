@@ -2,9 +2,9 @@ package steps;
 
 
 import api.clients.ApiHelperMessagesConfigurations;
-import api.models.response.widget.Widget;
 import api.models.request.message.MessageBody;
 import api.models.response.message.Message;
+import api.models.response.widget.Widget;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.Map;
 
 import static java.lang.String.format;
-import static utils.Validator.*;
+import static utils.Validator.validateErrorResponse;
 
 public class MessageSteps extends GeneralSteps {
 

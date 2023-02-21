@@ -10,7 +10,6 @@ import org.assertj.core.api.Assertions;
 import java.util.Map;
 
 import static api.clients.ApiHelperAccounts.getAccountSettingsResponse;
-import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static utils.Validator.verifyUnauthorisedResponse;
@@ -21,7 +20,7 @@ public class AccountSteps extends GeneralSteps {
     public void getAccountSettings(Map<String, String> dataMap) {
         Response response = getAccountSettingsResponse(getActivationKey(dataMap));
         int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(getResponseCode(dataMap));
+        int expectedResponseCode = getResponseCode(dataMap);
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {
@@ -47,7 +46,7 @@ public class AccountSteps extends GeneralSteps {
 
         Response response = ApiHelperAccounts.putAccountSettings(body, getActivationKey(dataMap));
         int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(getResponseCode(dataMap));
+        int expectedResponseCode = getResponseCode(dataMap);
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {

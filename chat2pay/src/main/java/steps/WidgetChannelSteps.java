@@ -14,7 +14,6 @@ import org.assertj.core.api.Assertions;
 import java.time.LocalDate;
 import java.util.Map;
 
-import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static utils.Validator.verifyBadRequestResponse;
@@ -33,7 +32,7 @@ public class WidgetChannelSteps extends GeneralSteps {
 
         response = ApiHelperChannelManagement.postChannelManagement(body, getWidgetId(dataMap), getActivationKey(dataMap));
         int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(getResponseCode(dataMap));
+        int expectedResponseCode = getResponseCode(dataMap);
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 202) {
@@ -58,7 +57,7 @@ public class WidgetChannelSteps extends GeneralSteps {
 
         response = ApiHelperChannelManagement.updateChannelStatus(body, getWidgetId(dataMap), ApiHelperChat2Pay.token.get());
         int statusCode = response.getStatusCode();
-        int responseCode = parseInt(getResponseCode(dataMap));
+        int responseCode = getResponseCode(dataMap);
 
         if (responseCode == statusCode) {
             if (statusCode == 200) {
@@ -83,7 +82,7 @@ public class WidgetChannelSteps extends GeneralSteps {
 
         response = ApiHelperChannelManagement.removeChannelIntegration(body, getWidgetId(dataMap), ApiHelperChat2Pay.token.get());
         int statusCode = response.getStatusCode();
-        int expectedResponseCode = parseInt(getResponseCode(dataMap));
+        int expectedResponseCode = getResponseCode(dataMap);
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {
