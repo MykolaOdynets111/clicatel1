@@ -48,3 +48,19 @@ Feature: Payment Configuration Support Endpoints
       | 40   | Canada  | 200            |
       | 177  | Poland  | 200            |
       | 233  | Ukraine | 200            |
+
+  @TestCaseId("https://jira.clickatell.com/browse/C2P-4754")
+  Scenario Outline: C2P Unity API :: Payment Configuration Support Endpoints :: GET /currency :: truth table
+
+    And User gets 'Currency'
+      | o.id           | <o.id>           |
+      | o.iso          | <o.iso>          |
+      | o.name         | <o.name>         |
+      | o.symbol       | <o.symbol>       |
+      | o.responseCode | <o.responseCode> |
+
+    Examples:
+      | o.id | o.iso | o.name               | o.symbol | o.responseCode |
+      | 48   | GBP   | British pound        | £        | 200            |
+      | 144  | USD   | United States dollar | $        | 200            |
+      | 142  | UAH   | Ukrainian hryvnia    | ₴        | 200            |

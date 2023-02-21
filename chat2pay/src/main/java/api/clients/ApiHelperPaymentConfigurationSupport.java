@@ -17,4 +17,8 @@ public class ApiHelperPaymentConfigurationSupport extends MainApi {
     public static Response getCountry(String authToken) {
         return getQuery(Endpoints.COUNTRY, authToken);
     }
+
+    public static Response getCurrency(String authToken) {
+        return getQuery(Endpoints.CURRENCY, authToken);
+    }
 }
