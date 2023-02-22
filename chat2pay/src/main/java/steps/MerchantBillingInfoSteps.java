@@ -48,21 +48,16 @@ public class MerchantBillingInfoSteps extends GeneralSteps {
     public void getMerchantBillingInfoCreatedWidget(Map<String, String> dataMap) {
         switch (getWidgetId(dataMap)) {
             case "valid":
-                response = ApiHelperMerchantBillingInfo.getMerchantBillingInfoCreatedWidget(createdWidgetId.get());
-                checkResponseCode(response, getResponseCode(dataMap));
+                response = getMerchantBillingInfoResponse(dataMap, createdWidgetId.get());
                 MerchantBillingInfoResponse getResponse = response.as(MerchantBillingInfoResponse.class);
                 checkPositiveResponse(dataMap, getResponse);
-                ApiHelperMerchantBillingInfo.getMerchantBillingInfoCreatedWidget(createdWidgetId.get());
-                checkResponseCode(response, getResponseCode(dataMap));
                 break;
             case "skip_posting":
-                response = ApiHelperMerchantBillingInfo.getMerchantBillingInfoCreatedWidget(createdWidgetId.get());
-                checkResponseCode(response, getResponseCode(dataMap));
+                response = getMerchantBillingInfoResponse(dataMap, createdWidgetId.get());
                 validateErrorResponse(response, dataMap);
                 break;
             case "non_existed":
-                response = ApiHelperMerchantBillingInfo.getMerchantBillingInfoCreatedWidget(getWidgetId(dataMap));
-                checkResponseCode(response, getResponseCode(dataMap));
+                response = getMerchantBillingInfoResponse(dataMap, getWidgetId(dataMap));
                 validateErrorResponse(response, dataMap);
                 break;
             default:
@@ -74,19 +69,16 @@ public class MerchantBillingInfoSteps extends GeneralSteps {
     public void deleteMerchantBillingInfoCreatedWidget(Map<String, String> dataMap) {
         switch (getWidgetId(dataMap)) {
             case "valid":
-                response = ApiHelperMerchantBillingInfo.deleteMerchantBillingInfoCreatedWidget(createdWidgetId.get());
-                checkResponseCode(response, getResponseCode(dataMap));
+                response = deleteMerchantBillingInfoResponse(dataMap, createdWidgetId.get());
                 Response getResponse = ApiHelperMerchantBillingInfo.getMerchantBillingInfoCreatedWidget(createdWidgetId.get());
                 checkResponseCode(getResponse, 404);
                 break;
             case "skip_posting":
-                response = ApiHelperMerchantBillingInfo.deleteMerchantBillingInfoCreatedWidget(createdWidgetId.get());
-                checkResponseCode(response, getResponseCode(dataMap));
+                response = deleteMerchantBillingInfoResponse(dataMap, createdWidgetId.get());
                 validateErrorResponse(response, dataMap);
                 break;
             case "non_existed":
-                response = ApiHelperMerchantBillingInfo.deleteMerchantBillingInfoCreatedWidget(getWidgetId(dataMap));
-                checkResponseCode(response, getResponseCode(dataMap));
+                response = deleteMerchantBillingInfoResponse(dataMap, getWidgetId(dataMap));
                 validateErrorResponse(response, dataMap);
                 break;
             default:
@@ -105,5 +97,17 @@ public class MerchantBillingInfoSteps extends GeneralSteps {
         softly.assertThat(dataMap.get("o.companyName")).isEqualTo(getResponse.companyName);
         softly.assertThat(dataMap.get("o.phone")).isEqualTo(getResponse.phone);
         softly.assertAll();
+    }
+
+    private Response getMerchantBillingInfoResponse(Map<String, String> dataMap, String widgetId) {
+        Response getResponse = ApiHelperMerchantBillingInfo.getMerchantBillingInfoCreatedWidget(widgetId);
+        checkResponseCode(getResponse, getResponseCode(dataMap));
+        return getResponse;
+    }
+
+    private Response deleteMerchantBillingInfoResponse(Map<String, String> dataMap, String widgetId) {
+        Response deleteResponse = ApiHelperMerchantBillingInfo.deleteMerchantBillingInfoCreatedWidget(widgetId);
+        checkResponseCode(deleteResponse, getResponseCode(dataMap));
+        return deleteResponse;
     }
 }
