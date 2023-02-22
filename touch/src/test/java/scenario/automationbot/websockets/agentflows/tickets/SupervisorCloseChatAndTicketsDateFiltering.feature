@@ -28,6 +28,7 @@ Feature: Supervisor desk
     Then Verify first closed ticket date are fitted by filter
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-1109")
+    #Failing because of bug https://jira.clickatell.com/browse/CCD-13004
   Scenario: CD :: Supervisor Desk :: Closed Chat :: Verify that the closed chats of only last 90 days are visible to supervisor
     Given I open portal
     And Login into portal as an admin of Automation Bot account
