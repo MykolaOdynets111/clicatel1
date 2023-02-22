@@ -14,11 +14,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class Country {
 
     @JsonProperty("id")
-    private int id;
+    public int id;
 
     @JsonProperty("isoCode2")
-    private String isoCode2;
+    public String isoCode2;
 
     @JsonProperty("name")
-    private String name;
+    public String name;
 }

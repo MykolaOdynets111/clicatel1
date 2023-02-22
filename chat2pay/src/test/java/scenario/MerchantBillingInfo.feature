@@ -51,7 +51,6 @@ Feature: Widgets operations
       | o.errorMessage | <o.errorMessage> |
       | o.errors       | <o.errors>       |
 
-
     Examples:
       | i.widgetId   | i.email                  | i.addressLine1 | i.addressLine2 | i.stateId | i.countryId | i.postalCode | i.city   | i.companyName | i.phone    | o.responseCode | o.status  | o.errorMessage | o.errors                   |
       | valid        | merchantinfo@billing.com | Merchant       | BillingArea    | 3367      | 206         | ABC999       | CapeTown | MBIInc        | 6665557772 | 200            |           |                |                            |

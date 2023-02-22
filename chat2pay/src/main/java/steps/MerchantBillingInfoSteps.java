@@ -17,7 +17,6 @@ public class MerchantBillingInfoSteps extends GeneralSteps {
 
     private Response response;
 
-
     @Then("^User updates Merchant's Billing Info for newly created widget$")
     public void postMerchantBillingInfoCreatedWidget(Map<String, String> dataMap) {
         MerchantBillingInfoBody body = new MerchantBillingInfoBody();
@@ -25,15 +24,12 @@ public class MerchantBillingInfoSteps extends GeneralSteps {
             case "valid":
                 response = ApiHelperMerchantBillingInfo.postMerchantBillingInfoCreatedWidget(createdWidgetId.get(), body);
                 checkResponseCode(response, getResponseCode(dataMap));
-
                 MerchantBillingInfoResponse postMerchantBillingInfoResponse = response.as(MerchantBillingInfoResponse.class);
                 checkPositiveResponse(dataMap, postMerchantBillingInfoResponse);
-
                 MerchantBillingInfoResponse getMerchantBillingInfoResponse = ApiHelperMerchantBillingInfo
                         .getMerchantBillingInfoCreatedWidget(createdWidgetId.get())
                         .as(MerchantBillingInfoResponse.class);
                 checkPositiveResponse(dataMap, getMerchantBillingInfoResponse);
-
                 break;
             case "non_existed":
                 response = ApiHelperMerchantBillingInfo.postMerchantBillingInfoCreatedWidget(getWidgetId(dataMap), body);

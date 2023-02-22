@@ -1,5 +1,6 @@
 package api.models.response.merchantbillinginfo;
 
+import api.models.response.paymentgatewaysettingsresponse.Country;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 

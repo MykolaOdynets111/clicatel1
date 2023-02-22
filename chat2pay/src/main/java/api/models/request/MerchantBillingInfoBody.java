@@ -22,29 +22,29 @@ import lombok.Setter;
 public class MerchantBillingInfoBody {
 
     @JsonProperty("email")
-    public String email ="merchantinfo@billing.com";
+    public String email = "merchantinfo@billing.com";
 
     @JsonProperty("addressLine1")
-    public String addressLine1 ="Merchant";
+    public String addressLine1 = "Merchant";
 
     @JsonProperty("addressLine2")
-    public String addressLine2 ="BillingArea";
+    public String addressLine2 = "BillingArea";
 
     @JsonProperty("stateId")
-    public int stateId =3367;
+    public int stateId = 3367;
 
     @JsonProperty("countryId")
     public int countryId = 206;
 
     @JsonProperty("postalCode")
-    public String postalCode ="ABC999";
+    public String postalCode = "ABC999";
 
     @JsonProperty("city")
-    public String city ="CapeTown";
+    public String city = "CapeTown";
 
     @JsonProperty("companyName")
-    public String companyName ="MBIInc";
+    public String companyName = "MBIInc";
 
     @JsonProperty("phone")
-    public String phone ="6665557772";
+    public String phone = "6665557772";
 }
