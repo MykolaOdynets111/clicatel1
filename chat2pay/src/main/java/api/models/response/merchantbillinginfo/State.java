@@ -1,18 +1,15 @@
-package api.models.response.paymentgatewaysettingsresponse;
+package api.models.response.merchantbillinginfo;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Getter;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id",
         "isoCode2",
         "name"
 })
-@Getter
-public class Country {
+
+public class State {
 
     @JsonProperty("id")
     public int id;

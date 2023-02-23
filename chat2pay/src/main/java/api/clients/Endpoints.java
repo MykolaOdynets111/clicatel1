@@ -55,4 +55,8 @@ public class Endpoints {
 
     // Two Way Numbers
     public static final String TWO_WAY_NUMBER = C2P_URL_DEMO + "/v2/widget/%s/two-way-numbers";
+
+    //Merchant's Billing Info
+    public static final String MERCHANTS_BILLING_INFO = WIDGETS_ENDPOINT + "/%s/merchant-billing-info";
+
 }
