@@ -17,7 +17,6 @@ Feature: Payment Configuration Support Endpoints
       | 1    | FULL    | 200            |
       | 2    | PARTIAL | 200            |
 
-
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4752")
   Scenario Outline: C2P Unity API :: Payment Configuration Support Endpoints :: GET /card-network :: truth table Edit
 

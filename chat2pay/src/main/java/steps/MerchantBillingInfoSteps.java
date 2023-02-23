@@ -24,8 +24,7 @@ public class MerchantBillingInfoSteps extends GeneralSteps {
             case "valid":
                 response = ApiHelperMerchantBillingInfo.postMerchantBillingInfoCreatedWidget(createdWidgetId.get(), body);
                 checkResponseCode(response, getResponseCode(dataMap));
-                MerchantBillingInfoResponse postMerchantBillingInfoResponse = response.as(MerchantBillingInfoResponse.class);
-                checkPositiveResponse(dataMap, postMerchantBillingInfoResponse);
+                checkPositiveResponse(dataMap, response.as(MerchantBillingInfoResponse.class));
                 MerchantBillingInfoResponse getMerchantBillingInfoResponse = ApiHelperMerchantBillingInfo
                         .getMerchantBillingInfoCreatedWidget(createdWidgetId.get())
                         .as(MerchantBillingInfoResponse.class);
@@ -49,8 +48,7 @@ public class MerchantBillingInfoSteps extends GeneralSteps {
         switch (getWidgetId(dataMap)) {
             case "valid":
                 response = getMerchantBillingInfoResponse(dataMap, createdWidgetId.get());
-                MerchantBillingInfoResponse getResponse = response.as(MerchantBillingInfoResponse.class);
-                checkPositiveResponse(dataMap, getResponse);
+                checkPositiveResponse(dataMap, response.as(MerchantBillingInfoResponse.class));
                 break;
             case "skip_posting":
                 response = getMerchantBillingInfoResponse(dataMap, createdWidgetId.get());

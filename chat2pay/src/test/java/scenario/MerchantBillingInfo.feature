@@ -6,11 +6,13 @@ Feature: Widgets operations
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4736")
   Scenario Outline: C2P Unity API :: Merchant's Billing Info :: GET /merchant-billing-info :: Get billing information for the widget
+
     Then User creates widget for an account
       | i.widget       | valid       |
       | i.type         | CHAT_TO_PAY |
       | i.environment  | SANDBOX     |
       | o.responseCode | 200         |
+
     Then User updates Merchant's Billing Info for newly created widget
       | i.widgetId     | <i.widgetId>     |
       | i.email        | <i.email>        |
@@ -35,6 +37,7 @@ Feature: Widgets operations
       | o.status       | <o.status>       |
       | o.errorMessage | <o.errorMessage> |
       | o.errors       | <o.errors>       |
+
     Then User gets Merchant's Billing Info for newly created widget
       | i.widgetId     | <i.widgetId>     |
       | o.responseCode | <o.responseCode> |
@@ -59,11 +62,13 @@ Feature: Widgets operations
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4737")
   Scenario Outline: C2P Unity API :: Merchant's Billing Info :: POST /merchant-billing-info :: Create billing information for the widget
+
     Then User creates widget for an account
       | i.widget       | valid       |
       | i.type         | CHAT_TO_PAY |
       | i.environment  | SANDBOX     |
       | o.responseCode | 200         |
+
     Then User updates Merchant's Billing Info for newly created widget
       | i.widgetId     | <i.widgetId>     |
       | i.email        | <i.email>        |
@@ -96,11 +101,13 @@ Feature: Widgets operations
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4738")
   Scenario Outline: C2P Unity API :: Merchant's Billing Info :: DELETE /merchant-billing-info :: DELETE billing information for the widget
+
     Then User creates widget for an account
       | i.widget       | valid       |
       | i.type         | CHAT_TO_PAY |
       | i.environment  | SANDBOX     |
       | o.responseCode | 200         |
+
     Then User updates Merchant's Billing Info for newly created widget
       | i.widgetId     | <i.widgetId>     |
       | i.email        | <i.email>        |
@@ -125,6 +132,7 @@ Feature: Widgets operations
       | o.status       | <o.status>       |
       | o.errorMessage | <o.errorMessage> |
       | o.errors       | <o.errors>       |
+
     Then User deletes Merchant's Billing Info for newly created widget
       | i.widgetId     | <i.widgetId>     |
       | o.responseCode | <o.responseCode> |
