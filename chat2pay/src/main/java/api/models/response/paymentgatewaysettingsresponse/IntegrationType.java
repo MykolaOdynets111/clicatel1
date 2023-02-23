@@ -9,7 +9,6 @@ import lombok.Getter;
 @JsonPropertyOrder({
         "id",
         "name"
-
 })
 @Getter
 public class IntegrationType {

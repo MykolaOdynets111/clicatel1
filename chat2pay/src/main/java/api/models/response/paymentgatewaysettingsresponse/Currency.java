@@ -11,7 +11,6 @@ import lombok.Getter;
         "iso",
         "name",
         "symbol"
-
 })
 @Getter
 public class Currency {
