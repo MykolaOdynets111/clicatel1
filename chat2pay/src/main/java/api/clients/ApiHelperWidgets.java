@@ -1,7 +1,6 @@
 package api.clients;
 
 import api.models.request.WidgetBody;
-import api.models.response.integration.IntegrationResponse;
 import api.models.response.widget.Widget;
 import api.models.response.widget.WidgetsContent;
 import api.models.response.widgetconfigurations.ApiKeysResponse;
@@ -12,14 +11,6 @@ import java.util.Objects;
 
 
 public class ApiHelperWidgets extends ApiHelperChat2Pay {
-
-    public static IntegrationResponse getIntegrationResponse(String widgetId) {
-        return getChat2PayQuery(String.format(Endpoints.WIDGET_INTEGRATION_ENDPOINT, widgetId))
-                .jsonPath()
-                .getList("", IntegrationResponse.class)
-                .stream().findAny()
-                .orElseThrow(() -> new AssertionError("No integrations found for widget" + widgetId));
-    }
 
     public static ApiKeysResponse getActivationKey(String widgetId) {
         return getChat2PayQuery(String.format(Endpoints.WIDGET_API_KEYS_ENDPOINT, widgetId))
