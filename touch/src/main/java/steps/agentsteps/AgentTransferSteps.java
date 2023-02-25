@@ -5,7 +5,6 @@ import apihelper.ApiHelper;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.TenantChatPreferences;
 import datamanager.jacksonschemas.dotcontrol.DotControlInitRequest;
-import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -18,8 +17,10 @@ import steps.FacebookSteps;
 import steps.TwitterSteps;
 import steps.dotcontrol.DotControlSteps;
 
+import java.util.Arrays;
 import java.util.List;
 
+import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AgentTransferSteps extends AbstractAgentSteps {
@@ -201,14 +202,15 @@ public class AgentTransferSteps extends AbstractAgentSteps {
             soft.assertAll();
     }
 
-    @Then("^(.*) receives incoming transfer on the right side of the screen with user's profile picture, channel and sentiment$")
-    public void secondAgentReceivesIncomingTransferOnTheRightSideOfTheScreenWithUserSProfilePicturePriorityChannelAndSentiment(String agent) {
+    @Then("^(.*) receives incoming transfer on the right side of the screen with user's profile picture, channel and sentiment for (.*)")
+    public void secondAgentReceivesIncomingTransferOnTheRightSideOfTheScreenWithUserSProfilePicturePriorityChannelAndSentiment(String agent, String integration) {
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(getIncomingTransferWindow(agent).isValidImgTransferPicture(
-                getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())),
+        String userName = getUserName(integration);
+        String firstLetters = Arrays.stream(userName.split(" ")).map(s -> s.substring(0, 1)).reduce("", String::concat);
+        softAssert.assertTrue(getIncomingTransferWindow(agent).isValidImgTransferPicture(firstLetters),
                 "User picture as not expected");
-        softAssert.assertTrue(getIncomingTransferWindow(agent).isValidImgTransferSentiment("connect to agent"),
-                "Sentiment picture as not expected");
+        softAssert.assertTrue(getIncomingTransferWindow(agent).isSentimentShown(),
+                format("Sentiment is not shown for on Transfer Window"));
         softAssert.assertTrue(getIncomingTransferWindow(agent).isRigthSideTransferChatWindow(),
                 "Transfered chat window not on the right side of the screen");
         softAssert.assertTrue(getIncomingTransferWindow(agent).isValidImTransferChannel("touchTransfer"),

@@ -1,23 +1,18 @@
-@img
+@Regression
 Feature: Transferring chat, user info
 
-  Background:
-    Given User select Automation Bot tenant
-    Given I login as agent of Automation Bot
-    And Click chat icon
-
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-1742")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-2761")
   Scenario: Transfer chat: All required fields in pop-up should be filled. Notification should have user's profile picture, channel and sentiment
-    When User enter connect to agent into widget input field
-    Then Agent has new conversation request
-    Given I login as second agent of Automation Bot
-    When First Agent click on new conversation
-    When Agent click on 'Transfer' chat
-    Then Transfer chat pop up appears for agent
-    When Agent select an agent in 'Transfer to' drop down
-    Then Agent notes field is appeared
-    And Agent sees error message 'Notes are required when specific agent is selected.'
-    When Agent complete 'Note' field
-    And  Click on 'Transfer' button in pop-up
+
+    Given I login as agent of General Bank Demo
+    Given Setup ORCA abc integration for General Bank Demo tenant
+    When Send connect to agent message by ORCA
+    Then Agent has new conversation request from orca user
+    When I login as second agent of General Bank Demo
+    When Agent click on new conversation request from orca
+    Then Conversation area becomes active with connect to agent user's message
+    And Agent transfers chat
     Then Second agent receives incoming transfer with "Incoming Transfer" header
-    Then Second Agent receives incoming transfer on the right side of the screen with user's profile picture, channel and sentiment
+    Then Second agent receives incoming transfer with "Please take care of this one" note from the another agent
+    And Second agent can see transferring agent name, orca and following user's message: 'connect to agent'
+    Then Second Agent receives incoming transfer on the right side of the screen with user's profile picture, channel and sentiment for orca
