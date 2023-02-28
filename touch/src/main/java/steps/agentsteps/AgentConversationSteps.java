@@ -95,25 +95,26 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @Then("^Visual indicator with \"(.*)\" text, (.*) name and time is shown$")
     public void verifyVisualIndicators(String message, String agent) {
         String generatedMessage = message + " " + getAgentName(agent);
-        validateIndicators(generatedMessage, agent,0);
+        validateIndicators(generatedMessage, agent);
     }
 
     @Then("^Transfer indicator with \"(.*)\" text, (.*) name \" to \" (.*) name and time is shown$")
     public void verifyTransferIndicators(String message, String firstAgent, String secondAgent) {
         String generatedMessage = message + " " + getAgentName(firstAgent) + " to " + getAgentName(secondAgent);
-        validateIndicators(generatedMessage, secondAgent,1);
+        String actualText = getChatBody("Second agent").getSpecificIndicatorsText(generatedMessage);
+        Assert.assertTrue(generatedMessage.equals(actualText.substring(0, actualText.length() - 20).trim()), "Expected text not found in the element list");
     }
 
     @Then("^Transfer reject indicator with (.*) name and \"(.*)\" text")
     public void verifyRejectedIndicator(String agent, String message) {
         String generatedMessage = getAgentName(agent) + " " + message;
-        String indicatorFromUI = getChatBody("Second agent").getIndicatorsText(0);
+        String indicatorFromUI = getChatBody("Second agent").getIndicatorsText();
         String massageWithNameUI = indicatorFromUI.substring(0, indicatorFromUI.length() - 20).trim();
         Assert.assertEquals(massageWithNameUI, generatedMessage.trim(), "Indicator has incorrect text");
     }
 
-    private void validateIndicators(String generatedMessage, String agent, int indicatorNumber) {
-        String indicatorFromUI = getChatBody(agent).getIndicatorsText(indicatorNumber);
+    private void validateIndicators(String generatedMessage, String agent) {
+        String indicatorFromUI = getChatBody(agent).getIndicatorsText();
         String time = indicatorFromUI.substring(indicatorFromUI.length() - 8);
         String massageWithNameUI = indicatorFromUI.substring(0, indicatorFromUI.length() - 20).trim();
         SoftAssert softAssert = new SoftAssert();
@@ -814,7 +815,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @Then("^(.*) checks visual indicator with text (.*) is shown during (.*) seconds$")
     public void verifyVisualIndicatorText(String agent, String visualIndicatorText, int wait) {
-        Assert.assertTrue(getChatBody(agent).isVisualIndicatorTextShown(wait, visualIndicatorText, 0),
+        Assert.assertTrue(getChatBody(agent).isVisualIndicatorTextShown(wait, visualIndicatorText),
                 String.format("Visual Indicator Text '%s' is incorrect", visualIndicatorText));
     }
 }
