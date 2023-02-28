@@ -91,3 +91,43 @@ Feature: Payment Configuration Support Endpoints
       | 1    | English (Great Britain) | 200            |
       | 5    | Spanish (Traditional)   | 200            |
       | 7    | Portuguese (Brazil)     | 200            |
+
+  @TestCaseId("https://jira.clickatell.com/browse/C2P-4757")
+  Scenario Outline: C2P Unity API :: Payment Configuration Support Endpoints :: GET /payment-type :: truth table
+
+    And User gets 'Payment Type'
+      | o.id           | <o.id>           |
+      | o.name         | <o.name>         |
+      | o.description  | <o.description>  |
+      | o.displayName  | <o.displayName>  |
+      | o.responseCode | <o.responseCode> |
+
+    Examples:
+      | o.id | o.name | o.description                                                                                | o.displayName | o.responseCode |
+      | 1    | SRC    | Secure Remote Commerce, using to enable Click to Pay simply and securely for different cards | Click to Pay  | 200            |
+
+  @TestCaseId("https://jira.clickatell.com/browse/C2P-4758")
+  Scenario Outline: C2P Unity API :: Payment Configuration Support Endpoints :: GET /state :: truth table
+
+    And User gets 'State'
+      | o.id           | <o.id>           |
+      | o.name         | <o.name>         |
+      | o.responseCode | <o.responseCode> |
+
+    Examples:
+      | o.id | o.name     | o.responseCode |
+      | 4179 | Alabama    | 200            |
+      | 4184 | California | 200            |
+
+  @TestCaseId("https://jira.clickatell.com/browse/C2P-4759")
+  Scenario Outline: C2P Unity API :: Payment Configuration Support Endpoints :: GET /transaction-type :: truth table
+
+    And User gets 'Transaction Type'
+      | o.id           | <o.id>           |
+      | o.name         | <o.name>         |
+      | o.responseCode | <o.responseCode> |
+
+    Examples:
+      | o.id | o.name        | o.responseCode |
+      | 1    | Authorization | 200            |
+      | 2    | Sale          | 200            |
