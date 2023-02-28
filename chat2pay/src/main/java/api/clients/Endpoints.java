@@ -38,6 +38,9 @@ public class Endpoints {
     public static final String INTEGRATION_TYPE = WIDGETS_ENDPOINT + "/payment-config/integration-type";
     public static final String LOCALE = WIDGETS_ENDPOINT + "/payment-config/locale";
     public static final String LOCALE_FOR_PAYMENT_GATEWAY = LOCALE + "?paymentGatewayId=%s";
+    public static final String PAYMENT_TYPE = WIDGETS_ENDPOINT + "/payment-config/payment-type";
+    public static final String STATE = WIDGETS_ENDPOINT + "/payment-config/state";
+    public static final String TRANSACTION_TYPE = WIDGETS_ENDPOINT + "/payment-config/transaction-type";
 
     // Payments
     public static final String PAYMENTS_GATEWAY_ENDPOINT = WIDGETS_ENDPOINT + "/%s/payment-gateway-settings";

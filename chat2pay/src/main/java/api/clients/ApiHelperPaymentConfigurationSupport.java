@@ -31,4 +31,16 @@ public class ApiHelperPaymentConfigurationSupport extends MainApi {
     public static Response getLocale(String authToken, String paymentGatewayId) {
         return getQuery(format(Endpoints.LOCALE_FOR_PAYMENT_GATEWAY, paymentGatewayId), authToken);
     }
+
+    public static Response getPaymentType(String authToken) {
+        return getQuery(Endpoints.PAYMENT_TYPE, authToken);
+    }
+
+    public static Response getState(String authToken) {
+        return getQuery(Endpoints.STATE, authToken);
+    }
+
+    public static Response getTransactionType(String authToken) {
+        return getQuery(Endpoints.TRANSACTION_TYPE, authToken);
+    }
 }
