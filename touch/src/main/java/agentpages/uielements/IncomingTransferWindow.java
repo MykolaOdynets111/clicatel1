@@ -92,7 +92,7 @@ public class IncomingTransferWindow extends AbstractUIElement {
 
     public boolean isValidImgTransferPicture(String userName) {
         isElementShown(this.getCurrentDriver(), transferPicture, 5);
-        return transferPicture.getText().equalsIgnoreCase(String.valueOf(userName));
+        return transferPicture.getText().equalsIgnoreCase(userName);
     }
 
     public boolean isValidImTransferChannel(String channel) {
