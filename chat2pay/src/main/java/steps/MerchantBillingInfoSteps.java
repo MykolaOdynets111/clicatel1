@@ -24,11 +24,11 @@ public class MerchantBillingInfoSteps extends GeneralSteps {
             case "valid":
                 response = ApiHelperMerchantBillingInfo.postMerchantBillingInfoCreatedWidget(createdWidgetId.get(), body);
                 checkResponseCode(response, getResponseCode(dataMap));
-                checkPositiveResponse(dataMap, response.as(MerchantBillingInfoResponse.class));
+                compareResponseWithExpectedData(dataMap, response.as(MerchantBillingInfoResponse.class));
                 MerchantBillingInfoResponse getMerchantBillingInfoResponse = ApiHelperMerchantBillingInfo
                         .getMerchantBillingInfoCreatedWidget(createdWidgetId.get())
                         .as(MerchantBillingInfoResponse.class);
-                checkPositiveResponse(dataMap, getMerchantBillingInfoResponse);
+                compareResponseWithExpectedData(dataMap, getMerchantBillingInfoResponse);
                 break;
             case "non_existed":
                 response = ApiHelperMerchantBillingInfo.postMerchantBillingInfoCreatedWidget(getWidgetId(dataMap), body);
@@ -48,7 +48,7 @@ public class MerchantBillingInfoSteps extends GeneralSteps {
         switch (getWidgetId(dataMap)) {
             case "valid":
                 response = getMerchantBillingInfoResponse(dataMap, createdWidgetId.get());
-                checkPositiveResponse(dataMap, response.as(MerchantBillingInfoResponse.class));
+                compareResponseWithExpectedData(dataMap, response.as(MerchantBillingInfoResponse.class));
                 break;
             case "skip_posting":
                 response = getMerchantBillingInfoResponse(dataMap, createdWidgetId.get());
@@ -84,7 +84,7 @@ public class MerchantBillingInfoSteps extends GeneralSteps {
         }
     }
 
-    private void checkPositiveResponse(Map<String, String> dataMap, MerchantBillingInfoResponse getResponse) {
+    private void compareResponseWithExpectedData(Map<String, String> dataMap, MerchantBillingInfoResponse getResponse) {
         softly.assertThat(dataMap.get("o.email")).isEqualTo(getResponse.email);
         softly.assertThat(dataMap.get("o.addressLine1")).isEqualTo(getResponse.addressLine1);
         softly.assertThat(dataMap.get("o.addressLine2")).isEqualTo(getResponse.addressLine2);
