@@ -12,7 +12,7 @@ Feature: Messages Configuration operations
       | i.environment  | SANDBOX     |
       | o.responseCode | 200         |
 
-    Then User gets configuration for newly created widget
+    And User gets configuration for newly created widget
       | i.widgetId     | <i.widgetId>     |
       | o.responseCode | <o.responseCode> |
       | o.updateTime   | <o.updateTime>   |
@@ -32,7 +32,7 @@ Feature: Messages Configuration operations
       | i.environment  | SANDBOX     |
       | o.responseCode | 200         |
 
-    Then User updates configuration for newly created widget
+    And User updates configuration for newly created widget
       | i.widgetId              | <i.widgetId>              |
       | i.waPaymentTemplateId   | <i.waPaymentTemplateId>   |
       | i.waPaymentTemplateName | <i.waPaymentTemplateName> |

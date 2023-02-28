@@ -11,10 +11,11 @@ import lombok.Getter;
         "name"
 })
 @Getter
-public class CardNetwork {
+public class BillingType {
 
     @JsonProperty("id")
     private int id;
+
     @JsonProperty("name")
     private String name;
 }
