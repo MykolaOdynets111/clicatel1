@@ -82,9 +82,8 @@ public class ChatBody extends AbstractUIElement {
 
     @FindBy(css = "[selenium-id='chat-message-content-opted-out'] p")
     private WebElement stopCardText;
-
     @FindBy(css = ".channel-separator-title")
-    private WebElement visualIndicator;
+    private List<WebElement> visualIndicator;
     @FindAll({
             @FindBy(css = "[selenium-id='map-chat-message-content-LocationMessage']"),
             @FindBy(css = "[data-testid='map-chat-message-content-LocationMessage']")
@@ -349,17 +348,17 @@ public class ChatBody extends AbstractUIElement {
         return getTextFromElem(this.getCurrentDriver(), stopCardText, 1, "Stop Card text").trim();
     }
 
-    public String getIndicatorsText() {
-        return getTextFromElem(this.getCurrentDriver(), visualIndicator, 1, "Visual Indicator");
+    public String getIndicatorsText(int indicatorNumber) {
+        return getTextFromElem(this.getCurrentDriver(), visualIndicator.get(indicatorNumber), 1, "Visual Indicator");
     }
 
     public void clickCancelPaymentButton() {
         clickElem(this.getCurrentDriver(), cancelPaymentButton, 10, "Cancel Payment button");
     }
 
-    public boolean isVisualIndicatorTextShown(int wait, String visualIndicatorText) {
+    public boolean isVisualIndicatorTextShown(int wait, String visualIndicatorText, int indicatorNumber) {
         for (int i = 0; i < wait; i++) {
-            if (getTextFromElem(this.getCurrentDriver(), visualIndicator, 2, "visual Indicator")
+            if (getTextFromElem(this.getCurrentDriver(), visualIndicator.get(indicatorNumber), 2, "visual Indicator")
                     .contains(visualIndicatorText)) return true;
             waitFor(1000);
         }
