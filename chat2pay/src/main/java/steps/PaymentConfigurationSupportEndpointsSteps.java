@@ -13,7 +13,6 @@ import api.models.response.paymentgatewaysettingsresponse.TransactionType;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.Assertions;
 import org.openqa.selenium.NoSuchSessionException;
 
 import java.util.Map;
