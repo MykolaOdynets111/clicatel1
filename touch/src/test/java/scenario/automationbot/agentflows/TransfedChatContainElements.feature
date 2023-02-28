@@ -1,4 +1,5 @@
 @Regression
+@orca_api
 Feature: Transferring chat, user info
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2761")
