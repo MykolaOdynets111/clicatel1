@@ -203,7 +203,7 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     }
 
     @Then("^(.*) receives incoming transfer on the right side of the screen with user's profile picture, channel and sentiment for (.*)")
-    public void secondAgentReceivesIncomingTransferOnTheRightSideOfTheScreenWithUserSProfilePicturePriorityChannelAndSentiment(String agent, String integration) {
+    public void verifyPictureChannelSentimentTransferWindow(String agent, String integration) {
         SoftAssert softAssert = new SoftAssert();
         String userName = getUserName(integration);
         String firstLetters = Arrays.stream(userName.split(" ")).map(s -> s.substring(0, 1)).reduce("", String::concat);
