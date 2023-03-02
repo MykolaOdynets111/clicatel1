@@ -92,7 +92,7 @@ public class IncomingTransferWindow extends AbstractUIElement {
 
     public boolean isValidImgTransferPicture(String userName) {
         isElementShown(this.getCurrentDriver(), transferPicture, 5);
-        return transferPicture.getText().equalsIgnoreCase(String.valueOf(userName.charAt(0)));
+        return transferPicture.getText().equalsIgnoreCase(userName);
     }
 
     public boolean isValidImTransferChannel(String channel) {
@@ -110,6 +110,9 @@ public class IncomingTransferWindow extends AbstractUIElement {
         int xcordElement = transferWindowHeader.getLocation().getX();
         int xcordWindow = findElemByXPATH(this.getCurrentDriver(),"//body").getSize().getWidth()/2;
         return    xcordElement > xcordWindow;
+    }
+    public boolean isSentimentShown() {
+        return isElementShown(this.getCurrentDriver(), transferSentiment, 5);
     }
 
 }
