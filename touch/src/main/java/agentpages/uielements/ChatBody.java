@@ -82,9 +82,10 @@ public class ChatBody extends AbstractUIElement {
 
     @FindBy(css = "[selenium-id='chat-message-content-opted-out'] p")
     private WebElement stopCardText;
-
     @FindBy(css = ".channel-separator-title")
     private WebElement visualIndicator;
+    @FindBy(css = ".channel-separator-title")
+    private List<WebElement> visualIndicators;
     @FindAll({
             @FindBy(css = "[selenium-id='map-chat-message-content-LocationMessage']"),
             @FindBy(css = "[data-testid='map-chat-message-content-LocationMessage']")
@@ -364,5 +365,12 @@ public class ChatBody extends AbstractUIElement {
             waitFor(1000);
         }
         return false;
+    }
+    public String getSpecificIndicatorsText(String expectedText) {
+        return visualIndicators.stream()
+                .map(WebElement::getText)
+                .filter(text -> text.contains(expectedText))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("Expected text not found in the element list"));
     }
 }

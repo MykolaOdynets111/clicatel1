@@ -101,14 +101,16 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @Then("^Transfer indicator with \"(.*)\" text, (.*) name \" to \" (.*) name and time is shown$")
     public void verifyTransferIndicators(String message, String firstAgent, String secondAgent) {
         String generatedMessage = message + " " + getAgentName(firstAgent) + " to " + getAgentName(secondAgent);
-        validateIndicators(generatedMessage, secondAgent);
+        String actualText = getChatBody("Second agent").getSpecificIndicatorsText(generatedMessage);
+        Assert.assertTrue(generatedMessage.equals(actualText.substring(0, actualText.length() - 20).trim()), "Expected text not found in the element list");
     }
 
-    @Then("^Transfer reject indicator with First agent name and \"(.*)\" text")
-    public void verifyRejectedIndicator(String message) {
-        String generatedMessage = getAgentName("First agent") + " " + message;
+    @Then("^Transfer reject indicator with (.*) name and \"(.*)\" text")
+    public void verifyRejectedIndicator(String agent, String message) {
+        String generatedMessage = getAgentName(agent) + " " + message;
         String indicatorFromUI = getChatBody("Second agent").getIndicatorsText();
-        Assert.assertEquals(indicatorFromUI, generatedMessage.trim(), "Indicator has incorrect text");
+        String massageWithNameUI = indicatorFromUI.substring(0, indicatorFromUI.length() - 20).trim();
+        Assert.assertEquals(massageWithNameUI, generatedMessage.trim(), "Indicator has incorrect text");
     }
 
     private void validateIndicators(String generatedMessage, String agent) {
