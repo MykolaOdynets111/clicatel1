@@ -19,8 +19,8 @@ public class Endpoints {
     public static final String DELETE_API_KEY = WIDGET_API_KEYS_ENDPOINT + "/%s";
 
     // Channel Management
-    public static final String CHANNEL_CONFIGURATION = C2P_URL_DEMO + "/v2/widget/%s/link-channels";
-    public static final String CHANNEL_STATUS = C2P_URL_DEMO + "/v2/widget/%s/status";
+    public static final String CHANNEL_CONFIGURATION = WIDGETS_ENDPOINT + "/%s/link-channels";
+    public static final String CHANNEL_STATUS = WIDGETS_ENDPOINT + "/%s/status";
 
     // Configurations
     public static final String CHAT_TO_PAY_CONFIGURATION_ENDPOINT = C2P_URL_DEMO + "/api/v2/config";
@@ -49,7 +49,7 @@ public class Endpoints {
     public static final String PAYMENT_RECEIPT = C2P_URL_DEMO + "/api/v2/order-receipt";
 
     // Two Way Numbers
-    public static final String TWO_WAY_NUMBER = C2P_URL_DEMO + "/v2/widget/%s/two-way-numbers";
+    public static final String TWO_WAY_NUMBER = WIDGETS_ENDPOINT + "/%s/two-way-numbers";
 
     //Merchant's Billing Info
     public static final String MERCHANTS_BILLING_INFO = WIDGETS_ENDPOINT + "/%s/merchant-billing-info";
