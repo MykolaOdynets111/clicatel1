@@ -116,3 +116,26 @@ Feature: Chat2Pay ::Chat2PayCustomerClosedChat
     And Agent clicks on go to chat button
     And Agent click on new conversation request from sms
     And Conversation area becomes active with connect to chat 2 pay user's message
+
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-1801")
+  Scenario: CD:: SMSChat2Pay :: Transfer Chat :: Verify that the SMS chat can be transferred to another agent after the current agent has sent a payment request to the customer
+    Given I login as agent of General Bank Demo
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    And Agent creates tenant extension with label and name
+      | extensionType | label              | name        |
+      | CHAT_2_PAY    | Send C2P Extension | Chat to Pay |
+    When Send connect to Support message by ORCA
+    Then Agent has new conversation request from orca user
+    When Agent click on new conversation request from orca
+    Then Conversation area becomes active with connect to Support user's message
+    When Agent open c2p form
+    And Agent fill c2p form with orderNumber 43333, price 9 and send
+    When I login as second agent of General Bank Demo
+    And Agent transfers chat
+    Then Second agent receives incoming transfer with "Incoming Transfer" header
+    Then Second agent receives incoming transfer with "Please take care of this one" note from the another agent
+    When Second agent click "Accept transfer" button
+    Then Second agent has new conversation request from orca user
+    And Agent should not see from user chat in agent desk from orca
+    When Second agent click on new conversation request from orca
+    Then Conversation area becomes active with connect to Support user's message in it for Second agent

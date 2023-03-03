@@ -3,13 +3,13 @@
 Feature: Transferring chat, user info
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2761")
-  Scenario: Transfer chat: All required fields in pop-up should be filled. Notification should have user's profile picture, channel and sentiment
+  Scenario: CD :: Agent Desk :: Live Chat :: Transfer Chat :: Verify that all required fields in pop-up should be filled, notification should have user's profile picture, channel and sentiment
 
-    Given I login as agent of General Bank Demo
-    Given Setup ORCA abc integration for General Bank Demo tenant
+    Given I login as agent of Automation Bot
+    Given Setup ORCA abc integration for Automation Bot tenant
     When Send connect to agent message by ORCA
     Then Agent has new conversation request from orca user
-    When I login as second agent of General Bank Demo
+    When I login as second agent of Automation Bot
     When Agent click on new conversation request from orca
     Then Conversation area becomes active with connect to agent user's message
     And Agent transfers chat

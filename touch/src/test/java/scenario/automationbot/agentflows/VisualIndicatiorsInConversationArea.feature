@@ -28,7 +28,7 @@ Feature: Supervisor desk
   @orca_api
   @Regression
   @TestCaseId("https://jira.clickatell.com/browse/CCD-2001")
-  Scenario: Verify that agent can view visual indicators if use transfer chat or reject transfer
+  Scenario: CD :: Agent Desk :: Live Chat :: Transfer Chat :: Verify that agent can view visual indicators if use transfer chat or reject transfer
     Then Second agent receives incoming transfer with "Please take care of this one" note from the another agent
     When Second agent click "Accept transfer" button
     Then Second agent has new conversation request
