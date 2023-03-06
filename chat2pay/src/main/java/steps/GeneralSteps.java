@@ -1,8 +1,10 @@
 package steps;
 
 import api.clients.ApiHelperChat2Pay;
+import api.clients.ApiHelperIntegration;
 import api.clients.ApiHelperWidgets;
 import api.models.request.PaymentBody;
+import api.models.response.integration.IntegrationResponse;
 import com.github.javafaker.Faker;
 import org.assertj.core.api.SoftAssertions;
 import org.jetbrains.annotations.NotNull;
@@ -34,8 +36,12 @@ public class GeneralSteps {
     }
 
     protected void setApplicationId() {
-        applicationID.set(ApiHelperWidgets
-                .getIntegrationResponse(widgetId.get())
+        applicationID.set(ApiHelperIntegration
+                .getIntegrationResponse(widgetId.get()).getBody()
+                .jsonPath()
+                .getList("", IntegrationResponse.class)
+                .stream().findAny()
+                .orElseThrow(() -> new AssertionError("No integrations found for widget" + widgetId))
                 .getIntegrator()
                 .getApplicationUuid());
     }
