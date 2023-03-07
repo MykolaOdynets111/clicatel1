@@ -69,5 +69,5 @@ Feature: Messages Configuration operations
       | o.environment  | <o.environment>  |
 
     Examples:
-      | i.templateId                     | o.responseCode | o.status       | o.type      | o.id                             | o.accountId                      | o.environment |
-      | 7662fe1804e54704a1cf8e52a0a7bdbc | 200            | NOT_CONFIGURED | CHAT_TO_PAY | 2c9acdc2865469380186559c805e0039 | 2c9acc3078b5cfe80178db93bd871a58 | SANDBOX       |
+      | i.templateId                     | o.responseCode | o.status   | o.type      | o.id                             | o.accountId                      | o.environment |
+      | 7662fe1804e54704a1cf8e52a0a7bdbc | 200            | CONFIGURED | CHAT_TO_PAY | 2c9acc9f86a227e60186a317e21b0063 | 2c9acc3078b5cfe80178db93bd871a58 | SANDBOX       |
