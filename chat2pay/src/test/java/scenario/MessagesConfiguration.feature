@@ -70,4 +70,4 @@ Feature: Messages Configuration operations
 
     Examples:
       | i.templateId                     | o.responseCode | o.status   | o.type      | o.id                             | o.accountId                      | o.environment |
-      | 7662fe1804e54704a1cf8e52a0a7bdbc | 200            | CONFIGURED | CHAT_TO_PAY | 2c9acc9f86a227e60186a317e21b0063 | 2c9acc3078b5cfe80178db93bd871a58 | SANDBOX       |
+      | 5b1a05c3fcfa40f3870dde989015ed24 | 200            | CONFIGURED | CHAT_TO_PAY | 2c9acd56862b180001862b679a390001 | 2c9acc3078b5cfe80178db93bd871a58 | SANDBOX       |
