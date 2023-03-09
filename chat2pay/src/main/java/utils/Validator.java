@@ -51,8 +51,8 @@ public class Validator {
     public static void verifyBadRequestResponse(Map<String, String> valuesMap, Response response) {
         BadRequestResponse badRequestResponse = response.as(BadRequestResponse.class);
 
-        softly.assertThat(valuesMap.get("o.errors")).isEqualTo(badRequestResponse.status);
-        softly.assertThat(valuesMap.get("o.path")).isEqualTo(badRequestResponse.message);
+        softly.assertThat(badRequestResponse.status).isEqualTo(valuesMap.get("o.errors"));
+        softly.assertThat(badRequestResponse.message).isEqualTo(valuesMap.get("o.path"));
         softly.assertAll();
     }
 

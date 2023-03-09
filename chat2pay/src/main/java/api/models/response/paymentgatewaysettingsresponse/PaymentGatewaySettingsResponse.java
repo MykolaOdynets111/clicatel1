@@ -5,7 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.util.List;
+
+import static datetimeutils.DateTimeHelper.parseToLocalDate;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -62,7 +65,7 @@ public class PaymentGatewaySettingsResponse {
     public Country country;
 
     @JsonProperty("shipToCountries")
-    public List<Object> shipToCountries = null;
+    public List<Integer> shipToCountries = null;
 
     @JsonProperty("defaultCurrency")
     public DefaultCurrency defaultCurrency;
@@ -80,10 +83,10 @@ public class PaymentGatewaySettingsResponse {
     public String merchantDescriptor;
 
     @JsonProperty("createdTime")
-    public String createdTime;
+    private String createdTime;
 
     @JsonProperty("modifiedTime")
-    public String modifiedTime;
+    private String modifiedTime;
 
     @JsonProperty("requestEmail")
     public boolean requestEmail;
@@ -105,4 +108,12 @@ public class PaymentGatewaySettingsResponse {
 
     @JsonProperty("billingType")
     public String billingType;
+
+    public LocalDate getCreatedTime() {
+        return parseToLocalDate(createdTime);
+    }
+
+    public LocalDate getModifiedTime() {
+        return parseToLocalDate(modifiedTime);
+    }
 }

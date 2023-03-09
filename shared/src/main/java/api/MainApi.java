@@ -6,6 +6,7 @@ import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.Objects;
 
 import static org.testng.Assert.fail;
@@ -14,13 +15,13 @@ public abstract class MainApi {
 
     @NotNull
     protected static ResponseBody postQuery(String endpoint, Object body, String authToken, int responseCode) {
-        Response response = post(endpoint, body, authToken);
+        Response response = post(authToken, endpoint, body);
         return validate(response, responseCode);
     }
 
     @NotNull
-    protected static Response postQuery(String endpoint, Object body, String authToken) {
-        return post(endpoint, body, authToken);
+    protected static Response postQuery(String authToken, String endpoint, Object body) {
+        return post(authToken, endpoint, body);
     }
 
     @NotNull
@@ -147,7 +148,16 @@ public abstract class MainApi {
         return validate(response, responseCode);
     }
 
-    protected static Response post(String endpoint, Object body, String authToken) {
+    protected static Response postMediaFile(String authToken, String endpoint, File file) {
+        return RestAssured.given().log().all()
+                .accept(ContentType.ANY)
+                .contentType(ContentType.MULTIPART)
+                .header("Authorization", authToken)
+                .body(file)
+                .post(endpoint);
+    }
+
+    protected static Response post(String authToken, String endpoint, Object body) {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .header("Authorization", authToken)

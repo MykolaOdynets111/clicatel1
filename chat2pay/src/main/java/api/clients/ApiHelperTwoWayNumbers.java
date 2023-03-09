@@ -14,6 +14,6 @@ public class ApiHelperTwoWayNumbers extends MainApi {
     }
 
     public static Response updateTwoWayNumbers(String widgetId, TwoWayNumberConfiguration configuration, String authToken) {
-        return postQuery(format(Endpoints.TWO_WAY_NUMBER, widgetId), configuration, authToken);
+        return postQuery(authToken, format(Endpoints.TWO_WAY_NUMBER, widgetId), configuration);
     }
 }

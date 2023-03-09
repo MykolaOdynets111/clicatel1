@@ -21,9 +21,12 @@ public class PaymentsSteps extends GeneralSteps {
 
     @When("^User gets paymentGatewaySettingsId for widget$")
     public void getPaymentGatewaySettingsId() {
-        paymentGatewaySettingsId.set(ApiHelperPayments
-                .getPaymentGatewaySettingsResponse(widgetId.get())
-                .getPaymentGatewaySettingsId());
+        setPaymentGatewaySettingsId();
+    }
+
+    @When("^User gets 'Payment Gateway Settings Id' for (.*) widget$")
+    public void getPaymentGatewaySettingsId(String name) {
+        setPaymentGatewaySettingsId(name);
     }
 
     @When("^User sets data in the payment body$")
