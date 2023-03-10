@@ -66,7 +66,6 @@ public class WidgetSteps extends GeneralSteps {
             default:
                 Assertions.fail(format("Expected status %s is not existed", status));
         }
-        System.out.println();
     }
 
     @Then("^User gets newly created widget$")
