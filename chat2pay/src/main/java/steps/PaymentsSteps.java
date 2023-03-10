@@ -1,6 +1,7 @@
 package steps;
 
 import api.clients.ApiHelperPayments;
+import api.clients.ApiHelperWidgets;
 import api.models.request.PaymentBody;
 import api.models.response.PaymentLinkResponse;
 import io.cucumber.java.en.Then;
@@ -21,12 +22,12 @@ public class PaymentsSteps extends GeneralSteps {
 
     @When("^User gets paymentGatewaySettingsId for widget$")
     public void getPaymentGatewaySettingsId() {
-        setPaymentGatewaySettingsId();
+        getPaymentSettingsId(widgetId.get());
     }
 
     @When("^User gets 'Payment Gateway Settings Id' for (.*) widget$")
     public void getPaymentGatewaySettingsId(String name) {
-        setPaymentGatewaySettingsId(name);
+        getPaymentSettingsId(ApiHelperWidgets.getWidgetId(name));
     }
 
     @When("^User sets data in the payment body$")

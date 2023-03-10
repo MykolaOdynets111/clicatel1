@@ -48,14 +48,6 @@ public class GeneralSteps {
                 .getApplicationUuid());
     }
 
-    protected void setPaymentGatewaySettingsId() {
-        getPaymentSettingsId(widgetId.get());
-    }
-
-    protected void setPaymentGatewaySettingsId(String widgetName) {
-        getPaymentSettingsId(ApiHelperWidgets.getWidgetId(widgetName));
-    }
-
     protected void setActivationKey() {
         activationKey.set(ApiHelperWidgets.getActivationKey(widgetId.get()).getApiKey());
     }
@@ -87,7 +79,7 @@ public class GeneralSteps {
         return numbers;
     }
 
-    private static void getPaymentSettingsId(String widgetId) {
+    protected static void getPaymentSettingsId(String widgetId) {
         paymentGatewaySettingsId.set(ApiHelperPayments
                 .getPaymentGatewaySettingsResponse(widgetId)
                 .getPaymentGatewaySettingsId());
