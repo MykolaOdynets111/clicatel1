@@ -31,7 +31,6 @@ Feature:  Clickatell product Integration Management
       | o.errorMessage      | <o.errorMessage>          |
       | o.errors            | <o.errors>                |
 
-
     And User updates clickatell-product application to the widget
       | i.widgetId          | <i.widgetId>          |
       | i.applicationId     | <i.applicationId>     |
@@ -47,7 +46,6 @@ Feature:  Clickatell product Integration Management
       | 2c9acd56862b180001862b679a390001 | 2               | DEACTIVATED             | DEACTIVATED         | 200                | 400            | BAD_REQUEST | URL /v2/widget | Current integration status is already Deactivated |
       | non_existed                      | non_existed     |                         |                     | 404                | 404            | NOT_FOUND   | URL /v2/widget | Widget does not exist, id                         |
 
-
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4727")
   Scenario Outline: C2P Unity API :: Integration Management :: GET /integration/clickatell-product{applicationId} ::Get details about clickatell-product application
     Then User adds clickatell-product application to the widget
@@ -57,7 +55,6 @@ Feature:  Clickatell product Integration Management
       | o.responseCode      | <o.postResponseCode>      |
       | o.errorMessage      | <o.errorMessage>          |
       | o.errors            | <o.errors>                |
-
 
     And User gets clickatell-product application for the widget
       | i.widgetId      | <i.widgetId>      |
