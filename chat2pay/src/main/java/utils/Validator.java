@@ -58,7 +58,7 @@ public class Validator {
 
     public static void checkResponseCode(Response response, int code) {
         assertThat(response.statusCode())
-                .as(format("Status code is not equals to %s", code))
+                .as(format("Expected response code %s but was %s", response.statusCode(), code))
                 .isEqualTo(code);
     }
 }
