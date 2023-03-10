@@ -1,4 +1,4 @@
-Feature: Channels Management
+Feature: Payment Gateway Settings Configuration
 
   Background:
     Given User is logged in to unity

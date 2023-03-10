@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -54,7 +55,7 @@ public class PaymentGatewaySettingsUnifiedPayments {
     @JsonProperty("countryId")
     public Integer countryId = 40;
     @JsonProperty("shipToCountriesIds")
-    public List<Integer> shipToCountriesIds = null;
+    public List<Integer> shipToCountriesIds = new ArrayList<>();
     @JsonProperty("defaultCurrencyId")
     public int defaultCurrencyId = 156;
     @JsonProperty("currenciesIds")

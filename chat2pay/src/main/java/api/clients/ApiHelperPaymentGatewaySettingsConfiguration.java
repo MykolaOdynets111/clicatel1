@@ -20,7 +20,7 @@ public class ApiHelperPaymentGatewaySettingsConfiguration extends MainApi {
     }
 
     public static Response getPaymentsGatewaySettings(String authToken, String widgetId) {
-        return getQuery(authToken, format(Endpoints.PAYMENTS_GATEWAY_ENDPOINT, widgetId));
+        return getQuery(format(Endpoints.PAYMENTS_GATEWAY_ENDPOINT, widgetId), authToken);
     }
 
     public static Response postUnifiedPaymentsSettings(String authToken, String widgetId,

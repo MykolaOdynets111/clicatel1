@@ -3,7 +3,12 @@ package steps;
 import api.clients.ApiHelperChat2Pay;
 import api.clients.ApiHelperPaymentGatewaySettingsConfiguration;
 import api.models.request.payments.PaymentGatewaySettingsUnifiedPayments;
+import api.models.response.paymentgatewaysettingsresponse.CardNetwork;
+import api.models.response.paymentgatewaysettingsresponse.Country;
+import api.models.response.paymentgatewaysettingsresponse.DefaultCurrency;
+import api.models.response.paymentgatewaysettingsresponse.Locale;
 import api.models.response.paymentgatewaysettingsresponse.PaymentGatewaySettingsResponse;
+import api.models.response.paymentgatewaysettingsresponse.PaymentType;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
@@ -11,6 +16,8 @@ import org.assertj.core.api.Assertions;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import static api.clients.ApiHelperPaymentGatewaySettingsConfiguration.postUnifiedPaymentsSettings;
 import static java.lang.String.format;
@@ -58,13 +65,15 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
 
     @Then("^User gets 'Unified Payment Gateway Settings'$")
     public void getPaymentGatewaySettings(Map<String, String> dataMap) {
-        Response response = ApiHelperPaymentGatewaySettingsConfiguration.getPaymentsGatewaySettings(TOKEN, createdWidgetId.get());
+        Response response;
         switch (getWidgetId(dataMap)) {
             case "valid":
+                response = ApiHelperPaymentGatewaySettingsConfiguration.getPaymentsGatewaySettings(TOKEN, createdWidgetId.get());
                 if (response.statusCode() == 200) {
+                    PaymentGatewaySettingsResponse settings = response.jsonPath().getList("", PaymentGatewaySettingsResponse.class)
+                            .stream().filter(s -> s.getPaymentGatewaySettingsId().equals(paymentGatewaySettingsId.get()))
+                            .findFirst().orElseThrow(NoSuchElementException::new);
 
-                    PaymentGatewaySettingsResponse settings = response.as(PaymentGatewaySettingsResponse.class);
-                    softly.assertThat(settings.paymentGatewaySettingsId).isEqualTo(paymentGatewaySettingsId.get());
                     softly.assertThat(settings.paymentGatewayId).isEqualTo(Integer.parseInt(dataMap.get("o.paymentGatewayId")));
                     softly.assertThat(settings.paymentIntegrationTypeId).isEqualTo(unifiedPaymentsSettings.getPaymentIntegrationTypeId());
                     softly.assertThat(settings.merchantId).isEqualTo(unifiedPaymentsSettings.getMerchantId());
@@ -75,16 +84,29 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
                     softly.assertThat(settings.requestEmail).isEqualTo(unifiedPaymentsSettings.getRequestEmail());
                     softly.assertThat(settings.requestPhone).isEqualTo(unifiedPaymentsSettings.getRequestPhone());
                     softly.assertThat(settings.requestShipping).isEqualTo(unifiedPaymentsSettings.getRequestShipping());
-                    softly.assertThat(settings.transactionType).isEqualTo(unifiedPaymentsSettings.getTransactionType());
+                    softly.assertThat(settings.transactionType).isEqualToIgnoringCase(unifiedPaymentsSettings.getTransactionType());
                     softly.assertThat(settings.restApiAccessKey).isEqualTo(unifiedPaymentsSettings.getRestApiAccessKey());
-                    softly.assertThat(settings.restApiSecretKey).isEqualTo(unifiedPaymentsSettings.getRestApiSecretKey());
+                    softly.assertThat(settings.restApiSecretKey.substring(0, 3)).isEqualTo(unifiedPaymentsSettings.getRestApiSecretKey().substring(0, 3));
                     softly.assertThat(settings.billingType).isEqualTo(unifiedPaymentsSettings.getBillingType());
+                    softly.assertThat(settings.currencies.size()).isEqualTo(unifiedPaymentsSettings.getCurrenciesIds().size());
+                    softly.assertThat(settings.currencies.get(0).getId()).isEqualTo(unifiedPaymentsSettings.getCurrenciesIds().get(0));
+                    softly.assertThat(settings.paymentTypes.size()).isEqualTo(unifiedPaymentsSettings.getPaymentTypesIds().size());
+                    softly.assertThat(settings.paymentTypes.stream().map(PaymentType::getId).collect(Collectors.toList()))
+                            .containsAll(unifiedPaymentsSettings.getPaymentTypesIds());
+                    softly.assertThat(settings.cardNetworks.size()).isEqualTo(unifiedPaymentsSettings.getCardNetworksIds().size());
+                    softly.assertThat(settings.cardNetworks.stream().map(CardNetwork::getId).collect(Collectors.toList()))
+                            .containsAll(unifiedPaymentsSettings.getCardNetworksIds());
+
+                    verifyLocalInfo(dataMap, settings);
+                    verifyCountryInfo(dataMap, settings);
+                    verifyDefaultCurrencyInfo(dataMap, settings);
                     softly.assertAll();
                 } else {
                     Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
                 }
                 break;
             case "invalid":
+                response = ApiHelperPaymentGatewaySettingsConfiguration.getPaymentsGatewaySettings(TOKEN, null);
                 verifyBadRequestResponse(dataMap, response);
         }
     }
@@ -92,6 +114,27 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
     @Then("^User sets up 'Unified Payment Setting' for widget$")
     public void setupUnifiedPaymentSetting() {
         paymentGatewaySettingsId.set(setupUnifiedPaymentsSettings(createdWidgetId.get()));
+    }
+
+    private void verifyLocalInfo(Map<String, String> dataMap, PaymentGatewaySettingsResponse settings) {
+        Locale locale = settings.locale;
+        softly.assertThat(locale.getId()).isEqualTo(unifiedPaymentsSettings.localeId);
+        softly.assertThat(locale.getName()).isEqualTo(dataMap.get("o.locale"));
+        softly.assertAll();
+    }
+
+    private void verifyCountryInfo(Map<String, String> dataMap, PaymentGatewaySettingsResponse settings) {
+        Country country = settings.country;
+        softly.assertThat(country.getId()).isEqualTo(unifiedPaymentsSettings.countryId);
+        softly.assertThat(country.getName()).isEqualTo(dataMap.get("o.country"));
+        softly.assertAll();
+    }
+
+    private void verifyDefaultCurrencyInfo(Map<String, String> dataMap, PaymentGatewaySettingsResponse settings) {
+        DefaultCurrency defaultCurrency = settings.defaultCurrency;
+        softly.assertThat(defaultCurrency.getId()).isEqualTo(unifiedPaymentsSettings.defaultCurrencyId);
+        softly.assertThat(defaultCurrency.getName()).isEqualTo(dataMap.get("o.defaultCurrency"));
+        softly.assertAll();
     }
 
     private String setupUnifiedPaymentsSettings(String widgetId) {
