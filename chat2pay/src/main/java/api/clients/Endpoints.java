@@ -11,7 +11,6 @@ public class Endpoints {
     // Widgets
     public static final String WIDGETS_ENDPOINT = C2P_URL_WITH_VERSION + "/widget";
     public static final String EXISTED_WIDGETS_ENDPOINT = WIDGETS_ENDPOINT + "/all?detailed=false&page=0&size=50";
-    public static final String WIDGET_INTEGRATION_ENDPOINT = WIDGETS_ENDPOINT + "/%s/integration";
     public static final String WIDGET_SHOWED_LINKED_API_ENDPOINT = WIDGETS_ENDPOINT + "/%s/show-linked-api";
 
     // Account Settings
@@ -57,4 +56,14 @@ public class Endpoints {
 
     //Merchant's Billing Info
     public static final String MERCHANTS_BILLING_INFO = WIDGETS_ENDPOINT + "/%s/merchant-billing-info";
+
+    //Payment Gateway Settings Configuration
+    public static final String GET_PAYMENTS_GATEWAY_LOGO = PAYMENTS_GATEWAY_ENDPOINT + "/%s/logo";
+    public static final String POST_PAYMENTS_GATEWAY_LOGO = PAYMENTS_GATEWAY_ENDPOINT + "/logo";
+    public static final String UNIFIED_PAYMENTS_SETTINGS = PAYMENTS_GATEWAY_ENDPOINT + "/2";
+
+    //IntegrationManagement
+    public static final String WIDGET_INTEGRATION_ENDPOINT = WIDGETS_ENDPOINT + "/%s/integration";
+    public static final String CLICKATELL_PRODUCT_ENDPOINT = WIDGET_INTEGRATION_ENDPOINT + "/clickatell-product";
+
 }

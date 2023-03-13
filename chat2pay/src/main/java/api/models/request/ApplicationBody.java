@@ -1,4 +1,4 @@
-package api.models.response.widget;
+package api.models.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,22 +8,21 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "id",
-        "name"
+        "status",
+        "applicationId"
 })
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConfigStatus {
+public class ApplicationBody {
 
-    @JsonProperty("id")
-    private int id;
+    @JsonProperty("status")
+    private String status;
 
-    @JsonProperty("name")
-    private String name;
+    @JsonProperty("applicationId")
+    private String applicationId;
 }

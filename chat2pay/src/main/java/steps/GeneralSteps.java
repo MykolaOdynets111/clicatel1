@@ -2,6 +2,7 @@ package steps;
 
 import api.clients.ApiHelperChat2Pay;
 import api.clients.ApiHelperIntegration;
+import api.clients.ApiHelperPayments;
 import api.clients.ApiHelperWidgets;
 import api.models.request.PaymentBody;
 import api.models.response.integration.IntegrationResponse;
@@ -28,6 +29,7 @@ public class GeneralSteps {
     protected static final ThreadLocal<String> activationKey = new ThreadLocal<>();
     protected static final ThreadLocal<String> createdWidgetId = new ThreadLocal<>();
     protected static final ThreadLocal<String> createdWidgetName = new ThreadLocal<>();
+
     protected final SoftAssertions softly = new SoftAssertions();
     protected Faker faker = new Faker();
 
@@ -75,6 +77,12 @@ public class GeneralSteps {
             numbers = Collections.singletonList(number);
         }
         return numbers;
+    }
+
+    protected static void getPaymentSettingsId(String widgetId) {
+        paymentGatewaySettingsId.set(ApiHelperPayments
+                .getPaymentGatewaySettingsResponse(widgetId)
+                .getPaymentGatewaySettingsId());
     }
 
     protected void clearTestData() {

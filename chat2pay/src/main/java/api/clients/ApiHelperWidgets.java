@@ -23,13 +23,13 @@ public class ApiHelperWidgets extends ApiHelperChat2Pay {
     public static String getWidgetId(String widgetName) {
         return getWidgets().stream()
                 .filter(widget -> Objects.nonNull(widget.getName()))
-                .filter(w -> w.getName().equals(widgetName)).findFirst()
+                .filter(w -> w.getName().startsWith(widgetName)).findFirst()
                 .orElseThrow(() -> new AssertionError("Widget didn't find"))
                 .getId();
     }
 
     public static Response createWidget(WidgetBody widgetBody) {
-        return postQuery(Endpoints.WIDGETS_ENDPOINT, widgetBody, token.get());
+        return postQuery(token.get(), Endpoints.WIDGETS_ENDPOINT, widgetBody);
     }
 
     public static Response getWidget(String widgetId) {

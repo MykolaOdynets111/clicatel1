@@ -82,11 +82,11 @@ public class MessageSteps extends GeneralSteps {
         response = ApiHelperMessagesConfigurations.getTemplateUsageResponse(dataMap.get("i.templateId"));
         Validator.checkResponseCode(response, getResponseCode(dataMap));
         Widget widget = response.getBody().jsonPath().getList("", Widget.class).get(0);
-        softly.assertThat(dataMap.get("o.status")).isEqualTo(widget.getStatus());
-        softly.assertThat(dataMap.get("o.type")).isEqualTo(widget.getType());
-        softly.assertThat(dataMap.get("o.id")).isEqualTo(widget.getId());
-        softly.assertThat(dataMap.get("o.accountId")).isEqualTo(widget.getAccountId());
-        softly.assertThat(dataMap.get("o.environment")).isEqualTo(widget.getEnvironment());
+        softly.assertThat(widget.getStatus()).isEqualTo(dataMap.get("o.status"));
+        softly.assertThat(widget.getType()).isEqualTo(dataMap.get("o.type"));
+        softly.assertThat(widget.getId()).isEqualTo(dataMap.get("o.id"));
+        softly.assertThat(widget.getAccountId()).isEqualTo(dataMap.get("o.accountId"));
+        softly.assertThat(widget.getEnvironment()).isEqualTo(dataMap.get("o.environment"));
         softly.assertAll();
     }
 }

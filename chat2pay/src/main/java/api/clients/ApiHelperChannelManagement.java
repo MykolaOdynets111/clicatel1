@@ -12,7 +12,7 @@ import static java.lang.String.format;
 public class ApiHelperChannelManagement extends MainApi {
 
     public static Response postChannelManagement(ChannelManagement channelManagement, String widgetId, String authToken) {
-        return postQuery(format(Endpoints.CHANNEL_CONFIGURATION, widgetId), channelManagement, authToken);
+        return postQuery(authToken, format(Endpoints.CHANNEL_CONFIGURATION, widgetId), channelManagement);
     }
 
     public static Response updateChannelStatus(ChannelStatus status, String widgetId, String authToken) {

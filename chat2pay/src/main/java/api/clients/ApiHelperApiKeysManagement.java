@@ -13,7 +13,7 @@ public class ApiHelperApiKeysManagement extends MainApi {
     }
 
     public static Response updateApiKeysManagement(String widgetId, String authToken) {
-        return postQuery(format(Endpoints.WIDGET_API_KEYS_ENDPOINT, widgetId), "", authToken);
+        return postQuery(authToken, format(Endpoints.WIDGET_API_KEYS_ENDPOINT, widgetId), "");
     }
 
     public static Response removeApiKeysManagement(String widgetId, String apiKeyId, String authToken) {

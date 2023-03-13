@@ -86,7 +86,7 @@ Feature: Widgets operations
       | non_existed | My first widget | CONFIGURED | 1                 | Configured          | SANDBOX       | 404            |              | NOT_FOUND | URL /v2/widget | Widget does not exist, id = |
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4717")
-  Scenario Outline: C2P Unity API :: GET /widget/{widgetId} :: get widget by id
+  Scenario Outline: C2P Unity API :: Widget Configuration :: PUT /show-linked-api :: update the show-linked-api info
 
     Then User creates widget for an account
       | i.widget       | valid       |
