@@ -1,5 +1,6 @@
 package steps;
 
+import api.clients.ApiHelperChat2Pay;
 import api.clients.ApiHelperWidgets;
 import api.models.request.WidgetBody;
 import api.models.response.updatedresponse.UpdatedEntityResponse;
@@ -10,6 +11,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
+import org.testng.Assert;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -21,6 +23,7 @@ import static utils.Validator.validateErrorResponse;
 
 public class WidgetSteps extends GeneralSteps {
 
+    public static final String TOKEN = ApiHelperChat2Pay.token.get();
     private Response response;
 
     @When("^User gets widgetId for (.*) form$")
@@ -36,6 +39,11 @@ public class WidgetSteps extends GeneralSteps {
     @When("^User gets activation key for widget$")
     public void getActivationKey() {
         setActivationKey();
+    }
+
+    @Then("^User creates (.*) widget")
+    public void createWidget(String name) {
+        createNewWidget(name, "CHAT_TO_PAY", "SANDBOX");
     }
 
     @Then("^User creates widget for an account$")
@@ -92,14 +100,16 @@ public class WidgetSteps extends GeneralSteps {
 
     @Then("^User updates newly created widget$")
     public void updateCreatedWidget(Map<String, String> dataMap) {
-        Widget updateBody = new Widget();
         createdWidgetName.set(faker.funnyName().name());
-        updateBody.setEnvironment(dataMap.get("i.environment"));
-        updateBody.setStatus(dataMap.get("i.status"));
-        updateBody.setConfigStatus(ConfigStatus.builder()
-                .id(Integer.parseInt(dataMap.get("i.configStatus_id")))
-                .name(dataMap.get("i.configStatus_name")).build());
-        updateBody.setName(createdWidgetName.get());
+        Widget updateBody = Widget.builder()
+                .name(createdWidgetName.get())
+                .environment(dataMap.get("i.environment"))
+                .status(dataMap.get("i.status"))
+                .configStatus(ConfigStatus.builder()
+                        .id(Integer.parseInt(dataMap.get("i.configStatus_id")))
+                        .name(dataMap.get("i.configStatus_name")).build())
+                .build();
+
         switch (getWidgetId(dataMap)) {
             case "valid":
                 response = ApiHelperWidgets.updateWidget(createdWidgetId.get(), updateBody);
@@ -124,8 +134,7 @@ public class WidgetSteps extends GeneralSteps {
 
     @Then("^User updates show_linked_api for newly created widget$")
     public void updateShowLinkedApiCreatedWidget(Map<String, String> dataMap) {
-        Widget body = new Widget();
-        body.setShowLinkedApi(Boolean.parseBoolean(dataMap.get("i.showLinkedApi")));
+        Widget body = Widget.builder().showLinkedApi(Boolean.parseBoolean(dataMap.get("i.showLinkedApi"))).build();
         switch (getWidgetId(dataMap)) {
             case "valid":
                 response = ApiHelperWidgets.updateShowLinkedApiForWidget(createdWidgetId.get(), body);
@@ -168,6 +177,34 @@ public class WidgetSteps extends GeneralSteps {
                 break;
             default:
                 Assertions.fail(format("Expected status %s is not existed", getWidgetId(dataMap)));
+        }
+    }
+
+    private String createNewWidget(String name, String type, String environment) {
+        WidgetBody widget = WidgetBody.builder()
+                .type(type)
+                .environment(environment)
+                .build();
+
+        Response response = ApiHelperWidgets.createWidget(widget);
+        if (response.statusCode() == 200) {
+            createdWidgetId.set(response.as(WidgetCreation.class).getWidgetId());
+            Widget updateBody = Widget.builder()
+                    .name(format("%s - %s", name, faker.funnyName().name()))
+                    .status("CONFIGURED")
+                    .configStatus(ConfigStatus.builder().id(1).name("Configured").build())
+                    .build();
+            Response putQuery = ApiHelperWidgets.updateWidget(createdWidgetId.get(), updateBody);
+
+            assertThat(putQuery.getStatusCode())
+                    .as("Create new widget. Expected status is 200!")
+                    .isEqualTo(200);
+
+            return createdWidgetId.get();
+        } else {
+            Assert.fail("Could not create widget!. Error code: " + response.statusCode());
+
+            return "";
         }
     }
 }

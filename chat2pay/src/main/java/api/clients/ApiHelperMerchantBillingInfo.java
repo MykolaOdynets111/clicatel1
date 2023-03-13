@@ -6,7 +6,7 @@ import io.restassured.response.Response;
 public class ApiHelperMerchantBillingInfo extends ApiHelperChat2Pay {
 
     public static Response postMerchantBillingInfoCreatedWidget(String widgetId, MerchantBillingInfoBody widgetBody) {
-        return postQuery(String.format(Endpoints.MERCHANTS_BILLING_INFO, widgetId), widgetBody, token.get());
+        return postQuery(token.get(), String.format(Endpoints.MERCHANTS_BILLING_INFO, widgetId), widgetBody);
     }
 
     public static Response getMerchantBillingInfoCreatedWidget(String widgetId) {

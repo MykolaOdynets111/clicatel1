@@ -3,7 +3,10 @@ package api.models.response.widget;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -28,63 +31,66 @@ import lombok.Data;
         "disabledApplicationCount"
 })
 
-@Data
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Widget {
 
     @JsonProperty("status")
-    private String status;
+    public String status;
 
     @JsonProperty("configStatus")
-    private ConfigStatus configStatus;
+    public ConfigStatus configStatus;
 
     @JsonProperty("type")
-    private String type;
+    public String type;
 
     @JsonProperty("name")
-    private String name;
+    public String name;
 
     @JsonProperty("id")
-    private String id;
+    public String id;
 
     @JsonProperty("accountId")
-    private String accountId;
+    public String accountId;
 
     @JsonProperty("environment")
-    private String environment;
+    public String environment;
 
     @JsonProperty("createdTime")
-    private String createdTime;
+    public String createdTime;
 
     @JsonProperty("modifiedTime")
-    private String modifiedTime;
+    public String modifiedTime;
 
     @JsonProperty("smsOmniIntegrationId")
-    private Object smsOmniIntegrationId;
+    public Object smsOmniIntegrationId;
 
     @JsonProperty("waOmniIntegrationId")
-    private Object waOmniIntegrationId;
+    public Object waOmniIntegrationId;
 
     @JsonProperty("smsOmniIntegrationStatus")
-    private boolean smsOmniIntegrationStatus;
+    public boolean smsOmniIntegrationStatus;
 
     @JsonProperty("waOmniIntegrationStatus")
-    private boolean waOmniIntegrationStatus;
+    public boolean waOmniIntegrationStatus;
 
     @JsonProperty("createdByUserName")
-    private String createdByUserName;
+    public String createdByUserName;
 
     @JsonProperty("createdByUserId")
-    private String createdByUserId;
+    public String createdByUserId;
 
     @JsonProperty("showTutorial")
-    private boolean showTutorial;
+    public boolean showTutorial;
 
     @JsonProperty("showLinkedApi")
-    private boolean showLinkedApi;
+    public boolean showLinkedApi;
 
     @JsonProperty("enabledApplicationCount")
-    private int enabledApplicationCount;
+    public int enabledApplicationCount;
 
     @JsonProperty("disabledApplicationCount")
-    private int disabledApplicationCount;
+    public int disabledApplicationCount;
 }

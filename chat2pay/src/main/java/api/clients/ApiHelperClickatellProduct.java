@@ -1,13 +1,12 @@
 package api.clients;
 
 import api.models.request.ApplicationBody;
-import api.models.request.MerchantBillingInfoBody;
 import io.restassured.response.Response;
 
 public class ApiHelperClickatellProduct extends ApiHelperChat2Pay {
 
     public static Response postClickatellProduct(String widgetId, ApplicationBody applicationBody) {
-        return postQuery(String.format(Endpoints.CLICKATELL_PRODUCT_ENDPOINT, widgetId), applicationBody, token.get());
+        return postQuery(token.get(), String.format(Endpoints.CLICKATELL_PRODUCT_ENDPOINT, widgetId), applicationBody);
     }
 
     public static Response updateClickatellProduct(String widgetId, ApplicationBody applicationBody) {
