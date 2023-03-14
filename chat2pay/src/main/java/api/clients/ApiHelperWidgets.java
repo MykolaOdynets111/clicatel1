@@ -24,7 +24,7 @@ public class ApiHelperWidgets extends ApiHelperChat2Pay {
         return getWidgets().stream()
                 .filter(widget -> Objects.nonNull(widget.getName()))
                 .filter(w -> w.getName().startsWith(widgetName)).findFirst()
-                .orElseThrow(() -> new AssertionError("Widget didn't find"))
+                .orElseThrow(() -> new AssertionError("Widget couldn't be found"))
                 .getId();
     }
 
