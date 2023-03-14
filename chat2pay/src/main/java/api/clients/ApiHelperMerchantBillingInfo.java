@@ -14,6 +14,6 @@ public class ApiHelperMerchantBillingInfo extends ApiHelperChat2Pay {
     }
 
     public static Response deleteMerchantBillingInfoCreatedWidget(String widgetId) {
-        return deleteQuery(String.format(Endpoints.MERCHANTS_BILLING_INFO, widgetId), token.get());
+        return deleteQuery(token.get(), String.format(Endpoints.MERCHANTS_BILLING_INFO, widgetId));
     }
 }

@@ -41,7 +41,7 @@ public class ApiHelperWidgets extends ApiHelperChat2Pay {
     }
 
     public static Response deleteWidget(String widgetId) {
-        return deleteQuery(Endpoints.WIDGETS_ENDPOINT + "/" + widgetId, token.get());
+        return deleteQuery(token.get(), Endpoints.WIDGETS_ENDPOINT + "/" + widgetId);
     }
 
     public static Response updateShowLinkedApiForWidget(String widgetId, Widget widgetBody) {

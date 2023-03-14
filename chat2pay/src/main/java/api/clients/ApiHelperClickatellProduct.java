@@ -18,6 +18,6 @@ public class ApiHelperClickatellProduct extends ApiHelperChat2Pay {
     }
 
     public static Response deleteClickatellProduct(String widgetId, String applicationId) {
-        return deleteQuery(String.format(Endpoints.CLICKATELL_PRODUCT_ENDPOINT, widgetId) + "/" + applicationId, token.get());
+        return deleteQuery(token.get(), String.format(Endpoints.CLICKATELL_PRODUCT_ENDPOINT, widgetId) + "/" + applicationId);
     }
 }

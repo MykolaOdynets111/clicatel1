@@ -1,6 +1,5 @@
 package steps;
 
-import api.clients.ApiHelperChat2Pay;
 import api.clients.ApiHelperWidgets;
 import api.models.request.WidgetBody;
 import api.models.response.updatedresponse.UpdatedEntityResponse;
@@ -23,7 +22,6 @@ import static utils.Validator.validateErrorResponse;
 
 public class WidgetSteps extends GeneralSteps {
 
-    public static final String TOKEN = ApiHelperChat2Pay.token.get();
     private Response response;
 
     @When("^User gets widgetId for (.*) form$")

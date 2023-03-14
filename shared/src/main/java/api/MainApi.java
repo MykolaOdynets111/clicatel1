@@ -122,12 +122,12 @@ public abstract class MainApi {
     }
 
     @NotNull
-    protected static Response deleteQuery(String endpoint, String authToken) {
+    protected static Response deleteQuery(String authToken, String endpoint) {
         return delete(endpoint, authToken);
     }
 
     @NotNull
-    protected static Response deleteQuery(String endpoint, Object body, String authToken) {
+    protected static Response deleteQuery(String authToken, String endpoint, Object body) {
         return delete(endpoint, body, authToken);
     }
 

@@ -60,10 +60,11 @@ public class Endpoints {
     //Payment Gateway Settings Configuration
     public static final String GET_PAYMENTS_GATEWAY_LOGO = PAYMENTS_GATEWAY_ENDPOINT + "/%s/logo";
     public static final String POST_PAYMENTS_GATEWAY_LOGO = PAYMENTS_GATEWAY_ENDPOINT + "/logo";
+    public static final String SECURE_ACCEPTANCE_SETTINGS = PAYMENTS_GATEWAY_ENDPOINT + "/1";
     public static final String UNIFIED_PAYMENTS_SETTINGS = PAYMENTS_GATEWAY_ENDPOINT + "/2";
+    public static final String DELETE_PAYMENTS_SETTINGS = PAYMENTS_GATEWAY_ENDPOINT + "/%s";
 
     //IntegrationManagement
     public static final String WIDGET_INTEGRATION_ENDPOINT = WIDGETS_ENDPOINT + "/%s/integration";
     public static final String CLICKATELL_PRODUCT_ENDPOINT = WIDGET_INTEGRATION_ENDPOINT + "/clickatell-product";
-
 }
