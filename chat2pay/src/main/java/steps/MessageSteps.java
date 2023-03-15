@@ -83,7 +83,7 @@ public class MessageSteps extends GeneralSteps {
         response = ApiHelperMessagesConfigurations.getTemplateUsageResponse(dataMap.get("i.templateId"));
         Validator.checkResponseCode(response, getResponseCode(dataMap));
         Widget widget = response.getBody().jsonPath().getList("", Widget.class)
-                .stream().filter(widget1 -> widget1.id.equals(dataMap.get("o.id")))
+                .stream().filter(w -> w.id.equals(dataMap.get("o.id")))
                 .findFirst().orElseThrow(NoSuchElementException::new);
         softly.assertThat(widget.getStatus()).isEqualTo(dataMap.get("o.status"));
         softly.assertThat(widget.getType()).isEqualTo(dataMap.get("o.type"));
