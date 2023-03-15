@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static api.clients.ApiHelperWidgets.deleteAllGeneratedWidgets;
 import static java.lang.Integer.parseInt;
 
 public class GeneralSteps {
@@ -85,7 +86,7 @@ public class GeneralSteps {
                 .getPaymentGatewaySettingsId());
     }
 
-    protected void clearTestData() {
+    protected void clearC2PTestData() {
         paymentBody.remove();
         paymentGatewaySettingsId.remove();
         paymentLink.remove();
@@ -95,5 +96,6 @@ public class GeneralSteps {
         activationKey.remove();
         createdWidgetId.remove();
         createdWidgetName.remove();
+        deleteAllGeneratedWidgets();
     }
 }

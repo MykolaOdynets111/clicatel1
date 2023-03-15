@@ -22,7 +22,7 @@ public class IntegrationSteps extends GeneralSteps {
             IntegrationResponse integrationResponse = response.jsonPath().getList("", IntegrationResponse.class)
                     .stream().filter(ir -> ir.getIntegrator().getName().equals(dataMap.get("o.name")))
                     .findFirst()
-                    .orElseThrow(NoSuchElementException::new);
+                    .orElseThrow(() -> new NoSuchElementException("There is no integration with name: " + dataMap.get("o.name")));
             checkIntegrationResponse(dataMap, integrationResponse);
         } else if (response.statusCode() == 404) {
             validateErrorResponse(response, dataMap);
