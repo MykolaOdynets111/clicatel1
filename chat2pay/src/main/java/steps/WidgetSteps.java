@@ -41,7 +41,7 @@ public class WidgetSteps extends GeneralSteps {
 
     @Then("^User creates (.*) widget")
     public void createWidget(String name) {
-        createNewWidget(name, "CHAT_TO_PAY", "SANDBOX");
+        createNewWidget(name);
     }
 
     @Then("^User creates widget for an account$")
@@ -178,10 +178,10 @@ public class WidgetSteps extends GeneralSteps {
         }
     }
 
-    private String createNewWidget(String name, String type, String environment) {
+    private void createNewWidget(String name) {
         WidgetBody widget = WidgetBody.builder()
-                .type(type)
-                .environment(environment)
+                .type("CHAT_TO_PAY")
+                .environment("SANDBOX")
                 .build();
 
         Response response = ApiHelperWidgets.createWidget(widget);
@@ -197,12 +197,8 @@ public class WidgetSteps extends GeneralSteps {
             assertThat(putQuery.getStatusCode())
                     .as("Create new widget. Expected status is 200!")
                     .isEqualTo(200);
-
-            return createdWidgetId.get();
         } else {
             Assert.fail("Could not create widget!. Error code: " + response.statusCode());
-
-            return "";
         }
     }
 }
