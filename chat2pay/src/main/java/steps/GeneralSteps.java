@@ -86,7 +86,7 @@ public class GeneralSteps {
                 .getPaymentGatewaySettingsId());
     }
 
-    protected void clearC2PTestData() {
+    protected void clearTestData() {
         paymentBody.remove();
         paymentGatewaySettingsId.remove();
         paymentLink.remove();
