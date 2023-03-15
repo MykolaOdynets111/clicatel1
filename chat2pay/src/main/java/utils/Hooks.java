@@ -6,11 +6,11 @@ import steps.GeneralSteps;
 
 public class Hooks extends GeneralSteps {
 
-    @After()
+    @After
     public void afterScenario() {
         if (ApiHelperWidgets.getWidget(createdWidgetId.get()).statusCode() == 200) {
             ApiHelperWidgets.deleteWidget(createdWidgetId.get());
         }
-        clearC2PTestData();
+        clearTestData();
     }
 }
