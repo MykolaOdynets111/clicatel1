@@ -12,6 +12,7 @@ import utils.Validator;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import static java.lang.String.format;
 import static utils.Validator.validateErrorResponse;
@@ -81,7 +82,9 @@ public class MessageSteps extends GeneralSteps {
     public void getTemplateUsage(Map<String, String> dataMap) {
         response = ApiHelperMessagesConfigurations.getTemplateUsageResponse(dataMap.get("i.templateId"));
         Validator.checkResponseCode(response, getResponseCode(dataMap));
-        Widget widget = response.getBody().jsonPath().getList("", Widget.class).get(0);
+        Widget widget = response.getBody().jsonPath().getList("", Widget.class)
+                .stream().filter(widget1 -> widget1.id.equals(dataMap.get("o.id")))
+                .findFirst().orElseThrow(NoSuchElementException::new);
         softly.assertThat(widget.getStatus()).isEqualTo(dataMap.get("o.status"));
         softly.assertThat(widget.getType()).isEqualTo(dataMap.get("o.type"));
         softly.assertThat(widget.getId()).isEqualTo(dataMap.get("o.id"));

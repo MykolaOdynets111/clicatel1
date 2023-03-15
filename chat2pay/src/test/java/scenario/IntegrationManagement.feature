@@ -20,7 +20,7 @@ Feature:  Integration Management
 
     Examples:
       | i.widgetId                       | o.responseCode | o.name | o.paymentStatusNotification           | o.integrationStatus | o.integratorType | o.status  | o.errorMessage | o.errors                  |
-      | 2c9acd56862b180001862b679a390001 | 200            | test   | https://en60qjud1gl72.x.pipedream.net | ACTIVATED           | APPLICATION      |           |                |                           |
+      | 2c9acd56862b180001862b679a390001 | 200            | Salesforce   | https://en60qjud1gl72.x.pipedream.net | ACTIVATED           | OMS      |           |                |                           |
       | non_existed                      | 404            |        |                                       |                     |                  | NOT_FOUND | URL /v2/widget | Widget does not exist, id |
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4724")
@@ -38,7 +38,7 @@ Feature:  Integration Management
       | o.errors                    | <o.errors>                    |
 
     Examples:
-      | i.widgetId                       | i.applicationId                      | o.responseCode | o.paymentStatusNotification           | o.integrationStatus | o.integratorType | o.status  | o.errorMessage | o.errors                      |
-      | 2c9acd56862b180001862b679a390001 | fc689978-d649-4862-8834-97b3d32327c7 | 200            | https://en60qjud1gl72.x.pipedream.net | ACTIVATED           | APPLICATION      |           |                |                               |
-      | non_existed                      | non_existed                          | 404            |                                       |                     |                  | NOT_FOUND | URL /v2/widget | Widget does not exist, id     |
-      | 2c9acd56862b180001862b679a390001 | non_existed                          | 404            |                                       |                     |                  | NOT_FOUND | URL /v2/widget | Integrator with applicationId |
+      | i.widgetId                       | i.applicationId | o.responseCode | o.paymentStatusNotification           | o.integrationStatus | o.integratorType | o.status  | o.errorMessage | o.errors                      |
+      | 2c9acd56862b180001862b679a390001 | 1               | 200            | https://en60qjud1gl72.x.pipedream.net | ACTIVATED           | OMS              |           |                |                               |
+      | non_existed                      | non_existed     | 404            |                                       |                     |                  | NOT_FOUND | URL /v2/widget | Widget does not exist, id     |
+      | 2c9acd56862b180001862b679a390001 | non_existed     | 404            |                                       |                     |                  | NOT_FOUND | URL /v2/widget | Integrator with applicationId |
