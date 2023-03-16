@@ -194,11 +194,13 @@ public class WidgetSteps extends GeneralSteps {
                     .build();
             Response putQuery = ApiHelperWidgets.updateWidget(createdWidgetId.get(), updateBody);
 
-            assertThat(putQuery.getStatusCode())
-                    .as("Create new widget. Expected status is 200!")
-                    .isEqualTo(200);
+            if (putQuery.getStatusCode() != 200) {
+                Assert.fail(format("Could not update widget! Error code: %s. Error message: %s",
+                        putQuery.getStatusCode(),
+                        putQuery.getBody()));
+            }
         } else {
-            Assert.fail("Could not create widget!. Error code: " + response.statusCode());
+            Assert.fail("Could not create widget! Error code: " + response.statusCode());
         }
     }
 }

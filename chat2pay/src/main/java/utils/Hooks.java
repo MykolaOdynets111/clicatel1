@@ -1,7 +1,7 @@
 package utils;
 
 import api.clients.ApiHelperWidgets;
-import org.junit.After;
+import io.cucumber.java.After;
 import steps.GeneralSteps;
 
 public class Hooks extends GeneralSteps {
