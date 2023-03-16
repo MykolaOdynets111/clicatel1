@@ -13,6 +13,8 @@ import static org.testng.Assert.fail;
 
 public abstract class MainApi {
 
+    // Get queries ___________
+
     @NotNull
     protected static Response getQuery(String endpoint, String authToken) {
         return get(authToken, endpoint);
@@ -75,7 +77,7 @@ public abstract class MainApi {
                 .get(endpoint);
     }
 
-    // Post queries
+    // Post queries ___________
 
     @NotNull
     protected static ResponseBody postQuery(String endpoint, Object body, String authToken, int responseCode) {
@@ -137,7 +139,7 @@ public abstract class MainApi {
     @NotNull
     protected static ResponseBody putQueryWithoutAuth(String endpoint, Object body, int responseCode) {
         Response response = putWithoutAuth(endpoint, body);
-            return validate(response, responseCode);
+        return validate(response, responseCode);
     }
 
     @NotNull
