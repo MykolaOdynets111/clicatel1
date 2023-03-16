@@ -95,5 +95,7 @@ public class GeneralSteps {
         activationKey.remove();
         createdWidgetId.remove();
         createdWidgetName.remove();
+
+        ApiHelperWidgets.deleteAllGeneratedWidgets();
     }
 }
