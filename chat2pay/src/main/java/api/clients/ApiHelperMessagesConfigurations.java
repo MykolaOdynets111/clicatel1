@@ -7,7 +7,7 @@ import io.restassured.response.Response;
 public class ApiHelperMessagesConfigurations extends ApiHelperChat2Pay {
 
     public static Response getMessageConfigurationResponse(String widgetId) {
-        return getQuery(String.format(Endpoints.MESSAGE_CONFIGURATIONS, widgetId), token.get());
+        return getQuery(token.get(), String.format(Endpoints.MESSAGE_CONFIGURATIONS, widgetId));
     }
 
     public static Response putMessageConfiguration(String widgetId, MessageBody messageBody) {
@@ -15,6 +15,6 @@ public class ApiHelperMessagesConfigurations extends ApiHelperChat2Pay {
     }
 
     public static Response getTemplateUsageResponse(String templateId) {
-        return getQuery(String.format(Endpoints.TEMPLATE_USAGE, templateId), token.get());
+        return getQuery(token.get(), String.format(Endpoints.TEMPLATE_USAGE, templateId));
     }
 }

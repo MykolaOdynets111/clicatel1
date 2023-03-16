@@ -12,7 +12,7 @@ import static java.lang.String.format;
 public class ApiHelperPaymentGatewaySettingsConfiguration extends ApiHelperChat2Pay {
 
     public static Response getLogo(String widgetId, String gatewayId) {
-        return getQuery(format(Endpoints.GET_PAYMENTS_GATEWAY_LOGO, widgetId, gatewayId), token.get());
+        return getQuery(token.get(), format(Endpoints.GET_PAYMENTS_GATEWAY_LOGO, widgetId, gatewayId));
     }
 
     public static Response postLogo(String widgetId, File logo) {
@@ -20,7 +20,7 @@ public class ApiHelperPaymentGatewaySettingsConfiguration extends ApiHelperChat2
     }
 
     public static Response getPaymentsGatewaySettings(String widgetId) {
-        return getQuery(format(Endpoints.PAYMENTS_GATEWAY_ENDPOINT, widgetId), token.get());
+        return getQuery(token.get(), format(Endpoints.PAYMENTS_GATEWAY_ENDPOINT, widgetId));
     }
 
     public static Response postSecureAcceptanceSettings(String widgetId,

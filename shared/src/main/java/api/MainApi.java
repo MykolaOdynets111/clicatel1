@@ -16,7 +16,7 @@ public abstract class MainApi {
     // Get queries ___________
 
     @NotNull
-    protected static Response getQuery(String endpoint, String authToken) {
+    protected static Response getQuery(String authToken, String endpoint) {
         return get(authToken, endpoint);
     }
 
