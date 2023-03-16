@@ -10,14 +10,14 @@ public class ApiHelperClickatellProduct extends ApiHelperChat2Pay {
     }
 
     public static Response updateClickatellProduct(String widgetId, ApplicationBody applicationBody) {
-        return putQuery(String.format(Endpoints.CLICKATELL_PRODUCT_ENDPOINT, widgetId), applicationBody, token.get());
+        return putQuery(token.get(), String.format(Endpoints.CLICKATELL_PRODUCT_ENDPOINT, widgetId), applicationBody);
     }
 
     public static Response getClickatellProduct(String widgetId, String applicationId) {
-        return getQuery(String.format(Endpoints.CLICKATELL_PRODUCT_ENDPOINT, widgetId) + "/" + applicationId, token.get());
+        return getQuery(token.get(), String.format(Endpoints.CLICKATELL_PRODUCT_ENDPOINT, widgetId) + "/" + applicationId);
     }
 
     public static Response deleteClickatellProduct(String widgetId, String applicationId) {
-        return deleteQuery(String.format(Endpoints.CLICKATELL_PRODUCT_ENDPOINT, widgetId) + "/" + applicationId, token.get());
+        return deleteQuery(token.get(), String.format(Endpoints.CLICKATELL_PRODUCT_ENDPOINT, widgetId) + "/" + applicationId);
     }
 }

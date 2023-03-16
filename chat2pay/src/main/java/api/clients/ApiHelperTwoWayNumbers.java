@@ -10,7 +10,7 @@ import static java.lang.String.format;
 public class ApiHelperTwoWayNumbers extends MainApi {
 
     public static Response getTwoWayNumbers(String widgetId, String authToken) {
-        return getQuery(format(Endpoints.TWO_WAY_NUMBER, widgetId), authToken);
+        return getQuery(authToken, format(Endpoints.TWO_WAY_NUMBER, widgetId));
     }
 
     public static Response updateTwoWayNumbers(String widgetId, TwoWayNumberConfiguration configuration, String authToken) {

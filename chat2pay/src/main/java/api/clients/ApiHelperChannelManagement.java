@@ -16,10 +16,10 @@ public class ApiHelperChannelManagement extends MainApi {
     }
 
     public static Response updateChannelStatus(ChannelStatus status, String widgetId, String authToken) {
-        return putQuery(format(Endpoints.CHANNEL_STATUS, widgetId), status, authToken);
+        return putQuery(authToken, format(Endpoints.CHANNEL_STATUS, widgetId), status);
     }
 
     public static Response removeChannelIntegration(ChannelType status, String widgetId, String authToken) {
-        return deleteQuery(format(Endpoints.CHANNEL_CONFIGURATION, widgetId), status, authToken);
+        return deleteQuery(authToken, format(Endpoints.CHANNEL_CONFIGURATION, widgetId), status);
     }
 }
