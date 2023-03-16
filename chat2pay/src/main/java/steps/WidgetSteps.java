@@ -93,6 +93,8 @@ public class WidgetSteps extends GeneralSteps {
                 response = ApiHelperWidgets.getWidget(getWidgetId(dataMap));
                 validateErrorResponse(response, dataMap);
                 break;
+            default:
+                Assertions.fail(format("Expected status %s is not existed", getWidgetId(dataMap)));
         }
     }
 
@@ -184,7 +186,7 @@ public class WidgetSteps extends GeneralSteps {
                 .environment("SANDBOX")
                 .build();
 
-        Response response = ApiHelperWidgets.createWidget(widget);
+        response = ApiHelperWidgets.createWidget(widget);
         if (response.statusCode() != 200) {
             Assert.fail("Could not create widget! Error code: " + response.statusCode());
         } else {
