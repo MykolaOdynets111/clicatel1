@@ -11,7 +11,7 @@ public class ApiHelperMessagesConfigurations extends ApiHelperChat2Pay {
     }
 
     public static Response putMessageConfiguration(String widgetId, MessageBody messageBody) {
-        return putQuery(String.format(Endpoints.MESSAGE_CONFIGURATIONS, widgetId), messageBody, token.get());
+        return putQuery(token.get(), String.format(Endpoints.MESSAGE_CONFIGURATIONS, widgetId), messageBody);
     }
 
     public static Response getTemplateUsageResponse(String templateId) {

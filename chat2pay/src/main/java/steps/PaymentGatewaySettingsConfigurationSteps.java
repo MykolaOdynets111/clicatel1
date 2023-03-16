@@ -79,7 +79,6 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
 
     @Then("^User gets 'Unified Payment Gateway Settings'$")
     public void getPaymentGatewaySettings(Map<String, String> dataMap) {
-        Response response;
         switch (getWidgetId(dataMap)) {
             case "valid":
                 response = ApiHelperPaymentGatewaySettingsConfiguration.getPaymentsGatewaySettings(createdWidgetId.get());
@@ -131,12 +130,14 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
             case "invalid":
                 response = ApiHelperPaymentGatewaySettingsConfiguration.getPaymentsGatewaySettings(null);
                 verifyBadRequestResponse(dataMap, response);
+                break;
+            default:
+                Assertions.fail(format("Expected status %s is not existed", getWidgetId(dataMap)));
         }
     }
 
     @Then("^User gets 'Secure Acceptance Settings'$")
     public void getSecureAcceptanceSettings(Map<String, String> dataMap) {
-        Response response;
         switch (getWidgetId(dataMap)) {
             case "valid":
                 response = ApiHelperPaymentGatewaySettingsConfiguration.getPaymentsGatewaySettings(createdWidgetId.get());
@@ -171,12 +172,14 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
             case "invalid":
                 response = ApiHelperPaymentGatewaySettingsConfiguration.getPaymentsGatewaySettings(null);
                 verifyBadRequestResponse(dataMap, response);
+                break;
+            default:
+                Assertions.fail(format("Expected status %s is not existed", getWidgetId(dataMap)));
         }
     }
 
     @Then("^User deletes 'Payment Gateway Settings'$")
     public void deletePaymentGatewaySettings(Map<String, String> dataMap) {
-        Response response;
         switch (getWidgetId(dataMap)) {
             case "valid":
                 String paymentGatewaySettingsId = GeneralSteps.paymentGatewaySettingsId.get();
@@ -192,6 +195,9 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
             case "invalid":
                 response = ApiHelperPaymentGatewaySettingsConfiguration.getPaymentsGatewaySettings(null);
                 verifyBadRequestResponse(dataMap, response);
+                break;
+            default:
+                Assertions.fail(format("Expected status %s is not existed", getWidgetId(dataMap)));
         }
     }
 

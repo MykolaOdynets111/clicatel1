@@ -38,7 +38,7 @@ public class ApiHelperWidgets extends ApiHelperChat2Pay {
     }
 
     public static Response updateWidget(String widgetId, Widget widgetBody) {
-        return putQuery(Endpoints.WIDGETS_ENDPOINT + "/" + widgetId, widgetBody, token.get());
+        return putQuery(token.get(), Endpoints.WIDGETS_ENDPOINT + "/" + widgetId, widgetBody);
     }
 
     public static Response deleteWidget(String widgetId) {
@@ -46,7 +46,7 @@ public class ApiHelperWidgets extends ApiHelperChat2Pay {
     }
 
     public static Response updateShowLinkedApiForWidget(String widgetId, Widget widgetBody) {
-        return putQuery(String.format(Endpoints.WIDGET_SHOWED_LINKED_API_ENDPOINT, widgetId), widgetBody, token.get());
+        return putQuery(token.get(), String.format(Endpoints.WIDGET_SHOWED_LINKED_API_ENDPOINT, widgetId), widgetBody);
     }
 
     public static void deleteAllGeneratedWidgets() {

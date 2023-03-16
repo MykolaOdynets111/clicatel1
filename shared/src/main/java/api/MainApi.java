@@ -37,13 +37,13 @@ public abstract class MainApi {
         return validate(response, responseCode);
     }
 
-    protected static Response putQuery(String endpoint, Object body, String authToken) {
-        return put(endpoint, body, authToken);
+    protected static Response putQuery(String authToken, String endpoint, Object body) {
+        return put(authToken, endpoint, body);
     }
 
     @NotNull
     protected static ResponseBody getQuery(String endpoint, String authToken, int responseCode) {
-        Response response = get(endpoint, authToken);
+        Response response = get(authToken, endpoint);
         return validate(response, responseCode);
     }
 
@@ -55,7 +55,7 @@ public abstract class MainApi {
 
     @NotNull
     protected static Response getQuery(String endpoint, String authToken) {
-        return get(endpoint, authToken);
+        return get(authToken, endpoint);
     }
 
     @NotNull
@@ -89,7 +89,6 @@ public abstract class MainApi {
         Response response = putWithBodyAndAuth(endpoint, authToken, body);
         return validate(response, responseCode);
     }
-
 
     protected static Response put(String endpoint, String authToken) {
         return RestAssured.given().log().all()
@@ -172,7 +171,7 @@ public abstract class MainApi {
                 .post(endpoint);
     }
 
-    private static Response put(String endpoint, Object body, String authToken) {
+    private static Response put(String authToken, String endpoint, Object body) {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .header("Authorization", authToken)
@@ -180,7 +179,7 @@ public abstract class MainApi {
                 .put(endpoint);
     }
 
-    private static Response get(String endpoint, String authToken) {
+    private static Response get(String authToken, String endpoint) {
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .header("Authorization", authToken)

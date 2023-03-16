@@ -12,6 +12,6 @@ public class ApiHelperAccounts extends MainApi {
     }
 
     public static Response putAccountSettings(AccountSettingsPropertyBody settings, String authToken) {
-        return putQuery(Endpoints.ACCOUNT_SETTINGS_SHOW_TUTORIAL, settings, authToken);
+        return putQuery(authToken, Endpoints.ACCOUNT_SETTINGS_SHOW_TUTORIAL, settings);
     }
 }
