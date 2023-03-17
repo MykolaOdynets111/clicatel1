@@ -1,10 +1,10 @@
 package steps;
 
 
-import api.clients.ApiHelperMessagesConfigurations;
-import api.models.request.message.MessageBody;
-import api.models.response.message.Message;
-import api.models.response.widget.Widget;
+import api.ApiHelperMessagesConfigurations;
+import data.models.request.message.MessageBody;
+import data.models.response.message.Message;
+import data.models.response.widget.Widget;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;

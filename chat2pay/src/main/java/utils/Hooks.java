@@ -1,6 +1,6 @@
 package utils;
 
-import api.clients.ApiHelperWidgets;
+import api.ApiHelperWidgets;
 import io.cucumber.java.After;
 import steps.GeneralSteps;
 

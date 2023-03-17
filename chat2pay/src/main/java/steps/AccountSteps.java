@@ -1,15 +1,15 @@
 package steps;
 
-import api.clients.ApiHelperAccounts;
-import api.models.request.widgetconfigurations.AccountSettingsPropertyBody;
-import api.models.response.account.AccountSettingsResponse;
+import api.ApiHelperAccounts;
+import data.models.request.widgetconfigurations.AccountSettingsPropertyBody;
+import data.models.response.account.AccountSettingsResponse;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
 
 import java.util.Map;
 
-import static api.clients.ApiHelperAccounts.getAccountSettingsResponse;
+import static api.ApiHelperAccounts.getAccountSettingsResponse;
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static utils.Validator.verifyUnauthorisedResponse;

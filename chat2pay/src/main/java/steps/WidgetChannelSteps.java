@@ -1,12 +1,12 @@
 package steps;
 
-import api.clients.ApiHelperChannelManagement;
-import api.clients.ApiHelperChat2Pay;
-import api.models.request.channels.ChannelManagement;
-import api.models.request.channels.ChannelStatus;
-import api.models.request.channels.ChannelType;
-import api.models.response.updatedresponse.UpdatedEntityResponse;
-import api.models.response.widgetconfigurations.ChannelManagementStatusResponse;
+import api.ApiHelperChannelManagement;
+import api.ApiHelperChat2Pay;
+import data.models.request.channels.ChannelManagement;
+import data.models.request.channels.ChannelStatus;
+import data.models.request.channels.ChannelType;
+import data.models.response.updatedresponse.UpdatedEntityResponse;
+import data.models.response.widgetconfigurations.ChannelManagementStatusResponse;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;

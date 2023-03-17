@@ -1,11 +1,11 @@
 package steps;
 
-import api.clients.ApiHelperChat2Pay;
-import api.clients.ApiHelperIntegration;
-import api.clients.ApiHelperPayments;
-import api.clients.ApiHelperWidgets;
-import api.models.request.PaymentBody;
-import api.models.response.integration.IntegrationResponse;
+import api.ApiHelperChat2Pay;
+import api.ApiHelperIntegration;
+import api.ApiHelperPayments;
+import api.ApiHelperWidgets;
+import data.models.request.PaymentBody;
+import data.models.response.integration.IntegrationResponse;
 import com.github.javafaker.Faker;
 import org.assertj.core.api.SoftAssertions;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static api.clients.ApiHelperWidgets.deleteAllGeneratedWidgets;
+import static api.ApiHelperWidgets.deleteAllGeneratedWidgets;
 import static java.lang.Integer.parseInt;
 
 public class GeneralSteps {

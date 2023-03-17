@@ -1,8 +1,8 @@
 package steps;
 
-import api.clients.ApiHelperMerchantBillingInfo;
-import api.models.request.MerchantBillingInfoBody;
-import api.models.response.merchantbillinginfo.MerchantBillingInfoResponse;
+import api.ApiHelperMerchantBillingInfo;
+import data.models.request.MerchantBillingInfoBody;
+import data.models.response.merchantbillinginfo.MerchantBillingInfoResponse;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
