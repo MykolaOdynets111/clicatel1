@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 @CucumberOptions(
         plugin = {"pretty", "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"},
         monochrome = true,
-        features = "src/test/java/scenario",
+        features = "chat2pay/src/test/java/scenario",
         glue = "steps")
 public class RunChat2PayTests extends AbstractTestNGCucumberTests {
 

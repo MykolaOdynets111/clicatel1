@@ -7,7 +7,7 @@ buildscript {
 sourceSets {
     main {
         resources {
-            srcDirs "src/main/resources"
+            srcDirs "src/test/resources"
         }
     }
 }
@@ -28,19 +28,16 @@ dependencies {
 }
 
 def suite = "chat2pay"
-def baseXmlPath = "/src/test/resources/suites"
+def baseXmlPath = "src/test/resources"
 
-tasks.withType(Test).configureEach {
-    systemProperties = System.getProperties() as Map<String, ?>
-}
 tasks.withType(Copy).configureEach { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
+
 
 tasks.withType(Test).configureEach {
     systemProperties = System.getProperties() as Map<String, ?>
 }
 
 // ========= !! TASKS FOR SUITES !! ============== //
-
 
 tasks.register('runChat2PayTests', Test) {
     useTestNG() {
