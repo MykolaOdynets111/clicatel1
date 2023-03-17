@@ -30,6 +30,7 @@ public class GeneralSteps {
     protected static final ThreadLocal<String> activationKey = new ThreadLocal<>();
     protected static final ThreadLocal<String> createdWidgetId = new ThreadLocal<>();
     protected static final ThreadLocal<String> createdWidgetName = new ThreadLocal<>();
+    protected static final ThreadLocal<String> createdCustomerApplicationId = new ThreadLocal<>();
 
     protected final SoftAssertions softly = new SoftAssertions();
     protected Faker faker = new Faker();

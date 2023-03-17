@@ -67,4 +67,5 @@ public class Endpoints {
     //IntegrationManagement
     public static final String WIDGET_INTEGRATION_ENDPOINT = WIDGETS_ENDPOINT + "/%s/integration";
     public static final String CLICKATELL_PRODUCT_ENDPOINT = WIDGET_INTEGRATION_ENDPOINT + "/clickatell-product";
+    public static final String CUSTOMER_APPLICATION_ENDPOINT = WIDGET_INTEGRATION_ENDPOINT + "/customer-application";
 }

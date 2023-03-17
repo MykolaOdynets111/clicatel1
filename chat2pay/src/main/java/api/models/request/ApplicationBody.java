@@ -1,5 +1,6 @@
 package api.models.request;
 
+import api.models.response.integration.NotificationUrls;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -11,7 +12,9 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "status",
-        "applicationId"
+        "applicationId",
+        "applicationName",
+        "notificationUrls"
 })
 
 @Getter
@@ -25,4 +28,11 @@ public class ApplicationBody {
 
     @JsonProperty("applicationId")
     private String applicationId;
+
+    @JsonProperty("applicationName")
+    private String applicationName;
+
+    @JsonProperty("notificationUrls")
+    private NotificationUrls notificationUrls;
+
 }
