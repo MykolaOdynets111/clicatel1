@@ -45,16 +45,21 @@ public class LeftMenuSteps extends AbstractAgentSteps {
 
     @Then("^(.*) has (?:new|old) (.*) (?:request|shown)(?: from (.*) user|)$")
     public void verifyIfAgentReceivesConversationRequest(String agent, String chatType, String integration) {
-        if (integration == null) {
-            if (ConfigManager.isWebWidget()) {
-                integration = "touch";
-            } else {
-                integration = "ORCA";
-            }
+        String userName;
+        if (chatType.equals( "WhatsAppConversation")){
+             userName = "AQA_Mykola";
         }
+        else {
+            if (integration == null) {
+                if (ConfigManager.isWebWidget()) {
+                    integration = "touch";
+                } else {
+                    integration = "ORCA";
+                }
+            }
 
-        String userName = getUserName(integration);
-
+            userName = getUserName(integration);
+        }
         boolean isConversationShown = getLeftMenu(agent).isNewConversationIsShown(userName, 30);
 
         Map settingResults = new HashMap<String, Object>();
@@ -247,10 +252,15 @@ public class LeftMenuSteps extends AbstractAgentSteps {
 
     @When("^(.*) click on (?:new|last opened) conversation request from (.*)$")
     public void acceptUserFromSocialConversation(String agent, String socialChannel) {
-        if (!ConfigManager.isWebWidget() && socialChannel.equalsIgnoreCase("touch")) {
-            socialChannel = "orca";
+        if (socialChannel.equals( "WhatsAppConversation")){
+            getLeftMenu(agent).openChatByUserName("AQA_Mykola");
         }
-        getLeftMenu(agent).openChatByUserName(getUserName(socialChannel));
+        else {
+            if (!ConfigManager.isWebWidget() && socialChannel.equalsIgnoreCase("touch")) {
+                socialChannel = "orca";
+            }
+            getLeftMenu(agent).openChatByUserName(getUserName(socialChannel));
+        }
     }
 
     //Don't use this method - id doesn't work

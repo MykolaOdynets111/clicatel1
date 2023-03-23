@@ -1,6 +1,7 @@
 package agentpages;
 
 import abstractclasses.AgentAbstractPage;
+import datamanager.Tenants;
 import driverfactory.URLs;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebElement;
@@ -62,6 +63,15 @@ public class AgentLoginPage extends AgentAbstractPage {
         String finalAgent = agent;
         String agentName = options.stream().filter(a -> a.getText().toLowerCase().contains(finalAgent)).findFirst().get().getText();
         dropdownSelect.selectByVisibleText(agentName);
+        return this;
+    }
+
+    public AgentLoginPage selectAmritOrcAgent(String agent){
+        Tenants.setTenantUnderTestOrgName(agent);
+        clickElem(this.getCurrentDriver(), agentsDropdown, 2, "Agents Dropdown");
+        dropdownSelect = new Select(agentsDropdown);
+        waitForOptionsIsDownloaded(dropdownSelect);
+        dropdownSelect.selectByVisibleText(agent);
         return this;
     }
 

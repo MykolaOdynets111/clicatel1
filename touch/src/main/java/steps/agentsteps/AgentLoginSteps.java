@@ -27,7 +27,12 @@ public class AgentLoginSteps extends AbstractAgentSteps {
         } else
         {
             AbstractAgentSteps.getAgentLoginPage(ordinalAgentNumber).openPortalLoginPage();
-            AbstractAgentSteps.getAgentLoginPage(ordinalAgentNumber).selectTenant(Tenants.getTenantUnderTestName())
+            if (ordinalAgentNumber.equals("Amrit ORCA")){
+                AbstractAgentSteps.getAgentLoginPage(ordinalAgentNumber).selectTenant(Tenants.getTenantUnderTestName())
+                        .selectAmritOrcAgent(ordinalAgentNumber).clickAuthenticateButton();
+                            }
+            else
+                AbstractAgentSteps.getAgentLoginPage(ordinalAgentNumber).selectTenant(Tenants.getTenantUnderTestName())
                     .selectAgent(ordinalAgentNumber).clickAuthenticateButton();
             AbstractAgentSteps.getAgentLoginPage(ordinalAgentNumber).getCurrentDriver().get(URLs.getUrlByNameOfPage("Agent Desk"));
         }
