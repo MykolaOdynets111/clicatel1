@@ -1,9 +1,9 @@
 package steps;
 
-import api.clients.ApiHelperChat2Pay;
-import api.clients.ApiHelperTwoWayNumbers;
-import api.models.request.widgetconfigurations.TwoWayNumberConfiguration;
-import api.models.response.widgetconfigurations.TwoWayNumbersBody;
+import api.ApiHelperChat2Pay;
+import api.ApiHelperTwoWayNumbers;
+import data.models.request.widgetconfigurations.TwoWayNumberConfiguration;
+import data.models.response.widgetconfigurations.TwoWayNumbersBody;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;

@@ -1,8 +1,8 @@
 package utils;
 
-import api.models.response.failedresponse.BadRequestResponse;
-import api.models.response.failedresponse.ErrorResponse;
-import api.models.response.failedresponse.UnauthorisedResponse;
+import data.models.response.failedresponse.BadRequestResponse;
+import data.models.response.failedresponse.ErrorResponse;
+import data.models.response.failedresponse.UnauthorisedResponse;
 import datamodelclasses.validateobjects.ErrorValidatorObject;
 import io.restassured.response.Response;
 import org.assertj.core.api.SoftAssertions;
