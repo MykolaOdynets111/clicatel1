@@ -1,6 +1,6 @@
 package steps;
 
-import api.clients.ApiHelperChat2Pay;
+import api.ApiHelperChat2Pay;
 import io.cucumber.java.en.Given;
 
 import static datamanager.UnityClients.QA_C2P_USER;

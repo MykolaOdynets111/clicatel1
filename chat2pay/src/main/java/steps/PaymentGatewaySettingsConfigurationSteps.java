@@ -1,16 +1,16 @@
 package steps;
 
-import api.clients.ApiHelperPaymentGatewaySettingsConfiguration;
-import api.models.request.payments.PaymentGatewaySettingsSecureAcceptance;
-import api.models.request.payments.PaymentGatewaySettingsUnifiedPayments;
-import api.models.response.paymentgatewaysettingsresponse.CardNetwork;
-import api.models.response.paymentgatewaysettingsresponse.Country;
-import api.models.response.paymentgatewaysettingsresponse.Currency;
-import api.models.response.paymentgatewaysettingsresponse.DefaultCurrency;
-import api.models.response.paymentgatewaysettingsresponse.Locale;
-import api.models.response.paymentgatewaysettingsresponse.PaymentGatewaySettingsResponse;
-import api.models.response.paymentgatewaysettingsresponse.PaymentType;
-import api.models.response.paymentgatewaysettingsresponse.SecureAcceptanceGatewaySettingsResponse;
+import api.ApiHelperPaymentGatewaySettingsConfiguration;
+import data.models.request.payments.PaymentGatewaySettingsSecureAcceptance;
+import data.models.request.payments.PaymentGatewaySettingsUnifiedPayments;
+import data.models.response.paymentgatewaysettingsresponse.CardNetwork;
+import data.models.response.paymentgatewaysettingsresponse.Country;
+import data.models.response.paymentgatewaysettingsresponse.Currency;
+import data.models.response.paymentgatewaysettingsresponse.DefaultCurrency;
+import data.models.response.paymentgatewaysettingsresponse.Locale;
+import data.models.response.paymentgatewaysettingsresponse.PaymentGatewaySettingsResponse;
+import data.models.response.paymentgatewaysettingsresponse.PaymentType;
+import data.models.response.paymentgatewaysettingsresponse.SecureAcceptanceGatewaySettingsResponse;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
@@ -22,8 +22,8 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-import static api.clients.ApiHelperPaymentGatewaySettingsConfiguration.postSecureAcceptanceSettings;
-import static api.clients.ApiHelperPaymentGatewaySettingsConfiguration.postUnifiedPaymentsSettings;
+import static api.ApiHelperPaymentGatewaySettingsConfiguration.postSecureAcceptanceSettings;
+import static api.ApiHelperPaymentGatewaySettingsConfiguration.postUnifiedPaymentsSettings;
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static utils.Validator.verifyBadRequestResponse;

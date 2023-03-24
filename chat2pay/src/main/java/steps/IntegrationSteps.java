@@ -1,6 +1,6 @@
 package steps;
 
-import api.models.response.integration.IntegrationResponse;
+import data.models.response.integration.IntegrationResponse;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
@@ -8,8 +8,8 @@ import org.assertj.core.api.Assertions;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import static api.clients.ApiHelperIntegration.getApplicationResponse;
-import static api.clients.ApiHelperIntegration.getIntegrationResponse;
+import static api.ApiHelperIntegration.getApplicationResponse;
+import static api.ApiHelperIntegration.getIntegrationResponse;
 import static java.lang.String.format;
 import static utils.Validator.validateErrorResponse;
 

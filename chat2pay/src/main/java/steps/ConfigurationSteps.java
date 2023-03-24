@@ -1,8 +1,8 @@
 package steps;
 
-import api.models.response.c2pconfiguration.ConfigurationBody;
-import api.models.response.c2pconfiguration.ConfigurationIntegrator;
-import api.models.response.c2pconfiguration.SupportedCurrency;
+import data.models.response.c2pconfiguration.ConfigurationBody;
+import data.models.response.c2pconfiguration.ConfigurationIntegrator;
+import data.models.response.c2pconfiguration.SupportedCurrency;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
@@ -10,7 +10,7 @@ import org.assertj.core.api.Assertions;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import static api.clients.ApiHelperConfigurations.getC2PConfigurationResponse;
+import static api.ApiHelperConfigurations.getC2PConfigurationResponse;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static utils.Validator.verifyUnauthorisedResponse;
