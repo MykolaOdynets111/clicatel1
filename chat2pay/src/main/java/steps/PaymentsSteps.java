@@ -1,9 +1,9 @@
 package steps;
 
-import api.clients.ApiHelperPayments;
-import api.clients.ApiHelperWidgets;
-import api.models.request.PaymentBody;
-import api.models.response.PaymentLinkResponse;
+import api.ApiHelperPayments;
+import api.ApiHelperWidgets;
+import data.models.request.PaymentBody;
+import data.models.response.PaymentLinkResponse;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;

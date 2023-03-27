@@ -1,8 +1,8 @@
 package steps;
 
-import api.clients.ApiHelperChat2Pay;
-import api.models.response.updatedresponse.UpdatedEntityResponse;
-import api.models.response.widgetconfigurations.ApiKeysResponse;
+import api.ApiHelperChat2Pay;
+import data.models.response.updatedresponse.UpdatedEntityResponse;
+import data.models.response.widgetconfigurations.ApiKeysResponse;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 
@@ -10,9 +10,9 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.Objects;
 
-import static api.clients.ApiHelperApiKeysManagement.getApiKeysManagement;
-import static api.clients.ApiHelperApiKeysManagement.removeApiKeysManagement;
-import static api.clients.ApiHelperApiKeysManagement.updateApiKeysManagement;
+import static api.ApiHelperApiKeysManagement.getApiKeysManagement;
+import static api.ApiHelperApiKeysManagement.removeApiKeysManagement;
+import static api.ApiHelperApiKeysManagement.updateApiKeysManagement;
 import static java.lang.String.format;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static utils.Validator.verifyBadRequestResponse;

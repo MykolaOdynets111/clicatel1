@@ -28,23 +28,23 @@ subprojects {
     targetCompatibility = JavaVersion.VERSION_1_8
 
     dependencies {
-        api  group: 'org.testcontainers', name: 'selenium', version: '1.16.3'
-        api  group: 'com.github.javafaker', name: 'javafaker', version: '1.0.2'
-        api  group: 'io.rest-assured', name: 'rest-assured', version: '4.5.1'
-        api  group: 'io.appium', name: 'java-client', version: '7.3.0'
-        api  group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '5.1.0'
-        api  group: 'ru.yandex.qatools.htmlelements', name: 'htmlelements-java', version: '1.20.0'
-        api  'com.assertthat:selenium-shutterbug:1.5'
-        api  'org.assertj:assertj-core:3.11.1'
+        api group: 'org.testcontainers', name: 'selenium', version: '1.16.3'
+        api group: 'com.github.javafaker', name: 'javafaker', version: '1.0.2'
+        api group: 'io.rest-assured', name: 'rest-assured', version: '4.5.1'
+        api group: 'io.appium', name: 'java-client', version: '7.3.0'
+        api group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '5.1.0'
+        api group: 'ru.yandex.qatools.htmlelements', name: 'htmlelements-java', version: '1.20.0'
+        api 'com.assertthat:selenium-shutterbug:1.5'
+        api 'org.assertj:assertj-core:3.11.1'
         compileOnly 'org.projectlombok:lombok:1.18.22'
         annotationProcessor 'org.projectlombok:lombok:1.18.22'
-        api  group: 'org.jetbrains', name: 'annotations', version: '23.0.0'
+        api group: 'org.jetbrains', name: 'annotations', version: '23.0.0'
         implementation group: 'org.json', name: 'json', version: '20090211'
         //testImplementation("org.assertj:assertj-core:3.11.1")
     }
-    
 
-    task reportToTesFLO(type:JavaExec) {
+
+    task reportToTesFLO(type: JavaExec) {
         sleep(5000)
         main = "testflo/TestFloReporter"
         systemProperties = System.getProperties()
@@ -59,6 +59,12 @@ task runMC2Tests {
     dependsOn 'clean'
     dependsOn ':mc2:runTests'
     runMC2Tests.finalizedBy(':mc2:allureReport')
+}
+
+tasks.register('runChat2PayTests') {
+    dependsOn 'clean'
+    dependsOn ':chat2pay:runChat2PayTests'
+    runChat2PayTests.finalizedBy(':chat2pay:allureReport')
 }
 
 
