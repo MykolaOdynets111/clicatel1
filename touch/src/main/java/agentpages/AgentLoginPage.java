@@ -10,6 +10,8 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
+import static utils.PropertiesReader.getProperty;
+
 public class AgentLoginPage extends AgentAbstractPage {
 
     @FindBy(css = "[id='tenants']")
@@ -66,7 +68,7 @@ public class AgentLoginPage extends AgentAbstractPage {
         return this;
     }
 
-    public AgentLoginPage selectAmritOrcAgent(String agent){
+    public AgentLoginPage selectWhatsAppFullFlowAgent(String agent){
         Tenants.setTenantUnderTestOrgName(agent);
         clickElem(this.getCurrentDriver(), agentsDropdown, 2, "Agents Dropdown");
         dropdownSelect = new Select(agentsDropdown);
@@ -77,7 +79,9 @@ public class AgentLoginPage extends AgentAbstractPage {
 
     public AgentLoginPage clickAuthenticateButton(){
         clickElem(this.getCurrentDriver(), authenticateButton, 2, "Authenticate");
-        verifyJVT();
+        if (getProperty("environment").equalsIgnoreCase("demo")) {
+            verifyJVT();
+        }
         return this;
     }
 

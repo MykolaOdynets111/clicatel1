@@ -2,11 +2,11 @@
 @Regression
 Feature: Whatsapp Appium :: Chatdesk
 
-  @TestCaseId("https://jira.clickatell.com/browse/CCD-1739")
+  @TestCaseId("https://jira.clickatell.com/browse/CCD-13084")
   Scenario: ChatDesk:: The header should have chatting using Appium whatsapp
 
 
-    Given I login as Amrit ORCA of ORCA Demo
+    Given I login as Agent of WhatsAppFullFlowTenant
 
     When Setup appium whatsapp integration for orca1demo tenant
 

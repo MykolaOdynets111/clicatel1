@@ -8,6 +8,8 @@ import org.testng.Assert;
 import socialaccounts.FacebookPages;
 import socialaccounts.TwitterPages;
 
+import static utils.PropertiesReader.getProperty;
+
 public class URLs {
 
     private static final String BASE_FB_URL = "https://www.facebook.com/";
@@ -40,9 +42,9 @@ public class URLs {
 
     private static String BASE_WS_URL = "https://%s-chatdesk-platform-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/api/";
 
-    private static String TOUCH_LOGIN_FORM = "https://%s-chatdesk-platform-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/internal/static/auth-tool/";
+    private static String TOUCH_LOGIN_FORM = "https://%s-chatdesk-platform-app-%s.int-eks-%s.shared-%s.eu-west-1.aws.clickatell.com/internal/static/auth-tool/";
 
-    private static String TOUCH_MAIN_URL = "https://%s-chatdesk-portal-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/";
+    private static String TOUCH_MAIN_URL = ".TouchMainURL";
 
 
 
@@ -110,19 +112,20 @@ public class URLs {
     }
 
     public static String getTouchLoginForm(){
-        return String.format(TOUCH_LOGIN_FORM, ConfigManager.getEnv());
+        String env = getProperty("environment");
+        return String.format(TOUCH_LOGIN_FORM, ConfigManager.getEnv(), getProperty(env + ".environment.type"), getProperty(env + ".environment.prefix"), getProperty(env + ".environment.prefix"));
     }
 
     public static String getAgentDeskURL(){
-        return String.format(TOUCH_MAIN_URL, ConfigManager.getEnv());
+        return String.format(getProperty(getProperty("environment") + TOUCH_MAIN_URL), ConfigManager.getEnv());
     }
 
     public static String getDashboardURL(){
-        return String.format(TOUCH_MAIN_URL, ConfigManager.getEnv())+"dashboard";
+        return String.format(getProperty(getProperty("environment") + TOUCH_MAIN_URL), ConfigManager.getEnv())+"dashboard";
     }
 
     public static String getSupervisorURL(){
-        return String.format(TOUCH_MAIN_URL, ConfigManager.getEnv())+"supervisor";
+        return String.format(getProperty(getProperty("environment") + TOUCH_MAIN_URL), ConfigManager.getEnv())+"supervisor";
     }
 
     public static String getBasePlatformUrl(){

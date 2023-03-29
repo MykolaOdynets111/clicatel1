@@ -1,6 +1,7 @@
 package drivermanager;
 
 import org.testng.Assert;
+import static utils.PropertiesReader.getProperty;
 
 
 public class ConfigManager {
@@ -147,7 +148,8 @@ public class ConfigManager {
     }
 
     public static String getEnv() {
-        String env = System.getProperty(ENV, "demo");
+        String environment = getProperty("environment");
+        String env = System.getProperty(ENV, environment);
         String deployTo = System.getProperty(DEPLOY_TO);
         if(deployTo==null) return env;
         else{

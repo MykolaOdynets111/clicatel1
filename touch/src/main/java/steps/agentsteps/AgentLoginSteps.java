@@ -16,6 +16,8 @@ import portalpages.PortalMainPage;
 import java.util.ArrayList;
 import java.util.List;
 
+import static utils.PropertiesReader.getProperty;
+
 public class AgentLoginSteps extends AbstractAgentSteps {
 
     @Given("^I login as (.*) of (.*)")
@@ -27,11 +29,11 @@ public class AgentLoginSteps extends AbstractAgentSteps {
         } else
         {
             AbstractAgentSteps.getAgentLoginPage(ordinalAgentNumber).openPortalLoginPage();
-            if (ordinalAgentNumber.equals("Amrit ORCA")){
-                AbstractAgentSteps.getAgentLoginPage(ordinalAgentNumber).selectTenant(Tenants.getTenantUnderTestName())
-                        .selectAmritOrcAgent(ordinalAgentNumber).clickAuthenticateButton();
-                            }
-            else
+            if (tenantOrgName.equals("WhatsAppFullFlowTenant")) {
+                String agentName = getProperty(getProperty("environment") + ".WhatsAppAgentName");
+                AbstractAgentSteps.getAgentLoginPage(agentName).selectTenant(Tenants.getTenantUnderTestName())
+                        .selectWhatsAppFullFlowAgent(agentName).clickAuthenticateButton();
+            } else
                 AbstractAgentSteps.getAgentLoginPage(ordinalAgentNumber).selectTenant(Tenants.getTenantUnderTestName())
                     .selectAgent(ordinalAgentNumber).clickAuthenticateButton();
             AbstractAgentSteps.getAgentLoginPage(ordinalAgentNumber).getCurrentDriver().get(URLs.getUrlByNameOfPage("Agent Desk"));

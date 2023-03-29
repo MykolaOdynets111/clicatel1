@@ -58,11 +58,16 @@ public class WASteps {
 
         androidDriver.findElementById("com.whatsapp:id/entry").sendKeys("1");
         androidDriver.findElementById("com.whatsapp:id/send").click();
+
+        Thread.sleep(5000);
+
+        androidDriver.findElementById("com.whatsapp:id/entry").sendKeys("1");
+        androidDriver.findElementById("com.whatsapp:id/send").click();
     }
 
     @Given("^Check received (.*) message in Appium Whatsapp$")
     public void checkAppiumReceivedMessage(String message) throws InterruptedException {
-        Thread.sleep(1000);
+        Thread.sleep(5000);
         List<MobileElement> mobileElements = androidDriver.findElementsById("com.whatsapp:id/message_text");
         String actualMessage = mobileElements.get(mobileElements.size()-1).getText();
 
@@ -74,6 +79,8 @@ public class WASteps {
 
     @Given("^User closes whatsapp integration$")
     public void closeWhatsAppChannel() {
+        androidDriver.findElementById("com.whatsapp:id/entry").sendKeys("//end");
+        androidDriver.findElementById("com.whatsapp:id/send").click();
         androidDriver.navigate().back();
         androidDriver.quit();
     }

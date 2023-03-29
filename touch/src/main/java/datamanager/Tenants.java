@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static utils.PropertiesReader.getProperty;
+
 
 public class Tenants {
 
@@ -113,8 +115,10 @@ public class Tenants {
             case "Performance":
                 setTenantInfo("performance", "Performance");
                 break;
-            case "ORCA Demo":
-                setTenantInfo("orca1demo1632920503", "ORCA Demo");
+            case "WhatsAppFullFlowTenant":
+                String agentName = getProperty(getProperty("environment") + ".WhatsAppAgentName");
+                String tenantName = getProperty(getProperty("environment") + ".WhatsAppTenantName");
+                setTenantInfo(tenantName, agentName);
                 break;
             default:
                 Tenants.setTenantUnderTestOrgName(tenantOrgName);
