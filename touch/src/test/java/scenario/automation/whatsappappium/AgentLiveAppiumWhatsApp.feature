@@ -1,5 +1,5 @@
 @no_widget
-@Mykola
+@mykola
 Feature: Whatsapp Appium :: Chatdesk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-13084")

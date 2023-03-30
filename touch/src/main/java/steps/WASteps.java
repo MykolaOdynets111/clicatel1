@@ -78,9 +78,13 @@ public class WASteps {
 
 
     @Given("^User closes whatsapp integration$")
-    public void closeWhatsAppChannel() {
+    public void closeWhatsAppChannel() throws InterruptedException {
         androidDriver.findElementById("com.whatsapp:id/entry").sendKeys("//end");
         androidDriver.findElementById("com.whatsapp:id/send").click();
+        Thread.sleep(5000);
+        androidDriver.findElementById("com.whatsapp:id/entry").sendKeys("skip");
+        androidDriver.findElementById("com.whatsapp:id/send").click();
+        Thread.sleep(5000);
         androidDriver.navigate().back();
         androidDriver.quit();
     }
