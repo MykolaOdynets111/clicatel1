@@ -67,7 +67,7 @@ public class WASteps {
 
     @Given("^Check received (.*) message in Appium Whatsapp$")
     public void checkAppiumReceivedMessage(String message) throws InterruptedException {
-        Thread.sleep(5000);
+        Thread.sleep(10000);
         List<MobileElement> mobileElements = androidDriver.findElementsById("com.whatsapp:id/message_text");
         String actualMessage = mobileElements.get(mobileElements.size()-1).getText();
 
