@@ -58,12 +58,6 @@ public class CustomerApplicationSteps extends GeneralSteps {
             Assertions.fail(format("Expected response code %s but was %s", getResponseCode(dataMap), response.statusCode()));
         }
     }
-
-
-
-
-
-
     @NotNull
     private ApplicationBody setCustomerApplicationBody(Map<String, String> dataMap) {
         return ApplicationBody.builder()

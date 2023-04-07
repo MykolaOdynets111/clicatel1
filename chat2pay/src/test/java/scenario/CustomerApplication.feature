@@ -58,7 +58,6 @@ Feature:  Customer application Integration Management
       | o.errorMessage              | <o.errorMessage>              |
       | o.errors                    | <o.errors>                    |
 
-
     Then User updates customer application to the widget
 
       | i.widgetId                  | <i.widgetId>                  |
@@ -80,4 +79,3 @@ Feature:  Customer application Integration Management
       | i.widgetId                       | i.paymentStatusNotification     | o.postResponseCode | o.responseCode | o.status  | o.errorMessage | o.errors                  |
       | 2c9acd9a86ea43d30186eeee78ac03e8 | ClickatellExtention-UpdateOrder | 200                | 200            |           |                |                           |
       | non_existed                      | non_existed                     | 404                | 404            | NOT_FOUND | URL /v2/widget | Widget does not exist, id |
-

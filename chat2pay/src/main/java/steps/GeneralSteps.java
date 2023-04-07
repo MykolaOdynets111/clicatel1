@@ -34,7 +34,6 @@ public class GeneralSteps {
     protected static final ThreadLocal<String> createdCustomerApplicationId = new ThreadLocal<>();
     protected Logger logger = Logger.getLogger(Class.class.getName());
 
-
     protected final SoftAssertions softly = new SoftAssertions();
     protected Faker faker = new Faker();
 
