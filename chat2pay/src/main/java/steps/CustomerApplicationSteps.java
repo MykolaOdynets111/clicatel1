@@ -1,9 +1,8 @@
 package steps;
 
-import api.clients.ApiHelperClickatellProduct;
 import api.clients.ApiHelperCustomerApplication;
-import api.models.request.ApplicationBody;
-import api.models.response.integration.NotificationUrls;
+import data.models.request.ApplicationBody;
+import data.models.response.integration.NotificationUrls;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
