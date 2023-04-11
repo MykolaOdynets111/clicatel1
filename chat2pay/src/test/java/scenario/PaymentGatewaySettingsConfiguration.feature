@@ -73,3 +73,18 @@ Feature: Payment Gateway Settings Configuration
       | i.widgetId | o.responseCode | o.errors  | o.path                                       |
       | valid      | 200            |           |                                              |
       | invalid    | 404            | NOT_FOUND | URL /v2/widget/null/payment-gateway-settings |
+
+  @TestCaseId("https://jira.clickatell.com/browse/C2P-4747")
+  Scenario Outline: C2P Unity API :: Payment Gateway Settings Configuration :: POST /payment-gateway-settings/logo :: truth table
+
+    And User sets up 'Unified Payment Setting' for widget
+    Then User posts 'Payment Gateway Logo'
+      | i.logo         | <i.logo>         |
+      | o.responseCode | <o.responseCode> |
+      | o.errors       | <o.errors>       |
+      | o.path         | <o.path>         |
+
+    Examples:
+      | i.logo  | o.responseCode | o.errors  | o.path                                       |
+      | valid   | 200            |           |                                              |
+      | invalid | 404            | NOT_FOUND | URL /v2/widget/null/payment-gateway-settings |

@@ -3,14 +3,7 @@ package steps;
 import api.ApiHelperPaymentGatewaySettingsConfiguration;
 import data.models.request.payments.PaymentGatewaySettingsSecureAcceptance;
 import data.models.request.payments.PaymentGatewaySettingsUnifiedPayments;
-import data.models.response.paymentgatewaysettingsresponse.CardNetwork;
-import data.models.response.paymentgatewaysettingsresponse.Country;
-import data.models.response.paymentgatewaysettingsresponse.Currency;
-import data.models.response.paymentgatewaysettingsresponse.DefaultCurrency;
-import data.models.response.paymentgatewaysettingsresponse.Locale;
-import data.models.response.paymentgatewaysettingsresponse.PaymentGatewaySettingsResponse;
-import data.models.response.paymentgatewaysettingsresponse.PaymentType;
-import data.models.response.paymentgatewaysettingsresponse.SecureAcceptanceGatewaySettingsResponse;
+import data.models.response.paymentgatewaysettingsresponse.*;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
@@ -50,9 +43,11 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
             case "valid":
                 File logo = new File(format(System.getProperty("user.dir") + "/src/test/resources/logos/%s", "LogoTest.png"));
                 response = ApiHelperPaymentGatewaySettingsConfiguration.postLogo(createdWidgetId.get(), logo);
+                Logo logoResponse = response.as(Logo.class);
 
                 softly.assertThat(response.getStatusCode()).isEqualTo(200);
-                softly.assertThat(response.getBody()).isNotNull();
+                softly.assertThat(logoResponse.originalFilename).isEqualTo(logo.getName());
+                softly.assertThat(logoResponse.getCreatedTime()).isEqualTo(LocalDate.now());
                 softly.assertAll();
                 break;
             case "invalid":
@@ -64,7 +59,7 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
         }
     }
 
-    @Then("^User gets 'Payment Gateway Logo'$")
+    @Then("^User gets 'Payment Gateway LogoRequest'$")
     public void getLogo(Map<String, String> dataMap) {
         response = ApiHelperPaymentGatewaySettingsConfiguration.getLogo(getWidgetId(dataMap), paymentGatewaySettingsId.get());
 
