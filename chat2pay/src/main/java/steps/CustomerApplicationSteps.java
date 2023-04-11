@@ -17,7 +17,6 @@ import static utils.Validator.validateErrorResponse;
 
 public class CustomerApplicationSteps extends GeneralSteps {
 
-
     @Then("^User adds customer application to the widget$")
     public void postCustomerApplication(Map<String, String> dataMap) {
         Response response = ApiHelperCustomerApplication.postCustomerApplication(getWidgetId(dataMap), setCustomerApplicationBody(dataMap));
@@ -33,7 +32,7 @@ public class CustomerApplicationSteps extends GeneralSteps {
 
     @Then("^User updates customer application to the widget$")
     public void updateCustomerApplication(Map<String, String> dataMap) {
-        Response response = ApiHelperCustomerApplication.updateCustomerApplication(getWidgetId(dataMap), setCustomerApplicationBody(dataMap), createdCustomerApplicationId.get() );
+        Response response = ApiHelperCustomerApplication.updateCustomerApplication(getWidgetId(dataMap), setCustomerApplicationBody(dataMap), createdCustomerApplicationId.get());
         if (response.statusCode() == 200) {
             checkResponseCode(response, getResponseCode(dataMap));
             assertThat(response.as(ApplicationBody.class).getApplicationId()).isEqualTo(createdCustomerApplicationId.get());
@@ -57,6 +56,7 @@ public class CustomerApplicationSteps extends GeneralSteps {
             Assertions.fail(format("Expected response code %s but was %s", getResponseCode(dataMap), response.statusCode()));
         }
     }
+
     @NotNull
     private ApplicationBody setCustomerApplicationBody(Map<String, String> dataMap) {
         return ApplicationBody.builder()

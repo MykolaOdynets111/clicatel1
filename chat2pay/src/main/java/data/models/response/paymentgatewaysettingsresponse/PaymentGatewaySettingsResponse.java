@@ -65,7 +65,7 @@ public class PaymentGatewaySettingsResponse {
     public Country country;
 
     @JsonProperty("shipToCountries")
-    public List<Integer> shipToCountries = null;
+    public List<Country> shipToCountries = null;
 
     @JsonProperty("defaultCurrency")
     public DefaultCurrency defaultCurrency;
@@ -105,6 +105,9 @@ public class PaymentGatewaySettingsResponse {
 
     @JsonProperty("restApiSecretKey")
     public String restApiSecretKey;
+
+    @JsonProperty("logo")
+    public Logo logo;
 
     @JsonProperty("billingType")
     public String billingType;

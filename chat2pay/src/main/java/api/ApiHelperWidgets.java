@@ -52,7 +52,8 @@ public class ApiHelperWidgets extends ApiHelperChat2Pay {
     }
 
     public static void deleteAllGeneratedWidgets() {
-        getWidgets().stream().filter(w -> w.name == null).collect(Collectors.toList()).forEach(w -> deleteWidget(w.id));
+        getWidgets().stream().filter(Objects::nonNull)
+                .filter(w -> w.name == null).collect(Collectors.toList()).forEach(w -> deleteWidget(w.id));
         getWidgets().stream()
                 .filter(Objects::nonNull)
                 .filter(w -> w.name.startsWith(GENERAL_WIDGET_NAME.name))
