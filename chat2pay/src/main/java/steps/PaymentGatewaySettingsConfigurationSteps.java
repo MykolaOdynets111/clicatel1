@@ -59,7 +59,7 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
         }
     }
 
-    @Then("^User gets 'Payment Gateway LogoRequest'$")
+    @Then("^User gets 'Payment Gateway Logo'$")
     public void getLogo(Map<String, String> dataMap) {
         response = ApiHelperPaymentGatewaySettingsConfiguration.getLogo(getWidgetId(dataMap), paymentGatewaySettingsId.get());
 
