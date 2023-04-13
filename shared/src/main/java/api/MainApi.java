@@ -55,6 +55,13 @@ public abstract class MainApi {
                 .get(endpoint);
     }
 
+    protected static Response getMediaType(String authToken, String endpoint) {
+        return RestAssured.given().log().all()
+                .accept(ContentType.ANY)
+                .header("Authorization", authToken)
+                .get(endpoint);
+    }
+
     private static Response getForAdminConfigurationSecret(String endpoint, String authToken) {
         return RestAssured.given().log().all()
                 .accept(ContentType.JSON)
@@ -115,6 +122,7 @@ public abstract class MainApi {
         return RestAssured.given().log().all()
                 .accept(ContentType.ANY)
                 .contentType(ContentType.MULTIPART)
+                .multiPart("logo", file, "multipart/form-data")
                 .header("Authorization", authToken)
                 .body(file)
                 .post(endpoint);

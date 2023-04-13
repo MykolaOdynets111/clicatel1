@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,6 +36,7 @@ import java.util.List;
         "paymentIntegrationTypeId"
 })
 @Getter
+@Setter
 @NoArgsConstructor
 public class PaymentGatewaySettingsUnifiedPayments {
 
