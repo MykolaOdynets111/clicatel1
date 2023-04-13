@@ -48,7 +48,7 @@ Feature:  Customer application Integration Management
       | non_existed                      | non_existed                     |                         |                     | 404            | NOT_FOUND | URL /v2/widget | Widget does not exist, id |
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4731")
-  Scenario Outline: C2P Unity API :: Integration Management :: DETELE PUT /integration/customer-application/{applicationId} ::Delete customer application details
+  Scenario Outline: C2P Unity API :: Integration Management :: DELETE /integration/customer-application/{applicationId} ::Delete customer application details
 
     Then User adds customer application to the widget
       | i.widgetId                  | <i.widgetId>                  |
@@ -69,6 +69,29 @@ Feature:  Customer application Integration Management
       | o.errors                    | <o.errors>                    |
 
     And User deletes customer-application from the widget
+      | i.widgetId     | <i.widgetId>     |
+      | o.responseCode | <o.responseCode> |
+      | o.status       | <o.status>       |
+      | o.errorMessage | <o.errorMessage> |
+      | o.errors       | <o.errors>       |
+
+    Examples:
+      | i.widgetId                       | i.paymentStatusNotification     | i.postApplicationStatus | i.putApplicationStatus | o.postResponseCode | o.responseCode | o.status  | o.errorMessage | o.errors                  |
+      | 2c9acd9a86ea43d30186eeee78ac03e8 | ClickatellExtention-UpdateOrder | ACTIVATED               | DEACTIVATED            | 200                | 200            |           |                |                           |
+      | non_existed                      | non_existed                     |                         |                        | 404                | 404            | NOT_FOUND | URL /v2/widget | Widget does not exist, id |
+
+  @TestCaseId("https://jira.clickatell.com/browse/C2P-4732")
+  Scenario Outline: C2P Unity API :: Integration Management :: DELETE /integration/customer-application/{applicationId} ::Delete customer application details
+
+    Then User adds customer application to the widget
+      | i.widgetId                  | <i.widgetId>                  |
+      | i.applicationStatus         | <i.postApplicationStatus>     |
+      | i.paymentStatusNotification | <i.paymentStatusNotification> |
+      | o.responseCode              | <o.postResponseCode>          |
+      | o.errorMessage              | <o.errorMessage>              |
+      | o.errors                    | <o.errors>                    |
+
+    And User deletes all customer-applications from the widget
       | i.widgetId     | <i.widgetId>     |
       | o.responseCode | <o.responseCode> |
       | o.status       | <o.status>       |

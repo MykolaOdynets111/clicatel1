@@ -2,6 +2,7 @@ package steps;
 
 import api.clients.ApiHelperCustomerApplication;
 import data.models.request.ApplicationBody;
+import data.models.response.integration.IntegrationResponse;
 import data.models.response.integration.NotificationUrls;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
@@ -49,6 +50,21 @@ public class CustomerApplicationSteps extends GeneralSteps {
         checkResponseCode(response, getResponseCode(dataMap));
         if (response.statusCode() == 200) {
             assertThat(response.as(ApplicationBody.class).getApplicationId())
+                    .isEqualTo(createdCustomerApplicationId.get());
+        } else if (String.valueOf(response.statusCode()).startsWith("4")) {
+            validateErrorResponse(response, dataMap);
+        } else {
+            Assertions.fail(format("Expected response code %s but was %s", getResponseCode(dataMap), response.statusCode()));
+        }
+    }
+
+    @Then("^User deletes all customer-applications from the widget$")
+    public void deleteAllCustomerApplication(Map<String, String> dataMap) {
+        Response response = ApiHelperCustomerApplication.deleteAllCustomerApplication(getWidgetId(dataMap));
+        checkResponseCode(response, getResponseCode(dataMap));
+        if (response.statusCode() == 200) {
+
+            assertThat(response.jsonPath().getList("").get(0))
                     .isEqualTo(createdCustomerApplicationId.get());
         } else if (String.valueOf(response.statusCode()).startsWith("4")) {
             validateErrorResponse(response, dataMap);
