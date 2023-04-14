@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
         plugin={"pretty", "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"},
         monochrome = true,
         features = "touch/src/test/java/scenario/automation",
-        tags = "@mykola",
+        tags = "@discovery",
         glue = "steps")
 public class RunGeneralBankRegressionTest extends AbstractTestNGCucumberTests {
 
