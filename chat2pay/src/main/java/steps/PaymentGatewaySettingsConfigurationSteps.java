@@ -79,6 +79,23 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
         }
     }
 
+    @Then("^User deletes 'Payment Gateway Logo'$")
+    public void deleteLogo(Map<String, String> dataMap) {
+        switch (dataMap.get("i.logo")) {
+            case "valid":
+                response = ApiHelperPaymentGatewaySettingsConfiguration.deleteLogo(createdWidgetId.get(), paymentGatewaySettingsId.get());
+                assertThat(response.statusCode()).isEqualTo(200);
+                break;
+            case "invalid":
+                response = ApiHelperPaymentGatewaySettingsConfiguration.deleteLogo(null, null);
+                assertThat(response.as(BadRequestResponse.class).message)
+                        .startsWith(dataMap.get("o.path"));
+                break;
+            default:
+                Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
+        }
+    }
+
     @Then("^User gets 'Unified Payment Gateway Settings'$")
     public void getPaymentGatewaySettings(Map<String, String> dataMap) {
         switch (getWidgetId(dataMap)) {

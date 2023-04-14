@@ -19,6 +19,10 @@ public class ApiHelperPaymentGatewaySettingsConfiguration extends ApiHelperChat2
         return postMediaFile(token.get(), format(Endpoints.POST_PAYMENTS_GATEWAY_LOGO, widgetId), logo);
     }
 
+    public static Response deleteLogo(String widgetId, String gatewayId) {
+        return deleteQuery(token.get(), String.format(Endpoints.GET_PAYMENTS_GATEWAY_LOGO, widgetId, gatewayId));
+    }
+
     public static Response getPaymentsGatewaySettings(String widgetId) {
         return getQuery(token.get(), format(Endpoints.PAYMENTS_GATEWAY_ENDPOINT, widgetId));
     }
