@@ -63,9 +63,14 @@ public class CustomerApplicationSteps extends GeneralSteps {
         Response response = ApiHelperCustomerApplication.deleteAllCustomerApplication(getWidgetId(dataMap));
         checkResponseCode(response, getResponseCode(dataMap));
         if (response.statusCode() == 200) {
-
-            assertThat(response.jsonPath().getList("").get(0))
-                    .isEqualTo(createdCustomerApplicationId.get());
+            assertThat(response
+                    .jsonPath()
+                    .getList("")
+                    .stream()
+                    .anyMatch(id -> id
+                            .equals(createdCustomerApplicationId
+                                    .get())))
+                    .isTrue();
         } else if (String.valueOf(response.statusCode()).startsWith("4")) {
             validateErrorResponse(response, dataMap);
         } else {
