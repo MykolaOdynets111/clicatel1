@@ -25,8 +25,8 @@ public class WidgetTwoWayNumberSteps extends GeneralSteps {
     @Then("^User gets two-way numbers$")
     public void getTwoWayNumbers(Map<String, String> dataMap) {
         response = ApiHelperTwoWayNumbers.getTwoWayNumbers(getWidgetId(dataMap), TOKEN);
-        int statusCode = response.getStatusCode();
-        int expectedResponseCode = getResponseCode(dataMap);
+        int statusCode = getResponseCode(response);
+        int expectedResponseCode = getExpectedCode(dataMap);
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {
@@ -55,8 +55,8 @@ public class WidgetTwoWayNumberSteps extends GeneralSteps {
                 .defaultNumber(dataMap.get("o.defaultNumbers")).build();
 
         response = ApiHelperTwoWayNumbers.updateTwoWayNumbers(widgetId, configuration, TOKEN);
-        int statusCode = response.getStatusCode();
-        int expectedResponseCode = getResponseCode(dataMap);
+        int statusCode = getResponseCode(response);
+        int expectedResponseCode = getExpectedCode(dataMap);
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {

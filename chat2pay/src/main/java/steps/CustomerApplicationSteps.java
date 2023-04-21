@@ -20,41 +20,58 @@ public class CustomerApplicationSteps extends GeneralSteps {
     @Then("^User adds customer application to the widget$")
     public void postCustomerApplication(Map<String, String> dataMap) {
         Response response = ApiHelperCustomerApplication.postCustomerApplication(getWidgetId(dataMap), setCustomerApplicationBody(dataMap));
-        if (response.statusCode() == 200) {
-            checkResponseCode(response, getResponseCode(dataMap));
+        if (getResponseCode(response) == 200) {
+            checkResponseCode(response, getExpectedCode(dataMap));
             createdCustomerApplicationId.set(response.as(ApplicationBody.class).getApplicationId());
-        } else if (String.valueOf(response.statusCode()).startsWith("4")) {
+        } else if (String.valueOf(getResponseCode(response)).startsWith("4")) {
             validateErrorResponse(response, dataMap);
         } else {
-            Assertions.fail(format("Expected response code %s but was %s", getResponseCode(dataMap), response.statusCode()));
+            Assertions.fail(format("Expected response code %s but was %s", getExpectedCode(dataMap), getResponseCode(response)));
         }
     }
 
     @Then("^User updates customer application to the widget$")
     public void updateCustomerApplication(Map<String, String> dataMap) {
         Response response = ApiHelperCustomerApplication.updateCustomerApplication(getWidgetId(dataMap), setCustomerApplicationBody(dataMap), createdCustomerApplicationId.get());
-        if (response.statusCode() == 200) {
-            checkResponseCode(response, getResponseCode(dataMap));
+        if (getResponseCode(response) == 200) {
+            checkResponseCode(response, getExpectedCode(dataMap));
             assertThat(response.as(ApplicationBody.class).getApplicationId()).isEqualTo(createdCustomerApplicationId.get());
-        } else if (String.valueOf(response.statusCode()).startsWith("4")) {
+        } else if (String.valueOf(getResponseCode(response)).startsWith("4")) {
             validateErrorResponse(response, dataMap);
         } else {
-            Assertions.fail(format("Expected response code %s but was %s", getResponseCode(dataMap), response.statusCode()));
+            Assertions.fail(format("Expected response code %s but was %s", getExpectedCode(dataMap), getResponseCode(response)));
         }
     }
 
     @Then("^User deletes customer-application from the widget$")
     public void deleteCustomerApplication(Map<String, String> dataMap) {
         Response response = ApiHelperCustomerApplication.deleteCustomerApplication(getWidgetId(dataMap), createdCustomerApplicationId.get());
-        checkResponseCode(response, getResponseCode(dataMap));
-        if (response.statusCode() == 200) {
+        checkResponseCode(response, getExpectedCode(dataMap));
+        if (getResponseCode(response) == 200) {
             assertThat(response.as(ApplicationBody.class).getApplicationId())
                     .isEqualTo(createdCustomerApplicationId.get());
-        } else if (String.valueOf(response.statusCode()).startsWith("4")) {
+        } else if (String.valueOf(getResponseCode(response)).startsWith("4")) {
             validateErrorResponse(response, dataMap);
         } else {
-            Assertions.fail(format("Expected response code %s but was %s", getResponseCode(dataMap), response.statusCode()));
+            Assertions.fail(format("Expected response code %s but was %s", getExpectedCode(dataMap), getResponseCode(response)));
         }
+    }
+
+    @Then("^User deletes all customer-applications from the widget$")
+    public void deleteAllCustomerApplication(Map<String, String> dataMap) {
+        Response response = ApiHelperCustomerApplication.deleteAllCustomerApplication(getWidgetId(dataMap));
+        checkResponseCode(response, getExpectedCode(dataMap));
+        if (getResponseCode(response) == 200) {
+            assertThat(isApplicationPresent(response)).isTrue();
+        } else if (String.valueOf(getResponseCode(response)).startsWith("4")) {
+            validateErrorResponse(response, dataMap);
+        } else {
+            Assertions.fail(format("Expected response code %s but was %s", getExpectedCode(dataMap), getResponseCode(response)));
+        }
+    }
+
+    private boolean isApplicationPresent(Response response) {
+        return response.jsonPath().getList("").stream().anyMatch(id -> id.equals(createdCustomerApplicationId.get()));
     }
 
     @NotNull
