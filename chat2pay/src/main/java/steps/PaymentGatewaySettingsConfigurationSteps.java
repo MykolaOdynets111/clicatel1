@@ -77,7 +77,7 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
                         .startsWith(dataMap.get("o.path"));
                 break;
             default:
-                Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
+                Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
         }
     }
 
@@ -94,7 +94,7 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
                         .startsWith(dataMap.get("o.path"));
                 break;
             default:
-                Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
+                Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
         }
     }
 
