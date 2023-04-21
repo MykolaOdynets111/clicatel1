@@ -85,9 +85,9 @@ Feature: Payment Gateway Settings Configuration
       | o.path         | <o.path>         |
 
     Examples:
-      | i.logo  | o.responseCode | o.errors  | o.path                                            |
-      | valid   | 200            |           |                                                   |
-      | invalid | 404            | NOT_FOUND | URL /v2/widget/null/payment-gateway-settings/logo |
+      | i.logo  | o.responseCode | o.errors  | o.path                                                 |
+      | valid   | 200            |           |                                                        |
+      | invalid | 404            | NOT_FOUND | URL /v2/widget/null/payment-gateway-settings/null/logo |
 
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4743")
   Scenario Outline: C2P Unity API :: Payment Gateway Settings Configuration :: GET /payment-gateway-settings/{paymentGatewaySettingsId}/logo :: truth table
