@@ -3,14 +3,8 @@ package steps;
 import api.ApiHelperPaymentGatewaySettingsConfiguration;
 import data.models.request.payments.PaymentGatewaySettingsSecureAcceptance;
 import data.models.request.payments.PaymentGatewaySettingsUnifiedPayments;
-import data.models.response.paymentgatewaysettingsresponse.CardNetwork;
-import data.models.response.paymentgatewaysettingsresponse.Country;
-import data.models.response.paymentgatewaysettingsresponse.Currency;
-import data.models.response.paymentgatewaysettingsresponse.DefaultCurrency;
-import data.models.response.paymentgatewaysettingsresponse.Locale;
-import data.models.response.paymentgatewaysettingsresponse.PaymentGatewaySettingsResponse;
-import data.models.response.paymentgatewaysettingsresponse.PaymentType;
-import data.models.response.paymentgatewaysettingsresponse.SecureAcceptanceGatewaySettingsResponse;
+import data.models.response.failedresponse.BadRequestResponse;
+import data.models.response.paymentgatewaysettingsresponse.*;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
@@ -46,18 +40,24 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
 
     @Then("^User posts 'Payment Gateway Logo'$")
     public void postLogo(Map<String, String> dataMap) {
+        File logo = new File(format(System.getProperty("user.dir") + "/src/test/resources/logos/%s", "LogoTest.png"));
         switch (dataMap.get("i.logo")) {
             case "valid":
-                File logo = new File(format(System.getProperty("user.dir") + "/src/test/resources/logos/%s", "LogoTest.png"));
                 response = ApiHelperPaymentGatewaySettingsConfiguration.postLogo(createdWidgetId.get(), logo);
+                Logo logoResponse = response.as(Logo.class);
+                paymentGatewaySettingsId.set(setupUnifiedPaymentsSettings(createdWidgetId.get(), logoResponse.id));
 
+                softly.assertThat(response.getStatusCode()).isEqualTo(200);
+                softly.assertThat(logoResponse.originalFilename).isEqualTo(logo.getName());
+                softly.assertThat(logoResponse.getCreatedTime()).isEqualTo(LocalDate.now());
                 softly.assertThat(getResponseCode(response)).isEqualTo(200);
                 softly.assertThat(response.getBody()).isNotNull();
                 softly.assertAll();
                 break;
             case "invalid":
-                response = ApiHelperPaymentGatewaySettingsConfiguration.postLogo(createdWidgetId.get(), new File("logo"));
-                verifyBadRequestResponse(dataMap, response);
+                response = ApiHelperPaymentGatewaySettingsConfiguration.getLogo(null, null);
+                assertThat(response.as(BadRequestResponse.class).message)
+                        .startsWith(dataMap.get("o.path"));
                 break;
             default:
                 Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
@@ -66,14 +66,35 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
 
     @Then("^User gets 'Payment Gateway Logo'$")
     public void getLogo(Map<String, String> dataMap) {
-        response = ApiHelperPaymentGatewaySettingsConfiguration.getLogo(getWidgetId(dataMap), paymentGatewaySettingsId.get());
+        switch (dataMap.get("i.logo")) {
+            case "valid":
+                response = ApiHelperPaymentGatewaySettingsConfiguration.getLogo(createdWidgetId.get(), paymentGatewaySettingsId.get());
+                assertThat(response).isNotNull();
+                break;
+            case "invalid":
+                response = ApiHelperPaymentGatewaySettingsConfiguration.getLogo(null, null);
+                assertThat(response.as(BadRequestResponse.class).message)
+                        .startsWith(dataMap.get("o.path"));
+                break;
+            default:
+                Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
+        }
+    }
 
-        if (getExpectedCode(dataMap) == 200) {
-            assertThat(response.getBody()).isNotNull();
-        } else if (getExpectedCode(dataMap) == 404) {
-            verifyBadRequestResponse(dataMap, response);
-        } else {
-            Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
+    @Then("^User deletes 'Payment Gateway Logo'$")
+    public void deleteLogo(Map<String, String> dataMap) {
+        switch (dataMap.get("i.logo")) {
+            case "valid":
+                response = ApiHelperPaymentGatewaySettingsConfiguration.deleteLogo(createdWidgetId.get(), paymentGatewaySettingsId.get());
+                assertThat(response.statusCode()).isEqualTo(200);
+                break;
+            case "invalid":
+                response = ApiHelperPaymentGatewaySettingsConfiguration.deleteLogo(null, null);
+                assertThat(response.as(BadRequestResponse.class).message)
+                        .startsWith(dataMap.get("o.path"));
+                break;
+            default:
+                Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
         }
     }
 
@@ -203,6 +224,16 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
 
     private String setupUnifiedPaymentsSettings(String widgetId) {
         Response postQuery = postUnifiedPaymentsSettings(widgetId, unifiedPaymentsSettings);
+
+        assertThat(postQuery.getStatusCode())
+                .as("Setup Unified Payments Settings for widget. Expected status is 200!")
+                .isEqualTo(200);
+
+        return postQuery.getBody().jsonPath().getString("paymentGatewaySettingsId");
+    }
+
+    private String setupUnifiedPaymentsSettings(String widgetId, String logoId) {
+        Response postQuery = postUnifiedPaymentsSettings(widgetId, logoId, unifiedPaymentsSettings);
 
         assertThat(postQuery.getStatusCode())
                 .as("Setup Unified Payments Settings for widget. Expected status is 200!")

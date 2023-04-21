@@ -40,6 +40,7 @@ import static datetimeutils.DateTimeHelper.parseToLocalDate;
 
 @Getter
 public class PaymentGatewaySettingsResponse {
+
     @JsonProperty("paymentGatewaySettingsId")
     public String paymentGatewaySettingsId;
 
