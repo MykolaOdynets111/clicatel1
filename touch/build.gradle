@@ -246,6 +246,12 @@ task runChatdeskTests(type:Test) {
     }
 }
 
+task runProdSmoke(type:Test){
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + tenantName + "/prodsmoke.xml"
+    }
+}
 
 // ========= !! MAIN TASKS !! ============== //
 
@@ -261,6 +267,10 @@ task runTests(type: Test) {
 
     if(suite == "regression") {
         runTests.dependsOn(runReqression)
+    }
+
+    if(suite == "prod") {
+        runTests.dependsOn(runProdSmoke)
     }
 
     if(suite == "facebook") {

@@ -1,5 +1,5 @@
 @no_widget
-@discovery
+@ProdScenario
 Feature: Whatsapp Appium :: Chatdesk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-13084")
