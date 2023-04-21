@@ -51,7 +51,7 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
                 File logo = new File(format(System.getProperty("user.dir") + "/src/test/resources/logos/%s", "LogoTest.png"));
                 response = ApiHelperPaymentGatewaySettingsConfiguration.postLogo(createdWidgetId.get(), logo);
 
-                softly.assertThat(response.getStatusCode()).isEqualTo(200);
+                softly.assertThat(getResponseCode(response)).isEqualTo(200);
                 softly.assertThat(response.getBody()).isNotNull();
                 softly.assertAll();
                 break;
@@ -60,7 +60,7 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
                 verifyBadRequestResponse(dataMap, response);
                 break;
             default:
-                Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
+                Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
         }
     }
 
@@ -68,12 +68,12 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
     public void getLogo(Map<String, String> dataMap) {
         response = ApiHelperPaymentGatewaySettingsConfiguration.getLogo(getWidgetId(dataMap), paymentGatewaySettingsId.get());
 
-        if (getResponseCode(dataMap) == 200) {
+        if (getExpectedCode(dataMap) == 200) {
             assertThat(response.getBody()).isNotNull();
-        } else if (getResponseCode(dataMap) == 404) {
+        } else if (getExpectedCode(dataMap) == 404) {
             verifyBadRequestResponse(dataMap, response);
         } else {
-            Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
+            Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
         }
     }
 
@@ -124,7 +124,7 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
                     softly.assertThat(defaultCurrency.getName()).isEqualTo(dataMap.get("o.defaultCurrency"));
                     softly.assertAll();
                 } else {
-                    Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
+                    Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
                 }
                 break;
             case "invalid":
@@ -166,7 +166,7 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
                     softly.assertThat(defaultCurrency.getName()).isEqualTo(dataMap.get("o.defaultCurrency"));
                     softly.assertAll();
                 } else {
-                    Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
+                    Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
                 }
                 break;
             case "invalid":
@@ -189,7 +189,7 @@ public class PaymentGatewaySettingsConfigurationSteps extends GeneralSteps {
 
                     assertThat(settingId).isEqualTo(paymentGatewaySettingsId);
                 } else {
-                    Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
+                    Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
                 }
                 break;
             case "invalid":

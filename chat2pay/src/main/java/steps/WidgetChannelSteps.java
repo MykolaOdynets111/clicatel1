@@ -31,8 +31,8 @@ public class WidgetChannelSteps extends GeneralSteps {
                 .build();
 
         response = ApiHelperChannelManagement.postChannelManagement(body, getWidgetId(dataMap), getActivationKey(dataMap));
-        int statusCode = response.getStatusCode();
-        int expectedResponseCode = getResponseCode(dataMap);
+        int statusCode = getResponseCode(response);
+        int expectedResponseCode = getExpectedCode(dataMap);
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 202) {
@@ -56,8 +56,8 @@ public class WidgetChannelSteps extends GeneralSteps {
                 .build();
 
         response = ApiHelperChannelManagement.updateChannelStatus(body, getWidgetId(dataMap), ApiHelperChat2Pay.token.get());
-        int statusCode = response.getStatusCode();
-        int responseCode = getResponseCode(dataMap);
+        int statusCode = getResponseCode(response);
+        int responseCode = getExpectedCode(dataMap);
 
         if (responseCode == statusCode) {
             if (statusCode == 200) {
@@ -81,8 +81,8 @@ public class WidgetChannelSteps extends GeneralSteps {
                 .build();
 
         response = ApiHelperChannelManagement.removeChannelIntegration(body, getWidgetId(dataMap), ApiHelperChat2Pay.token.get());
-        int statusCode = response.getStatusCode();
-        int expectedResponseCode = getResponseCode(dataMap);
+        int statusCode = getResponseCode(response);
+        int expectedResponseCode = getExpectedCode(dataMap);
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {

@@ -19,8 +19,8 @@ public class AccountSteps extends GeneralSteps {
     @Then("^User gets account settings")
     public void getAccountSettings(Map<String, String> dataMap) {
         Response response = getAccountSettingsResponse(getActivationKey(dataMap));
-        int statusCode = response.getStatusCode();
-        int expectedResponseCode = getResponseCode(dataMap);
+        int statusCode = getResponseCode(response);
+        int expectedResponseCode = getExpectedCode(dataMap);
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {
@@ -45,8 +45,8 @@ public class AccountSteps extends GeneralSteps {
                 .build();
 
         Response response = ApiHelperAccounts.putAccountSettings(body, getActivationKey(dataMap));
-        int statusCode = response.getStatusCode();
-        int expectedResponseCode = getResponseCode(dataMap);
+        int statusCode = getResponseCode(response);
+        int expectedResponseCode = getExpectedCode(dataMap);
 
         if (expectedResponseCode == statusCode) {
             if (statusCode == 200) {

@@ -23,7 +23,7 @@ public class MerchantBillingInfoSteps extends GeneralSteps {
         switch (getWidgetId(dataMap)) {
             case "valid":
                 response = ApiHelperMerchantBillingInfo.postMerchantBillingInfoCreatedWidget(createdWidgetId.get(), body);
-                checkResponseCode(response, getResponseCode(dataMap));
+                checkResponseCode(response, getExpectedCode(dataMap));
                 compareResponseWithExpectedData(dataMap, response.as(MerchantBillingInfoResponse.class));
                 MerchantBillingInfoResponse getMerchantBillingInfoResponse = ApiHelperMerchantBillingInfo
                         .getMerchantBillingInfoCreatedWidget(createdWidgetId.get())
@@ -32,7 +32,7 @@ public class MerchantBillingInfoSteps extends GeneralSteps {
                 break;
             case "non_existed":
                 response = ApiHelperMerchantBillingInfo.postMerchantBillingInfoCreatedWidget(getWidgetId(dataMap), body);
-                checkResponseCode(response, getResponseCode(dataMap));
+                checkResponseCode(response, getExpectedCode(dataMap));
                 validateErrorResponse(response, dataMap);
                 break;
             case "skip_posting":
@@ -99,13 +99,13 @@ public class MerchantBillingInfoSteps extends GeneralSteps {
 
     private Response getMerchantBillingInfoResponse(Map<String, String> dataMap, String widgetId) {
         Response getResponse = ApiHelperMerchantBillingInfo.getMerchantBillingInfoCreatedWidget(widgetId);
-        checkResponseCode(getResponse, getResponseCode(dataMap));
+        checkResponseCode(getResponse, getExpectedCode(dataMap));
         return getResponse;
     }
 
     private Response deleteMerchantBillingInfoResponse(Map<String, String> dataMap, String widgetId) {
         Response deleteResponse = ApiHelperMerchantBillingInfo.deleteMerchantBillingInfoCreatedWidget(widgetId);
-        checkResponseCode(deleteResponse, getResponseCode(dataMap));
+        checkResponseCode(deleteResponse, getExpectedCode(dataMap));
         return deleteResponse;
     }
 }

@@ -7,6 +7,7 @@ import api.ApiHelperWidgets;
 import com.github.javafaker.Faker;
 import data.models.request.PaymentBody;
 import data.models.response.integration.IntegrationResponse;
+import io.restassured.response.Response;
 import org.assertj.core.api.SoftAssertions;
 import org.jetbrains.annotations.NotNull;
 
@@ -60,8 +61,12 @@ public class GeneralSteps {
         return dataMap.get("i.widgetId");
     }
 
-    protected int getResponseCode(Map<String, String> dataMap) {
+    protected int getExpectedCode(Map<String, String> dataMap) {
         return parseInt(dataMap.get("o.responseCode"));
+    }
+
+    protected int getResponseCode(Response response) {
+        return response.statusCode();
     }
 
     protected static String getActivationKey(Map<String, String> valuesMap) {
