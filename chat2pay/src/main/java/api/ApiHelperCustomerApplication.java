@@ -1,8 +1,6 @@
-package api.clients;
+package api;
 
 
-import api.ApiHelperChat2Pay;
-import api.Endpoints;
 import data.models.request.ApplicationBody;
 import io.restassured.response.Response;
 
@@ -23,5 +21,9 @@ public class ApiHelperCustomerApplication extends ApiHelperChat2Pay {
 
     public static Response deleteAllCustomerApplication(String widgetId) {
         return deleteQuery(token.get(), String.format(Endpoints.CUSTOMER_APPLICATION_ENDPOINT, widgetId) + "/all");
+    }
+
+    public static Response postOrderManagementSystem(String widgetId, ApplicationBody applicationBody) {
+        return postQuery(token.get(), String.format(Endpoints.ORDER_MANAGEMENT_SYSTEM_ENDPOINT, widgetId), applicationBody);
     }
 }
