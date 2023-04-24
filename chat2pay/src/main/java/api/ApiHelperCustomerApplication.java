@@ -26,4 +26,9 @@ public class ApiHelperCustomerApplication extends ApiHelperChat2Pay {
     public static Response postOrderManagementSystem(String widgetId, ApplicationBody applicationBody) {
         return postQuery(token.get(), String.format(Endpoints.ORDER_MANAGEMENT_SYSTEM_ENDPOINT, widgetId), applicationBody);
     }
+
+    public static Response putOrderManagementSystem(String widgetId, String applicationId, ApplicationBody applicationBody) {
+        return putQuery(token.get(), String.format(Endpoints.ORDER_MANAGEMENT_SYSTEM_ENDPOINT, widgetId)
+                + "/" + applicationId, applicationBody);
+    }
 }
