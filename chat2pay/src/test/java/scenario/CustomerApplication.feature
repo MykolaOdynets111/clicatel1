@@ -33,7 +33,6 @@ Feature:  Customer application Integration Management
       | o.errors                    | <o.errors>                    |
 
     Then User updates customer application to the widget
-
       | i.widgetId                  | <i.widgetId>                  |
       | i.paymentStatusNotification | <i.paymentStatusNotification> |
       | i.applicationStatus         | <i.applicationStatus>         |
@@ -59,7 +58,6 @@ Feature:  Customer application Integration Management
       | o.errors                    | <o.errors>                    |
 
     Then User updates customer application to the widget
-
       | i.widgetId                  | <i.widgetId>                  |
       | i.paymentStatusNotification | <i.paymentStatusNotification> |
       | i.applicationStatus         | <i.putApplicationStatus>      |

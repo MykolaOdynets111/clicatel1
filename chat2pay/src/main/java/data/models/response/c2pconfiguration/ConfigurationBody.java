@@ -3,6 +3,7 @@ package data.models.response.c2pconfiguration;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import data.models.response.paymentgatewaysettingsresponse.CardNetwork;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -37,6 +38,8 @@ public class ConfigurationBody {
     public List<SupportedCurrency> supportedCurrencies;
     @JsonProperty("environment")
     public String environment;
+    @JsonProperty("cardNetworks")
+    public List<CardNetwork> cardNetworks;
 
     public LocalDate getUpdatedTime() {
         return parseToLocalDate(this.updateTime);

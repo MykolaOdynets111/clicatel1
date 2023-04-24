@@ -21,7 +21,8 @@ public class CustomerApplicationSteps extends GeneralSteps {
 
     @Then("^User adds customer application to the widget$")
     public void postCustomerApplication(Map<String, String> dataMap) {
-        response = ApiHelperCustomerApplication.postCustomerApplication(getWidgetId(dataMap), setCustomerApplicationBody(dataMap).build());
+        ApplicationBody applicationBody = setCustomerApplicationBody(dataMap).build();
+        response = ApiHelperCustomerApplication.postCustomerApplication(getWidgetId(dataMap), applicationBody);
         if (getResponseCode(response) == 200) {
             checkResponseCode(response, getExpectedCode(dataMap));
             createdCustomerApplicationId.set(response.as(ApplicationBody.class).getApplicationId());
@@ -34,8 +35,9 @@ public class CustomerApplicationSteps extends GeneralSteps {
 
     @Then("^User updates customer application to the widget$")
     public void updateCustomerApplication(Map<String, String> dataMap) {
+        ApplicationBody applicationBody = setCustomerApplicationBody(dataMap).build();
         response = ApiHelperCustomerApplication.updateCustomerApplication(getWidgetId(dataMap),
-                setCustomerApplicationBody(dataMap).build(), createdCustomerApplicationId.get());
+                applicationBody, createdCustomerApplicationId.get());
         if (getResponseCode(response) == 200) {
             checkResponseCode(response, getExpectedCode(dataMap));
             assertThat(response.as(ApplicationBody.class).getApplicationId()).isEqualTo(createdCustomerApplicationId.get());
