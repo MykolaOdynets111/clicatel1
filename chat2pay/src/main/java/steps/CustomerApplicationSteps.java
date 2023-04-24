@@ -2,7 +2,6 @@ package steps;
 
 import api.ApiHelperCustomerApplication;
 import data.models.request.ApplicationBody;
-import data.models.response.integration.IntegrationResponse;
 import data.models.response.integration.NotificationUrls;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
@@ -11,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-import static api.ApiHelperIntegration.getIntegrationResponse;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static utils.Validator.checkResponseCode;
@@ -100,20 +98,37 @@ public class CustomerApplicationSteps extends GeneralSteps {
 
     @Then("^User puts order management system to the widget$")
     public void putOMS(Map<String, String> dataMap) {
-        String applicationId;
         ApplicationBody application = setCustomerApplicationBody(dataMap).status("DEACTIVATED").build();
 
         switch (dataMap.get("i.widgetId")) {
             case "valid":
-                applicationId = getIntegrationResponse(createdWidgetId.get())
-                        .jsonPath().getList("", IntegrationResponse.class)
-                        .get(0).getIntegrator().getApplicationUuid();
-                response = ApiHelperCustomerApplication.putOrderManagementSystem(createdWidgetId.get(), applicationId, application);
+                response = ApiHelperCustomerApplication.putOrderManagementSystem(createdWidgetId.get(),
+                        getApplicationId(createdWidgetId.get()), application);
+
                 String id = response.jsonPath().get("applicationId");
                 assertThat(id).isEqualTo(application.getApplicationId());
                 break;
             case "invalid":
                 response = ApiHelperCustomerApplication.putOrderManagementSystem(null, null, application);
+                validateErrorResponse(response, dataMap);
+                break;
+            default:
+                Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
+        }
+    }
+
+    @Then("^User deletes order management system$")
+    public void deleteOMS(Map<String, String> dataMap) {
+        switch (dataMap.get("i.widgetId")) {
+            case "valid":
+                String applicationId = getApplicationId(createdWidgetId.get());
+                response = ApiHelperCustomerApplication.deleteOrderManagementSystem(createdWidgetId.get(), applicationId);
+
+                String id = response.jsonPath().get("applicationId");
+                assertThat(id).isEqualTo(applicationId);
+                break;
+            case "invalid":
+                response = ApiHelperCustomerApplication.deleteOrderManagementSystem(null, null);
                 validateErrorResponse(response, dataMap);
                 break;
             default:
