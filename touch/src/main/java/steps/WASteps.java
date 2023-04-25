@@ -21,10 +21,10 @@ public class WASteps {
     @Given("^Setup appium whatsapp integration for (.*) tenant$")
     public void createAppiumWAIntegration(String tenantName) throws Exception {
 
-
         DesiredCapabilities caps = new DesiredCapabilities();
 
         caps.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android");
+        caps.setCapability(MobileCapabilityType.PLATFORM_VERSION, "7.0");
         caps.setCapability("adbExecTimeout", 50000);
         caps.setCapability(MobileCapabilityType.PLATFORM_VERSION, "9");
         caps.setCapability(MobileCapabilityType.DEVICE_NAME, "Pixel 2");
