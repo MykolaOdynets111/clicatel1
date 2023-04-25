@@ -25,6 +25,7 @@ public class WASteps {
         DesiredCapabilities caps = new DesiredCapabilities();
 
         caps.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android");
+        caps.setCapability("adbExecTimeout", 50000);
         caps.setCapability(MobileCapabilityType.PLATFORM_VERSION, "9");
         caps.setCapability(MobileCapabilityType.DEVICE_NAME, "Pixel 2");
         caps.setCapability("appPackage", "com.whatsapp");
