@@ -45,34 +45,16 @@ public class WASteps {
 
     @Given("^Send (.*) message by Appium Whatsapp$")
     public void sendAppiumMessage(String message) throws InterruptedException {
-
-
-
-        // put the message into message area:
         androidDriver.findElementById("com.whatsapp:id/entry").sendKeys(message);
         androidDriver.findElementById("com.whatsapp:id/send").click();
-
         Thread.sleep(5000);
-
-        androidDriver.findElementById("com.whatsapp:id/entry").sendKeys("1");
-        androidDriver.findElementById("com.whatsapp:id/send").click();
-
-        Thread.sleep(5000);
-
-        androidDriver.findElementById("com.whatsapp:id/entry").sendKeys("1");
-        androidDriver.findElementById("com.whatsapp:id/send").click();
-
-        Thread.sleep(5000);
-
-        androidDriver.findElementById("com.whatsapp:id/entry").sendKeys("1");
-        androidDriver.findElementById("com.whatsapp:id/send").click();
     }
 
     @Given("^Check received (.*) message in Appium Whatsapp$")
     public void checkAppiumReceivedMessage(String message) throws InterruptedException {
         Thread.sleep(10000);
         List<MobileElement> mobileElements = androidDriver.findElementsById("com.whatsapp:id/message_text");
-        String actualMessage = mobileElements.get(mobileElements.size()-1).getText();
+        String actualMessage = mobileElements.get(mobileElements.size() - 1).getText();
 
         assertThat(actualMessage)
                 .as(format("Last message must be %s", message))
