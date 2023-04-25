@@ -30,12 +30,14 @@ public class WASteps {
         caps.setCapability("appPackage", "com.whatsapp");
         caps.setCapability("appActivity", "com.whatsapp.HomeActivity");
         caps.setCapability("noReset", true);
-        caps.setCapability("newCommandTimeout", 20000);
+        caps.setCapability("newCommandTimeout", 90000);
+        caps.setCapability("androidInstallTimeout", 90000);
+        caps.setCapability("appWaitForLaunch", false);
 
         URL url = new URL("http://0.0.0.0:4723/wd/hub");
 
         androidDriver = new AndroidDriver<>(url, caps);
-        androidDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        androidDriver.manage().timeouts().implicitlyWait(90, TimeUnit.SECONDS);
 
         androidDriver.findElementById("com.whatsapp:id/menuitem_search").click();
         androidDriver.findElementById("com.whatsapp:id/search_input").setValue(getProperty("environment"));
