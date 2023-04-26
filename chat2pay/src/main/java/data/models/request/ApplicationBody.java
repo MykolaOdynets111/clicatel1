@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
         "status",
         "applicationId",
         "applicationName",
+        "applicationType",
         "notificationUrls"
 })
 
@@ -32,7 +33,9 @@ public class ApplicationBody {
     @JsonProperty("applicationName")
     private String applicationName;
 
+    @JsonProperty("applicationType")
+    private String applicationType;
+
     @JsonProperty("notificationUrls")
     private NotificationUrls notificationUrls;
-
 }

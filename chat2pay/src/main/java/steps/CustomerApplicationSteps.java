@@ -1,6 +1,6 @@
 package steps;
 
-import api.clients.ApiHelperCustomerApplication;
+import api.ApiHelperCustomerApplication;
 import data.models.request.ApplicationBody;
 import data.models.response.integration.NotificationUrls;
 import io.cucumber.java.en.Then;
@@ -17,9 +17,12 @@ import static utils.Validator.validateErrorResponse;
 
 public class CustomerApplicationSteps extends GeneralSteps {
 
+    private Response response;
+
     @Then("^User adds customer application to the widget$")
     public void postCustomerApplication(Map<String, String> dataMap) {
-        Response response = ApiHelperCustomerApplication.postCustomerApplication(getWidgetId(dataMap), setCustomerApplicationBody(dataMap));
+        ApplicationBody applicationBody = setCustomerApplicationBody(dataMap).build();
+        response = ApiHelperCustomerApplication.postCustomerApplication(getWidgetId(dataMap), applicationBody);
         if (getResponseCode(response) == 200) {
             checkResponseCode(response, getExpectedCode(dataMap));
             createdCustomerApplicationId.set(response.as(ApplicationBody.class).getApplicationId());
@@ -32,7 +35,9 @@ public class CustomerApplicationSteps extends GeneralSteps {
 
     @Then("^User updates customer application to the widget$")
     public void updateCustomerApplication(Map<String, String> dataMap) {
-        Response response = ApiHelperCustomerApplication.updateCustomerApplication(getWidgetId(dataMap), setCustomerApplicationBody(dataMap), createdCustomerApplicationId.get());
+        ApplicationBody applicationBody = setCustomerApplicationBody(dataMap).build();
+        response = ApiHelperCustomerApplication.updateCustomerApplication(getWidgetId(dataMap),
+                applicationBody, createdCustomerApplicationId.get());
         if (getResponseCode(response) == 200) {
             checkResponseCode(response, getExpectedCode(dataMap));
             assertThat(response.as(ApplicationBody.class).getApplicationId()).isEqualTo(createdCustomerApplicationId.get());
@@ -45,7 +50,7 @@ public class CustomerApplicationSteps extends GeneralSteps {
 
     @Then("^User deletes customer-application from the widget$")
     public void deleteCustomerApplication(Map<String, String> dataMap) {
-        Response response = ApiHelperCustomerApplication.deleteCustomerApplication(getWidgetId(dataMap), createdCustomerApplicationId.get());
+        response = ApiHelperCustomerApplication.deleteCustomerApplication(getWidgetId(dataMap), createdCustomerApplicationId.get());
         checkResponseCode(response, getExpectedCode(dataMap));
         if (getResponseCode(response) == 200) {
             assertThat(response.as(ApplicationBody.class).getApplicationId())
@@ -59,7 +64,7 @@ public class CustomerApplicationSteps extends GeneralSteps {
 
     @Then("^User deletes all customer-applications from the widget$")
     public void deleteAllCustomerApplication(Map<String, String> dataMap) {
-        Response response = ApiHelperCustomerApplication.deleteAllCustomerApplication(getWidgetId(dataMap));
+        response = ApiHelperCustomerApplication.deleteAllCustomerApplication(getWidgetId(dataMap));
         checkResponseCode(response, getExpectedCode(dataMap));
         if (getResponseCode(response) == 200) {
             assertThat(isApplicationPresent(response)).isTrue();
@@ -70,17 +75,80 @@ public class CustomerApplicationSteps extends GeneralSteps {
         }
     }
 
+    @Then("^User adds order management system to the widget$")
+    public void postOMS(Map<String, String> dataMap) {
+        ApplicationBody application = setCustomerApplicationBody(dataMap)
+                .applicationId("1")
+                .status("ACTIVATED")
+                .applicationType(dataMap.get("i.applicationType"))
+                .build();
+
+        switch (dataMap.get("i.widgetId")) {
+            case "valid":
+                response = ApiHelperCustomerApplication.postOrderManagementSystem(createdWidgetId.get(), application);
+                String id = response.jsonPath().get("applicationId");
+                assertThat(id).isEqualTo(application.getApplicationId());
+                break;
+            case "invalid":
+                response = ApiHelperCustomerApplication.postOrderManagementSystem(null, application);
+                validateErrorResponse(response, dataMap);
+                break;
+            default:
+                Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
+        }
+    }
+
+    @Then("^User puts order management system to the widget$")
+    public void putOMS(Map<String, String> dataMap) {
+        ApplicationBody application = setCustomerApplicationBody(dataMap).status("DEACTIVATED").build();
+
+        switch (dataMap.get("i.widgetId")) {
+            case "valid":
+                response = ApiHelperCustomerApplication.putOrderManagementSystem(createdWidgetId.get(),
+                        getFirstApplicationId(createdWidgetId.get()), application);
+
+                String id = response.jsonPath().get("applicationId");
+                assertThat(id).isEqualTo(application.getApplicationId());
+                break;
+            case "invalid":
+                response = ApiHelperCustomerApplication.putOrderManagementSystem(null, null, application);
+                validateErrorResponse(response, dataMap);
+                break;
+            default:
+                Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
+        }
+    }
+
+    @Then("^User deletes order management system$")
+    public void deleteOMS(Map<String, String> dataMap) {
+        switch (dataMap.get("i.widgetId")) {
+            case "valid":
+                String applicationId = getFirstApplicationId(createdWidgetId.get());
+                response = ApiHelperCustomerApplication.deleteOrderManagementSystem(createdWidgetId.get(), applicationId);
+
+                String id = response.jsonPath().get("applicationId");
+                assertThat(id).isEqualTo(applicationId);
+                break;
+            case "invalid":
+                response = ApiHelperCustomerApplication.deleteOrderManagementSystem(null, null);
+                validateErrorResponse(response, dataMap);
+                break;
+            default:
+                Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
+        }
+    }
+
     private boolean isApplicationPresent(Response response) {
         return response.jsonPath().getList("").stream().anyMatch(id -> id.equals(createdCustomerApplicationId.get()));
     }
 
     @NotNull
-    private ApplicationBody setCustomerApplicationBody(Map<String, String> dataMap) {
+    private ApplicationBody.ApplicationBodyBuilder setCustomerApplicationBody(Map<String, String> dataMap) {
         return ApplicationBody.builder()
                 .applicationName(faker.funnyName().name())
                 .status(dataMap.get("i.applicationStatus"))
                 .notificationUrls(NotificationUrls.builder()
                         .paymentStatusNotification(dataMap.get("i.paymentStatusNotification"))
-                        .build()).build();
+                        .build());
     }
 }

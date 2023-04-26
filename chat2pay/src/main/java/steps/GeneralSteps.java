@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.logging.Logger;
 
+import static api.ApiHelperIntegration.getIntegrationResponse;
 import static api.ApiHelperWidgets.deleteAllGeneratedWidgets;
 import static java.lang.Integer.parseInt;
 
@@ -88,6 +89,12 @@ public class GeneralSteps {
         paymentGatewaySettingsId.set(ApiHelperPayments
                 .getPaymentGatewaySettingsResponse(widgetId)
                 .getPaymentGatewaySettingsId());
+    }
+
+    protected static String getFirstApplicationId(String widgetId) {
+        return getIntegrationResponse(widgetId)
+                .jsonPath().getList("", IntegrationResponse.class)
+                .get(0).getIntegrator().getApplicationUuid();
     }
 
     protected void clearTestData() {

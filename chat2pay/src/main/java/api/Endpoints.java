@@ -64,8 +64,9 @@ public class Endpoints {
     public static final String UNIFIED_PAYMENTS_SETTINGS = PAYMENTS_GATEWAY_ENDPOINT + "/2";
     public static final String DELETE_PAYMENTS_SETTINGS = PAYMENTS_GATEWAY_ENDPOINT + "/%s";
 
-    //IntegrationManagement
+    //Integration Management
     public static final String WIDGET_INTEGRATION_ENDPOINT = WIDGETS_ENDPOINT + "/%s/integration";
     public static final String CLICKATELL_PRODUCT_ENDPOINT = WIDGET_INTEGRATION_ENDPOINT + "/clickatell-product";
     public static final String CUSTOMER_APPLICATION_ENDPOINT = WIDGET_INTEGRATION_ENDPOINT + "/customer-application";
+    public static final String ORDER_MANAGEMENT_SYSTEM_ENDPOINT = WIDGET_INTEGRATION_ENDPOINT + "/oms";
 }
