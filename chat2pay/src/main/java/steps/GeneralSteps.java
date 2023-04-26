@@ -91,7 +91,7 @@ public class GeneralSteps {
                 .getPaymentGatewaySettingsId());
     }
 
-    protected static String getApplicationId(String widgetId) {
+    protected static String getFirstApplicationId(String widgetId) {
         return getIntegrationResponse(widgetId)
                 .jsonPath().getList("", IntegrationResponse.class)
                 .get(0).getIntegrator().getApplicationUuid();

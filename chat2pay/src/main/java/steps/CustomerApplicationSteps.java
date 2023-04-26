@@ -105,7 +105,7 @@ public class CustomerApplicationSteps extends GeneralSteps {
         switch (dataMap.get("i.widgetId")) {
             case "valid":
                 response = ApiHelperCustomerApplication.putOrderManagementSystem(createdWidgetId.get(),
-                        getApplicationId(createdWidgetId.get()), application);
+                        getFirstApplicationId(createdWidgetId.get()), application);
 
                 String id = response.jsonPath().get("applicationId");
                 assertThat(id).isEqualTo(application.getApplicationId());
@@ -123,7 +123,7 @@ public class CustomerApplicationSteps extends GeneralSteps {
     public void deleteOMS(Map<String, String> dataMap) {
         switch (dataMap.get("i.widgetId")) {
             case "valid":
-                String applicationId = getApplicationId(createdWidgetId.get());
+                String applicationId = getFirstApplicationId(createdWidgetId.get());
                 response = ApiHelperCustomerApplication.deleteOrderManagementSystem(createdWidgetId.get(), applicationId);
 
                 String id = response.jsonPath().get("applicationId");
