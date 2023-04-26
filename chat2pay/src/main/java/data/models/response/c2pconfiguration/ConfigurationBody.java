@@ -19,7 +19,8 @@ import static datetimeutils.DateTimeHelper.parseToLocalDate;
         "integrators",
         "apiKey",
         "supportedCurrencies",
-        "environment"
+        "environment",
+        "cardNetworks"
 })
 @Getter
 public class ConfigurationBody {
