@@ -25,7 +25,7 @@ public class WASteps {
 
         caps.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android");
         caps.setCapability(MobileCapabilityType.PLATFORM_VERSION, "9");
-        caps.setCapability(MobileCapabilityType.DEVICE_NAME, "Pixel 2");
+        caps.setCapability(MobileCapabilityType.DEVICE_NAME, "Pixel_2");
         caps.setCapability("appPackage", "com.whatsapp");
         caps.setCapability("appActivity", "com.whatsapp.HomeActivity");
         caps.setCapability("noReset", true);
