@@ -3,11 +3,22 @@ package data.models.response.widget;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import data.models.response.c2pconfiguration.SupportedCurrency;
+import data.models.response.integration.Integrator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import static datetimeutils.DateTimeHelper.parseToLocalDate;
+
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "status",
@@ -28,13 +39,11 @@ import lombok.NoArgsConstructor;
         "showTutorial",
         "showLinkedApi",
         "enabledApplicationCount",
-        "disabledApplicationCount"
+        "disabledApplicationCount",
+        "apiKey",
+        "enabledChannels",
+        "supportedCurrencies"
 })
-
-@Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Widget {
 
     @JsonProperty("status")
@@ -93,4 +102,23 @@ public class Widget {
 
     @JsonProperty("disabledApplicationCount")
     public int disabledApplicationCount;
+
+    @JsonProperty("integrators")
+    public List<Integrator> integrators;
+
+    @JsonProperty("apiKey")
+    public String apiKey;
+
+    @JsonProperty("enabledChannels")
+    public List<String> enabledChannels;
+
+    @JsonProperty("supportedCurrencies")
+    public List<SupportedCurrency> supportedCurrencies;
+
+    public LocalDate getCreatedTime() {
+        return parseToLocalDate(createdTime);
+    }
+    public LocalDate getModifiedTime() {
+        return parseToLocalDate(modifiedTime);
+    }
 }

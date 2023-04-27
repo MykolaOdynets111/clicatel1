@@ -1,6 +1,5 @@
 package api;
 
-import api.MainApi;
 import datamanager.UnityClients;
 import io.restassured.response.ResponseBody;
 import lombok.Getter;

@@ -60,6 +60,9 @@ public class ApiHelperWidgets extends ApiHelperChat2Pay {
                 .forEach(w -> deleteWidget(w.id));
     }
 
+    public static WidgetsContent getWidgetsContent() {
+        return getChat2PayQuery(Endpoints.EXISTED_WIDGETS_ENDPOINT).as(WidgetsContent.class);
+    }
     private static List<Widget> getWidgets() {
         return getChat2PayQuery(Endpoints.EXISTED_WIDGETS_ENDPOINT).as(WidgetsContent.class).getWidgets();
     }
