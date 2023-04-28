@@ -47,7 +47,7 @@ public class LeftMenuSteps extends AbstractAgentSteps {
     public void verifyIfAgentReceivesConversationRequest(String agent, String chatType, String integration) {
         String userName;
         if (chatType.equals( "WhatsAppConversation")){
-             userName = "AQA_Mykola";
+            userName = "testuser";
         }
         else {
             if (integration == null) {
