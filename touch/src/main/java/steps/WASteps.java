@@ -37,7 +37,7 @@ public class WASteps {
         androidDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
         androidDriver.findElementById("com.whatsapp:id/menuitem_search").click();
-        androidDriver.findElementById("com.whatsapp:id/search_input").setValue(getProperty("environment"));
+        androidDriver.findElementById("com.whatsapp:id/search_input").setValue(getProperty("prod"));
         androidDriver.findElementById("com.whatsapp:id/conversations_row_header").click();
 
     }
