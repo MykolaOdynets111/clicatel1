@@ -47,7 +47,7 @@ public class LeftMenuSteps extends AbstractAgentSteps {
     public void verifyIfAgentReceivesConversationRequest(String agent, String chatType, String integration) {
         String userName;
         if (chatType.equals( "WhatsAppConversation")){
-             userName = "AQA_Mykola";
+            userName = "testuser";
         }
         else {
             if (integration == null) {
@@ -253,7 +253,7 @@ public class LeftMenuSteps extends AbstractAgentSteps {
     @When("^(.*) click on (?:new|last opened) conversation request from (.*)$")
     public void acceptUserFromSocialConversation(String agent, String socialChannel) {
         if (socialChannel.equals( "WhatsAppConversation")){
-            getLeftMenu(agent).openChatByUserName("AQA_Mykola");
+            getLeftMenu(agent).openChatByUserName("testuser");
         }
         else {
             if (!ConfigManager.isWebWidget() && socialChannel.equalsIgnoreCase("touch")) {
