@@ -1,5 +1,6 @@
 @no_widget
 @ProdScenario
+@orca_api
 Feature: Whatsapp Appium :: Chatdesk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-13084")
