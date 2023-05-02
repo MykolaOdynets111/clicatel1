@@ -46,6 +46,13 @@ public class WidgetSteps extends GeneralSteps {
         createNewWidget();
     }
 
+    @Then("^User sets up 'show_linked_api'")
+    public void setUpShowLinkedApi() {
+        Widget body = Widget.builder().showLinkedApi(true).build();
+        response = ApiHelperWidgets.updateShowLinkedApiForWidget(createdWidgetId.get(), body);
+        checkResponseCode(response, 200);
+    }
+
     @Then("^User creates widget for an account$")
     public void createWidget(Map<String, String> dataMap) {
         WidgetBody widget = WidgetBody.builder()
@@ -183,12 +190,7 @@ public class WidgetSteps extends GeneralSteps {
     }
 
     private void createNewWidget() {
-        WidgetBody widget = WidgetBody.builder()
-                .type("CHAT_TO_PAY")
-                .environment("SANDBOX")
-                .build();
-
-        response = ApiHelperWidgets.createWidget(widget);
+        response = ApiHelperWidgets.createWidget(new WidgetBody());
         if (response.statusCode() != 200) {
             Assert.fail("Could not create widget! Error code: " + response.statusCode());
         } else {
@@ -196,7 +198,7 @@ public class WidgetSteps extends GeneralSteps {
             Widget updateBody = Widget.builder()
                     .name(generateWidgetName())
                     .status("CONFIGURED")
-                    .configStatus(ConfigStatus.builder().id(1).name("Configured").build())
+                    .configStatus(new ConfigStatus())
                     .build();
             Response putQuery = ApiHelperWidgets.updateWidget(createdWidgetId.get(), updateBody);
 

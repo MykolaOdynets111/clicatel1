@@ -8,22 +8,21 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id",
         "name"
 })
-
-@Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class ConfigStatus {
 
     @JsonProperty("id")
-    private int id;
+    private int id = 1;
 
     @JsonProperty("name")
-    private String name;
+    private String name = "Configured";
 }
+

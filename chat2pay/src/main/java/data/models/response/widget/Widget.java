@@ -5,17 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import data.models.response.c2pconfiguration.SupportedCurrency;
 import data.models.response.integration.Integrator;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
-import static datetimeutils.DateTimeHelper.parseToLocalDate;
-
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -114,11 +109,4 @@ public class Widget {
 
     @JsonProperty("supportedCurrencies")
     public List<SupportedCurrency> supportedCurrencies;
-
-    public LocalDate getCreatedTime() {
-        return parseToLocalDate(createdTime);
-    }
-    public LocalDate getModifiedTime() {
-        return parseToLocalDate(modifiedTime);
-    }
 }

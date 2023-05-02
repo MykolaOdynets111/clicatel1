@@ -36,18 +36,19 @@ Feature: Get Chat 2 pay configuration
 
     Given User is logged in to unity
     When User creates new widget
-    And User sets up 'Unified Payment Setting' for widget
+    And User sets up 'Secure Acceptance Setting' for widget
+    And User sets up 'show_linked_api'
+    And User sets up customer application to the widget
     Then User get the widget configuration
-      | i.widgetId         | <i.widgetId>         |
-      | o.paymentGatewayId | <o.paymentGatewayId> |
-      | o.locale           | <o.locale>           |
-      | o.country          | <o.country>          |
-      | o.defaultCurrency  | <o.defaultCurrency>  |
-      | o.responseCode     | <o.responseCode>     |
-      | o.errors           | <o.errors>           |
-      | o.path             | <o.path>             |
+      | i.activationKey   | <i.activationKey>   |
+      | i.widgetId        | <i.widgetId>        |
+      | o.status          | <o.status>          |
+      | o.defaultCurrency | <o.defaultCurrency> |
+      | o.responseCode    | <o.responseCode>    |
+      | o.errors          | <o.errors>          |
+      | o.path            | <o.path>            |
 
     Examples:
-      | i.widgetId | o.paymentGatewayId | o.locale               | o.country    | o.defaultCurrency | o.responseCode | o.errors  | o.path                                       |
-      | valid      | 1                  | English (South Africa) | South Africa | South Africa      | 200            |           |                                              |
-      | invalid    |                    |                        |              |                   | 404            | NOT_FOUND | URL /v2/widget/null/payment-gateway-settings |
+      | i.activationKey | i.widgetId | o.status  | o.defaultCurrency  | o.responseCode | o.errors  | o.path                                       |
+      | token           | valid      | CONFIGURED | South African rand | 200            |           |                                              |
+      | token           | invalid    |           |                    | 404            | NOT_FOUND | URL /v2/widget/null/payment-gateway-settings |

@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
+import static data.enums.WidgetsInfo.GENERAL_WIDGET_NAME;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static utils.Validator.checkResponseCode;
@@ -18,6 +19,13 @@ import static utils.Validator.validateErrorResponse;
 public class CustomerApplicationSteps extends GeneralSteps {
 
     private Response response;
+
+    @Then("^User sets up customer application to the widget$")
+    public void setUpCustomerApplication() {
+        ApplicationBody applicationBody = getCustomerApplicationBody("ACTIVATED", "ClickatellExtention-UpdateOrder").build();
+        response = ApiHelperCustomerApplication.postCustomerApplication(createdWidgetId.get(), applicationBody);
+        checkResponseCode(response, 200);
+    }
 
     @Then("^User adds customer application to the widget$")
     public void postCustomerApplication(Map<String, String> dataMap) {
@@ -143,12 +151,19 @@ public class CustomerApplicationSteps extends GeneralSteps {
     }
 
     @NotNull
-    private ApplicationBody.ApplicationBodyBuilder setCustomerApplicationBody(Map<String, String> dataMap) {
+    private ApplicationBody.ApplicationBodyBuilder getCustomerApplicationBody(String status,
+                                                                              String paymentsStatus) {
+        NotificationUrls notificationUrls = NotificationUrls.builder()
+                .paymentStatusNotification(paymentsStatus)
+                .build();
         return ApplicationBody.builder()
-                .applicationName(faker.funnyName().name())
-                .status(dataMap.get("i.applicationStatus"))
-                .notificationUrls(NotificationUrls.builder()
-                        .paymentStatusNotification(dataMap.get("i.paymentStatusNotification"))
-                        .build());
+                .applicationName(format("%s - %s", GENERAL_WIDGET_NAME.name, faker.funnyName().name()))
+                .status(status)
+                .notificationUrls(notificationUrls);
+    }
+
+    @NotNull
+    private ApplicationBody.ApplicationBodyBuilder setCustomerApplicationBody(Map<String, String> dataMap) {
+        return getCustomerApplicationBody(dataMap.get("i.applicationStatus"), dataMap.get("i.paymentStatusNotification"));
     }
 }
