@@ -6,6 +6,7 @@ import data.models.response.c2pconfiguration.ConfigurationBody;
 import data.models.response.c2pconfiguration.ConfigurationIntegrator;
 import data.models.response.c2pconfiguration.SupportedCurrency;
 import data.models.response.widget.Widget;
+import data.models.response.widget.WidgetIntegrator;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
@@ -78,7 +79,6 @@ public class ConfigurationSteps extends GeneralSteps {
                 Widget widget = getWidgetsContent().getWidgets().stream().filter(w -> w.getId().equals(createdWidgetId.get()))
                         .findFirst().orElseThrow(() -> new NoSuchElementException("There is no such widget: " + createdWidgetId.get()));
                 String apiKey = getApiKeysManagement(createdWidgetId.get(), ApiHelperChat2Pay.token.get()).jsonPath().getList("apiKey").get(0).toString();
-                ConfigurationBody configuration = getC2PConfigurationResponse(apiKey).as(ConfigurationBody.class);
 
                 softly.assertThat(widget.getName()).startsWith(GENERAL_WIDGET_NAME.name);
                 softly.assertThat(widget.getApiKey()).isEqualToIgnoringCase(apiKey);
@@ -91,7 +91,7 @@ public class ConfigurationSteps extends GeneralSteps {
                 softly.assertThat(parseToLocalDate(widget.getCreatedTime())).isToday();
                 softly.assertThat(parseToLocalDate(widget.getModifiedTime())).isToday();
 
-                SupportedCurrency currency = configuration.getSupportedCurrencies().stream().findAny()
+                SupportedCurrency currency = widget.getSupportedCurrencies().stream().findAny()
                         .orElseThrow(NoSuchElementException::new);
                 softly.assertThat(currency.getId()).isEqualTo(156);
                 softly.assertThat(currency.getIso()).isEqualTo("ZAR");
@@ -99,7 +99,7 @@ public class ConfigurationSteps extends GeneralSteps {
                 softly.assertThat(currency.getSymbol()).isEqualTo("R");
                 softly.assertThat(currency.isDefault).isEqualTo(true);
 
-                ConfigurationIntegrator integrator = configuration.getIntegrators().stream().findAny()
+                WidgetIntegrator integrator = widget.getIntegrators().stream().findAny()
                         .orElseThrow(() -> new NoSuchElementException("Integration is absent"));
                 softly.assertThat(integrator.getName()).startsWith(GENERAL_WIDGET_NAME.name);
                 softly.assertThat(integrator.getApplicationId()).isNotNull();

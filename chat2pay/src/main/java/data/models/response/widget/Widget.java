@@ -99,7 +99,7 @@ public class Widget {
     public int disabledApplicationCount;
 
     @JsonProperty("integrators")
-    public List<Integrator> integrators;
+    public List<WidgetIntegrator> integrators;
 
     @JsonProperty("apiKey")
     public String apiKey;
