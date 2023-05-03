@@ -141,9 +141,8 @@ Feature: Widgets operations
   @TestCaseId("https://jira.clickatell.com/browse/C2P-4320")
   Scenario Outline: C2P Unity API :: Widget Configuration :: GET /widget/all :: truth table
 
-    Given User is logged in to unity
     When User creates new widget
-    And User sets up 'Secure Acceptance Setting' for widget
+    And User sets up 'Unified Payment Setting' for widget
     And User sets up 'show_linked_api'
     And User sets up customer application to the widget
     Then User get the widget configuration

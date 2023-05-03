@@ -43,14 +43,21 @@ public class ApiHelperWidgets extends ApiHelperChat2Pay {
         return putQuery(token.get(), Endpoints.WIDGETS_ENDPOINT + "/" + widgetId, widgetBody);
     }
 
-    public static Response deleteWidget(String widgetId) {
-        return deleteQuery(token.get(), Endpoints.WIDGETS_ENDPOINT + "/" + widgetId);
-    }
-
     public static Response updateShowLinkedApiForWidget(String widgetId, Widget widgetBody) {
         return putQuery(token.get(), String.format(Endpoints.WIDGET_SHOWED_LINKED_API_ENDPOINT, widgetId), widgetBody);
     }
 
+    public static WidgetsContent getWidgetsContent() {
+        return getChat2PayQuery(Endpoints.EXISTED_WIDGETS_ENDPOINT).as(WidgetsContent.class);
+    }
+
+    private static List<Widget> getWidgets() {
+        return getChat2PayQuery(Endpoints.EXISTED_WIDGETS_ENDPOINT).as(WidgetsContent.class).getWidgets();
+    }
+
+    public static Response deleteWidget(String widgetId) {
+        return deleteQuery(token.get(), Endpoints.WIDGETS_ENDPOINT + "/" + widgetId);
+    }
     public static void deleteAllGeneratedWidgets() {
         getWidgets().stream().filter(Objects::nonNull)
                 .filter(w -> w.name == null).collect(Collectors.toList()).forEach(w -> deleteWidget(w.id));
@@ -58,12 +65,5 @@ public class ApiHelperWidgets extends ApiHelperChat2Pay {
                 .filter(Objects::nonNull)
                 .filter(w -> w.name.startsWith(GENERAL_WIDGET_NAME.name))
                 .forEach(w -> deleteWidget(w.id));
-    }
-
-    public static WidgetsContent getWidgetsContent() {
-        return getChat2PayQuery(Endpoints.EXISTED_WIDGETS_ENDPOINT).as(WidgetsContent.class);
-    }
-    private static List<Widget> getWidgets() {
-        return getChat2PayQuery(Endpoints.EXISTED_WIDGETS_ENDPOINT).as(WidgetsContent.class).getWidgets();
     }
 }
