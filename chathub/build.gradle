@@ -44,37 +44,10 @@ tasks.withType(Test) {
 // ========= !! TASKS FOR SUITES !! ============== //
 
 
-task runTouchTests(type:Test) {
+task runChatHubTests(type:Test) {
     useTestNG() {
         ignoreFailures = true
-        suites baseXmlPath+tenantName+"/uitests.xml"
-        suites baseXmlPath+tenantName+"/aggregated_onethread_tests.xml"
-        suites baseXmlPath+tenantName+"/aggregated_compatible_tests.xml"
+        suites baseXmlPath+"/chathub.xml"
     }
+    defaultTasks 'clean', 'RunChatHubTests'
 }
-
-
-// ========= !! MAIN TASKS !! ============== //
-
-task runTests(type: Test) {
-
-    if (System.getProperty("suite") != null) {
-        suite = System.properties.getProperty("suite")
-    }
-
-    if(suite == "websockets") {
-        runTests.dependsOn(runWebsocketsReqression)
-    }
-
-
-    if(suite == "abc") {
-        runTests.dependsOn(runAbcTests)
-    }
-
-    reportToTesFLO.dependsOn('allureReport')
-
-    runTests.finalizedBy(reportToTesFLO)
-
-    defaultTasks 'clean', 'runTests'
-}
-

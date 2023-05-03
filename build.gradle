@@ -66,5 +66,8 @@ tasks.register('runChat2PayTests') {
     dependsOn ':chat2pay:runChat2PayTests'
     runChat2PayTests.finalizedBy(':chat2pay:allureReport')
 }
-
-
+task runChatHubTests {
+    dependsOn 'clean'
+    dependsOn ':chathub:runChatHubTests'
+    runChatHubTests.finalizedBy(':chathub:allureReport')
+}
