@@ -3,7 +3,9 @@ package data.models.response.pageable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.Getter;
 
+@Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "sort",
@@ -13,18 +15,18 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "unpaged",
         "paged"
 })
-public class Page {
+public class Pageable {
 
     @JsonProperty("sort")
-    public Sort sort;
+    private Sort sort;
     @JsonProperty("pageNumber")
-    public Integer pageNumber;
+    private Integer pageNumber;
     @JsonProperty("pageSize")
-    public Integer pageSize;
+    private Integer pageSize;
     @JsonProperty("offset")
-    public Integer offset;
+    private Integer offset;
     @JsonProperty("unpaged")
-    public Boolean unpaged;
+    private Boolean unpaged;
     @JsonProperty("paged")
-    public Boolean paged;
+    private Boolean paged;
 }

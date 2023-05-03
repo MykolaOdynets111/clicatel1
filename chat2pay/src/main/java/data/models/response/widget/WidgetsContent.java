@@ -3,6 +3,8 @@ package data.models.response.widget;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import data.models.response.pageable.Pageable;
+import data.models.response.pageable.Sort;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +36,7 @@ public class WidgetsContent {
     private List<Widget> widgets;
 
     @JsonProperty("pageable")
-    private Object pageable;
+    private Pageable pageable;
 
     @JsonProperty("last")
     private boolean last;
@@ -52,7 +54,7 @@ public class WidgetsContent {
     private int number;
 
     @JsonProperty("sort")
-    private Object sort;
+    private Sort sort;
 
     @JsonProperty("numberOfElements")
     private int numberOfElements;

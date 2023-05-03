@@ -5,12 +5,15 @@ import data.models.request.WidgetBody;
 import data.models.response.c2pconfiguration.ConfigurationBody;
 import data.models.response.c2pconfiguration.ConfigurationIntegrator;
 import data.models.response.c2pconfiguration.SupportedCurrency;
+import data.models.response.pageable.Pageable;
 import data.models.response.widget.Widget;
 import data.models.response.widget.WidgetIntegrator;
+import data.models.response.widget.WidgetsContent;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
 
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -25,8 +28,6 @@ import static java.lang.String.format;
 import static utils.Validator.verifyUnauthorisedResponse;
 
 public class ConfigurationSteps extends GeneralSteps {
-
-    public static final String TOKEN = ApiHelperChat2Pay.token.get();
 
     @Then("^User get the C2P configuration")
     public void getC2PConfiguration(Map<String, String> dataMap) {
@@ -76,8 +77,9 @@ public class ConfigurationSteps extends GeneralSteps {
             case "valid":
                 WidgetBody widgetBody = new WidgetBody();
                 String accountId = getAccountSettingsResponse(getActivationKey(dataMap)).jsonPath().getString("accountId");
-                Widget widget = getWidgetsContent().getWidgets().stream().filter(w -> w.getId().equals(createdWidgetId.get()))
-                        .findFirst().orElseThrow(() -> new NoSuchElementException("There is no such widget: " + createdWidgetId.get()));
+                List<Widget> widgets = getWidgetsContent().getWidgets();
+                Widget widget = widgets.stream().filter(w -> w.getId().equals(createdWidgetId.get())).findFirst()
+                        .orElseThrow(() -> new NoSuchElementException("There is no such widget: " + createdWidgetId.get()));
                 String apiKey = getApiKeysManagement(createdWidgetId.get(), ApiHelperChat2Pay.token.get()).jsonPath().getList("apiKey").get(0).toString();
 
                 softly.assertThat(widget.getName()).startsWith(GENERAL_WIDGET_NAME.name);
@@ -92,7 +94,7 @@ public class ConfigurationSteps extends GeneralSteps {
                 softly.assertThat(parseToLocalDate(widget.getModifiedTime())).isToday();
 
                 SupportedCurrency currency = widget.getSupportedCurrencies().stream().findAny()
-                        .orElseThrow(NoSuchElementException::new);
+                        .orElseThrow(() -> new NoSuchElementException("Support currency is absent"));
                 softly.assertThat(currency.getId()).isEqualTo(156);
                 softly.assertThat(currency.getIso()).isEqualTo("ZAR");
                 softly.assertThat(currency.getName()).isEqualToIgnoringCase(dataMap.get("o.defaultCurrency"));
@@ -105,6 +107,32 @@ public class ConfigurationSteps extends GeneralSteps {
                 softly.assertThat(integrator.getApplicationId()).isNotNull();
                 softly.assertThat(integrator.getType()).isEqualTo("APPLICATION");
                 softly.assertThat(integrator.getStatus()).isEqualTo("ACTIVATED");
+
+                WidgetsContent widgetsContent = getWidgetsContent();
+                Pageable pageable = getWidgetsContent().getPageable();
+                softly.assertThat(pageable.getSort().getUnsorted()).isTrue();
+                softly.assertThat(pageable.getSort().getSorted()).isFalse();
+                softly.assertThat(pageable.getSort().getEmpty()).isTrue();
+
+                softly.assertThat(pageable.getPageNumber()).isEqualTo(0);
+                softly.assertThat(pageable.getPageSize()).isEqualTo(200);
+                softly.assertThat(pageable.getOffset()).isEqualTo(0);
+                softly.assertThat(pageable.getUnpaged()).isFalse();
+                softly.assertThat(pageable.getPaged()).isTrue();
+
+                softly.assertThat(widgetsContent.isLast()).isTrue();
+                softly.assertThat(widgetsContent.getTotalPages()).isEqualTo(1);
+                softly.assertThat(widgetsContent.getTotalElements()).isEqualTo(widgets.size());
+                softly.assertThat(widgetsContent.getSort().getUnsorted()).isTrue();
+                softly.assertThat(widgetsContent.getSort().getSorted()).isFalse();
+                softly.assertThat(widgetsContent.getSort().getEmpty()).isTrue();
+
+                softly.assertThat(widgetsContent.isFirst()).isTrue();
+                softly.assertThat(widgetsContent.getNumber()).isEqualTo(0);
+                softly.assertThat(widgetsContent.getNumberOfElements()).isEqualTo(widgets.size());
+                softly.assertThat(widgetsContent.getSize()).isEqualTo(200);
+                softly.assertThat(widgetsContent.isEmpty()).isFalse();
+
                 softly.assertAll();
                 break;
             case "invalid":
