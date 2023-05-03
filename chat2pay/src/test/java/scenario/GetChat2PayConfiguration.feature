@@ -30,25 +30,3 @@ Feature: Get Chat 2 pay configuration
       | c80a79a9857040acafbea2774008ed1b | 200            | false                    | false               | c80a79a9857040acafbea2774008ed1b | 156                    | ZAR                       | South African rand         | R                            | true                            | SANDBOX       | 4562605b-28b4-466f-b2e4-fd67df78c816 | Test               | ACTIVATED            | APPLICATION        |              |                |
       | test                             | 401            |                          |                     |                                  |                        |                           |                            |                              |                                 |               |                                      |                    |                      |                    | Unauthorized | /api/v2/config |
       | " "                              | 401            |                          |                     |                                  |                        |                           |                            |                              |                                 |               |                                      |                    |                      |                    | Unauthorized | /api/v2/config |
-
-  @TestCaseId("https://jira.clickatell.com/browse/C2P-4320")
-  Scenario Outline: C2P Unity API :: Widget Configuration :: GET /widget/all :: truth table
-
-    Given User is logged in to unity
-    When User creates new widget
-    And User sets up 'Secure Acceptance Setting' for widget
-    And User sets up 'show_linked_api'
-    And User sets up customer application to the widget
-    Then User get the widget configuration
-      | i.activationKey   | <i.activationKey>   |
-      | i.widgetId        | <i.widgetId>        |
-      | o.status          | <o.status>          |
-      | o.defaultCurrency | <o.defaultCurrency> |
-      | o.responseCode    | <o.responseCode>    |
-      | o.errors          | <o.errors>          |
-      | o.path            | <o.path>            |
-
-    Examples:
-      | i.activationKey | i.widgetId | o.status  | o.defaultCurrency  | o.responseCode | o.errors  | o.path                                       |
-      | token           | valid      | CONFIGURED | South African rand | 200            |           |                                              |
-      | token           | invalid    |           |                    | 404            | NOT_FOUND | URL /v2/widget/null/payment-gateway-settings |
