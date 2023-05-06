@@ -3,26 +3,25 @@ package data.models.response.widget;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "id",
-        "name"
+        "type",
+        "name",
+        "status",
+        "applicationId"
 })
-public class ConfigStatus {
 
-    @JsonProperty("id")
-    private int id = 1;
+@Getter
+public class WidgetIntegrator {
 
+    @JsonProperty("applicationId")
+    private String applicationId;
     @JsonProperty("name")
-    private String name = "Configured";
+    private String name;
+    @JsonProperty("status")
+    private String status;
+    @JsonProperty("type")
+    private String type;
 }
-

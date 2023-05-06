@@ -10,7 +10,7 @@ public class Endpoints {
 
     // Widgets
     public static final String WIDGETS_ENDPOINT = C2P_URL_WITH_VERSION + "/widget";
-    public static final String EXISTED_WIDGETS_ENDPOINT = WIDGETS_ENDPOINT + "/all?detailed=false&page=0&size=500";
+    public static final String EXISTED_WIDGETS_ENDPOINT = WIDGETS_ENDPOINT + "/all?detailed=true&page=0&size=200";
     public static final String WIDGET_SHOWED_LINKED_API_ENDPOINT = WIDGETS_ENDPOINT + "/%s/show-linked-api";
 
     // Account Settings

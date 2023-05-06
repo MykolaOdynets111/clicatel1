@@ -17,6 +17,7 @@ import static datetimeutils.DateTimeHelper.parseToLocalDate;
 
 @Getter
 public class WidgetCreation {
+
     @JsonProperty("widgetId")
     private String widgetId;
 

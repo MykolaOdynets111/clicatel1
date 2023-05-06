@@ -1,28 +1,30 @@
 package data.models.request;
 
-import data.models.response.widget.ConfigStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import data.models.response.widget.ConfigStatus;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Builder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "type",
-        "name",
         "configStatus",
         "environment"
 })
-
-@Builder
 public class WidgetBody {
 
     @JsonProperty("type")
-    private final String type;
+    private String type = "CHAT_TO_PAY";
     @JsonProperty("configStatus")
-    private final ConfigStatus configStatus;
-    @JsonProperty("name")
-    private final String name;
+    private ConfigStatus configStatus = new ConfigStatus();
     @JsonProperty("environment")
-    private final String environment;
+    private String environment = "SANDBOX";
 }
