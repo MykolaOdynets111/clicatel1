@@ -282,7 +282,7 @@ public class Hooks implements JSHelper {
         }
     }
 
-    private void finishAgentFlowIfExists(Scenario scenario) {
+    private void finishAgentFlowIfExists(Scenario scenario) throws InterruptedException {
 
         if (scenario.getSourceTagNames().contains("@delete_agent_on_failure")&&scenario.isFailed()){
             String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(),
@@ -310,6 +310,10 @@ public class Hooks implements JSHelper {
             }
             if(!scenario.getSourceTagNames().contains("@no_chatdesk") || scenario.getSourceTagNames().contains("@orca_api")){
                 closePopupsIfOpenedEndChatAndlogoutAgent("main agent");}
+
+            if (scenario.getSourceTagNames().contains("@emulator_steps")){
+                closeAndroidApplicationAndOpenMainScreen();
+            }
 
             if(scenario.getSourceTagNames().contains("@sign_up")){
                 newAccountInfo();
@@ -531,5 +535,10 @@ public class Hooks implements JSHelper {
     @Attachment
     private String newAccountInfo(){
         return MC2Account.TOUCH_GO_NEW_ACCOUNT.toString();
+    }
+
+    private void closeAndroidApplicationAndOpenMainScreen() throws InterruptedException {
+            WASteps waSteps = new WASteps();
+            waSteps.backToMainEmulatorScreen();
     }
 }

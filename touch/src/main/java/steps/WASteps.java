@@ -60,9 +60,7 @@ public class WASteps {
                 .isEqualTo(message);
     }
 
-
-    @Given("^User closes whatsapp integration$")
-    public void closeWhatsAppChannel() throws InterruptedException {
+    public void backToMainEmulatorScreen() throws InterruptedException {
         androidDriver.findElementById("com.whatsapp:id/entry").sendKeys("//end");
         androidDriver.findElementById("com.whatsapp:id/send").click();
         Thread.sleep(5000);

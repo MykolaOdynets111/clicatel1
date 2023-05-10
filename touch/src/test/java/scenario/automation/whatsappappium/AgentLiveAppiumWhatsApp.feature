@@ -1,6 +1,7 @@
 @no_widget
 @ProdScenario
 @orca_api
+@emulator_steps
 Feature: Whatsapp Appium :: Chatdesk
 
   @TestCaseId("https://jira.clickatell.com/browse/CCD-13084")
@@ -20,4 +21,3 @@ Feature: Whatsapp Appium :: Chatdesk
     Then Conversation area becomes active with Test message 2 from User user's message
     When Agent send Test message 2 from Agent message
     Then Check received Test message 2 from Agent message in Appium Whatsapp
-    And User closes whatsapp integration
