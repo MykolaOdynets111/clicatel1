@@ -40,13 +40,13 @@ public class PaymentConfigurationSupportEndpointsSteps extends GeneralSteps {
     public void getBillingTypes(Map<String, String> dataMap) {
         response = getBillingType(TOKEN);
 
-        if (getResponseCode(dataMap) == 200) {
+        if (getExpectedCode(dataMap) == 200) {
             BillingType billingType = response.jsonPath().getList("", BillingType.class)
                     .stream().filter(bt -> bt.getId() == parseInt(dataMap.get("o.id")))
                     .findFirst().orElseThrow(NoSuchElementException::new);
             assertThat(billingType.getName()).isEqualToIgnoringCase(dataMap.get("o.name"));
         } else {
-            Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
+            Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
         }
     }
 
@@ -54,13 +54,13 @@ public class PaymentConfigurationSupportEndpointsSteps extends GeneralSteps {
     public void getCardNetworks(Map<String, String> dataMap) {
         response = getCardNetwork(TOKEN);
 
-        if (getResponseCode(dataMap) == 200) {
+        if (getExpectedCode(dataMap) == 200) {
             CardNetwork cardNetwork = response.jsonPath().getList("", CardNetwork.class)
                     .stream().filter(bt -> bt.getId() == parseInt(dataMap.get("o.id")))
                     .findFirst().orElseThrow(NoSuchElementException::new);
             assertThat(cardNetwork.getName()).isEqualToIgnoringCase(dataMap.get("o.name"));
         } else {
-            Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
+            Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
         }
     }
 
@@ -68,13 +68,13 @@ public class PaymentConfigurationSupportEndpointsSteps extends GeneralSteps {
     public void getCountries(Map<String, String> dataMap) {
         response = getCountry(TOKEN);
 
-        if (getResponseCode(dataMap) == 200) {
+        if (getExpectedCode(dataMap) == 200) {
             Country country = response.jsonPath().getList("", Country.class)
                     .stream().filter(bt -> bt.getId() == parseInt(dataMap.get("o.id")))
                     .findFirst().orElseThrow(NoSuchElementException::new);
             assertThat(country.getName()).isEqualToIgnoringCase(dataMap.get("o.name"));
         } else {
-            Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
+            Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
         }
     }
 
@@ -87,7 +87,7 @@ public class PaymentConfigurationSupportEndpointsSteps extends GeneralSteps {
 
         response = getCurrency(TOKEN, String.valueOf(integrationType.getId()));
 
-        if (getResponseCode(dataMap) == 200) {
+        if (getExpectedCode(dataMap) == 200) {
             Currency currency = response.jsonPath().getList("", Currency.class)
                     .stream().filter(bt -> bt.getId() == parseInt(dataMap.get("o.id")))
                     .findFirst().orElseThrow(NoSuchElementException::new);
@@ -96,7 +96,7 @@ public class PaymentConfigurationSupportEndpointsSteps extends GeneralSteps {
             softly.assertThat(currency.getSymbol()).isEqualTo(dataMap.get("o.symbol"));
             softly.assertAll();
         } else {
-            Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
+            Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
         }
     }
 
@@ -104,13 +104,13 @@ public class PaymentConfigurationSupportEndpointsSteps extends GeneralSteps {
     public void getIntegrationTypes(Map<String, String> dataMap) {
         response = getIntegrationType(TOKEN);
 
-        if (getResponseCode(dataMap) == 200) {
+        if (getExpectedCode(dataMap) == 200) {
             IntegrationType integrationType = response.jsonPath().getList("", IntegrationType.class)
                     .stream().filter(bt -> bt.getId() == parseInt(dataMap.get("o.id")))
                     .findFirst().orElseThrow(NoSuchElementException::new);
             assertThat(integrationType.getName()).isEqualToIgnoringCase(dataMap.get("o.name"));
         } else {
-            Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
+            Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
         }
     }
 
@@ -119,13 +119,13 @@ public class PaymentConfigurationSupportEndpointsSteps extends GeneralSteps {
         String paymentGatewayId = String.valueOf(getPaymentGatewaySettingsResponse(widgetId.get()).getPaymentGatewayId());
         response = getLocale(TOKEN, paymentGatewayId);
 
-        if (getResponseCode(dataMap) == 200) {
+        if (getExpectedCode(dataMap) == 200) {
             Locale locale = response.jsonPath().getList("", Locale.class)
                     .stream().filter(bt -> bt.getId() == parseInt(dataMap.get("o.id")))
                     .findFirst().orElseThrow(NoSuchElementException::new);
             assertThat(locale.getName()).isEqualToIgnoringCase(dataMap.get("o.name"));
         } else {
-            Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
+            Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
         }
     }
 
@@ -133,7 +133,7 @@ public class PaymentConfigurationSupportEndpointsSteps extends GeneralSteps {
     public void getPaymentTypes(Map<String, String> dataMap) {
         response = getPaymentType(TOKEN);
 
-        if (getResponseCode(dataMap) == 200) {
+        if (getExpectedCode(dataMap) == 200) {
             PaymentType paymentType = response.jsonPath().getList("", PaymentType.class)
                     .stream().filter(bt -> bt.getId() == parseInt(dataMap.get("o.id")))
                     .findFirst().orElseThrow(NoSuchSessionException::new);
@@ -142,7 +142,7 @@ public class PaymentConfigurationSupportEndpointsSteps extends GeneralSteps {
             softly.assertThat(paymentType.getDisplayName()).isEqualToIgnoringCase(dataMap.get("o.displayName"));
             softly.assertAll();
         } else {
-            Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
+            Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
         }
     }
 
@@ -150,14 +150,14 @@ public class PaymentConfigurationSupportEndpointsSteps extends GeneralSteps {
     public void getStates(Map<String, String> dataMap) {
         response = getState(TOKEN);
 
-        if (getResponseCode(dataMap) == 200) {
+        if (getExpectedCode(dataMap) == 200) {
             State state = response.jsonPath().getList("", State.class)
                     .stream().filter(bt -> bt.getId() == parseInt(dataMap.get("o.id")))
                     .findFirst().orElseThrow(NoSuchSessionException::new);
 
             assertThat(state.getName()).isEqualToIgnoringCase(dataMap.get("o.name"));
         } else {
-            Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
+            Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
         }
     }
 
@@ -165,14 +165,14 @@ public class PaymentConfigurationSupportEndpointsSteps extends GeneralSteps {
     public void getTransactionTypes(Map<String, String> dataMap) {
         response = getTransactionType(TOKEN);
 
-        if (getResponseCode(dataMap) == 200) {
+        if (getExpectedCode(dataMap) == 200) {
             TransactionType state = response.jsonPath().getList("", TransactionType.class)
                     .stream().filter(bt -> bt.getId() == parseInt(dataMap.get("o.id")))
                     .findFirst().orElseThrow(NoSuchSessionException::new);
 
             assertThat(state.getName()).isEqualToIgnoringCase(dataMap.get("o.name"));
         } else {
-            Assertions.fail(format("The response code is not as expected %s", getResponseCode(dataMap)));
+            Assertions.fail(format("The response code is not as expected %s", getExpectedCode(dataMap)));
         }
     }
 }

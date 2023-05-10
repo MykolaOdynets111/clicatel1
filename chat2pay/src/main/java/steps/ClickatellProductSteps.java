@@ -19,51 +19,51 @@ public class ClickatellProductSteps extends GeneralSteps {
     @Then("^User updates clickatell-product application to the widget$")
     public void updateClickatellProduct(Map<String, String> dataMap) {
         Response response = ApiHelperClickatellProduct.updateClickatellProduct(getWidgetId(dataMap), setApplicationBody(dataMap));
-        if (response.statusCode() == 200) {
-            checkResponseCode(response, getResponseCode(dataMap));
-        } else if (String.valueOf(response.statusCode()).startsWith("4")) {
+        if (getResponseCode(response) == 200) {
+            checkResponseCode(response, getExpectedCode(dataMap));
+        } else if (String.valueOf(getResponseCode(response)).startsWith("4")) {
             validateErrorResponse(response, dataMap);
         } else {
-            Assertions.fail(format("Expected response code %s but was %s", getResponseCode(dataMap), response.statusCode()));
+            Assertions.fail(format("Expected response code %s but was %s", getExpectedCode(dataMap), getResponseCode(response)));
         }
     }
 
     @Then("^User adds clickatell-product application to the widget$")
     public void postClickatellProduct(Map<String, String> dataMap) {
         Response response = ApiHelperClickatellProduct.postClickatellProduct(getWidgetId(dataMap), setApplicationBody(dataMap));
-        if (response.statusCode() == 200) {
-            checkResponseCode(response, getResponseCode(dataMap));
-        } else if (String.valueOf(response.statusCode()).startsWith("4")) {
+        if (getResponseCode(response) == 200) {
+            checkResponseCode(response, getExpectedCode(dataMap));
+        } else if (String.valueOf(getResponseCode(response)).startsWith("4")) {
             validateErrorResponse(response, dataMap);
         } else {
-            Assertions.fail(format("Expected response code %s but was %s", getResponseCode(dataMap), response.statusCode()));
+            Assertions.fail(format("Expected response code %s but was %s", getExpectedCode(dataMap), response.statusCode()));
         }
     }
 
     @Then("^User gets clickatell-product application for the widget$")
     public void getClickatellProduct(Map<String, String> dataMap) {
         Response response = ApiHelperClickatellProduct.getClickatellProduct(getWidgetId(dataMap), dataMap.get("i.applicationId"));
-        checkResponseCode(response, getResponseCode(dataMap));
+        checkResponseCode(response, getExpectedCode(dataMap));
         if (response.statusCode() == 200) {
             assertThat(response.getBody().asString()).isEqualTo(dataMap.get("o.body"));
         } else if (String.valueOf(response.statusCode()).startsWith("4")) {
             validateErrorResponse(response, dataMap);
         } else {
-            Assertions.fail(format("Expected response code %s but was %s", getResponseCode(dataMap), response.statusCode()));
+            Assertions.fail(format("Expected response code %s but was %s", getExpectedCode(dataMap), response.statusCode()));
         }
     }
 
     @Then("^User deletes clickatell-product application from the widget$")
     public void deleteClickatellProduct(Map<String, String> dataMap) {
         Response response = ApiHelperClickatellProduct.deleteClickatellProduct(getWidgetId(dataMap), dataMap.get("i.applicationId"));
-        checkResponseCode(response, getResponseCode(dataMap));
+        checkResponseCode(response, getExpectedCode(dataMap));
         if (response.statusCode() == 200) {
             assertThat(response.as(ApplicationBody.class).getApplicationId())
                     .isEqualTo(dataMap.get("o.applicationId"));
         } else if (String.valueOf(response.statusCode()).startsWith("4")) {
             validateErrorResponse(response, dataMap);
         } else {
-            Assertions.fail(format("Expected response code %s but was %s", getResponseCode(dataMap), response.statusCode()));
+            Assertions.fail(format("Expected response code %s but was %s", getExpectedCode(dataMap), response.statusCode()));
         }
     }
 

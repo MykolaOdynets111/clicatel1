@@ -7,16 +7,14 @@ import api.ApiHelperWidgets;
 import com.github.javafaker.Faker;
 import data.models.request.PaymentBody;
 import data.models.response.integration.IntegrationResponse;
+import io.restassured.response.Response;
 import org.assertj.core.api.SoftAssertions;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.logging.Logger;
 
+import static api.ApiHelperIntegration.getIntegrationResponse;
 import static api.ApiHelperWidgets.deleteAllGeneratedWidgets;
 import static java.lang.Integer.parseInt;
 
@@ -31,6 +29,7 @@ public class GeneralSteps {
     protected static final ThreadLocal<String> activationKey = new ThreadLocal<>();
     protected static final ThreadLocal<String> createdWidgetId = new ThreadLocal<>();
     protected static final ThreadLocal<String> createdWidgetName = new ThreadLocal<>();
+    protected static final ThreadLocal<String> createdCustomerApplicationId = new ThreadLocal<>();
     protected Logger logger = Logger.getLogger(Class.class.getName());
 
     protected final SoftAssertions softly = new SoftAssertions();
@@ -59,8 +58,12 @@ public class GeneralSteps {
         return dataMap.get("i.widgetId");
     }
 
-    protected int getResponseCode(Map<String, String> dataMap) {
+    protected int getExpectedCode(Map<String, String> dataMap) {
         return parseInt(dataMap.get("o.responseCode"));
+    }
+
+    protected int getResponseCode(Response response) {
+        return response.statusCode();
     }
 
     protected static String getActivationKey(Map<String, String> valuesMap) {
@@ -86,6 +89,12 @@ public class GeneralSteps {
         paymentGatewaySettingsId.set(ApiHelperPayments
                 .getPaymentGatewaySettingsResponse(widgetId)
                 .getPaymentGatewaySettingsId());
+    }
+
+    protected static String getFirstApplicationId(String widgetId) {
+        return getIntegrationResponse(widgetId)
+                .jsonPath().getList("", IntegrationResponse.class)
+                .get(0).getIntegrator().getApplicationUuid();
     }
 
     protected void clearTestData() {

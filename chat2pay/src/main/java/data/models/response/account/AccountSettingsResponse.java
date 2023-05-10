@@ -13,6 +13,7 @@ import lombok.Getter;
 
 @Getter
 public class AccountSettingsResponse {
+
     @JsonProperty("accountId")
     public String accountId;
     @JsonProperty("showTutorial")

@@ -3,7 +3,10 @@ package data.models.response.integration;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -11,7 +14,11 @@ import lombok.Getter;
         "PAYMENT_STATUS_NOTIFICATION",
         "CONFIG_CHANGE_NOTIFICATION"
 })
+
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class NotificationUrls {
 
     @JsonProperty("TRANSACTION_STATUS_NOTIFICATION")

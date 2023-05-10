@@ -25,7 +25,7 @@ public class WidgetApiKeysManagementSteps extends GeneralSteps {
     @Then("^User gets 'API Keys Management'$")
     public void getApiKeyManagement(Map<String, String> dataMap) {
         response = getApiKeysManagement(getWidgetId(dataMap), TOKEN);
-        int expectedResponseCode = getResponseCode(dataMap);
+        int expectedResponseCode = getExpectedCode(dataMap);
 
         if (expectedResponseCode == 200) {
             response.jsonPath().getList("", ApiKeysResponse.class).stream()
@@ -43,7 +43,7 @@ public class WidgetApiKeysManagementSteps extends GeneralSteps {
         String widgetId = getWidgetId(dataMap);
         int originalApiKeyNumber = getApiKeysNumber(widgetId);
         response = updateApiKeysManagement(widgetId, TOKEN);
-        int expectedResponseCode = getResponseCode(dataMap);
+        int expectedResponseCode = getExpectedCode(dataMap);
 
         if (expectedResponseCode == 200) {
             int updatedApiKeyNumber = getApiKeysNumber(widgetId);
@@ -63,7 +63,7 @@ public class WidgetApiKeysManagementSteps extends GeneralSteps {
         String widgetId = getWidgetId(dataMap);
         response = getApiKeysManagement(widgetId, TOKEN);
         int originalApiKeysNumber = getApiKeysNumber(widgetId);
-        int expectedResponseCode = getResponseCode(dataMap);
+        int expectedResponseCode = getExpectedCode(dataMap);
 
         if (expectedResponseCode == 200) {
             response.jsonPath().getList("", ApiKeysResponse.class).stream().findFirst().ifPresent(a -> {

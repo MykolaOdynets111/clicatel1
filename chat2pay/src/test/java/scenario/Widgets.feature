@@ -136,3 +136,25 @@ Feature: Widgets operations
       | i.widgetId  | o.responseCode | o.updateTime | o.status  | o.errorMessage | o.errors                    |
       | valid       | 200            | TRUE         |           |                |                             |
       | non_existed | 404            |              | NOT_FOUND | URL /v2/widget | Widget does not exist, id = |
+
+
+  @TestCaseId("https://jira.clickatell.com/browse/C2P-4320")
+  Scenario Outline: C2P Unity API :: Widget Configuration :: GET /widget/all :: truth table
+
+    When User creates new widget
+    And User sets up 'Unified Payment Setting' for widget
+    And User sets up 'show_linked_api'
+    And User sets up customer application to the widget
+    Then User get the widget configuration
+      | i.activationKey   | <i.activationKey>   |
+      | i.widgetId        | <i.widgetId>        |
+      | o.status          | <o.status>          |
+      | o.defaultCurrency | <o.defaultCurrency> |
+      | o.responseCode    | <o.responseCode>    |
+      | o.errors          | <o.errors>          |
+      | o.path            | <o.path>            |
+
+    Examples:
+      | i.activationKey | i.widgetId | o.status   | o.defaultCurrency  | o.responseCode | o.errors  | o.path                                       |
+      | token           | valid      | CONFIGURED | South African rand | 200            |           |                                              |
+      | token           | invalid    |            |                    | 404            | NOT_FOUND | URL /v2/widget/null/payment-gateway-settings |

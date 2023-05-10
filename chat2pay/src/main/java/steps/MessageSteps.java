@@ -26,7 +26,7 @@ public class MessageSteps extends GeneralSteps {
         switch (getWidgetId(dataMap)) {
             case "valid":
                 response = ApiHelperMessagesConfigurations.getMessageConfigurationResponse(createdWidgetId.get());
-                Validator.checkResponseCode(response, getResponseCode(dataMap));
+                Validator.checkResponseCode(response, getExpectedCode(dataMap));
                 break;
             case "non_existed":
                 response = ApiHelperMessagesConfigurations.getMessageConfigurationResponse(getWidgetId(dataMap));
@@ -50,7 +50,7 @@ public class MessageSteps extends GeneralSteps {
         switch (getWidgetId(dataMap)) {
             case "valid":
                 response = ApiHelperMessagesConfigurations.putMessageConfiguration(createdWidgetId.get(), requestBody);
-                Validator.checkResponseCode(response, getResponseCode(dataMap));
+                Validator.checkResponseCode(response, getExpectedCode(dataMap));
                 Message updateResponse = response.as(Message.class);
                 softly.assertThat(updateResponse.getUpdateTime())
                         .as(format("widget update date is not equals to %s", LocalDate.now()))
@@ -81,7 +81,7 @@ public class MessageSteps extends GeneralSteps {
     @Then("^User gets template usage for templateId$")
     public void getTemplateUsage(Map<String, String> dataMap) {
         response = ApiHelperMessagesConfigurations.getTemplateUsageResponse(dataMap.get("i.templateId"));
-        Validator.checkResponseCode(response, getResponseCode(dataMap));
+        Validator.checkResponseCode(response, getExpectedCode(dataMap));
         Widget widget = response.getBody().jsonPath().getList("", Widget.class)
                 .stream().filter(w -> w.id.equals(dataMap.get("o.id")))
                 .findFirst().orElseThrow(NoSuchElementException::new);
