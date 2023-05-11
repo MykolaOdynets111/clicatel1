@@ -1,5 +1,6 @@
 package steps;
 
+import io.cucumber.java.After;
 import io.cucumber.java.en.Given;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
@@ -60,6 +61,7 @@ public class WASteps {
                 .isEqualTo(message);
     }
 
+    @After("@emulator_steps")
     public void backToMainEmulatorScreen() throws InterruptedException {
         androidDriver.findElementById("com.whatsapp:id/entry").sendKeys("//end");
         androidDriver.findElementById("com.whatsapp:id/send").click();
